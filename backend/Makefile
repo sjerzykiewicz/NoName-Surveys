@@ -12,6 +12,12 @@ isort:
 black:
 	poetry run black --config pyproject.toml src
 
+pyupgrade:
+	poetry run pyupgrade --py36-plus
+
+yesqa:
+	poetry run yesqa
+
 # pre-commit flake8 runs only against staged files
 flake8:
 	poetry run flake8 src
@@ -39,7 +45,7 @@ compile_env:
 
 install_dev: install_venv install_pre_commit
 
-format: isort black
+format: isort black -py all
 
 lint: pre_commit ruff flake8 mypy
 

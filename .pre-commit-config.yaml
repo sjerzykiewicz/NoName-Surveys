@@ -1,0 +1,82 @@
+exclude: '.git|.tox'
+default_stages: [commit]
+fail_fast: true
+
+repos:
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-xml
+      - id: check-yaml
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: codespell
+        name: codespell
+        entry: bash -c 'cd backend && make codespell'
+        language: system
+        types_or: [python, rst, markdown]
+        files: ^backend/
+
+      - id: isort
+        name: isort
+        entry: bash -c 'cd backend && make isort'
+        language: system
+        files: ^backend/
+
+      - id: pyupgrade
+        name: pyupgrade
+        entry: bash -c 'cd backend && make pyupgrade'
+        language: system
+        files: ^backend/
+
+      - id: yesqa
+        name: yesqa
+        entry: bash -c 'cd backend && make yesqa'
+        language: system
+        files: ^backend/
+
+      - id: black
+        name: black
+        entry: bash -c 'cd backend && make black'
+        language: system
+        files: ^backend/
+
+      - id: ruff
+        name: ruff
+        entry: bash -c 'cd backend && make ruff'
+        language: system
+        files: ^backend/
+
+      - id: flake8
+        name: flake8
+        entry: bash -c 'cd backend && make flake8'
+        language: system
+        files: ^backend/
+
+      - id: prettier
+        name: prettier
+        entry: npm run format
+        args: ['--prefix', 'frontend']
+        language: system
+        files: ^frontend/
+        pass_filenames: false
+
+      - id: lint
+        name: lint
+        entry: npm run lint
+        args: ['--prefix', 'frontend']
+        language: system
+        files: ^frontend/
+        pass_filenames: false

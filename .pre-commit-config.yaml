@@ -27,41 +27,57 @@ repos:
         entry: codespell
         language: system
         types_or: [python, rst, markdown]
-        files: ^src/
+        files: ^backend/
 
       - id: isort
         name: isort
         entry: isort
         language: system
-        files: ^src/
+        files: ^backend/
 
       - id: pyupgrade
         name: pyupgrade
         entry: pyupgrade
         language: system
         args: [--py310-plus]
-        files: ^src/
+        files: ^backend/
 
       - id: yesqa
         name: yesqa
         entry: yesqa
         language: system
-        files: ^src/
+        files: ^backend/
 
       - id: black
         name: black
         entry: black
         language: system
-        files: ^src/
+        files: ^backend/
 
       - id: ruff
         name: ruff
         entry: ruff
         language: system
-        files: ^src/
+        files: ^backend/
 
       - id: flake8
         name: flake8
         entry: flake8
         language: system
-        files: ^src/
+        files: ^backend/
+
+      - id: prettier
+        name: prettier
+        entry: npm run format
+        args: ['--prefix', 'frontend']
+        language: system
+        files: ^frontend/
+        pass_filenames: false
+
+      - id: lint
+        name: lint
+        entry: npm run lint
+        args: ['--prefix', 'frontend']
+        language: system
+        files: ^frontend/
+        pass_filenames: false

@@ -1,0 +1,67 @@
+exclude: '.git|.tox'
+default_stages: [commit]
+fail_fast: true
+
+repos:
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-xml
+      - id: check-yaml
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: codespell
+        name: codespell
+        entry: codespell
+        language: system
+        types_or: [python, rst, markdown]
+        files: ^src/
+
+      - id: isort
+        name: isort
+        entry: isort
+        language: system
+        files: ^src/
+
+      - id: pyupgrade
+        name: pyupgrade
+        entry: pyupgrade
+        language: system
+        args: [--py310-plus]
+        files: ^src/
+
+      - id: yesqa
+        name: yesqa
+        entry: yesqa
+        language: system
+        files: ^src/
+
+      - id: black
+        name: black
+        entry: black
+        language: system
+        files: ^src/
+
+      - id: ruff
+        name: ruff
+        entry: ruff
+        language: system
+        files: ^src/
+
+      - id: flake8
+        name: flake8
+        entry: flake8
+        language: system
+        files: ^src/

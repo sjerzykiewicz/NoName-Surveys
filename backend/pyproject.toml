@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "backend"
-version = "0.1.0"
+name = "noname"
+version = "0.0.1"
 description = ""
 authors = ["Sebastian Jerzykiewicz <sebastian.jerzykiewicz@grupawp.pl>"]
 readme = "README.md"

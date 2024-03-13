@@ -6,6 +6,9 @@ install_pre_commit:
 	poetry run pre-commit install
 
 # Dev tools
+codespell:
+	poetry run codespell
+
 isort:
 	poetry run isort src
 
@@ -50,6 +53,9 @@ format: isort black -py all
 lint: pre_commit ruff flake8 mypy
 
 build: pre_commit mypy test
+
+run:
+	poetry run python src/main.py
 
 # Misc
 jupyter:

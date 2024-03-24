@@ -61,5 +61,5 @@ make build  # pre_commit mypy test
 If you want to run app locally, you can use:
 
 ```sh
-make run # poetry run python src/main.py
+make run # poetry run uvicorn src.main:app --reload
 ```

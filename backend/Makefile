@@ -55,7 +55,7 @@ lint: pre_commit ruff flake8 mypy
 build: pre_commit mypy test
 
 run:
-	poetry run python src/main.py
+	poetry run uvicorn src.main:app --reload
 
 # Misc
 jupyter:

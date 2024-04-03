@@ -4,4 +4,8 @@
 	export let data: PageData;
 </script>
 
-<h1>{data.message}</h1>
+{#if data.message}
+	<h1>{data.message}</h1>
+{:else}
+	<h1>Loading...</h1>
+{/if}

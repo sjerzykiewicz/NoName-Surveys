@@ -6,10 +6,11 @@
 	.box {
 		display: flex;
 		flex-flow: column;
-		height: 97%;
+		height: auto;
+		min-height: 100%;
 		width: 50%;
 		margin: auto;
-		margin-top: 25px;
+		margin-top: 3em;
 		border: 1px solid #eaeaea;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		background-color: #2a2a2a;

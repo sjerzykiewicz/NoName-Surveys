@@ -1,3 +1,9 @@
+<script lang="ts">
+	import type { ActionData } from "../../routes/welcome/$types";
+
+	export let form: ActionData;
+</script>
+
 <form method="POST">
 	<label>Enter survey code</label>
 	<br/>
@@ -5,8 +11,13 @@
 		name="survey-code"
 		type="text"
 		required
+		maxlength=6
 	/>
 </form>
+
+{#if form?.error}
+	<p class="error">{form.error}</p>
+{/if}
 
 <style>
 	form, input {
@@ -21,5 +32,12 @@
 		background-color: #222;
 		width: 4em;
 		margin: 10px;
+	}
+
+	.error {
+		text-align: center;
+		color: #EAEAEA;
+		font-family: "Jura";
+		font-weight: bold;
 	}
 </style>

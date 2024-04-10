@@ -1,8 +1,8 @@
 <form method="POST">
 	<label>Log in or register</label>
 	<br/>
-	<button>Log in</button>
-	<button>Register</button>
+	<button disabled>Log in</button>
+	<button disabled>Register</button>
 </form>
 
 <style>

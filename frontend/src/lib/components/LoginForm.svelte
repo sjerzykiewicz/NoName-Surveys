@@ -23,5 +23,10 @@
 		font-family: 'Jura';
 		border-radius: 5px;
 		padding: 5px;
+		transition: 0.3s;
+	}
+	button:hover {
+		background-color: #1a1a1a;
+		transition: 0.3s;
 	}
 </style>

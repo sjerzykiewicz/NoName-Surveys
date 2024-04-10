@@ -4,7 +4,7 @@
 
 <style>
 	.content {
-		flex: 1;
 		padding: 0.75em 1.5em 0.75em 0.75em;
+		flex: 1;
 	}
 </style>

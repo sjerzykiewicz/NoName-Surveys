@@ -14,5 +14,9 @@
 		border: 1px solid #eaeaea;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		background-color: #2a2a2a;
+		font-size: 1em;
+		font-weight: normal;
+		font-family: 'Jura';
+		color: #eaeaea;
 	}
 </style>

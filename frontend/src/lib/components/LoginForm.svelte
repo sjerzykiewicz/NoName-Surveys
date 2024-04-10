@@ -1,6 +1,6 @@
 <form method="POST">
 	<label for="login_buttons">Log in or register</label>
-	<br/>
+	<br />
 	<div id="login-buttons">
 		<button disabled>Log in</button>
 		<button disabled>Register</button>
@@ -9,17 +9,18 @@
 
 <style>
 	form {
+		margin-top: 1em;
 		text-align: center;
-		color: #EAEAEA;
-		font-family: "Jura";
+		color: #eaeaea;
+		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 2em;
 	}
 	button {
 		background-color: #4a4a4a;
-		border: 1px solid #EAEAEA;
-		color: #EAEAEA;
-		font-family: "Jura";
+		border: 1px solid #eaeaea;
+		color: #eaeaea;
+		font-family: 'Jura';
 		border-radius: 5px;
 		padding: 5px;
 	}

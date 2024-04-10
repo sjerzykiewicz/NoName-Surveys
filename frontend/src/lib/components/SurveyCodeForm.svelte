@@ -5,9 +5,10 @@
 </script>
 
 <form method="POST">
-	<label>Enter survey code</label>
+	<label for="code-input">Enter survey code</label>
 	<br/>
-	<input 
+	<input
+		id="code-input" 
 		name="survey-code"
 		type="text"
 		required

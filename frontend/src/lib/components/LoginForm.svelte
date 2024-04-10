@@ -1,8 +1,10 @@
 <form method="POST">
-	<label>Log in or register</label>
+	<label for="login_buttons">Log in or register</label>
 	<br/>
-	<button disabled>Log in</button>
-	<button disabled>Register</button>
+	<div id="login-buttons">
+		<button disabled>Log in</button>
+		<button disabled>Register</button>
+	</div>
 </form>
 
 <style>

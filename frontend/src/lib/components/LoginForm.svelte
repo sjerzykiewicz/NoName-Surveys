@@ -24,6 +24,8 @@
 		border-radius: 5px;
 		padding: 5px;
 		transition: 0.3s;
+		font-size: 0.6em;
+		margin: 10px;
 	}
 	button:hover {
 		background-color: #1a1a1a;

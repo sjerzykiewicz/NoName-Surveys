@@ -1,14 +1,9 @@
 <script>
-	import Banner from './Banner.svelte';
-	import CodeForm from './CodeForm.svelte';
-	import LoginForm from './LoginForm.svelte';
+	import WelcomingBanner from '$lib/components/WelcomingBanner.svelte';
+	import SurveyCodeForm from '$lib/components/SurveyCodeForm.svelte';
+	import LoginForm from '$lib/components/LoginForm.svelte';
 </script>
 
-<Banner />
-<CodeForm />
+<WelcomingBanner />
+<SurveyCodeForm />
 <LoginForm />
-
-
-
-
-

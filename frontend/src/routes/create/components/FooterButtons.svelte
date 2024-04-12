@@ -1,19 +1,19 @@
-<button class="footer-button" type="submit" form="form">
-	<i class="material-icons">done</i>Save
-</button>
-<a href="/create" class="footer-button">
-	<i class="material-icons">remove_red_eye</i>Preview
-</a>
 <a href="/" class="footer-button">
 	<i class="material-icons">arrow_back</i>Back
 </a>
+<a href="/create" class="footer-button">
+	<i class="material-icons">remove_red_eye</i>Preview
+</a>
+<button class="footer-button" type="submit">
+	<i class="material-icons">done</i>Save
+</button>
 
 <style>
 	.footer-button {
 		display: flex;
 		flex-flow: row;
 		justify-content: center;
-		align-items: center;
+		align-items: flex-end;
 		text-decoration: none;
 		background-color: #4a4a4a;
 		padding: 0.25em;
@@ -27,8 +27,7 @@
 		color: #eaeaea;
 		cursor: pointer;
 		transition: background-color 0.3s;
-		margin-left: 0.75em;
-		float: right;
+		margin-left: 0.5em;
 	}
 
 	.footer-button:hover {

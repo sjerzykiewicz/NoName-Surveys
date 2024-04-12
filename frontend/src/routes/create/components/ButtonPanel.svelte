@@ -1,22 +1,29 @@
 <script lang="ts">
+	import Single from '../questions/Single.svelte';
+	import Multi from '../questions/Multi.svelte';
+	import Slider from '../questions/Slider.svelte';
+	import Scale from '../questions/Scale.svelte';
+	import List from '../questions/List.svelte';
+	import Rank from '../questions/Rank.svelte';
+	import Text from '../questions/Text.svelte';
 	import { fade } from 'svelte/transition';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, type ComponentType } from 'svelte';
 
 	const dispatch = createEventDispatcher();
 
-	function addQuestion(type: string) {
-		dispatch('addQuestion', { question: type });
+	function addQuestion(type: ComponentType) {
+		dispatch('addQuestion', { component: type });
 	}
 </script>
 
 <div class="button-panel" transition:fade={{ duration: 200 }}>
-	<button class="first" on:click={() => addQuestion('Single')}>Single</button>
-	<button on:click={() => addQuestion('Multi')}>Multi</button>
-	<button on:click={() => addQuestion('Slider')}>Slider</button>
-	<button on:click={() => addQuestion('Scale')}>Scale</button>
-	<button on:click={() => addQuestion('List')}>List</button>
-	<button on:click={() => addQuestion('Rank')}>Rank</button>
-	<button class="last" on:click={() => addQuestion('Text')}>Text</button>
+	<button class="first" on:click={() => addQuestion(Single)}>Single</button>
+	<button on:click={() => addQuestion(Multi)}>Multi</button>
+	<button on:click={() => addQuestion(Slider)}>Slider</button>
+	<button on:click={() => addQuestion(Scale)}>Scale</button>
+	<button on:click={() => addQuestion(List)}>List</button>
+	<button on:click={() => addQuestion(Rank)}>Rank</button>
+	<button class="last" on:click={() => addQuestion(Text)}>Text</button>
 </div>
 
 <style>

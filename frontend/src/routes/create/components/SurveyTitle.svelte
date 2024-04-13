@@ -1,7 +1,11 @@
-<div class="input" contenteditable></div>
+<script lang="ts">
+	import { title } from '../stores';
+</script>
+
+<div class="title-input" contenteditable bind:textContent={$title}>{$title}</div>
 
 <style>
-	.input {
+	.title-input {
 		flex: 1;
 		background-color: #1a1a1a;
 		padding: 0.25em;
@@ -16,7 +20,7 @@
 		overflow: hidden;
 	}
 
-	.input[contenteditable]:empty::before {
+	.title-input[contenteditable]:empty::before {
 		content: 'Enter survey title...';
 		color: #eaeaea40;
 	}

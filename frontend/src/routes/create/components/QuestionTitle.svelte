@@ -1,21 +1,19 @@
 <script lang="ts">
 	import { questions } from '../stores';
-	import { createEventDispatcher } from 'svelte';
 
-	export let index: number;
-	index += 1;
-
-	const dispatch = createEventDispatcher();
+	export let qIndex: number;
+	qIndex += 1;
 
 	function removeQuestion() {
-		dispatch('removeQuestion', { index: index - 1 });
+		$questions.splice(qIndex - 1, 1);
+		$questions = $questions;
 	}
 </script>
 
 <div class="question-area">
-	<div class="index">{index}.</div>
-	<div class="question-input" contenteditable bind:textContent={$questions[index - 1].value}>
-		{$questions[index - 1].value}
+	<div class="index">{qIndex}.</div>
+	<div class="question-input" contenteditable bind:textContent={$questions[qIndex - 1].question}>
+		{$questions[qIndex - 1].question}
 	</div>
 	<button on:click={() => removeQuestion()}>
 		<i class="material-icons">close</i>Question
@@ -55,6 +53,8 @@
 		margin-right: 0.25em;
 		font-size: 1.25em;
 		cursor: default;
+		width: 1.25em;
+		text-align: right;
 	}
 
 	button {

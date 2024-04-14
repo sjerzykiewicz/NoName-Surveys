@@ -25,7 +25,7 @@
 				choices: []
 			}
 		];
-		panelVisible = !panelVisible;
+		togglePanel();
 	}
 </script>
 
@@ -36,8 +36,8 @@
 	<div class="button-panel" transition:fade={{ duration: 200 }}>
 		<button class="first type-button" on:click={() => addQuestion(Single)}>Single</button>
 		<button class="type-button" on:click={() => addQuestion(Multi)}>Multi</button>
-		<button class="type-button" on:click={() => addQuestion(Slider)}>Slider</button>
 		<button class="type-button" on:click={() => addQuestion(Scale)}>Scale</button>
+		<button class="type-button" on:click={() => addQuestion(Slider)}>Slider</button>
 		<button class="type-button" on:click={() => addQuestion(List)}>List</button>
 		<button class="type-button" on:click={() => addQuestion(Rank)}>Rank</button>
 		<button class="last type-button" on:click={() => addQuestion(Text)}>Text</button>
@@ -56,7 +56,7 @@
 		align-items: flex-end;
 		background-color: #4a4a4a;
 		padding: 0.25em;
-		border: 1px solid #eaeaea;
+		border: 1px solid #999999;
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		width: fit-content;
@@ -67,6 +67,7 @@
 		cursor: pointer;
 		transition: background-color 0.3s;
 		margin-right: 0.5em;
+		margin-bottom: 33%;
 		float: left;
 	}
 
@@ -76,7 +77,7 @@
 		box-shadow: 0px 4px 4px #1a1a1a;
 		width: fit-content;
 		border-radius: 5px;
-		border: 1px solid #eaeaea;
+		border: 1px solid #999999;
 	}
 
 	.type-button {

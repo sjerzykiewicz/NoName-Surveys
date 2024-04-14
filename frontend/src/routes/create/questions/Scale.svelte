@@ -29,7 +29,7 @@
 		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
-		width: 80%;
+		width: 85%;
 	}
 
 	.choice {
@@ -40,10 +40,13 @@
 	}
 
 	.radio {
-		text-align: center;
+		display: flex;
+		height: 1.5em;
+		width: 1.5em;
 	}
 
 	.number {
 		font-size: 1.25em;
+		cursor: default;
 	}
 </style>

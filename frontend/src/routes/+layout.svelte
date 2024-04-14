@@ -11,7 +11,7 @@
 		width: 50%;
 		margin: auto;
 		margin-top: 3em;
-		border: 1px solid #eaeaea;
+		border: 1px solid #999999;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		background-color: #2a2a2a;
 		font-size: 1em;

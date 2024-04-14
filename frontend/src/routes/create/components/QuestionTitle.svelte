@@ -15,7 +15,7 @@
 	<div class="question-input" contenteditable bind:textContent={$questions[qIndex - 1].question}>
 		{$questions[qIndex - 1].question}
 	</div>
-	<button on:click={() => removeQuestion()}>
+	<button on:click={removeQuestion}>
 		<i class="material-icons">close</i>Question
 	</button>
 </div>
@@ -25,7 +25,7 @@
 		display: flex;
 		flex-flow: row;
 		align-items: center;
-		margin-bottom: 0.5em;
+		margin-bottom: 1em;
 		font-size: 1.25em;
 		font-weight: normal;
 		font-family: 'Jura';
@@ -36,7 +36,7 @@
 		flex: 1;
 		background-color: #1a1a1a;
 		padding: 0.25em;
-		border: 1px solid #eaeaea;
+		border: 1px solid #999999;
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		cursor: text;
@@ -52,6 +52,7 @@
 	.index {
 		margin-right: 0.25em;
 		font-size: 1.25em;
+		font-weight: bold;
 		cursor: default;
 		width: 1.25em;
 		text-align: right;
@@ -64,7 +65,7 @@
 		align-items: flex-end;
 		background-color: #4a4a4a;
 		padding: 0.25em;
-		border: 1px solid #eaeaea;
+		border: 1px solid #999999;
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		width: fit-content;

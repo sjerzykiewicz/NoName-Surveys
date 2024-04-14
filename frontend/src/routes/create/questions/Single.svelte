@@ -65,7 +65,7 @@
 		flex: 1;
 		background-color: #1a1a1a;
 		padding: 0.25em;
-		border: 1px solid #eaeaea;
+		border: 1px solid #999999;
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		font-size: 1.25em;
@@ -96,7 +96,7 @@
 		align-items: flex-end;
 		background-color: #4a4a4a;
 		padding: 0.25em;
-		border: 1px solid #eaeaea;
+		border: 1px solid #999999;
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		width: fit-content;

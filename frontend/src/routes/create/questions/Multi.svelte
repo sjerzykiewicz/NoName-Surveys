@@ -3,32 +3,41 @@
 
 	export let qIndex: number;
 
+	let buttonHidden: boolean = true;
+
 	$questions[qIndex].choices = ['', ''];
 
 	function addChoice() {
 		$questions[qIndex].choices = [...$questions[qIndex].choices, ''];
+
+		changeVisibility();
 	}
 
 	function removeChoice(index: number) {
 		$questions[qIndex].choices.splice(index, 1);
 		$questions = $questions;
+
+		changeVisibility();
+	}
+
+	function changeVisibility() {
+		if ($questions[qIndex].choices.length > 2) buttonHidden = false;
+		else buttonHidden = true;
 	}
 </script>
 
 <div class="choice-area">
 	{#each $questions[qIndex].choices as choice, chIndex}
 		<div class="choice">
-			<div class="radio">
+			<div class="checkbox">
 				<input type="checkbox" disabled name={$questions[qIndex].question} />
 			</div>
 			<div class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}
 			</div>
-			{#if $questions[qIndex].choices.length > 2}
-				<button on:click={() => removeChoice(chIndex)}>
-					<i class="material-icons">close</i>Choice
-				</button>
-			{/if}
+			<button class:remove-button={buttonHidden} on:click={() => removeChoice(chIndex)}>
+				<i class="material-icons">close</i>Choice
+			</button>
 		</div>
 	{/each}
 	<button class="add-choice" on:click={addChoice}>
@@ -42,7 +51,7 @@
 		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
-		width: 80%;
+		width: 85%;
 	}
 
 	.choice {
@@ -70,7 +79,11 @@
 		color: #eaeaea40;
 	}
 
-	.radio {
+	.remove-button {
+		visibility: hidden;
+	}
+
+	.checkbox {
 		text-align: right;
 		width: 1.75em;
 		margin-right: 0.5em;

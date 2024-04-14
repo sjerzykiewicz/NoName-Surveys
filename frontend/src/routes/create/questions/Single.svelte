@@ -3,15 +3,26 @@
 
 	export let qIndex: number;
 
+	let buttonHidden: boolean = true;
+
 	$questions[qIndex].choices = ['', ''];
 
 	function addChoice() {
 		$questions[qIndex].choices = [...$questions[qIndex].choices, ''];
+
+		changeVisibility();
 	}
 
 	function removeChoice(index: number) {
 		$questions[qIndex].choices.splice(index, 1);
 		$questions = $questions;
+
+		changeVisibility();
+	}
+
+	function changeVisibility() {
+		if ($questions[qIndex].choices.length > 2) buttonHidden = false;
+		else buttonHidden = true;
 	}
 </script>
 
@@ -24,11 +35,9 @@
 			<div class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}
 			</div>
-			{#if $questions[qIndex].choices.length > 2}
-				<button on:click={() => removeChoice(chIndex)}>
-					<i class="material-icons">close</i>Choice
-				</button>
-			{/if}
+			<button class:remove-button={buttonHidden} on:click={() => removeChoice(chIndex)}>
+				<i class="material-icons">close</i>Choice
+			</button>
 		</div>
 	{/each}
 	<button class="add-choice" on:click={addChoice}>
@@ -42,7 +51,7 @@
 		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
-		width: 80%;
+		width: 85%;
 	}
 
 	.choice {
@@ -68,6 +77,10 @@
 	.choice-input[contenteditable]:empty::before {
 		content: 'Enter choice...';
 		color: #eaeaea40;
+	}
+
+	.remove-button {
+		visibility: hidden;
 	}
 
 	.radio {

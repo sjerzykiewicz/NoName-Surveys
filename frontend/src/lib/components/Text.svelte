@@ -1,19 +1,23 @@
 <script lang="ts">
 	import { questions } from '$lib/stores';
 
-	export let qIndex: number;
+	export let questionIndex: number;
 
-	$questions[qIndex].choices = [''];
+	$questions[questionIndex].choices = [''];
 
 	function clearDetails() {
-		$questions[qIndex].choices[0] = '';
+		$questions[questionIndex].choices[0] = '';
 	}
 </script>
 
 <div class="choice-area">
 	<div class="details">
-		<div class="details-input" contenteditable bind:textContent={$questions[qIndex].choices[0]}>
-			{$questions[qIndex].choices[0]}
+		<div
+			class="details-input"
+			contenteditable
+			bind:textContent={$questions[questionIndex].choices[0]}
+		>
+			{$questions[questionIndex].choices[0]}
 		</div>
 		<button on:click={clearDetails}>
 			<i class="material-icons">close</i>Details

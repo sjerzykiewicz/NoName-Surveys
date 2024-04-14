@@ -1,41 +1,41 @@
 <script lang="ts">
 	import { questions } from '$lib/stores';
 
-	export let qIndex: number;
+	export let questionIndex: number;
 
-	let buttonHidden: boolean = true;
+	let isButtonHidden: boolean = true;
 
-	$questions[qIndex].choices = ['', ''];
+	$questions[questionIndex].choices = ['', ''];
 
 	function addChoice() {
-		$questions[qIndex].choices = [...$questions[qIndex].choices, ''];
+		$questions[questionIndex].choices = [...$questions[questionIndex].choices, ''];
 
 		changeVisibility();
 	}
 
 	function removeChoice(index: number) {
-		$questions[qIndex].choices.splice(index, 1);
+		$questions[questionIndex].choices.splice(index, 1);
 		$questions = $questions;
 
 		changeVisibility();
 	}
 
 	function changeVisibility() {
-		if ($questions[qIndex].choices.length > 2) buttonHidden = false;
-		else buttonHidden = true;
+		if ($questions[questionIndex].choices.length > 2) isButtonHidden = false;
+		else isButtonHidden = true;
 	}
 </script>
 
 <div class="choice-area">
-	{#each $questions[qIndex].choices as choice, chIndex}
+	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
 			<div class="checkbox">
-				<input type="checkbox" disabled name={$questions[qIndex].question} />
+				<input type="checkbox" disabled name={$questions[questionIndex].question} />
 			</div>
 			<div class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}
 			</div>
-			<button class:remove-button={buttonHidden} on:click={() => removeChoice(chIndex)}>
+			<button class:remove-button={isButtonHidden} on:click={() => removeChoice(choiceIndex)}>
 				<i class="material-icons">close</i>Choice
 			</button>
 		</div>

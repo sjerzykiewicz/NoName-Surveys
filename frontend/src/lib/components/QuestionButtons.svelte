@@ -10,10 +10,10 @@
 	import { type ComponentType } from 'svelte';
 	import { questions } from '$lib/stores';
 
-	let panelVisible: boolean = false;
+	let isPanelVisible: boolean = false;
 
 	function togglePanel() {
-		panelVisible = !panelVisible;
+		isPanelVisible = !isPanelVisible;
 	}
 
 	function addQuestion(component: ComponentType) {
@@ -32,7 +32,7 @@
 <button class="add-question" on:click={togglePanel}>
 	<i class="material-icons">add</i>Question
 </button>
-{#if panelVisible}
+{#if isPanelVisible}
 	<div class="button-panel" transition:fade={{ duration: 200 }}>
 		<button class="first type-button" on:click={() => addQuestion(Single)}>Single</button>
 		<button class="type-button" on:click={() => addQuestion(Multi)}>Multi</button>

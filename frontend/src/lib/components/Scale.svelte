@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { questions } from '$lib/stores';
 
-	export let qIndex: number;
+	export let questionIndex: number;
 
-	$questions[qIndex].choices = ['1', '2', '3', '4', '5'];
+	$questions[questionIndex].choices = ['1', '2', '3', '4', '5'];
 </script>
 
 <div class="choice-area">
-	{#each $questions[qIndex].choices as choice}
+	{#each $questions[questionIndex].choices as choice}
 		<div class="choice">
 			<div class="radio">
-				<input type="radio" disabled name={$questions[qIndex].question} />
+				<input type="radio" disabled name={$questions[questionIndex].question} />
 			</div>
 			<div class="number">
 				{choice}

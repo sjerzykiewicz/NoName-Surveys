@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { questions } from '$lib/stores';
 
-	export let qIndex: number;
+	export let questionIndex: number;
 
-	$questions[qIndex].choices = ['', ''];
+	$questions[questionIndex].choices = ['', ''];
 </script>
 
 <div class="choice-area">
@@ -12,9 +12,9 @@
 			class="range"
 			type="range"
 			step="1"
-			min={$questions[qIndex].choices[0]}
-			max={$questions[qIndex].choices[1]}
-			name={$questions[qIndex].question}
+			min={$questions[questionIndex].choices[0]}
+			max={$questions[questionIndex].choices[1]}
+			name={$questions[questionIndex].question}
 			disabled
 		/>
 	</div>
@@ -22,20 +22,20 @@
 		<input
 			class="limit-input"
 			type="number"
-			name={$questions[qIndex].question}
+			name={$questions[questionIndex].question}
 			autocomplete="off"
 			required
 			placeholder="Enter min..."
-			bind:value={$questions[qIndex].choices[0]}
+			bind:value={$questions[questionIndex].choices[0]}
 		/>
 		<input
 			class="limit-input"
 			type="number"
-			name={$questions[qIndex].question}
+			name={$questions[questionIndex].question}
 			autocomplete="off"
 			required
 			placeholder="Enter max..."
-			bind:value={$questions[qIndex].choices[1]}
+			bind:value={$questions[questionIndex].choices[1]}
 		/>
 	</div>
 </div>

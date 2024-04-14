@@ -1,19 +1,23 @@
 <script lang="ts">
 	import { questions } from '$lib/stores';
 
-	export let qIndex: number;
-	qIndex += 1;
+	export let questionIndex: number;
+	questionIndex += 1;
 
 	function removeQuestion() {
-		$questions.splice(qIndex - 1, 1);
+		$questions.splice(questionIndex - 1, 1);
 		$questions = $questions;
 	}
 </script>
 
 <div class="question-area">
-	<div class="index">{qIndex}.</div>
-	<div class="question-input" contenteditable bind:textContent={$questions[qIndex - 1].question}>
-		{$questions[qIndex - 1].question}
+	<div class="index">{questionIndex}.</div>
+	<div
+		class="question-input"
+		contenteditable
+		bind:textContent={$questions[questionIndex - 1].question}
+	>
+		{$questions[questionIndex - 1].question}
 	</div>
 	<button on:click={removeQuestion}>
 		<i class="material-icons">close</i>Question

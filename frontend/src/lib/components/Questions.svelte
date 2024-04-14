@@ -4,10 +4,10 @@
 	import { questions } from '$lib/stores';
 </script>
 
-{#each $questions as question, qIndex}
+{#each $questions as question, questionIndex}
 	<div class="question">
-		<QuestionTitle {qIndex} />
-		<svelte:component this={question.component} {qIndex} />
+		<QuestionTitle {questionIndex} />
+		<svelte:component this={question.component} {questionIndex} />
 	</div>
 {/each}
 <QuestionButtons />

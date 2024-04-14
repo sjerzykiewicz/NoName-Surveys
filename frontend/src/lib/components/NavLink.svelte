@@ -14,8 +14,9 @@
 		color: #eaeaea;
 		font-family: 'Jura';
 		font-weight: bold;
-		font-size: 2.25em;
+		font-size: 1.5em;
 		border: 1px solid #999999;
+		border-left: none;
 		width: 100%;
 		text-decoration: none;
 	}

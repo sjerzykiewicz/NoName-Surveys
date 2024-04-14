@@ -1,5 +1,4 @@
 <script>
-	import { page } from '$app/stores';
 	import NavLink from '$lib/components/NavLink.svelte';
 </script>
 

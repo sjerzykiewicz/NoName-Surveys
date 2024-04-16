@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlmodel import SQLModel
+
+from src.api.main import api_router
+from src.db.base import engine
 
 app = FastAPI()
 
@@ -14,6 +18,13 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World!"}
+app.include_router(api_router)
+
+
+def init_db():
+    SQLModel.metadata.create_all(engine)
+
+
+@app.on_event("startup")
+async def on_startup():
+    init_db()

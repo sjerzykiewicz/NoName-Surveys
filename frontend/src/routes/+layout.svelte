@@ -21,6 +21,7 @@
 		height: auto;
 		min-height: 100%;
 		width: 50%;
+		min-width: 767px;
 		margin: auto;
 		margin-top: 2em;
 		border: 1px solid #999999;
@@ -31,7 +32,21 @@
 	nav {
 		display: flex;
 		flex-flow: row;
+		width: 100%;
 		justify-content: space-around;
 		background-color: #1a1a1a;
+	}
+
+	@media screen and (max-width: 767px) {
+		.box {
+			width: 100%;
+			min-width: 0;
+		}
+	}
+
+	@media screen and (max-width: 479px) {
+		nav {
+			flex-flow: column;
+		}
 	}
 </style>

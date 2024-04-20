@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel
 
-from src.api.main import api_router
+from src.api.router import api_router
 from src.db.base import engine
 
 app = FastAPI()

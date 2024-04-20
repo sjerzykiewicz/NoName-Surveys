@@ -12,6 +12,6 @@ def create_user(user_create: UserBase, session: Session) -> User:
     return user
 
 
-def get_users(session: Session) -> User | None:
+def get_users(session: Session) -> list[User] | None:
     users = session.exec(select(User)).all()
     return [user for user in users]

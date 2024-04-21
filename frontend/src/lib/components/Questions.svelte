@@ -2,10 +2,23 @@
 	import QuestionButtons from '$lib/components/QuestionButtons.svelte';
 	import QuestionTitle from '$lib/components/QuestionTitle.svelte';
 	import { questions } from '$lib/stores';
+	import { cubicInOut } from 'svelte/easing';
+	import { slide } from 'svelte/transition';
+
+	function scrollToElement(selector: string) {
+		const element = document.querySelector(selector) as HTMLElement;
+		if (element) {
+			element.scrollIntoView({ behavior: 'smooth' });
+		}
+	}
 </script>
 
 {#each $questions as question, questionIndex}
-	<div class="question">
+	<div
+		class="question"
+		in:slide={{ duration: 300, easing: cubicInOut }}
+		on:introend={() => scrollToElement('.add-question')}
+	>
 		<QuestionTitle {questionIndex} />
 		<svelte:component this={question.component} {questionIndex} />
 	</div>

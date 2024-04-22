@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { questions } from '$lib/stores';
+	import { afterUpdate } from 'svelte';
 
 	export let questionIndex: number;
 
@@ -9,21 +10,17 @@
 
 	function addChoice() {
 		$questions[questionIndex].choices = [...$questions[questionIndex].choices, ''];
-
-		changeVisibility();
 	}
 
 	function removeChoice(index: number) {
 		$questions[questionIndex].choices.splice(index, 1);
 		$questions = $questions;
-
-		changeVisibility();
 	}
 
-	function changeVisibility() {
+	afterUpdate(() => {
 		if ($questions[questionIndex].choices.length > 2) isButtonHidden = false;
 		else isButtonHidden = true;
-	}
+	});
 </script>
 
 <div class="choice-area">

@@ -60,8 +60,12 @@
 			<i class="material-icons">add</i>Question
 		</button>
 		{#if previousQuestion}
-			<button class="add-previous-question" on:click={() => addQuestion(previousQuestion)}>
-				<i class="material-icons">repeat</i>
+			<button
+				class="add-previous-question"
+				transition:slide={{ axis: 'x', duration: 300, easing: cubicInOut }}
+				on:click={() => addQuestion(previousQuestion)}
+			>
+				<i class="material-icons">replay</i>
 			</button>
 		{/if}
 	</div>

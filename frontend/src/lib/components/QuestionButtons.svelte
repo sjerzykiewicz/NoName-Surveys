@@ -7,10 +7,9 @@
 	import Rank from '$lib/components/Rank.svelte';
 	import Text from '$lib/components/Text.svelte';
 	import { questions } from '$lib/stores';
-	import { type ComponentType } from 'svelte';
+	import { type ComponentType, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { onMount } from 'svelte';
 
 	let isPanelVisible: boolean = false;
 	let previousQuestion: ComponentType;
@@ -32,6 +31,13 @@
 
 		previousQuestion = component;
 		isPanelVisible = false;
+	}
+
+	function scrollToElement(selector: string) {
+		const element = document.querySelector(selector) as HTMLElement;
+		if (element) {
+			element.scrollIntoView({ behavior: 'smooth' });
+		}
 	}
 
 	onMount(() => {
@@ -70,7 +76,11 @@
 		{/if}
 	</div>
 	{#if isPanelVisible}
-		<div class="button-panel" transition:slide={{ duration: 300, easing: cubicInOut }}>
+		<div
+			class="button-panel"
+			transition:slide={{ duration: 300, easing: cubicInOut }}
+			on:introend={() => scrollToElement('.add-question')}
+		>
 			<button class="type-button" on:click={() => addQuestion(Single)}>Single</button>
 			<button class="type-button" on:click={() => addQuestion(Multi)}>Multi</button>
 			<button class="type-button" on:click={() => addQuestion(Scale)}>Scale</button>

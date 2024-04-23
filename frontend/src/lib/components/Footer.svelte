@@ -10,5 +10,9 @@
 		flex-flow: row;
 		justify-content: flex-end;
 		align-items: center;
+		position: fixed;
+		bottom: 0;
+		width: calc(50% - 1.5em);
+		background-color: #2a2a2a;
 	}
 </style>

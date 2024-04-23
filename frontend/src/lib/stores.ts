@@ -5,6 +5,7 @@ export const title: Writable<string> = writable('');
 export const questions: Writable<
 	{
 		component: ComponentType;
+		required: boolean;
 		question: string;
 		choices: Array<string>;
 	}[]

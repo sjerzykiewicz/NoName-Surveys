@@ -2,7 +2,7 @@
 	<i class="material-icons">arrow_back</i>Back
 </a>
 <a href="/create" class="footer-button">
-	<i class="material-icons">remove_red_eye</i>Preview
+	<i class="material-icons">visibility</i>Preview
 </a>
 <button class="footer-button">
 	<i class="material-icons">done</i>Save

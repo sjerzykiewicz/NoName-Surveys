@@ -54,11 +54,10 @@
 	}
 
 	.index {
-		margin-right: 0.25em;
-		font-size: 1.25em;
-		font-weight: bold;
+		margin-right: 0.3em;
+		font-size: 1.1em;
 		cursor: default;
-		width: 1.25em;
+		width: 1.4em;
 		text-align: right;
 	}
 

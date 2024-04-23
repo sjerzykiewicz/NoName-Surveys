@@ -7,6 +7,7 @@
 
 	function scrollToElement(selector: string) {
 		const element = document.querySelector(selector) as HTMLElement;
+
 		if (element) {
 			element.scrollIntoView({ behavior: 'smooth' });
 		}
@@ -17,7 +18,7 @@
 	<div
 		class="question"
 		in:slide={{ duration: 300, easing: cubicInOut }}
-		on:introend={() => scrollToElement('.add-question')}
+		on:introend={() => scrollToElement('.button-group')}
 	>
 		<QuestionTitle {questionIndex} />
 		<svelte:component this={question.component} {questionIndex} />

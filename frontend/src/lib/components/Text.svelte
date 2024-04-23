@@ -24,13 +24,14 @@
 		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
-		width: 85%;
+		width: 86%;
 	}
 
 	.details {
 		display: flex;
 		align-items: center;
 		flex-flow: row;
+		margin-left: 2.25em;
 	}
 
 	.details-input {

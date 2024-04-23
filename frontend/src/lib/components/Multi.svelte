@@ -48,7 +48,7 @@
 		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
-		width: 85%;
+		width: 86%;
 	}
 
 	.choice {

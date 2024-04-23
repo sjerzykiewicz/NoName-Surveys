@@ -18,8 +18,11 @@
 	}
 
 	afterUpdate(() => {
-		if ($questions[questionIndex].choices.length > 2) isButtonHidden = false;
-		else isButtonHidden = true;
+		if ($questions[questionIndex].choices.length > 2) {
+			isButtonHidden = false;
+		} else {
+			isButtonHidden = true;
+		}
 	});
 </script>
 
@@ -46,7 +49,7 @@
 		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
-		width: 85%;
+		width: 86%;
 	}
 
 	.choice {

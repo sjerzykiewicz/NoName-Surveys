@@ -16,6 +16,10 @@
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
+
+		if (isPanelVisible) {
+			scrollToElement('.add-question');
+		}
 	}
 
 	function addQuestion(component: ComponentType) {
@@ -35,6 +39,7 @@
 
 	function scrollToElement(selector: string) {
 		const element = document.querySelector(selector) as HTMLElement;
+
 		if (element) {
 			element.scrollIntoView({ behavior: 'smooth' });
 		}
@@ -76,11 +81,7 @@
 		{/if}
 	</div>
 	{#if isPanelVisible}
-		<div
-			class="button-panel"
-			transition:slide={{ duration: 300, easing: cubicInOut }}
-			on:introend={() => scrollToElement('.add-question')}
-		>
+		<div class="button-panel" transition:slide={{ duration: 300, easing: cubicInOut }}>
 			<button class="type-button" on:click={() => addQuestion(Single)}>Single</button>
 			<button class="type-button" on:click={() => addQuestion(Multi)}>Multi</button>
 			<button class="type-button" on:click={() => addQuestion(Scale)}>Scale</button>

@@ -50,7 +50,7 @@
 		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
-		width: 85%;
+		width: 86%;
 	}
 
 	.slider {
@@ -64,12 +64,13 @@
 
 	.range {
 		appearance: none;
-		width: 85%;
+		width: 100%;
 		height: 0.5em;
 		border-radius: 0.5em;
 		background: #999999;
 		outline: none;
 		opacity: 1;
+		margin-left: 2.75em;
 	}
 
 	.range::-webkit-slider-thumb {
@@ -94,7 +95,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		width: 85%;
+		width: 100%;
 	}
 
 	.limit-input {
@@ -110,6 +111,7 @@
 		cursor: text;
 		overflow: hidden;
 		width: 6.5em;
+		margin-left: 1.75em;
 	}
 
 	.limit-input::placeholder {

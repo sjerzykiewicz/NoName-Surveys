@@ -24,12 +24,13 @@
 		display: flex;
 		flex-flow: row;
 		align-items: center;
-		justify-content: space-evenly;
+		justify-content: space-around;
 		font-size: 1em;
 		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
-		width: 86%;
+		width: calc(86% - 2.25em);
+		margin-left: 2.25em;
 	}
 
 	.choice {

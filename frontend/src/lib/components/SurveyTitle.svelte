@@ -2,7 +2,9 @@
 	import { title } from '$lib/stores';
 </script>
 
-<div class="title-input" contenteditable bind:textContent={$title}>{$title}</div>
+<div title="Enter survey title" class="title-input" contenteditable bind:textContent={$title}>
+	{$title}
+</div>
 
 <style>
 	.title-input {

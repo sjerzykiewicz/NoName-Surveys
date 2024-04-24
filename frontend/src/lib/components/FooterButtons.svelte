@@ -1,28 +1,20 @@
-<a href="/" class="footer-button">
-	<i class="material-icons">arrow_back</i>Back
+<a href="/create" title="Preview survey" class="footer-button">
+	<i class="material-symbols-rounded">search</i>Preview
 </a>
-<a href="/create" class="footer-button">
-	<i class="material-icons">visibility</i>Preview
-</a>
-<button class="footer-button">
-	<i class="material-icons">done</i>Save
+<button title="Save survey" class="footer-button save">
+	<i class="material-symbols-rounded">save</i>Save
 </button>
 
 <style>
 	.footer-button {
 		display: flex;
-		flex-flow: row;
-		justify-content: center;
-		align-items: flex-end;
 		text-decoration: none;
 		background-color: #4a4a4a;
 		padding: 0.25em;
 		border: 1px solid #999999;
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
-		width: fit-content;
 		font-size: 1.25em;
-		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
 		cursor: pointer;
@@ -34,9 +26,16 @@
 		background-color: #1a1a1a;
 	}
 
-	.material-icons {
-		font-size: 0.99em;
-		font-weight: bold;
-		padding-right: 0.25em;
+	.save {
+		background-color: #0075ff;
+	}
+
+	.save:hover {
+		background-color: #001c53;
+	}
+
+	i {
+		font-size: 1.15em;
+		margin-right: 0.15em;
 	}
 </style>

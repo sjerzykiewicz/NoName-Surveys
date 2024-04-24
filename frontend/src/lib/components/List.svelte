@@ -18,8 +18,11 @@
 	}
 
 	afterUpdate(() => {
-		if ($questions[questionIndex].choices.length > 2) isButtonHidden = false;
-		else isButtonHidden = true;
+		if ($questions[questionIndex].choices.length > 2) {
+			isButtonHidden = false;
+		} else {
+			isButtonHidden = true;
+		}
 	});
 </script>
 
@@ -29,16 +32,20 @@
 	</div>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
-			<div class="choice-input" contenteditable bind:textContent={choice}>
+			<div title="Enter choice" class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}
 			</div>
-			<button class:remove-button={isButtonHidden} on:click={() => removeChoice(choiceIndex)}>
-				<i class="material-icons">close</i>Choice
+			<button
+				title="Remove choice"
+				class:remove-choice={isButtonHidden}
+				on:click={() => removeChoice(choiceIndex)}
+			>
+				<i class="material-symbols-rounded">cancel</i>
 			</button>
 		</div>
 	{/each}
-	<button class="add-choice" on:click={addChoice}>
-		<i class="material-icons">add</i>Choice
+	<button title="Add choice" class="add-choice" on:click={addChoice}>
+		<i class="material-symbols-rounded">add_circle</i>Choice
 	</button>
 </div>
 
@@ -99,26 +106,21 @@
 		flex-flow: row;
 		margin-bottom: 0.5em;
 		margin-left: 2.25em;
-		margin-right: 7.04em;
+		margin-right: 2.81em;
 	}
 
-	.remove-button {
+	.remove-choice {
 		visibility: hidden;
 	}
 
 	button {
 		display: flex;
-		flex-flow: row;
-		justify-content: center;
-		align-items: flex-end;
 		background-color: #4a4a4a;
 		padding: 0.25em;
 		border: 1px solid #999999;
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
-		width: fit-content;
 		font-size: 1.25em;
-		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
 		cursor: pointer;
@@ -129,9 +131,15 @@
 		background-color: #1a1a1a;
 	}
 
-	.material-icons {
-		font-size: 0.99em;
-		font-weight: bold;
-		padding-right: 0.25em;
+	.add-choice {
+		margin-left: 1.8em;
+	}
+
+	i {
+		font-size: 1.15em;
+	}
+
+	.add-choice i {
+		margin-right: 0.15em;
 	}
 </style>

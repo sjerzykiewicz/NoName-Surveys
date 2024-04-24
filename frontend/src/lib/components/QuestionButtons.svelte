@@ -18,14 +18,26 @@
 		isPanelVisible = !isPanelVisible;
 	}
 
+	function setQuestionChoices(component: ComponentType) {
+		if ([Single, Multi, Slider, List, Rank].includes(component)) {
+			return ['', ''];
+		} else if (component === Scale) {
+			return ['1', '2', '3', '4', '5'];
+		} else {
+			return [''];
+		}
+	}
+
 	function addQuestion(component: ComponentType) {
+		const choices: Array<string> = setQuestionChoices(component);
+
 		$questions = [
 			...$questions,
 			{
 				component: component,
 				required: false,
 				question: '',
-				choices: []
+				choices: choices
 			}
 		];
 

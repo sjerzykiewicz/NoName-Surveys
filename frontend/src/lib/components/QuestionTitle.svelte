@@ -102,6 +102,7 @@
 
 	.arrows i {
 		line-height: 0.696em;
+		overflow: hidden;
 	}
 
 	.up {

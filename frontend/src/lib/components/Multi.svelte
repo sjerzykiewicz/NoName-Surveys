@@ -6,8 +6,6 @@
 
 	let isButtonHidden: boolean = true;
 
-	$questions[questionIndex].choices = ['', ''];
-
 	function addChoice() {
 		$questions[questionIndex].choices = [...$questions[questionIndex].choices, ''];
 	}

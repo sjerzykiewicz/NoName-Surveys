@@ -2,8 +2,6 @@
 	import { questions } from '$lib/stores';
 
 	export let questionIndex: number;
-
-	$questions[questionIndex].choices = ['1', '2', '3', '4', '5'];
 </script>
 
 <div class="choice-area">

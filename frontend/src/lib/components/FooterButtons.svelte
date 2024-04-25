@@ -96,12 +96,20 @@
 		background-color: #1a1a1a;
 	}
 
+	.footer-button:active {
+		background-color: #999999;
+	}
+
 	.save {
 		background-color: #0075ff;
 	}
 
 	.save:hover {
 		background-color: #001c53;
+	}
+
+	.save:active {
+		background-color: #999999;
 	}
 
 	i {

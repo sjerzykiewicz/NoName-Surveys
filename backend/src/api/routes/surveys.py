@@ -72,6 +72,16 @@ class TextQuestion(Question):
     text: TextQuestionBody
 
 
+class ListQuestionBody(BaseModel):
+    choices: list[str] = Field(
+        min_length=2, description="ListQuestion must have at least 2 choices"
+    )
+
+
+class ListQuestion(Question):
+    list: ListQuestionBody
+
+
 class Survey(BaseModel):
     title: str
     questions: list[
@@ -81,6 +91,7 @@ class Survey(BaseModel):
         | RankQuestion
         | TextQuestion
         | SliderQuestion
+        | ListQuestion
     ] = []
 
 

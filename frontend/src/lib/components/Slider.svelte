@@ -2,8 +2,6 @@
 	import { questions } from '$lib/stores';
 
 	export let questionIndex: number;
-
-	$questions[questionIndex].choices = ['', ''];
 </script>
 
 <div class="choice-area">
@@ -20,6 +18,7 @@
 	</div>
 	<div class="limits">
 		<input
+			title="Enter minimum value"
 			class="limit-input"
 			type="number"
 			name={$questions[questionIndex].question}
@@ -29,6 +28,7 @@
 			bind:value={$questions[questionIndex].choices[0]}
 		/>
 		<input
+			title="Enter maximum value"
 			class="limit-input"
 			type="number"
 			name={$questions[questionIndex].question}

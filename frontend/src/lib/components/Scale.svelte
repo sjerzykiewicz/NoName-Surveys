@@ -2,8 +2,6 @@
 	import { questions } from '$lib/stores';
 
 	export let questionIndex: number;
-
-	$questions[questionIndex].choices = ['1', '2', '3', '4', '5'];
 </script>
 
 <div class="choice-area">
@@ -24,12 +22,13 @@
 		display: flex;
 		flex-flow: row;
 		align-items: center;
-		justify-content: space-evenly;
+		justify-content: space-around;
 		font-size: 1em;
 		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
-		width: 86%;
+		width: calc(86% - 2.25em);
+		margin-left: 2.25em;
 	}
 
 	.choice {

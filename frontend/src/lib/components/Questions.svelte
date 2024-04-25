@@ -18,7 +18,7 @@
 	<div
 		class="question"
 		in:slide={{ duration: 300, easing: cubicInOut }}
-		on:introend={() => scrollToElement('.button-group')}
+		on:introend={() => scrollToElement('.add-question')}
 	>
 		<QuestionTitle {questionIndex} />
 		<svelte:component this={question.component} {questionIndex} />

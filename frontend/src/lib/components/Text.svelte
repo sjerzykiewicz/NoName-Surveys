@@ -2,13 +2,12 @@
 	import { questions } from '$lib/stores';
 
 	export let questionIndex: number;
-
-	$questions[questionIndex].choices = [''];
 </script>
 
 <div class="choice-area">
 	<div class="details">
 		<div
+			title="Enter question details"
 			class="details-input"
 			contenteditable
 			bind:textContent={$questions[questionIndex].choices[0]}

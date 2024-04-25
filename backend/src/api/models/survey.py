@@ -8,7 +8,8 @@ class Question(BaseModel):
 
 class SingleQuestionBody(BaseModel):
     choices: list[str] = Field(
-        min_length=2, description="SingleQuestion must have at least 2 choices"
+        min_length=2,
+        description="Single choice question must have at least 2 options",
     )
 
 
@@ -18,7 +19,8 @@ class SingleQuestion(Question):
 
 class MultiQuestionBody(BaseModel):
     choices: list[str] = Field(
-        min_length=2, description="MultiQuestion must have at least 2 choices"
+        min_length=2,
+        description="Multiple choice question must have at least 2 options",
     )
 
 
@@ -35,8 +37,8 @@ class ScaleQuestion(Question):
 
 
 class SliderQuestionBody(BaseModel):
-    min: float
-    max: float
+    min_value: float
+    max_value: float
 
 
 class SliderQuestion(Question):
@@ -45,7 +47,7 @@ class SliderQuestion(Question):
 
 class RankQuestionBody(BaseModel):
     choices: list[str] = Field(
-        min_length=2, description="RankQuestion must have at least 2 choices"
+        min_length=2, description="Rank question must have at least 2 options"
     )
 
 
@@ -63,7 +65,7 @@ class TextQuestion(Question):
 
 class ListQuestionBody(BaseModel):
     choices: list[str] = Field(
-        min_length=2, description="ListQuestion must have at least 2 choices"
+        min_length=2, description="List question must have at least 2 options"
     )
 
 

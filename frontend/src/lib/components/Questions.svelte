@@ -28,6 +28,6 @@
 
 <style>
 	.question {
-		margin-bottom: 2em;
+		margin-bottom: 1.875em;
 	}
 </style>

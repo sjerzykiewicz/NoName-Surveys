@@ -10,6 +10,7 @@
 	import { type ComponentType, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import PreviousQuestion from './PreviousQuestion.svelte';
 
 	let isPanelVisible: boolean = false;
 	let previousQuestion: ComponentType;
@@ -73,21 +74,17 @@
 		<button
 			title="Choose question type"
 			class="add-question"
-			class:active={isPanelVisible}
+			class:clicked={isPanelVisible}
 			class:previous={previousQuestion}
 			on:click={togglePanel}
 		>
 			<i class="material-symbols-rounded">add</i>Question
 		</button>
 		{#if previousQuestion}
-			<button
-				title="Add previous question type"
-				class="add-previous-question"
-				transition:slide={{ axis: 'x', duration: 300, easing: cubicInOut }}
-				on:click={() => addQuestion(previousQuestion)}
-			>
-				<i class="material-symbols-rounded">repeat</i>
-			</button>
+			<PreviousQuestion
+				{previousQuestion}
+				on:addPreviousQuestion={(event) => addQuestion(event.detail.component)}
+			/>
 		{/if}
 	</div>
 	{#if isPanelVisible}
@@ -138,6 +135,10 @@
 		background-color: #1a1a1a;
 	}
 
+	button:active {
+		background-color: #999999;
+	}
+
 	.button-group {
 		width: fit-content;
 		margin-bottom: 14.5em;
@@ -162,23 +163,23 @@
 			border-radius 0.3s;
 	}
 
-	.add-question.active {
-		background-color: #1a1a1a;
+	.add-question.clicked {
+		background-color: #0075ff;
 		border-bottom-right-radius: 0px;
 		border-bottom-left-radius: 0px;
+	}
+
+	.add-question.clicked:hover {
+		background-color: #001c53;
+	}
+
+	.add-question.clicked:active {
+		background-color: #999999;
 	}
 
 	.add-question.previous {
 		border-top-right-radius: 0px;
 		border-bottom-right-radius: 0px;
-	}
-
-	.add-previous-question {
-		width: auto;
-		border: 1px solid #999999;
-		border-left: 0px;
-		border-radius: 0px 5px 5px 0px;
-		transition: background-color 0.3s;
 	}
 
 	.button-panel {
@@ -209,7 +210,7 @@
 
 	.add-question i {
 		margin-right: 0.15em;
-		font-variation-settings: 'wght' 900;
+		font-variation-settings: 'wght' 700;
 	}
 
 	.type-button i {

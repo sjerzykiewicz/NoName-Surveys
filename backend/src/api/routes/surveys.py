@@ -74,9 +74,16 @@ class TextQuestion(Question):
 
 class Survey(BaseModel):
     title: str
-    questions: list[Question] = []
+    questions: list[
+        SingleQuestion
+        | MultiQuestion
+        | ScaleQuestion
+        | RankQuestion
+        | TextQuestion
+        | SliderQuestion
+    ] = []
 
 
 @router.post("/create", response_description="Create a new survey")
 async def create_survey(survey_create: Survey):
-    return {"message": "OK"}
+    return survey_create

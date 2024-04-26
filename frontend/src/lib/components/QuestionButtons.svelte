@@ -217,4 +217,30 @@
 		margin-right: 0.24375em;
 		margin-left: 0.08125em;
 	}
+
+	@media screen and (max-width: 767px) {
+		.button-group {
+			margin-bottom: 0em;
+		}
+
+		.button-group.active {
+			margin-bottom: 14.5em;
+		}
+
+		.add-question {
+			font-size: 1em;
+		}
+
+		.button-panel {
+			height: 14.5em;
+		}
+
+		.type-button {
+			font-size: 1em;
+		}
+
+		.type-button i {
+			font-size: 1em;
+		}
+	}
 </style>

@@ -48,4 +48,14 @@
 		font-size: 1.25em;
 		cursor: default;
 	}
+
+	@media screen and (max-width: 767px) {
+		.choice-area {
+			font-size: 1em;
+		}
+
+		.number {
+			font-size: 1em;
+		}
+	}
 </style>

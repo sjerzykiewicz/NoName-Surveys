@@ -19,11 +19,11 @@
 		display: flex;
 		flex-flow: column;
 		height: auto;
-		min-height: calc(100% - 5.5em);
+		min-height: calc(100% - 5em);
 		width: 50%;
 		min-width: 767px;
 		margin: auto;
-		margin-top: 2em;
+		padding-top: 1.5em;
 		border: 1px solid #999999;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		background-color: #2a2a2a;
@@ -40,7 +40,7 @@
 	@media screen and (max-width: 767px) {
 		.box {
 			width: 100%;
-			min-width: 0;
+			min-width: 0px;
 		}
 	}
 

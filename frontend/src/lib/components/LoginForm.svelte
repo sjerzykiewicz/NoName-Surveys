@@ -9,7 +9,7 @@
 
 <style>
 	form {
-		margin-top: 1em;
+		margin: 2em 0 2em 0;
 		text-align: center;
 		color: #eaeaea;
 		font-family: 'Jura';
@@ -30,5 +30,11 @@
 	button:hover {
 		background-color: #1a1a1a;
 		transition: 0.3s;
+	}
+
+	@media screen and (max-width: 767px) {
+		form {
+			font-size: 1.5em;
+		}
 	}
 </style>

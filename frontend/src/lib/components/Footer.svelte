@@ -12,7 +12,15 @@
 		align-items: center;
 		position: fixed;
 		bottom: 0;
+		min-width: calc(767px - 1.5em);
 		width: calc(50% - 1.5em);
 		background-color: #2a2a2a;
+	}
+
+	@media screen and (max-width: 767px) {
+		.footer {
+			width: calc(100% - 1.5em);
+			min-width: 0px;
+		}
 	}
 </style>

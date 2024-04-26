@@ -149,4 +149,30 @@
 		font-size: 1.15em;
 		font-variation-settings: 'wght' 900;
 	}
+
+	@media screen and (max-width: 767px) {
+		.question-area {
+			font-size: 1em;
+		}
+
+		.question-input {
+			font-size: 1em;
+		}
+
+		.index {
+			font-size: 1em;
+		}
+
+		.arrows i {
+			font-size: 1.5em;
+		}
+
+		button {
+			font-size: 0.8em;
+		}
+
+		i {
+			font-size: 1em;
+		}
+	}
 </style>

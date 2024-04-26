@@ -9,7 +9,7 @@
 
 <style>
 	a {
-		padding: 0.5em;
+		padding: 0.5em 0 0.5em 0;
 		text-align: center;
 		color: #eaeaea;
 		font-family: 'Jura';
@@ -19,14 +19,15 @@
 		border-left: none;
 		width: 100%;
 		text-decoration: none;
+		transition: background-color 0.3s;
 	}
 
 	a:hover {
-		background-color: #4a4a4a;
+		background-color: #0075ff;
 		transition: background-color 0.3s;
 	}
 
 	.active {
-		background-color: #4a4a4a;
+		background-color: #0075ff;
 	}
 </style>

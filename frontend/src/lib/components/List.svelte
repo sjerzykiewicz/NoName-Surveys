@@ -140,4 +140,22 @@
 	.add-choice i {
 		margin-right: 0.15em;
 	}
+
+	@media screen and (max-width: 767px) {
+		.choice-input {
+			font-size: 1em;
+		}
+
+		.dropdown-top {
+			font-size: 1em;
+		}
+
+		button {
+			font-size: 1em;
+		}
+
+		i {
+			font-size: 1em;
+		}
+	}
 </style>

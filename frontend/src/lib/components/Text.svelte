@@ -49,4 +49,14 @@
 		content: 'Enter question details...';
 		color: #eaeaea40;
 	}
+
+	@media screen and (max-width: 767px) {
+		.choice-area {
+			font-size: 1em;
+		}
+
+		.details-input {
+			font-size: 1em;
+		}
+	}
 </style>

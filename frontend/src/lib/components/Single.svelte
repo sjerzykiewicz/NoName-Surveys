@@ -120,4 +120,18 @@
 	.add-choice i {
 		margin-right: 0.15em;
 	}
+
+	@media screen and (max-width: 767px) {
+		.choice-area {
+			font-size: 1em;
+		}
+
+		.choice-input {
+			font-size: 1em;
+		}
+
+		.add-choice i {
+			font-size: 1em;
+		}
+	}
 </style>

@@ -2,28 +2,35 @@
 	import { title } from '$lib/stores';
 	import { questions } from '$lib/stores';
 	import * as Survey from '$lib/Survey';
+	import Single from '$lib/components/Single.svelte';
+	import Multi from '$lib/components/Multi.svelte';
+	import Scale from '$lib/components/Scale.svelte';
+	import Slider from '$lib/components/Slider.svelte';
+	import List from '$lib/components/List.svelte';
+	import Rank from '$lib/components/Rank.svelte';
+	import Text from '$lib/components/Text.svelte';
 
 	function parseSurvey() {
 		let surveyTitle: string = $title;
 		let questionList: Array<Survey.Question> = [];
 		$questions.forEach((q) => {
-			switch (q.component.name) {
-				case 'Proxy<Single>':
+			switch (q.component) {
+				case Single:
 					questionList = [
 						...questionList,
 						new Survey.SingleQuestion(q.required, q.question, q.choices)
 					];
 					break;
-				case 'Proxy<Multi>':
+				case Multi:
 					questionList = [
 						...questionList,
 						new Survey.MultiQuestion(q.required, q.question, q.choices)
 					];
 					break;
-				case 'Proxy<Scale>':
+				case Scale:
 					questionList = [...questionList, new Survey.ScaleQuestion(q.required, q.question)];
 					break;
-				case 'Proxy<Slider>':
+				case Slider:
 					questionList = [
 						...questionList,
 						new Survey.SliderQuestion(
@@ -34,19 +41,19 @@
 						)
 					];
 					break;
-				case 'Proxy<List>':
+				case List:
 					questionList = [
 						...questionList,
 						new Survey.ListQuestion(q.required, q.question, q.choices)
 					];
 					break;
-				case 'Proxy<Rank>':
+				case Rank:
 					questionList = [
 						...questionList,
 						new Survey.RankQuestion(q.required, q.question, q.choices)
 					];
 					break;
-				case 'Proxy<Text>':
+				case Text:
 					questionList = [
 						...questionList,
 						new Survey.TextQuestion(q.required, q.question, q.choices[0])

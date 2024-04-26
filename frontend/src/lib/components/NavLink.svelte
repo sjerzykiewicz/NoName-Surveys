@@ -19,12 +19,12 @@
 		border-left: none;
 		width: 100%;
 		text-decoration: none;
-		transition: background-color 0.3s;
+		transition: background-color 0.2s;
 	}
 
 	a:hover {
 		background-color: #0075ff;
-		transition: background-color 0.3s;
+		transition: background-color 0.2s;
 	}
 
 	.active {

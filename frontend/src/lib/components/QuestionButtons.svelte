@@ -178,7 +178,7 @@
 		border: 1px solid #999999;
 		border-left: 0px;
 		border-radius: 0px 5px 5px 0px;
-		transition: background-color 0.3s;
+		transition: background-color 0.2s;
 	}
 
 	.button-panel {
@@ -195,7 +195,7 @@
 		border: 0px;
 		border-left: 1px solid #999999;
 		border-right: 1px solid #999999;
-		transition: background-color 0.3s;
+		transition: background-color 0.2s;
 	}
 
 	.last {

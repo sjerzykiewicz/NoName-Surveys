@@ -18,7 +18,7 @@
 		font-family: 'Jura';
 		color: #eaeaea;
 		cursor: pointer;
-		transition: background-color 0.3s;
+		transition: background-color 0.2s;
 		margin-left: 0.5em;
 	}
 

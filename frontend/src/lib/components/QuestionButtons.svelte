@@ -16,7 +16,7 @@
 	let isPanelVisible: boolean = false;
 	let isQuestionAdded: boolean = false;
 	let previousQuestionType: ComponentType;
-	let questionTypes: Array<ComponentType> = [Text, Single, Multi, Scale, YesNo, List, Rank, Slider];
+	let questionTypes: Array<ComponentType> = [Text, Single, Multi, Scale, YesNo, Slider, Rank, List];
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;

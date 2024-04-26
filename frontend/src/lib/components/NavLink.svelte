@@ -23,7 +23,7 @@
 
 	a:hover {
 		background-color: #4a4a4a;
-		transition: background-color 0.3s;
+		transition: background-color 0.2s;
 	}
 
 	.active {

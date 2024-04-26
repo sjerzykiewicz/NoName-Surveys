@@ -22,6 +22,11 @@
 		$questions[questionIndex] = question;
 		$questions = $questions;
 	}
+
+	function toggleRequirement() {
+		$questions[questionIndex - 1].required = !$questions[questionIndex - 1].required;
+		$questions = $questions;
+	}
 </script>
 
 <div class="question-area">
@@ -52,6 +57,14 @@
 	>
 		{$questions[questionIndex - 1].question}
 	</div>
+	<button
+		title={$questions[questionIndex - 1].required ? 'Required' : 'Not required'}
+		class="required-button"
+		class:checked={$questions[questionIndex - 1].required}
+		on:click={toggleRequirement}
+	>
+		<i class="material-symbols-rounded">asterisk</i>
+	</button>
 	<button title="Remove question" on:click={removeQuestion}>
 		<i class="material-symbols-rounded">close</i>
 	</button>
@@ -127,6 +140,26 @@
 		cursor: not-allowed;
 	}
 
+	.required-button {
+		margin-right: 0.5em;
+	}
+
+	.required-button i {
+		font-variation-settings: 'wght' 400;
+	}
+
+	.required-button.checked {
+		background-color: #0075ff;
+	}
+
+	.required-button.checked:hover {
+		background-color: #001c53;
+	}
+
+	.required-button.checked:active {
+		background-color: #999999;
+	}
+
 	button {
 		display: flex;
 		background-color: #4a4a4a;
@@ -138,15 +171,19 @@
 		font-family: 'Jura';
 		color: #eaeaea;
 		cursor: pointer;
-		transition: background-color 0.3s;
+		transition: background-color 0.2s;
 	}
 
 	button:hover {
 		background-color: #1a1a1a;
 	}
 
+	button:active {
+		background-color: #999999;
+	}
+
 	i {
 		font-size: 1.15em;
-		font-variation-settings: 'wght' 900;
+		font-variation-settings: 'wght' 700;
 	}
 </style>

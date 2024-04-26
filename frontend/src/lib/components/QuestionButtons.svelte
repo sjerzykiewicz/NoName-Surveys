@@ -5,14 +5,18 @@
 	import Slider from '$lib/components/Slider.svelte';
 	import List from '$lib/components/List.svelte';
 	import Rank from '$lib/components/Rank.svelte';
+	import YesNo from '$lib/components/YesNo.svelte';
 	import Text from '$lib/components/Text.svelte';
 	import { questions } from '$lib/stores';
 	import { type ComponentType, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import QuestionType from './QuestionType.svelte';
 
 	let isPanelVisible: boolean = false;
-	let previousQuestion: ComponentType;
+	let isQuestionAdded: boolean = false;
+	let previousQuestionType: ComponentType;
+	let questionTypes: Array<ComponentType> = [Text, Single, Multi, Scale, YesNo, Slider, Rank, List];
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -23,6 +27,8 @@
 			return ['', ''];
 		} else if (component === Scale) {
 			return ['1', '2', '3', '4', '5'];
+		} else if (component === YesNo) {
+			return ['Yes', 'No'];
 		} else {
 			return [''];
 		}
@@ -41,7 +47,8 @@
 			}
 		];
 
-		previousQuestion = component;
+		previousQuestionType = component;
+		isQuestionAdded = true;
 		isPanelVisible = false;
 	}
 
@@ -68,55 +75,40 @@
 	});
 </script>
 
-<div class="button-group" class:active={isPanelVisible}>
+<div class="button-group" class:clicked={isPanelVisible} class:previous={previousQuestionType}>
 	<div class="add-buttons">
 		<button
 			title="Choose question type"
 			class="add-question"
-			class:active={isPanelVisible}
-			class:previous={previousQuestion}
+			class:clicked={isPanelVisible}
+			class:previous={previousQuestionType}
 			on:click={togglePanel}
 		>
 			<i class="material-symbols-rounded">add</i>Question
 		</button>
-		{#if previousQuestion}
-			<button
-				title="Add previous question type"
-				class="add-previous-question"
-				transition:slide={{ axis: 'x', duration: 300, easing: cubicInOut }}
-				on:click={() => addQuestion(previousQuestion)}
-			>
-				<i class="material-symbols-rounded">repeat</i>
-			</button>
+		{#if isQuestionAdded}
+			<QuestionType
+				questionType={previousQuestionType}
+				questionTypeIndex={-1}
+				{isQuestionAdded}
+				on:addQuestionType={(event) => addQuestion(event.detail.component)}
+			/>
 		{/if}
 	</div>
 	{#if isPanelVisible}
 		<div
 			class="button-panel"
-			transition:slide={{ duration: 300, easing: cubicInOut }}
+			transition:slide={{ duration: 200, easing: cubicInOut }}
 			on:introstart={() => scrollToElement('.add-question')}
 		>
-			<button title="Single choice" class="type-button" on:click={() => addQuestion(Single)}
-				><i class="material-symbols-rounded">radio_button_checked</i>Single</button
-			>
-			<button title="Multiple choice" class="type-button" on:click={() => addQuestion(Multi)}
-				><i class="material-symbols-rounded">check_box</i>Multi</button
-			>
-			<button title="1-5 scale" class="type-button" on:click={() => addQuestion(Scale)}
-				><i class="material-symbols-rounded">star</i>Scale</button
-			>
-			<button title="Slider" class="type-button" on:click={() => addQuestion(Slider)}
-				><i class="material-symbols-rounded">sliders</i>Slider</button
-			>
-			<button title="Dropdown menu" class="type-button" on:click={() => addQuestion(List)}
-				><i class="material-symbols-rounded">expand_circle_down</i>List</button
-			>
-			<button title="Ranking choice" class="type-button" on:click={() => addQuestion(Rank)}
-				><i class="material-symbols-rounded">numbers</i>Rank</button
-			>
-			<button title="Open question" class="last type-button" on:click={() => addQuestion(Text)}
-				><i class="material-symbols-rounded">text_fields</i>Text</button
-			>
+			{#each questionTypes.filter((questionType) => questionType !== previousQuestionType) as questionType, questionTypeIndex}
+				<QuestionType
+					{questionType}
+					{questionTypeIndex}
+					{isQuestionAdded}
+					on:addQuestionType={(event) => addQuestion(event.detail.component)}
+				/>
+			{/each}
 		</div>
 	{/if}
 </div>
@@ -138,14 +130,26 @@
 		background-color: #1a1a1a;
 	}
 
+	button:active {
+		background-color: #999999;
+	}
+
 	.button-group {
 		width: fit-content;
+		margin-bottom: 16.57em;
+	}
+
+	.button-group.clicked {
+		margin-bottom: 0em;
+		transition-delay: 0.2s;
+	}
+
+	.button-group.previous {
 		margin-bottom: 14.5em;
 	}
 
-	.button-group.active {
+	.button-group.clicked.previous {
 		margin-bottom: 0em;
-		transition-delay: 0.3s;
 	}
 
 	.add-buttons {
@@ -158,27 +162,27 @@
 		border: 1px solid #999999;
 		border-radius: 5px;
 		transition:
-			background-color 0.3s,
-			border-radius 0.3s;
+			background-color 0.2s,
+			border-radius 0.2s;
 	}
 
-	.add-question.active {
-		background-color: #1a1a1a;
+	.add-question.clicked {
+		background-color: #0075ff;
 		border-bottom-right-radius: 0px;
 		border-bottom-left-radius: 0px;
+	}
+
+	.add-question.clicked:hover {
+		background-color: #001c53;
+	}
+
+	.add-question.clicked:active {
+		background-color: #999999;
 	}
 
 	.add-question.previous {
 		border-top-right-radius: 0px;
 		border-bottom-right-radius: 0px;
-	}
-
-	.add-previous-question {
-		width: auto;
-		border: 1px solid #999999;
-		border-left: 0px;
-		border-radius: 0px 5px 5px 0px;
-		transition: background-color 0.3s;
 	}
 
 	.button-panel {
@@ -187,20 +191,7 @@
 		border-radius: 0px 0px 5px 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		width: fit-content;
-		height: 14.5em;
-	}
-
-	.type-button {
-		flex: 1;
-		border: 0px;
-		border-left: 1px solid #999999;
-		border-right: 1px solid #999999;
-		transition: background-color 0.3s;
-	}
-
-	.last {
-		border-radius: 0px 0px 5px 5px;
-		border-bottom: 1px solid #999999;
+		height: auto;
 	}
 
 	i {
@@ -209,12 +200,6 @@
 
 	.add-question i {
 		margin-right: 0.15em;
-		font-variation-settings: 'wght' 900;
-	}
-
-	.type-button i {
-		font-size: 1em;
-		margin-right: 0.24375em;
-		margin-left: 0.08125em;
+		font-variation-settings: 'wght' 700;
 	}
 </style>

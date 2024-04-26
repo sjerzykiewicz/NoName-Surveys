@@ -23,7 +23,6 @@
 			type="number"
 			name={$questions[questionIndex].question}
 			autocomplete="off"
-			required
 			placeholder="Enter min..."
 			bind:value={$questions[questionIndex].choices[0]}
 		/>
@@ -33,7 +32,6 @@
 			type="number"
 			name={$questions[questionIndex].question}
 			autocomplete="off"
-			required
 			placeholder="Enter max..."
 			bind:value={$questions[questionIndex].choices[1]}
 		/>

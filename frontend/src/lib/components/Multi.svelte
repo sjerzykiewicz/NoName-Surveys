@@ -102,11 +102,15 @@
 		font-family: 'Jura';
 		color: #eaeaea;
 		cursor: pointer;
-		transition: background-color 0.3s;
+		transition: background-color 0.2s;
 	}
 
 	button:hover {
 		background-color: #1a1a1a;
+	}
+
+	button:active {
+		background-color: #999999;
 	}
 
 	.add-choice {

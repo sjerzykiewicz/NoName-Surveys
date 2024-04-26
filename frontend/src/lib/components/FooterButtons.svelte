@@ -18,12 +18,16 @@
 		font-family: 'Jura';
 		color: #eaeaea;
 		cursor: pointer;
-		transition: background-color 0.3s;
+		transition: background-color 0.2s;
 		margin-left: 0.5em;
 	}
 
 	.footer-button:hover {
 		background-color: #1a1a1a;
+	}
+
+	.footer-button:active {
+		background-color: #999999;
 	}
 
 	.save {
@@ -32,6 +36,10 @@
 
 	.save:hover {
 		background-color: #001c53;
+	}
+
+	.save:active {
+		background-color: #999999;
 	}
 
 	i {

@@ -1,7 +1,79 @@
+<script lang="ts">
+	import { title } from '$lib/stores';
+	import { questions } from '$lib/stores';
+	import Question from '$lib/entities/questions/Question';
+	import SingleQuestion from '$lib/entities/questions/Single';
+	import MultiQuestion from '$lib/entities/questions/Multi';
+	import ScaleQuestion from '$lib/entities/questions/Scale';
+	import SliderQuestion from '$lib/entities/questions/Slider';
+	import ListQuestion from '$lib/entities/questions/List';
+	import RankQuestion from '$lib/entities/questions/Rank';
+	import TextQuestion from '$lib/entities/questions/Text';
+	import YesNoQuestion from '$lib/entities/questions/YesNo';
+	import Survey from '$lib/entities/Survey';
+	import Single from '$lib/components/Single.svelte';
+	import Multi from '$lib/components/Multi.svelte';
+	import Scale from '$lib/components/Scale.svelte';
+	import Slider from '$lib/components/Slider.svelte';
+	import List from '$lib/components/List.svelte';
+	import Rank from '$lib/components/Rank.svelte';
+	import Text from '$lib/components/Text.svelte';
+	import YesNo from '$lib/components/YesNo.svelte';
+
+	function constructQuestionList() {
+		let questionList: Array<Question> = [];
+		$questions.forEach((q) => {
+			switch (q.component) {
+				case Single:
+					questionList = [...questionList, new SingleQuestion(q.required, q.question, q.choices)];
+					break;
+				case Multi:
+					questionList = [...questionList, new MultiQuestion(q.required, q.question, q.choices)];
+					break;
+				case Scale:
+					questionList = [...questionList, new ScaleQuestion(q.required, q.question)];
+					break;
+				case Slider:
+					questionList = [
+						...questionList,
+						new SliderQuestion(
+							q.required,
+							q.question,
+							parseFloat(q.choices[0]),
+							parseFloat(q.choices[1])
+						)
+					];
+					break;
+				case List:
+					questionList = [...questionList, new ListQuestion(q.required, q.question, q.choices)];
+					break;
+				case Rank:
+					questionList = [...questionList, new RankQuestion(q.required, q.question, q.choices)];
+					break;
+				case Text:
+					questionList = [...questionList, new TextQuestion(q.required, q.question, q.choices[0])];
+					break;
+				case YesNo:
+					questionList = [...questionList, new YesNoQuestion(q.required, q.question)];
+					break;
+			}
+		});
+
+		return questionList;
+	}
+
+	function parseSurvey() {
+		let parsedSurvey: Survey = new Survey($title, constructQuestionList());
+
+		// TODO remove this later
+		console.log(JSON.stringify(parsedSurvey));
+	}
+</script>
+
 <a href="/create" title="Preview survey" class="footer-button">
 	<i class="material-symbols-rounded">search</i>Preview
 </a>
-<button title="Save survey" class="footer-button save">
+<button title="Save survey" class="footer-button save" on:click={parseSurvey}>
 	<i class="material-symbols-rounded">save</i>Save
 </button>
 

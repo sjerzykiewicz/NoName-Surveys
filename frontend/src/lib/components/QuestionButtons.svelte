@@ -6,104 +6,215 @@
 	import List from '$lib/components/List.svelte';
 	import Rank from '$lib/components/Rank.svelte';
 	import Text from '$lib/components/Text.svelte';
-	import { fade } from 'svelte/transition';
-	import { type ComponentType } from 'svelte';
 	import { questions } from '$lib/stores';
+	import { type ComponentType, onMount } from 'svelte';
+	import { slide } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
 
 	let isPanelVisible: boolean = false;
+	let previousQuestion: ComponentType;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
 	}
 
+	function setQuestionChoices(component: ComponentType) {
+		if ([Single, Multi, Slider, List, Rank].includes(component)) {
+			return ['', ''];
+		} else if (component === Scale) {
+			return ['1', '2', '3', '4', '5'];
+		} else {
+			return [''];
+		}
+	}
+
 	function addQuestion(component: ComponentType) {
+		const choices: Array<string> = setQuestionChoices(component);
+
 		$questions = [
 			...$questions,
 			{
 				component: component,
+				required: false,
 				question: '',
-				choices: []
+				choices: choices
 			}
 		];
-		togglePanel();
+
+		previousQuestion = component;
+		isPanelVisible = false;
 	}
+
+	function scrollToElement(selector: string) {
+		const element = document.querySelector(selector) as HTMLElement;
+
+		if (element) {
+			element.scrollIntoView({ behavior: 'smooth' });
+		}
+	}
+
+	onMount(() => {
+		function handleClick(event: MouseEvent) {
+			if (isPanelVisible && !(event.target as HTMLElement).closest('.button-group')) {
+				isPanelVisible = false;
+			}
+		}
+
+		document.body.addEventListener('click', handleClick);
+
+		return () => {
+			document.body.removeEventListener('click', handleClick);
+		};
+	});
 </script>
 
-<button class="add-question" on:click={togglePanel}>
-	<i class="material-icons">add</i>Question
-</button>
-{#if isPanelVisible}
-	<div class="button-panel" transition:fade={{ duration: 200 }}>
-		<button class="first type-button" on:click={() => addQuestion(Single)}>Single</button>
-		<button class="type-button" on:click={() => addQuestion(Multi)}>Multi</button>
-		<button class="type-button" on:click={() => addQuestion(Scale)}>Scale</button>
-		<button class="type-button" on:click={() => addQuestion(Slider)}>Slider</button>
-		<button class="type-button" on:click={() => addQuestion(List)}>List</button>
-		<button class="type-button" on:click={() => addQuestion(Rank)}>Rank</button>
-		<button class="last type-button" on:click={() => addQuestion(Text)}>Text</button>
+<div class="button-group" class:active={isPanelVisible}>
+	<div class="add-buttons">
+		<button
+			title="Choose question type"
+			class="add-question"
+			class:active={isPanelVisible}
+			class:previous={previousQuestion}
+			on:click={togglePanel}
+		>
+			<i class="material-symbols-rounded">add</i>Question
+		</button>
+		{#if previousQuestion}
+			<button
+				title="Add previous question type"
+				class="add-previous-question"
+				transition:slide={{ axis: 'x', duration: 300, easing: cubicInOut }}
+				on:click={() => addQuestion(previousQuestion)}
+			>
+				<i class="material-symbols-rounded">repeat</i>
+			</button>
+		{/if}
 	</div>
-{/if}
+	{#if isPanelVisible}
+		<div
+			class="button-panel"
+			transition:slide={{ duration: 300, easing: cubicInOut }}
+			on:introstart={() => scrollToElement('.add-question')}
+		>
+			<button title="Single choice" class="type-button" on:click={() => addQuestion(Single)}
+				><i class="material-symbols-rounded">radio_button_checked</i>Single</button
+			>
+			<button title="Multiple choice" class="type-button" on:click={() => addQuestion(Multi)}
+				><i class="material-symbols-rounded">check_box</i>Multi</button
+			>
+			<button title="1-5 scale" class="type-button" on:click={() => addQuestion(Scale)}
+				><i class="material-symbols-rounded">star</i>Scale</button
+			>
+			<button title="Slider" class="type-button" on:click={() => addQuestion(Slider)}
+				><i class="material-symbols-rounded">sliders</i>Slider</button
+			>
+			<button title="Dropdown menu" class="type-button" on:click={() => addQuestion(List)}
+				><i class="material-symbols-rounded">expand_circle_down</i>List</button
+			>
+			<button title="Ranking choice" class="type-button" on:click={() => addQuestion(Rank)}
+				><i class="material-symbols-rounded">numbers</i>Rank</button
+			>
+			<button title="Open question" class="last type-button" on:click={() => addQuestion(Text)}
+				><i class="material-symbols-rounded">text_fields</i>Text</button
+			>
+		</div>
+	{/if}
+</div>
 
 <style>
+	button {
+		display: flex;
+		align-items: center;
+		background-color: #4a4a4a;
+		padding: 0.25em;
+		width: 6.25em;
+		font-size: 1.25em;
+		font-family: 'Jura';
+		color: #eaeaea;
+		cursor: pointer;
+	}
+
 	button:hover {
 		background-color: #1a1a1a;
 	}
 
-	.add-question {
+	.button-group {
+		width: fit-content;
+		margin-bottom: 14.5em;
+	}
+
+	.button-group.active {
+		margin-bottom: 0em;
+		transition-delay: 0.3s;
+	}
+
+	.add-buttons {
 		display: flex;
-		flex-flow: row;
-		justify-content: center;
-		align-items: flex-end;
-		background-color: #4a4a4a;
-		padding: 0.25em;
-		border: 1px solid #999999;
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
-		width: fit-content;
-		font-size: 1.25em;
-		font-weight: normal;
-		font-family: 'Jura';
-		color: #eaeaea;
-		cursor: pointer;
+	}
+
+	.add-question {
+		border: 1px solid #999999;
+		border-radius: 5px;
+		transition:
+			background-color 0.3s,
+			border-radius 0.3s;
+	}
+
+	.add-question.active {
+		background-color: #1a1a1a;
+		border-bottom-right-radius: 0px;
+		border-bottom-left-radius: 0px;
+	}
+
+	.add-question.previous {
+		border-top-right-radius: 0px;
+		border-bottom-right-radius: 0px;
+	}
+
+	.add-previous-question {
+		width: auto;
+		border: 1px solid #999999;
+		border-left: 0px;
+		border-radius: 0px 5px 5px 0px;
 		transition: background-color 0.3s;
-		margin-right: 0.5em;
-		margin-bottom: 33%;
-		float: left;
 	}
 
 	.button-panel {
 		display: flex;
-		flex-flow: row;
+		flex-flow: column;
+		border-radius: 0px 0px 5px 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		width: fit-content;
-		border-radius: 5px;
-		border: 1px solid #999999;
+		height: 14.5em;
 	}
 
 	.type-button {
-		background-color: #4a4a4a;
-		padding: 0.25em;
-		width: fit-content;
-		font-size: 1.25em;
-		font-weight: normal;
-		font-family: 'Jura';
-		color: #eaeaea;
+		flex: 1;
 		border: 0px;
-		cursor: pointer;
+		border-left: 1px solid #999999;
+		border-right: 1px solid #999999;
 		transition: background-color 0.3s;
 	}
 
-	.first {
-		border-radius: 5px 0px 0px 5px;
-	}
-
 	.last {
-		border-radius: 0px 5px 5px 0px;
+		border-radius: 0px 0px 5px 5px;
+		border-bottom: 1px solid #999999;
 	}
 
-	.material-icons {
-		font-size: 0.99em;
-		font-weight: bold;
-		padding-right: 0.25em;
+	i {
+		font-size: 1.15em;
+	}
+
+	.add-question i {
+		margin-right: 0.15em;
+		font-variation-settings: 'wght' 900;
+	}
+
+	.type-button i {
+		font-size: 1em;
+		margin-right: 0.24375em;
+		margin-left: 0.08125em;
 	}
 </style>

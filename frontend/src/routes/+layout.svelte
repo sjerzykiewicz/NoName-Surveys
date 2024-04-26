@@ -19,7 +19,7 @@
 		display: flex;
 		flex-flow: column;
 		height: auto;
-		min-height: 100%;
+		min-height: calc(100% - 5.5em);
 		width: 50%;
 		min-width: 767px;
 		margin: auto;

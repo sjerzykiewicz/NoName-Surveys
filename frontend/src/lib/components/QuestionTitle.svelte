@@ -8,19 +8,52 @@
 		$questions.splice(questionIndex - 1, 1);
 		$questions = $questions;
 	}
+
+	function moveQuestionUp() {
+		const question = $questions[questionIndex - 1];
+		$questions[questionIndex - 1] = $questions[questionIndex - 2];
+		$questions[questionIndex - 2] = question;
+		$questions = $questions;
+	}
+
+	function moveQuestionDown() {
+		const question = $questions[questionIndex - 1];
+		$questions[questionIndex - 1] = $questions[questionIndex];
+		$questions[questionIndex] = question;
+		$questions = $questions;
+	}
 </script>
 
 <div class="question-area">
 	<div class="index">{questionIndex}.</div>
+	<div class="arrows">
+		<button
+			title="Move question up"
+			class="up"
+			disabled={questionIndex === 1}
+			on:click={moveQuestionUp}
+		>
+			<i class="material-symbols-rounded">arrow_drop_up</i>
+		</button>
+		<button
+			title="Move question down"
+			class="down"
+			disabled={questionIndex === $questions.length}
+			on:click={moveQuestionDown}
+		>
+			<i class="material-symbols-rounded">arrow_drop_down</i>
+		</button>
+	</div>
 	<div
+		title="Enter question"
 		class="question-input"
 		contenteditable
 		bind:textContent={$questions[questionIndex - 1].question}
 	>
 		{$questions[questionIndex - 1].question}
 	</div>
-	<button on:click={removeQuestion}>
-		<i class="material-icons">close</i>Question
+	<button title="Remove question" on:click={removeQuestion}>
+		<i class="material-symbols-rounded">close</i>
 	</button>
 </div>
 
@@ -54,27 +87,54 @@
 	}
 
 	.index {
-		margin-right: 0.25em;
-		font-size: 1.25em;
-		font-weight: bold;
+		margin-right: 0.3em;
+		font-size: 1.1em;
 		cursor: default;
-		width: 1.25em;
+		width: 1.4em;
 		text-align: right;
+	}
+
+	.arrows {
+		display: flex;
+		flex-flow: column;
+		margin-right: 0.5em;
+	}
+
+	.arrows i {
+		line-height: 0.696em;
+		overflow: hidden;
+	}
+
+	.up {
+		border-radius: 5px 5px 0px 0px;
+		border-bottom: 1px solid #999999;
+		padding: 0em 0.25em 0em 0.25em;
+	}
+
+	.up:disabled {
+		background-color: #1a1a1a;
+		cursor: not-allowed;
+	}
+
+	.down {
+		border-radius: 0px 0px 5px 5px;
+		border-top: 0px;
+		padding: 0em 0.25em 0em 0.25em;
+	}
+
+	.down:disabled {
+		background-color: #1a1a1a;
+		cursor: not-allowed;
 	}
 
 	button {
 		display: flex;
-		flex-flow: row;
-		justify-content: center;
-		align-items: flex-end;
 		background-color: #4a4a4a;
 		padding: 0.25em;
 		border: 1px solid #999999;
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
-		width: fit-content;
 		font-size: 1em;
-		font-weight: normal;
 		font-family: 'Jura';
 		color: #eaeaea;
 		cursor: pointer;
@@ -85,9 +145,8 @@
 		background-color: #1a1a1a;
 	}
 
-	.material-icons {
-		font-size: 0.99em;
-		font-weight: bold;
-		padding-right: 0.25em;
+	i {
+		font-size: 1.15em;
+		font-variation-settings: 'wght' 900;
 	}
 </style>

@@ -90,7 +90,6 @@
 		box-shadow: 0px 4px 4px #1a1a1a;
 		font-size: 1.25em;
 		height: 1em;
-		overflow: hidden;
 	}
 
 	.dropdown-top:disabled {
@@ -122,7 +121,7 @@
 		font-family: 'Jura';
 		color: #eaeaea;
 		cursor: pointer;
-		transition: background-color 0.3s;
+		transition: background-color 0.2s;
 	}
 
 	button:hover {

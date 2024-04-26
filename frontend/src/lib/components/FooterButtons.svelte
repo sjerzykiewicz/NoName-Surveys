@@ -1,7 +1,70 @@
+<script lang="ts">
+	import { title } from '$lib/stores';
+	import { questions } from '$lib/stores';
+	import * as Survey from '$lib/Survey';
+
+	function parseSurvey() {
+		let surveyTitle: string = $title;
+		let questionList: Array<Survey.Question> = [];
+		$questions.forEach((q) => {
+			switch (q.component.name) {
+				case 'Proxy<Single>':
+					questionList = [
+						...questionList,
+						new Survey.SingleQuestion(q.required, q.question, q.choices)
+					];
+					break;
+				case 'Proxy<Multi>':
+					questionList = [
+						...questionList,
+						new Survey.MultiQuestion(q.required, q.question, q.choices)
+					];
+					break;
+				case 'Proxy<Scale>':
+					questionList = [...questionList, new Survey.ScaleQuestion(q.required, q.question)];
+					break;
+				case 'Proxy<Slider>':
+					questionList = [
+						...questionList,
+						new Survey.SliderQuestion(
+							q.required,
+							q.question,
+							parseFloat(q.choices[0]),
+							parseFloat(q.choices[1])
+						)
+					];
+					break;
+				case 'Proxy<List>':
+					questionList = [
+						...questionList,
+						new Survey.ListQuestion(q.required, q.question, q.choices)
+					];
+					break;
+				case 'Proxy<Rank>':
+					questionList = [
+						...questionList,
+						new Survey.RankQuestion(q.required, q.question, q.choices)
+					];
+					break;
+				case 'Proxy<Text>':
+					questionList = [
+						...questionList,
+						new Survey.TextQuestion(q.required, q.question, q.choices[0])
+					];
+			}
+		});
+
+		let parsedSurvey: Survey.Survey = new Survey.Survey(surveyTitle, questionList);
+
+		// this will be removed later
+		console.log(JSON.stringify(parsedSurvey));
+	}
+</script>
+
 <a href="/create" title="Preview survey" class="footer-button">
 	<i class="material-symbols-rounded">search</i>Preview
 </a>
-<button title="Save survey" class="footer-button save">
+<button title="Save survey" class="footer-button save" on:click={parseSurvey}>
 	<i class="material-symbols-rounded">save</i>Save
 </button>
 

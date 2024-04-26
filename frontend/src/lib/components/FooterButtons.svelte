@@ -43,9 +43,5 @@
 		.footer-button {
 			font-size: 1em;
 		}
-
-		i {
-			font-size: 1em;
-		}
 	}
 </style>

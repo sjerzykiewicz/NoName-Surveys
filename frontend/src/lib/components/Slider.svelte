@@ -119,23 +119,9 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-area {
-			font-size: 1em;
-		}
-
-		.slider {
-			margin-top: 0.25em;
-			margin-bottom: 0.5em;
-		}
-
-		.range {
-			margin-left: 2.25em;
-		}
-
+		.choice-area,
 		.limit-input {
 			font-size: 1em;
-			width: 6em;
-			margin-left: 1.5em;
 		}
 	}
 </style>

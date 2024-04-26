@@ -113,6 +113,7 @@
 
 	button {
 		display: flex;
+		align-items: center;
 		background-color: #4a4a4a;
 		padding: 0.25em;
 		border: 1px solid #999999;
@@ -142,19 +143,9 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-input {
-			font-size: 1em;
-		}
-
-		.dropdown-top {
-			font-size: 1em;
-		}
-
+		.choice-input,
+		.dropdown-top,
 		button {
-			font-size: 1em;
-		}
-
-		i {
 			font-size: 1em;
 		}
 	}

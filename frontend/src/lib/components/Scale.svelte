@@ -50,10 +50,7 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-area {
-			font-size: 1em;
-		}
-
+		.choice-area,
 		.number {
 			font-size: 1em;
 		}

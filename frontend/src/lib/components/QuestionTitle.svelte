@@ -151,28 +151,15 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.question-area {
-			font-size: 1em;
-		}
-
-		.question-input {
-			font-size: 1em;
-		}
-
-		.index {
+		.question-area,
+		.question-input,
+		.index,
+		button {
 			font-size: 1em;
 		}
 
 		.arrows i {
-			font-size: 1.5em;
-		}
-
-		button {
-			font-size: 0.8em;
-		}
-
-		i {
-			font-size: 1em;
+			font-size: 1.2em;
 		}
 	}
 </style>

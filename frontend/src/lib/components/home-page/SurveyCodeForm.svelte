@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ActionData } from '../../routes/welcome/$types';
+	import type { ActionData } from '../../../routes/welcome/$types';
 
 	export let form: ActionData;
 </script>

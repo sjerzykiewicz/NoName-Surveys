@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { questions } from '$lib/stores';
-
-	export let questionIndex: number;
+	export let question: string;
+	export let required: boolean;
+	export let choices: Array<string>;
 </script>
 
 <div class="choice-area">
@@ -10,31 +10,15 @@
 			class="range"
 			type="range"
 			step="1"
-			min={$questions[questionIndex].choices[0]}
-			max={$questions[questionIndex].choices[1]}
-			name={$questions[questionIndex].question}
-			disabled
+			{required}
+			min={choices[0]}
+			max={choices[1]}
+			name={question}
 		/>
 	</div>
 	<div class="limits">
-		<input
-			title="Enter minimum value"
-			class="limit-input"
-			type="number"
-			name={$questions[questionIndex].question}
-			autocomplete="off"
-			placeholder="Enter min..."
-			bind:value={$questions[questionIndex].choices[0]}
-		/>
-		<input
-			title="Enter maximum value"
-			class="limit-input"
-			type="number"
-			name={$questions[questionIndex].question}
-			autocomplete="off"
-			placeholder="Enter max..."
-			bind:value={$questions[questionIndex].choices[1]}
-		/>
+		<div title="Minimum value" class="limit">{choices[0]}</div>
+		<div title="Maximum value" class="limit">{choices[1]}</div>
 	</div>
 </div>
 
@@ -96,7 +80,7 @@
 		width: 100%;
 	}
 
-	.limit-input {
+	.limit {
 		background-color: #1a1a1a;
 		padding: 0.25em;
 		border: 1px solid #999999;
@@ -108,18 +92,6 @@
 		color: #eaeaea;
 		cursor: text;
 		overflow: hidden;
-		width: 6.5em;
 		margin-left: 1.75em;
-	}
-
-	.limit-input::placeholder {
-		color: #eaeaea40;
-	}
-
-	@media screen and (max-width: 767px) {
-		.choice-area,
-		.limit-input {
-			font-size: 1em;
-		}
 	}
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { questions } from '$lib/stores';
+	import { questions } from '$lib/components/create-page/stores';
 	import { afterUpdate } from 'svelte';
 
 	export let questionIndex: number;
@@ -25,11 +25,9 @@
 </script>
 
 <div class="choice-area">
-	<div class="dropdown">
-		<select class="dropdown-top" disabled />
-	</div>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
+			<div class="rank">{choiceIndex + 1}.</div>
 			<div title="Enter choice" class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}
 			</div>
@@ -61,7 +59,6 @@
 		align-items: center;
 		flex-flow: row;
 		margin-bottom: 0.5em;
-		margin-left: 2.25em;
 	}
 
 	.choice-input {
@@ -82,32 +79,17 @@
 		color: #eaeaea40;
 	}
 
-	.dropdown-top {
-		flex: 1;
-		background-color: #4a4a4a;
-		border: 1px solid #999999;
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
-		font-size: 1.25em;
-		height: 1em;
-	}
-
-	.dropdown-top:disabled {
-		color: #eaeaea;
-		opacity: 1;
-	}
-
-	.dropdown {
-		display: flex;
-		align-items: center;
-		flex-flow: row;
-		margin-bottom: 0.5em;
-		margin-left: 2.25em;
-		margin-right: 2.81em;
-	}
-
 	.remove-choice {
 		visibility: hidden;
+	}
+
+	.rank {
+		margin-right: 0.25em;
+		font-size: 1.25em;
+		color: #999999;
+		cursor: default;
+		width: 1.5em;
+		text-align: right;
 	}
 
 	button {
@@ -147,7 +129,7 @@
 
 	@media screen and (max-width: 767px) {
 		.choice-input,
-		.dropdown-top,
+		.remove-choice,
 		button {
 			font-size: 1em;
 		}

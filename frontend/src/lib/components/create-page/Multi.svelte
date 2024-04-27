@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { questions } from '$lib/stores';
+	import { questions } from '$lib/components/create-page/stores';
 	import { afterUpdate } from 'svelte';
 
 	export let questionIndex: number;
@@ -27,7 +27,9 @@
 <div class="choice-area">
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
-			<div class="rank">{choiceIndex + 1}.</div>
+			<div class="checkbox">
+				<input type="checkbox" disabled name={$questions[questionIndex].question} />
+			</div>
 			<div title="Enter choice" class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}
 			</div>
@@ -83,13 +85,10 @@
 		visibility: hidden;
 	}
 
-	.rank {
-		margin-right: 0.25em;
-		font-size: 1.25em;
-		color: #999999;
-		cursor: default;
-		width: 1.5em;
+	.checkbox {
 		text-align: right;
+		width: 1.75em;
+		margin-right: 0.5em;
 	}
 
 	button {
@@ -129,7 +128,6 @@
 
 	@media screen and (max-width: 767px) {
 		.choice-input,
-		.remove-choice,
 		button {
 			font-size: 1em;
 		}

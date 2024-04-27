@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { questions } from '$lib/stores';
-
-	export let questionIndex: number;
+	export let question: string;
+	export let required: boolean;
+	export let choices: Array<string>;
 </script>
 
 <div class="choice-area">
-	{#each $questions[questionIndex].choices as choice}
+	{#each choices as choice}
 		<div class="choice">
 			<div class="radio">
-				<input type="radio" disabled name={$questions[questionIndex].question} />
+				<input type="radio" {required} name={question} />
 			</div>
 			<div class="number">
 				{choice}
@@ -47,12 +47,5 @@
 	.number {
 		font-size: 1.25em;
 		cursor: default;
-	}
-
-	@media screen and (max-width: 767px) {
-		.choice-area,
-		.number {
-			font-size: 1em;
-		}
 	}
 </style>

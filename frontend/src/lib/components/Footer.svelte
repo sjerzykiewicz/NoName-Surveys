@@ -9,7 +9,6 @@
 		display: flex;
 		flex-flow: row;
 		justify-content: flex-end;
-		align-items: center;
 		position: fixed;
 		bottom: 0;
 		min-width: calc(767px - 1.5em);

@@ -114,4 +114,10 @@
 		margin-right: 0.24375em;
 		margin-left: 0.08125em;
 	}
+
+	@media screen and (max-width: 767px) {
+		button {
+			font-size: 1em;
+		}
+	}
 </style>

@@ -191,7 +191,7 @@
 		border-radius: 0px 0px 5px 5px;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		width: fit-content;
-		height: 14.5em;
+		height: auto;
 	}
 
 	i {
@@ -204,8 +204,15 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.add-question,
-		.button-panel {
+		.button-group {
+			margin-bottom: 13.063em;
+		}
+
+		.button-group.previous {
+			margin-bottom: 11.4375em;
+		}
+
+		button {
 			font-size: 1em;
 		}
 	}

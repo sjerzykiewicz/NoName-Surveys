@@ -5,7 +5,9 @@
 	export let href: string;
 </script>
 
-<a {href} class:active={$page.url.pathname === href}>{title}</a>
+<a {href} {title} class:active={$page.url.pathname === href} class:last={title === 'Account'}
+	>{title}</a
+>
 
 <style>
 	a {
@@ -23,11 +25,26 @@
 	}
 
 	a:hover {
-		background-color: #0075ff;
+		background-color: #4a4a4a;
 		transition: background-color 0.2s;
 	}
 
 	.active {
 		background-color: #0075ff;
+	}
+
+	.active:hover {
+		background-color: #001c53;
+	}
+
+	.last {
+		border-right: none;
+	}
+
+	@media screen and (max-width: 479px) {
+		a {
+			border-top: none;
+			border-right: none;
+		}
 	}
 </style>

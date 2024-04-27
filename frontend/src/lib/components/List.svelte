@@ -90,7 +90,6 @@
 		box-shadow: 0px 4px 4px #1a1a1a;
 		font-size: 1.25em;
 		height: 1em;
-		overflow: hidden;
 	}
 
 	.dropdown-top:disabled {
@@ -128,6 +127,10 @@
 
 	button:hover {
 		background-color: #1a1a1a;
+	}
+
+	button:active {
+		background-color: #999999;
 	}
 
 	.add-choice {

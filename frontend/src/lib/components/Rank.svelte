@@ -111,6 +111,10 @@
 		background-color: #1a1a1a;
 	}
 
+	button:active {
+		background-color: #999999;
+	}
+
 	.add-choice {
 		margin-left: 1.8em;
 	}

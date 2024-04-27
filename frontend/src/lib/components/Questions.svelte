@@ -17,7 +17,7 @@
 {#each $questions as question, questionIndex}
 	<div
 		class="question"
-		in:slide={{ duration: 300, easing: cubicInOut }}
+		in:slide={{ duration: 200, easing: cubicInOut }}
 		on:introend={() => scrollToElement('.add-question')}
 	>
 		<QuestionTitle {questionIndex} />
@@ -28,6 +28,6 @@
 
 <style>
 	.question {
-		margin-bottom: 2em;
+		margin-bottom: 1.875em;
 	}
 </style>

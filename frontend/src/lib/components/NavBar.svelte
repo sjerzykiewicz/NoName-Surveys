@@ -60,6 +60,7 @@
 		align-items: center;
 		padding: 1em;
 		color: white;
+		background-color: #1a1a1a;
 	}
 
 	.nav-burger i {
@@ -104,7 +105,7 @@
 
 		a {
 			border-top: none;
-			border-right: none;
+			border-bottom: none;
 		}
 	}
 </style>

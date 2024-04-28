@@ -1,49 +1,8 @@
 <script lang="ts">
-	import { Hamburger } from 'svelte-hamburgers';
-	import { slide } from 'svelte/transition';
-	import { page } from '$app/stores';
-
-	import NavLink from '$lib/components/NavLink.svelte';
-
-	let open: boolean;
-	let innerWidth: number;
-	let innerHeight: number;
-	let currPath = $page.url.pathname;
-
-	// TODO: move welcome page to root path
-	const navLinks = {
-		Home: '/welcome',
-		Create: '/create',
-		Pending: '/pending',
-		Summary: '/summary',
-		Account: '/account'
-	};
-
-	function hideNav() {
-		currPath = $page.url.pathname;
-		open = false;
-	}
+	import NavBar from '$lib/components/NavBar.svelte';
 </script>
 
-<svelte:window bind:innerWidth bind:innerHeight />
-
-{#if innerWidth < 767}
-	<div class="nav-burger">
-		<i class="material-symbols-rounded">shield_person</i>
-		<Hamburger bind:open --color="white" />
-	</div>
-{/if}
-
-{#if open || innerWidth >= 767}
-	<nav transition:slide>
-		{#each Object.entries(navLinks) as [title, href]}
-			<NavLink {href} {title} />
-		{/each}
-	</nav>
-	{#if currPath != $page.url.pathname}
-		{hideNav()}
-	{/if}
-{/if}
+<NavBar />
 <div class="box">
 	<slot />
 </div>
@@ -63,37 +22,12 @@
 		background-color: #2a2a2a;
 	}
 
-	nav {
-		display: flex;
-		flex-flow: row;
-		width: 100%;
-		justify-content: space-around;
-		background-color: #1a1a1a;
-	}
-
-	.nav-burger {
-		display: flex;
-		flex-flow: row;
-		justify-content: space-between;
-		align-items: center;
-		padding: 1em;
-		color: white;
-	}
-
-	.nav-burger i {
-		font-size: 3em;
-	}
-
 	@media screen and (max-width: 767px) {
 		.box {
 			width: 100%;
 			min-width: 0px;
 			margin-top: 0px;
 			border: none;
-		}
-
-		nav {
-			flex-flow: column;
 		}
 	}
 </style>

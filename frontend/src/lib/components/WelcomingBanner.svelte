@@ -8,5 +8,12 @@
 		font-family: 'Jura';
 		font-size: 4em;
 		font-weight: bold;
+		margin-bottom: 1.5em;
+	}
+
+	@media screen and (max-width: 767px) {
+		h1 {
+			font-size: 3em;
+		}
 	}
 </style>

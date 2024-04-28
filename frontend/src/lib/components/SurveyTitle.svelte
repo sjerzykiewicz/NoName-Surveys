@@ -26,4 +26,10 @@
 		content: 'Enter survey title...';
 		color: #eaeaea40;
 	}
+
+	@media screen and (max-width: 767px) {
+		.title-input {
+			font-size: 1.25em;
+		}
+	}
 </style>

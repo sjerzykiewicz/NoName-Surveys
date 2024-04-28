@@ -98,7 +98,8 @@
 		background-color: #1a1a1a;
 	}
 
-	.footer-button:active {
+	.footer-button:active,
+	.save:active {
 		background-color: #999999;
 	}
 
@@ -110,12 +111,14 @@
 		background-color: #001c53;
 	}
 
-	.save:active {
-		background-color: #999999;
-	}
-
 	i {
 		font-size: 1.15em;
 		margin-right: 0.15em;
+	}
+
+	@media screen and (max-width: 767px) {
+		.footer-button {
+			font-size: 1em;
+		}
 	}
 </style>

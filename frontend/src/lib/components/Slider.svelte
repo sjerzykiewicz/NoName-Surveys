@@ -115,4 +115,11 @@
 	.limit-input::placeholder {
 		color: #eaeaea40;
 	}
+
+	@media screen and (max-width: 767px) {
+		.choice-area,
+		.limit-input {
+			font-size: 1em;
+		}
+	}
 </style>

@@ -93,6 +93,7 @@
 
 	button {
 		display: flex;
+		align-items: center;
 		background-color: #4a4a4a;
 		padding: 0.25em;
 		border: 1px solid #999999;
@@ -123,5 +124,12 @@
 
 	.add-choice i {
 		margin-right: 0.15em;
+	}
+
+	@media screen and (max-width: 767px) {
+		.choice-input,
+		button {
+			font-size: 1em;
+		}
 	}
 </style>

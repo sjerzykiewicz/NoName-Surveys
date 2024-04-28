@@ -36,4 +36,14 @@
 		font-family: 'Jura';
 		font-weight: bold;
 	}
+
+	@media screen and (max-width: 767px) {
+		input {
+			width: 3em;
+		}
+
+		form {
+			font-size: 1.5em;
+		}
+	}
 </style>

@@ -4,14 +4,11 @@
 </script>
 
 <div class="choice-area">
+	<!-- TODO cannot apply 'required' directly to input - checking if at least one was selected needs typescript -->
 	{#each $questions[questionIndex].choices as choice}
 		<div class="choice">
 			<div class="checkbox">
-				<input
-					type="checkbox"
-					required={$questions[questionIndex].required}
-					name={$questions[questionIndex].question}
-				/>
+				<input type="checkbox" name={$questions[questionIndex].question} />
 			</div>
 			<div title="Select choice" class="choice-input">
 				{choice}

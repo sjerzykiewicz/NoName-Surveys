@@ -12,7 +12,7 @@ export const questions: Readable<
 > = readable([
 	{
 		type: 'single',
-		required: false,
+		required: true,
 		question: 'Single question',
 		choices: ['Choice 1', 'Choice 2', 'Choice 3']
 	},
@@ -30,25 +30,25 @@ export const questions: Readable<
 	},
 	{
 		type: 'scale',
-		required: false,
+		required: true,
 		question: 'Scale question',
 		choices: ['1', '2', '3', '4', '5']
 	},
 	{
 		type: 'multi',
-		required: false,
+		required: true,
 		question: 'Multi question',
 		choices: ['Choice 1', 'Choice 2', 'Choice 3', 'Choice 4']
 	},
 	{
 		type: 'slider',
-		required: false,
+		required: true,
 		question: 'Slider question',
 		choices: ['1', '10']
 	},
 	{
 		type: 'yesno',
-		required: false,
+		required: true,
 		question: 'Yes/No question',
 		choices: ['Yes', 'No']
 	}

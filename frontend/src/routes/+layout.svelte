@@ -1,15 +1,36 @@
-<script>
+<script lang="ts">
+	import { Hamburger } from 'svelte-hamburgers';
+	import { slide } from 'svelte/transition';
+
 	import NavLink from '$lib/components/NavLink.svelte';
+
+	let open: boolean;
+	let innerWidth: number;
+	let innerHeight: number;
+
+	// TODO: move welcome page to root path
+	const navLinks = {
+		Home: '/welcome',
+		Create: '/create',
+		Pending: '/pending',
+		Summary: '/summary',
+		Account: '/account'
+	};
 </script>
 
-<nav>
-	<!-- TODO: move welcome page to root path -->
-	<NavLink href="/welcome" title="Home" />
-	<NavLink href="/create" title="Create" />
-	<NavLink href="/pending" title="Pending" />
-	<NavLink href="/summary" title="Summary" />
-	<NavLink href="/account" title="Account" />
-</nav>
+<svelte:window bind:innerWidth bind:innerHeight />
+
+{#if innerWidth < 767}
+	<Hamburger bind:open --color="white" />
+{/if}
+
+{#if open || innerWidth >= 767}
+	<nav transition:slide>
+		{#each Object.entries(navLinks) as [title, href]}
+			<NavLink {href} {title} />
+		{/each}
+	</nav>
+{/if}
 <div class="box">
 	<slot />
 </div>
@@ -44,9 +65,7 @@
 			margin-top: 0px;
 			border: none;
 		}
-	}
 
-	@media screen and (max-width: 479px) {
 		nav {
 			flex-flow: column;
 		}

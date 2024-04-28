@@ -1,14 +1,14 @@
 <script lang="ts">
 	import type { ComponentType } from 'svelte';
-	import Single from './Single.svelte';
-	import Text from './Text.svelte';
-	import List from './List.svelte';
-	import Scale from './Scale.svelte';
-	import QuestionTitle from './QuestionTitle.svelte';
-	import Multi from './Multi.svelte';
-	import Slider from './Slider.svelte';
-	import YesNo from '../fill-page/YesNo.svelte';
-	import { questions } from './stores';
+	import Single from '$lib/components/fill-page/Single.svelte';
+	import Text from '$lib/components/fill-page/Text.svelte';
+	import List from '$lib/components/fill-page/List.svelte';
+	import Scale from '$lib/components/fill-page/Scale.svelte';
+	import QuestionTitle from '$lib/components/fill-page/QuestionTitle.svelte';
+	import Multi from '$lib/components/fill-page/Multi.svelte';
+	import Slider from '$lib/components/fill-page/Slider.svelte';
+	import YesNo from '$lib/components/fill-page/YesNo.svelte';
+	import { questions } from '$lib/components/fill-page/stores';
 
 	const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,

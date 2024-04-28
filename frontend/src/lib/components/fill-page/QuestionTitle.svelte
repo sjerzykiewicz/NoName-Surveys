@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { questions } from './stores';
+	import { questions } from '$lib/components/fill-page/stores';
 
 	export let questionIndex: number;
 </script>

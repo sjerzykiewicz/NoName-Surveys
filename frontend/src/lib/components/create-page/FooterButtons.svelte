@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { title } from '$lib/components/create-page/stores';
-	import { questions } from '$lib/components/create-page/stores';
+	import { title } from '$lib/stores/create-page';
+	import { questions } from '$lib/stores/create-page';
 	import Question from '$lib/entities/questions/Question';
 	import SingleQuestion from '$lib/entities/questions/Single';
 	import MultiQuestion from '$lib/entities/questions/Multi';

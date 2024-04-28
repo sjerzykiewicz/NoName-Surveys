@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { questions } from '$lib/components/fill-page/stores';
+	import { questions } from '$lib/stores/fill-page';
 	import type { ComponentType } from 'svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';

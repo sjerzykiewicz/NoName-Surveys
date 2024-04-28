@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { title } from '$lib/components/create-page/stores';
+	import { title } from '$lib/stores/create-page';
 </script>
 
 <div title="Enter survey title" class="title-input" contenteditable bind:textContent={$title}>

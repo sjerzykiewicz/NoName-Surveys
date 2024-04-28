@@ -7,7 +7,7 @@
 	import Rank from '$lib/components/create-page/Rank.svelte';
 	import YesNo from '$lib/components/create-page/YesNo.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
-	import { questions } from '$lib/components/create-page/stores';
+	import { questions } from '$lib/stores/create-page';
 	import { type ComponentType, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';

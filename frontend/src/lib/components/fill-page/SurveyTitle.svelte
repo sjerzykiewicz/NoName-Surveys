@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { title } from '$lib/components/fill-page/stores';
+	import { title } from '$lib/stores/fill-page';
 </script>
 
 <div title="Survey title" class="title">

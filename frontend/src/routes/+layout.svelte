@@ -21,7 +21,10 @@
 <svelte:window bind:innerWidth bind:innerHeight />
 
 {#if innerWidth < 767}
-	<Hamburger bind:open --color="white" />
+	<div class="nav-burger">
+		<i class="material-symbols-rounded">shield_person</i>
+		<Hamburger bind:open --color="white" />
+	</div>
 {/if}
 
 {#if open || innerWidth >= 767}
@@ -56,6 +59,18 @@
 		width: 100%;
 		justify-content: space-around;
 		background-color: #1a1a1a;
+	}
+
+	.nav-burger {
+		display: flex;
+		flex-flow: row;
+		justify-content: space-between;
+		align-items: center;
+		color: white;
+	}
+
+	.nav-burger i {
+		font-size: 3em;
 	}
 
 	@media screen and (max-width: 767px) {

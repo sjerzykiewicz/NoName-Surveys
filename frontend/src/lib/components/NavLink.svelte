@@ -34,7 +34,7 @@
 	}
 
 	.active:hover {
-		background-color: #001c53;
+		background-color: #0075ff;
 	}
 
 	.last {

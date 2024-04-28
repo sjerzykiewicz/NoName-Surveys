@@ -136,20 +136,11 @@
 
 	.button-group {
 		width: fit-content;
-		margin-bottom: 16.57em;
-	}
-
-	.button-group.clicked {
-		margin-bottom: 0em;
-		transition-delay: 0.2s;
+		margin-bottom: 14.5em;
 	}
 
 	.button-group.previous {
 		margin-bottom: 14.5em;
-	}
-
-	.button-group.clicked.previous {
-		margin-bottom: 0em;
 	}
 
 	.add-buttons {
@@ -192,6 +183,7 @@
 		box-shadow: 0px 4px 4px #1a1a1a;
 		width: fit-content;
 		height: auto;
+		position: absolute;
 	}
 
 	i {
@@ -204,14 +196,6 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.button-group {
-			margin-bottom: 13.063em;
-		}
-
-		.button-group.previous {
-			margin-bottom: 11.4375em;
-		}
-
 		button {
 			font-size: 1em;
 		}

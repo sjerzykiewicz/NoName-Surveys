@@ -104,7 +104,7 @@
 		}
 
 		a {
-			border-top: none;
+			border-right: none;
 			border-bottom: none;
 		}
 	}

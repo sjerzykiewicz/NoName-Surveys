@@ -1,15 +1,8 @@
-<script>
-	import NavLink from '$lib/components/NavLink.svelte';
+<script lang="ts">
+	import NavBar from '$lib/components/NavBar.svelte';
 </script>
 
-<nav>
-	<!-- TODO: move welcome page to root path -->
-	<NavLink href="/welcome" title="Home" />
-	<NavLink href="/create" title="Create" />
-	<NavLink href="/pending" title="Pending" />
-	<NavLink href="/summary" title="Summary" />
-	<NavLink href="/account" title="Account" />
-</nav>
+<NavBar />
 <div class="box">
 	<slot />
 </div>
@@ -29,26 +22,13 @@
 		background-color: #2a2a2a;
 	}
 
-	nav {
-		display: flex;
-		flex-flow: row;
-		width: 100%;
-		justify-content: space-around;
-		background-color: #1a1a1a;
-	}
-
 	@media screen and (max-width: 767px) {
 		.box {
 			width: 100%;
 			min-width: 0px;
 			margin-top: 0px;
 			border: none;
-		}
-	}
-
-	@media screen and (max-width: 479px) {
-		nav {
-			flex-flow: column;
+			border-top: 1px solid #999999;
 		}
 	}
 </style>

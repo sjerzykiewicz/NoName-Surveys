@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { Hamburger } from 'svelte-hamburgers';
 	import { slide } from 'svelte/transition';
+	import { page } from '$app/stores';
 
 	import NavLink from '$lib/components/NavLink.svelte';
 
 	let open: boolean;
 	let innerWidth: number;
 	let innerHeight: number;
+	let currPath = $page.url.pathname;
 
 	// TODO: move welcome page to root path
 	const navLinks = {
@@ -16,6 +18,11 @@
 		Summary: '/summary',
 		Account: '/account'
 	};
+
+	function hideNav() {
+		currPath = $page.url.pathname;
+		open = false;
+	}
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -33,6 +40,9 @@
 			<NavLink {href} {title} />
 		{/each}
 	</nav>
+	{#if currPath != $page.url.pathname}
+		{hideNav()}
+	{/if}
 {/if}
 <div class="box">
 	<slot />
@@ -66,6 +76,7 @@
 		flex-flow: row;
 		justify-content: space-between;
 		align-items: center;
+		padding: 1em;
 		color: white;
 	}
 

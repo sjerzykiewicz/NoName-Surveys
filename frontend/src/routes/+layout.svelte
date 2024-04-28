@@ -28,6 +28,7 @@
 			min-width: 0px;
 			margin-top: 0px;
 			border: none;
+			border-top: 1px solid #999999;
 		}
 	}
 </style>

@@ -1,9 +1,9 @@
 <script lang="ts">
-	export let title: string = '';
+	import { title } from './stores';
 </script>
 
 <div title="Survey title" class="title">
-	{title}
+	{$title}
 </div>
 
 <style>

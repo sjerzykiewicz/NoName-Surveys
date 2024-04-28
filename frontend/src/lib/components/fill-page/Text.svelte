@@ -1,14 +1,18 @@
 <script lang="ts">
-	export let question: string;
-	export let required: boolean;
-	export let choices: Array<string>;
+	import { questions } from './stores';
+	export let questionIndex: number;
 </script>
 
 <div class="choice-area">
 	<div class="details">
-		{choices[0]}
+		{$questions[questionIndex].choices[0]}
 	</div>
-	<input class="text-area" type="textarea" {required} name={question} />
+	<input
+		class="text-area"
+		type="textarea"
+		required={$questions[questionIndex].required}
+		name={$questions[questionIndex].question}
+	/>
 </div>
 
 <style>

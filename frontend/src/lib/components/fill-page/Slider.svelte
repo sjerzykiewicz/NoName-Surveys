@@ -1,7 +1,6 @@
 <script lang="ts">
-	export let question: string;
-	export let required: boolean;
-	export let choices: Array<string>;
+	import { questions } from './stores';
+	export let questionIndex: number;
 </script>
 
 <div class="choice-area">
@@ -10,15 +9,15 @@
 			class="range"
 			type="range"
 			step="1"
-			{required}
-			min={choices[0]}
-			max={choices[1]}
-			name={question}
+			required={$questions[questionIndex].required}
+			min={$questions[questionIndex].choices[0]}
+			max={$questions[questionIndex].choices[1]}
+			name={$questions[questionIndex].question}
 		/>
 	</div>
 	<div class="limits">
-		<div title="Minimum value" class="limit">{choices[0]}</div>
-		<div title="Maximum value" class="limit">{choices[1]}</div>
+		<div title="Minimum value" class="limit">{$questions[questionIndex].choices[0]}</div>
+		<div title="Maximum value" class="limit">{$questions[questionIndex].choices[1]}</div>
 	</div>
 </div>
 

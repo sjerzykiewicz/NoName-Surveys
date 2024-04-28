@@ -1,12 +1,13 @@
 <script lang="ts">
-	export let questionNumber: number;
-	export let question: string;
+	import { questions } from './stores';
+
+	export let questionIndex: number;
 </script>
 
 <div class="question-area">
-	<div class="index">{questionNumber}.</div>
+	<div class="index">{questionIndex + 1}.</div>
 	<div title="Question title" class="question-title">
-		{question}
+		{$questions[questionIndex].question}
 	</div>
 </div>
 

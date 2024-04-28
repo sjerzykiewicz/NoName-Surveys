@@ -1,12 +1,11 @@
 <script lang="ts">
-	export let question: string;
-	export let required: boolean;
-	export let choices: Array<string>;
+	import { questions } from './stores';
+	export let questionIndex: number;
 </script>
 
 <div class="choice-area">
-	<select {required} name={question}>
-		{#each choices as choice}
+	<select required={$questions[questionIndex].required} name={$questions[questionIndex].question}>
+		{#each $questions[questionIndex].choices as choice}
 			<option value={choice}>
 				{choice}
 			</option>

@@ -1,14 +1,17 @@
 <script lang="ts">
-	export let question: string;
-	export let required: boolean;
-	export let choices: Array<string>;
+	import { questions } from './stores';
+	export let questionIndex: number;
 </script>
 
 <div class="choice-area">
-	{#each choices as choice}
+	{#each $questions[questionIndex].choices as choice}
 		<div class="choice">
 			<div class="radio">
-				<input type="radio" {required} name={question} />
+				<input
+					type="radio"
+					required={$questions[questionIndex].required}
+					name={$questions[questionIndex].question}
+				/>
 			</div>
 			<div class="number">
 				{choice}

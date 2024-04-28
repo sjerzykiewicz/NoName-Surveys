@@ -38,4 +38,11 @@
 		font-family: 'Jura';
 		color: #eaeaea;
 	}
+
+	@media screen and (max-width: 767px) {
+		select,
+		option {
+			font-size: 1em;
+		}
+	}
 </style>

@@ -93,4 +93,11 @@
 		overflow: hidden;
 		margin-left: 1.75em;
 	}
+
+	@media screen and (max-width: 767px) {
+		.choice-area,
+		.limit {
+			font-size: 1em;
+		}
+	}
 </style>

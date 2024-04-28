@@ -42,4 +42,11 @@
 		width: 1.4em;
 		text-align: right;
 	}
+
+	@media screen and (max-width: 767px) {
+		.question-area,
+		.index {
+			font-size: 1em;
+		}
+	}
 </style>

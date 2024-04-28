@@ -54,4 +54,10 @@
 		width: 1.75em;
 		margin-right: 0.5em;
 	}
+
+	@media screen and (max-width: 767px) {
+		.choice-input {
+			font-size: 1em;
+		}
+	}
 </style>

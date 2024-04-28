@@ -8,7 +8,7 @@
 		{$questions[questionIndex].choices[0]}
 	</div>
 	<input
-		class="text-area"
+		class="details-area"
 		type="textarea"
 		required={$questions[questionIndex].required}
 		name={$questions[questionIndex].question}
@@ -32,7 +32,7 @@
 		margin-bottom: 0.5em;
 	}
 
-	.text-area {
+	.details-area {
 		flex: 1;
 		background-color: #1a1a1a;
 		padding: 0.5em;
@@ -41,5 +41,12 @@
 		box-shadow: 0px 4px 4px #1a1a1a;
 		cursor: text;
 		color: #eaeaea;
+	}
+
+	@media screen and (max-width: 767px) {
+		.choice-area,
+		.details-area {
+			font-size: 1em;
+		}
 	}
 </style>

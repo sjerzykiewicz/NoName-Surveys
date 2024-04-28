@@ -21,4 +21,10 @@
 		cursor: text;
 		overflow: hidden;
 	}
+
+	@media screen and (max-width: 767px) {
+		.title {
+			font-size: 1.25em;
+		}
+	}
 </style>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/fill-page';
 	export let questionIndex: number;
+	let value: number = parseFloat($questions[questionIndex].choices[0]);
 </script>
 
 <div class="choice-area">
@@ -13,10 +14,12 @@
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
 			name={$questions[questionIndex].question}
+			bind:value
 		/>
 	</div>
 	<div class="limits">
 		<div title="Minimum value" class="limit">{$questions[questionIndex].choices[0]}</div>
+		<div title="Current value" class="limit">{value}</div>
 		<div title="Maximum value" class="limit">{$questions[questionIndex].choices[1]}</div>
 	</div>
 </div>

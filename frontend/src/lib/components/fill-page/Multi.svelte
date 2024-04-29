@@ -1,14 +1,28 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/fill-page';
+	import { answers } from '$lib/stores/fill-page';
 	export let questionIndex: number;
+
+	function updateAnswers(choice: string) {
+		if ($answers[questionIndex].choices.includes(choice)) {
+			$answers[questionIndex].choices = $answers[questionIndex].choices.filter(
+				(ch) => ch !== choice
+			);
+		} else {
+			$answers[questionIndex].choices = [...$answers[questionIndex].choices, choice];
+		}
+	}
 </script>
 
 <div class="choice-area">
-	<!-- TODO cannot apply 'required' directly to input - checking if at least one was selected needs typescript -->
 	{#each $questions[questionIndex].choices as choice}
 		<div class="choice">
 			<div class="checkbox">
-				<input type="checkbox" name={$questions[questionIndex].question} />
+				<input
+					type="checkbox"
+					name={$questions[questionIndex].question}
+					on:click={() => updateAnswers(choice)}
+				/>
 			</div>
 			<div title="Select choice" class="choice-input">
 				{choice}

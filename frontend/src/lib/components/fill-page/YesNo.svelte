@@ -1,41 +1,32 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/fill-page';
+	import { answers } from '$lib/stores/fill-page';
 	export let questionIndex: number;
+	let selected: number;
+
+	function handleClick(id: number) {
+		if (id === 0) {
+			$answers[questionIndex].choices[0] = 'yes';
+			if (selected !== 0) selected = 0;
+		} else {
+			$answers[questionIndex].choices[0] = 'no';
+			if (selected !== 1) selected = 1;
+		}
+	}
 </script>
 
 <div class="choice-area">
-	<label for="yes">
-		<input
-			type="radio"
-			name={$questions[questionIndex].question}
-			id="yes"
-			title={$questions[questionIndex].choices[0]}
-			required={$questions[questionIndex].required}
-		/>
-		<div class="choice">
-			<i class="material-symbols-rounded">thumb_up</i>{$questions[questionIndex].choices[0]}
-		</div>
-	</label>
-	<label for="no">
-		<input
-			type="radio"
-			name={$questions[questionIndex].question}
-			id="no"
-			title={$questions[questionIndex].choices[1]}
-			required={$questions[questionIndex].required}
-		/>
-		<div class="choice">
-			<i class="material-symbols-rounded">thumb_down</i>{$questions[questionIndex].choices[1]}
-		</div>
-	</label>
+	<button class="choice" class:selected={selected === 0} on:click={() => handleClick(0)}>
+		<i class="material-symbols-rounded">thumb_up</i>{$questions[questionIndex].choices[0]}
+	</button>
+	<button class="choice" class:selected={selected === 1} on:click={() => handleClick(1)}>
+		<i class="material-symbols-rounded">thumb_down</i>{$questions[questionIndex].choices[1]}
+	</button>
 </div>
 
 <style>
-	input[type='radio'] {
-		visibility: hidden;
-	}
-
-	input[type='radio']:checked + .choice {
+	.choice.selected,
+	.choice.selected:hover {
 		background-color: #0075ff;
 	}
 
@@ -67,10 +58,6 @@
 
 	.choice:hover {
 		background-color: #4a4a4a;
-	}
-
-	.choice:checked {
-		background-color: #0075ff;
 	}
 
 	i {

@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/fill-page';
+	import { answers } from '$lib/stores/fill-page';
 	export let questionIndex: number;
+
+	$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
 </script>
 
 <div class="choice-area">
 	<select required={$questions[questionIndex].required} name={$questions[questionIndex].question}>
 		{#each $questions[questionIndex].choices as choice}
-			<option value={choice}>
+			<option value={choice} on:click={() => ($answers[questionIndex].choices[0] = choice)}>
 				{choice}
 			</option>
 		{/each}

@@ -1,4 +1,4 @@
-import { readable, type Readable } from 'svelte/store';
+import { readable, type Readable, writable, type Writable } from 'svelte/store';
 
 // TODO this is for demonstration purposes only, survey will be constructed from JSON
 export const title: Readable<string> = readable('Test survey');
@@ -51,5 +51,17 @@ export const questions: Readable<
 		required: true,
 		question: 'Yes/No question',
 		choices: ['Yes', 'No']
+	},
+	{
+		type: 'rank',
+		required: true,
+		question: 'Rank question',
+		choices: ['Choice 1', 'Choice 2', 'Choice 3']
 	}
 ]);
+
+export const answers: Writable<
+	{
+		choices: Array<string>;
+	}[]
+> = writable([]);

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/fill-page';
+	import { answers } from '$lib/stores/fill-page';
 	export let questionIndex: number;
+	let value: string;
 </script>
 
 <div class="choice-area">
@@ -12,6 +14,8 @@
 		required={$questions[questionIndex].required}
 		name={$questions[questionIndex].question}
 		placeholder="Enter your answer..."
+		bind:value
+		on:change={() => ($answers[questionIndex].choices[0] = value)}
 	/>
 </div>
 

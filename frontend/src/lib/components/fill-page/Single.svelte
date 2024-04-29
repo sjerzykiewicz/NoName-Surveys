@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/fill-page';
+	import { answers } from '$lib/stores/fill-page';
 	export let questionIndex: number;
 </script>
 
@@ -11,6 +12,7 @@
 					type="radio"
 					required={$questions[questionIndex].required}
 					name={$questions[questionIndex].question}
+					on:click={() => ($answers[questionIndex].choices[0] = choice)}
 				/>
 			</div>
 			<div title="Select choice" class="choice-input">

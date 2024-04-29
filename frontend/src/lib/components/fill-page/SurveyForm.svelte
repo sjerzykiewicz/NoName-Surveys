@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { questions } from '$lib/stores/fill-page';
+	import { answers, questions } from '$lib/stores/fill-page';
 	import type { ComponentType } from 'svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
@@ -12,6 +12,7 @@
 	import Multi from '$lib/components/fill-page/Multi.svelte';
 	import Slider from '$lib/components/fill-page/Slider.svelte';
 	import YesNo from '$lib/components/fill-page/YesNo.svelte';
+	import Rank from '$lib/components/fill-page/Rank.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
 	const componentTypeMap: { [id: string]: ComponentType } = {
@@ -21,33 +22,44 @@
 		scale: Scale,
 		yesno: YesNo,
 		slider: Slider,
+		rank: Rank,
 		list: List
 	};
+
+	const numQuestions = $questions.length;
+	for (let i = 0; i < numQuestions; i++) {
+		$answers = [...$answers, { choices: [] }];
+	}
+
+	function processForm() {
+		for (let i = 0; i < numQuestions; i++) {
+			// TODO - implement actual processing
+			console.log($answers[i].choices);
+		}
+	}
 </script>
 
-<form method="POST">
-	<Header>
-		<SurveyTitle />
-	</Header>
-	<Content>
-		{#each $questions as question, questionIndex}
-			<div class="question">
-				<QuestionTitle {questionIndex} />
-				<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
-			</div>
-		{/each}
-	</Content>
-	<Footer>
-		<button class="footer-button back" disabled>
-			<!-- TODO insert icon -->
-			<i class="material-symbols-rounded"></i>Back
-		</button>
-		<button class="footer-button submit" type="submit">
-			<!-- TODO insert icon -->
-			<i class="material-symbols-rounded"></i>Submit
-		</button>
-	</Footer>
-</form>
+<Header>
+	<SurveyTitle />
+</Header>
+<Content>
+	{#each $questions as question, questionIndex}
+		<div class="question">
+			<QuestionTitle {questionIndex} />
+			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
+		</div>
+	{/each}
+</Content>
+<Footer>
+	<button class="footer-button back" disabled>
+		<!-- TODO insert icon -->
+		<i class="material-symbols-rounded"></i>Back
+	</button>
+	<button class="footer-button submit" on:click={processForm}>
+		<!-- TODO insert icon -->
+		<i class="material-symbols-rounded"></i>Submit
+	</button>
+</Footer>
 
 <style>
 	.question {

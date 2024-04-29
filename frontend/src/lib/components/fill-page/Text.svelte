@@ -7,11 +7,11 @@
 	<div class="details">
 		{$questions[questionIndex].choices[0]}
 	</div>
-	<input
+	<textarea
 		class="details-area"
-		type="textarea"
 		required={$questions[questionIndex].required}
 		name={$questions[questionIndex].question}
+		placeholder="Enter your answer..."
 	/>
 </div>
 
@@ -30,6 +30,11 @@
 		align-items: center;
 		flex-flow: row;
 		margin-bottom: 0.5em;
+		background-color: #1a1a1a;
+		border: 1px solid #999999;
+		border-radius: 5px;
+		box-shadow: 0px 4px 4px #1a1a1a;
+		padding: 0.3em;
 	}
 
 	.details-area {
@@ -41,6 +46,9 @@
 		box-shadow: 0px 4px 4px #1a1a1a;
 		cursor: text;
 		color: #eaeaea;
+		width: 80%;
+		height: 5em;
+		resize: none;
 	}
 
 	@media screen and (max-width: 767px) {

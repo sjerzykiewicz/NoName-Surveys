@@ -4,26 +4,26 @@
 </script>
 
 <div class="choice-area">
-	<input
-		type="radio"
-		name={$questions[questionIndex].question}
-		id="yes"
-		title={$questions[questionIndex].choices[0]}
-		required={$questions[questionIndex].required}
-	/>
 	<label for="yes">
+		<input
+			type="radio"
+			name={$questions[questionIndex].question}
+			id="yes"
+			title={$questions[questionIndex].choices[0]}
+			required={$questions[questionIndex].required}
+		/>
 		<div class="choice">
 			<i class="material-symbols-rounded">thumb_up</i>{$questions[questionIndex].choices[0]}
 		</div>
 	</label>
-	<input
-		type="radio"
-		name={$questions[questionIndex].question}
-		id="no"
-		title={$questions[questionIndex].choices[1]}
-		required={$questions[questionIndex].required}
-	/>
 	<label for="no">
+		<input
+			type="radio"
+			name={$questions[questionIndex].question}
+			id="no"
+			title={$questions[questionIndex].choices[1]}
+			required={$questions[questionIndex].required}
+		/>
 		<div class="choice">
 			<i class="material-symbols-rounded">thumb_down</i>{$questions[questionIndex].choices[1]}
 		</div>
@@ -33,6 +33,10 @@
 <style>
 	input[type='radio'] {
 		visibility: hidden;
+	}
+
+	input[type='radio']:checked + .choice {
+		background-color: #0075ff;
 	}
 
 	.choice-area {

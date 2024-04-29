@@ -2,6 +2,7 @@
 	import { Hamburger } from 'svelte-hamburgers';
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import { cubicInOut } from 'svelte/easing';
 
 	let open: boolean;
 	let innerWidth: number;
@@ -11,7 +12,6 @@
 	const navLinks = {
 		Home: '/welcome',
 		Create: '/create',
-		Pending: '/pending',
 		Summary: '/summary',
 		Account: '/account'
 	};
@@ -23,34 +23,39 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-{#if innerWidth < 767}
+{#if innerWidth <= 767}
 	<div class="nav-burger">
 		<i class="material-symbols-rounded">shield_person</i>
-		<Hamburger bind:open --color="white" />
+		<Hamburger bind:open --color="#eaeaea" />
 	</div>
 {/if}
 
-{#if open || innerWidth >= 767}
-	<nav transition:slide>
-		{#each Object.entries(navLinks) as [title, href]}
-			<a
-				{href}
-				{title}
-				class:active={$page.url.pathname === href}
-				class:last={title === 'Account'}
-				on:click={hideNav}>{title}</a
-			>
-		{/each}
-	</nav>
+{#if open || innerWidth > 767}
+	<div class="bar">
+		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
+			{#each Object.entries(navLinks) as [title, href]}
+				<a {href} {title} class:active={$page.url.pathname === href} on:click={hideNav}>{title}</a>
+			{/each}
+		</nav>
+	</div>
 {/if}
 
 <style>
 	nav {
 		display: flex;
 		flex-flow: row;
-		width: 100%;
+		margin: auto;
+		min-width: 767px;
+		width: 50%;
 		justify-content: space-around;
 		background-color: #1a1a1a;
+		border-left: 1px solid #999999;
+	}
+
+	.bar {
+		position: static;
+		background-color: #1a1a1a;
+		border-bottom: 1px solid #999999;
 	}
 
 	.nav-burger {
@@ -58,8 +63,8 @@
 		flex-flow: row;
 		justify-content: space-between;
 		align-items: center;
-		padding: 1em;
-		color: white;
+		padding: 0.75em;
+		color: #eaeaea;
 		background-color: #1a1a1a;
 	}
 
@@ -74,8 +79,7 @@
 		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 1.5em;
-		border: 1px solid #999999;
-		border-left: none;
+		border-right: 1px solid #999999;
 		width: 100%;
 		text-decoration: none;
 		transition: background-color 0.2s;
@@ -94,16 +98,24 @@
 		background-color: #0075ff;
 	}
 
-	.last {
-		border-right: none;
+	i {
+		cursor: default;
 	}
 
 	@media screen and (max-width: 767px) {
 		nav {
 			flex-flow: column;
+			border-left: none;
+			width: 100%;
+			min-width: 0px;
+		}
+
+		.bar {
+			border-bottom: none;
 		}
 
 		a {
+			border-top: 1px solid #999999;
 			border-right: none;
 			border-bottom: none;
 		}

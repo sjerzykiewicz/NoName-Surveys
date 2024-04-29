@@ -1,28 +1,31 @@
-from pydantic import BaseModel
-from src.api.models.question_base import Question, subclass_registry
+from typing import Union
+
+from pydantic import BaseModel, Field
+
+from src.api.models.questions.binary_question import BinaryQuestion
+from src.api.models.questions.list_question import ListQuestion
+from src.api.models.questions.multi_question import MultiQuestion
+from src.api.models.questions.rank_question import RankQuestion
+from src.api.models.questions.scale_question import ScaleQuestion
+from src.api.models.questions.single_question import SingleQuestion
+from src.api.models.questions.slider_question import SliderQuestion
+from src.api.models.questions.text_question import TextQuestion
 
 
 class Survey(BaseModel):
     title: str
-    questions: list[Question] = []
-
-    # this funky method allows us to instantiate the correct subclass of Question
-    def __init__(self, **kwargs):
-        for index in range(len(kwargs["questions"])):
-            cur_question = kwargs["questions"][index]
-            if isinstance(cur_question, dict):
-                item_question_keys = sorted(cur_question.keys())
-                assigned_subclass = False
-                for _, subclass in subclass_registry.items():
-                    registry_question_keys = sorted(subclass.__fields__.keys())
-                    if item_question_keys == registry_question_keys:
-                        cur_question = subclass(**cur_question)
-                        assigned_subclass = True
-                        break
-                if not assigned_subclass:
-                    raise ValueError(f"Question {cur_question} does not match any known question types")
-                kwargs["questions"][index] = cur_question
-            else:
-                raise ValueError("Questions must be a list of dictionaries")
-
-        super().__init__(**kwargs)
+    questions: list[
+        Union[
+            BinaryQuestion,
+            ListQuestion,
+            MultiQuestion,
+            RankQuestion,
+            ScaleQuestion,
+            SingleQuestion,
+            SliderQuestion,
+            TextQuestion,
+        ]
+    ] = Field(
+        min_length=1,
+        description="Questions list must have at least 1 element",
+    )

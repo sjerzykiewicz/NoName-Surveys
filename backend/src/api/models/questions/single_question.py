@@ -2,7 +2,7 @@ from typing import Literal
 
 from pydantic import Field
 
-from src.api.models.question_base import Question
+from src.api.models.questions.question_base import Question
 
 
 class SingleQuestion(Question):
@@ -11,3 +11,6 @@ class SingleQuestion(Question):
         min_length=2,
         description="Single choice question must have at least 2 options",
     )
+
+    class Config:
+        extra = "forbid"

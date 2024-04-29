@@ -6,7 +6,7 @@
 </script>
 
 <div class="choice-area">
-	<select required={$questions[questionIndex].required} name={$questions[questionIndex].question}>
+	<select name={$questions[questionIndex].question}>
 		{#each $questions[questionIndex].choices as choice}
 			<option value={choice} on:click={() => ($answers[questionIndex].choices[0] = choice)}>
 				{choice}

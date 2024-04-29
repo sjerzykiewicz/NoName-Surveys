@@ -10,7 +10,6 @@
 	</div>
 	<textarea
 		class="details-area"
-		required={$questions[questionIndex].required}
 		name={$questions[questionIndex].question}
 		placeholder="Enter your answer..."
 		bind:value

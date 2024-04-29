@@ -11,7 +11,6 @@
 			class="range"
 			type="range"
 			step="1"
-			required={$questions[questionIndex].required}
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
 			name={$questions[questionIndex].question}

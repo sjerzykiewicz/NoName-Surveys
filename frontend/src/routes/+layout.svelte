@@ -1,11 +1,13 @@
 <script lang="ts">
 	import NavBar from '$lib/components/NavBar.svelte';
+	import ScrollToTop from '$lib/components/ScrollToTop.svelte';
 </script>
 
 <NavBar />
 <div class="box">
 	<slot />
 </div>
+<ScrollToTop />
 
 <style>
 	.box {

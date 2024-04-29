@@ -1,13 +1,13 @@
 <script lang="ts">
-	import Single from '$lib/components/Single.svelte';
-	import Multi from '$lib/components/Multi.svelte';
-	import Scale from '$lib/components/Scale.svelte';
-	import Slider from '$lib/components/Slider.svelte';
-	import List from '$lib/components/List.svelte';
-	import Rank from '$lib/components/Rank.svelte';
-	import YesNo from '$lib/components/YesNo.svelte';
-	import Text from '$lib/components/Text.svelte';
-	import { questions } from '$lib/stores';
+	import Single from '$lib/components/create-page/Single.svelte';
+	import Multi from '$lib/components/create-page/Multi.svelte';
+	import Scale from '$lib/components/create-page/Scale.svelte';
+	import Slider from '$lib/components/create-page/Slider.svelte';
+	import List from '$lib/components/create-page/List.svelte';
+	import Rank from '$lib/components/create-page/Rank.svelte';
+	import YesNo from '$lib/components/create-page/YesNo.svelte';
+	import Text from '$lib/components/create-page/Text.svelte';
+	import { questions } from '$lib/stores/create-page';
 	import { type ComponentType, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';

@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { title } from '$lib/stores';
+	import { title } from '$lib/stores/fill-page';
 </script>
 
-<div title="Enter survey title" class="title-input" contenteditable bind:textContent={$title}>
+<div title="Survey title" class="title">
 	{$title}
 </div>
 
 <style>
-	.title-input {
+	.title {
 		flex: 1;
 		background-color: #1a1a1a;
 		padding: 0.25em;
@@ -22,13 +22,8 @@
 		overflow: hidden;
 	}
 
-	.title-input[contenteditable]:empty::before {
-		content: 'Enter survey title...';
-		color: #eaeaea40;
-	}
-
 	@media screen and (max-width: 767px) {
-		.title-input {
+		.title {
 			font-size: 1.25em;
 		}
 	}

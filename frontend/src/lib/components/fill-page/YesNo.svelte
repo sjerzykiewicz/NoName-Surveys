@@ -1,19 +1,34 @@
 <script lang="ts">
-	import { questions } from '$lib/stores';
-
+	import { questions, answers } from '$lib/stores/fill-page';
 	export let questionIndex: number;
+	let selected: number;
+
+	function handleClick(id: number) {
+		if (id === 0) {
+			$answers[questionIndex].choices[0] = 'yes';
+			if (selected !== 0) selected = 0;
+		} else {
+			$answers[questionIndex].choices[0] = 'no';
+			if (selected !== 1) selected = 1;
+		}
+	}
 </script>
 
 <div class="choice-area">
-	<button title={$questions[questionIndex].choices[0]} disabled>
+	<button class="choice" class:selected={selected === 0} on:click={() => handleClick(0)}>
 		<i class="material-symbols-rounded">thumb_up</i>{$questions[questionIndex].choices[0]}
 	</button>
-	<button title={$questions[questionIndex].choices[1]} disabled>
+	<button class="choice" class:selected={selected === 1} on:click={() => handleClick(1)}>
 		<i class="material-symbols-rounded">thumb_down</i>{$questions[questionIndex].choices[1]}
 	</button>
 </div>
 
 <style>
+	.choice.selected,
+	.choice.selected:hover {
+		background-color: #0075ff;
+	}
+
 	.choice-area {
 		display: flex;
 		flex-flow: row;
@@ -27,9 +42,9 @@
 		margin-left: 2.25em;
 	}
 
-	button {
+	.choice {
 		display: flex;
-		background-color: #4a4a4a;
+		background-color: #1a1a1a;
 		padding: 0.25em;
 		border: 1px solid #999999;
 		border-radius: 5px;
@@ -40,13 +55,17 @@
 		cursor: default;
 	}
 
+	.choice:hover {
+		background-color: #4a4a4a;
+	}
+
 	i {
 		font-size: 1.15em;
 		margin-right: 0.15em;
 	}
 
 	@media screen and (max-width: 767px) {
-		button,
+		.choice,
 		i {
 			font-size: 1em;
 		}

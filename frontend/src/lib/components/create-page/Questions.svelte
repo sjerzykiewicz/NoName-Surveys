@@ -1,7 +1,7 @@
 <script lang="ts">
-	import QuestionButtons from '$lib/components/QuestionButtons.svelte';
-	import QuestionTitle from '$lib/components/QuestionTitle.svelte';
-	import { questions } from '$lib/stores';
+	import QuestionButtons from '$lib/components/create-page/QuestionButtons.svelte';
+	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
+	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 

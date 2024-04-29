@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { questions } from '$lib/stores';
+	import { questions } from '$lib/stores/create-page';
 	import { afterUpdate } from 'svelte';
 
 	export let questionIndex: number;

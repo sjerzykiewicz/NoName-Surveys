@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { questions } from '$lib/stores';
+	import { questions } from '$lib/stores/create-page';
 	import { afterUpdate } from 'svelte';
 
 	export let questionIndex: number;
@@ -25,11 +25,11 @@
 </script>
 
 <div class="choice-area">
+	<div class="dropdown">
+		<select class="dropdown-top" disabled />
+	</div>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
-			<div class="checkbox">
-				<input type="checkbox" disabled name={$questions[questionIndex].question} />
-			</div>
 			<div title="Enter choice" class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}
 			</div>
@@ -61,6 +61,7 @@
 		align-items: center;
 		flex-flow: row;
 		margin-bottom: 0.5em;
+		margin-left: 2.25em;
 	}
 
 	.choice-input {
@@ -81,14 +82,32 @@
 		color: #eaeaea40;
 	}
 
-	.remove-choice {
-		visibility: hidden;
+	.dropdown-top {
+		flex: 1;
+		background-color: #4a4a4a;
+		border: 1px solid #999999;
+		border-radius: 5px;
+		box-shadow: 0px 4px 4px #1a1a1a;
+		font-size: 1.25em;
+		height: 1em;
 	}
 
-	.checkbox {
-		text-align: right;
-		width: 1.75em;
-		margin-right: 0.5em;
+	.dropdown-top:disabled {
+		color: #eaeaea;
+		opacity: 1;
+	}
+
+	.dropdown {
+		display: flex;
+		align-items: center;
+		flex-flow: row;
+		margin-bottom: 0.5em;
+		margin-left: 2.25em;
+		margin-right: 2.81em;
+	}
+
+	.remove-choice {
+		visibility: hidden;
 	}
 
 	button {
@@ -128,6 +147,7 @@
 
 	@media screen and (max-width: 767px) {
 		.choice-input,
+		.dropdown-top,
 		button {
 			font-size: 1em;
 		}

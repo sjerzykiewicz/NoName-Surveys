@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { title } from '$lib/stores';
-	import { questions } from '$lib/stores';
+	import { title } from '$lib/stores/create-page';
+	import { questions } from '$lib/stores/create-page';
 	import Question from '$lib/entities/questions/Question';
 	import SingleQuestion from '$lib/entities/questions/Single';
 	import MultiQuestion from '$lib/entities/questions/Multi';
@@ -11,14 +11,14 @@
 	import TextQuestion from '$lib/entities/questions/Text';
 	import YesNoQuestion from '$lib/entities/questions/YesNo';
 	import Survey from '$lib/entities/Survey';
-	import Single from '$lib/components/Single.svelte';
-	import Multi from '$lib/components/Multi.svelte';
-	import Scale from '$lib/components/Scale.svelte';
-	import Slider from '$lib/components/Slider.svelte';
-	import List from '$lib/components/List.svelte';
-	import Rank from '$lib/components/Rank.svelte';
-	import Text from '$lib/components/Text.svelte';
-	import YesNo from '$lib/components/YesNo.svelte';
+	import Single from '$lib/components/create-page/Single.svelte';
+	import Multi from '$lib/components/create-page/Multi.svelte';
+	import Scale from '$lib/components/create-page/Scale.svelte';
+	import Slider from '$lib/components/create-page/Slider.svelte';
+	import List from '$lib/components/create-page/List.svelte';
+	import Rank from '$lib/components/create-page/Rank.svelte';
+	import Text from '$lib/components/create-page/Text.svelte';
+	import YesNo from '$lib/components/create-page/YesNo.svelte';
 
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];

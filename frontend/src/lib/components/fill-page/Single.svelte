@@ -14,18 +14,26 @@
 
 <div class="choice-area">
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<button
-			title="Select choice"
-			class="choice"
-			class:selected={selected === choiceIndex}
-			on:click={() => handleClick(choiceIndex, choice)}
-		>
-			{choice}
-		</button>
+		<label class="choice-div">
+			<div class="radio">
+				<input
+					type="radio"
+					name={$questions[questionIndex].question}
+					on:click={() => handleClick(choiceIndex, choice)}
+				/>
+			</div>
+			<div title="Enter choice" class="choice" class:selected={selected === choiceIndex}>
+				{choice}
+			</div>
+		</label>
 	{/each}
 </div>
 
 <style>
+	input[type='radio']:checked {
+		accent-color: #0075ff;
+	}
+
 	.choice-area {
 		font-size: 1em;
 		font-weight: normal;
@@ -34,25 +42,35 @@
 		width: 86%;
 	}
 
-	.choice {
+	.choice-div {
 		display: flex;
 		align-items: center;
 		flex-flow: row;
 		margin-bottom: 0.5em;
+	}
+
+	.choice {
+		flex: 1;
 		background-color: #1a1a1a;
-		color: #eaeaea;
+		padding: 0.25em;
 		border: 1px solid #999999;
-		font-size: 1.25em;
 		border-radius: 5px;
-		font-weight: normal;
-		font-family: 'Jura';
-		margin-left: 1.9em;
-		width: 80%;
+		box-shadow: 0px 4px 4px #1a1a1a;
+		font-size: 1.25em;
+		cursor: text;
+		overflow: hidden;
+		margin-right: 0.5em;
 	}
 
 	.choice.selected,
 	.choice.selected:hover {
 		border: 2px solid #0075ff;
+	}
+
+	.radio {
+		text-align: right;
+		width: 1.75em;
+		margin-right: 0.5em;
 	}
 
 	@media screen and (max-width: 767px) {

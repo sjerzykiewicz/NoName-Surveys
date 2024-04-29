@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { questions } from '$lib/stores/fill-page';
-	import { answers } from '$lib/stores/fill-page';
+	import { questions, answers } from '$lib/stores/fill-page';
 	export let questionIndex: number;
 	let value: number = parseFloat($questions[questionIndex].choices[0]);
 	$answers[questionIndex].choices[0] = value.toString();

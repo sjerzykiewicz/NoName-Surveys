@@ -59,8 +59,17 @@
 	@media screen and (max-width: 767px) {
 		.choice-input,
 		.remove-choice,
+		.rank,
 		button {
 			font-size: 1em;
+		}
+
+		.rank {
+			width: 2em;
+		}
+
+		.add-choice {
+			margin-left: 2.25em;
 		}
 	}
 </style>

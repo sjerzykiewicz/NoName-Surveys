@@ -53,7 +53,6 @@
 	}
 
 	.bar {
-		position: static;
 		background-color: var(--secondary-color);
 		border-bottom: 1px solid var(--border-color);
 	}
@@ -88,6 +87,10 @@
 	a:hover {
 		background-color: var(--primary-color);
 		transition: background-color 0.2s;
+	}
+
+	a:active {
+		background-color: #999999;
 	}
 
 	.active,

@@ -180,5 +180,9 @@
 		.arrows i {
 			font-size: 1.2em;
 		}
+
+		.index {
+			width: 2em;
+		}
 	}
 </style>

@@ -3,17 +3,18 @@
 <style>
 	h1 {
 		text-align: center;
-		text-shadow: 0 0.1em 0.1em #000000;
+		text-shadow: 0px 4px 4px #1a1a1a;
 		color: #eaeaea;
 		font-family: 'Jura';
-		font-size: 4em;
+		font-size: 3em;
 		font-weight: bold;
 		margin-bottom: 1.5em;
+		cursor: default;
 	}
 
 	@media screen and (max-width: 767px) {
 		h1 {
-			font-size: 3em;
+			font-size: 2em;
 		}
 	}
 </style>

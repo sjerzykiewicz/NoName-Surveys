@@ -14,12 +14,13 @@
 		display: flex;
 		flex-flow: column;
 		height: auto;
-		min-height: calc(100% - 5em);
+		min-height: calc(100% - 4.875em);
 		width: 50%;
 		min-width: 767px;
 		margin: auto;
 		margin-top: 1.5em;
 		border: 1px solid #999999;
+		border-bottom: none;
 		box-shadow: 0px 4px 4px #1a1a1a;
 		background-color: #2a2a2a;
 	}
@@ -28,9 +29,10 @@
 		.box {
 			width: 100%;
 			min-width: 0px;
+			min-height: calc(100% - 5.175em);
 			margin-top: 0px;
-			border: none;
-			border-top: 1px solid #999999;
+			border-left: none;
+			border-right: none;
 		}
 	}
 </style>

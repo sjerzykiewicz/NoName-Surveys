@@ -51,13 +51,8 @@
 	{/each}
 </Content>
 <Footer>
-	<button class="footer-button back" disabled>
-		<!-- TODO insert icon -->
-		<i class="material-symbols-rounded"></i>Back
-	</button>
-	<button class="footer-button submit" on:click={processForm}>
-		<!-- TODO insert icon -->
-		<i class="material-symbols-rounded"></i>Submit
+	<button title="Submit survey" class="footer-button submit" on:click={processForm}>
+		<i class="material-symbols-rounded">done</i>Submit
 	</button>
 </Footer>
 
@@ -85,17 +80,17 @@
 		background-color: #1a1a1a;
 	}
 
-	.footer-button:active,
-	.submit:active {
-		background-color: #999999;
-	}
-
 	.submit {
 		background-color: #0075ff;
 	}
 
 	.submit:hover {
 		background-color: #001c53;
+	}
+
+	.footer-button:active,
+	.submit:active {
+		background-color: #999999;
 	}
 
 	i {

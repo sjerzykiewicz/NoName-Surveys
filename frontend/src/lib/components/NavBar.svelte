@@ -53,7 +53,6 @@
 	}
 
 	.bar {
-		position: static;
 		background-color: #1a1a1a;
 		border-bottom: 1px solid #999999;
 	}
@@ -87,7 +86,10 @@
 
 	a:hover {
 		background-color: #4a4a4a;
-		transition: background-color 0.2s;
+	}
+
+	a:active {
+		background-color: #999999;
 	}
 
 	.active {

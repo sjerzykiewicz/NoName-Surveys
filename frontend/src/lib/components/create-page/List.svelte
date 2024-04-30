@@ -151,5 +151,13 @@
 		button {
 			font-size: 1em;
 		}
+
+		.dropdown {
+			margin-right: 2.275em;
+		}
+
+		.add-choice {
+			margin-left: 2.25em;
+		}
 	}
 </style>

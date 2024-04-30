@@ -121,5 +121,9 @@
 		.limit-input {
 			font-size: 1em;
 		}
+
+		.limit-input {
+			margin-left: 2.25em;
+		}
 	}
 </style>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import '../app.css';
+
 	import NavBar from '$lib/components/NavBar.svelte';
 	import ScrollToTop from '$lib/components/ScrollToTop.svelte';
 </script>

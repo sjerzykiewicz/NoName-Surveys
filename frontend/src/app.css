@@ -1,0 +1,84 @@
+/* global.css */
+:root {
+	--primary-color: #4a4a4a;
+	--secondary-color: #1a1a1a;
+	--text-color: #eaeaea;
+	--text-color-transparent: #eaeaea40;
+	--border-color: #999999;
+	--box-shadow-color: #1a1a1a;
+	--accent-color: #0075ff;
+	--accent-color-dark: #001c53;
+}
+
+/* styles for create-page components */
+.choice-area {
+	font-size: 1em;
+	font-weight: normal;
+	font-family: 'Jura';
+	color: var(--text-color);
+	width: 86%;
+}
+
+.choice {
+	display: flex;
+	align-items: center;
+	flex-flow: row;
+	margin-bottom: 0.5em;
+}
+
+.choice-input {
+	flex: 1;
+	background-color: var(--secondary-color);
+	padding: 0.25em;
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	box-shadow: 0px 4px 4px var(--box-shadow-color);
+	font-size: 1.25em;
+	cursor: text;
+	overflow: hidden;
+	margin-right: 0.5em;
+}
+
+.choice-input[contenteditable]:empty::before {
+	content: 'Enter choice...';
+	color: var(--text-color-transparent);
+}
+
+.remove-choice {
+	visibility: hidden;
+}
+
+.create-page-button {
+	display: flex;
+	align-items: center;
+	background-color: var(--primary-color);
+	padding: 0.25em;
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	box-shadow: 0px 4px 4px var(--box-shadow-color);
+	font-size: 1.25em;
+	font-family: 'Jura';
+	color: var(--text-color);
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.create-page-button:hover {
+	background-color: var(--secondary-color);
+}
+
+.create-page-button:active {
+	background-color: var(--border-color);
+}
+
+.add-choice {
+	margin-left: 1.8em;
+}
+
+.material-symbols-rounded {
+	font-size: 1.15em;
+}
+
+.add-choice .material-symbols-rounded {
+	margin-right: 0.15em;
+}

@@ -34,7 +34,7 @@
 	<div class="arrows">
 		<button
 			title="Move question up"
-			class="up"
+			class="up create-page-button"
 			disabled={questionIndex === 1}
 			on:click={moveQuestionUp}
 		>
@@ -42,7 +42,7 @@
 		</button>
 		<button
 			title="Move question down"
-			class="down"
+			class="down create-page-button"
 			disabled={questionIndex === $questions.length}
 			on:click={moveQuestionDown}
 		>
@@ -51,7 +51,7 @@
 	</div>
 	<div
 		title="Enter question"
-		class="question-input"
+		class="question-input create-page-button"
 		contenteditable
 		bind:textContent={$questions[questionIndex - 1].question}
 	>
@@ -59,13 +59,13 @@
 	</div>
 	<button
 		title={$questions[questionIndex - 1].required ? 'Required' : 'Not required'}
-		class="required-button"
+		class="required-button create-page-button"
 		class:checked={$questions[questionIndex - 1].required}
 		on:click={toggleRequirement}
 	>
 		<i class="material-symbols-rounded">asterisk</i>
 	</button>
-	<button title="Remove question" on:click={removeQuestion}>
+	<button class="create-page-button" title="Remove question" on:click={removeQuestion}>
 		<i class="material-symbols-rounded">close</i>
 	</button>
 </div>
@@ -79,16 +79,16 @@
 		font-size: 1.25em;
 		font-weight: normal;
 		font-family: 'Jura';
-		color: #eaeaea;
+		color: var(--text-color);
 	}
 
 	.question-input {
 		flex: 1;
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 		padding: 0.25em;
-		border: 1px solid #999999;
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		cursor: text;
 		overflow: hidden;
 		margin-right: 0.5em;
@@ -96,7 +96,7 @@
 
 	.question-input[contenteditable]:empty::before {
 		content: 'Enter question...';
-		color: #eaeaea40;
+		color: var(--text-color-transparent);
 	}
 
 	.index {
@@ -120,12 +120,12 @@
 
 	.up {
 		border-radius: 5px 5px 0px 0px;
-		border-bottom: 1px solid #999999;
+		border-bottom: 1px solid var(--border-color);
 		padding: 0em 0.25em 0em 0.25em;
 	}
 
 	.up:disabled {
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 		cursor: not-allowed;
 	}
 
@@ -136,7 +136,7 @@
 	}
 
 	.down:disabled {
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 		cursor: not-allowed;
 	}
 
@@ -149,37 +149,19 @@
 	}
 
 	.required-button.checked {
-		background-color: #0075ff;
+		background-color: var(--accent-color);
 	}
 
 	.required-button.checked:hover {
-		background-color: #001c53;
+		background-color: var(--accent-color-dark);
 	}
 
 	.required-button.checked:active {
-		background-color: #999999;
+		background-color: var(--border-color);
 	}
 
 	button {
-		display: flex;
-		background-color: #4a4a4a;
-		padding: 0.25em;
-		border: 1px solid #999999;
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
 		font-size: 1em;
-		font-family: 'Jura';
-		color: #eaeaea;
-		cursor: pointer;
-		transition: background-color 0.2s;
-	}
-
-	button:hover {
-		background-color: #1a1a1a;
-	}
-
-	button:active {
-		background-color: #999999;
 	}
 
 	i {

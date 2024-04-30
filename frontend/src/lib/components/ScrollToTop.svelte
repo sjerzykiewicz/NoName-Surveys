@@ -9,13 +9,17 @@
 <svelte:window bind:scrollY={scrollHeight} />
 
 {#if showScrollToTop}
-	<button transition:scale on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+	<button
+		class="scroll-to-top"
+		transition:scale
+		on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+	>
 		<i class="material-symbols-rounded">arrow_upward</i>
 	</button>
 {/if}
 
 <style>
-	button {
+	.scroll-to-top {
 		position: fixed;
 		bottom: 0.7em;
 		left: 2em;
@@ -30,12 +34,12 @@
 		transition-duration: 0.2s;
 	}
 
-	button:hover {
+	.scroll-to-top:hover {
 		transform: translateY(-10px);
 	}
 
 	@media screen and (max-width: 767px) {
-		button {
+		.scroll-to-top {
 			bottom: 0.5em;
 			left: 1em;
 		}

@@ -51,7 +51,7 @@
 	</div>
 	<div
 		title="Enter question"
-		class="question-input create-page-button"
+		class="question-input"
 		contenteditable
 		bind:textContent={$questions[questionIndex - 1].question}
 	>

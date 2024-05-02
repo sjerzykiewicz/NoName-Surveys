@@ -6,7 +6,7 @@
 
 <style>
 	.login-box {
-		margin: 2em 0 0.5em 0;
+		margin: 1.5em 0 0.5em 0;
 		text-align: center;
 		color: #eaeaea;
 		font-family: 'Jura';
@@ -22,6 +22,7 @@
 		width: 15em;
 		margin-left: auto;
 		margin-right: auto;
+		margin-bottom: 5em;
 	}
 
 	button {

@@ -83,3 +83,69 @@
 .add-choice .material-symbols-rounded {
 	margin-right: 0.15em;
 }
+
+.footer-button {
+	display: flex;
+	text-decoration: none;
+	background-color: var(--primary-color);
+	padding: 0.25em;
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	box-shadow: 0px 4px 4px var(--box-shadow-color);
+	font-size: 1.25em;
+	font-family: 'Jura';
+	color: #eaeaea;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	margin-left: 0.5em;
+}
+
+.footer-button:hover {
+	background-color: var(--box-shadow-color);
+}
+
+.footer-button:active,
+.save:active,
+.submit:active {
+	background-color: var(--border-color);
+}
+
+.save,
+.submit {
+	background-color: var(--accent-color);
+}
+
+.save:hover,
+.submit:hover {
+	background-color: var(--accent-color-dark);
+}
+
+/* styles for fill-page components */
+.choice-in {
+	flex: 1;
+	background-color: var(--secondary-color);
+	padding: 0.25em;
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	box-shadow: 0px 4px 4px var(--box-shadow-color);
+	font-size: 1.25em;
+	cursor: text;
+	overflow: hidden;
+	margin-right: 0.5em;
+}
+
+.choice-in.selected,
+.choice-in.selected:hover {
+	border: 2px solid var(--accent-color);
+}
+
+.radio {
+	text-align: right;
+	width: 1.75em;
+	margin-right: 0.5em;
+}
+
+input[type='checkbox']:checked,
+input[type='radio']:checked {
+	accent-color: var(--accent-color);
+}

@@ -50,38 +50,10 @@
 </div>
 
 <style>
-	.choice-area {
-		font-size: 1em;
-		font-weight: normal;
-		font-family: 'Jura';
-		color: #eaeaea;
-		width: 86%;
-	}
-
-	.choice {
-		display: flex;
-		align-items: center;
-		flex-flow: row;
-		margin-bottom: 0.5em;
-	}
-
-	.choice-input {
-		flex: 1;
-		background-color: #1a1a1a;
-		padding: 0.25em;
-		border: 1px solid #999999;
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
-		font-size: 1.25em;
-		cursor: text;
-		overflow: hidden;
-		margin-right: 0.5em;
-	}
-
 	.rank {
 		margin-right: 0.25em;
 		font-size: 1.25em;
-		color: #999999;
+		color: var(--border-color);
 		cursor: default;
 		width: 1.5em;
 		text-align: right;
@@ -94,18 +66,18 @@
 	}
 
 	.arrows i {
-		line-height: 0.696em;
+		line-height: 0.7em;
 		overflow: hidden;
 	}
 
 	.up {
 		border-radius: 5px 5px 0px 0px;
-		border-bottom: 1px solid #999999;
+		border-bottom: 1px solid var(--border-color);
 		padding: 0em 0.25em 0em 0.25em;
 	}
 
 	.up:disabled {
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 		cursor: not-allowed;
 	}
 
@@ -116,30 +88,30 @@
 	}
 
 	.down:disabled {
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 		cursor: not-allowed;
 	}
 
 	button {
 		display: flex;
-		background-color: #4a4a4a;
+		background-color: var(--primary-color);
 		padding: 0.25em;
-		border: 1px solid #999999;
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1em;
 		font-family: 'Jura';
-		color: #eaeaea;
+		color: var(--text-color);
 		cursor: pointer;
 		transition: background-color 0.2s;
 	}
 
 	button:hover {
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 	}
 
 	button:active {
-		background-color: #999999;
+		background-color: var(--border-color);
 	}
 
 	@media screen and (max-width: 767px) {

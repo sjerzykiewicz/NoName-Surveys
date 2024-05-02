@@ -15,18 +15,18 @@
 </script>
 
 <div class="choice-area">
-	<button class="choice" class:selected={selected === 0} on:click={() => handleClick(0)}>
+	<button class="choice-yes-no" class:selected={selected === 0} on:click={() => handleClick(0)}>
 		<i class="material-symbols-rounded">thumb_up</i>{$questions[questionIndex].choices[0]}
 	</button>
-	<button class="choice" class:selected={selected === 1} on:click={() => handleClick(1)}>
+	<button class="choice-yes-no" class:selected={selected === 1} on:click={() => handleClick(1)}>
 		<i class="material-symbols-rounded">thumb_down</i>{$questions[questionIndex].choices[1]}
 	</button>
 </div>
 
 <style>
-	.choice.selected,
-	.choice.selected:hover {
-		background-color: #0075ff;
+	.choice-yes-no.selected,
+	.choice-yes-no.selected:hover {
+		background-color: var(--accent-color);
 	}
 
 	.choice-area {
@@ -37,26 +37,26 @@
 		font-size: 1em;
 		font-weight: normal;
 		font-family: 'Jura';
-		color: #eaeaea;
+		color: var(--text-color);
 		width: calc(86% - 2.25em);
 		margin-left: 2.25em;
 	}
 
-	.choice {
+	.choice-yes-no {
 		display: flex;
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 		padding: 0.25em;
-		border: 1px solid #999999;
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1.25em;
 		font-family: 'Jura';
-		color: #eaeaea;
+		color: var(--text-color);
 		cursor: default;
 	}
 
-	.choice:hover {
-		background-color: #4a4a4a;
+	.choice-yes-no:hover {
+		background-color: var(--primary-color);
 	}
 
 	i {
@@ -65,7 +65,7 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice,
+		.choice-yes-no,
 		i {
 			font-size: 1em;
 		}

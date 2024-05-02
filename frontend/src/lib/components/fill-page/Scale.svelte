@@ -7,7 +7,7 @@
 	{#each $questions[questionIndex].choices as choice}
 		<label class="choice-div">
 			<div class="choice">
-				<div class="radio">
+				<div class="radio-scale">
 					<input
 						type="radio"
 						name={$questions[questionIndex].question}
@@ -28,29 +28,20 @@
 		flex-flow: row;
 		align-items: center;
 		justify-content: space-around;
-		font-size: 1em;
-		font-weight: normal;
-		font-family: 'Jura';
-		color: #eaeaea;
 		width: calc(86% - 2.25em);
 		margin-left: 2.25em;
 	}
 
 	.choice {
-		display: flex;
 		flex-flow: column;
-		align-items: center;
 		text-align: center;
+		margin-bottom: none;
 	}
 
-	.radio {
+	.radio-scale {
 		display: flex;
 		height: 1.5em;
 		width: 1.5em;
-	}
-
-	input[type='radio']:checked {
-		accent-color: #0075ff;
 	}
 
 	.number {

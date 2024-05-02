@@ -19,11 +19,6 @@
 
 <style>
 	.choice-area {
-		font-size: 1em;
-		font-weight: normal;
-		font-family: 'Jura';
-		color: #eaeaea;
-		width: 86%;
 		padding-left: 2.3em;
 	}
 
@@ -32,22 +27,22 @@
 		align-items: center;
 		flex-flow: row;
 		margin-bottom: 0.5em;
-		background-color: #1a1a1a;
-		border: 1px solid #999999;
+		background-color: var(--secondary-color);
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		padding: 0.3em;
 	}
 
 	.details-area {
 		flex: 1;
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 		padding: 0.5em;
-		border: 1px solid #999999;
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		cursor: text;
-		color: #eaeaea;
+		color: var(--text-color);
 		width: 80%;
 		height: 5em;
 		resize: none;

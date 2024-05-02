@@ -31,11 +31,6 @@
 		flex-flow: column;
 		align-items: center;
 		justify-content: center;
-		font-size: 1em;
-		font-weight: normal;
-		font-family: 'Jura';
-		color: #eaeaea;
-		width: 86%;
 	}
 
 	.slider {
@@ -52,7 +47,7 @@
 		width: 100%;
 		height: 0.5em;
 		border-radius: 0.5em;
-		background: #999999;
+		background: var(--border-color);
 		outline: none;
 		opacity: 1;
 		margin-left: 2.75em;
@@ -63,7 +58,7 @@
 		width: 1.5em;
 		height: 1.5em;
 		border-radius: 1.5em;
-		background: #eaeaea;
+		background: var(--text-color);
 		cursor: default;
 	}
 
@@ -72,7 +67,7 @@
 		width: 1.5em;
 		height: 1.5em;
 		border-radius: 1.5em;
-		background: #eaeaea;
+		background: var(--text-color);
 		cursor: default;
 	}
 
@@ -84,15 +79,15 @@
 	}
 
 	.limit {
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 		padding: 0.25em;
-		border: 1px solid #999999;
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1.25em;
 		font-weight: normal;
 		font-family: 'Jura';
-		color: #eaeaea;
+		color: var(--text-color);
 		cursor: text;
 		overflow: hidden;
 		margin-left: 1.75em;

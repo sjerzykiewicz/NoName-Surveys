@@ -65,39 +65,6 @@
 	.question {
 		margin-bottom: 1.875em;
 	}
-	.footer-button {
-		display: flex;
-		text-decoration: none;
-		background-color: #4a4a4a;
-		padding: 0.25em;
-		border: 1px solid #999999;
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
-		font-size: 1.25em;
-		font-family: 'Jura';
-		color: #eaeaea;
-		cursor: pointer;
-		transition: background-color 0.2s;
-		margin-left: 0.5em;
-	}
-
-	.footer-button:hover {
-		background-color: #1a1a1a;
-	}
-
-	.footer-button:active,
-	.submit:active {
-		background-color: #999999;
-	}
-
-	.submit {
-		background-color: #0075ff;
-	}
-
-	.submit:hover {
-		background-color: #001c53;
-	}
-
 	i {
 		font-size: 1.15em;
 		margin-right: 0.15em;

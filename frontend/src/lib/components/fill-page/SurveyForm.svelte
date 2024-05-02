@@ -11,7 +11,7 @@
 	import QuestionTitle from '$lib/components/fill-page/QuestionTitle.svelte';
 	import Multi from '$lib/components/fill-page/Multi.svelte';
 	import Slider from '$lib/components/fill-page/Slider.svelte';
-	import YesNo from '$lib/components/fill-page/YesNo.svelte';
+	import Binary from '$lib/components/fill-page/Binary.svelte';
 	import Rank from '$lib/components/fill-page/Rank.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
@@ -20,7 +20,7 @@
 		single: Single,
 		multi: Multi,
 		scale: Scale,
-		yesno: YesNo,
+		binary: Binary,
 		slider: Slider,
 		rank: Rank,
 		list: List

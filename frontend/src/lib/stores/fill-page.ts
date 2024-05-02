@@ -60,7 +60,7 @@ export const questions: Readable<
 		choices: ['15', '80']
 	},
 	{
-		type: 'yesno',
+		type: 'binary',
 		required: true,
 		question: 'Czy jesteś zainteresowany dalszą współpracą z naszym zespołem?',
 		choices: ['Tak', 'Nie']

@@ -5,7 +5,7 @@
 	import Slider from '$lib/components/create-page/Slider.svelte';
 	import List from '$lib/components/create-page/List.svelte';
 	import Rank from '$lib/components/create-page/Rank.svelte';
-	import YesNo from '$lib/components/create-page/YesNo.svelte';
+	import Binary from '$lib/components/create-page/Binary.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import { questions } from '$lib/stores/create-page';
 	import { type ComponentType, onMount } from 'svelte';
@@ -16,7 +16,16 @@
 	let isPanelVisible: boolean = false;
 	let isQuestionAdded: boolean = false;
 	let previousQuestionType: ComponentType;
-	let questionTypes: Array<ComponentType> = [Text, Single, Multi, Scale, YesNo, Slider, Rank, List];
+	let questionTypes: Array<ComponentType> = [
+		Text,
+		Single,
+		Multi,
+		Scale,
+		Binary,
+		Slider,
+		Rank,
+		List
+	];
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -27,8 +36,8 @@
 			return ['', ''];
 		} else if (component === Scale) {
 			return ['1', '2', '3', '4', '5'];
-		} else if (component === YesNo) {
-			return ['Yes', 'No'];
+		} else if (component === Binary) {
+			return ['', ''];
 		} else {
 			return [''];
 		}

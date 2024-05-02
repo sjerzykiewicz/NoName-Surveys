@@ -1,9 +1,9 @@
 import Question from '$lib/entities/questions/Question';
 
-class YesNoQuestionBody {}
+class BinaryQuestionBody {}
 
-export default class YesNoQuestion extends Question {
-	yes_no: YesNoQuestionBody = {};
+export default class BinaryQuestion extends Question {
+	binary: BinaryQuestionBody = {};
 	constructor(required: boolean = false, question: string = '') {
 		super(required, question);
 	}

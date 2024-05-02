@@ -5,7 +5,7 @@
 	import Slider from '$lib/components/create-page/Slider.svelte';
 	import List from '$lib/components/create-page/List.svelte';
 	import Rank from '$lib/components/create-page/Rank.svelte';
-	import YesNo from '$lib/components/create-page/YesNo.svelte';
+	import Binary from '$lib/components/create-page/Binary.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import { beforeUpdate, type ComponentType } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
@@ -52,8 +52,8 @@
 			case Rank:
 				questionTypeData = { title: 'Ranking choice', icon: 'numbers', text: 'Rank' };
 				break;
-			case YesNo:
-				questionTypeData = { title: 'Yes/No choice', icon: 'thumbs_up_down', text: 'Yes/No' };
+			case Binary:
+				questionTypeData = { title: 'Yes/No choice', icon: 'thumbs_up_down', text: 'Binary' };
 				break;
 			case Text:
 				questionTypeData = { title: 'Open question', icon: 'text_fields', text: 'Text' };

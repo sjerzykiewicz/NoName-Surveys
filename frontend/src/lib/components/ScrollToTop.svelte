@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cubicInOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
 
 	let scrollHeight: number;
@@ -11,7 +12,7 @@
 {#if showScrollToTop}
 	<button
 		class="scroll-to-top"
-		transition:scale
+		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
 	>
 		<i class="material-symbols-rounded">north</i>

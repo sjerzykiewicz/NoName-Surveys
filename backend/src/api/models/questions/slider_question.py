@@ -1,6 +1,6 @@
 from typing import Literal, Optional
 
-from pydantic import validator
+from pydantic import ValidationInfo, field_validator
 
 from src.api.models.questions.question_base import Question
 
@@ -11,14 +11,14 @@ class SliderQuestion(Question):
     max_value: float
     answer: Optional[float] = None
 
-    @validator("answer")
-    def validate_answer(cls, v, values):
+    @field_validator("answer")
+    def validate_answer(cls, v, info: ValidationInfo) -> Optional[float]:
         if not v:
             return v
         if (
-            "min_value" in values
-            and "max_value" in values
-            and values["min_value"] <= v <= values["max_value"]
+            "min_value" in info.data
+            and "max_value" in info.data
+            and not info.data["min_value"] <= v <= info.data["max_value"]
         ):
             raise ValueError(
                 "answer must be between minimum and maximum possible values"

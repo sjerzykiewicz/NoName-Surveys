@@ -1,6 +1,6 @@
 from typing import Literal, Optional
 
-from pydantic import Field, validator
+from pydantic import Field, ValidationInfo, field_validator
 
 from src.api.models.questions.question_base import Question
 
@@ -12,11 +12,11 @@ class BinaryQuestion(Question):
     )
     answer: Optional[str] = None
 
-    @validator("answer")
-    def validate_answer(cls, v, values):
+    @field_validator("answer")
+    def validate_answer(cls, v, info: ValidationInfo) -> Optional[str]:
         if not v:
             return v
-        if "choices" in values and v not in values["choices"]:
+        if "choices" in info.data and v not in info.data["choices"]:
             raise ValueError("answer must be one of the choices")
         return v
 

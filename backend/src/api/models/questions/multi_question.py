@@ -1,6 +1,6 @@
 from typing import Literal, Optional
 
-from pydantic import Field, validator
+from pydantic import Field, ValidationInfo, field_validator
 
 from src.api.models.questions.question_base import Question
 
@@ -13,12 +13,12 @@ class MultiQuestion(Question):
     )
     answer: Optional[list[str]] = None
 
-    @validator("answer")
-    def validate_answer(cls, v, values):
+    @field_validator("answer")
+    def validate_answer(cls, v, info: ValidationInfo) -> Optional[list[str]]:
         if not v:
             return v
-        if "choices" in values and any(
-            choice not in values["choices"] for choice in v
+        if "choices" in info.data and any(
+            choice not in info.data["choices"] for choice in v
         ):
             raise ValueError("answer must be one of the choices")
         return v

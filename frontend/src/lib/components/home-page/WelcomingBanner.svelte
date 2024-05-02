@@ -8,7 +8,7 @@
 		font-family: 'Jura';
 		font-size: 3em;
 		font-weight: bold;
-		margin-bottom: 1.5em;
+		margin-bottom: 1em;
 		cursor: default;
 	}
 

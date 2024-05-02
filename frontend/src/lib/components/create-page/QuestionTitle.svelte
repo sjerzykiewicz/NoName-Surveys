@@ -171,7 +171,6 @@
 
 	@media screen and (max-width: 767px) {
 		.question-area,
-		.question-input,
 		.index,
 		button {
 			font-size: 1em;

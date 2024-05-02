@@ -1,34 +1,33 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
-	export let questionIndex: number;
-	let selected: number;
 
-	function handleClick(id: number) {
-		if (id === 0) {
-			$answers[questionIndex].choices[0] = 'yes';
-			if (selected !== 0) selected = 0;
-		} else {
-			$answers[questionIndex].choices[0] = 'no';
-			if (selected !== 1) selected = 1;
-		}
-	}
+	export let questionIndex: number;
 </script>
 
 <div class="choice-area">
-	<button class="choice" class:selected={selected === 0} on:click={() => handleClick(0)}>
+	<button
+		title="Select your answer"
+		class="choice-binary"
+		class:selected={$answers[questionIndex].choices[0] === $questions[questionIndex].choices[0]}
+		on:click={() => {
+			$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
+		}}
+	>
 		<i class="material-symbols-rounded">thumb_up</i>{$questions[questionIndex].choices[0]}
 	</button>
-	<button class="choice" class:selected={selected === 1} on:click={() => handleClick(1)}>
+	<button
+		title="Select your answer"
+		class="choice-binary"
+		class:selected={$answers[questionIndex].choices[0] === $questions[questionIndex].choices[1]}
+		on:click={() => {
+			$answers[questionIndex].choices[0] = $questions[questionIndex].choices[1];
+		}}
+	>
 		<i class="material-symbols-rounded">thumb_down</i>{$questions[questionIndex].choices[1]}
 	</button>
 </div>
 
 <style>
-	.choice.selected,
-	.choice.selected:hover {
-		background-color: #0075ff;
-	}
-
 	.choice-area {
 		display: flex;
 		flex-flow: row;
@@ -37,26 +36,37 @@
 		font-size: 1em;
 		font-weight: normal;
 		font-family: 'Jura';
-		color: #eaeaea;
+		color: var(--text-color);
 		width: calc(86% - 2.25em);
 		margin-left: 2.25em;
 	}
 
-	.choice {
+	.choice-binary {
 		display: flex;
-		background-color: #1a1a1a;
+		background-color: var(--primary-color);
 		padding: 0.25em;
-		border: 1px solid #999999;
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1.25em;
 		font-family: 'Jura';
-		color: #eaeaea;
-		cursor: default;
+		color: var(--text-color);
+		cursor: pointer;
+		transition: 0.2s;
 	}
 
-	.choice:hover {
-		background-color: #4a4a4a;
+	.choice-binary:hover {
+		background-color: var(--secondary-color);
+	}
+
+	.choice-binary.selected,
+	.choice-binary.selected:hover {
+		background-color: var(--accent-color);
+	}
+
+	.choice-binary:active,
+	.choice-binary.selected:active {
+		background-color: var(--border-color);
 	}
 
 	i {
@@ -65,7 +75,7 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice,
+		.choice-binary,
 		i {
 			font-size: 1em;
 		}

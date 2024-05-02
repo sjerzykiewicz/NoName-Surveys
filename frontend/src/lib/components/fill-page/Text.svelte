@@ -1,61 +1,59 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+
 	export let questionIndex: number;
-	let value: string;
+
+	$answers[questionIndex].choices[0] = '';
 </script>
 
 <div class="choice-area">
-	<div class="details">
+	<div title="Question details" class="details">
 		{$questions[questionIndex].choices[0]}
 	</div>
-	<textarea
-		class="details-area"
-		name={$questions[questionIndex].question}
-		placeholder="Enter your answer..."
-		bind:value
-		on:change={() => ($answers[questionIndex].choices[0] = value)}
-	/>
+	<div
+		title="Enter your answer"
+		class="text-area"
+		contenteditable
+		bind:textContent={$answers[questionIndex].choices[0]}
+	>
+		{$answers[questionIndex].choices[0]}
+	</div>
 </div>
 
 <style>
 	.choice-area {
-		font-size: 1em;
-		font-weight: normal;
-		font-family: 'Jura';
-		color: #eaeaea;
-		width: 86%;
 		padding-left: 2.3em;
 	}
 
 	.details {
-		display: flex;
-		align-items: center;
-		flex-flow: row;
+		font-size: 1.25em;
+		margin-top: -0.5em;
 		margin-bottom: 0.5em;
-		background-color: #1a1a1a;
-		border: 1px solid #999999;
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
-		padding: 0.3em;
+		text-shadow: 0px 4px 4px var(--box-shadow-color);
+		cursor: default;
 	}
 
-	.details-area {
-		flex: 1;
-		background-color: #1a1a1a;
+	.text-area {
+		font-size: 1.25em;
+		background-color: var(--secondary-color);
 		padding: 0.5em;
-		border: 1px solid #999999;
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		cursor: text;
-		color: #eaeaea;
-		width: 80%;
-		height: 5em;
-		resize: none;
+		color: var(--text-color);
+		min-height: 6em;
+	}
+
+	.text-area[contenteditable]:empty::before {
+		content: 'Enter your answer...';
+		color: var(--text-color-transparent);
 	}
 
 	@media screen and (max-width: 767px) {
 		.choice-area,
-		.details-area {
+		.details,
+		.text-area {
 			font-size: 1em;
 		}
 	}

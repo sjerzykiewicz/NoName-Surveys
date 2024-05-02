@@ -1,22 +1,21 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+
 	export let questionIndex: number;
 </script>
 
 <div class="choice-area">
 	{#each $questions[questionIndex].choices as choice}
-		<label class="choice-div">
-			<div class="choice">
-				<div class="radio">
-					<input
-						type="radio"
-						name={$questions[questionIndex].question}
-						on:click={() => ($answers[questionIndex].choices[0] = choice)}
-					/>
-				</div>
-				<div class="number">
-					{choice}
-				</div>
+		<label title="Select your answer" class="choice">
+			<input
+				type="radio"
+				name={$questions[questionIndex].question}
+				on:change={() => {
+					$answers[questionIndex].choices[0] = choice;
+				}}
+			/>
+			<div class="number" class:selected={$answers[questionIndex].choices[0] === choice}>
+				{choice}
 			</div>
 		</label>
 	{/each}
@@ -28,34 +27,29 @@
 		flex-flow: row;
 		align-items: center;
 		justify-content: space-around;
-		font-size: 1em;
-		font-weight: normal;
-		font-family: 'Jura';
-		color: #eaeaea;
 		width: calc(86% - 2.25em);
 		margin-left: 2.25em;
 	}
 
 	.choice {
-		display: flex;
 		flex-flow: column;
-		align-items: center;
-		text-align: center;
-	}
-
-	.radio {
-		display: flex;
-		height: 1.5em;
-		width: 1.5em;
-	}
-
-	input[type='radio']:checked {
-		accent-color: #0075ff;
+		padding: 0.5em;
+		margin-bottom: 0em;
+		cursor: pointer;
 	}
 
 	.number {
 		font-size: 1.25em;
-		cursor: default;
+		margin-top: 0.25em;
+	}
+
+	.number.selected {
+		font-weight: bold;
+		color: var(--accent-color);
+	}
+
+	input[type='radio'] {
+		margin: 0em;
 	}
 
 	@media screen and (max-width: 767px) {

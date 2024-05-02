@@ -18,14 +18,6 @@
 </div>
 
 <style>
-	.choice-area {
-		font-size: 1em;
-		font-weight: normal;
-		font-family: 'Jura';
-		color: #eaeaea;
-		width: 86%;
-	}
-
 	.details {
 		display: flex;
 		align-items: center;
@@ -35,11 +27,11 @@
 
 	.details-input {
 		flex: 1;
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 		padding: 0.25em;
-		border: 1px solid #999999;
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1.25em;
 		cursor: text;
 		overflow: hidden;
@@ -47,7 +39,7 @@
 
 	.details-input[contenteditable]:empty::before {
 		content: 'Enter question details...';
-		color: #eaeaea40;
+		color: var(--text-color-transparent);
 	}
 
 	@media screen and (max-width: 767px) {

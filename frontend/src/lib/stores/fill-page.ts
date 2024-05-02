@@ -18,7 +18,7 @@ export const questions: Readable<
 	},
 	{
 		type: 'text',
-		required: true,
+		required: false,
 		question: 'Uzasadnij swój wybór.',
 		choices: ['Czemu wybrałeś akurat tę stronę? Podziel się swoją opinią.']
 	},
@@ -44,7 +44,7 @@ export const questions: Readable<
 	},
 	{
 		type: 'multi',
-		required: true,
+		required: false,
 		question: 'Wybierz wszystkie stwierdzenia, z którymi się zgadzasz.',
 		choices: [
 			'Zespół NoName ma essę',

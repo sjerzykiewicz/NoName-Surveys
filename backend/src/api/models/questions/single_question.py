@@ -15,6 +15,8 @@ class SingleQuestion(Question):
 
     @validator("answer")
     def validate_answer(cls, v, values):
+        if not v:
+            return v
         if len(v) != 1:
             raise ValueError("answer must be a single choice")
         if "choices" in values and v not in values["choices"]:

@@ -14,6 +14,8 @@ class RankQuestion(Question):
 
     @validator("answer")
     def validate_answer(cls, v, values):
+        if not v:
+            return v
         if "choices" in values and set(v) != set(values["choices"]):
             raise ValueError("answer must be one of the choices")
         return v

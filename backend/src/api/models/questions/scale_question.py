@@ -12,7 +12,9 @@ class ScaleQuestion(Question):
     answer: Optional[float] = None
 
     @validator("answer")
-    def validate_answer(cls, v, values, **kwargs):
+    def validate_answer(cls, v, values):
+        if not v:
+            return v
         if (
             "min_value" in values
             and "max_value" in values

@@ -13,7 +13,9 @@ class ListQuestion(Question):
     answer: Optional[list[str]] = None
 
     @validator("answer")
-    def validate_answer(cls, v, values, **kwargs):
+    def validate_answer(cls, v, values):
+        if not v:
+            return v
         if "choices" in values and any(
             choice not in values["choices"] for choice in v
         ):

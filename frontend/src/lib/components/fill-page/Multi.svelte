@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+
 	export let questionIndex: number;
 
 	let selected: Array<boolean> = [];
@@ -20,7 +21,7 @@
 
 <div class="choice-area">
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<label class="choice">
+		<label title="Select your answer" class="choice">
 			<div class="radio">
 				<input
 					type="checkbox"
@@ -31,7 +32,7 @@
 					}}
 				/>
 			</div>
-			<div title="Enter choice" class="choice-in" class:selected={selected[choiceIndex]}>
+			<div class="choice-in" class:selected={selected[choiceIndex]}>
 				{choice}
 			</div>
 		</label>
@@ -39,6 +40,11 @@
 </div>
 
 <style>
+	.choice {
+		width: fit-content;
+		cursor: pointer;
+	}
+
 	@media screen and (max-width: 767px) {
 		.choice-area,
 		.choice-in {

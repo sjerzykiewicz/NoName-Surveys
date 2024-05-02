@@ -16,10 +16,8 @@
 		display: flex;
 		flex-flow: row;
 		align-items: flex-start;
-		align-items: flex-start;
 		margin-bottom: 1em;
 		font-size: 1.25em;
-		font-weight: bold;
 		font-weight: bold;
 		font-family: 'Jura';
 		color: var(--text-color);

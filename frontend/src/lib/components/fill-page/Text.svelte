@@ -1,20 +1,23 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+
 	export let questionIndex: number;
-	let value: string;
+
+	$answers[questionIndex].choices[0] = '';
 </script>
 
 <div class="choice-area">
-	<div class="details">
+	<div title="Question details" class="details">
 		{$questions[questionIndex].choices[0]}
 	</div>
-	<textarea
-		class="details-area"
-		name={$questions[questionIndex].question}
-		placeholder="Enter your answer..."
-		bind:value
-		on:change={() => ($answers[questionIndex].choices[0] = value)}
-	/>
+	<div
+		title="Enter your answer"
+		class="text-area"
+		contenteditable
+		bind:textContent={$answers[questionIndex].choices[0]}
+	>
+		{$answers[questionIndex].choices[0]}
+	</div>
 </div>
 
 <style>
@@ -23,19 +26,15 @@
 	}
 
 	.details {
-		display: flex;
-		align-items: center;
-		flex-flow: row;
+		font-size: 1.25em;
+		margin-top: -0.5em;
 		margin-bottom: 0.5em;
-		background-color: var(--secondary-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
-		padding: 0.3em;
+		text-shadow: 0px 4px 4px var(--box-shadow-color);
+		cursor: default;
 	}
 
-	.details-area {
-		flex: 1;
+	.text-area {
+		font-size: 1.25em;
 		background-color: var(--secondary-color);
 		padding: 0.5em;
 		border: 1px solid var(--border-color);
@@ -43,14 +42,18 @@
 		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		cursor: text;
 		color: var(--text-color);
-		width: 80%;
-		height: 5em;
-		resize: none;
+		min-height: 6em;
+	}
+
+	.text-area[contenteditable]:empty::before {
+		content: 'Enter your answer...';
+		color: var(--text-color-transparent);
 	}
 
 	@media screen and (max-width: 767px) {
 		.choice-area,
-		.details-area {
+		.details,
+		.text-area {
 			font-size: 1em;
 		}
 	}

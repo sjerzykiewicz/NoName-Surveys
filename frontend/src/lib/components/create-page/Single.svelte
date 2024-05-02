@@ -55,6 +55,10 @@
 		margin-right: 0.5em;
 	}
 
+	input[type='radio'] {
+		cursor: default;
+	}
+
 	@media screen and (max-width: 767px) {
 		.choice-area,
 		.choice-input,

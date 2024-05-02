@@ -1,34 +1,33 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
-	export let questionIndex: number;
-	let selected: number;
 
-	function handleClick(id: number) {
-		if (id === 0) {
-			$answers[questionIndex].choices[0] = 'yes';
-			if (selected !== 0) selected = 0;
-		} else {
-			$answers[questionIndex].choices[0] = 'no';
-			if (selected !== 1) selected = 1;
-		}
-	}
+	export let questionIndex: number;
 </script>
 
 <div class="choice-area">
-	<button class="choice-yes-no" class:selected={selected === 0} on:click={() => handleClick(0)}>
+	<button
+		title="Select your answer"
+		class="choice-binary"
+		class:selected={$answers[questionIndex].choices[0] === $questions[questionIndex].choices[0]}
+		on:click={() => {
+			$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
+		}}
+	>
 		<i class="material-symbols-rounded">thumb_up</i>{$questions[questionIndex].choices[0]}
 	</button>
-	<button class="choice-yes-no" class:selected={selected === 1} on:click={() => handleClick(1)}>
+	<button
+		title="Select your answer"
+		class="choice-binary"
+		class:selected={$answers[questionIndex].choices[0] === $questions[questionIndex].choices[1]}
+		on:click={() => {
+			$answers[questionIndex].choices[0] = $questions[questionIndex].choices[1];
+		}}
+	>
 		<i class="material-symbols-rounded">thumb_down</i>{$questions[questionIndex].choices[1]}
 	</button>
 </div>
 
 <style>
-	.choice-yes-no.selected,
-	.choice-yes-no.selected:hover {
-		background-color: var(--accent-color);
-	}
-
 	.choice-area {
 		display: flex;
 		flex-flow: row;
@@ -42,9 +41,9 @@
 		margin-left: 2.25em;
 	}
 
-	.choice-yes-no {
+	.choice-binary {
 		display: flex;
-		background-color: var(--secondary-color);
+		background-color: var(--primary-color);
 		padding: 0.25em;
 		border: 1px solid var(--border-color);
 		border-radius: 5px;
@@ -52,11 +51,22 @@
 		font-size: 1.25em;
 		font-family: 'Jura';
 		color: var(--text-color);
-		cursor: default;
+		cursor: pointer;
+		transition: 0.2s;
 	}
 
-	.choice-yes-no:hover {
-		background-color: var(--primary-color);
+	.choice-binary:hover {
+		background-color: var(--secondary-color);
+	}
+
+	.choice-binary.selected,
+	.choice-binary.selected:hover {
+		background-color: var(--accent-color);
+	}
+
+	.choice-binary:active,
+	.choice-binary.selected:active {
+		background-color: var(--border-color);
 	}
 
 	i {
@@ -65,7 +75,7 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-yes-no,
+		.choice-binary,
 		i {
 			font-size: 1em;
 		}

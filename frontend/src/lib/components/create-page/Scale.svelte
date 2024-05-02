@@ -7,9 +7,7 @@
 <div class="choice-area">
 	{#each $questions[questionIndex].choices as choice}
 		<div class="choice">
-			<div class="radio">
-				<input type="radio" disabled name={$questions[questionIndex].question} />
-			</div>
+			<input type="radio" disabled name={$questions[questionIndex].question} />
 			<div class="number">
 				{choice}
 			</div>
@@ -32,14 +30,14 @@
 		text-align: center;
 	}
 
-	.radio {
-		display: flex;
-		height: 1.5em;
-		width: 1.5em;
-	}
-
 	.number {
 		font-size: 1.25em;
+		margin-top: 0.25em;
+		cursor: default;
+	}
+
+	input[type='radio'] {
+		margin: 0em;
 		cursor: default;
 	}
 

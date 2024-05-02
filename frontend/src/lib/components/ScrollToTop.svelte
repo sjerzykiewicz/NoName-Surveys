@@ -27,7 +27,6 @@
 		color: var(--text-color);
 		border: none;
 		border-radius: 5px;
-		border-radius: 5px;
 		width: 3em;
 		height: 3em;
 		box-shadow: 0px 4px 4px var(--box-shadow-color);
@@ -42,6 +41,10 @@
 
 	.scroll-to-top:active {
 		background-color: var(--border-color);
+	}
+
+	.material-symbols-rounded {
+		font-size: 1.5em;
 	}
 
 	@media screen and (max-width: 767px) {

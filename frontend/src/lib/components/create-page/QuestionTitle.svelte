@@ -10,17 +10,15 @@
 	}
 
 	function moveQuestionUp() {
-		const question = $questions[questionIndex - 1];
+		const higher = $questions[questionIndex - 1];
 		$questions[questionIndex - 1] = $questions[questionIndex - 2];
-		$questions[questionIndex - 2] = question;
-		$questions = $questions;
+		$questions[questionIndex - 2] = higher;
 	}
 
 	function moveQuestionDown() {
-		const question = $questions[questionIndex - 1];
+		const lower = $questions[questionIndex - 1];
 		$questions[questionIndex - 1] = $questions[questionIndex];
-		$questions[questionIndex] = question;
-		$questions = $questions;
+		$questions[questionIndex] = lower;
 	}
 
 	function toggleRequirement() {
@@ -82,18 +80,6 @@
 		color: var(--text-color);
 	}
 
-	.question-input {
-		flex: 1;
-		background-color: var(--secondary-color);
-		padding: 0.25em;
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
-		cursor: text;
-		overflow: hidden;
-		margin-right: 0.5em;
-	}
-
 	.question-input[contenteditable]:empty::before {
 		content: 'Enter question...';
 		color: var(--text-color-transparent);
@@ -114,7 +100,7 @@
 	}
 
 	.arrows i {
-		line-height: 0.696em;
+		line-height: 0.7em;
 		overflow: hidden;
 	}
 

@@ -1,21 +1,19 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+
 	export let questionIndex: number;
-	let lowestChoice: number = $questions[questionIndex].choices.length - 1;
 
 	$answers[questionIndex].choices = $questions[questionIndex].choices;
 
-	function moveChoiceUp(choice: string) {
-		let index = $answers[questionIndex].choices.findIndex((ch) => ch === choice);
-		let higher = $answers[questionIndex].choices[index - 1];
-		$answers[questionIndex].choices[index - 1] = choice;
+	function moveChoiceUp(index: number) {
+		const higher = $answers[questionIndex].choices[index - 1];
+		$answers[questionIndex].choices[index - 1] = $answers[questionIndex].choices[index];
 		$answers[questionIndex].choices[index] = higher;
 	}
 
-	function moveChoiceDown(choice: string) {
-		let index = $answers[questionIndex].choices.findIndex((ch) => ch === choice);
-		let lower = $answers[questionIndex].choices[index + 1];
-		$answers[questionIndex].choices[index + 1] = choice;
+	function moveChoiceDown(index: number) {
+		const lower = $answers[questionIndex].choices[index + 1];
+		$answers[questionIndex].choices[index + 1] = $answers[questionIndex].choices[index];
 		$answers[questionIndex].choices[index] = lower;
 	}
 </script>
@@ -24,50 +22,55 @@
 	{#each $answers[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
-			<div title="Enter choice" class="choice-input">
-				{choice}
-			</div>
 			<div class="arrows">
 				<button
-					title="Move question up"
+					title="Move answer up"
 					class="up"
 					disabled={choiceIndex === 0}
-					on:click={() => moveChoiceUp(choice)}
+					on:click={() => moveChoiceUp(choiceIndex)}
 				>
 					<i class="material-symbols-rounded">arrow_drop_up</i>
 				</button>
 				<button
-					title="Move question down"
+					title="Move answer down"
 					class="down"
-					disabled={choiceIndex === lowestChoice}
-					on:click={() => moveChoiceDown(choice)}
+					disabled={choiceIndex === $questions[questionIndex].choices.length - 1}
+					on:click={() => moveChoiceDown(choiceIndex)}
 				>
 					<i class="material-symbols-rounded">arrow_drop_down</i>
 				</button>
+			</div>
+			<div class="choice-in">
+				{choice}
 			</div>
 		</div>
 	{/each}
 </div>
 
 <style>
+	.choice {
+		width: fit-content;
+	}
+
+	.choice-in {
+		cursor: default;
+	}
+
+	.choice-in:hover {
+		background-color: var(--primary-color);
+	}
+
 	.rank {
 		margin-right: 0.25em;
 		font-size: 1.25em;
-		color: var(--border-color);
+		color: var(--text-color);
 		cursor: default;
 		width: 1.5em;
 		text-align: right;
 	}
 
 	.arrows {
-		display: flex;
-		flex-flow: column;
-		margin-right: 0.5em;
-	}
-
-	.arrows i {
-		line-height: 0.7em;
-		overflow: hidden;
+		font-size: 1.25em;
 	}
 
 	.up {
@@ -115,8 +118,14 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-input {
+		.choice-in,
+		.arrows,
+		.rank {
 			font-size: 1em;
+		}
+
+		.rank {
+			width: 2em;
 		}
 	}
 </style>

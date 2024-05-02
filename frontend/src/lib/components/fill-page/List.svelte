@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+
 	export let questionIndex: number;
 
 	$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
 </script>
 
 <div class="choice-area">
-	<select name={$questions[questionIndex].question} bind:value={$answers[questionIndex].choices[0]}>
+	<select
+		title="Select your answer"
+		name={$questions[questionIndex].question}
+		bind:value={$answers[questionIndex].choices[0]}
+	>
 		{#each $questions[questionIndex].choices as choice}
 			<option value={choice}>
 				{choice}
@@ -21,24 +26,22 @@
 	}
 
 	select {
-		flex: 1;
-		background-color: var(--secondary-color);
+		background-color: var(--primary-color);
 		padding: 0.25em;
 		border: 1px solid var(--border-color);
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1.25em;
-		cursor: text;
-		margin-right: 0.5em;
-		font-size: 1em;
+		cursor: pointer;
 		font-weight: normal;
 		font-family: 'Jura';
 		color: var(--text-color);
+		max-width: 100%;
+		transition: 0.2s;
 	}
 
 	@media screen and (max-width: 767px) {
-		select,
-		option {
+		select {
 			font-size: 1em;
 		}
 	}

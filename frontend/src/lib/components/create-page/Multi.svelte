@@ -55,6 +55,10 @@
 		margin-right: 0.5em;
 	}
 
+	input[type='checkbox'] {
+		cursor: default;
+	}
+
 	@media screen and (max-width: 767px) {
 		.choice-input,
 		button {

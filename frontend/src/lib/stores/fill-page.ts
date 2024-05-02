@@ -57,7 +57,7 @@ export const questions: Readable<
 		type: 'slider',
 		required: true,
 		question: 'Ile masz lat?',
-		choices: ['0', '100']
+		choices: ['15', '80']
 	},
 	{
 		type: 'yesno',

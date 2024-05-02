@@ -51,9 +51,6 @@
 
 	.error {
 		text-align: center;
-		color: #ff3333;
-		font-family: 'Jura';
-		font-weight: bold;
 		font-size: 1.25em;
 		text-shadow: 0px 4px 4px #1a1a1a;
 	}

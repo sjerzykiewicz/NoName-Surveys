@@ -79,9 +79,6 @@
 	}
 
 	.error {
-		color: #ff3333;
-		font-family: 'Jura';
-		font-weight: bold;
 		padding-left: 5%;
 	}
 

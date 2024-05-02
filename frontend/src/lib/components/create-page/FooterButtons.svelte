@@ -54,7 +54,7 @@
 					questionList = [...questionList, new TextQuestion(q.required, q.question, q.choices[0])];
 					break;
 				case YesNo:
-					questionList = [...questionList, new YesNoQuestion(q.required, q.question)];
+					questionList = [...questionList, new YesNoQuestion(q.required, q.question, q.choices)];
 					break;
 			}
 		});

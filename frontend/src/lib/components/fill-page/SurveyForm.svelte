@@ -36,6 +36,7 @@
 	function processForm() {
 		unansweredRequired = [];
 		for (let i = 0; i < numQuestions; i++) {
+			// TODO - remove console log
 			console.log($answers[i].choices);
 			if ($answers[i].choices.length === 0 && $questions[i].required) {
 				unansweredRequired = [...unansweredRequired, i];

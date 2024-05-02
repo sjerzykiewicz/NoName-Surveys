@@ -164,7 +164,7 @@
 	}
 
 	.add-question.clicked:hover {
-		background-color: var(--accent-color-dark);
+		background-color: var(--accent-dark-color);
 	}
 
 	.add-question.clicked:active {

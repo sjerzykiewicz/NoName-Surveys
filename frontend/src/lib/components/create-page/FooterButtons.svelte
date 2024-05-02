@@ -108,7 +108,7 @@
 	}
 
 	.save:hover {
-		background-color: var(--accent-color-dark);
+		background-color: var(--accent-dark-color);
 	}
 
 	i {

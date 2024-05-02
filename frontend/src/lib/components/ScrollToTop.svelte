@@ -23,13 +23,13 @@
 		position: fixed;
 		bottom: 0.7em;
 		left: 2em;
-		background-color: #4a4a4a;
-		color: white;
+		background-color: var(--primary-color);
+		color: var(--text-color);
 		border: none;
 		border-radius: 25%;
 		width: 3em;
 		height: 3em;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		z-index: 5;
 		transition-duration: 0.2s;
 	}

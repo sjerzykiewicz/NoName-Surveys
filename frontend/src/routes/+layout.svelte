@@ -21,9 +21,9 @@
 		min-width: 767px;
 		margin: auto;
 		margin-top: 1.5em;
-		border: 1px solid #999999;
-		box-shadow: 0px 4px 4px #1a1a1a;
-		background-color: #2a2a2a;
+		border: 1px solid var(--border-color);
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
+		background-color: var(--bg-darker-color);
 	}
 
 	@media screen and (max-width: 767px) {
@@ -32,7 +32,7 @@
 			min-width: 0px;
 			margin-top: 0px;
 			border: none;
-			border-top: 1px solid #999999;
+			border-top: 1px solid var(--border-color);
 		}
 	}
 </style>

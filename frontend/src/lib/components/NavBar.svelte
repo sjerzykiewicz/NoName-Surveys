@@ -48,14 +48,14 @@
 		min-width: 767px;
 		width: 50%;
 		justify-content: space-around;
-		background-color: #1a1a1a;
-		border-left: 1px solid #999999;
+		background-color: var(--secondary-color);
+		border-left: 1px solid var(--border-color);
 	}
 
 	.bar {
 		position: static;
-		background-color: #1a1a1a;
-		border-bottom: 1px solid #999999;
+		background-color: var(--secondary-color);
+		border-bottom: 1px solid var(--border-color);
 	}
 
 	.nav-burger {
@@ -64,8 +64,8 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.75em;
-		color: #eaeaea;
-		background-color: #1a1a1a;
+		color: var(--text-color);
+		background-color: var(--secondary-color);
 	}
 
 	.nav-burger i {
@@ -75,27 +75,24 @@
 	a {
 		padding: 0.5em 0 0.5em 0;
 		text-align: center;
-		color: #eaeaea;
+		color: var(--text-color);
 		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 1.5em;
-		border-right: 1px solid #999999;
+		border-right: 1px solid var(--border-color);
 		width: 100%;
 		text-decoration: none;
 		transition: background-color 0.2s;
 	}
 
 	a:hover {
-		background-color: #4a4a4a;
+		background-color: var(--primary-color);
 		transition: background-color 0.2s;
 	}
 
-	.active {
-		background-color: #0075ff;
-	}
-
+	.active,
 	.active:hover {
-		background-color: #0075ff;
+		background-color: var(--accent-color);
 	}
 
 	i {
@@ -115,7 +112,7 @@
 		}
 
 		a {
-			border-top: 1px solid #999999;
+			border-top: 1px solid var(--border-color);
 			border-right: none;
 			border-bottom: none;
 		}

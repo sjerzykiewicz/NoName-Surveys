@@ -153,7 +153,7 @@
 	}
 
 	.required-button.checked:hover {
-		background-color: var(--accent-color-dark);
+		background-color: var(--accent-dark-color);
 	}
 
 	.required-button.checked:active {

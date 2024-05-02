@@ -7,7 +7,8 @@
 	--border-color: #999999;
 	--box-shadow-color: #1a1a1a;
 	--accent-color: #0075ff;
-	--accent-color-dark: #001c53;
+	--accent-dark-color: #001c53;
+	--bg-darker-color: #2a2a2a;
 }
 
 /* styles for create-page components */
@@ -117,7 +118,7 @@
 
 .save:hover,
 .submit:hover {
-	background-color: var(--accent-color-dark);
+	background-color: var(--accent-dark-color);
 }
 
 /* styles for fill-page components */

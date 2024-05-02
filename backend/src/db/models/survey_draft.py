@@ -4,9 +4,7 @@ from sqlmodel import Field, SQLModel
 
 
 class SurveyDraftBase(SQLModel):
-    creator: Optional[int] = Field(
-        default=None, foreign_key="user.id"
-    )
+    creator: Optional[int] = Field(default=None, foreign_key="user.id")
     title: str
     survey_structure: str
     creation_date: str

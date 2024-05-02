@@ -29,3 +29,6 @@ class Survey(BaseModel):
         min_length=1,
         description="Questions list must have at least 1 element",
     )
+
+    class Config:
+        extra = "forbid"

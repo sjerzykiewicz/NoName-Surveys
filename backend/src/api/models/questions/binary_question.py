@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, Optional
 
 from pydantic import Field
 
@@ -10,6 +10,7 @@ class BinaryQuestion(Question):
     choices: list[str] = Field(
         len=2, description="Binary question must have precisely 2 options"
     )
+    answer: Optional[str] = None
 
     class Config:
         extra = "forbid"

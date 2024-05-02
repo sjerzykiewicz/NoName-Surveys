@@ -90,7 +90,7 @@
 	}
 
 	a:active {
-		background-color: #999999;
+		background-color: var(--border-color);
 	}
 
 	.active,

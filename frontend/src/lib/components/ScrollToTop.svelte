@@ -27,6 +27,7 @@
 		color: var(--text-color);
 		border: none;
 		border-radius: 5px;
+		border-radius: 5px;
 		width: 3em;
 		height: 3em;
 		box-shadow: 0px 4px 4px var(--box-shadow-color);

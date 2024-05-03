@@ -31,11 +31,30 @@
 		$answers = [...$answers, { choices: [] }];
 	}
 
+	let unansweredRequired: Array<number> = [];
+
 	function processForm() {
+		unansweredRequired = [];
 		for (let i = 0; i < numQuestions; i++) {
-			// TODO - implement actual processing
+			// TODO - remove console log
 			console.log($answers[i].choices);
+			if ($questions[i].required) {
+				if ($answers[i].choices.length === 0) {
+					unansweredRequired[i] = i;
+				} else {
+					for (let j in $answers[i].choices) {
+						let choice = $answers[i].choices[j];
+						if (choice === null || choice === undefined || choice.length === 0) {
+							unansweredRequired[i] = i;
+						}
+					}
+				}
+			}
 		}
+		if (unansweredRequired.length > 0) {
+			return;
+		}
+		// TODO - further processing
 	}
 </script>
 
@@ -48,6 +67,9 @@
 			<QuestionTitle {questionIndex} />
 			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
 		</div>
+		{#if unansweredRequired.includes(questionIndex)}
+			<p class="error">*An answer to question {questionIndex + 1} is required!</p>
+		{/if}
 	{/each}
 </Content>
 <Footer>
@@ -64,6 +86,10 @@
 	i {
 		font-size: 1.15em;
 		margin-right: 0.15em;
+	}
+
+	.error {
+		padding-left: 5%;
 	}
 
 	@media screen and (max-width: 767px) {

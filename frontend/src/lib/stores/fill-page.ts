@@ -18,7 +18,7 @@ export const questions: Readable<
 	},
 	{
 		type: 'text',
-		required: false,
+		required: true,
 		question: 'Uzasadnij swój wybór.',
 		choices: ['Czemu wybrałeś akurat tę stronę? Podziel się swoją opinią.']
 	},

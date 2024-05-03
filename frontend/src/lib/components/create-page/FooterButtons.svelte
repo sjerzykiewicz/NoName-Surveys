@@ -9,7 +9,7 @@
 	import ListQuestion from '$lib/entities/questions/List';
 	import RankQuestion from '$lib/entities/questions/Rank';
 	import TextQuestion from '$lib/entities/questions/Text';
-	import YesNoQuestion from '$lib/entities/questions/YesNo';
+	import BinaryQuestion from '$lib/entities/questions/Binary';
 	import Survey from '$lib/entities/Survey';
 	import Single from '$lib/components/create-page/Single.svelte';
 	import Multi from '$lib/components/create-page/Multi.svelte';
@@ -72,7 +72,7 @@
 				case YesNo:
 					questionList = [
 						...questionList,
-						new YesNoQuestion(q.required, q.question, q.choices, undefined)
+						new BinaryQuestion(q.required, q.question, q.choices, undefined)
 					];
 					break;
 			}

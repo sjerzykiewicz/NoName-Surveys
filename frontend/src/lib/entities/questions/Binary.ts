@@ -1,6 +1,6 @@
 import Question from '$lib/entities/questions/Question';
 
-export default class YesNoQuestion extends Question {
+export default class BinaryQuestion extends Question {
 	choices: Array<string>;
 	answer: string | undefined;
 	constructor(

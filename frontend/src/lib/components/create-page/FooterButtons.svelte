@@ -70,52 +70,14 @@
 	}
 </script>
 
-<a href="/create" title="Preview survey" class="footer-button">
+<button title="Preview survey" class="footer-button">
 	<i class="material-symbols-rounded">search</i>Preview
-</a>
+</button>
 <button title="Save survey" class="footer-button save" on:click={parseSurvey}>
 	<i class="material-symbols-rounded">save</i>Save
 </button>
 
 <style>
-	.footer-button {
-		display: flex;
-		text-decoration: none;
-		background-color: var(--primary-color);
-		padding: 0.25em;
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
-		font-size: 1.25em;
-		font-family: 'Jura';
-		color: #eaeaea;
-		cursor: pointer;
-		transition: background-color 0.2s;
-		margin-left: 0.5em;
-	}
-
-	.footer-button:hover {
-		background-color: var(--box-shadow-color);
-	}
-
-	.footer-button:active,
-	.save:active {
-		background-color: var(--border-color);
-	}
-
-	.save {
-		background-color: var(--accent-color);
-	}
-
-	.save:hover {
-		background-color: var(--accent-dark-color);
-	}
-
-	i {
-		font-size: 1.15em;
-		margin-right: 0.15em;
-	}
-
 	@media screen and (max-width: 767px) {
 		.footer-button {
 			font-size: 1em;

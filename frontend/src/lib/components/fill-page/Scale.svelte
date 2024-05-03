@@ -41,6 +41,7 @@
 	.number {
 		font-size: 1.25em;
 		margin-top: 0.25em;
+		text-shadow: 0px 4px 4px var(--shadow-color);
 	}
 
 	.number.selected {

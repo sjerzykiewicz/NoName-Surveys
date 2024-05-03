@@ -30,7 +30,7 @@
 		padding: 0.25em;
 		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
+		box-shadow: 0px 4px 4px var(--shadow-color);
 		font-size: 1.25em;
 		cursor: pointer;
 		font-weight: normal;

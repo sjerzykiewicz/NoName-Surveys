@@ -14,7 +14,6 @@
 
 	export let questionType: ComponentType;
 	export let questionTypeIndex: number;
-	export let isQuestionAdded: boolean;
 
 	let questionTypeData: { title: string; icon: string; text: string } = {
 		title: '',
@@ -64,7 +63,7 @@
 <button
 	title={questionTypeData.title}
 	class:previous={questionTypeIndex === -1}
-	class:last={questionTypeIndex === 7 || (questionTypeIndex === 6 && isQuestionAdded)}
+	class:last={questionTypeIndex === 7}
 	in:slide={{ axis: 'x', duration: 200, easing: cubicInOut }}
 	on:click={handleClick}
 	><i class="material-symbols-rounded">{questionTypeData.icon}</i>{questionTypeData.text}</button
@@ -73,27 +72,12 @@
 <style>
 	button {
 		flex: 1;
-		display: flex;
-		align-items: center;
-		background-color: var(--primary-color);
-		padding: 0.25em;
 		width: 6.25em;
 		border: 0px;
+		border-radius: 0px;
 		border-left: 1px solid var(--border-color);
 		border-right: 1px solid var(--border-color);
-		font-size: 1.25em;
-		font-family: 'Jura';
-		color: var(--text-color);
-		cursor: pointer;
-		transition: background-color 0.2s;
-	}
-
-	button:hover {
-		background-color: var(--secondary-color);
-	}
-
-	button:active {
-		background-color: var(--border-color);
+		box-shadow: none;
 	}
 
 	.last {

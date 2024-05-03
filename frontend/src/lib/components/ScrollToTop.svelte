@@ -22,18 +22,20 @@
 <style>
 	.scroll-to-top {
 		position: fixed;
+		justify-content: center;
 		bottom: 0.75em;
 		left: 1.5em;
-		background-color: var(--primary-color);
+		background-color: var(--primary-dark-color);
 		color: var(--text-color);
 		border: none;
 		border-radius: 5px;
 		width: 3em;
 		height: 3em;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
+		font-size: 0.8em;
+		box-shadow: 0px 4px 4px var(--shadow-color);
 		cursor: pointer;
 		z-index: 5;
-		transition-duration: 0.2s;
+		transition: 0.2s;
 	}
 
 	.scroll-to-top:hover {

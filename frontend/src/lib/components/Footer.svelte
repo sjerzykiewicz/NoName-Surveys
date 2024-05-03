@@ -13,7 +13,7 @@
 		bottom: 0;
 		min-width: calc(767px - 1.5em);
 		width: calc(50% - 1.5em);
-		background-color: var(--bg-darker-color);
+		background-color: var(--secondary-color);
 	}
 
 	@media screen and (max-width: 767px) {

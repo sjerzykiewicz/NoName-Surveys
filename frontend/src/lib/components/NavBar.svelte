@@ -48,13 +48,14 @@
 		min-width: 767px;
 		width: 50%;
 		justify-content: space-around;
-		background-color: var(--secondary-color);
+		background-color: var(--shadow-color);
 		border-left: 1px solid var(--border-color);
 	}
 
 	.bar {
-		background-color: var(--secondary-color);
+		background-color: var(--shadow-color);
 		border-bottom: 1px solid var(--border-color);
+		box-shadow: 0px 4px 4px var(--shadow-color);
 	}
 
 	.nav-burger {
@@ -64,7 +65,7 @@
 		align-items: center;
 		padding: 0.75em;
 		color: var(--text-color);
-		background-color: var(--secondary-color);
+		background-color: var(--shadow-color);
 	}
 
 	.nav-burger i {
@@ -85,7 +86,7 @@
 	}
 
 	a:hover {
-		background-color: var(--primary-color);
+		background-color: var(--primary-dark-color);
 		transition: background-color 0.2s;
 	}
 

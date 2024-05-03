@@ -8,23 +8,14 @@
 
 <style>
 	.title-input {
-		flex: 1;
-		background-color: var(--secondary-color);
-		padding: 0.25em;
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1.5em;
 		font-weight: bold;
-		font-family: 'Jura';
-		color: var(--text-color);
-		cursor: text;
-		overflow: hidden;
+		margin: 0em;
 	}
 
 	.title-input[contenteditable]:empty::before {
 		content: 'Enter survey title...';
-		color: var(--text-color-transparent);
+		color: var(--text-dark-color);
 	}
 
 	@media screen and (max-width: 767px) {

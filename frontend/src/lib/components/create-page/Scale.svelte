@@ -28,6 +28,7 @@
 	.choice {
 		flex-flow: column;
 		text-align: center;
+		margin: 0em;
 	}
 
 	.number {

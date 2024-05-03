@@ -25,13 +25,19 @@
 		$questions.forEach((q) => {
 			switch (q.component) {
 				case Single:
-					questionList = [...questionList, new SingleQuestion(q.required, q.question, q.choices)];
+					questionList = [
+						...questionList,
+						new SingleQuestion(q.required, q.question, q.choices, undefined)
+					];
 					break;
 				case Multi:
-					questionList = [...questionList, new MultiQuestion(q.required, q.question, q.choices)];
+					questionList = [
+						...questionList,
+						new MultiQuestion(q.required, q.question, q.choices, undefined)
+					];
 					break;
 				case Scale:
-					questionList = [...questionList, new ScaleQuestion(q.required, q.question)];
+					questionList = [...questionList, new ScaleQuestion(q.required, q.question, undefined)];
 					break;
 				case Slider:
 					questionList = [
@@ -40,21 +46,34 @@
 							q.required,
 							q.question,
 							parseFloat(q.choices[0]),
-							parseFloat(q.choices[1])
+							parseFloat(q.choices[1]),
+							undefined
 						)
 					];
 					break;
 				case List:
-					questionList = [...questionList, new ListQuestion(q.required, q.question, q.choices)];
+					questionList = [
+						...questionList,
+						new ListQuestion(q.required, q.question, q.choices, undefined)
+					];
 					break;
 				case Rank:
-					questionList = [...questionList, new RankQuestion(q.required, q.question, q.choices)];
+					questionList = [
+						...questionList,
+						new RankQuestion(q.required, q.question, q.choices, undefined)
+					];
 					break;
 				case Text:
-					questionList = [...questionList, new TextQuestion(q.required, q.question, q.choices[0])];
+					questionList = [
+						...questionList,
+						new TextQuestion(q.required, q.question, q.choices[0], undefined)
+					];
 					break;
 				case Binary:
-					questionList = [...questionList, new BinaryQuestion(q.required, q.question)];
+					questionList = [
+						...questionList,
+						new BinaryQuestion(q.required, q.question, q.choices, undefined)
+					];
 					break;
 			}
 		});

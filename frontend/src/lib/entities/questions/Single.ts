@@ -1,16 +1,16 @@
 import Question from '$lib/entities/questions/Question';
 
-class SingleQuestionBody {
-	choices: Array<string>;
-	constructor(choices: Array<string> = []) {
-		this.choices = choices;
-	}
-}
-
 export default class SingleQuestion extends Question {
-	single: SingleQuestionBody;
-	constructor(required: boolean = false, question: string = '', choices: Array<string> = []) {
-		super(required, question);
-		this.single = new SingleQuestionBody(choices);
+	choices: Array<string>;
+	answer: string | undefined;
+	constructor(
+		required: boolean = false,
+		question: string = '',
+		choices: Array<string> = [],
+		answer: string | undefined
+	) {
+		super(required, question, 'single');
+		this.choices = choices;
+		this.answer = answer;
 	}
 }

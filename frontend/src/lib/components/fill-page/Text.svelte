@@ -3,7 +3,7 @@
 
 	export let questionIndex: number;
 
-	$answers[questionIndex].choices[0] = '';
+	// $answers[questionIndex].choices[0] = '';
 </script>
 
 <div class="choice-area">

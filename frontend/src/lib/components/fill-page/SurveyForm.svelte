@@ -38,8 +38,17 @@
 		for (let i = 0; i < numQuestions; i++) {
 			// TODO - remove console log
 			console.log($answers[i].choices);
-			if ($answers[i].choices.length === 0 && $questions[i].required) {
-				unansweredRequired = [...unansweredRequired, i];
+			if ($questions[i].required) {
+				if ($answers[i].choices.length === 0) {
+					unansweredRequired[i] = i;
+				} else {
+					for (let j = 0; j < $answers[i].choices.length; j++) {
+						let choice = $answers[i].choices[j];
+						if (choice === null || choice === undefined || choice.length === 0) {
+							unansweredRequired[i] = i;
+						}
+					}
+				}
 			}
 		}
 		if (unansweredRequired.length > 0) {

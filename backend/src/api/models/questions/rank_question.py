@@ -14,7 +14,7 @@ class RankQuestion(Question):
 
     @field_validator("answer")
     def validate_answer(cls, v, info: ValidationInfo) -> Optional[list[str]]:
-        if not v:
+        if v is None:
             return v
         if "choices" in info.data and set(v) != set(info.data["choices"]):
             raise ValueError("answer must be one of the choices")

@@ -14,7 +14,7 @@ class BinaryQuestion(Question):
 
     @field_validator("answer")
     def validate_answer(cls, v, info: ValidationInfo) -> Optional[str]:
-        if not v:
+        if v is None:
             return v
         if "choices" in info.data and v not in info.data["choices"]:
             raise ValueError("answer must be one of the choices")

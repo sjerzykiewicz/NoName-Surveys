@@ -7,22 +7,14 @@ from src.api.models.questions.question_base import Question
 
 class ScaleQuestion(Question):
     question_type: Literal["scale"] = "scale"
-    min_value: float
-    max_value: float
-    answer: Optional[float] = None
+    answer: Optional[int] = None
 
     @field_validator("answer")
     def validate_answer(cls, v, info: ValidationInfo) -> Optional[float]:
-        if not v:
+        if v is None:
             return v
-        if (
-            "min_value" in info.data
-            and "max_value" in info.data
-            and info.data["min_value"] <= v <= info.data["max_value"]
-        ):
-            raise ValueError(
-                "answer must be between minimum and maximum possible values"
-            )
+        if not 1 <= v <= 5:
+            raise ValueError("scale answer must be between 1 and 5")
         return v
 
     class Config:

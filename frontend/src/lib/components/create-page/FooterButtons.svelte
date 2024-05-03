@@ -81,11 +81,11 @@
 		return questionList;
 	}
 
-	async function parseSurvey() {
+	async function processSurvey() {
 		let parsedSurvey: Survey = new Survey($title, constructQuestionList());
 
 		let surveyDraft = {
-			creator: 1,
+			creator: 1, // TODO - replace with actual user ID
 			title: $title,
 			survey_structure: parsedSurvey
 		};
@@ -98,6 +98,7 @@
 			}
 		});
 
+		// TODO - more precise info
 		if (!response.ok) {
 			alert('An error occured. Survey not saved.');
 		}
@@ -107,7 +108,7 @@
 <a href="/create" title="Preview survey" class="footer-button">
 	<i class="material-symbols-rounded">search</i>Preview
 </a>
-<button title="Save survey" class="footer-button save" on:click={parseSurvey}>
+<button title="Save survey" class="footer-button save" on:click={processSurvey}>
 	<i class="material-symbols-rounded">save</i>Save
 </button>
 

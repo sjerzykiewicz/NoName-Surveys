@@ -18,7 +18,7 @@
 	import List from '$lib/components/create-page/List.svelte';
 	import Rank from '$lib/components/create-page/Rank.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
-	import YesNo from '$lib/components/create-page/YesNo.svelte';
+	import Binary from '$lib/components/create-page/Binary.svelte';
 
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];
@@ -69,7 +69,7 @@
 						new TextQuestion(q.required, q.question, q.choices[0], undefined)
 					];
 					break;
-				case YesNo:
+				case Binary:
 					questionList = [
 						...questionList,
 						new BinaryQuestion(q.required, q.question, q.choices, undefined)
@@ -100,11 +100,11 @@
 	.footer-button {
 		display: flex;
 		text-decoration: none;
-		background-color: #4a4a4a;
+		background-color: var(--primary-color);
 		padding: 0.25em;
-		border: 1px solid #999999;
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1.25em;
 		font-family: 'Jura';
 		color: #eaeaea;
@@ -114,20 +114,20 @@
 	}
 
 	.footer-button:hover {
-		background-color: #1a1a1a;
+		background-color: var(--box-shadow-color);
 	}
 
 	.footer-button:active,
 	.save:active {
-		background-color: #999999;
+		background-color: var(--border-color);
 	}
 
 	.save {
-		background-color: #0075ff;
+		background-color: var(--accent-color);
 	}
 
 	.save:hover {
-		background-color: #001c53;
+		background-color: var(--accent-dark-color);
 	}
 
 	i {

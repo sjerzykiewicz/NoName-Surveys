@@ -11,7 +11,7 @@
 	import QuestionTitle from '$lib/components/fill-page/QuestionTitle.svelte';
 	import Multi from '$lib/components/fill-page/Multi.svelte';
 	import Slider from '$lib/components/fill-page/Slider.svelte';
-	import YesNo from '$lib/components/fill-page/YesNo.svelte';
+	import Binary from '$lib/components/fill-page/Binary.svelte';
 	import Rank from '$lib/components/fill-page/Rank.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
@@ -20,7 +20,7 @@
 		single: Single,
 		multi: Multi,
 		scale: Scale,
-		yesno: YesNo,
+		binary: Binary,
 		slider: Slider,
 		rank: Rank,
 		list: List
@@ -51,51 +51,14 @@
 	{/each}
 </Content>
 <Footer>
-	<button class="footer-button back" disabled>
-		<!-- TODO insert icon -->
-		<i class="material-symbols-rounded"></i>Back
-	</button>
-	<button class="footer-button submit" on:click={processForm}>
-		<!-- TODO insert icon -->
-		<i class="material-symbols-rounded"></i>Submit
+	<button title="Submit survey" class="footer-button submit" on:click={processForm}>
+		<i class="material-symbols-rounded">done</i>Submit
 	</button>
 </Footer>
 
 <style>
 	.question {
 		margin-bottom: 1.875em;
-	}
-	.footer-button {
-		display: flex;
-		text-decoration: none;
-		background-color: #4a4a4a;
-		padding: 0.25em;
-		border: 1px solid #999999;
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
-		font-size: 1.25em;
-		font-family: 'Jura';
-		color: #eaeaea;
-		cursor: pointer;
-		transition: background-color 0.2s;
-		margin-left: 0.5em;
-	}
-
-	.footer-button:hover {
-		background-color: #1a1a1a;
-	}
-
-	.footer-button:active,
-	.submit:active {
-		background-color: #999999;
-	}
-
-	.submit {
-		background-color: #0075ff;
-	}
-
-	.submit:hover {
-		background-color: #001c53;
 	}
 
 	i {

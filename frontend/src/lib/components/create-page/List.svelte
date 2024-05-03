@@ -35,6 +35,7 @@
 			</div>
 			<button
 				title="Remove choice"
+				class="create-page-button"
 				class:remove-choice={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
@@ -42,58 +43,28 @@
 			</button>
 		</div>
 	{/each}
-	<button title="Add choice" class="add-choice" on:click={addChoice}>
+	<button title="Add choice" class="create-page-button add-choice" on:click={addChoice}>
 		<i class="material-symbols-rounded">add_circle</i>Choice
 	</button>
 </div>
 
 <style>
-	.choice-area {
-		font-size: 1em;
-		font-weight: normal;
-		font-family: 'Jura';
-		color: #eaeaea;
-		width: 86%;
-	}
-
 	.choice {
-		display: flex;
-		align-items: center;
-		flex-flow: row;
-		margin-bottom: 0.5em;
 		margin-left: 2.25em;
-	}
-
-	.choice-input {
-		flex: 1;
-		background-color: #1a1a1a;
-		padding: 0.25em;
-		border: 1px solid #999999;
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
-		font-size: 1.25em;
-		cursor: text;
-		overflow: hidden;
-		margin-right: 0.5em;
-	}
-
-	.choice-input[contenteditable]:empty::before {
-		content: 'Enter choice...';
-		color: #eaeaea40;
 	}
 
 	.dropdown-top {
 		flex: 1;
-		background-color: #4a4a4a;
-		border: 1px solid #999999;
+		background-color: var(--primary-color);
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1.25em;
 		height: 1em;
 	}
 
 	.dropdown-top:disabled {
-		color: #eaeaea;
+		color: var(--text-color);
 		opacity: 1;
 	}
 
@@ -106,50 +77,19 @@
 		margin-right: 2.81em;
 	}
 
-	.remove-choice {
-		visibility: hidden;
-	}
-
-	button {
-		display: flex;
-		align-items: center;
-		background-color: #4a4a4a;
-		padding: 0.25em;
-		border: 1px solid #999999;
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
-		font-size: 1.25em;
-		font-family: 'Jura';
-		color: #eaeaea;
-		cursor: pointer;
-		transition: background-color 0.2s;
-	}
-
-	button:hover {
-		background-color: #1a1a1a;
-	}
-
-	button:active {
-		background-color: #999999;
-	}
-
-	.add-choice {
-		margin-left: 1.8em;
-	}
-
-	i {
-		font-size: 1.15em;
-	}
-
-	.add-choice i {
-		margin-right: 0.15em;
-	}
-
 	@media screen and (max-width: 767px) {
 		.choice-input,
 		.dropdown-top,
 		button {
 			font-size: 1em;
+		}
+
+		.dropdown {
+			margin-right: 2.275em;
+		}
+
+		.add-choice {
+			margin-left: 2.25em;
 		}
 	}
 </style>

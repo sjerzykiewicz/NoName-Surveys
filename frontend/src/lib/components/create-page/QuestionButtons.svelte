@@ -5,7 +5,7 @@
 	import Slider from '$lib/components/create-page/Slider.svelte';
 	import List from '$lib/components/create-page/List.svelte';
 	import Rank from '$lib/components/create-page/Rank.svelte';
-	import YesNo from '$lib/components/create-page/YesNo.svelte';
+	import Binary from '$lib/components/create-page/Binary.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import { questions } from '$lib/stores/create-page';
 	import { type ComponentType, onMount } from 'svelte';
@@ -16,19 +16,26 @@
 	let isPanelVisible: boolean = false;
 	let isQuestionAdded: boolean = false;
 	let previousQuestionType: ComponentType;
-	let questionTypes: Array<ComponentType> = [Text, Single, Multi, Scale, YesNo, Slider, Rank, List];
+	let questionTypes: Array<ComponentType> = [
+		Text,
+		Single,
+		Multi,
+		Scale,
+		Binary,
+		Slider,
+		Rank,
+		List
+	];
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
 	}
 
 	function setQuestionChoices(component: ComponentType) {
-		if ([Single, Multi, Slider, List, Rank].includes(component)) {
+		if ([Single, Multi, Slider, List, Rank, Binary].includes(component)) {
 			return ['', ''];
 		} else if (component === Scale) {
 			return ['1', '2', '3', '4', '5'];
-		} else if (component === YesNo) {
-			return ['Yes', 'No'];
 		} else {
 			return [''];
 		}
@@ -117,40 +124,36 @@
 	button {
 		display: flex;
 		align-items: center;
-		background-color: #4a4a4a;
+		background-color: var(--primary-color);
 		padding: 0.25em;
 		width: 6.25em;
 		font-size: 1.25em;
 		font-family: 'Jura';
-		color: #eaeaea;
+		color: var(--text-color);
 		cursor: pointer;
 	}
 
 	button:hover {
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 	}
 
 	button:active {
-		background-color: #999999;
+		background-color: var(--border-color);
 	}
 
 	.button-group {
 		width: fit-content;
-		margin-bottom: 14.5em;
-	}
-
-	.button-group.previous {
-		margin-bottom: 14.5em;
+		margin-bottom: 17em;
 	}
 
 	.add-buttons {
 		display: flex;
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 	}
 
 	.add-question {
-		border: 1px solid #999999;
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
 		transition:
 			background-color 0.2s,
@@ -158,17 +161,17 @@
 	}
 
 	.add-question.clicked {
-		background-color: #0075ff;
+		background-color: var(--accent-color);
 		border-bottom-right-radius: 0px;
 		border-bottom-left-radius: 0px;
 	}
 
 	.add-question.clicked:hover {
-		background-color: #001c53;
+		background-color: var(--accent-dark-color);
 	}
 
 	.add-question.clicked:active {
-		background-color: #999999;
+		background-color: var(--border-color);
 	}
 
 	.add-question.previous {
@@ -180,7 +183,7 @@
 		display: flex;
 		flex-flow: column;
 		border-radius: 0px 0px 5px 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
+		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		width: fit-content;
 		height: auto;
 		position: absolute;
@@ -198,6 +201,10 @@
 	@media screen and (max-width: 767px) {
 		button {
 			font-size: 1em;
+		}
+
+		.button-group {
+			margin-bottom: 13.5em;
 		}
 	}
 </style>

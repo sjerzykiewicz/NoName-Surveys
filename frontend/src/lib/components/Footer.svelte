@@ -5,7 +5,7 @@
 <style>
 	.footer {
 		padding: 0.75em;
-		border-top: 1px solid #999999;
+		border-top: 1px solid var(--border-color);
 		display: flex;
 		flex-flow: row;
 		justify-content: flex-end;
@@ -13,7 +13,7 @@
 		bottom: 0;
 		min-width: calc(767px - 1.5em);
 		width: calc(50% - 1.5em);
-		background-color: #2a2a2a;
+		background-color: var(--bg-darker-color);
 	}
 
 	@media screen and (max-width: 767px) {

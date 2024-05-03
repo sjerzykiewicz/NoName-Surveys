@@ -5,7 +5,7 @@
 	import Slider from '$lib/components/create-page/Slider.svelte';
 	import List from '$lib/components/create-page/List.svelte';
 	import Rank from '$lib/components/create-page/Rank.svelte';
-	import YesNo from '$lib/components/create-page/YesNo.svelte';
+	import Binary from '$lib/components/create-page/Binary.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import { beforeUpdate, type ComponentType } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
@@ -52,8 +52,8 @@
 			case Rank:
 				questionTypeData = { title: 'Ranking choice', icon: 'numbers', text: 'Rank' };
 				break;
-			case YesNo:
-				questionTypeData = { title: 'Yes/No choice', icon: 'thumbs_up_down', text: 'Yes/No' };
+			case Binary:
+				questionTypeData = { title: 'Yes/No choice', icon: 'thumbs_up_down', text: 'Binary' };
 				break;
 			case Text:
 				questionTypeData = { title: 'Open question', icon: 'text_fields', text: 'Text' };
@@ -75,44 +75,44 @@
 		flex: 1;
 		display: flex;
 		align-items: center;
-		background-color: #4a4a4a;
+		background-color: var(--primary-color);
 		padding: 0.25em;
 		width: 6.25em;
 		border: 0px;
-		border-left: 1px solid #999999;
-		border-right: 1px solid #999999;
+		border-left: 1px solid var(--border-color);
+		border-right: 1px solid var(--border-color);
 		font-size: 1.25em;
 		font-family: 'Jura';
-		color: #eaeaea;
+		color: var(--text-color);
 		cursor: pointer;
 		transition: background-color 0.2s;
 	}
 
 	button:hover {
-		background-color: #1a1a1a;
+		background-color: var(--secondary-color);
 	}
 
 	button:active {
-		background-color: #999999;
+		background-color: var(--border-color);
 	}
 
 	.last {
 		border-radius: 0px 0px 5px 5px;
-		border-bottom: 1px solid #999999;
+		border-bottom: 1px solid var(--border-color);
 	}
 
 	.previous {
 		border-radius: 0px 5px 5px 0px;
 		border-left: 0px;
-		border-top: 1px solid #999999;
-		border-bottom: 1px solid #999999;
+		border-top: 1px solid var(--border-color);
+		border-bottom: 1px solid var(--border-color);
 		width: auto;
 	}
 
 	i {
 		font-size: 1em;
-		margin-right: 0.24375em;
-		margin-left: 0.08125em;
+		margin-right: 0.25em;
+		margin-left: 0.1em;
 	}
 
 	@media screen and (max-width: 767px) {

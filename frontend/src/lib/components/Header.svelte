@@ -5,7 +5,7 @@
 <style>
 	.header {
 		padding: 0.75em;
-		border-bottom: 1px solid #999999;
+		border-bottom: 1px solid var(--border-color);
 		display: flex;
 		flex-flow: row;
 		justify-content: flex-start;

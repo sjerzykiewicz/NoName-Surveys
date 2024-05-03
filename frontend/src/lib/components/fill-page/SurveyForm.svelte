@@ -14,6 +14,11 @@
 	import Binary from '$lib/components/fill-page/Binary.svelte';
 	import Rank from '$lib/components/fill-page/Rank.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import type Question from '$lib/entities/questions/Question';
+	import type TextQuestion from '$lib/entities/questions/Text';
+	import { title } from '$lib/stores/fill-page';
+	import type SingleQuestion from '$lib/entities/questions/Single';
+	import type SliderQuestion from '$lib/entities/questions/Slider';
 
 	const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -25,6 +30,37 @@
 		rank: Rank,
 		list: List
 	};
+
+	export let survey: {
+		title: string;
+		questions: Array<Question>;
+	};
+
+	$title = survey.title;
+
+	for (let i in survey.questions) {
+		$questions[i] = {
+			type: survey.questions[i].question_type,
+			required: survey.questions[i].required,
+			question: survey.questions[i].question,
+			choices: []
+		};
+		switch (survey.questions[i].question_type) {
+			case 'text':
+				$questions[i].choices[0] = (survey.questions[i] as TextQuestion).details;
+				break;
+			case 'scale':
+				$questions[i].choices = ['1', '2', '3', '4', '5'];
+				break;
+			case 'slider':
+				$questions[i].choices[0] = (survey.questions[i] as SliderQuestion).min_value.toString();
+				$questions[i].choices[1] = (survey.questions[i] as SliderQuestion).max_value.toString();
+				break;
+			default:
+				$questions[i].choices = (survey.questions[i] as SingleQuestion).choices;
+				break;
+		}
+	}
 
 	const numQuestions = $questions.length;
 	for (let i = 0; i < numQuestions; i++) {

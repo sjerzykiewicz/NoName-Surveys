@@ -9,7 +9,7 @@
 	import ListQuestion from '$lib/entities/questions/List';
 	import RankQuestion from '$lib/entities/questions/Rank';
 	import TextQuestion from '$lib/entities/questions/Text';
-	import YesNoQuestion from '$lib/entities/questions/YesNo';
+	import BinaryQuestion from '$lib/entities/questions/Binary';
 	import Survey from '$lib/entities/Survey';
 	import Single from '$lib/components/create-page/Single.svelte';
 	import Multi from '$lib/components/create-page/Multi.svelte';
@@ -18,7 +18,7 @@
 	import List from '$lib/components/create-page/List.svelte';
 	import Rank from '$lib/components/create-page/Rank.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
-	import YesNo from '$lib/components/create-page/YesNo.svelte';
+	import Binary from '$lib/components/create-page/Binary.svelte';
 
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];
@@ -53,8 +53,8 @@
 				case Text:
 					questionList = [...questionList, new TextQuestion(q.required, q.question, q.choices[0])];
 					break;
-				case YesNo:
-					questionList = [...questionList, new YesNoQuestion(q.required, q.question)];
+				case Binary:
+					questionList = [...questionList, new BinaryQuestion(q.required, q.question)];
 					break;
 			}
 		});

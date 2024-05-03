@@ -42,7 +42,7 @@
 				if ($answers[i].choices.length === 0) {
 					unansweredRequired[i] = i;
 				} else {
-					for (let j = 0; j < $answers[i].choices.length; j++) {
+					for (let j in $answers[i].choices) {
 						let choice = $answers[i].choices[j];
 						if (choice === null || choice === undefined || choice.length === 0) {
 							unansweredRequired[i] = i;

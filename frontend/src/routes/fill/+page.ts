@@ -10,7 +10,7 @@ export const load: PageLoad = async () => {
 			questions: []
 		};
 	} else {
-		const first = surveys[0].survey_structure;
+		const first = surveys[surveys.length - 1].survey_structure;
 		return {
 			title: first.title,
 			questions: first.questions

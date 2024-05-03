@@ -101,6 +101,8 @@
 		// TODO - more precise info
 		if (!response.ok) {
 			alert('An error occured. Survey not saved.');
+		} else {
+			alert('Survey saved.');
 		}
 	}
 </script>

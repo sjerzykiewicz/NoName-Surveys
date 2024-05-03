@@ -14,11 +14,11 @@
 	import Binary from '$lib/components/fill-page/Binary.svelte';
 	import Rank from '$lib/components/fill-page/Rank.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import type Question from '$lib/entities/questions/Question';
 	import type TextQuestion from '$lib/entities/questions/Text';
 	import { title } from '$lib/stores/fill-page';
 	import type SingleQuestion from '$lib/entities/questions/Single';
 	import type SliderQuestion from '$lib/entities/questions/Slider';
+	import type Survey from '$lib/entities/Survey';
 
 	const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -31,10 +31,7 @@
 		list: List
 	};
 
-	export let survey: {
-		title: string;
-		questions: Array<Question>;
-	};
+	export let survey: Survey;
 
 	$title = survey.title;
 

@@ -1,10 +1,7 @@
 <script lang="ts">
 	import SurveyForm from '$lib/components/fill-page/SurveyForm.svelte';
-	import type Question from '$lib/entities/questions/Question';
-	export let data: {
-		title: string;
-		questions: Array<Question>;
-	};
+	import type Survey from '$lib/entities/Survey';
+	export let data: Survey;
 </script>
 
 <SurveyForm survey={data} />

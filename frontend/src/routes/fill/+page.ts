@@ -1,9 +1,9 @@
 import type { PageLoad } from '../$types';
 
-export const load: PageLoad = async () => {
+export const load: PageLoad = async ({ fetch }) => {
 	const response = await fetch('http://localhost:8000/survey-drafts/all', { method: 'GET' });
 	const surveys = await response.json();
-	// TODO - for now return the first survey
+	// TODO - for now return the newest survey
 	if (surveys.length === 0) {
 		return {
 			title: '',

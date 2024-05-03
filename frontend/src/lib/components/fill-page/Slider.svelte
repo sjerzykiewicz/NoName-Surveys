@@ -113,6 +113,14 @@
 		background: var(--accent-dark-color);
 	}
 
+	.range::-webkit-slider-thumb:active {
+		cursor: grabbing;
+	}
+
+	.range::-moz-range-thumb:active {
+		cursor: grabbing;
+	}
+
 	.limits {
 		display: flex;
 		align-items: center;

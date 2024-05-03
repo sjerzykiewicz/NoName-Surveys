@@ -15,7 +15,7 @@ class SingleQuestion(Question):
 
     @field_validator("answer")
     def validate_answer(cls, v, info: ValidationInfo) -> Optional[str]:
-        if not v:
+        if v is None:
             return v
         if len(v) != 1:
             raise ValueError("answer must be a single choice")

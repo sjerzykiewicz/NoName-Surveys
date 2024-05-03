@@ -13,7 +13,7 @@ class SliderQuestion(Question):
 
     @field_validator("answer")
     def validate_answer(cls, v, info: ValidationInfo) -> Optional[float]:
-        if not v:
+        if v is None:
             return v
         if (
             "min_value" in info.data

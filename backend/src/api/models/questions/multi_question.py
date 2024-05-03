@@ -15,7 +15,7 @@ class MultiQuestion(Question):
 
     @field_validator("answer")
     def validate_answer(cls, v, info: ValidationInfo) -> Optional[list[str]]:
-        if not v:
+        if v is None:
             return v
         if "choices" in info.data and any(
             choice not in info.data["choices"] for choice in v

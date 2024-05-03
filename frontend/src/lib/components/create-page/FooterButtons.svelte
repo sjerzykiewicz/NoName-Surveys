@@ -81,11 +81,26 @@
 		return questionList;
 	}
 
-	function parseSurvey() {
+	async function parseSurvey() {
 		let parsedSurvey: Survey = new Survey($title, constructQuestionList());
 
-		// TODO remove this later
-		console.log(JSON.stringify(parsedSurvey));
+		let surveyDraft = {
+			creator: 1,
+			title: $title,
+			survey_structure: parsedSurvey
+		};
+
+		const response = await fetch('http://localhost:8000/survey-drafts/create', {
+			method: 'POST',
+			body: JSON.stringify(surveyDraft),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			alert('An error occured. Survey not saved.');
+		}
 	}
 </script>
 

@@ -3,7 +3,10 @@ from sqlmodel import Session
 
 import src.db.crud.survey_draft as survey_draft_crud
 from src.api.models.surveys.survey import Survey
-from src.api.models.surveys.survey_draft import SurveyDraftCreate
+from src.api.models.surveys.survey_draft import (
+    SurveyDraftCreate,
+    SurveyDraftRead,
+)
 from src.db.base import get_session
 from src.db.models.survey_draft import SurveyDraftBase
 
@@ -13,11 +16,11 @@ router = APIRouter()
 @router.get(
     "/all",
     response_description="Get all Survey Drafts",
-    response_model=list[SurveyDraftCreate],
+    response_model=list[SurveyDraftRead],
 )
 async def get_survey_drafts(session: Session = Depends(get_session)):
     return [
-        SurveyDraftCreate(
+        SurveyDraftRead(
             creator=draft.creator,
             title=draft.title,
             creation_date=draft.creation_date,
@@ -30,16 +33,24 @@ async def get_survey_drafts(session: Session = Depends(get_session)):
 @router.post(
     "/create",
     response_description="Create a new Survey Draft",
-    response_model=SurveyDraftBase,
+    response_model=SurveyDraftRead,
 )
 async def create_survey_draft(
     survey_draft_create: SurveyDraftCreate,
     session: Session = Depends(get_session),
 ):
-    survey_draft = SurveyDraftBase(
+    survey_draft_base = SurveyDraftBase(
         creator=survey_draft_create.creator,
         title=survey_draft_create.title,
         survey_structure=survey_draft_create.survey_structure.model_dump_json(),
-        creation_date=survey_draft_create.creation_date,
     )
-    return survey_draft_crud.create_survey_draft(survey_draft, session)
+    survey_draft = survey_draft_crud.create_survey_draft(
+        survey_draft_base, session
+    )
+
+    return SurveyDraftRead(
+        creator=survey_draft.creator,
+        title=survey_draft.title,
+        creation_date=survey_draft.creation_date,
+        survey_structure=Survey.parse_raw(survey_draft.survey_structure),
+    )

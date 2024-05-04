@@ -92,15 +92,16 @@
 	}
 
 	.limit-input {
-		background-color: var(--box-shadow-color);
+		background-color: var(--shadow-color);
 		padding: 0.25em;
 		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
+		box-shadow: 0px 4px 4px var(--shadow-color);
 		font-size: 1.25em;
 		font-weight: normal;
 		font-family: 'Jura';
 		color: var(--text-color);
+		text-align: center;
 		cursor: text;
 		overflow: hidden;
 		width: 6.5em;
@@ -108,7 +109,7 @@
 	}
 
 	.limit-input::placeholder {
-		color: var(--text-color-transparent);
+		color: var(--text-dark-color);
 	}
 
 	@media screen and (max-width: 767px) {

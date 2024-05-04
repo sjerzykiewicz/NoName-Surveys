@@ -26,20 +26,21 @@
 		display: flex;
 		flex-flow: column;
 		text-align: center;
-		color: #eaeaea;
+		color: var(--text-color);
 		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 2em;
-		text-shadow: 0px 4px 4px #1a1a1a;
+		text-shadow: 0px 4px 4px var(--shadow-color);
 	}
 
 	input {
+		text-align: center;
 		padding: 0.25em;
-		background-color: #1a1a1a;
-		border: 1px solid #999999;
+		background-color: var(--shadow-color);
+		border: 1px solid var(--border-color);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px #1a1a1a;
-		color: #eaeaea;
+		box-shadow: 0px 4px 4px var(--shadow-color);
+		color: var(--text-color);
 		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 1.25em;
@@ -52,7 +53,7 @@
 	.error {
 		text-align: center;
 		font-size: 1.25em;
-		text-shadow: 0px 4px 4px #1a1a1a;
+		text-shadow: 0px 4px 4px var(--shadow-color);
 	}
 
 	@media screen and (max-width: 767px) {

@@ -1,62 +1,26 @@
 /* global.css */
 :root {
 	--primary-color: #4a4a4a;
-	--secondary-color: #1a1a1a;
-	--text-color: #eaeaea;
-	--text-color-transparent: #eaeaea40;
-	--border-color: #999999;
-	--box-shadow-color: #1a1a1a;
+	--primary-dark-color: #3a3a3a;
+	--secondary-color: #2a2a2a;
+	--shadow-color: #1a1a1a;
+	--border-color: #9a9a9a;
+	--text-color: #dadada;
+	--text-dark-color: #5a5a5a;
 	--accent-color: #0075ff;
 	--accent-dark-color: #005cc8;
-	--bg-darker-color: #2a2a2a;
+	--error-color: #ff3333;
 }
 
 /* styles for create-page components */
-.choice-area {
-	font-size: 1em;
-	font-weight: normal;
-	font-family: 'Jura';
-	color: var(--text-color);
-	width: 86%;
-}
-
-.choice {
+button {
 	display: flex;
 	align-items: center;
-	flex-flow: row;
-	margin-bottom: 0.5em;
-}
-
-.choice-input {
-	flex: 1;
-	background-color: var(--secondary-color);
 	padding: 0.25em;
-	border: 1px solid var(--border-color);
-	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--box-shadow-color);
-	font-size: 1.25em;
-	cursor: text;
-	overflow: hidden;
-	margin-right: 0.5em;
-}
-
-.choice-input[contenteditable]:empty::before {
-	content: 'Enter choice...';
-	color: var(--text-color-transparent);
-}
-
-.remove-choice {
-	visibility: hidden;
-}
-
-.create-page-button {
-	display: flex;
-	align-items: center;
 	background-color: var(--primary-color);
-	padding: 0.25em;
 	border: 1px solid var(--border-color);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--box-shadow-color);
+	box-shadow: 0px 4px 4px var(--shadow-color);
 	font-size: 1.25em;
 	font-family: 'Jura';
 	color: var(--text-color);
@@ -64,60 +28,19 @@
 	transition: background-color 0.2s;
 }
 
-.question-input {
-	flex: 1;
+button:hover {
 	background-color: var(--secondary-color);
-	padding: 0.25em;
-	border: 1px solid var(--border-color);
-	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--box-shadow-color);
-	font-size: 1em;
-	cursor: text;
-	overflow: hidden;
-	margin-right: 0.5em;
 }
 
-.add-choice {
-	margin-left: 1.8em;
-}
-
-.material-symbols-rounded {
-	font-size: 1.15em;
-}
-
-.add-choice .material-symbols-rounded {
-	margin-right: 0.15em;
+button:active {
+	background-color: var(--border-color);
 }
 
 .footer-button {
-	display: flex;
 	text-decoration: none;
-	background-color: var(--primary-color);
-	padding: 0.25em;
-	border: 1px solid var(--border-color);
-	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--box-shadow-color);
-	font-size: 1.25em;
-	font-family: 'Jura';
-	color: var(--text-color);
-	cursor: pointer;
-	transition: background-color 0.2s;
 	margin-left: 0.5em;
 }
 
-.arrows {
-	display: flex;
-	flex-flow: column;
-	margin-right: 0.5em;
-}
-
-.arrows i {
-	line-height: 0.7em;
-	overflow: hidden;
-}
-
-/* hover */
-.create-page-button:hover,
 .footer-button:hover,
 .choice-in:hover {
 	background-color: var(--secondary-color);
@@ -133,12 +56,104 @@
 	background-color: var(--accent-dark-color);
 }
 
-/* active */
-.create-page-button:active,
 .footer-button:active,
 .save:active,
 .submit:active {
 	background-color: var(--border-color);
+}
+
+.add-choice {
+	margin-left: 1.8em;
+}
+
+.material-symbols-rounded {
+	font-size: 1.15em;
+}
+
+.add-choice .material-symbols-rounded,
+.footer-button .material-symbols-rounded {
+	margin-right: 0.15em;
+}
+
+.choice-area {
+	font-size: 1em;
+	font-weight: normal;
+	font-family: 'Jura';
+	color: var(--text-color);
+	width: 86%;
+}
+
+.choice {
+	display: flex;
+	align-items: center;
+	flex-flow: row;
+	margin-bottom: 0.5em;
+}
+
+.question-input {
+	font-size: 1em;
+}
+
+.choice-input {
+	font-size: 1.25em;
+}
+
+.choice-input[contenteditable]:empty::before {
+	content: 'Enter choice...';
+	color: var(--text-dark-color);
+}
+
+div[contenteditable] {
+	flex: 1;
+	background-color: var(--shadow-color);
+	padding: 0.25em;
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	box-shadow: 0px 4px 4px var(--shadow-color);
+	font-weight: normal;
+	font-family: 'Jura';
+	color: var(--text-color);
+	cursor: text;
+	overflow: hidden;
+	margin-right: 0.5em;
+}
+
+div[contenteditable]:empty::before {
+	color: var(--text-dark-color);
+}
+
+.remove-choice {
+	visibility: hidden;
+}
+
+.arrows {
+	display: flex;
+	flex-flow: column;
+	margin-right: 0.5em;
+}
+
+.arrows i {
+	line-height: 0.7em;
+	overflow: hidden;
+}
+
+.up {
+	border-radius: 5px 5px 0px 0px;
+	border-bottom: 1px solid var(--border-color);
+	padding: 0em 0.25em 0em 0.25em;
+}
+
+.down {
+	border-radius: 0px 0px 5px 5px;
+	border-top: 0px;
+	padding: 0em 0.25em 0em 0.25em;
+}
+
+.up:disabled,
+.down:disabled {
+	background-color: var(--secondary-color);
+	color: var(--text-dark-color);
+	cursor: not-allowed;
 }
 
 /* styles for fill-page components */
@@ -148,7 +163,7 @@
 	padding: 0.25em;
 	border: 1px solid var(--border-color);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--box-shadow-color);
+	box-shadow: 0px 4px 4px var(--shadow-color);
 	font-size: 1.25em;
 	cursor: pointer;
 	overflow: hidden;
@@ -158,7 +173,7 @@
 
 .choice-in.selected,
 .choice-in.selected:hover {
-	background-color: var(--secondary-color);
+	background-color: var(--shadow-color);
 	border: 2px solid var(--accent-color);
 	color: var(--accent-color);
 	font-weight: bold;
@@ -181,7 +196,7 @@ input[type='radio']:checked {
 }
 
 .error {
-	color: #ff3333;
+	color: var(--error-color);
 	font-family: 'Jura';
 	font-weight: bold;
 }

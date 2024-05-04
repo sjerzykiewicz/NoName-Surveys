@@ -116,13 +116,8 @@
 		margin-bottom: 1.875em;
 	}
 
-	i {
-		font-size: 1.15em;
-		margin-right: 0.15em;
-	}
-
 	.error {
-		padding-left: 5%;
+		padding-left: 2.3em;
 	}
 
 	@media screen and (max-width: 767px) {

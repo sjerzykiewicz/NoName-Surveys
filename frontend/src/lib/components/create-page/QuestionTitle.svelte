@@ -82,7 +82,7 @@
 
 	.question-input[contenteditable]:empty::before {
 		content: 'Enter question...';
-		color: var(--text-color-transparent);
+		color: var(--text-dark-color);
 	}
 
 	.index {
@@ -91,39 +91,6 @@
 		cursor: default;
 		width: 1.4em;
 		text-align: right;
-	}
-
-	.arrows {
-		display: flex;
-		flex-flow: column;
-		margin-right: 0.5em;
-	}
-
-	.arrows i {
-		line-height: 0.7em;
-		overflow: hidden;
-	}
-
-	.up {
-		border-radius: 5px 5px 0px 0px;
-		border-bottom: 1px solid var(--border-color);
-		padding: 0em 0.25em 0em 0.25em;
-	}
-
-	.up:disabled {
-		background-color: var(--secondary-color);
-		cursor: not-allowed;
-	}
-
-	.down {
-		border-radius: 0px 0px 5px 5px;
-		border-top: 0px;
-		padding: 0em 0.25em 0em 0.25em;
-	}
-
-	.down:disabled {
-		background-color: var(--secondary-color);
-		cursor: not-allowed;
 	}
 
 	.required-button {
@@ -151,7 +118,6 @@
 	}
 
 	i {
-		font-size: 1.15em;
 		font-variation-settings: 'wght' 700;
 	}
 

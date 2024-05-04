@@ -14,7 +14,6 @@
 	import QuestionType from './QuestionType.svelte';
 
 	let isPanelVisible: boolean = false;
-	let isQuestionAdded: boolean = false;
 	let previousQuestionType: ComponentType;
 	let questionTypes: Array<ComponentType> = [
 		Text,
@@ -32,10 +31,14 @@
 	}
 
 	function setQuestionChoices(component: ComponentType) {
-		if ([Single, Multi, Slider, List, Rank, Binary].includes(component)) {
+		if ([Single, Multi, List, Rank].includes(component)) {
 			return ['', ''];
 		} else if (component === Scale) {
 			return ['1', '2', '3', '4', '5'];
+		} else if (component === Binary) {
+			return ['Yes', 'No'];
+		} else if (component === Slider) {
+			return ['0', '10'];
 		} else {
 			return [''];
 		}
@@ -55,7 +58,6 @@
 		];
 
 		previousQuestionType = component;
-		isQuestionAdded = true;
 		isPanelVisible = false;
 	}
 
@@ -93,11 +95,10 @@
 		>
 			<i class="material-symbols-rounded">add</i>Question
 		</button>
-		{#if isQuestionAdded}
+		{#if previousQuestionType}
 			<QuestionType
 				questionType={previousQuestionType}
 				questionTypeIndex={-1}
-				{isQuestionAdded}
 				on:addQuestionType={(event) => addQuestion(event.detail.component)}
 			/>
 		{/if}
@@ -108,11 +109,10 @@
 			transition:slide={{ duration: 200, easing: cubicInOut }}
 			on:introstart={() => scrollToElement('.add-question')}
 		>
-			{#each questionTypes.filter((questionType) => questionType !== previousQuestionType) as questionType, questionTypeIndex}
+			{#each questionTypes as questionType, questionTypeIndex}
 				<QuestionType
 					{questionType}
 					{questionTypeIndex}
-					{isQuestionAdded}
 					on:addQuestionType={(event) => addQuestion(event.detail.component)}
 				/>
 			{/each}
@@ -122,23 +122,8 @@
 
 <style>
 	button {
-		display: flex;
-		align-items: center;
-		background-color: var(--primary-color);
-		padding: 0.25em;
 		width: 6.25em;
-		font-size: 1.25em;
-		font-family: 'Jura';
-		color: var(--text-color);
-		cursor: pointer;
-	}
-
-	button:hover {
-		background-color: var(--secondary-color);
-	}
-
-	button:active {
-		background-color: var(--border-color);
+		box-shadow: none;
 	}
 
 	.button-group {
@@ -149,12 +134,10 @@
 	.add-buttons {
 		display: flex;
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
+		box-shadow: 0px 4px 4px var(--shadow-color);
 	}
 
 	.add-question {
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
 		transition:
 			background-color 0.2s,
 			border-radius 0.2s;
@@ -183,14 +166,10 @@
 		display: flex;
 		flex-flow: column;
 		border-radius: 0px 0px 5px 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
+		box-shadow: 0px 4px 4px var(--shadow-color);
 		width: fit-content;
 		height: auto;
 		position: absolute;
-	}
-
-	i {
-		font-size: 1.15em;
 	}
 
 	.add-question i {

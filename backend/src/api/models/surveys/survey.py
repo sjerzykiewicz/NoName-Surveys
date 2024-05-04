@@ -50,7 +50,7 @@ class SurveyFetchInput(BaseModel):
             raise ValueError("survey code must be provided")
         if not re.match(r"^\d{6}$", v):
             raise ValueError(
-                "survey code must be a string constisting of 6 digits"
+                "survey code must be a string consisting of 6 digits"
             )
         return v
 

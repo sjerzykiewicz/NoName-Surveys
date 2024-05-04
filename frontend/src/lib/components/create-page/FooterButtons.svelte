@@ -86,7 +86,6 @@
 
 		let surveyDraft = {
 			creator: 1, // TODO - replace with actual user ID
-			title: $title,
 			survey_structure: parsedSurvey
 		};
 

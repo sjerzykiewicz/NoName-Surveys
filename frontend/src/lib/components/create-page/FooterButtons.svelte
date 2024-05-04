@@ -105,6 +105,7 @@
 			alert('An error occured. Survey not saved.');
 		} else {
 			const code = (await response.json()).survey_code;
+			// TODO - display access code on page
 			alert('Survey saved. Acces code: ' + code + '.');
 		}
 	}

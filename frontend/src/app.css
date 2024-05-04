@@ -12,6 +12,19 @@
 	--error-color: #ff3333;
 }
 
+:root[data-color-scheme='light'] {
+	--primary-color: #dadada;
+	--primary-dark-color: #eaeaea;
+	--secondary-color: #fafafa;
+	--shadow-color: #c0c0c0;
+	--border-color: #5a5a5a;
+	--text-color: #4a4a4a;
+	--text-dark-color: #9a9a9a;
+	--accent-color: #3392ff;
+	--accent-dark-color: #226ec5;
+	--error-color: #ff3333;
+}
+
 /* styles for create-page components */
 button {
 	display: flex;

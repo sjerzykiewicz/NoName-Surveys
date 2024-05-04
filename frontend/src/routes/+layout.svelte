@@ -2,9 +2,20 @@
 	import '../app.css';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import ScrollToTop from '$lib/components/ScrollToTop.svelte';
+	import { onMount } from 'svelte';
+
+	let colorScheme = 'dark';
+
+	onMount(() => {
+		const savedColorScheme = localStorage.getItem('colorScheme');
+		if (savedColorScheme) {
+			colorScheme = savedColorScheme;
+		}
+		document.documentElement.dataset.colorScheme = colorScheme;
+	});
 </script>
 
-<NavBar />
+<NavBar {colorScheme} />
 <div class="box">
 	<slot />
 </div>

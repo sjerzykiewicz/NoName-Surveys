@@ -40,3 +40,11 @@
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
+<script>
+	window.addEventListener('DOMContentLoaded', () => {
+		const colorScheme = localStorage.getItem('colorScheme');
+		if (colorScheme) {
+			document.documentElement.setAttribute('data-color-scheme', colorScheme);
+		}
+	});
+</script>

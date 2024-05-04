@@ -3,6 +3,7 @@
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
 	import { cubicInOut } from 'svelte/easing';
+	import { onMount } from 'svelte';
 
 	let open: boolean;
 	let innerWidth: number;
@@ -19,6 +20,36 @@
 	function hideNav() {
 		open = false;
 	}
+
+	let hamburgerColor = '#dadada';
+	let mode = 'light_mode';
+
+	onMount(() => {
+		const colorScheme = localStorage.getItem('colorScheme') || 'dark';
+
+		if (colorScheme === 'dark') {
+			document.documentElement.dataset.colorScheme = 'dark';
+		} else {
+			document.documentElement.dataset.colorScheme = 'light';
+			hamburgerColor = '#4a4a4a';
+			mode = 'dark_mode';
+		}
+	});
+
+	function toggleDarkMode() {
+		const currentColorScheme = document.documentElement.dataset.colorScheme;
+		if (currentColorScheme === 'dark') {
+			document.documentElement.dataset.colorScheme = 'light';
+			hamburgerColor = '#4a4a4a';
+			mode = 'dark_mode';
+			localStorage.setItem('colorScheme', 'light');
+		} else {
+			document.documentElement.dataset.colorScheme = 'dark';
+			hamburgerColor = '#dadada';
+			mode = 'light_mode';
+			localStorage.setItem('colorScheme', 'dark');
+		}
+	}
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -26,7 +57,7 @@
 {#if innerWidth <= 767}
 	<div class="nav-burger">
 		<i class="material-symbols-rounded">shield_person</i>
-		<Hamburger bind:open --color="#eaeaea" />
+		<Hamburger bind:open --color={hamburgerColor} />
 	</div>
 {/if}
 
@@ -36,6 +67,9 @@
 			{#each Object.entries(navLinks) as [title, href]}
 				<a {href} {title} class:active={$page.url.pathname === href} on:click={hideNav}>{title}</a>
 			{/each}
+			<button on:click={toggleDarkMode} class="toggle-mode">
+				<i class="material-symbols-rounded">{mode}</i>
+			</button>
 		</nav>
 	</div>
 {/if}
@@ -84,7 +118,6 @@
 		text-decoration: none;
 		transition: background-color 0.2s;
 	}
-
 	a:hover {
 		background-color: var(--primary-dark-color);
 		transition: background-color 0.2s;

@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import type { PageLoad } from '../$types';
 
 export const load: PageLoad = async ({ fetch, params }) => {
@@ -10,6 +11,9 @@ export const load: PageLoad = async ({ fetch, params }) => {
 		}
 	});
 	// TODO - error checks
+	if (!response.ok) {
+		return error(404);
+	}
 	const survey = (await response.json()).survey_structure;
 
 	return {

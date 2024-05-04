@@ -1,10 +1,23 @@
 <script lang="ts">
-	import type { ActionData } from '../../../routes/welcome/$types';
+	import { goto } from '$app/navigation';
 
-	export let form: ActionData;
+	let code: string;
+	let error: string;
+
+	function handleSubmit() {
+		if (code === null || code === '') {
+			error = 'Please enter code';
+			return;
+		}
+		if (!/^[0-9]{6}$/.test(code)) {
+			error = 'Code must be 6 characters long and contain only digits';
+			return;
+		}
+		goto('http://localhost:5173/fill/' + code);
+	}
 </script>
 
-<form method="POST">
+<form on:submit|preventDefault={handleSubmit}>
 	<label for="code-input">Enter survey code</label>
 	<input
 		title="Enter survey code"
@@ -14,11 +27,12 @@
 		required
 		maxlength="6"
 		autocomplete="off"
+		bind:value={code}
 	/>
 </form>
 
-{#if form?.error}
-	<p class="error">{form.error}</p>
+{#if error}
+	<p class="error">Code must be 6 characters long and contain only digits</p>
 {/if}
 
 <style>

@@ -1,10 +1,16 @@
 import Question from '$lib/entities/questions/Question';
 
-class BinaryQuestionBody {}
-
 export default class BinaryQuestion extends Question {
-	binary: BinaryQuestionBody = {};
-	constructor(required: boolean = false, question: string = '') {
-		super(required, question);
+	choices: Array<string>;
+	answer: string | undefined;
+	constructor(
+		required: boolean = false,
+		question: string = '',
+		choices: Array<string> = [],
+		answer: string | undefined
+	) {
+		super(required, question, 'binary');
+		this.choices = choices;
+		this.answer = answer;
 	}
 }

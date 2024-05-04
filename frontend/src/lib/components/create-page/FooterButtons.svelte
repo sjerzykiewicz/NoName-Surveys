@@ -25,13 +25,19 @@
 		$questions.forEach((q) => {
 			switch (q.component) {
 				case Single:
-					questionList = [...questionList, new SingleQuestion(q.required, q.question, q.choices)];
+					questionList = [
+						...questionList,
+						new SingleQuestion(q.required, q.question, q.choices, undefined)
+					];
 					break;
 				case Multi:
-					questionList = [...questionList, new MultiQuestion(q.required, q.question, q.choices)];
+					questionList = [
+						...questionList,
+						new MultiQuestion(q.required, q.question, q.choices, undefined)
+					];
 					break;
 				case Scale:
-					questionList = [...questionList, new ScaleQuestion(q.required, q.question)];
+					questionList = [...questionList, new ScaleQuestion(q.required, q.question, undefined)];
 					break;
 				case Slider:
 					questionList = [
@@ -40,21 +46,34 @@
 							q.required,
 							q.question,
 							parseFloat(q.choices[0]),
-							parseFloat(q.choices[1])
+							parseFloat(q.choices[1]),
+							undefined
 						)
 					];
 					break;
 				case List:
-					questionList = [...questionList, new ListQuestion(q.required, q.question, q.choices)];
+					questionList = [
+						...questionList,
+						new ListQuestion(q.required, q.question, q.choices, undefined)
+					];
 					break;
 				case Rank:
-					questionList = [...questionList, new RankQuestion(q.required, q.question, q.choices)];
+					questionList = [
+						...questionList,
+						new RankQuestion(q.required, q.question, q.choices, undefined)
+					];
 					break;
 				case Text:
-					questionList = [...questionList, new TextQuestion(q.required, q.question, q.choices[0])];
+					questionList = [
+						...questionList,
+						new TextQuestion(q.required, q.question, q.choices[0], undefined)
+					];
 					break;
 				case Binary:
-					questionList = [...questionList, new BinaryQuestion(q.required, q.question)];
+					questionList = [
+						...questionList,
+						new BinaryQuestion(q.required, q.question, q.choices, undefined)
+					];
 					break;
 			}
 		});
@@ -62,18 +81,36 @@
 		return questionList;
 	}
 
-	function parseSurvey() {
+	async function processSurvey() {
 		let parsedSurvey: Survey = new Survey($title, constructQuestionList());
 
-		// TODO remove this later
-		console.log(JSON.stringify(parsedSurvey));
+		let surveyDraft = {
+			creator: 1, // TODO - replace with actual user ID
+			title: $title,
+			survey_structure: parsedSurvey
+		};
+
+		const response = await fetch('http://localhost:8000/survey-drafts/create', {
+			method: 'POST',
+			body: JSON.stringify(surveyDraft),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		// TODO - more precise info
+		if (!response.ok) {
+			alert('An error occured. Survey not saved.');
+		} else {
+			alert('Survey saved.');
+		}
 	}
 </script>
 
 <button title="Preview survey" class="footer-button">
 	<i class="material-symbols-rounded">search</i>Preview
 </button>
-<button title="Save survey" class="footer-button save" on:click={parseSurvey}>
+<button title="Save survey" class="footer-button save" on:click={processSurvey}>
 	<i class="material-symbols-rounded">save</i>Save
 </button>
 

@@ -36,7 +36,7 @@ async def get_survey_by_code(
         survey.survey_structure_id, session
     )
     return SurveyFetchOutput(
-        survey_structure=Survey.parse_raw(survey_draft.survey_structure),
+        survey_structure=Survey.model_validate_json(survey_draft.survey_structure),
         uses_cryptographic_module=survey.uses_cryptographic_module,
         survey_code=survey.survey_code,
     )

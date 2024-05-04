@@ -25,7 +25,7 @@ async def get_survey_drafts(
         SurveyDraftRead(
             creator=draft.creator,
             creation_date=draft.creation_date,
-            survey_structure=Survey.parse_raw(draft.survey_structure),
+            survey_structure=Survey.model_validate_json(draft.survey_structure),
         )
         for draft in survey_draft_crud.get_survey_drafts_for_user(
             user_id, session
@@ -53,5 +53,5 @@ async def create_survey_draft(
     return SurveyDraftRead(
         creator=survey_draft.creator,
         creation_date=survey_draft.creation_date,
-        survey_structure=Survey.parse_raw(survey_draft.survey_structure),
+        survey_structure=Survey.model_validate_json(survey_draft.survey_structure),
     )

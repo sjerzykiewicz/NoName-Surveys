@@ -81,18 +81,36 @@
 		return questionList;
 	}
 
-	function parseSurvey() {
+	async function processSurvey() {
 		let parsedSurvey: Survey = new Survey($title, constructQuestionList());
 
-		// TODO remove this later
-		console.log(JSON.stringify(parsedSurvey));
+		let surveyDraft = {
+			creator: 1, // TODO - replace with actual user ID
+			title: $title,
+			survey_structure: parsedSurvey
+		};
+
+		const response = await fetch('http://localhost:8000/survey-drafts/create', {
+			method: 'POST',
+			body: JSON.stringify(surveyDraft),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		// TODO - more precise info
+		if (!response.ok) {
+			alert('An error occured. Survey not saved.');
+		} else {
+			alert('Survey saved.');
+		}
 	}
 </script>
 
 <a href="/create" title="Preview survey" class="footer-button">
 	<i class="material-symbols-rounded">search</i>Preview
 </a>
-<button title="Save survey" class="footer-button save" on:click={parseSurvey}>
+<button title="Save survey" class="footer-button save" on:click={processSurvey}>
 	<i class="material-symbols-rounded">save</i>Save
 </button>
 

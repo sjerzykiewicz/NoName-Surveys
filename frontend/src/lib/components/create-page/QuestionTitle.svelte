@@ -103,6 +103,7 @@
 
 	.required-button.checked {
 		background-color: var(--accent-color);
+		color: var(--text-color-2);
 	}
 
 	.required-button.checked:hover {

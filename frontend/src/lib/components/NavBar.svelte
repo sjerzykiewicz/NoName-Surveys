@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Hamburger } from 'svelte-hamburgers';
-	import { slide } from 'svelte/transition';
+	import { slide, fade } from 'svelte/transition';
 	import { page } from '$app/stores';
 	import { cubicInOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
@@ -22,7 +22,7 @@
 	}
 
 	let hamburgerColor = '#dadada';
-	let mode = 'light_mode';
+	let arrow_direction = 'arrow_left_alt';
 
 	onMount(() => {
 		const colorScheme = localStorage.getItem('colorScheme') || 'dark';
@@ -32,7 +32,7 @@
 		} else {
 			document.documentElement.dataset.colorScheme = 'light';
 			hamburgerColor = '#4a4a4a';
-			mode = 'dark_mode';
+			arrow_direction = 'arrow_right_alt';
 		}
 	});
 
@@ -41,12 +41,12 @@
 		if (currentColorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'light';
 			hamburgerColor = '#4a4a4a';
-			mode = 'dark_mode';
+			arrow_direction = 'arrow_right_alt';
 			localStorage.setItem('colorScheme', 'light');
 		} else {
 			document.documentElement.dataset.colorScheme = 'dark';
 			hamburgerColor = '#dadada';
-			mode = 'light_mode';
+			arrow_direction = 'arrow_left_alt';
 			localStorage.setItem('colorScheme', 'dark');
 		}
 	}
@@ -67,9 +67,19 @@
 			{#each Object.entries(navLinks) as [title, href]}
 				<a {href} {title} class:active={$page.url.pathname === href} on:click={hideNav}>{title}</a>
 			{/each}
-			<button on:click={toggleDarkMode} class="toggle-mode">
-				<i class="material-symbols-rounded">{mode}</i>
-			</button>
+			{#key arrow_direction}
+				<button in:fade on:click={toggleDarkMode} class="toggle-mode">
+					<i
+						class="material-symbols-rounded"
+						class:active-mode={arrow_direction === 'arrow_right_alt'}>light_mode</i
+					>
+					<i class="material-symbols-rounded">{arrow_direction}</i>
+					<i
+						class="material-symbols-rounded"
+						class:active-mode={arrow_direction === 'arrow_left_alt'}>dark_mode</i
+					>
+				</button>
+			{/key}
 		</nav>
 	</div>
 {/if}
@@ -106,6 +116,31 @@
 		font-size: 3em;
 	}
 
+	.toggle-mode {
+		all: unset;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		font-size: 1.5em;
+		transition: background-color 0.2s;
+		color: var(--text-color);
+		font-family: 'Jura';
+		font-weight: bold;
+		border-right: 1px solid var(--border-color);
+		cursor: pointer;
+	}
+
+	.toggle-mode:hover {
+		background-color: var(--primary-dark-color);
+		transition: background-color 0.2s;
+	}
+
+	.toggle-mode i {
+		font-size: 0.9em;
+		cursor: pointer;
+	}
+
 	a {
 		padding: 0.5em 0 0.5em 0;
 		text-align: center;
@@ -130,10 +165,16 @@
 	.active,
 	.active:hover {
 		background-color: var(--accent-color);
+		color: var(--text-color-2);
 	}
 
 	i {
 		cursor: default;
+	}
+
+	.active-mode {
+		color: var(--accent-color);
+		font-size: 1.2em !important;
 	}
 
 	@media screen and (max-width: 767px) {
@@ -148,10 +189,12 @@
 			border-bottom: none;
 		}
 
-		a {
+		a,
+		.toggle-mode {
 			border-top: 1px solid var(--border-color);
 			border-right: none;
 			border-bottom: none;
+			padding: 0.5em 0 0.5em 0;
 		}
 	}
 </style>

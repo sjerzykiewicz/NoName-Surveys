@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
-import type { PageLoad } from '../$types';
+import type { PageServerLoad } from './$types';
 
-export const load: PageLoad = async ({ fetch, params }) => {
+export const load: PageServerLoad = async ({ fetch, params }) => {
 	const survey_code = params.code;
 	const response = await fetch('http://localhost:8000/surveys', {
 		method: 'POST',

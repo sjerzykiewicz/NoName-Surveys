@@ -32,7 +32,7 @@ class Survey(BaseModel):
     )
 
     @field_validator("title")
-    def validate_answer(cls, v, info: ValidationInfo) -> str:
+    def validate_survey_title(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             raise ValueError("survey title must be provided")
         return v
@@ -45,7 +45,7 @@ class SurveyFetchInput(BaseModel):
     survey_code: str
 
     @field_validator("survey_code")
-    def validate_answer(cls, v, info: ValidationInfo) -> str:
+    def validate_survey_join_code(cls, v, info: ValidationInfo) -> str:
         if v is None:
             raise ValueError("survey code must be provided")
         if not re.match(r"^\d{6}$", v):

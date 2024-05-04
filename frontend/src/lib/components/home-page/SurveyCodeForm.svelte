@@ -32,7 +32,7 @@
 </form>
 
 {#if error}
-	<p class="error">Code must be 6 characters long and contain only digits</p>
+	<p class="error">{error}</p>
 {/if}
 
 <style>

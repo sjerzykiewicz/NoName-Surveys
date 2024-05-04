@@ -1,6 +1,7 @@
+import re
 from typing import Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
 from src.api.models.questions.binary_question import BinaryQuestion
 from src.api.models.questions.list_question import ListQuestion
@@ -29,6 +30,67 @@ class Survey(BaseModel):
         min_length=1,
         description="Questions list must have at least 1 element",
     )
+
+    @field_validator("title")
+    def validate_answer(cls, v, info: ValidationInfo) -> str:
+        if v is None or v == "":
+            raise ValueError("survey title must be provided")
+        return v
+
+    class Config:
+        extra = "forbid"
+
+
+class SurveyFetchInput(BaseModel):
+    survey_code: str
+
+    @field_validator("survey_code")
+    def validate_answer(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("survey code must be provided")
+        if not re.match(r"^\d{6}$", v):
+            raise ValueError(
+                "survey code must be a string constisting of 6 digits"
+            )
+        return v
+
+    class Config:
+        extra = "forbid"
+
+
+class SurveyFetchOutput(BaseModel):
+    survey_structure: Survey
+    uses_cryptographic_module: bool
+    survey_code: str
+
+    class Config:
+        extra = "forbid"
+
+
+class SurveyGetForUserOutput(BaseModel):
+    survey_structure_id: int
+    uses_cryptographic_module: bool
+    survey_code: str
+
+    class Config:
+        extra = "forbid"
+
+
+class SurveyCreateInput(BaseModel):
+    creator: int
+    survey_structure: Survey
+    deadline: str
+    uses_cryptographic_module: bool
+
+    class Config:
+        extra = "forbid"
+
+
+class SurveyCreateOutput(BaseModel):
+    creator: int
+    survey_structure_id: int
+    uses_cryptographic_module: bool
+    survey_code: str
 
     class Config:
         extra = "forbid"

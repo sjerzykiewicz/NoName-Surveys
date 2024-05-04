@@ -6,7 +6,6 @@ from sqlmodel import Field, SQLModel
 
 class SurveyDraftBase(SQLModel):
     creator: int = Field(foreign_key="user.id", nullable=False)
-    title: str
     survey_structure: str
 
 

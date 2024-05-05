@@ -19,6 +19,7 @@
 	import Rank from '$lib/components/create-page/Rank.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
+	import SurveyInfo from '$lib/entities/SurveyCreateInfo';
 
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];
@@ -85,28 +86,23 @@
 		let parsedSurvey: Survey = new Survey($title, constructQuestionList());
 
 		// TODO - replace dummy values with proper data
-		let surveyDraft = {
-			creator: 1,
-			survey_structure: parsedSurvey,
-			deadline: '31-12-9999',
-			uses_cryptographic_module: false
-		};
+		let surveyInfo = new SurveyInfo(1, parsedSurvey, '31-12-9999', false);
 
-		const response = await fetch('http://localhost:8000/surveys/create', {
+		const response = await fetch('/api/surveys/create', {
 			method: 'POST',
-			body: JSON.stringify(surveyDraft),
+			body: JSON.stringify(surveyInfo),
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		});
 
-		// TODO - more precise info
 		if (!response.ok) {
-			alert('An error occured. Survey not saved.');
+			// TODO - display what exactly is wrong
+			alert(response.statusText);
 		} else {
-			const code = (await response.json()).survey_code;
-			// TODO - display access code on page
-			alert('Survey saved. Acces code: ' + code + '.');
+			const code = (await response.json()).code;
+			// TODO - display code on page
+			alert(`Survey saved. Access code: ${code}`);
 		}
 	}
 </script>

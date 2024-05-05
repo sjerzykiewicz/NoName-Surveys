@@ -6,7 +6,6 @@
 
 <form method="POST">
 	<label for="code-input">Enter survey code</label>
-	<br />
 	<input
 		title="Enter survey code"
 		id="code-input"

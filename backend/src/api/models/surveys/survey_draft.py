@@ -1,20 +1,20 @@
 from pydantic import BaseModel
 
-from src.api.models.surveys.survey import Survey
+from src.api.models.surveys.survey import SurveyStructure
 
 
-class SurveyDraftCreate(BaseModel):
+class SurveyStructureDraftCreate(BaseModel):
     creator: int
-    survey_structure: Survey
+    survey_structure: SurveyStructure
 
     class Config:
         extra = "forbid"
 
 
-class SurveyDraftRead(SurveyDraftCreate):
+class SurveyStructureDraftRead(SurveyStructureDraftCreate):
     creator: int
     creation_date: str
-    survey_structure: Survey
+    survey_structure: SurveyStructure
 
     class Config:
         extra = "forbid"

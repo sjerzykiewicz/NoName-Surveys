@@ -13,7 +13,7 @@ from src.api.models.questions.slider_question import SliderQuestion
 from src.api.models.questions.text_question import TextQuestion
 
 
-class Survey(BaseModel):
+class SurveyStructure(BaseModel):
     title: str
     questions: list[
         Union[
@@ -41,7 +41,7 @@ class Survey(BaseModel):
         extra = "forbid"
 
 
-class SurveyFetchInput(BaseModel):
+class SurveyStructureFetchInput(BaseModel):
     survey_code: str
 
     @field_validator("survey_code")
@@ -58,8 +58,8 @@ class SurveyFetchInput(BaseModel):
         extra = "forbid"
 
 
-class SurveyFetchOutput(BaseModel):
-    survey_structure: Survey
+class SurveyStructureFetchOutput(BaseModel):
+    survey_structure: SurveyStructure
     uses_cryptographic_module: bool
     survey_code: str
 
@@ -67,7 +67,7 @@ class SurveyFetchOutput(BaseModel):
         extra = "forbid"
 
 
-class SurveyGetForUserOutput(BaseModel):
+class SurveyStructureGetForUserOutput(BaseModel):
     survey_structure_id: int
     uses_cryptographic_module: bool
     survey_code: str
@@ -76,9 +76,9 @@ class SurveyGetForUserOutput(BaseModel):
         extra = "forbid"
 
 
-class SurveyCreateInput(BaseModel):
+class SurveyStructureCreateInput(BaseModel):
     creator: int
-    survey_structure: Survey
+    survey_structure: SurveyStructure
     deadline: str
     uses_cryptographic_module: bool
 
@@ -86,7 +86,7 @@ class SurveyCreateInput(BaseModel):
         extra = "forbid"
 
 
-class SurveyCreateOutput(BaseModel):
+class SurveyStructureCreateOutput(BaseModel):
     creator: int
     survey_structure_id: int
     uses_cryptographic_module: bool

@@ -71,11 +71,13 @@
 	</div>
 {/if}
 
-<button in:fade on:click={toggleDarkMode} class="toggle-mode">
-	<i class="material-symbols-rounded" class:active-mode={mode === 'light_mode'}>light_mode</i>
-	<i class="material-symbols-rounded">horizontal_rule</i>
-	<i class="material-symbols-rounded" class:active-mode={mode === 'dark_mode'}>dark_mode</i>
-</button>
+{#key mode}
+	<button in:fade on:click={toggleDarkMode} class="toggle-mode">
+		<i class="material-symbols-rounded" class:active-mode={mode === 'light_mode'}>light_mode</i>
+		<i class="material-symbols-rounded">horizontal_rule</i>
+		<i class="material-symbols-rounded" class:active-mode={mode === 'dark_mode'}>dark_mode</i>
+	</button>
+{/key}
 
 <style>
 	nav {

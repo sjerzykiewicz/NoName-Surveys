@@ -7,7 +7,15 @@
 <form method="POST">
 	<label for="code-input">Enter survey code</label>
 	<br />
-	<input id="code-input" name="survey-code" type="text" required maxlength="6" />
+	<input
+		title="Enter survey code"
+		id="code-input"
+		name="survey-code"
+		type="text"
+		required
+		maxlength="6"
+		autocomplete="off"
+	/>
 </form>
 
 {#if form?.error}

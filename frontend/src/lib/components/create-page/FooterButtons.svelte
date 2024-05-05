@@ -83,31 +83,27 @@
 		return questionList;
 	}
 
-	function processSurvey() {
+	async function processSurvey() {
 		let parsedSurvey: Survey = new Survey($title, constructQuestionList());
 
 		// TODO - replace dummy values with proper data
 		let surveyInfo = new SurveyInfo(1, parsedSurvey, '31-12-9999', false);
 
-		fetch('/api/surveys/create', {
+		const response = await fetch('/api/surveys/create', {
 			method: 'POST',
 			body: JSON.stringify(surveyInfo),
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		}).then((response) => {
-			if (!response.ok) {
-				// TODO - display what exactly is wrong
-				alert(response.statusText);
-			} else {
-				response.json().then((data) => {
-					const code = data.code;
-					$title = '';
-					$questions = [];
-					goto(`/codeview/${code}`);
-				});
-			}
 		});
+
+		if (!response.ok) {
+			// TODO - display what exactly is wrong
+			alert(response.statusText);
+		} else {
+			const code = (await response.json()).code;
+			return await goto(`/codeview/${code}`, { replaceState: true, invalidateAll: true });
+		}
 	}
 </script>
 

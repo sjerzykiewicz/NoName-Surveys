@@ -22,7 +22,7 @@
 	}
 
 	let hamburgerColor = '#dadada';
-	let arrow_direction = 'arrow_left_alt';
+	let mode = 'dark_mode';
 
 	onMount(() => {
 		const colorScheme = localStorage.getItem('colorScheme') || 'dark';
@@ -32,7 +32,7 @@
 		} else {
 			document.documentElement.dataset.colorScheme = 'light';
 			hamburgerColor = '#4a4a4a';
-			arrow_direction = 'arrow_right_alt';
+			mode = 'light_mode';
 		}
 	});
 
@@ -41,12 +41,12 @@
 		if (currentColorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'light';
 			hamburgerColor = '#4a4a4a';
-			arrow_direction = 'arrow_right_alt';
+			mode = 'light_mode';
 			localStorage.setItem('colorScheme', 'light');
 		} else {
 			document.documentElement.dataset.colorScheme = 'dark';
 			hamburgerColor = '#dadada';
-			arrow_direction = 'arrow_left_alt';
+			mode = 'dark_mode';
 			localStorage.setItem('colorScheme', 'dark');
 		}
 	}
@@ -67,17 +67,13 @@
 			{#each Object.entries(navLinks) as [title, href]}
 				<a {href} {title} class:active={$page.url.pathname === href} on:click={hideNav}>{title}</a>
 			{/each}
-			{#key arrow_direction}
+			{#key mode}
 				<button in:fade on:click={toggleDarkMode} class="toggle-mode">
-					<i
-						class="material-symbols-rounded"
-						class:active-mode={arrow_direction === 'arrow_right_alt'}>light_mode</i
+					<i class="material-symbols-rounded" class:active-mode={mode === 'light_mode'}
+						>light_mode</i
 					>
-					<i class="material-symbols-rounded">{arrow_direction}</i>
-					<i
-						class="material-symbols-rounded"
-						class:active-mode={arrow_direction === 'arrow_left_alt'}>dark_mode</i
-					>
+					<i class="material-symbols-rounded">horizontal_rule</i>
+					<i class="material-symbols-rounded" class:active-mode={mode === 'dark_mode'}>dark_mode</i>
 				</button>
 			{/key}
 		</nav>
@@ -137,7 +133,7 @@
 	}
 
 	.toggle-mode i {
-		font-size: 0.9em;
+		font-size: 0.8em;
 		cursor: pointer;
 	}
 
@@ -173,7 +169,7 @@
 	}
 
 	.active-mode {
-		color: var(--accent-color);
+		color: var(--theme-accent-color);
 		font-size: 1.2em !important;
 	}
 

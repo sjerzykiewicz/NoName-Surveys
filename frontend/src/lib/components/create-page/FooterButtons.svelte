@@ -102,6 +102,8 @@
 			alert(response.statusText);
 		} else {
 			const code = (await response.json()).code;
+			$title = '';
+			$questions = [];
 			goto(`/codeview/${code}`, { replaceState: true, invalidateAll: true });
 		}
 	}

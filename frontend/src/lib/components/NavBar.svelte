@@ -67,7 +67,7 @@
 			{#each Object.entries(navLinks) as [title, href]}
 				<a {href} {title} class:active={$page.url.pathname === href} on:click={hideNav}>{title}</a>
 			{/each}
-			{#key mode}
+			<!-- {#key mode}
 				<button in:fade on:click={toggleDarkMode} class="toggle-mode">
 					<i class="material-symbols-rounded" class:active-mode={mode === 'light_mode'}
 						>light_mode</i
@@ -75,10 +75,16 @@
 					<i class="material-symbols-rounded">horizontal_rule</i>
 					<i class="material-symbols-rounded" class:active-mode={mode === 'dark_mode'}>dark_mode</i>
 				</button>
-			{/key}
+			{/key} -->
 		</nav>
 	</div>
 {/if}
+
+<button in:fade on:click={toggleDarkMode} class="toggle-mode">
+	<i class="material-symbols-rounded" class:active-mode={mode === 'light_mode'}>light_mode</i>
+	<i class="material-symbols-rounded">horizontal_rule</i>
+	<i class="material-symbols-rounded" class:active-mode={mode === 'dark_mode'}>dark_mode</i>
+</button>
 
 <style>
 	nav {
@@ -113,30 +119,25 @@
 	}
 
 	.toggle-mode {
-		all: unset;
-		display: flex;
-		align-items: center;
+		position: fixed;
 		justify-content: center;
-		width: 100%;
-		font-size: 1.5em;
-		transition: background-color 0.2s;
-		color: var(--text-color);
-		font-family: 'Jura';
-		font-weight: bold;
-		border-right: 1px solid var(--border-color);
-		cursor: pointer;
-	}
-
-	.toggle-mode:hover {
+		top: 0.2em;
+		right: 0.5em;
 		background-color: var(--primary-dark-color);
-		transition: background-color 0.2s;
+		color: var(--text-color);
+		border: none;
+		border-radius: 5px;
+		font-size: 1.5em;
+		box-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: pointer;
+		z-index: 5;
+		transition: 0.2s;
 	}
 
 	.toggle-mode i {
 		font-size: 0.8em;
 		cursor: pointer;
 	}
-
 	a {
 		padding: 0.5em 0 0.5em 0;
 		text-align: center;
@@ -173,6 +174,12 @@
 		font-size: 1.2em !important;
 	}
 
+	@media screen and (max-width: 978px) {
+		.toggle-mode {
+			top: 2.5em;
+		}
+	}
+
 	@media screen and (max-width: 767px) {
 		nav {
 			flex-flow: column;
@@ -184,13 +191,17 @@
 		.bar {
 			border-bottom: none;
 		}
-
-		a,
-		.toggle-mode {
+		a {
 			border-top: 1px solid var(--border-color);
 			border-right: none;
 			border-bottom: none;
 			padding: 0.5em 0 0.5em 0;
+		}
+
+		.toggle-mode {
+			top: 0.6em;
+			right: 2.5em;
+			font-size: 1.75em;
 		}
 	}
 </style>

@@ -37,6 +37,14 @@ class SurveyStructure(BaseModel):
             raise ValueError("survey title must be provided")
         return v
 
+    def validate_for_answer(self):
+        for question in self.questions:
+            question.validate_for_answer()
+
+    def validate_for_draft(self):
+        for question in self.questions:
+            question.validate_for_draft()
+
     class Config:
         extra = "forbid"
 

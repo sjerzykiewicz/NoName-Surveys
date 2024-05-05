@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 import src.db.crud.survey_draft as survey_draft_crud
@@ -44,6 +44,10 @@ async def create_survey_draft(
     survey_draft_create: SurveyStructureDraftCreate,
     session: Session = Depends(get_session),
 ):
+    try:
+        survey_draft_create.survey_structure.validate_for_draft()
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     survey_draft_base = SurveyDraftBase(
         creator=survey_draft_create.creator,
         survey_structure=survey_draft_create.survey_structure.model_dump_json(),

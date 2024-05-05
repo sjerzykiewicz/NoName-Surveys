@@ -23,5 +23,14 @@ class SingleQuestion(Question):
             raise ValueError("answer must be one of the choices")
         return v
 
+    def validate_structure_against(self, answer) -> None:
+        if (
+            not isinstance(answer, SingleQuestion)
+            or self.required != answer.required
+            or self.question != answer.question
+            or self.choices != answer.choices
+        ):
+            raise ValueError("Invalid answer!")
+
     class Config:
         extra = "forbid"

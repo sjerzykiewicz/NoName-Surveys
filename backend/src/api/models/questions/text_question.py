@@ -18,5 +18,14 @@ class TextQuestion(Question):
             raise ValueError("answer is required")
         return v
 
+    def validate_structure_against(self, answer) -> None:
+        if (
+            not isinstance(answer, TextQuestion)
+            or self.required != answer.required
+            or self.question != answer.question
+            or self.details != answer.details
+        ):
+            raise ValueError("Invalid answer!")
+
     class Config:
         extra = "forbid"

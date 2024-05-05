@@ -25,5 +25,15 @@ class SliderQuestion(Question):
             )
         return v
 
+    def validate_structure_against(self, answer) -> None:
+        if (
+            not isinstance(answer, SliderQuestion)
+            or self.required != answer.required
+            or self.question != answer.question
+            or self.min_value != answer.min_value
+            or self.max_value != answer.max_value
+        ):
+            raise ValueError("Invalid answer!")
+
     class Config:
         extra = "forbid"

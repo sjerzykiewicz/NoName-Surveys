@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { Hamburger } from 'svelte-hamburgers';
-	import { slide } from 'svelte/transition';
+	import { slide, scale } from 'svelte/transition';
 	import { page } from '$app/stores';
 	import { cubicInOut } from 'svelte/easing';
+	import { onMount } from 'svelte';
 
 	let open: boolean;
 	let innerWidth: number;
@@ -19,14 +20,48 @@
 	function hideNav() {
 		open = false;
 	}
+
+	let hamburgerColor = '#dadada';
+	let bulb = 'lightbulb';
+
+	onMount(() => {
+		const colorScheme = localStorage.getItem('colorScheme') || 'dark';
+
+		if (colorScheme === 'dark') {
+			document.documentElement.dataset.colorScheme = 'dark';
+		} else {
+			document.documentElement.dataset.colorScheme = 'light';
+			hamburgerColor = '#4a4a4a';
+			bulb = 'light_off';
+		}
+	});
+
+	function toggleThemeMode() {
+		const currentColorScheme = document.documentElement.dataset.colorScheme;
+		if (currentColorScheme === 'dark') {
+			document.documentElement.dataset.colorScheme = 'light';
+			hamburgerColor = '#4a4a4a';
+
+			bulb = 'light_off';
+			localStorage.setItem('colorScheme', 'light');
+		} else {
+			document.documentElement.dataset.colorScheme = 'dark';
+			hamburgerColor = '#dadada';
+			bulb = 'lightbulb';
+			localStorage.setItem('colorScheme', 'dark');
+		}
+	}
+
+	let scrollHeight: number;
+	$: showToggleThemeMode = scrollHeight == 0;
 </script>
 
-<svelte:window bind:innerWidth bind:innerHeight />
+<svelte:window bind:innerWidth bind:innerHeight bind:scrollY={scrollHeight} />
 
 {#if innerWidth <= 767}
 	<div class="nav-burger">
 		<i class="material-symbols-rounded">shield_person</i>
-		<Hamburger bind:open --color="#eaeaea" />
+		<Hamburger bind:open --color={hamburgerColor} />
 	</div>
 {/if}
 
@@ -38,6 +73,16 @@
 			{/each}
 		</nav>
 	</div>
+{/if}
+
+{#if showToggleThemeMode}
+	<button
+		transition:scale={{ duration: 200, easing: cubicInOut }}
+		on:click={toggleThemeMode}
+		class="toggle-mode"
+	>
+		<i class="material-symbols-rounded">{bulb}</i>
+	</button>
 {/if}
 
 <style>
@@ -72,6 +117,33 @@
 		font-size: 3em;
 	}
 
+	.toggle-mode {
+		position: fixed;
+		justify-content: center;
+		top: 0.2em;
+		right: 0.5em;
+		background-color: var(--primary-dark-color);
+		color: var(--text-color);
+		border: none;
+		border-radius: 5px;
+		font-size: 1.5em;
+		box-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: pointer;
+		z-index: 5;
+		transition: 0.2s;
+	}
+
+	.toggle-mode i {
+		cursor: pointer;
+	}
+
+	.toggle-mode:hover {
+		transform: scale(110%);
+	}
+
+	.toggle-mode:active {
+		background-color: var(--border-color);
+	}
 	a {
 		padding: 0.5em 0 0.5em 0;
 		text-align: center;
@@ -84,7 +156,6 @@
 		text-decoration: none;
 		transition: background-color 0.2s;
 	}
-
 	a:hover {
 		background-color: var(--primary-dark-color);
 		transition: background-color 0.2s;
@@ -97,10 +168,17 @@
 	.active,
 	.active:hover {
 		background-color: var(--accent-color);
+		color: var(--text-color-2);
 	}
 
 	i {
 		cursor: default;
+	}
+
+	@media screen and (max-width: 892px) {
+		.toggle-mode {
+			top: 2.5em;
+		}
 	}
 
 	@media screen and (max-width: 767px) {
@@ -114,11 +192,17 @@
 		.bar {
 			border-bottom: none;
 		}
-
 		a {
 			border-top: 1px solid var(--border-color);
 			border-right: none;
 			border-bottom: none;
+			padding: 0.5em 0 0.5em 0;
+		}
+
+		.toggle-mode {
+			top: 0.6em;
+			right: 2.5em;
+			font-size: 1.75em;
 		}
 	}
 </style>

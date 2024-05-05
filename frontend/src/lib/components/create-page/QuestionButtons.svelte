@@ -147,6 +147,7 @@
 		background-color: var(--accent-color);
 		border-bottom-right-radius: 0px;
 		border-bottom-left-radius: 0px;
+		color: var(--text-color-2);
 	}
 
 	.add-question.clicked:hover {

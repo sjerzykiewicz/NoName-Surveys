@@ -6,9 +6,24 @@
 	--shadow-color: #1a1a1a;
 	--border-color: #9a9a9a;
 	--text-color: #dadada;
+	--text-color-2: #dadada;
 	--text-dark-color: #5a5a5a;
 	--accent-color: #0075ff;
 	--accent-dark-color: #005cc8;
+	--error-color: #ff3333;
+}
+
+:root[data-color-scheme='light'] {
+	--primary-color: #dadada;
+	--primary-dark-color: #eaeaea;
+	--secondary-color: #fafafa;
+	--shadow-color: #dad8d8;
+	--border-color: #5a5a5a;
+	--text-color: #4a4a4a;
+	--text-color-2: #dadada;
+	--text-dark-color: #9a9a9a;
+	--accent-color: #3392ff;
+	--accent-dark-color: #226ec5;
 	--error-color: #ff3333;
 }
 
@@ -49,6 +64,7 @@ button:active {
 .save,
 .submit {
 	background-color: var(--accent-color);
+	color: var(--text-color-2);
 }
 
 .save:hover,

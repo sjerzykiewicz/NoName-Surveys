@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Hamburger } from 'svelte-hamburgers';
-	import { slide, fade } from 'svelte/transition';
+	import { slide, scale } from 'svelte/transition';
 	import { page } from '$app/stores';
 	import { cubicInOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
@@ -22,7 +22,7 @@
 	}
 
 	let hamburgerColor = '#dadada';
-	let mode = 'dark_mode';
+	let bulb = 'lightbulb';
 
 	onMount(() => {
 		const colorScheme = localStorage.getItem('colorScheme') || 'dark';
@@ -32,27 +32,31 @@
 		} else {
 			document.documentElement.dataset.colorScheme = 'light';
 			hamburgerColor = '#4a4a4a';
-			mode = 'light_mode';
+			bulb = 'light_off';
 		}
 	});
 
-	function toggleDarkMode() {
+	function toggleThemeMode() {
 		const currentColorScheme = document.documentElement.dataset.colorScheme;
 		if (currentColorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'light';
 			hamburgerColor = '#4a4a4a';
-			mode = 'light_mode';
+
+			bulb = 'light_off';
 			localStorage.setItem('colorScheme', 'light');
 		} else {
 			document.documentElement.dataset.colorScheme = 'dark';
 			hamburgerColor = '#dadada';
-			mode = 'dark_mode';
+			bulb = 'lightbulb';
 			localStorage.setItem('colorScheme', 'dark');
 		}
 	}
+
+	let scrollHeight: number;
+	$: showToggleThemeMode = scrollHeight == 0;
 </script>
 
-<svelte:window bind:innerWidth bind:innerHeight />
+<svelte:window bind:innerWidth bind:innerHeight bind:scrollY={scrollHeight} />
 
 {#if innerWidth <= 767}
 	<div class="nav-burger">
@@ -71,13 +75,15 @@
 	</div>
 {/if}
 
-{#key mode}
-	<button in:fade on:click={toggleDarkMode} class="toggle-mode">
-		<i class="material-symbols-rounded" class:active-mode={mode === 'light_mode'}>light_mode</i>
-		<i class="material-symbols-rounded">horizontal_rule</i>
-		<i class="material-symbols-rounded" class:active-mode={mode === 'dark_mode'}>dark_mode</i>
+{#if showToggleThemeMode}
+	<button
+		transition:scale={{ duration: 200, easing: cubicInOut }}
+		on:click={toggleThemeMode}
+		class="toggle-mode"
+	>
+		<i class="material-symbols-rounded">{bulb}</i>
 	</button>
-{/key}
+{/if}
 
 <style>
 	nav {
@@ -128,8 +134,15 @@
 	}
 
 	.toggle-mode i {
-		font-size: 0.8em;
 		cursor: pointer;
+	}
+
+	.toggle-mode:hover {
+		transform: scale(110%);
+	}
+
+	.toggle-mode:active {
+		background-color: var(--border-color);
 	}
 	a {
 		padding: 0.5em 0 0.5em 0;
@@ -162,12 +175,7 @@
 		cursor: default;
 	}
 
-	.active-mode {
-		color: var(--theme-accent-color);
-		font-size: 1.2em !important;
-	}
-
-	@media screen and (max-width: 978px) {
+	@media screen and (max-width: 892px) {
 		.toggle-mode {
 			top: 2.5em;
 		}

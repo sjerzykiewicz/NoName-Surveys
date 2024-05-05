@@ -11,7 +11,6 @@
 	--accent-color: #0075ff;
 	--accent-dark-color: #005cc8;
 	--error-color: #ff3333;
-	--theme-accent-color: #b2cdff;
 }
 
 :root[data-color-scheme='light'] {
@@ -26,7 +25,6 @@
 	--accent-color: #3392ff;
 	--accent-dark-color: #226ec5;
 	--error-color: #ff3333;
-	--theme-accent-color: #ff9c2b;
 }
 
 /* styles for create-page components */

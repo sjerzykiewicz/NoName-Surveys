@@ -20,6 +20,7 @@
 	import Text from '$lib/components/create-page/Text.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
 	import SurveyInfo from '$lib/entities/SurveyCreateInfo';
+	import { goto } from '$app/navigation';
 
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];
@@ -101,8 +102,7 @@
 			alert(response.statusText);
 		} else {
 			const code = (await response.json()).code;
-			// TODO - display code on page
-			alert(`Survey saved. Access code: ${code}`);
+			goto(`/codeview/${code}`, { replaceState: true, invalidateAll: true });
 		}
 	}
 </script>

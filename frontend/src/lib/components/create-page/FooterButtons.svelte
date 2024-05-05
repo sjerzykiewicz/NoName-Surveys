@@ -84,12 +84,15 @@
 	async function processSurvey() {
 		let parsedSurvey: Survey = new Survey($title, constructQuestionList());
 
+		// TODO - replace dummy values with proper data
 		let surveyDraft = {
-			creator: 1, // TODO - replace with actual user ID
-			survey_structure: parsedSurvey
+			creator: 1,
+			survey_structure: parsedSurvey,
+			deadline: '31-12-9999',
+			uses_cryptographic_module: false
 		};
 
-		const response = await fetch('http://localhost:8000/survey-drafts/create', {
+		const response = await fetch('http://localhost:8000/surveys/create', {
 			method: 'POST',
 			body: JSON.stringify(surveyDraft),
 			headers: {
@@ -101,7 +104,9 @@
 		if (!response.ok) {
 			alert('An error occured. Survey not saved.');
 		} else {
-			alert('Survey saved.');
+			const code = (await response.json()).survey_code;
+			// TODO - display access code on page
+			alert('Survey saved. Acces code: ' + code + '.');
 		}
 	}
 </script>

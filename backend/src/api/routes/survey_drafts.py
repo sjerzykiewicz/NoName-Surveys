@@ -45,7 +45,7 @@ async def create_survey_draft(
     session: Session = Depends(get_session),
 ):
     try:
-        survey_draft_create.survey_structure.validate_for_draft()
+        survey_draft_create.survey_structure.validate()
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     survey_draft_base = SurveyDraftBase(

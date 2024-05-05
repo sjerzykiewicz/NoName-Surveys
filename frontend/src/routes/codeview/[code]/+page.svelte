@@ -6,7 +6,7 @@
 
 <div class="content">
 	<h2>Survey created succesfully.</h2>
-	<p>You can acces it with the following code:</p>
+	<p>Access code:</p>
 	<h1>{data.code}</h1>
 </div>
 

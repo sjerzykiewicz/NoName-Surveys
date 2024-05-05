@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
-export const actions = {
+export const actions: Actions = {
 	default: async ({ request }) => {
 		const data = await request.formData();
 		const code = data.get('survey-code');
@@ -20,4 +20,4 @@ export const actions = {
 
 		return redirect(303, `/fill/${code}`);
 	}
-} satisfies Actions;
+};

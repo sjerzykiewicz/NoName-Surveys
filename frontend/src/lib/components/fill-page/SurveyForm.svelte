@@ -101,7 +101,9 @@
 			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
 		</div>
 		{#if unansweredRequired.includes(questionIndex)}
-			<p class="error">*An answer to question {questionIndex + 1} is required!</p>
+			<p class="error">
+				<i class="material-symbols-rounded">error</i>Please answer question {questionIndex + 1}.
+			</p>
 		{/if}
 	{/each}
 </Content>
@@ -117,7 +119,9 @@
 	}
 
 	.error {
-		padding-left: 2.3em;
+		padding-left: 2em;
+		margin-top: -1em;
+		font-size: 1em;
 	}
 
 	@media screen and (max-width: 767px) {

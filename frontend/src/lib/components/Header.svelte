@@ -7,8 +7,8 @@
 		padding: 0.75em;
 		border-bottom: 1px solid var(--border-color);
 		display: flex;
-		flex-flow: row;
+		flex-flow: column;
 		justify-content: flex-start;
-		align-items: center;
+		align-items: flex-start;
 	}
 </style>

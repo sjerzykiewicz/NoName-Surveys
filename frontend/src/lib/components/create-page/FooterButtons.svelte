@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
-	import { questions } from '$lib/stores/create-page';
+	import { questions, questionErrors } from '$lib/stores/create-page';
 	import Question from '$lib/entities/questions/Question';
 	import SingleQuestion from '$lib/entities/questions/Single';
 	import MultiQuestion from '$lib/entities/questions/Multi';
@@ -83,7 +83,37 @@
 		return questionList;
 	}
 
+	export let titleError: boolean = false;
+
 	async function processSurvey() {
+		titleError = false;
+		$questionErrors = [];
+
+		if ($title === null || $title === undefined || $title.length === 0) {
+			titleError = true;
+			return;
+		}
+
+		const numQuestions = $questions.length;
+
+		for (let i = 0; i < numQuestions; i++) {
+			let question = $questions[i].question;
+			if (question === null || question === undefined || question.length === 0) {
+				$questionErrors[i] = i;
+			} else {
+				for (let j in $questions[i].choices) {
+					let choice = $questions[i].choices[j];
+					if (choice === null || choice === undefined || choice.length === 0) {
+						$questionErrors[i] = i;
+					}
+				}
+			}
+		}
+
+		if ($questionErrors.length > 0) {
+			return;
+		}
+
 		let parsedSurvey: Survey = new Survey($title, constructQuestionList());
 
 		// TODO - replace dummy values with proper data
@@ -112,11 +142,22 @@
 <button title="Preview survey" class="footer-button">
 	<i class="material-symbols-rounded">search</i>Preview
 </button>
-<button title="Save survey" class="footer-button save" on:click={processSurvey}>
+<button
+	title="Save survey"
+	class="footer-button save"
+	disabled={$questions.length === 0}
+	on:click={processSurvey}
+>
 	<i class="material-symbols-rounded">save</i>Save
 </button>
 
 <style>
+	.save:disabled {
+		color: var(--text-dark-color);
+		background-color: var(--secondary-color);
+		cursor: not-allowed;
+	}
+
 	@media screen and (max-width: 767px) {
 		.footer-button {
 			font-size: 1em;

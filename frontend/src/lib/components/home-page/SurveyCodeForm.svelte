@@ -18,7 +18,7 @@
 </form>
 
 {#if form?.error}
-	<p class="error">{form.error}</p>
+	<p class="error"><i class="material-symbols-rounded">error</i>{form.error}</p>
 {/if}
 
 <style>
@@ -51,9 +51,7 @@
 	}
 
 	.error {
-		text-align: center;
-		font-size: 1.25em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		justify-content: center;
 	}
 
 	@media screen and (max-width: 767px) {

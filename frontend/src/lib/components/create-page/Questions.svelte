@@ -1,7 +1,7 @@
 <script lang="ts">
 	import QuestionButtons from '$lib/components/create-page/QuestionButtons.svelte';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
-	import { questions } from '$lib/stores/create-page';
+	import { questions, questionErrors } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 
@@ -23,11 +23,22 @@
 		<QuestionTitle {questionIndex} />
 		<svelte:component this={question.component} {questionIndex} />
 	</div>
+	{#if $questionErrors.includes(questionIndex)}
+		<p class="error">
+			<i class="material-symbols-rounded">error</i>Please fill out or remove question {questionIndex +
+				1}.
+		</p>
+	{/if}
 {/each}
 <QuestionButtons />
 
 <style>
 	.question {
 		margin-bottom: 1.875em;
+	}
+
+	.error {
+		padding-left: 2em;
+		margin: -1em 0em 1em 0em;
 	}
 </style>

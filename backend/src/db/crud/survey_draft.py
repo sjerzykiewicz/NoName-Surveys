@@ -1,5 +1,3 @@
-from sqlmodel import select
-
 from src.db.base import Session
 from src.db.models.survey_draft import SurveyDraft, SurveyDraftBase
 

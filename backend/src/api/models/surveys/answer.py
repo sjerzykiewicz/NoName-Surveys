@@ -13,8 +13,9 @@ from src.api.models.questions.slider_question import SliderQuestion
 from src.api.models.questions.text_question import TextQuestion
 
 
-class SurveyStructure(BaseModel):
-    title: str
+# "Base" because there will be another model for NoName module usage
+class SurveyAnswerBase(BaseModel):
+    survey_code: str
     questions: list[
         Union[
             BinaryQuestion,
@@ -31,21 +32,25 @@ class SurveyStructure(BaseModel):
         description="Questions list must have at least 1 element",
     )
 
-    @field_validator("title")
-    def validate_survey_title(cls, v, info: ValidationInfo) -> str:
-        if v is None or v == "":
-            raise ValueError("survey title must be provided")
+    @field_validator("survey_code")
+    def validate_survey_join_code(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("survey code must be provided")
+        if not re.match(r"^\d{6}$", v):
+            raise ValueError(
+                "survey code must be a string consisting of 6 digits"
+            )
         return v
 
-    def validate(self):
+    def validate(self) -> None:
         for question in self.questions:
-            question.validate_for_draft()
+            question.validate_for_answer()
 
     class Config:
         extra = "forbid"
 
 
-class SurveyStructureFetchInput(BaseModel):
+class SurveyAnswersFetchInput(BaseModel):
     survey_code: str
 
     @field_validator("survey_code")
@@ -62,39 +67,23 @@ class SurveyStructureFetchInput(BaseModel):
         extra = "forbid"
 
 
-class SurveyStructureFetchOutput(BaseModel):
-    survey_structure: SurveyStructure
-    uses_cryptographic_module: bool
-    survey_code: str
-
-    class Config:
-        extra = "forbid"
-
-
-class SurveyStructureGetForUserOutput(BaseModel):
-    survey_structure_id: int
-    uses_cryptographic_module: bool
-    survey_code: str
-
-    class Config:
-        extra = "forbid"
-
-
-class SurveyStructureCreateInput(BaseModel):
-    creator: int
-    survey_structure: SurveyStructure
-    deadline: str
-    uses_cryptographic_module: bool
-
-    class Config:
-        extra = "forbid"
-
-
-class SurveyStructureCreateOutput(BaseModel):
-    creator: int
-    survey_structure_id: int
-    uses_cryptographic_module: bool
-    survey_code: str
+class SurveyAnswersFetchOutput(BaseModel):
+    title: str
+    questions: list[
+        Union[
+            BinaryQuestion,
+            ListQuestion,
+            MultiQuestion,
+            RankQuestion,
+            ScaleQuestion,
+            SingleQuestion,
+            SliderQuestion,
+            TextQuestion,
+        ]
+    ] = Field(
+        min_length=1,
+        description="Questions list must have at least 1 element",
+    )
 
     class Config:
         extra = "forbid"

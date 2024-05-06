@@ -182,7 +182,7 @@
 			// TODO - display what exactly is wrong
 			alert(response.statusText);
 		} else {
-			return await goto(`/welcome`, { replaceState: true, invalidateAll: true });
+			return await goto(`/`, { replaceState: true, invalidateAll: true });
 		}
 	}
 </script>

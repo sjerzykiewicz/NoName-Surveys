@@ -10,7 +10,7 @@
 	import { RankQuestion } from '$lib/entities/questions/Rank';
 	import { TextQuestion } from '$lib/entities/questions/Text';
 	import { BinaryQuestion } from '$lib/entities/questions/Binary';
-	import Survey from '$lib/entities/Survey';
+	import Survey from '$lib/entities/surveys/Survey';
 	import Single from '$lib/components/create-page/Single.svelte';
 	import Multi from '$lib/components/create-page/Multi.svelte';
 	import Scale from '$lib/components/create-page/Scale.svelte';
@@ -19,7 +19,7 @@
 	import Rank from '$lib/components/create-page/Rank.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
-	import SurveyInfo from '$lib/entities/SurveyCreateInfo';
+	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import { goto } from '$app/navigation';
 
 	function constructQuestionList() {

@@ -14,11 +14,20 @@
 	import Binary from '$lib/components/fill-page/Binary.svelte';
 	import Rank from '$lib/components/fill-page/Rank.svelte';
 	import Footer from '$lib/components/Footer.svelte';
-	import type TextQuestion from '$lib/entities/questions/Text';
+	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
 	import { title } from '$lib/stores/fill-page';
-	import type SingleQuestion from '$lib/entities/questions/Single';
-	import type SliderQuestion from '$lib/entities/questions/Slider';
-	import type Survey from '$lib/entities/Survey';
+	import { SingleQuestion, SingleQuestionAnswered } from '$lib/entities/questions/Single';
+	import { SliderQuestionAnswered, type SliderQuestion } from '$lib/entities/questions/Slider';
+	import type Survey from '$lib/entities/surveys/Survey';
+	import type Question from '$lib/entities/questions/Question';
+	import { MultiQuestionAnswered } from '$lib/entities/questions/Multi';
+	import { BinaryQuestionAnswered } from '$lib/entities/questions/Binary';
+	import { RankQuestionAnswered } from '$lib/entities/questions/Rank';
+	import { ListQuestionAnswered } from '$lib/entities/questions/List';
+	import { ScaleQuestionAnswered } from '$lib/entities/questions/Scale';
+	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -64,9 +73,82 @@
 		$answers = [...$answers, { choices: [] }];
 	}
 
+	function constructAnswerList() {
+		let answerList: Array<Question> = [];
+		for (let i = 0; i < numQuestions; i++) {
+			const type = $questions[i].type;
+			switch (type) {
+				case 'single':
+					answerList[i] = new SingleQuestionAnswered(
+						$questions[i].required,
+						$questions[i].question,
+						$questions[i].choices,
+						$answers[i].choices[0]
+					);
+					break;
+				case 'multi':
+					answerList[i] = new MultiQuestionAnswered(
+						$questions[i].required,
+						$questions[i].question,
+						$questions[i].choices,
+						$answers[i].choices
+					);
+					break;
+				case 'binary':
+					answerList[i] = new BinaryQuestionAnswered(
+						$questions[i].required,
+						$questions[i].question,
+						$questions[i].choices,
+						$answers[i].choices[0]
+					);
+					break;
+				case 'rank':
+					answerList[i] = new RankQuestionAnswered(
+						$questions[i].required,
+						$questions[i].question,
+						$questions[i].choices,
+						$answers[i].choices
+					);
+					break;
+				case 'list':
+					answerList[i] = new ListQuestionAnswered(
+						$questions[i].required,
+						$questions[i].question,
+						$questions[i].choices,
+						$answers[i].choices[0]
+					);
+					break;
+				case 'scale':
+					answerList[i] = new ScaleQuestionAnswered(
+						$questions[i].required,
+						$questions[i].question,
+						parseFloat($answers[i].choices[0])
+					);
+					break;
+				case 'text':
+					answerList[i] = new TextQuestionAnswered(
+						$questions[i].required,
+						$questions[i].question,
+						$questions[i].choices[0],
+						$answers[i].choices[0]
+					);
+					break;
+				case 'slider':
+					answerList[i] = new SliderQuestionAnswered(
+						$questions[i].required,
+						$questions[i].question,
+						parseFloat($questions[i].choices[0]),
+						parseFloat($questions[i].choices[1]),
+						parseFloat($answers[i].choices[0])
+					);
+			}
+		}
+		return answerList;
+	}
+
 	let unansweredRequired: Array<number> = [];
 
-	function processForm() {
+	async function processForm() {
 		unansweredRequired = [];
 		for (let i = 0; i < numQuestions; i++) {
 			// TODO - remove console log
@@ -87,7 +169,23 @@
 		if (unansweredRequired.length > 0) {
 			return;
 		}
-		// TODO - further processing
+		const answerList: Array<Question> = constructAnswerList();
+		const answer = new SurveyAnswer($page.params.code, answerList);
+
+		const response = await fetch('/api/surveys/fill', {
+			method: 'POST',
+			body: JSON.stringify(answer),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			// TODO - display what exactly is wrong
+			alert(response.statusText);
+		} else {
+			return await goto(`/welcome`, { replaceState: true, invalidateAll: true });
+		}
 	}
 </script>
 

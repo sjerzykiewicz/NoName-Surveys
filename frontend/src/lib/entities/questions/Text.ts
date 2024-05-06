@@ -1,16 +1,17 @@
 import Question from '$lib/entities/questions/Question';
 
-export default class TextQuestion extends Question {
+export class TextQuestion extends Question {
 	details: string;
-	answer: string | undefined;
-	constructor(
-		required: boolean = false,
-		question: string = '',
-		details: string = '',
-		answer: string | undefined
-	) {
+	constructor(required: boolean, question: string, details: string) {
 		super(required, question, 'text');
 		this.details = details;
+	}
+}
+
+export class TextQuestionAnswered extends TextQuestion {
+	answer: string;
+	constructor(required: boolean, question: string, details: string, answer: string) {
+		super(required, question, details);
 		this.answer = answer;
 	}
 }

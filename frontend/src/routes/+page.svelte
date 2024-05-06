@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import WelcomingBanner from '$lib/components/home-page/WelcomingBanner.svelte';
+	import SurveyCodeForm from '$lib/components/home-page/SurveyCodeForm.svelte';
+	import LoginForm from '$lib/components/home-page/LoginForm.svelte';
 
-	export let data: PageData;
+	export let form;
 </script>
 
-{#if data.message}
-	<h1>{data.message}</h1>
-{:else}
-	<h1>Loading...</h1>
-{/if}
+<WelcomingBanner />
+<SurveyCodeForm {form} />
+<LoginForm />

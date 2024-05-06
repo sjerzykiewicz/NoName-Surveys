@@ -9,12 +9,23 @@
 	let innerWidth: number;
 	let innerHeight: number;
 
-	// TODO: move welcome page to root path
 	const navLinks = {
-		Home: '/welcome',
-		Create: '/create',
-		Summary: '/summary',
-		Account: '/account'
+		Home: {
+			href: '/',
+			disabled: false
+		},
+		Create: {
+			href: '/create',
+			disabled: false
+		},
+		Summary: {
+			href: '/summary',
+			disabled: true
+		},
+		Account: {
+			href: '/account',
+			disabled: true
+		}
 	};
 
 	function hideNav() {
@@ -68,8 +79,14 @@
 {#if open || innerWidth > 767}
 	<div class="bar">
 		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
-			{#each Object.entries(navLinks) as [title, href]}
-				<a {href} {title} class:active={$page.url.pathname === href} on:click={hideNav}>{title}</a>
+			{#each Object.entries(navLinks) as [title, data]}
+				<a
+					href={data.href}
+					{title}
+					class:active={$page.url.pathname === data.href}
+					on:click={hideNav}
+					class:disabled-link={data.disabled == true}>{title}</a
+				>
 			{/each}
 		</nav>
 	</div>
@@ -173,6 +190,11 @@
 
 	i {
 		cursor: default;
+	}
+
+	.disabled-link {
+		pointer-events: none;
+		color: var(--text-dark-color);
 	}
 
 	@media screen and (max-width: 892px) {

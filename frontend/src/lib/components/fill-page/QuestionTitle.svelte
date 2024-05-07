@@ -22,7 +22,6 @@
 		margin-bottom: 1em;
 		font-size: 1.25em;
 		font-weight: bold;
-		font-family: 'Jura';
 		color: var(--text-color);
 		cursor: default;
 	}

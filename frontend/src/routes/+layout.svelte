@@ -31,14 +31,14 @@
 	}
 
 	:root::-webkit-scrollbar-track {
-		background-color: var(--shadow-color);
+		background-color: var(--secondary-dark-color);
 	}
 
 	:root::-webkit-scrollbar-thumb {
 		background-color: var(--primary-color);
 		background-clip: padding-box;
 		border-radius: 5px;
-		border: 2px solid var(--shadow-color);
+		border: 2px solid var(--secondary-dark-color);
 	}
 
 	:root::-webkit-scrollbar-thumb:hover {

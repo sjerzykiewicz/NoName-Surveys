@@ -32,7 +32,6 @@
 		open = false;
 	}
 
-	let hamburgerColor = '#dadada';
 	let bulb = 'lightbulb';
 
 	onMount(() => {
@@ -42,22 +41,19 @@
 			document.documentElement.dataset.colorScheme = 'dark';
 		} else {
 			document.documentElement.dataset.colorScheme = 'light';
-			hamburgerColor = '#4a4a4a';
 			bulb = 'light_off';
 		}
 	});
 
 	function toggleThemeMode() {
 		const currentColorScheme = document.documentElement.dataset.colorScheme;
+
 		if (currentColorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'light';
-			hamburgerColor = '#4a4a4a';
-
 			bulb = 'light_off';
 			localStorage.setItem('colorScheme', 'light');
 		} else {
 			document.documentElement.dataset.colorScheme = 'dark';
-			hamburgerColor = '#dadada';
 			bulb = 'lightbulb';
 			localStorage.setItem('colorScheme', 'dark');
 		}
@@ -72,7 +68,7 @@
 {#if innerWidth <= 767}
 	<div class="nav-burger">
 		<i class="material-symbols-rounded">shield_person</i>
-		<Hamburger bind:open --color={hamburgerColor} />
+		<Hamburger bind:open --color="var(--text-color)" --box-shadow="none" />
 	</div>
 {/if}
 
@@ -110,12 +106,12 @@
 		min-width: 767px;
 		width: 50%;
 		justify-content: space-around;
-		background-color: var(--shadow-color);
+		background-color: var(--secondary-dark-color);
 		border-left: 1px solid var(--border-color);
 	}
 
 	.bar {
-		background-color: var(--shadow-color);
+		background-color: var(--secondary-dark-color);
 		border-bottom: 1px solid var(--border-color);
 		box-shadow: 0px 4px 4px var(--shadow-color);
 	}
@@ -127,31 +123,24 @@
 		align-items: center;
 		padding: 0.75em;
 		color: var(--text-color);
-		background-color: var(--shadow-color);
+		background-color: var(--secondary-dark-color);
 	}
 
 	.nav-burger i {
 		font-size: 3em;
+		cursor: default;
 	}
 
 	.toggle-mode {
 		position: fixed;
 		justify-content: center;
-		top: 0.2em;
+		top: 0.25em;
 		right: 0.5em;
 		background-color: var(--primary-dark-color);
-		color: var(--text-color);
 		border: none;
-		border-radius: 5px;
 		font-size: 1.5em;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		cursor: pointer;
 		z-index: 5;
 		transition: 0.2s;
-	}
-
-	.toggle-mode i {
-		cursor: pointer;
 	}
 
 	.toggle-mode:hover {
@@ -161,6 +150,7 @@
 	.toggle-mode:active {
 		background-color: var(--border-color);
 	}
+
 	a {
 		padding: 0.5em 0 0.5em 0;
 		text-align: center;
@@ -170,11 +160,10 @@
 		border-right: 1px solid var(--border-color);
 		width: 100%;
 		text-decoration: none;
-		transition: background-color 0.2s;
 	}
+
 	a:hover {
 		background-color: var(--primary-dark-color);
-		transition: background-color 0.2s;
 	}
 
 	a:active {
@@ -187,13 +176,10 @@
 		color: var(--text-color-2);
 	}
 
-	i {
-		cursor: default;
-	}
-
 	.disabled-link {
 		pointer-events: none;
 		color: var(--text-dark-color);
+		background-color: var(--secondary-color);
 	}
 
 	@media screen and (max-width: 892px) {
@@ -222,7 +208,7 @@
 
 		.toggle-mode {
 			top: 0.6em;
-			right: 2.5em;
+			right: 3em;
 			font-size: 1.75em;
 		}
 	}

@@ -1,16 +1,17 @@
 import Question from '$lib/entities/questions/Question';
 
-export default class MultiQuestion extends Question {
+export class MultiQuestion extends Question {
 	choices: Array<string>;
-	answer: string | undefined;
-	constructor(
-		required: boolean = false,
-		question: string = '',
-		choices: Array<string> = [],
-		answer: string | undefined
-	) {
+	constructor(required: boolean, question: string, choices: Array<string>) {
 		super(required, question, 'multi');
 		this.choices = choices;
+	}
+}
+
+export class MultiQuestionAnswered extends MultiQuestion {
+	answer: Array<string>;
+	constructor(required: boolean, question: string, choices: Array<string>, answer: Array<string>) {
+		super(required, question, choices);
 		this.answer = answer;
 	}
 }

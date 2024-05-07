@@ -66,7 +66,7 @@
 
 	.selected .choice-in,
 	.selected .choice-in:hover {
-		background-color: var(--shadow-color);
+		background-color: var(--secondary-dark-color);
 		border: 2px solid var(--accent-color);
 		color: var(--accent-color);
 		font-weight: bold;

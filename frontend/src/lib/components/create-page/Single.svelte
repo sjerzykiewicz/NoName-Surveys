@@ -28,7 +28,7 @@
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
 			<div class="radio">
-				<input type="radio" disabled name={$questions[questionIndex].question} />
+				<input type="radio" disabled name={questionIndex.toString()} />
 			</div>
 			<div title="Enter choice" class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}

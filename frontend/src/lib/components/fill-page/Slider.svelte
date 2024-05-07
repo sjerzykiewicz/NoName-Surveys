@@ -29,7 +29,7 @@
 			step="1"
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
-			name={$questions[questionIndex].question}
+			name={questionIndex.toString()}
 			bind:value
 			on:change={handleChange}
 		/>
@@ -43,7 +43,7 @@
 			autocomplete="off"
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
-			name={$questions[questionIndex].question}
+			name={questionIndex.toString()}
 			bind:value
 			on:change={handleChange}
 		/>

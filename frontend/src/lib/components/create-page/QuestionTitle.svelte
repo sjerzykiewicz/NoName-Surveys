@@ -2,38 +2,37 @@
 	import { questions } from '$lib/stores/create-page';
 
 	export let questionIndex: number;
-	questionIndex += 1;
 
 	function removeQuestion() {
-		$questions.splice(questionIndex - 1, 1);
+		$questions.splice(questionIndex, 1);
 		$questions = $questions;
 	}
 
 	function moveQuestionUp() {
-		const higher = $questions[questionIndex - 1];
-		$questions[questionIndex - 1] = $questions[questionIndex - 2];
-		$questions[questionIndex - 2] = higher;
+		const higher = $questions[questionIndex];
+		$questions[questionIndex] = $questions[questionIndex - 1];
+		$questions[questionIndex - 1] = higher;
 	}
 
 	function moveQuestionDown() {
-		const lower = $questions[questionIndex - 1];
-		$questions[questionIndex - 1] = $questions[questionIndex];
-		$questions[questionIndex] = lower;
+		const lower = $questions[questionIndex];
+		$questions[questionIndex] = $questions[questionIndex + 1];
+		$questions[questionIndex + 1] = lower;
 	}
 
 	function toggleRequirement() {
-		$questions[questionIndex - 1].required = !$questions[questionIndex - 1].required;
+		$questions[questionIndex].required = !$questions[questionIndex].required;
 		$questions = $questions;
 	}
 </script>
 
 <div class="question-area">
-	<div class="index">{questionIndex}.</div>
+	<div class="index">{questionIndex + 1}.</div>
 	<div class="arrows">
 		<button
 			title="Move question up"
 			class="up create-page-button"
-			disabled={questionIndex === 1}
+			disabled={questionIndex === 0}
 			on:click={moveQuestionUp}
 		>
 			<i class="material-symbols-rounded">arrow_drop_up</i>
@@ -41,7 +40,7 @@
 		<button
 			title="Move question down"
 			class="down create-page-button"
-			disabled={questionIndex === $questions.length}
+			disabled={questionIndex === $questions.length - 1}
 			on:click={moveQuestionDown}
 		>
 			<i class="material-symbols-rounded">arrow_drop_down</i>
@@ -51,14 +50,14 @@
 		title="Enter question"
 		class="question-input"
 		contenteditable
-		bind:textContent={$questions[questionIndex - 1].question}
+		bind:textContent={$questions[questionIndex].question}
 	>
-		{$questions[questionIndex - 1].question}
+		{$questions[questionIndex].question}
 	</div>
 	<button
-		title={$questions[questionIndex - 1].required ? 'Required' : 'Not required'}
+		title={$questions[questionIndex].required ? 'Required' : 'Not required'}
 		class="required-button create-page-button"
-		class:checked={$questions[questionIndex - 1].required}
+		class:checked={$questions[questionIndex].required}
 		on:click={toggleRequirement}
 	>
 		<i class="material-symbols-rounded">asterisk</i>

@@ -69,6 +69,10 @@
 		text-shadow: 0px 4px 4px var(--shadow-color);
 	}
 
+	i {
+		font-variation-settings: 'wght' 700;
+	}
+
 	@media screen and (max-width: 767px) {
 		input,
 		.error {

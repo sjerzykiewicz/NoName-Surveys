@@ -7,7 +7,7 @@
 <div class="choice-area">
 	{#each $questions[questionIndex].choices as choice}
 		<div class="choice">
-			<input type="radio" disabled name={$questions[questionIndex].question} />
+			<input type="radio" disabled name={questionIndex.toString()} />
 			<div class="number">
 				{choice}
 			</div>

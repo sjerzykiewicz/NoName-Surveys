@@ -25,7 +25,7 @@
 			<div class="radio">
 				<input
 					type="checkbox"
-					name={$questions[questionIndex].question}
+					name={questionIndex.toString()}
 					on:click={() => {
 						updateAnswers(choice);
 						selected[choiceIndex] = !selected[choiceIndex];

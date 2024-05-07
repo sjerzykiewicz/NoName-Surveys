@@ -9,7 +9,7 @@
 		<label title="Select your answer" class="choice">
 			<input
 				type="radio"
-				name={$questions[questionIndex].question}
+				name={questionIndex.toString()}
 				on:change={() => {
 					$answers[questionIndex].choices[0] = choice;
 				}}

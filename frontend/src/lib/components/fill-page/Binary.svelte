@@ -11,7 +11,7 @@
 	>
 		<input
 			type="radio"
-			name={$questions[questionIndex].question}
+			name={questionIndex.toString()}
 			on:change={() => {
 				$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
 			}}
@@ -27,7 +27,7 @@
 	>
 		<input
 			type="radio"
-			name={$questions[questionIndex].question}
+			name={questionIndex.toString()}
 			on:change={() => {
 				$answers[questionIndex].choices[0] = $questions[questionIndex].choices[1];
 			}}

@@ -100,13 +100,12 @@
 			let question = $questions[i].question;
 			if (question === null || question === undefined || question.length === 0) {
 				$questionErrors[i] = i;
-			} else {
-				for (let j in $questions[i].choices) {
-					let choice = $questions[i].choices[j];
-					if (choice === null || choice === undefined || choice.length === 0) {
-						$questionErrors[i] = i;
-					}
-				}
+			} else if (
+				$questions[i].choices.some(
+					(choice) => choice === null || choice === undefined || choice.length === 0
+				)
+			) {
+				$questionErrors[i] = i;
 			}
 		}
 

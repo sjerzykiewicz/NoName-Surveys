@@ -41,4 +41,10 @@
 		padding-left: 2em;
 		margin: -1em 0em 1em 0em;
 	}
+
+	@media screen and (max-width: 767px) {
+		.error {
+			font-size: 1em;
+		}
+	}
 </style>

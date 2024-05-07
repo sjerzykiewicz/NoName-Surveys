@@ -71,16 +71,16 @@
 		for (let i = 0; i < numQuestions; i++) {
 			// TODO - remove console log
 			console.log($answers[i].choices);
+
 			if ($questions[i].required) {
 				if ($answers[i].choices.length === 0) {
 					unansweredRequired[i] = i;
-				} else {
-					for (let j in $answers[i].choices) {
-						let choice = $answers[i].choices[j];
-						if (choice === null || choice === undefined || choice.length === 0) {
-							unansweredRequired[i] = i;
-						}
-					}
+				} else if (
+					$answers[i].choices.some(
+						(choice) => choice === null || choice === undefined || choice.length === 0
+					)
+				) {
+					unansweredRequired[i] = i;
 				}
 			}
 		}
@@ -120,7 +120,7 @@
 
 	.error {
 		padding-left: 2em;
-		margin-top: -1em;
+		margin: -1em 0em 0.5em 0em;
 		font-size: 1em;
 	}
 

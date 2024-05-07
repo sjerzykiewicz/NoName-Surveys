@@ -28,5 +28,9 @@
 		.title-input {
 			font-size: 1.25em;
 		}
+
+		.error {
+			font-size: 1em;
+		}
 	}
 </style>

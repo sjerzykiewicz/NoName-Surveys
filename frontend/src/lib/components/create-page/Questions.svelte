@@ -23,10 +23,9 @@
 		<QuestionTitle {questionIndex} />
 		<svelte:component this={question.component} {questionIndex} />
 	</div>
-	{#if $questionErrors.includes(questionIndex)}
+	{#if $questionErrors[questionIndex] !== ''}
 		<p class="error">
-			<i class="material-symbols-rounded">error</i>Please fill out or remove question {questionIndex +
-				1}.
+			<i class="material-symbols-rounded">error</i>{$questionErrors[questionIndex]}
 		</p>
 	{/if}
 {/each}

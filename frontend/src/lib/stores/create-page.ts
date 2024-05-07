@@ -12,4 +12,4 @@ export const questions: Writable<
 	}[]
 > = writable([]);
 
-export const questionErrors: Writable<Array<number>> = writable([]);
+export const questionErrors: Writable<Array<string>> = writable([]);

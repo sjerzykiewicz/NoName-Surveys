@@ -54,3 +54,39 @@ export const saveAnswer = async (answer: SurveyAnswer) => {
 
 	return (await response.json()).message;
 };
+
+export const getSurveysOfUser = async (id: number) => {
+	const response = await fetch(`${host}/surveys/all/${id}`, { method: 'GET' });
+	if (!response.ok) {
+		throw error(response.status, response.statusText);
+	}
+
+	const surveys = await response.json();
+	const entry_list: Array<{ title: string; uses_crypto: boolean; code: string }> = [];
+	for (let i = 0; i < surveys.length; i++) {
+		const { survey_structure } = await getSurveyByCode(surveys[i].survey_code);
+		const entry = {
+			title: survey_structure.title,
+			uses_crypto: surveys[i].uses_cryptographic_module,
+			code: surveys[i].survey_code
+		};
+		entry_list[i] = entry;
+	}
+
+	return entry_list;
+};
+
+export const getSurveyAnswers = async (survey_code: string) => {
+	const response = await fetch(`${host}/answers/fetch`, {
+		method: 'POST',
+		body: JSON.stringify({ survey_code }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	if (!response.ok) {
+		throw error(response.status, response.statusText);
+	}
+
+	return await response.json();
+};

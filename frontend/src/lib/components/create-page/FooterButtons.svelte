@@ -114,7 +114,7 @@
 			const code = (await response.json()).code;
 			$title = '';
 			$questions = [];
-			return await goto(`/codeview/${code}`, { replaceState: true, invalidateAll: true });
+			return await goto(`/${code}/view`, { replaceState: true, invalidateAll: true });
 		}
 	}
 </script>

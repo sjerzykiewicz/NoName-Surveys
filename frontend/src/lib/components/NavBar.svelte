@@ -19,8 +19,8 @@
 			disabled: false
 		},
 		Summary: {
-			href: '/summary',
-			disabled: true
+			href: '/summary/1', // TODO - user id
+			disabled: false
 		},
 		Account: {
 			href: '/account',

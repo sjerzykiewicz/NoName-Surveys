@@ -18,6 +18,6 @@ export const actions: Actions = {
 			});
 		}
 
-		return redirect(303, `/fill/${code}`);
+		return redirect(303, `/${code}/fill`);
 	}
 };

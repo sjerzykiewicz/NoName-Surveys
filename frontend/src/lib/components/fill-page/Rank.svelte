@@ -103,7 +103,6 @@
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1em;
-		font-family: 'Jura';
 		color: var(--text-color);
 		cursor: pointer;
 		transition: background-color 0.2s;

@@ -165,7 +165,6 @@
 		padding: 0.5em 0 0.5em 0;
 		text-align: center;
 		color: var(--text-color);
-		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 1.5em;
 		border-right: 1px solid var(--border-color);

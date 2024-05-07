@@ -27,6 +27,28 @@
 	--error-color: #ff3333;
 }
 
+* {
+	font-family: 'Jura';
+}
+
+html,
+body {
+	display: contents;
+	height: 100%;
+	background: linear-gradient(0deg, var(--shadow-color) 0%, var(--secondary-color) 100%);
+	background-attachment: fixed;
+	margin: 0px;
+	overflow-y: auto;
+}
+
+i {
+	font-variation-settings:
+		'FILL' 0,
+		'wght' 400,
+		'GRAD' 0,
+		'opsz' 40;
+}
+
 /* styles for create-page components */
 button {
 	display: flex;
@@ -37,7 +59,6 @@ button {
 	border-radius: 5px;
 	box-shadow: 0px 4px 4px var(--shadow-color);
 	font-size: 1.25em;
-	font-family: 'Jura';
 	color: var(--text-color);
 	cursor: pointer;
 	transition: background-color 0.2s;
@@ -94,7 +115,6 @@ button:active {
 .choice-area {
 	font-size: 1em;
 	font-weight: normal;
-	font-family: 'Jura';
 	color: var(--text-color);
 	width: 86%;
 }
@@ -127,7 +147,6 @@ div[contenteditable] {
 	border-radius: 5px;
 	box-shadow: 0px 4px 4px var(--shadow-color);
 	font-weight: normal;
-	font-family: 'Jura';
 	color: var(--text-color);
 	cursor: text;
 	overflow: hidden;
@@ -213,6 +232,5 @@ input[type='radio']:checked {
 
 .error {
 	color: var(--error-color);
-	font-family: 'Jura';
 	font-weight: bold;
 }

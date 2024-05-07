@@ -34,7 +34,6 @@
 		font-size: 1.25em;
 		cursor: pointer;
 		font-weight: normal;
-		font-family: 'Jura';
 		color: var(--text-color);
 		max-width: 100%;
 		transition: 0.2s;

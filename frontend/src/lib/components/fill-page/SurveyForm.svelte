@@ -219,6 +219,10 @@
 		font-size: 1em;
 	}
 
+	i {
+		font-variation-settings: 'wght' 700;
+	}
+
 	@media screen and (max-width: 767px) {
 		.footer-button {
 			font-size: 1em;

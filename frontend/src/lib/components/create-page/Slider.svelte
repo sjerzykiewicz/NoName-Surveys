@@ -12,7 +12,7 @@
 			step="1"
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
-			name={$questions[questionIndex].question}
+			name={questionIndex.toString()}
 			disabled
 		/>
 	</div>
@@ -21,7 +21,7 @@
 			title="Enter minimum value"
 			class="limit-input"
 			type="number"
-			name={$questions[questionIndex].question}
+			name={questionIndex.toString()}
 			autocomplete="off"
 			placeholder="Enter min..."
 			bind:value={$questions[questionIndex].choices[0]}
@@ -30,7 +30,7 @@
 			title="Enter maximum value"
 			class="limit-input"
 			type="number"
-			name={$questions[questionIndex].question}
+			name={questionIndex.toString()}
 			autocomplete="off"
 			placeholder="Enter max..."
 			bind:value={$questions[questionIndex].choices[1]}

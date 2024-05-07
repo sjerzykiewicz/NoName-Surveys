@@ -9,7 +9,7 @@
 <div class="choice-area">
 	<select
 		title="Select your answer"
-		name={$questions[questionIndex].question}
+		name={questionIndex.toString()}
 		bind:value={$answers[questionIndex].choices[0]}
 	>
 		{#each $questions[questionIndex].choices as choice}

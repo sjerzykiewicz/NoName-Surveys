@@ -65,6 +65,10 @@
 		justify-content: center;
 	}
 
+	i {
+		font-variation-settings: 'wght' 700;
+	}
+
 	@media screen and (max-width: 767px) {
 		input,
 		.error {

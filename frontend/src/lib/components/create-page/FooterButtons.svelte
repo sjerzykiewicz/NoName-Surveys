@@ -68,7 +68,6 @@
 
 	async function processSurvey() {
 		titleError = false;
-		$questionErrors = [];
 
 		if ($title === null || $title === undefined || $title.length === 0) {
 			titleError = true;
@@ -80,17 +79,21 @@
 		for (let i = 0; i < numQuestions; i++) {
 			let question = $questions[i].question;
 			if (question === null || question === undefined || question.length === 0) {
-				$questionErrors[i] = i;
+				$questionErrors[i] = 'Please fill out or remove question ' + (i + 1) + '.';
 			} else if (
 				$questions[i].choices.some(
 					(choice) => choice === null || choice === undefined || choice.length === 0
 				)
 			) {
-				$questionErrors[i] = i;
+				$questionErrors[i] = 'Please fill out or remove question ' + (i + 1) + '.';
+			} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
+				$questionErrors[i] = 'Please remove duplicate choices from question ' + (i + 1) + '.';
+			} else {
+				$questionErrors[i] = '';
 			}
 		}
 
-		if ($questionErrors.length > 0) {
+		if (!$questionErrors.every((error) => error === '')) {
 			return;
 		}
 

@@ -28,7 +28,7 @@
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
 			<div class="checkbox">
-				<input type="checkbox" disabled name={$questions[questionIndex].question} />
+				<input type="checkbox" disabled name={questionIndex.toString()} />
 			</div>
 			<div title="Enter choice" class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}

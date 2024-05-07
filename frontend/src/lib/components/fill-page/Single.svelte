@@ -2,21 +2,28 @@
 	import { questions, answers } from '$lib/stores/fill-page';
 
 	export let questionIndex: number;
+
+	let checked: number;
+
+	function updateAnswers(choice: string, choiceIndex: number) {
+		$answers[questionIndex].choices[0] = choice;
+		checked = choiceIndex;
+	}
 </script>
 
 <div class="choice-area">
-	{#each $questions[questionIndex].choices as choice}
+	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<label title="Select your answer" class="choice">
 			<div class="radio">
 				<input
 					type="radio"
-					name={$questions[questionIndex].question}
+					name={questionIndex.toString()}
 					on:change={() => {
-						$answers[questionIndex].choices[0] = choice;
+						updateAnswers(choice, choiceIndex);
 					}}
 				/>
 			</div>
-			<div class="choice-in" class:selected={$answers[questionIndex].choices[0] === choice}>
+			<div class="choice-in" class:selected={checked === choiceIndex}>
 				{choice}
 			</div>
 		</label>

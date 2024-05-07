@@ -68,7 +68,7 @@
 {#if innerWidth <= 767}
 	<div class="nav-burger">
 		<i class="material-symbols-rounded">shield_person</i>
-		<Hamburger bind:open --color="var(--text-color)" --box-shadow="none" />
+		<Hamburger bind:open --color="var(--text-color)" />
 	</div>
 {/if}
 

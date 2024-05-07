@@ -8,13 +8,13 @@ export const actions: Actions = {
 		if (code === null || code === '') {
 			return fail(422, {
 				description: code,
-				error: 'Please enter code'
+				error: 'Please enter code.'
 			});
 		}
 		if (!/^[0-9]{6}$/.test(code.toString())) {
 			return fail(422, {
 				description: code,
-				error: 'Code must be 6 characters long and contain only digits'
+				error: 'Code must be 6 characters long and contain only digits.'
 			});
 		}
 

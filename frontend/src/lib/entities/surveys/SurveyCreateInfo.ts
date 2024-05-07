@@ -1,4 +1,4 @@
-import type Survey from '$lib/entities/Survey';
+import type Survey from '$lib/entities/surveys/Survey';
 
 export default class SurveyCreateInfo {
 	creator: number;

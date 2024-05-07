@@ -1,9 +1,15 @@
 import Question from '$lib/entities/questions/Question';
 
-export default class ScaleQuestion extends Question {
-	answer: number | undefined;
-	constructor(required: boolean = false, question: string = '', answer: number | undefined) {
+export class ScaleQuestion extends Question {
+	constructor(required: boolean, question: string) {
 		super(required, question, 'scale');
+	}
+}
+
+export class ScaleQuestionAnswered extends ScaleQuestion {
+	answer: number;
+	constructor(required: boolean, question: string, answer: number) {
+		super(required, question);
 		this.answer = answer;
 	}
 }

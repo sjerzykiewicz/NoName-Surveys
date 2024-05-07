@@ -5,5 +5,5 @@
 </script>
 
 {#each data.survey_list as entry}
-	<h1><a href="/{entry.survey_code}/summary">{entry.survey_code}</a></h1>
+	<h1><a href="/{entry.code}/summary">{entry.title}</a></h1>
 {/each}

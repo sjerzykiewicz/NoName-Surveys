@@ -61,7 +61,19 @@ export const getSurveysOfUser = async (id: number) => {
 		throw error(response.status, response.statusText);
 	}
 
-	return await response.json();
+	const surveys = await response.json();
+	const entry_list: Array<{ title: string; uses_crypto: boolean; code: string }> = [];
+	for (let i = 0; i < surveys.length; i++) {
+		const { survey_structure } = await getSurveyByCode(surveys[i].survey_code);
+		const entry = {
+			title: survey_structure.title,
+			uses_crypto: surveys[i].uses_cryptographic_module,
+			code: surveys[i].survey_code
+		};
+		entry_list[i] = entry;
+	}
+
+	return entry_list;
 };
 
 export const getSurveyAnswers = async (survey_code: string) => {

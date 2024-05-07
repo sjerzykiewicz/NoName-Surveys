@@ -132,7 +132,6 @@
 		text-shadow: 0px 4px 4px var(--shadow-color);
 		font-size: 1.25em;
 		font-weight: bold;
-		font-family: 'Jura';
 		color: var(--text-color);
 		cursor: default;
 		margin-left: 2em;
@@ -146,7 +145,6 @@
 		box-shadow: 0px 4px 4px var(--shadow-color);
 		font-size: 1.25em;
 		font-weight: normal;
-		font-family: 'Jura';
 		color: var(--text-color);
 		cursor: text;
 		overflow: hidden;

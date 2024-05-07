@@ -64,7 +64,8 @@
 	}
 
 	.dropdown-top:disabled {
-		color: var(--text-color);
+		background-color: var(--secondary-color);
+		color: var(--text-dark-color);
 		opacity: 1;
 	}
 

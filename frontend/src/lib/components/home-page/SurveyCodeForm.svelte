@@ -35,7 +35,6 @@
 	form {
 		text-align: center;
 		color: var(--text-color);
-		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 2em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
@@ -49,7 +48,6 @@
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color);
 		color: var(--text-color);
-		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 1.25em;
 		width: 4.25em;

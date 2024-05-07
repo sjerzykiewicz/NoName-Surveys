@@ -99,7 +99,6 @@
 		box-shadow: 0px 4px 4px var(--shadow-color);
 		font-size: 1.25em;
 		font-weight: normal;
-		font-family: 'Jura';
 		color: var(--text-color);
 		text-align: center;
 		cursor: text;

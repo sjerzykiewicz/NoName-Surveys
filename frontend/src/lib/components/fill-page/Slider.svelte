@@ -78,7 +78,6 @@
 		opacity: 1;
 		margin-left: 2.75em;
 		cursor: pointer;
-		transition: background-color 0.2s;
 	}
 
 	.range:hover {
@@ -92,7 +91,6 @@
 		border-radius: 1.5em;
 		background: var(--accent-color);
 		cursor: grab;
-		transition: background-color 0.2s;
 	}
 
 	.range::-moz-range-thumb {
@@ -102,7 +100,6 @@
 		border-radius: 1.5em;
 		background: var(--accent-color);
 		cursor: grab;
-		transition: background-color 0.2s;
 	}
 
 	.range::-webkit-slider-thumb:hover {
@@ -138,7 +135,7 @@
 	}
 
 	.current-value {
-		background-color: var(--shadow-color);
+		background-color: var(--secondary-dark-color);
 		padding: 0.25em;
 		border: 1px solid var(--border-color);
 		border-radius: 5px;

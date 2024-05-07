@@ -3,10 +3,11 @@
 	--primary-color: #4a4a4a;
 	--primary-dark-color: #3a3a3a;
 	--secondary-color: #2a2a2a;
+	--secondary-dark-color: #1a1a1a;
 	--shadow-color: #1a1a1a;
 	--border-color: #9a9a9a;
-	--text-color: #dadada;
-	--text-color-2: #dadada;
+	--text-color: #cacaca;
+	--text-color-2: #eaeaea;
 	--text-dark-color: #5a5a5a;
 	--accent-color: #0075ff;
 	--accent-dark-color: #005cc8;
@@ -15,30 +16,33 @@
 
 :root[data-color-scheme='light'] {
 	--primary-color: #dadada;
-	--primary-dark-color: #eaeaea;
-	--secondary-color: #fafafa;
-	--shadow-color: #dad8d8;
+	--primary-dark-color: #cacaca;
+	--secondary-color: #eaeaea;
+	--secondary-dark-color: #fafafa;
+	--shadow-color: #cacaca;
 	--border-color: #5a5a5a;
-	--text-color: #4a4a4a;
-	--text-color-2: #dadada;
+	--text-color: #1a1a1a;
+	--text-color-2: #eaeaea;
 	--text-dark-color: #9a9a9a;
-	--accent-color: #3392ff;
-	--accent-dark-color: #226ec5;
+	--accent-color: #0075ff;
+	--accent-dark-color: #005cc8;
 	--error-color: #ff3333;
 }
 
 * {
 	font-family: 'Jura';
+	transition:
+		background-color 0.2s,
+		color 0.2s;
 }
 
 html,
 body {
 	display: contents;
 	height: 100%;
-	background: linear-gradient(0deg, var(--shadow-color) 0%, var(--secondary-color) 100%);
+	background: linear-gradient(0deg, var(--secondary-dark-color) 0%, var(--secondary-color) 100%);
 	background-attachment: fixed;
 	margin: 0px;
-	overflow-y: auto;
 }
 
 i {
@@ -47,6 +51,10 @@ i {
 		'wght' 400,
 		'GRAD' 0,
 		'opsz' 40;
+}
+
+.hamburger {
+	box-shadow: none;
 }
 
 /* styles for create-page components */
@@ -61,7 +69,6 @@ button {
 	font-size: 1.25em;
 	color: var(--text-color);
 	cursor: pointer;
-	transition: background-color 0.2s;
 }
 
 button:hover {
@@ -141,7 +148,7 @@ button:active {
 
 div[contenteditable] {
 	flex: 1;
-	background-color: var(--shadow-color);
+	background-color: var(--secondary-dark-color);
 	padding: 0.25em;
 	border: 1px solid var(--border-color);
 	border-radius: 5px;
@@ -203,12 +210,11 @@ div[contenteditable]:empty::before {
 	cursor: pointer;
 	overflow: hidden;
 	margin-right: 0.5em;
-	transition: background-color 0.2s;
 }
 
 .choice-in.selected,
 .choice-in.selected:hover {
-	background-color: var(--shadow-color);
+	background-color: var(--secondary-dark-color);
 	border: 2px solid var(--accent-color);
 	color: var(--accent-color);
 	font-weight: bold;

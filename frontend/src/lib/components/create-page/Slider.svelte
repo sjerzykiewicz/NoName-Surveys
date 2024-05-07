@@ -92,7 +92,7 @@
 	}
 
 	.limit-input {
-		background-color: var(--shadow-color);
+		background-color: var(--secondary-dark-color);
 		padding: 0.25em;
 		border: 1px solid var(--border-color);
 		border-radius: 5px;

@@ -140,6 +140,7 @@
 	.add-question {
 		transition:
 			background-color 0.2s,
+			color 0.2s,
 			border-radius 0.2s;
 	}
 

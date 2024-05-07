@@ -43,7 +43,7 @@
 	input {
 		text-align: center;
 		padding: 0.25em;
-		background-color: var(--shadow-color);
+		background-color: var(--secondary-dark-color);
 		border: 1px solid var(--border-color);
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color);

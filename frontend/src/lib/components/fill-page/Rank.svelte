@@ -73,47 +73,12 @@
 		font-size: 1.25em;
 	}
 
-	.up {
-		border-radius: 5px 5px 0px 0px;
-		border-bottom: 1px solid var(--border-color);
-		padding: 0em 0.25em 0em 0.25em;
-	}
-
-	.up:disabled {
-		background-color: var(--secondary-color);
-		cursor: not-allowed;
-	}
-
-	.down {
-		border-radius: 0px 0px 5px 5px;
-		border-top: 0px;
-		padding: 0em 0.25em 0em 0.25em;
-	}
-
-	.down:disabled {
-		background-color: var(--secondary-color);
-		cursor: not-allowed;
+	.arrows i {
+		font-variation-settings: 'wght' 700;
 	}
 
 	button {
-		display: flex;
-		background-color: var(--primary-color);
-		padding: 0.25em;
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1em;
-		color: var(--text-color);
-		cursor: pointer;
-		transition: background-color 0.2s;
-	}
-
-	button:hover {
-		background-color: var(--secondary-color);
-	}
-
-	button:active {
-		background-color: var(--border-color);
 	}
 
 	@media screen and (max-width: 767px) {

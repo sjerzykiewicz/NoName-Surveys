@@ -2,6 +2,7 @@ import { writable, type Writable } from 'svelte/store';
 import { type ComponentType } from 'svelte';
 
 export const title: Writable<string> = writable('');
+
 export const questions: Writable<
 	{
 		component: ComponentType;
@@ -10,3 +11,5 @@ export const questions: Writable<
 		choices: Array<string>;
 	}[]
 > = writable([]);
+
+export const questionErrors: Writable<Array<number>> = writable([]);

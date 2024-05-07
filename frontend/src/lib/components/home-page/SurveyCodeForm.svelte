@@ -23,7 +23,7 @@
 </form>
 
 {#if form?.error}
-	<p class="error">{form.error}</p>
+	<p class="error"><i class="material-symbols-rounded">error</i>{form.error}</p>
 {/if}
 
 <style>
@@ -35,7 +35,6 @@
 	form {
 		text-align: center;
 		color: var(--text-color);
-		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 2em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
@@ -44,12 +43,11 @@
 	input {
 		text-align: center;
 		padding: 0.25em;
-		background-color: var(--shadow-color);
+		background-color: var(--secondary-dark-color);
 		border: 1px solid var(--border-color);
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color);
 		color: var(--text-color);
-		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 1.25em;
 		width: 4.25em;
@@ -64,9 +62,7 @@
 	}
 
 	.error {
-		text-align: center;
-		font-size: 1.25em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		justify-content: center;
 	}
 
 	i {

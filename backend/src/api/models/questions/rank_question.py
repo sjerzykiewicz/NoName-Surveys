@@ -12,6 +12,12 @@ class RankQuestion(Question):
     )
     answer: Optional[list[str]] = None
 
+    @field_validator("choices")
+    def validate_choices(cls, v, info: ValidationInfo) -> list[str]:
+        if len(set(v)) != len(v):
+            raise ValueError("all choices must be unique")
+        return v
+
     @field_validator("answer")
     def validate_answer(cls, v, info: ValidationInfo) -> Optional[list[str]]:
         if v is None:

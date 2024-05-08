@@ -203,7 +203,7 @@
 	{/each}
 </Content>
 <Footer>
-	<button title="Submit survey" class="footer-button submit" on:click={processForm}>
+	<button title="Submit survey" class="footer-button save" on:click={processForm}>
 		<i class="material-symbols-rounded">done</i>Submit
 	</button>
 </Footer>

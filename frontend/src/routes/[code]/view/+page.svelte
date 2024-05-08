@@ -6,8 +6,12 @@
 	let isCopied: boolean = false;
 
 	function copyCode(): void {
-		navigator.clipboard.writeText(data.code);
-		isCopied = true;
+		if (window.isSecureContext) {
+			navigator.clipboard.writeText(data.code);
+			isCopied = true;
+		} else {
+			alert('The code could not be copied due to an insecure connection.');
+		}
 	}
 </script>
 

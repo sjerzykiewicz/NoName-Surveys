@@ -27,13 +27,15 @@
 	.text-area {
 		background-color: var(--secondary-dark-color);
 		padding: 0.25em;
-		border: 1px solid var(--border-color);
+		border: 2px solid var(--accent-color);
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color);
 		font-size: 1.25em;
-		font-weight: normal;
-		color: var(--text-color);
-		cursor: text;
+		font-weight: bold;
+		color: var(--accent-color);
+		width: fit-content;
+		max-width: 100%;
+		cursor: default;
 		overflow: hidden;
 		overflow-wrap: break-word;
 		margin-right: 0.5em;

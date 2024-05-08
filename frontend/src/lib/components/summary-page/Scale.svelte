@@ -5,7 +5,9 @@
 <div class="choice-area">
 	{#each [1, 2, 3, 4, 5] as choice}
 		<label title={choice === data.answer ? 'Answer' : ''} class="choice">
-			<input type="radio" checked={choice === data.answer} disabled />
+			<div class="scale" class:selected={choice === data.answer}>
+				<input type="radio" checked={choice === data.answer} disabled />
+			</div>
 			<div class="number" class:selected={choice === data.answer}>
 				{choice}
 			</div>
@@ -27,7 +29,7 @@
 		flex-flow: column;
 		padding: 0.5em;
 		margin-bottom: 0em;
-		cursor: pointer;
+		cursor: default;
 	}
 
 	.number {
@@ -41,8 +43,19 @@
 		color: var(--accent-color);
 	}
 
+	.scale.selected {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 11px;
+		width: 11px;
+		border: 4px solid var(--accent-color);
+		border-radius: 50%;
+	}
+
 	input[type='radio'] {
 		margin: 0em;
+		cursor: default;
 	}
 
 	@media screen and (max-width: 767px) {

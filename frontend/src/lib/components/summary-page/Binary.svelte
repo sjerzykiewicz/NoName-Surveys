@@ -42,7 +42,7 @@
 		text-align: center;
 		margin-bottom: 0em;
 		padding: 0em 0.5em;
-		cursor: pointer;
+		cursor: default;
 	}
 
 	.choice-in {
@@ -50,6 +50,11 @@
 		width: fit-content;
 		max-width: 11em;
 		overflow-wrap: break-word;
+		cursor: default;
+	}
+
+	.choice-in:hover {
+		background-color: var(--primary-color);
 	}
 
 	.selected .choice-in,
@@ -67,6 +72,7 @@
 		margin: 0em;
 		height: 1.5em;
 		width: 1.5em;
+		cursor: default;
 	}
 
 	i {

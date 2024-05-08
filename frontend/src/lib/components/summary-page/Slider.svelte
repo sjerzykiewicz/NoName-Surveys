@@ -16,7 +16,7 @@
 	</div>
 	<div class="limits">
 		<div title="Minimum value" class="limit">{data.min_value}</div>
-		<input title="Answer" class="current-value" type="number" value={data.answer} disabled />
+		<div title="Answer" class="current-value">{data.answer}</div>
 		<div title="Maximum value" class="limit">{data.max_value}</div>
 	</div>
 </div>
@@ -43,11 +43,11 @@
 		width: 100%;
 		height: 0.5em;
 		border-radius: 0.5em;
-		background: var(--text-color);
+		background: var(--border-color);
 		outline: none;
 		opacity: 1;
 		margin-left: 2.75em;
-		cursor: pointer;
+		cursor: default;
 	}
 
 	.range:hover {
@@ -59,8 +59,8 @@
 		width: 1.5em;
 		height: 1.5em;
 		border-radius: 1.5em;
-		background: var(--accent-color);
-		cursor: grab;
+		background: var(--text-color);
+		cursor: default;
 	}
 
 	.range::-moz-range-thumb {
@@ -68,24 +68,24 @@
 		width: 1.5em;
 		height: 1.5em;
 		border-radius: 1.5em;
-		background: var(--accent-color);
-		cursor: grab;
+		background: var(--text-color);
+		cursor: default;
 	}
 
 	.range::-webkit-slider-thumb:hover {
-		background: var(--accent-dark-color);
+		background: var(--text-color);
 	}
 
 	.range::-moz-range-thumb:hover {
-		background: var(--accent-dark-color);
+		background: var(--text-color);
 	}
 
 	.range::-webkit-slider-thumb:active {
-		cursor: grabbing;
+		cursor: default;
 	}
 
 	.range::-moz-range-thumb:active {
-		cursor: grabbing;
+		cursor: default;
 	}
 
 	.limits {
@@ -107,15 +107,15 @@
 	.current-value {
 		background-color: var(--secondary-dark-color);
 		padding: 0.25em;
-		border: 1px solid var(--border-color);
+		border: 2px solid var(--accent-color);
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color);
 		font-size: 1.25em;
-		font-weight: normal;
-		color: var(--text-color);
-		cursor: text;
+		font-weight: bold;
+		color: var(--accent-color);
+		cursor: default;
 		overflow: hidden;
-		width: 3.5em;
+		width: fit-content;
 		margin-left: 2em;
 		text-align: center;
 	}

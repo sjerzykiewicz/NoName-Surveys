@@ -19,17 +19,22 @@
 	}
 
 	.choice-in {
+		border: 2px solid var(--accent-color);
+		background-color: var(--secondary-dark-color);
+		font-weight: bold;
+		color: var(--accent-color);
 		cursor: default;
 	}
 
 	.choice-in:hover {
-		background-color: var(--primary-color);
+		background-color: var(--secondary-dark-color);
 	}
 
 	.rank {
 		margin-right: 0.25em;
 		font-size: 1.25em;
-		color: var(--text-color);
+		font-weight: bold;
+		color: var(--accent-color);
 		cursor: default;
 		width: 1.5em;
 		text-align: right;

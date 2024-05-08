@@ -11,6 +11,12 @@ class SliderQuestion(Question):
     max_value: float
     answer: Optional[float] = None
 
+    @field_validator("max_value")
+    def validate_choices(cls, v, info: ValidationInfo) -> float:
+        if v <= info.data["min_value"]:
+            raise ValueError("max_value must be greater than min_value")
+        return v
+
     @field_validator("answer")
     def validate_answer(cls, v, info: ValidationInfo) -> Optional[float]:
         if v is None:

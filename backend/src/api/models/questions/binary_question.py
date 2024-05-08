@@ -12,6 +12,12 @@ class BinaryQuestion(Question):
     )
     answer: Optional[str] = None
 
+    @field_validator("choices")
+    def validate_choices(cls, v, info: ValidationInfo) -> list[str]:
+        if v[0] == v[1]:
+            raise ValueError("choices must be unique")
+        return v
+
     @field_validator("answer")
     def validate_answer(cls, v, info: ValidationInfo) -> Optional[str]:
         if v is None:

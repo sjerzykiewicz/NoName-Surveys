@@ -1,27 +1,36 @@
 <script lang="ts">
+	import Header from '$lib/components/Header.svelte';
+	import Content from '$lib/components/Content.svelte';
 	import { page } from '$app/stores';
 	import type { PageServerData } from './$types';
 
 	export let data: PageServerData;
-	console.log(data);
+
+	let numbers: Array<number> = [];
+
+	for (let i = 0; i < data.answers.length; i++) {
+		numbers.push(i);
+	}
 </script>
 
-{#each data.answers as answer, i}
-	<div class="entry">
-		<div class="entry-title">
-			<a href="{$page.url.pathname}/{i}">{i + 1}. answer to survey: '{answer.title}'</a>
+<Header>
+	<div class="title">{data.survey.survey_structure.title}</div>
+</Header>
+
+<Content>
+	{#each numbers as i}
+		<div class="entry">
+			<div>
+				<a href="{$page.url.pathname}/{i}">{i + 1}. Answer</a>
+			</div>
 		</div>
-		<div class="entry-code">
-			accessed with code: {data.code}
-		</div>
-	</div>
-{/each}
+	{/each}
+</Content>
 
 <style>
 	.entry {
 		border: 1px solid var(--border-color);
 		border-radius: 10px;
-		font-family: 'Jura';
 		color: var(--text-color);
 		padding: 5px;
 		padding-left: 10px;
@@ -33,7 +42,6 @@
 		padding: 0.5em 0 0.5em 0;
 		text-align: center;
 		color: var(--text-color);
-		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 1.5em;
 		width: 100%;

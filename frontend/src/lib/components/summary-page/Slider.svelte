@@ -1,24 +1,5 @@
 <script lang="ts">
-	import { questions, answers } from '$lib/stores/fill-page';
-
-	export let questionIndex: number;
-
-	let value: number = Math.round(
-		(parseFloat($questions[questionIndex].choices[0]) +
-			parseFloat($questions[questionIndex].choices[1])) /
-			2
-	);
-
-	$answers[questionIndex].choices[0] = value.toString();
-
-	function handleChange() {
-		if (value < parseFloat($questions[questionIndex].choices[0])) {
-			value = parseFloat($questions[questionIndex].choices[0]);
-		} else if (value > parseFloat($questions[questionIndex].choices[1])) {
-			value = parseFloat($questions[questionIndex].choices[1]);
-		}
-		$answers[questionIndex].choices[0] = value.toString();
-	}
+	export let data: { answer: number; min_value: number; max_value: number };
 </script>
 
 <div class="choice-area">
@@ -27,27 +8,16 @@
 			class="range"
 			type="range"
 			step="1"
-			min={$questions[questionIndex].choices[0]}
-			max={$questions[questionIndex].choices[1]}
-			name={questionIndex.toString()}
-			bind:value
-			on:change={handleChange}
+			min={data.min_value}
+			max={data.max_value}
+			value={data.answer}
+			disabled
 		/>
 	</div>
 	<div class="limits">
-		<div title="Minimum value" class="limit">{$questions[questionIndex].choices[0]}</div>
-		<input
-			title="Your answer"
-			class="current-value"
-			type="number"
-			autocomplete="off"
-			min={$questions[questionIndex].choices[0]}
-			max={$questions[questionIndex].choices[1]}
-			name={questionIndex.toString()}
-			bind:value
-			on:change={handleChange}
-		/>
-		<div title="Maximum value" class="limit">{$questions[questionIndex].choices[1]}</div>
+		<div title="Minimum value" class="limit">{data.min_value}</div>
+		<input title="Answer" class="current-value" type="number" value={data.answer} disabled />
+		<div title="Maximum value" class="limit">{data.max_value}</div>
 	</div>
 </div>
 

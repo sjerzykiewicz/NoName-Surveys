@@ -86,6 +86,11 @@
 				)
 			) {
 				$questionErrors[i] = 'Please fill out or remove question ' + (i + 1) + '.';
+			} else if (
+				$questions[i].component === Slider &&
+				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
+			) {
+				$questionErrors[i] = 'Maximum value must be greater than minimum value';
 			} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
 				$questionErrors[i] = 'Please remove duplicate choices from question ' + (i + 1) + '.';
 			} else {

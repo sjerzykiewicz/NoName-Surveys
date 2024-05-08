@@ -16,7 +16,7 @@
 			maxlength="6"
 			autocomplete="off"
 		/>
-		<button title="Submit code" class="submit" type="submit">
+		<button title="Submit code" class="save" type="submit">
 			<i class="material-symbols-rounded">done</i>Submit
 		</button>
 	</label>
@@ -56,7 +56,7 @@
 		margin-right: auto;
 	}
 
-	.submit {
+	.save {
 		font-size: 1em;
 		margin: 0.75em auto 0em auto;
 	}
@@ -79,7 +79,7 @@
 			font-size: 1.5em;
 		}
 
-		.submit {
+		.save {
 			font-size: 0.75em;
 		}
 	}

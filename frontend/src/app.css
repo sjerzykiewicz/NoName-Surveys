@@ -89,21 +89,18 @@ button:active {
 	background-color: var(--secondary-color);
 }
 
-.save,
-.submit {
+.save {
 	background-color: var(--accent-color);
 	color: var(--text-color-2);
 	transition: 0.2s;
 }
 
-.save:hover,
-.submit:hover {
+.save:hover {
 	background-color: var(--accent-dark-color);
 }
 
 .footer-button:active,
-.save:active,
-.submit:active {
+.save:active {
 	background-color: var(--border-color);
 }
 
@@ -117,7 +114,8 @@ button:active {
 
 .add-choice .material-symbols-rounded,
 .footer-button .material-symbols-rounded,
-.error .material-symbols-rounded {
+.error .material-symbols-rounded,
+.save .material-symbols-rounded {
 	margin-right: 0.15em;
 }
 

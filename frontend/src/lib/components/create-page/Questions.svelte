@@ -32,10 +32,6 @@
 <QuestionButtons />
 
 <style>
-	.question {
-		margin-bottom: 1.875em;
-	}
-
 	.error {
 		padding-left: 2em;
 		margin: -1em 0em 1em 0em;

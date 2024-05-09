@@ -3,7 +3,6 @@
 	import type { ComponentType } from 'svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
-	import SurveyTitle from '$lib/components/fill-page/SurveyTitle.svelte';
 	import Single from '$lib/components/fill-page/Single.svelte';
 	import Text from '$lib/components/fill-page/Text.svelte';
 	import List from '$lib/components/fill-page/List.svelte';
@@ -187,7 +186,9 @@
 </script>
 
 <Header>
-	<SurveyTitle />
+	<div title="Survey title" class="title">
+		{$title}
+	</div>
 </Header>
 <Content>
 	{#each $questions as question, questionIndex}
@@ -209,10 +210,6 @@
 </Footer>
 
 <style>
-	.question {
-		margin-bottom: 1.875em;
-	}
-
 	.error {
 		padding-left: 2em;
 		margin: -1em 0em 0.5em 0em;
@@ -224,6 +221,10 @@
 	}
 
 	@media screen and (max-width: 767px) {
+		.title {
+			font-size: 1.25em;
+		}
+
 		.footer-button {
 			font-size: 1em;
 		}

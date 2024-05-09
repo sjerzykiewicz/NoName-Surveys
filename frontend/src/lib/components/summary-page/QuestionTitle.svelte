@@ -1,16 +1,12 @@
 <script lang="ts">
-	import { questions } from '$lib/stores/fill-page';
-
+	export let question: string;
 	export let questionIndex: number;
 </script>
 
 <div class="question-area">
 	<div class="index">{questionIndex + 1}.</div>
 	<div title="Question" class="question-title">
-		{$questions[questionIndex].question}
-		{#if $questions[questionIndex].required}
-			<span class="required">*</span>
-		{/if}
+		{question}
 	</div>
 </div>
 
@@ -36,10 +32,6 @@
 		width: 1.4em;
 		text-align: right;
 		padding-right: 0.5em;
-	}
-
-	.required {
-		color: var(--accent-color);
 	}
 
 	@media screen and (max-width: 767px) {

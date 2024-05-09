@@ -1,0 +1,99 @@
+<script lang="ts">
+	export let data: { answer: string; choices: string[] };
+</script>
+
+<div class="choice-area">
+	<label
+		title={data.choices[0] === data.answer ? 'Answer' : ''}
+		class="choice"
+		class:selected={data.choices[0] === data.answer}
+	>
+		<input type="radio" disabled />
+		<i class="material-symbols-rounded">thumb_up</i>
+		<div class="choice-in">
+			{data.choices[0]}
+		</div>
+	</label>
+	<label
+		title={data.choices[1] === data.answer ? 'Answer' : ''}
+		class="choice"
+		class:selected={data.choices[1] === data.answer}
+	>
+		<input type="radio" disabled />
+		<i class="material-symbols-rounded">thumb_down</i>
+		<div class="choice-in">
+			{data.choices[1]}
+		</div>
+	</label>
+</div>
+
+<style>
+	.choice-area {
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+		justify-content: space-evenly;
+		width: calc(86% - 2.25em);
+		margin-left: 2.25em;
+	}
+
+	.choice {
+		flex-flow: column;
+		text-align: center;
+		margin-bottom: 0em;
+		padding: 0em 0.5em;
+		cursor: default;
+	}
+
+	.choice-in {
+		margin: 0.5em 0em 0em 0em;
+		width: fit-content;
+		max-width: 11em;
+		overflow-wrap: break-word;
+		cursor: default;
+	}
+
+	.choice-in:hover {
+		background-color: var(--primary-color);
+	}
+
+	.selected .choice-in,
+	.selected .choice-in:hover {
+		background-color: var(--secondary-dark-color);
+		border: 2px solid var(--accent-color);
+		color: var(--accent-color);
+		font-weight: bold;
+	}
+
+	input {
+		appearance: none;
+		position: relative;
+		top: 1.5em;
+		margin: 0em;
+		height: 1.5em;
+		width: 1.5em;
+		cursor: default;
+	}
+
+	i {
+		font-size: 1.25em;
+	}
+
+	.selected i {
+		color: var(--accent-color);
+		font-variation-settings:
+			'FILL' 1,
+			'GRAD' 200;
+	}
+
+	@media screen and (max-width: 767px) {
+		.choice-in,
+		i {
+			font-size: 1em;
+		}
+
+		.choice-in {
+			max-width: 5em;
+		}
+	}
+</style>

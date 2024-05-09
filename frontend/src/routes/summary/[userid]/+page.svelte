@@ -8,7 +8,7 @@
 </script>
 
 <Header>
-	<div class="header">Your surveys</div>
+	<div class="title">Your surveys</div>
 </Header>
 
 <Content>
@@ -18,16 +18,8 @@
 </Content>
 
 <style>
-	.header {
-		text-shadow: 0px 4px 4px var(--box-shadow-color);
-		font-size: 1.5em;
-		font-weight: bold;
-		font-family: 'Jura';
-		color: var(--text-color);
-	}
-
 	@media screen and (max-width: 767px) {
-		.header {
+		.title {
 			font-size: 1.25em;
 		}
 	}

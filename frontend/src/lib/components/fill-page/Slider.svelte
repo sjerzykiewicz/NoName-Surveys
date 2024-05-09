@@ -147,6 +147,7 @@
 		overflow: hidden;
 		width: 3.5em;
 		margin-left: 2em;
+		text-align: center;
 	}
 
 	@media screen and (max-width: 767px) {

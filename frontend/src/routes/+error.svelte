@@ -28,4 +28,11 @@
 	p {
 		font-size: 1.5em;
 	}
+
+	@media screen and (max-width: 767px) {
+		div {
+			margin: 1em;
+			padding: 1em;
+		}
+	}
 </style>

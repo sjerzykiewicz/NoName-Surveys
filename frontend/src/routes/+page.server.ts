@@ -1,5 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
+import * as db from '$lib/server/database';
 
 export const actions: Actions = {
 	default: async ({ request }) => {
@@ -18,6 +19,12 @@ export const actions: Actions = {
 			});
 		}
 
-		return redirect(303, `/${code}/fill`);
+		try {
+			await db.getSurveyByCode(code.toString());
+		} catch (e) {
+			return fail(404, { description: code, error: 'Survey not found' });
+		}
+
+		redirect(303, `/${code}/fill`);
 	}
 };

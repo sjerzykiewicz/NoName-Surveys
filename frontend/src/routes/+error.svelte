@@ -6,7 +6,7 @@
 	<div>
 		<h1>Error: <span>{$page.status}</span></h1>
 		<h2>Message: <span>{$page.error.message}</span></h2>
-		<p>Something went wrong, please contact with the administrator.</p>
+		<p>Something went wrong, please contact the administrator.</p>
 	</div>
 {/if}
 

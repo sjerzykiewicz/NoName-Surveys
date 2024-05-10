@@ -79,13 +79,13 @@
 		for (let i = 0; i < numQuestions; i++) {
 			let question = $questions[i].question;
 			if (question === null || question === undefined || question.length === 0) {
-				$questionErrors[i] = 'Please fill out or remove question ' + (i + 1) + '.';
+				$questionErrors[i] = 'Please enter question no. ' + (i + 1) + '.';
 			} else if (
 				$questions[i].choices.some(
 					(choice) => choice === null || choice === undefined || choice.length === 0
 				)
 			) {
-				$questionErrors[i] = 'Please fill out or remove question ' + (i + 1) + '.';
+				$questionErrors[i] = 'Please enter all choices for question no. ' + (i + 1) + '.';
 			} else if (
 				$questions[i].component === Slider &&
 				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])

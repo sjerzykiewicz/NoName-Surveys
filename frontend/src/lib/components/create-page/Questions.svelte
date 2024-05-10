@@ -28,7 +28,7 @@
 			case QuestionError.DuplicateChoices:
 				return 'Please remove duplicate choices from question no. ' + (i + 1) + '.';
 			case QuestionError.ImproperSliderValues:
-				return 'Maximum value must be greater than minimum value';
+				return 'Maximum value must be greater than minimum value.';
 		}
 	}
 </script>

@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
+	import { questionErrors } from '$lib/stores/create-page';
 
 	export let questionIndex: number;
 
 	function removeQuestion() {
+		$questionErrors[questionIndex] = '';
 		$questions.splice(questionIndex, 1);
 		$questions = $questions;
 	}

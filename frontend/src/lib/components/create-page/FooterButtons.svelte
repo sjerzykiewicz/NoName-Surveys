@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
-	import { questions, questionErrors } from '$lib/stores/create-page';
+	import { questions } from '$lib/stores/create-page';
 	import Question from '$lib/entities/questions/Question';
 	import { SingleQuestion } from '$lib/entities/questions/Single';
 	import { MultiQuestion } from '$lib/entities/questions/Multi';
@@ -21,6 +21,7 @@
 	import Binary from '$lib/components/create-page/Binary.svelte';
 	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import { goto } from '$app/navigation';
+	import { QuestionError } from '$lib/entities/QuestionError';
 
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];
@@ -79,7 +80,7 @@
 		for (let i = 0; i < numQuestions; i++) {
 			let question = $questions[i].question;
 			if (question === null || question === undefined || question.length === 0) {
-				$questionErrors[i] = 'Please enter question no. ' + (i + 1) + '.';
+				$questions[i].error = QuestionError.QuestionRequired;
 			} else if (
 				$questions[i].component != Text &&
 				$questions[i].choices.some(
@@ -88,27 +89,27 @@
 			) {
 				switch ($questions[i].component) {
 					case Slider:
-						$questionErrors[i] = 'Please enter both values for question no. ' + (i + 1) + '.';
+						$questions[i].error = QuestionError.SliderValuesRequired;
 						break;
 					case Binary:
-						$questionErrors[i] = 'Please enter both choices for question no. ' + (i + 1) + '.';
+						$questions[i].error = QuestionError.BinaryChoicesRequired;
 						break;
 					default:
-						$questionErrors[i] = 'Please enter all choices for question no. ' + (i + 1) + '.';
+						$questions[i].error = QuestionError.ChoicesRequired;
 				}
 			} else if (
 				$questions[i].component === Slider &&
 				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
 			) {
-				$questionErrors[i] = 'Maximum value must be greater than minimum value';
+				$questions[i].error = QuestionError.ImproperSliderValues;
 			} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
-				$questionErrors[i] = 'Please remove duplicate choices from question ' + (i + 1) + '.';
+				$questions[i].error = QuestionError.DuplicateChoices;
 			} else {
-				$questionErrors[i] = '';
+				$questions[i].error = QuestionError.NoError;
 			}
 		}
 
-		if (!$questionErrors.every((error) => error === '')) {
+		if (!$questions.every((q) => q.error === QuestionError.NoError)) {
 			return;
 		}
 

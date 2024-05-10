@@ -81,11 +81,21 @@
 			if (question === null || question === undefined || question.length === 0) {
 				$questionErrors[i] = 'Please enter question no. ' + (i + 1) + '.';
 			} else if (
+				$questions[i].component != Text &&
 				$questions[i].choices.some(
 					(choice) => choice === null || choice === undefined || choice.length === 0
 				)
 			) {
-				$questionErrors[i] = 'Please enter all choices for question no. ' + (i + 1) + '.';
+				switch ($questions[i].component) {
+					case Slider:
+						$questionErrors[i] = 'Please enter both values for question no. ' + (i + 1) + '.';
+						break;
+					case Binary:
+						$questionErrors[i] = 'Please enter both choices for question no. ' + (i + 1) + '.';
+						break;
+					default:
+						$questionErrors[i] = 'Please enter all choices for question no. ' + (i + 1) + '.';
+				}
 			} else if (
 				$questions[i].component === Slider &&
 				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])

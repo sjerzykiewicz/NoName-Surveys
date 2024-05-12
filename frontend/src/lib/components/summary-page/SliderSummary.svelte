@@ -18,7 +18,7 @@
 	</div>
 	<div class="limits">
 		<div title="Minimum value" class="limit">{data.min_value}</div>
-		<div title="Answer" class="current-value">{avg}</div>
+		<div title="Average answer" class="current-value">{avg}</div>
 		<div title="Maximum value" class="limit">{data.max_value}</div>
 	</div>
 </div>

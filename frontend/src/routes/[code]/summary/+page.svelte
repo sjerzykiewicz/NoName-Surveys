@@ -21,7 +21,7 @@
 
 <Content>
 	<div class="answers-number">Number of answers: {numbers.length}</div>
-	<AnswersSummary answers={data.answers} />
+	<AnswersSummary surveyAnswers={data.answers} />
 	{#if data.answers.length === 0}
 		<h2>No answers yet!</h2>
 	{:else}

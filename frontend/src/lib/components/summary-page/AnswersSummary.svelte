@@ -9,8 +9,17 @@
 	import BinarySummary from '$lib/components/summary-page/BinarySummary.svelte';
 	import RankSummary from '$lib/components/summary-page/RankSummary.svelte';
 	import type { ComponentType } from 'svelte';
+	import type { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
+	import type { TextQuestionAnswered } from '$lib/entities/questions/Text';
+	import type { SingleQuestionAnswered } from '$lib/entities/questions/Single';
+	import type { MultiQuestionAnswered } from '$lib/entities/questions/Multi';
+	import type { ScaleQuestionAnswered } from '$lib/entities/questions/Scale';
+	import type { BinaryQuestionAnswered } from '$lib/entities/questions/Binary';
+	import type { SliderQuestionAnswered } from '$lib/entities/questions/Slider';
+	import type { RankQuestionAnswered } from '$lib/entities/questions/Rank';
+	import type { ListQuestionAnswered } from '$lib/entities/questions/List';
 
-	export let answers;
+	export let surveyAnswers;
 
 	const componentTypeMap: { [id: string]: ComponentType } = {
 		text: TextSummary,
@@ -34,29 +43,73 @@
 		max_value: number;
 	}[] = [];
 
-	answers.forEach((answer) => {
-		answer.questions.forEach((question, id) => {
+	surveyAnswers.forEach((surveyAnswer: SurveyAnswer) => {
+		surveyAnswer.questions.forEach((question, id: number) => {
+			let details = '';
+			let answer: string | number = '';
+			let answers: (string | number)[] = [];
+			let choices: string[] = [];
+			let min_value = 0;
+			let max_value = 0;
+			switch (question.question_type) {
+				case 'text':
+					details = (question as TextQuestionAnswered).details;
+					answer = (question as TextQuestionAnswered).answer;
+					break;
+				case 'single':
+					answer = (question as SingleQuestionAnswered).answer;
+					choices = (question as SingleQuestionAnswered).choices;
+					break;
+				case 'multi':
+					answers = (question as MultiQuestionAnswered).answer;
+					choices = (question as MultiQuestionAnswered).choices;
+					break;
+				case 'scale':
+					answer = (question as ScaleQuestionAnswered).answer;
+					break;
+				case 'binary':
+					answer = (question as BinaryQuestionAnswered).answer;
+					break;
+				case 'slider':
+					answer = (question as SliderQuestionAnswered).answer;
+					min_value = (question as SliderQuestionAnswered).min_value;
+					max_value = (question as SliderQuestionAnswered).max_value;
+					break;
+				case 'rank':
+					answers = (question as RankQuestionAnswered).answer;
+					choices = (question as RankQuestionAnswered).choices;
+					break;
+				case 'list':
+					answer = (question as ListQuestionAnswered).answer;
+					choices = (question as ListQuestionAnswered).choices;
+					break;
+			}
+
+			if (answer != '') {
+				answers = [answer];
+			}
+
 			if (groupedAnswers.length <= id) {
 				groupedAnswers.push({
 					required: question.required,
 					question: question.question,
-					answers: [question.answer],
+					answers: answers,
 					question_type: question.question_type,
-					choices: question.choices,
-					details: question.details,
-					min_value: question.min_value,
-					max_value: question.max_value
+					choices: choices,
+					details: details,
+					min_value: min_value,
+					max_value: max_value
 				});
 			} else {
 				groupedAnswers[id] = {
 					required: question.required,
 					question: question.question,
-					answers: [...groupedAnswers[id].answers, question.answer],
+					answers: [...groupedAnswers[id].answers, ...answers],
 					question_type: question.question_type,
-					choices: question.choices,
-					details: question.details,
-					min_value: question.min_value,
-					max_value: question.max_value
+					choices: choices,
+					details: details,
+					min_value: min_value,
+					max_value: max_value
 				};
 			}
 		});

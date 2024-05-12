@@ -18,7 +18,7 @@
 			<div class="choice-in" class:selected={data.answers.includes([choice])}>
 				{choice}
 			</div>
-			<div class="choice-percentage">
+			<div class="choice-percentage" title="Average">
 				{calculatePercentage(choice)}
 			</div>
 		</label>

@@ -28,7 +28,7 @@
 <div class="title">{parseFloat(id) + 1}. Answer</div>
 {#each answer.questions as question, questionIndex}
 	<div class="question">
-		<QuestionTitle question={question.question} {questionIndex} />
+		<QuestionTitle question={question.question} {questionIndex} required={question.required} />
 		<svelte:component this={componentTypeMap[question.question_type]} data={question} />
 	</div>
 {/each}

@@ -10,9 +10,9 @@
 			{data.details}
 		</div>
 	{/if}
-	<div class="text-answers">
+	<div class="text-answers" title="Click to get all answers">
 		{#each data.answers as answer, i}
-			<a href="{$page.url.pathname}/{i}" title="Answers" class="text-area">
+			<a href="{$page.url.pathname}/{i}" class="text-area">
 				{answer}
 			</a>
 		{/each}

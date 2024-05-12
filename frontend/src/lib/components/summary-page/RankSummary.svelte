@@ -11,9 +11,9 @@
 	}
 </script>
 
-<div class="choice-area">
+<div class="choice-area" title="Ordered by average place">
 	{#each data.choices.sort((a, b) => parseFloat(calculateAvgPlace(a)) - parseFloat(calculateAvgPlace(b))) as choice, answerIndex}
-		<div title="Answer" class="choice">
+		<div class="choice">
 			<div class="rank">{answerIndex + 1}.</div>
 			<div class="choice-in">
 				{choice}
@@ -28,22 +28,18 @@
 	}
 
 	.choice-in {
-		border: 2px solid var(--accent-color);
-		background-color: var(--secondary-dark-color);
 		font-weight: bold;
-		color: var(--accent-color);
 		cursor: default;
 	}
 
 	.choice-in:hover {
-		background-color: var(--secondary-dark-color);
+		background-color: var(--primary-color);
 	}
 
 	.rank {
 		margin-right: 0.25em;
 		font-size: 1.25em;
 		font-weight: bold;
-		color: var(--accent-color);
 		cursor: default;
 		width: 1.5em;
 		text-align: right;

@@ -15,7 +15,7 @@
 			<div class="choice-in">
 				{choice}
 			</div>
-			<div class="choice-percentage">
+			<div class="choice-percentage" title="Average">
 				{calculatePercentage(choice, data.answers)}%
 			</div>
 		</div>

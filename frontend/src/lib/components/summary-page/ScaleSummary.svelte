@@ -4,14 +4,14 @@
 
 <div class="choice-area">
 	{#each [1, 2, 3, 4, 5] as choice}
-		<label title="Answer" class="choice">
+		<label class="choice">
 			<div class="scale">
 				<input type="radio" disabled />
 			</div>
 			<div class="number">
 				{choice}
 			</div>
-			<div class="choice-percentage">
+			<div class="choice-percentage" title="Average">
 				{(
 					(data.answers.filter((answer) => answer === choice).length / data.answers.length) *
 					100

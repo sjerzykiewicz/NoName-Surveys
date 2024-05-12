@@ -42,6 +42,7 @@
 		width: 11px;
 		border: 4px solid var(--accent-color);
 		border-radius: 3px;
+		background-color: var(--accent-color);
 	}
 
 	input {

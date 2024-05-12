@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let data: { answers: number[]; min_value: number; max_value: number };
 
-	let avg = data.answers.reduce((a, b) => a + b, 0) / data.answers.length;
+	let avg = (data.answers.reduce((a, b) => a + b, 0) / data.answers.length).toFixed(2);
 </script>
 
 <div class="choice-area">

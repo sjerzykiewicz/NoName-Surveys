@@ -20,8 +20,13 @@
 </Header>
 
 <Content>
+	<div class="answers-number">Number of answers: {numbers.length}</div>
 	<AnswersSummary answers={data.answers} />
-	<h2>All answers:</h2>
+	{#if data.answers.length === 0}
+		<h2>No answers yet!</h2>
+	{:else}
+		<h2>All answers:</h2>
+	{/if}
 	{#each numbers as i}
 		<div class="entry">
 			<div>
@@ -64,5 +69,12 @@
 
 	h2 {
 		margin-top: 2em;
+		color: var(--text-color);
+	}
+
+	.answers-number {
+		color: var(--text-color);
+		font-size: 1.5em;
+		margin: 0.5em;
 	}
 </style>

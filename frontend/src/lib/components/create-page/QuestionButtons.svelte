@@ -13,6 +13,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import QuestionType from './QuestionType.svelte';
 	import { QuestionError } from '$lib/entities/QuestionError';
+	import { scrollToElement } from '$lib/utils/scrollToElement';
 
 	let isPanelVisible: boolean = false;
 	let previousQuestionType: ComponentType;
@@ -61,14 +62,6 @@
 
 		previousQuestionType = component;
 		isPanelVisible = false;
-	}
-
-	function scrollToElement(selector: string) {
-		const element = document.querySelector(selector) as HTMLElement;
-
-		if (element) {
-			element.scrollIntoView({ behavior: 'smooth' });
-		}
 	}
 
 	onMount(() => {

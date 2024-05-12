@@ -5,14 +5,7 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-
-	function scrollToElement(selector: string) {
-		const element = document.querySelector(selector) as HTMLElement;
-
-		if (element) {
-			element.scrollIntoView({ behavior: 'smooth' });
-		}
-	}
+	import { scrollToElement } from '$lib/utils/scrollToElement';
 
 	function errorMessage(i: number) {
 		const error = $questions[i].error;

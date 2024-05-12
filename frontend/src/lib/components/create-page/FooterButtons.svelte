@@ -23,14 +23,7 @@
 	import { goto } from '$app/navigation';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { tick } from 'svelte';
-
-	function scrollToElement(selector: string) {
-		const element = document.querySelector(selector) as HTMLElement;
-
-		if (element) {
-			element.scrollIntoView({ behavior: 'smooth' });
-		}
-	}
+	import { scrollToElement } from '$lib/utils/scrollToElement';
 
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];

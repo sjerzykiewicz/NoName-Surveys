@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
+	import AnswersSummary from '$lib/components/summary-page/AnswersSummary.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	import { page } from '$app/stores';
 	import type { PageServerData } from './$types';
 
@@ -18,6 +20,8 @@
 </Header>
 
 <Content>
+	<AnswersSummary answers={data.answers} />
+	<h2>All answers:</h2>
 	{#each numbers as i}
 		<div class="entry">
 			<div>
@@ -26,6 +30,15 @@
 		</div>
 	{/each}
 </Content>
+
+<Footer>
+	<button
+		class="back"
+		on:click={() => {
+			history.back();
+		}}><i class="material-symbols-rounded">undo</i>Back</button
+	>
+</Footer>
 
 <style>
 	.entry {
@@ -47,5 +60,9 @@
 		width: 100%;
 		text-decoration: none;
 		transition: background-color 0.2s;
+	}
+
+	h2 {
+		margin-top: 2em;
 	}
 </style>

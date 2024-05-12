@@ -7,11 +7,12 @@
 	import Rank from '$lib/components/create-page/Rank.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
-	import { questions, questionErrors } from '$lib/stores/create-page';
+	import { questions } from '$lib/stores/create-page';
 	import { type ComponentType, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import QuestionType from './QuestionType.svelte';
+	import { QuestionError } from '$lib/entities/QuestionError';
 
 	let isPanelVisible: boolean = false;
 	let previousQuestionType: ComponentType;
@@ -53,14 +54,13 @@
 				component: component,
 				required: false,
 				question: '',
-				choices: choices
+				choices: choices,
+				error: QuestionError.NoError
 			}
 		];
 
 		previousQuestionType = component;
 		isPanelVisible = false;
-
-		$questionErrors = [...$questionErrors, ''];
 	}
 
 	function scrollToElement(selector: string) {

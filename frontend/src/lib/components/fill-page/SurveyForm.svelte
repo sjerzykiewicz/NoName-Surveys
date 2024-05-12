@@ -1,17 +1,8 @@
 <script lang="ts">
 	import { answers, questions } from '$lib/stores/fill-page';
-	import type { ComponentType } from 'svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
-	import Single from '$lib/components/fill-page/Single.svelte';
-	import Text from '$lib/components/fill-page/Text.svelte';
-	import List from '$lib/components/fill-page/List.svelte';
-	import Scale from '$lib/components/fill-page/Scale.svelte';
 	import QuestionTitle from '$lib/components/fill-page/QuestionTitle.svelte';
-	import Multi from '$lib/components/fill-page/Multi.svelte';
-	import Slider from '$lib/components/fill-page/Slider.svelte';
-	import Binary from '$lib/components/fill-page/Binary.svelte';
-	import Rank from '$lib/components/fill-page/Rank.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
 	import { title } from '$lib/stores/fill-page';
@@ -27,17 +18,7 @@
 	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-
-	const componentTypeMap: { [id: string]: ComponentType } = {
-		text: Text,
-		single: Single,
-		multi: Multi,
-		scale: Scale,
-		binary: Binary,
-		slider: Slider,
-		rank: Rank,
-		list: List
-	};
+	import { componentTypeMap } from '$lib/utils/componentTypeMap';
 
 	export let survey: Survey;
 

@@ -24,6 +24,34 @@
 				return 'Maximum value must be greater than minimum value in question no. ' + (i + 1) + '.';
 		}
 	}
+
+	$: checkQuestionError = (i: number) => {
+		return $questions[i].error === QuestionError.QuestionRequired && !$questions[i].question;
+	};
+
+	$: checkChoicesError = (i: number) => {
+		const error = $questions[i].error;
+		switch (error) {
+			case QuestionError.ChoicesRequired:
+			case QuestionError.BinaryChoicesRequired:
+			case QuestionError.SliderValuesRequired:
+				if ($questions[i].choices.some((c) => !c)) {
+					return true;
+				}
+				break;
+			case QuestionError.DuplicateChoices:
+				if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
+					return true;
+				}
+				break;
+			case QuestionError.ImproperSliderValues:
+				if (parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])) {
+					return true;
+				}
+				break;
+		}
+		return false;
+	};
 </script>
 
 {#each $questions as question, questionIndex}
@@ -35,7 +63,7 @@
 		<QuestionTitle {questionIndex} />
 
 		{#key question.error}
-			{#if question.error === QuestionError.QuestionRequired && !question.question}
+			{#if checkQuestionError(questionIndex)}
 				<p title="Error" class="error question-error">
 					<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
 				</p>
@@ -43,7 +71,7 @@
 
 			<svelte:component this={question.component} {questionIndex} />
 
-			{#if ([QuestionError.ChoicesRequired, QuestionError.BinaryChoicesRequired, QuestionError.SliderValuesRequired].includes(question.error) && question.choices.some((c) => !c)) || (question.error === QuestionError.DuplicateChoices && new Set(question.choices).size !== question.choices.length) || (question.error === QuestionError.ImproperSliderValues && parseFloat(question.choices[0]) >= parseFloat(question.choices[1]))}
+			{#if checkChoicesError(questionIndex)}
 				<p title="Error" class="error choice-error">
 					<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
 				</p>

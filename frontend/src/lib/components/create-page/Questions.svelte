@@ -28,7 +28,7 @@
 			case QuestionError.DuplicateChoices:
 				return 'Please remove duplicate choices from question no. ' + (i + 1) + '.';
 			case QuestionError.ImproperSliderValues:
-				return 'Maximum value must be greater than minimum value.';
+				return 'Maximum value must be greater than minimum value in question no. ' + (i + 1) + '.';
 		}
 	}
 </script>
@@ -40,22 +40,38 @@
 		on:introend={() => scrollToElement('.add-question')}
 	>
 		<QuestionTitle {questionIndex} />
-		<svelte:component this={question.component} {questionIndex} />
+
+		{#key question.error}
+			{#if question.error === QuestionError.QuestionRequired && !question.question}
+				<p title="Error" class="error question-error">
+					<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
+				</p>
+			{/if}
+
+			<svelte:component this={question.component} {questionIndex} />
+
+			{#if ([QuestionError.ChoicesRequired, QuestionError.BinaryChoicesRequired, QuestionError.SliderValuesRequired].includes(question.error) && question.choices.some((c) => !c)) || (question.error === QuestionError.DuplicateChoices && new Set(question.choices).size !== question.choices.length) || (question.error === QuestionError.ImproperSliderValues && parseFloat(question.choices[0]) >= parseFloat(question.choices[1]))}
+				<p title="Error" class="error choice-error">
+					<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
+				</p>
+			{/if}
+		{/key}
 	</div>
-	{#key question.error}
-		{#if question.error !== QuestionError.NoError}
-			<p class="error">
-				<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
-			</p>
-		{/if}
-	{/key}
 {/each}
 <QuestionButtons />
 
 <style>
 	.error {
 		padding-left: 2em;
-		margin: -1em 0em 1em 0em;
+	}
+
+	.question-error {
+		margin-top: -0.5em;
+		margin-bottom: 0.5em;
+	}
+
+	.choice-error {
+		margin-top: 0.5em;
 	}
 
 	@media screen and (max-width: 767px) {

@@ -22,6 +22,15 @@
 	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import { goto } from '$app/navigation';
 	import { QuestionError } from '$lib/entities/QuestionError';
+	import { tick } from 'svelte';
+
+	function scrollToElement(selector: string) {
+		const element = document.querySelector(selector) as HTMLElement;
+
+		if (element) {
+			element.scrollIntoView({ behavior: 'smooth' });
+		}
+	}
 
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];
@@ -72,7 +81,6 @@
 
 		if ($title === null || $title === undefined || $title.length === 0) {
 			titleError = true;
-			return;
 		}
 
 		const numQuestions = $questions.length;
@@ -109,7 +117,9 @@
 			}
 		}
 
-		if (!$questions.every((q) => q.error === QuestionError.NoError)) {
+		if (!$questions.every((q) => q.error === QuestionError.NoError) || titleError) {
+			await tick();
+			scrollToElement('.error');
 			return;
 		}
 

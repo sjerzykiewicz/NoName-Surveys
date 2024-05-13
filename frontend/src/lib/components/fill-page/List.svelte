@@ -41,7 +41,7 @@
 
 	@media screen and (max-width: 767px) {
 		select {
-			font-size: 1em;
+			font-size: 1.5em;
 		}
 	}
 </style>

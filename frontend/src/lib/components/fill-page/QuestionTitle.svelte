@@ -45,7 +45,9 @@
 	@media screen and (max-width: 767px) {
 		.question-area,
 		.index {
-			font-size: 1em;
+			font-size: 1.1em;
+			margin-left: -0.5em;
+			word-wrap: break-word;
 		}
 
 		.index {

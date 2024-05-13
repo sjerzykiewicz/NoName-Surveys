@@ -154,7 +154,7 @@
 		.choice-area,
 		.limit,
 		.current-value {
-			font-size: 1em;
+			font-size: 1.2em;
 		}
 	}
 </style>

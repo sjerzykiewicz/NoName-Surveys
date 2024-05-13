@@ -95,7 +95,7 @@
 	@media screen and (max-width: 767px) {
 		.choice-in,
 		i {
-			font-size: 1em;
+			font-size: 1.5em;
 		}
 
 		.choice-in {

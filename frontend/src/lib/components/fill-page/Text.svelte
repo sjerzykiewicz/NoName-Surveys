@@ -45,7 +45,7 @@
 		.choice-area,
 		.details,
 		.text-area {
-			font-size: 1em;
+			font-size: 1.1em;
 		}
 	}
 </style>

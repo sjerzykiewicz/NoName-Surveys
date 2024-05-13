@@ -39,4 +39,11 @@
 	.scroll-to-top:active {
 		background-color: var(--border-color);
 	}
+
+	@media screen and (max-width: 767px) {
+		.scroll-to-top {
+			font-size: 1.75em;
+			bottom: 0.4em;
+		}
+	}
 </style>

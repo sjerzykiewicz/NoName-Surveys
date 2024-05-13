@@ -40,6 +40,16 @@
 		.choice-area,
 		.choice-in {
 			font-size: 1em;
+			min-width: 3em;
+			min-height: 2em;
+			text-align: center;
+		}
+
+		.choice-in {
+			justify-content: center;
+			align-items: center;
+			display: flex;
+			overflow-wrap: break-word;
 		}
 	}
 </style>

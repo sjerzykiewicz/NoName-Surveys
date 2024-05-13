@@ -56,7 +56,7 @@
 	@media screen and (max-width: 767px) {
 		.choice-area,
 		.number {
-			font-size: 1em;
+			font-size: 1.25em;
 		}
 	}
 </style>

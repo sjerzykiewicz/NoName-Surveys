@@ -222,11 +222,11 @@
 
 	@media screen and (max-width: 767px) {
 		.title {
-			font-size: 1.25em;
+			font-size: 2em;
 		}
 
 		.footer-button {
-			font-size: 1em;
+			font-size: 1.5em;
 		}
 	}
 </style>

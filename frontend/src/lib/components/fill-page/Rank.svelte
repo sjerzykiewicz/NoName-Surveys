@@ -85,11 +85,24 @@
 		.choice-in,
 		.arrows,
 		.rank {
-			font-size: 1em;
+			font-size: 1.2em;
+		}
+
+		.arrows {
+			font-size: 1.5em;
+		}
+
+		.choice {
+			max-width: 100%;
+		}
+
+		.choice-in {
+			overflow-wrap: break-word;
 		}
 
 		.rank {
 			width: 2em;
+			margin-left: -0.5em;
 		}
 	}
 </style>

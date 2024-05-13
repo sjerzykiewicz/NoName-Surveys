@@ -31,16 +31,16 @@
 
 	@media screen and (max-width: 767px) {
 		.login-box {
-			font-size: 1.5em;
+			font-size: 2em;
 		}
 
 		.login-buttons {
-			width: 12em;
+			width: 18em;
 		}
 
 		button,
 		i {
-			font-size: 1em;
+			font-size: 1.5em;
 		}
 	}
 </style>

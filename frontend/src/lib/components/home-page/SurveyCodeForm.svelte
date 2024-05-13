@@ -63,6 +63,7 @@
 
 	.error {
 		justify-content: center;
+		text-align: center;
 	}
 
 	i {
@@ -72,15 +73,15 @@
 	@media screen and (max-width: 767px) {
 		input,
 		.error {
-			font-size: 1em;
-		}
-
-		form {
 			font-size: 1.5em;
 		}
 
+		form {
+			font-size: 2em;
+		}
+
 		.save {
-			font-size: 0.75em;
+			font-size: 1em;
 		}
 	}
 </style>

@@ -36,6 +36,7 @@
 		required: boolean;
 		question: string;
 		answers: (string | number)[];
+		multi_answers: string[][];
 		question_type: string;
 		choices: string[];
 		details: string;
@@ -48,6 +49,7 @@
 			let details = '';
 			let answer: string | number = '';
 			let answers: (string | number)[] = [];
+			let multi_answers: string[][] = [];
 			let choices: string[] = [];
 			let min_value = 0;
 			let max_value = 0;
@@ -63,6 +65,7 @@
 				case 'multi':
 					answers = (question as MultiQuestionAnswered).answer;
 					choices = (question as MultiQuestionAnswered).choices;
+					multi_answers = [(question as MultiQuestionAnswered).answer];
 					break;
 				case 'scale':
 					answer = (question as ScaleQuestionAnswered).answer;
@@ -95,6 +98,7 @@
 					required: question.required,
 					question: question.question,
 					answers: answers,
+					multi_answers: multi_answers,
 					question_type: question.question_type,
 					choices: choices,
 					details: details,
@@ -106,6 +110,7 @@
 					required: question.required,
 					question: question.question,
 					answers: [...groupedAnswers[id].answers, ...answers],
+					multi_answers: [...groupedAnswers[id].multi_answers, ...multi_answers],
 					question_type: question.question_type,
 					choices: choices,
 					details: details,

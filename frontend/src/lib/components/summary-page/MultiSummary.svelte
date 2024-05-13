@@ -1,21 +1,20 @@
 <script lang="ts">
-	export let data: { answers: string[][]; choices: string[] };
+	export let data: { multi_answers: string[]; choices: string[] };
 
 	function calculatePercentage(choice: string) {
-		const totalAnswers = data.answers.flat().length;
-		const choiceCount = data.answers.flat().filter((answers) => answers === choice).length;
-		const percentage = (choiceCount / totalAnswers) * 100;
-		return `${percentage.toFixed(2)}%`;
+		const count = data.multi_answers.filter((answer) => answer.includes(choice)).length;
+		const percentage = (count / data.multi_answers.length) * 100;
+		return percentage.toFixed(2) + '%';
 	}
 </script>
 
 <div class="choice-area">
 	{#each data.choices as choice}
-		<label title={data.answers.includes([choice]) ? 'Answer' : ''} class="choice">
-			<div class="radio" class:selected={data.answers.includes([choice])}>
-				<input type="checkbox" checked={data.answers.includes([choice])} disabled />
+		<label class="choice">
+			<div class="radio">
+				<input type="checkbox" disabled />
 			</div>
-			<div class="choice-in" class:selected={data.answers.includes([choice])}>
+			<div class="choice-in">
 				{choice}
 			</div>
 			<div class="choice-percentage" title="Average">
@@ -37,21 +36,6 @@
 
 	.choice-in:hover {
 		background-color: var(--primary-color);
-	}
-
-	.choice-in.selected {
-		background-color: var(--secondary-dark-color);
-	}
-
-	.radio.selected {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-left: 0.75em;
-		height: 11px;
-		width: 11px;
-		border: 4px solid var(--accent-color);
-		border-radius: 3px;
 	}
 
 	input {

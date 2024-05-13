@@ -69,6 +69,7 @@
 					break;
 				case 'binary':
 					answer = (question as BinaryQuestionAnswered).answer;
+					choices = (question as BinaryQuestionAnswered).choices;
 					break;
 				case 'slider':
 					answer = (question as SliderQuestionAnswered).answer;

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import QRCodeStyling from 'qr-code-styling';
 
 	export let data: string;
 	export let size: number;
@@ -11,6 +10,8 @@
 		document.head.appendChild(script);
 
 		script.onload = () => {
+			// @ts-expect-error QRCodeStyling is defined in the script above
+			// eslint-disable-next-line no-undef
 			let qrCode = new QRCodeStyling({
 				width: size,
 				height: size,

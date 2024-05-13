@@ -2,7 +2,6 @@
 	import { answers, questions } from '$lib/stores/fill-page';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
-	import QuestionTitle from '$lib/components/fill-page/QuestionTitle.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
 	import { title } from '$lib/stores/fill-page';
@@ -18,9 +17,29 @@
 	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { componentTypeMap } from '$lib/utils/componentTypeMap';
+	import QuestionTitle from './QuestionTitle.svelte';
+	import Single from './Single.svelte';
+	import Text from './Text.svelte';
+	import List from './List.svelte';
+	import Scale from './Scale.svelte';
+	import Multi from './Multi.svelte';
+	import Slider from './Slider.svelte';
+	import Binary from './Binary.svelte';
+	import Rank from './Rank.svelte';
+	import type { ComponentType } from 'svelte';
 
 	export let survey: Survey;
+
+	export const componentTypeMap: { [id: string]: ComponentType } = {
+		text: Text,
+		single: Single,
+		multi: Multi,
+		scale: Scale,
+		binary: Binary,
+		slider: Slider,
+		rank: Rank,
+		list: List
+	};
 
 	$title = survey.title;
 

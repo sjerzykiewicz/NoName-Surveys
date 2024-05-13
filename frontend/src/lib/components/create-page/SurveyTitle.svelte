@@ -7,7 +7,7 @@
 <div title="Enter survey title" class="title-input" contenteditable bind:textContent={$title}>
 	{$title}
 </div>
-{#if titleError}
+{#if titleError && !$title}
 	<p class="error"><i class="material-symbols-rounded">error</i>Please enter survey title.</p>
 {/if}
 

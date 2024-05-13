@@ -28,6 +28,32 @@
 		List
 	];
 
+	function checkError(i: number) {
+		if (!$questions[i].question) {
+			$questions[i].error = QuestionError.QuestionRequired;
+		} else if ($questions[i].component != Text && $questions[i].choices.some((c) => !c)) {
+			switch ($questions[i].component) {
+				case Slider:
+					$questions[i].error = QuestionError.SliderValuesRequired;
+					break;
+				case Binary:
+					$questions[i].error = QuestionError.BinaryChoicesRequired;
+					break;
+				default:
+					$questions[i].error = QuestionError.ChoicesRequired;
+			}
+		} else if (
+			$questions[i].component === Slider &&
+			parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
+		) {
+			$questions[i].error = QuestionError.ImproperSliderValues;
+		} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
+			$questions[i].error = QuestionError.DuplicateChoices;
+		} else {
+			$questions[i].error = QuestionError.NoError;
+		}
+	}
+
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
 	}
@@ -47,6 +73,11 @@
 	}
 
 	function addQuestion(component: ComponentType) {
+		const i: number = $questions.length - 1;
+		if (i >= 0) {
+			checkError(i);
+		}
+
 		const choices: Array<string> = setQuestionChoices(component);
 
 		$questions = [

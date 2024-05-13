@@ -1,11 +1,11 @@
 <script lang="ts">
-	// import { page } from '$app/stores';
+	import { page } from '$app/stores';
 	import type { PageData } from './$types';
-	// import QrCode from '$lib/components/QrCode.svelte';
+	import QrCode from '$lib/components/QrCode.svelte';
 
 	export let data: PageData;
 
-	// let url: string = $page.url.origin + '/' + data.code + '/fill';
+	let url: string = $page.url.origin + '/' + data.code + '/fill';
 
 	let isCopied: boolean = false;
 
@@ -31,9 +31,9 @@
 			Copy
 		{/if}</button
 	>
-	<!-- <a href="/{data.code}/fill" title="Go to fill page" class="qr-code">
+	<a href="/{data.code}/fill" title="Go to fill page" class="qr-code">
 		<QrCode data={url} size={300} />
-	</a> -->
+	</a>
 </div>
 
 <style>
@@ -61,11 +61,11 @@
 		margin: 0.5em auto;
 	}
 
-	/* .qr-code {
+	.qr-code {
 		display: flex;
 		margin: 2em auto;
 		width: fit-content;
-	} */
+	}
 
 	@media screen and (max-width: 767px) {
 		h2 {

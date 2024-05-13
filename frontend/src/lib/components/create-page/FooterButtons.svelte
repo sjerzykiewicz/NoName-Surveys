@@ -72,22 +72,16 @@
 	async function processSurvey() {
 		titleError = false;
 
-		if ($title === null || $title === undefined || $title.length === 0) {
+		if (!$title) {
 			titleError = true;
 		}
 
 		const numQuestions = $questions.length;
 
 		for (let i = 0; i < numQuestions; i++) {
-			let question = $questions[i].question;
-			if (question === null || question === undefined || question.length === 0) {
+			if (!$questions[i].question) {
 				$questions[i].error = QuestionError.QuestionRequired;
-			} else if (
-				$questions[i].component != Text &&
-				$questions[i].choices.some(
-					(choice) => choice === null || choice === undefined || choice.length === 0
-				)
-			) {
+			} else if ($questions[i].component != Text && $questions[i].choices.some((c) => !c)) {
 				switch ($questions[i].component) {
 					case Slider:
 						$questions[i].error = QuestionError.SliderValuesRequired;

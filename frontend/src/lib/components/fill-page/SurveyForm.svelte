@@ -153,11 +153,7 @@
 			if ($questions[i].required) {
 				if ($answers[i].choices.length === 0) {
 					unansweredRequired[i] = i;
-				} else if (
-					$answers[i].choices.some(
-						(choice) => choice === null || choice === undefined || choice.length === 0
-					)
-				) {
+				} else if ($answers[i].choices.some((c) => !c)) {
 					unansweredRequired[i] = i;
 				}
 			}

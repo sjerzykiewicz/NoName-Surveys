@@ -17,7 +17,18 @@
 			alert('The code could not be copied due to an insecure connection.');
 		}
 	}
+
+	let innerWidth: number;
+	function calculateSize(width: number): number {
+		if (width < 768) {
+			return 300;
+		} else {
+			return 400;
+		}
+	}
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div class="content">
 	<h2>Survey created successfully.</h2>
@@ -32,7 +43,7 @@
 		{/if}</button
 	>
 	<a href="/{data.code}/fill" title="Go to fill page" class="qr-code">
-		<QrCode data={url} size={300} />
+		<QrCode data={url} size={calculateSize(innerWidth)} />
 	</a>
 </div>
 

@@ -89,13 +89,15 @@ button:active {
 	background-color: var(--secondary-color);
 }
 
-.save {
+.save,
+.back {
 	background-color: var(--accent-color);
 	color: var(--text-color-2);
 	transition: 0.2s;
 }
 
-.save:hover {
+.save:hover,
+.back:hover {
 	background-color: var(--accent-dark-color);
 }
 
@@ -259,4 +261,11 @@ input[type='radio']:checked {
 	color: var(--text-color);
 	cursor: default;
 	overflow: hidden;
+}
+
+.choice-percentage {
+	margin-left: 0.5em;
+	font-weight: bold;
+	color: var(--accent-color);
+	cursor: default;
 }

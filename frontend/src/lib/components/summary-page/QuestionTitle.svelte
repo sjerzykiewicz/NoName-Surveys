@@ -1,12 +1,16 @@
 <script lang="ts">
 	export let question: string;
 	export let questionIndex: number;
+	export let required: boolean;
 </script>
 
 <div class="question-area">
 	<div class="index">{questionIndex + 1}.</div>
 	<div title="Question" class="question-title">
 		{question}
+		{#if required}
+			<span class="required">*</span>
+		{/if}
 	</div>
 </div>
 
@@ -32,6 +36,10 @@
 		width: 1.4em;
 		text-align: right;
 		padding-right: 0.5em;
+	}
+
+	.required {
+		color: var(--accent-color);
 	}
 
 	@media screen and (max-width: 767px) {

@@ -24,6 +24,7 @@
 
 	function loadDraft() {
 		$title = structure.title;
+		$questions = [];
 		structure.questions.forEach((q) => {
 			switch (q.question_type) {
 				case 'single':

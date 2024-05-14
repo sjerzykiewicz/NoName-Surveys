@@ -24,6 +24,7 @@
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
+	import { tick } from 'svelte';
 
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];
@@ -69,7 +70,7 @@
 
 	export let titleError: boolean = false;
 
-	function checkCorrectness(): boolean {
+	async function checkCorrectness() {
 		titleError = false;
 
 		if (!$title) {
@@ -105,6 +106,7 @@
 		}
 
 		if (!$questions.every((q) => q.error === QuestionError.NoError) || titleError) {
+			await tick();
 			scrollToElement('.error');
 			return false;
 		}
@@ -113,7 +115,7 @@
 	}
 
 	async function saveDraft() {
-		if (!checkCorrectness()) return;
+		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
 		// TODO - user id
 		const draftInfo = new DraftCreateInfo(1, parsedSurvey);
@@ -135,7 +137,7 @@
 	}
 
 	async function createSurvey() {
-		if (!checkCorrectness()) return;
+		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
 
 		// TODO - replace dummy values with proper data

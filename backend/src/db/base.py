@@ -1,8 +1,12 @@
 from sqlmodel import Session, SQLModel, create_engine
 
+from config import settings
+
 # this is to be changed later on in the development
 engine = create_engine(
-    "sqlite://", echo=True, connect_args={"check_same_thread": False}
+    "sqlite://",
+    echo=(settings.environment_type == "dev"),
+    connect_args={"check_same_thread": False},
 )
 
 

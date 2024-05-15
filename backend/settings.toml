@@ -1,0 +1,9 @@
+environment_type = "dev"
+
+# Provide below fields in the .secrets.toml file
+# db_type = ""
+# dialect =  ""
+# username = ""
+# password = ""
+# host = ""
+# database = ""

@@ -10,6 +10,7 @@ python = "^3.10"
 fastapi = "^0.110.0"
 uvicorn = "^0.29.0"
 sqlmodel = "^0.0.16"
+dynaconf = "^3.2.5"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

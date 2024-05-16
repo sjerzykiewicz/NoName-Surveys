@@ -16,11 +16,3 @@
 		<SummaryEntry title={entry.title} code={entry.code} />
 	{/each}
 </Content>
-
-<style>
-	@media screen and (max-width: 767px) {
-		.title {
-			font-size: 1.25em;
-		}
-	}
-</style>

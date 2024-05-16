@@ -18,8 +18,12 @@
 			href: '/create',
 			disabled: false
 		},
+		Drafts: {
+			href: '/drafts',
+			disabled: false
+		},
 		Summary: {
-			href: '/summary/1', // TODO - user id
+			href: '/summary',
 			disabled: false
 		},
 		Account: {

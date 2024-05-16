@@ -1,6 +1,8 @@
 <script lang="ts">
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
+	import AnswersSummary from '$lib/components/summary-page/AnswersSummary.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	import { page } from '$app/stores';
 	import type { PageServerData } from './$types';
 
@@ -18,6 +20,13 @@
 </Header>
 
 <Content>
+	<div class="answers-number">Number of answers: {numbers.length}</div>
+	<AnswersSummary surveyAnswers={data.answers} />
+	{#if data.answers.length === 0}
+		<h2>No answers yet!</h2>
+	{:else}
+		<h2>All answers:</h2>
+	{/if}
 	{#each numbers as i}
 		<div class="entry">
 			<div>
@@ -26,6 +35,15 @@
 		</div>
 	{/each}
 </Content>
+
+<Footer>
+	<button
+		class="back"
+		on:click={() => {
+			history.back();
+		}}><i class="material-symbols-rounded">undo</i>Back</button
+	>
+</Footer>
 
 <style>
 	.entry {
@@ -47,5 +65,16 @@
 		width: 100%;
 		text-decoration: none;
 		transition: background-color 0.2s;
+	}
+
+	h2 {
+		margin-top: 2em;
+		color: var(--text-color);
+	}
+
+	.answers-number {
+		color: var(--text-color);
+		font-size: 1.5em;
+		margin: 0.5em;
 	}
 </style>

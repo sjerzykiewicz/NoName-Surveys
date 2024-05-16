@@ -5,14 +5,7 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-
-	function scrollToElement(selector: string) {
-		const element = document.querySelector(selector) as HTMLElement;
-
-		if (element) {
-			element.scrollIntoView({ behavior: 'smooth' });
-		}
-	}
+	import { scrollToElement } from '$lib/utils/scrollToElement';
 
 	function errorMessage(i: number) {
 		const error = $questions[i].error;
@@ -28,9 +21,37 @@
 			case QuestionError.DuplicateChoices:
 				return 'Please remove duplicate choices from question no. ' + (i + 1) + '.';
 			case QuestionError.ImproperSliderValues:
-				return 'Maximum value must be greater than minimum value.';
+				return 'Maximum value must be greater than minimum value in question no. ' + (i + 1) + '.';
 		}
 	}
+
+	$: checkQuestionError = (i: number) => {
+		return $questions[i].error === QuestionError.QuestionRequired && !$questions[i].question;
+	};
+
+	$: checkChoicesError = (i: number) => {
+		const error = $questions[i].error;
+		switch (error) {
+			case QuestionError.ChoicesRequired:
+			case QuestionError.BinaryChoicesRequired:
+			case QuestionError.SliderValuesRequired:
+				if ($questions[i].choices.some((c) => !c)) {
+					return true;
+				}
+				break;
+			case QuestionError.DuplicateChoices:
+				if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
+					return true;
+				}
+				break;
+			case QuestionError.ImproperSliderValues:
+				if (parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])) {
+					return true;
+				}
+				break;
+		}
+		return false;
+	};
 </script>
 
 {#each $questions as question, questionIndex}
@@ -40,22 +61,38 @@
 		on:introend={() => scrollToElement('.add-question')}
 	>
 		<QuestionTitle {questionIndex} />
-		<svelte:component this={question.component} {questionIndex} />
+
+		{#key question.error}
+			{#if checkQuestionError(questionIndex)}
+				<p title="Error" class="error question-error">
+					<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
+				</p>
+			{/if}
+
+			<svelte:component this={question.component} {questionIndex} />
+
+			{#if checkChoicesError(questionIndex)}
+				<p title="Error" class="error choice-error">
+					<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
+				</p>
+			{/if}
+		{/key}
 	</div>
-	{#key question.error}
-		{#if question.error !== QuestionError.NoError}
-			<p class="error">
-				<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
-			</p>
-		{/if}
-	{/key}
 {/each}
 <QuestionButtons />
 
 <style>
 	.error {
 		padding-left: 2em;
-		margin: -1em 0em 1em 0em;
+	}
+
+	.question-error {
+		margin-top: -0.5em;
+		margin-bottom: 0.5em;
+	}
+
+	.choice-error {
+		margin-top: 0.5em;
 	}
 
 	@media screen and (max-width: 767px) {

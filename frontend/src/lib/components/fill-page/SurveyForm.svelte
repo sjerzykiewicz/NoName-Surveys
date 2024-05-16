@@ -1,17 +1,7 @@
 <script lang="ts">
 	import { answers, questions } from '$lib/stores/fill-page';
-	import type { ComponentType } from 'svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
-	import Single from '$lib/components/fill-page/Single.svelte';
-	import Text from '$lib/components/fill-page/Text.svelte';
-	import List from '$lib/components/fill-page/List.svelte';
-	import Scale from '$lib/components/fill-page/Scale.svelte';
-	import QuestionTitle from '$lib/components/fill-page/QuestionTitle.svelte';
-	import Multi from '$lib/components/fill-page/Multi.svelte';
-	import Slider from '$lib/components/fill-page/Slider.svelte';
-	import Binary from '$lib/components/fill-page/Binary.svelte';
-	import Rank from '$lib/components/fill-page/Rank.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
 	import { title } from '$lib/stores/fill-page';
@@ -27,8 +17,20 @@
 	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import QuestionTitle from './QuestionTitle.svelte';
+	import Single from './Single.svelte';
+	import Text from './Text.svelte';
+	import List from './List.svelte';
+	import Scale from './Scale.svelte';
+	import Multi from './Multi.svelte';
+	import Slider from './Slider.svelte';
+	import Binary from './Binary.svelte';
+	import Rank from './Rank.svelte';
+	import type { ComponentType } from 'svelte';
 
-	const componentTypeMap: { [id: string]: ComponentType } = {
+	export let survey: Survey;
+
+	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
 		single: Single,
 		multi: Multi,
@@ -38,8 +40,6 @@
 		rank: Rank,
 		list: List
 	};
-
-	export let survey: Survey;
 
 	$title = survey.title;
 
@@ -153,11 +153,7 @@
 			if ($questions[i].required) {
 				if ($answers[i].choices.length === 0) {
 					unansweredRequired[i] = i;
-				} else if (
-					$answers[i].choices.some(
-						(choice) => choice === null || choice === undefined || choice.length === 0
-					)
-				) {
+				} else if ($answers[i].choices.some((c) => !c)) {
 					unansweredRequired[i] = i;
 				}
 			}

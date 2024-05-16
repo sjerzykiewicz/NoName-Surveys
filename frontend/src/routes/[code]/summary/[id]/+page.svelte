@@ -2,6 +2,7 @@
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
 	import Answers from '$lib/components/summary-page/Answers.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	import type { PageServerData } from './$types';
 
 	export let data: PageServerData;
@@ -14,3 +15,12 @@
 <Content>
 	<Answers answer={data.answers[data.id]} id={data.id} />
 </Content>
+
+<Footer>
+	<button
+		class="back"
+		on:click={() => {
+			history.back();
+		}}><i class="material-symbols-rounded">undo</i>Back</button
+	>
+</Footer>

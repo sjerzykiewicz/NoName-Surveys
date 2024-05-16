@@ -33,7 +33,6 @@
 			</div>
 			<button
 				title="Remove choice"
-				class="create-page-button"
 				class:remove-choice={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
@@ -41,7 +40,7 @@
 			</button>
 		</div>
 	{/each}
-	<button title="Add choice" class="create-page-button add-choice" on:click={addChoice}>
+	<button title="Add choice" class="add-choice" on:click={addChoice}>
 		<i class="material-symbols-rounded">add_circle</i>Choice
 	</button>
 </div>

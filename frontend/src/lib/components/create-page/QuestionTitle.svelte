@@ -31,7 +31,7 @@
 	<div class="arrows">
 		<button
 			title="Move question up"
-			class="up create-page-button"
+			class="up"
 			disabled={questionIndex === 0}
 			on:click={moveQuestionUp}
 		>
@@ -39,7 +39,7 @@
 		</button>
 		<button
 			title="Move question down"
-			class="down create-page-button"
+			class="down"
 			disabled={questionIndex === $questions.length - 1}
 			on:click={moveQuestionDown}
 		>
@@ -56,13 +56,13 @@
 	</div>
 	<button
 		title={$questions[questionIndex].required ? 'Required' : 'Not required'}
-		class="required-button create-page-button"
+		class="required-button"
 		class:checked={$questions[questionIndex].required}
 		on:click={toggleRequirement}
 	>
 		<i class="material-symbols-rounded">asterisk</i>
 	</button>
-	<button class="create-page-button" title="Remove question" on:click={removeQuestion}>
+	<button title="Remove question" on:click={removeQuestion}>
 		<i class="material-symbols-rounded">close</i>
 	</button>
 </div>

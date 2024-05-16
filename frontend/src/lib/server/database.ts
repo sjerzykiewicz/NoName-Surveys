@@ -1,3 +1,4 @@
+import type DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 import type Survey from '$lib/entities/surveys/Survey';
 import type { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
 import type SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
@@ -89,4 +90,28 @@ export const getSurveyAnswers = async (survey_code: string) => {
 	}
 
 	return await response.json();
+};
+
+export const saveDraft = async (info: DraftCreateInfo) => {
+	const response = await fetch(`${host}/survey-drafts/create`, {
+		method: 'POST',
+		body: JSON.stringify(info),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	if (!response.ok) {
+		throw error(response.status, response.statusText);
+	}
+	return response.ok;
+};
+
+export const getDraftsOfUser = async (id: number) => {
+	const response = await fetch(`${host}/survey-drafts/all/${id}`, { method: 'GET' });
+	if (!response.ok) {
+		throw error(response.status, response.statusText);
+	}
+
+	const drafts = await response.json();
+	return { drafts };
 };

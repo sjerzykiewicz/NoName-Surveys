@@ -22,8 +22,9 @@
 	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import { goto } from '$app/navigation';
 	import { QuestionError } from '$lib/entities/QuestionError';
-	import { tick } from 'svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
+	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
+	import { tick } from 'svelte';
 
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];
@@ -69,7 +70,7 @@
 
 	export let titleError: boolean = false;
 
-	async function processSurvey() {
+	async function checkCorrectness() {
 		titleError = false;
 
 		if (!$title) {
@@ -107,13 +108,40 @@
 		if (!$questions.every((q) => q.error === QuestionError.NoError) || titleError) {
 			await tick();
 			scrollToElement('.error');
-			return;
+			return false;
 		}
 
-		let parsedSurvey: Survey = new Survey($title, constructQuestionList());
+		return true;
+	}
+
+	async function saveDraft() {
+		if (!(await checkCorrectness())) return;
+		const parsedSurvey = new Survey($title, constructQuestionList());
+		// TODO - user id
+		const draftInfo = new DraftCreateInfo(1, parsedSurvey);
+
+		const response = await fetch('/api/surveys/drafts/create', {
+			method: 'POST',
+			body: JSON.stringify(draftInfo),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			alert(response.statusText);
+		} else {
+			// TODO - display in UI
+			alert('Saved');
+		}
+	}
+
+	async function createSurvey() {
+		if (!(await checkCorrectness())) return;
+		const parsedSurvey = new Survey($title, constructQuestionList());
 
 		// TODO - replace dummy values with proper data
-		let surveyInfo = new SurveyInfo(1, parsedSurvey, '31-12-9999', false);
+		const surveyInfo = new SurveyInfo(1, parsedSurvey, '31-12-9999', false);
 
 		const response = await fetch('/api/surveys/create', {
 			method: 'POST',
@@ -139,12 +167,20 @@
 	<i class="material-symbols-rounded">search</i>Preview
 </button>
 <button
-	title="Save survey"
+	title="Save draft"
 	class="footer-button save"
 	disabled={$questions.length === 0}
-	on:click={processSurvey}
+	on:click={saveDraft}
 >
-	<i class="material-symbols-rounded">save</i>Save
+	<i class="material-symbols-rounded">save</i>Save draft
+</button>
+<button
+	title="Finish"
+	class="footer-button save"
+	disabled={$questions.length === 0}
+	on:click={createSurvey}
+>
+	<i class="material-symbols-rounded">done</i>Finish
 </button>
 
 <style>

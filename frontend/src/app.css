@@ -263,6 +263,12 @@ input[type='radio']:checked {
 	overflow: hidden;
 }
 
+@media screen and (max-width: 767px) {
+	.title {
+		font-size: 1.25em;
+	}
+}
+
 .choice-percentage {
 	margin-left: 0.5em;
 	font-weight: bold;

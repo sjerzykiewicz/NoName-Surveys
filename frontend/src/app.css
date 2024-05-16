@@ -107,7 +107,7 @@ button:active {
 }
 
 .add-choice {
-	margin-left: 1.8em;
+	margin-left: 2.25em;
 }
 
 .material-symbols-rounded {
@@ -136,7 +136,7 @@ button:active {
 }
 
 .question {
-	margin-bottom: 1.875em;
+	margin-bottom: 1.75em;
 }
 
 .question-input {
@@ -181,19 +181,20 @@ div[contenteditable]:empty::before {
 }
 
 .arrows i {
+	font-variation-settings: 'wght' 700;
 	line-height: 0.7em;
 	overflow: hidden;
 }
 
 .up {
 	border-radius: 5px 5px 0px 0px;
-	border-bottom: 1px solid var(--border-color);
+	border-bottom: 0.5px solid var(--border-color);
 	padding: 0em 0.25em 0em 0.25em;
 }
 
 .down {
 	border-radius: 0px 0px 5px 5px;
-	border-top: 0px;
+	border-top: 0.5px solid var(--border-color);
 	padding: 0em 0.25em 0em 0.25em;
 }
 
@@ -226,8 +227,11 @@ div[contenteditable]:empty::before {
 	font-weight: bold;
 }
 
-.radio {
+.radio,
+.checkbox,
+.rank {
 	text-align: right;
+	font-size: 1.25em;
 	width: 1.75em;
 	margin-right: 0.5em;
 }
@@ -263,15 +267,21 @@ input[type='radio']:checked {
 	overflow: hidden;
 }
 
-@media screen and (max-width: 767px) {
-	.title {
-		font-size: 1.25em;
-	}
-}
-
 .choice-percentage {
 	margin-left: 0.5em;
 	font-weight: bold;
 	color: var(--accent-color);
 	cursor: default;
+}
+
+@media screen and (max-width: 767px) {
+	.title {
+		font-size: 1.25em;
+	}
+
+	.radio,
+	.checkbox,
+	.rank {
+		font-size: 1em;
+	}
 }

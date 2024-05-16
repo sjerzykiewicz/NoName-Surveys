@@ -60,7 +60,7 @@
 		in:slide={{ duration: 200, easing: cubicInOut }}
 		on:introend={() => scrollToElement('.add-question')}
 	>
-		<QuestionTitle {questionIndex} />
+		<QuestionTitle {questionIndex} questionType={question.component} />
 
 		{#key question.error}
 			{#if checkQuestionError(questionIndex)}

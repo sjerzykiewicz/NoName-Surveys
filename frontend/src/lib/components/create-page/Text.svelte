@@ -20,11 +20,12 @@
 <style>
 	.details {
 		display: flex;
+		font-size: 1.25em;
 		margin-left: 2.25em;
 	}
 
 	.details-input {
-		font-size: 1.25em;
+		margin-right: 0em;
 	}
 
 	.details-input[contenteditable]:empty::before {
@@ -33,7 +34,7 @@
 
 	@media screen and (max-width: 767px) {
 		.choice-area,
-		.details-input {
+		.details {
 			font-size: 1em;
 		}
 	}

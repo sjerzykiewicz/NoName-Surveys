@@ -48,12 +48,6 @@
 </div>
 
 <style>
-	.radio {
-		text-align: right;
-		width: 1.75em;
-		margin-right: 0.5em;
-	}
-
 	input[type='radio'] {
 		cursor: default;
 	}

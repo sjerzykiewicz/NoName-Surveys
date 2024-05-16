@@ -1,25 +1,14 @@
 <script lang="ts">
-	import Single from '$lib/components/create-page/Single.svelte';
-	import Multi from '$lib/components/create-page/Multi.svelte';
-	import Scale from '$lib/components/create-page/Scale.svelte';
-	import Slider from '$lib/components/create-page/Slider.svelte';
-	import List from '$lib/components/create-page/List.svelte';
-	import Rank from '$lib/components/create-page/Rank.svelte';
-	import Binary from '$lib/components/create-page/Binary.svelte';
-	import Text from '$lib/components/create-page/Text.svelte';
 	import { beforeUpdate, type ComponentType } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	export let questionType: ComponentType;
 	export let questionTypeIndex: number;
 
-	let questionTypeData: { title: string; icon: string; text: string } = {
-		title: '',
-		icon: '',
-		text: ''
-	};
+	let questionTypeData: { title: string; icon: string; text: string };
 
 	const dispatch = createEventDispatcher();
 
@@ -28,35 +17,7 @@
 	}
 
 	beforeUpdate(() => {
-		switch (questionType) {
-			case Single:
-				questionTypeData = { title: 'Single choice', icon: 'radio_button_checked', text: 'Single' };
-				break;
-			case Multi:
-				questionTypeData = { title: 'Multiple choice', icon: 'check_box', text: 'Multi' };
-				break;
-			case Scale:
-				questionTypeData = { title: '1-5 choice', icon: 'star', text: 'Scale' };
-				break;
-			case Slider:
-				questionTypeData = { title: 'Range of values', icon: 'sliders', text: 'Slider' };
-				break;
-			case List:
-				questionTypeData = {
-					title: 'Dropdown menu choice',
-					icon: 'expand_circle_down',
-					text: 'List'
-				};
-				break;
-			case Rank:
-				questionTypeData = { title: 'Ranking choice', icon: 'numbers', text: 'Rank' };
-				break;
-			case Binary:
-				questionTypeData = { title: 'Yes/No choice', icon: 'thumbs_up_down', text: 'Binary' };
-				break;
-			case Text:
-				questionTypeData = { title: 'Open question', icon: 'text_fields', text: 'Text' };
-		}
+		questionTypeData = getQuestionTypeData(questionType);
 	});
 </script>
 

@@ -48,12 +48,6 @@
 </div>
 
 <style>
-	.checkbox {
-		text-align: right;
-		width: 1.75em;
-		margin-right: 0.5em;
-	}
-
 	input[type='checkbox'] {
 		cursor: default;
 	}

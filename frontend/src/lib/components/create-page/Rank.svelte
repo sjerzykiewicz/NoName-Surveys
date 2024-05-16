@@ -47,12 +47,8 @@
 
 <style>
 	.rank {
-		margin-right: 0.25em;
-		font-size: 1.25em;
 		color: var(--border-color);
 		cursor: default;
-		width: 1.5em;
-		text-align: right;
 	}
 
 	@media screen and (max-width: 767px) {
@@ -61,14 +57,6 @@
 		.rank,
 		button {
 			font-size: 1em;
-		}
-
-		.rank {
-			width: 2em;
-		}
-
-		.add-choice {
-			margin-left: 2.25em;
 		}
 	}
 </style>

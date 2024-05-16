@@ -59,14 +59,10 @@
 	}
 
 	function setQuestionChoices(component: ComponentType) {
-		if ([Single, Multi, List, Rank].includes(component)) {
+		if ([Single, Multi, List, Rank, Binary, Slider].includes(component)) {
 			return ['', ''];
 		} else if (component === Scale) {
 			return ['1', '2', '3', '4', '5'];
-		} else if (component === Binary) {
-			return ['Yes', 'No'];
-		} else if (component === Slider) {
-			return ['0', '10'];
 		} else {
 			return [''];
 		}

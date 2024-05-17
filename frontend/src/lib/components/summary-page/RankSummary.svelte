@@ -23,10 +23,6 @@
 </div>
 
 <style>
-	.choice {
-		width: fit-content;
-	}
-
 	.choice-in {
 		font-weight: bold;
 		cursor: default;
@@ -39,9 +35,10 @@
 	.rank {
 		margin-right: 0.25em;
 		font-size: 1.25em;
-		font-weight: bold;
+		color: var(--text-color);
 		cursor: default;
-		width: 1.5em;
+		width: 1.75em;
+		min-width: 1.75em;
 		text-align: right;
 	}
 

@@ -225,6 +225,13 @@ div[contenteditable] * {
 }
 
 /* styles for fill-page components */
+.question-title {
+	flex: 1;
+	text-shadow: 0px 4px 4px var(--shadow-color);
+	overflow: hidden;
+	overflow-wrap: break-word;
+}
+
 .choice-in {
 	background-color: var(--primary-color);
 	padding: 0.25em;
@@ -244,6 +251,15 @@ div[contenteditable] * {
 	border: 2px solid var(--accent-color);
 	color: var(--accent-color);
 	font-weight: bold;
+}
+
+.details {
+	font-size: 1.25em;
+	margin-top: -0.5em;
+	margin-bottom: 0.5em;
+	text-shadow: 0px 4px 4px var(--shadow-color);
+	cursor: default;
+	overflow-wrap: break-word;
 }
 
 .radio {
@@ -281,6 +297,8 @@ input[type='radio']:checked {
 	font-weight: bold;
 	color: var(--text-color);
 	cursor: default;
+	max-width: 100%;
+	overflow-wrap: break-word;
 	overflow: hidden;
 }
 

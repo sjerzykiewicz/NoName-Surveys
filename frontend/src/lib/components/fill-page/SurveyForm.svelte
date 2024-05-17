@@ -206,11 +206,6 @@
 </Footer>
 
 <style>
-	.title {
-		max-width: 100%;
-		overflow-wrap: break-word;
-	}
-
 	.error {
 		padding-left: 2em;
 		margin: -1em 0em 0.5em 0em;

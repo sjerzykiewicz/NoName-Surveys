@@ -21,10 +21,10 @@
 		cursor: default;
 		font-weight: bold;
 		color: var(--accent-color);
-		width: fit-content;
-		max-width: 100%;
 		transition: 0.2s;
+		overflow-wrap: break-word;
 	}
+
 	@media screen and (max-width: 767px) {
 		.select {
 			font-size: 1em;

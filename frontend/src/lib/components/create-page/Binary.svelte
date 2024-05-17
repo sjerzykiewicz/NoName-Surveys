@@ -11,8 +11,10 @@
 			title="Enter positive choice"
 			class="choice-input yes"
 			contenteditable
+			role="textbox"
+			tabindex="0"
 			bind:textContent={$questions[questionIndex].choices[0]}
-			on:beforeinput|once={() => ($questions[questionIndex].choices[0] = '')}
+			on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
 		>
 			{$questions[questionIndex].choices[0]}
 		</div>
@@ -23,8 +25,10 @@
 			title="Enter negative choice"
 			class="choice-input no"
 			contenteditable
+			role="textbox"
+			tabindex="0"
 			bind:textContent={$questions[questionIndex].choices[1]}
-			on:beforeinput|once={() => ($questions[questionIndex].choices[1] = '')}
+			on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
 		>
 			{$questions[questionIndex].choices[1]}
 		</div>

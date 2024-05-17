@@ -83,7 +83,7 @@
 
 <style>
 	.error {
-		padding-left: 2em;
+		padding-left: 2.8em;
 	}
 
 	.question-error {
@@ -93,11 +93,5 @@
 
 	.choice-error {
 		margin-top: 0.5em;
-	}
-
-	@media screen and (max-width: 767px) {
-		.error {
-			font-size: 1em;
-		}
 	}
 </style>

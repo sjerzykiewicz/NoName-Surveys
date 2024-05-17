@@ -48,10 +48,6 @@
 </div>
 
 <style>
-	.choice {
-		width: fit-content;
-	}
-
 	.choice-in {
 		cursor: default;
 	}
@@ -65,7 +61,8 @@
 		font-size: 1.25em;
 		color: var(--text-color);
 		cursor: default;
-		width: 1.5em;
+		width: 1.75em;
+		min-width: 1.75em;
 		text-align: right;
 	}
 

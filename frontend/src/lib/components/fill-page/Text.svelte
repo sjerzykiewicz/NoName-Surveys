@@ -30,6 +30,7 @@
 		margin-bottom: 0.5em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
 		cursor: default;
+		overflow-wrap: break-word;
 	}
 
 	.text-area {

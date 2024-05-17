@@ -170,6 +170,26 @@ div[contenteditable]:empty::before {
 	color: var(--text-dark-color);
 }
 
+/*	pasting text into div[contenteditable] carries over its style */
+/*	this eliminates most such cases */
+div[contenteditable] * {
+	font-size: inherit !important;
+	font-family: inherit !important;
+	font-weight: inherit !important;
+	font-style: inherit !important;
+	color: inherit !important;
+	background-color: inherit !important;
+	border: none !important;
+	outline: none !important;
+	text-decoration: none !important;
+	text-shadow: none !important;
+	box-shadow: none !important;
+	display: inline !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	cursor: inherit !important;
+}
+
 .remove-choice {
 	visibility: hidden;
 }
@@ -206,7 +226,6 @@ div[contenteditable]:empty::before {
 
 /* styles for fill-page components */
 .choice-in {
-	flex: 1;
 	background-color: var(--primary-color);
 	padding: 0.25em;
 	border: 1px solid var(--border-color);
@@ -215,7 +234,8 @@ div[contenteditable]:empty::before {
 	font-size: 1.25em;
 	cursor: pointer;
 	overflow: hidden;
-	margin-right: 0.5em;
+	overflow-wrap: break-word;
+	width: fit-content;
 }
 
 .choice-in.selected,
@@ -229,6 +249,7 @@ div[contenteditable]:empty::before {
 .radio {
 	text-align: right;
 	width: 1.75em;
+	min-width: 1.75em;
 	margin-right: 0.5em;
 }
 

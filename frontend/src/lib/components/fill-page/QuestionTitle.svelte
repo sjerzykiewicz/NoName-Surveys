@@ -30,6 +30,7 @@
 		flex: 1;
 		text-shadow: 0px 4px 4px var(--shadow-color);
 		overflow: hidden;
+		overflow-wrap: break-word;
 	}
 
 	.index {

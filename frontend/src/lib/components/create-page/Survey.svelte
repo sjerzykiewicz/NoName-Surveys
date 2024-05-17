@@ -1,5 +1,5 @@
 <script lang="ts">
-	import QuestionButtons from '$lib/components/create-page/QuestionButtons.svelte';
+	import AddQuestionButtons from '$lib/components/create-page/AddQuestionButtons.svelte';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { questions } from '$lib/stores/create-page';
@@ -79,7 +79,7 @@
 		{/key}
 	</div>
 {/each}
-<QuestionButtons />
+<AddQuestionButtons />
 
 <style>
 	.error {

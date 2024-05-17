@@ -3,7 +3,7 @@
 	import Content from '$lib/components/Content.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import SurveyTitle from '$lib/components/create-page/SurveyTitle.svelte';
-	import Questions from '$lib/components/create-page/Questions.svelte';
+	import Survey from '$lib/components/create-page/Survey.svelte';
 	import FooterButtons from '$lib/components/create-page/FooterButtons.svelte';
 
 	export let titleError: boolean;
@@ -13,7 +13,7 @@
 	<SurveyTitle {titleError} />
 </Header>
 <Content>
-	<Questions />
+	<Survey />
 </Content>
 <Footer>
 	<FooterButtons bind:titleError />

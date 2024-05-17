@@ -39,6 +39,7 @@
 			autocomplete="off"
 			placeholder={placeholder[0]}
 			bind:value={$questions[questionIndex].choices[0]}
+			on:beforeinput|once={() => ($questions[questionIndex].choices[0] = '')}
 		/>
 		<input
 			title="Enter maximum value"
@@ -48,6 +49,7 @@
 			autocomplete="off"
 			placeholder={placeholder[1]}
 			bind:value={$questions[questionIndex].choices[1]}
+			on:beforeinput|once={() => ($questions[questionIndex].choices[1] = '')}
 		/>
 	</div>
 </div>

@@ -57,9 +57,5 @@
 		button {
 			font-size: 1em;
 		}
-
-		.add-choice {
-			margin-left: 2.25em;
-		}
 	}
 </style>

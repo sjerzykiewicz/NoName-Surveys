@@ -287,7 +287,7 @@ i {
 	text-align: center;
 	cursor: text;
 	overflow: hidden;
-	width: 12em;
+	width: 15em;
 }
 
 .limit-input::placeholder {

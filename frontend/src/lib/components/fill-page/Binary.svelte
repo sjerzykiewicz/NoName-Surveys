@@ -8,15 +8,16 @@
 	<label
 		class="choice"
 		class:selected={$answers[questionIndex].choices[0] === $questions[questionIndex].choices[0]}
-	>
-		<input
-			type="radio"
-			name={questionIndex.toString()}
-			on:change={() => {
-				$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
-			}}
-		/>
-		<i class="material-symbols-rounded">thumb_up</i>
+		><div class="icon">
+			<input
+				type="radio"
+				name={questionIndex.toString()}
+				on:change={() => {
+					$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
+				}}
+			/>
+			<i class="material-symbols-rounded">thumb_up</i>
+		</div>
 		<div title="Select your answer" class="choice-input display">
 			{$questions[questionIndex].choices[0]}
 		</div>
@@ -24,15 +25,16 @@
 	<label
 		class="choice"
 		class:selected={$answers[questionIndex].choices[0] === $questions[questionIndex].choices[1]}
-	>
-		<input
-			type="radio"
-			name={questionIndex.toString()}
-			on:change={() => {
-				$answers[questionIndex].choices[0] = $questions[questionIndex].choices[1];
-			}}
-		/>
-		<i class="material-symbols-rounded">thumb_down</i>
+		><div class="icon">
+			<input
+				type="radio"
+				name={questionIndex.toString()}
+				on:change={() => {
+					$answers[questionIndex].choices[0] = $questions[questionIndex].choices[1];
+				}}
+			/>
+			<i class="material-symbols-rounded">thumb_down</i>
+		</div>
 		<div title="Select your answer" class="choice-input display">
 			{$questions[questionIndex].choices[1]}
 		</div>
@@ -51,7 +53,6 @@
 
 	.choice {
 		flex-flow: column;
-		text-align: center;
 		margin-top: -0.5em;
 		margin-bottom: 0em;
 		cursor: pointer;
@@ -68,6 +69,16 @@
 		background-color: var(--secondary-dark-color);
 		border: 1px solid var(--accent-color);
 		color: var(--accent-color);
+	}
+
+	.icon {
+		display: flex;
+		flex-flow: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		width: 1.75em;
+		min-width: 1.75em;
 	}
 
 	input {
@@ -107,7 +118,17 @@
 		.choice-input {
 			max-width: none;
 			margin-top: 0em;
-			margin-left: 0.5em;
+		}
+
+		.icon {
+			flex-flow: row;
+			text-align: right;
+			margin-right: 0.5em;
+		}
+
+		input {
+			top: 0em;
+			left: 1em;
 		}
 	}
 </style>

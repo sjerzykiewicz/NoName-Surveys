@@ -120,5 +120,9 @@
 		.limit {
 			font-size: 1em;
 		}
+
+		.limit-input {
+			width: 10em;
+		}
 	}
 </style>

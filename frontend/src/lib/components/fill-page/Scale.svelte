@@ -38,6 +38,7 @@
 		flex-flow: column;
 		text-align: center;
 		margin-bottom: 0em;
+		padding: 0.5em;
 		cursor: pointer;
 	}
 

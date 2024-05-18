@@ -209,7 +209,7 @@
 
 <style>
 	.error {
-		margin: -1em 0em 0.5em 0em;
+		margin: -1em 0em 0.5em 2.8em;
 	}
 
 	.save i {
@@ -221,7 +221,8 @@
 			font-size: 1.25em;
 		}
 
-		.footer-button {
+		.footer-button,
+		i {
 			font-size: 1em;
 		}
 	}

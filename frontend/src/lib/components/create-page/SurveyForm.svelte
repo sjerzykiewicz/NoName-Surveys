@@ -83,7 +83,7 @@
 
 <style>
 	.error {
-		padding-left: 2.8em;
+		margin-left: 2.8em;
 	}
 
 	.question-error {

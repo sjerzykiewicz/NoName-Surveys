@@ -17,7 +17,6 @@
 
 <style>
 	.choice {
-		width: fit-content;
 		cursor: default;
 	}
 

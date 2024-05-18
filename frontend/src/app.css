@@ -170,6 +170,26 @@ div[contenteditable]:empty::before {
 	color: var(--text-dark-color);
 }
 
+/*	pasting text into div[contenteditable] carries over its style */
+/*	this eliminates most such cases */
+div[contenteditable] * {
+	font-size: inherit !important;
+	font-family: inherit !important;
+	font-weight: inherit !important;
+	font-style: inherit !important;
+	color: inherit !important;
+	background-color: inherit !important;
+	border: none !important;
+	outline: none !important;
+	text-decoration: none !important;
+	text-shadow: none !important;
+	box-shadow: none !important;
+	display: inline !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	cursor: inherit !important;
+}
+
 .remove-choice {
 	visibility: hidden;
 }
@@ -206,8 +226,14 @@ div[contenteditable]:empty::before {
 }
 
 /* styles for fill-page components */
-.choice-in {
+.question-title {
 	flex: 1;
+	text-shadow: 0px 4px 4px var(--shadow-color);
+	overflow: hidden;
+	overflow-wrap: break-word;
+}
+
+.choice-in {
 	background-color: var(--primary-color);
 	padding: 0.25em;
 	border: 1px solid var(--border-color);
@@ -216,7 +242,8 @@ div[contenteditable]:empty::before {
 	font-size: 1.25em;
 	cursor: pointer;
 	overflow: hidden;
-	margin-right: 0.5em;
+	overflow-wrap: break-word;
+	width: fit-content;
 }
 
 .choice-in.selected,
@@ -225,6 +252,15 @@ div[contenteditable]:empty::before {
 	border: 2px solid var(--accent-color);
 	color: var(--accent-color);
 	font-weight: bold;
+}
+
+.details {
+	font-size: 1.25em;
+	margin-top: -0.5em;
+	margin-bottom: 0.5em;
+	text-shadow: 0px 4px 4px var(--shadow-color);
+	cursor: default;
+	overflow-wrap: break-word;
 }
 
 .radio,
@@ -264,6 +300,8 @@ input[type='radio']:checked {
 	font-weight: bold;
 	color: var(--text-color);
 	cursor: default;
+	max-width: 100%;
+	overflow-wrap: break-word;
 	overflow: hidden;
 }
 

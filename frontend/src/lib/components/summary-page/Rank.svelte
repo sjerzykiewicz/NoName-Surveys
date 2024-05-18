@@ -14,10 +14,6 @@
 </div>
 
 <style>
-	.choice {
-		width: fit-content;
-	}
-
 	.choice-in {
 		border: 2px solid var(--accent-color);
 		background-color: var(--secondary-dark-color);
@@ -36,7 +32,8 @@
 		font-weight: bold;
 		color: var(--accent-color);
 		cursor: default;
-		width: 1.5em;
+		width: 1.75em;
+		min-width: 1.75em;
 		text-align: right;
 	}
 

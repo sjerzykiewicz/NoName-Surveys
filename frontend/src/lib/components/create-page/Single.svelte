@@ -52,11 +52,4 @@
 	input[type='radio'] {
 		cursor: default;
 	}
-
-	@media screen and (max-width: 767px) {
-		.choice-area,
-		button {
-			font-size: 1em;
-		}
-	}
 </style>

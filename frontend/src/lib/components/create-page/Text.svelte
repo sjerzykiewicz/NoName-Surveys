@@ -29,10 +29,4 @@
 	.details-input[contenteditable]:empty::before {
 		content: 'Enter question details...';
 	}
-
-	@media screen and (max-width: 767px) {
-		.choice-area {
-			font-size: 1em;
-		}
-	}
 </style>

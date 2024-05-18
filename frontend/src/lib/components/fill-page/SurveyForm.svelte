@@ -215,15 +215,4 @@
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}
-
-	@media screen and (max-width: 767px) {
-		.title {
-			font-size: 1.25em;
-		}
-
-		.footer-button,
-		i {
-			font-size: 1em;
-		}
-	}
 </style>

@@ -71,10 +71,6 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-area {
-			font-size: 1em;
-		}
-
 		.choice-input {
 			width: 6em;
 		}

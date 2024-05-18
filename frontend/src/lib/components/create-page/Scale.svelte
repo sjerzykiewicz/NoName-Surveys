@@ -6,9 +6,9 @@
 
 <div class="choice-area">
 	{#each $questions[questionIndex].choices as choice}
-		<div class="choice">
+		<div title={choice} class="choice">
 			<input type="radio" disabled name={questionIndex.toString()} />
-			<div class="number">
+			<div class="choice-input display">
 				{choice}
 			</div>
 		</div>
@@ -22,29 +22,29 @@
 		align-items: center;
 		justify-content: space-around;
 		width: calc(86% - 2.25em);
-		font-size: 1.25em;
 		margin-left: 2.25em;
 	}
 
 	.choice {
 		flex-flow: column;
-		margin: 0em;
+		text-align: center;
+		margin-bottom: 0em;
 	}
 
-	.number {
-		margin-top: 0.25em;
+	.choice-input {
+		background-color: var(--secondary-color);
+		color: var(--text-dark-color);
+		margin-top: 0.5em;
+		width: 1em;
 		cursor: default;
+	}
+
+	.choice-input:hover {
+		background-color: var(--secondary-color);
 	}
 
 	input[type='radio'] {
 		margin: 0em;
 		cursor: default;
-	}
-
-	@media screen and (max-width: 767px) {
-		.choice-area,
-		.number {
-			font-size: 1em;
-		}
 	}
 </style>

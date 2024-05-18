@@ -119,7 +119,7 @@ button:active {
 	visibility: hidden;
 }
 
-i {
+.material-symbols-rounded {
 	font-size: 1.15em;
 }
 
@@ -417,13 +417,16 @@ input[type='radio']:checked {
 		font-size: 1.25em;
 	}
 
+	button,
+	select,
 	.radio,
 	.checkbox,
 	.rank,
 	.index,
 	.question-area,
-	.choice-area.display,
-	.details {
+	.choice-area,
+	.details,
+	.dropdown {
 		font-size: 1em;
 	}
 

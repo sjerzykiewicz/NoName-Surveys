@@ -134,13 +134,8 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.question-label,
-		button {
+		.question-label {
 			font-size: 1em;
-		}
-
-		.arrows i {
-			font-size: 1.2em;
 		}
 	}
 </style>

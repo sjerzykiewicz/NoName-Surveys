@@ -193,10 +193,4 @@
 		background-color: var(--secondary-color);
 		cursor: not-allowed;
 	}
-
-	@media screen and (max-width: 767px) {
-		.footer-button {
-			font-size: 1em;
-		}
-	}
 </style>

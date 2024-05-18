@@ -77,12 +77,4 @@
 		margin-left: 2.25em;
 		margin-right: 2.25em;
 	}
-
-	@media screen and (max-width: 767px) {
-		select,
-		.dropdown,
-		button {
-			font-size: 1em;
-		}
-	}
 </style>

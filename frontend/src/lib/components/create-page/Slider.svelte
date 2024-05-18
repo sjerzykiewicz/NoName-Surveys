@@ -62,10 +62,4 @@
 		justify-content: center;
 		margin-left: 2.25em;
 	}
-
-	@media screen and (max-width: 767px) {
-		.choice-area {
-			font-size: 1em;
-		}
-	}
 </style>

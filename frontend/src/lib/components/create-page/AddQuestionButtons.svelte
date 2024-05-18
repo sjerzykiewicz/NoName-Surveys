@@ -210,12 +210,8 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		button {
-			font-size: 1em;
-		}
-
 		.button-group {
-			margin-bottom: 13.5em;
+			margin-bottom: 12.5em;
 		}
 	}
 </style>

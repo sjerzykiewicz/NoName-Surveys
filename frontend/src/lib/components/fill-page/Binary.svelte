@@ -59,7 +59,7 @@
 
 	.choice-input {
 		margin: 0.5em 0em 0em 0em;
-		max-width: 12em;
+		max-width: 15em;
 		overflow-wrap: break-word;
 	}
 
@@ -91,8 +91,23 @@
 	}
 
 	@media screen and (max-width: 767px) {
+		.choice-area {
+			flex-flow: column;
+			align-items: flex-start;
+			margin-left: 0em;
+			width: calc(100% - 2.25em);
+		}
+
+		.choice {
+			flex-flow: row;
+			margin-top: 0em;
+			margin-bottom: 0.5em;
+		}
+
 		.choice-input {
-			max-width: 6em;
+			max-width: none;
+			margin-top: 0em;
+			margin-left: 0.5em;
 		}
 	}
 </style>

@@ -18,7 +18,7 @@
 	}
 </script>
 
-<div class="choice-area">
+<div class="choice-area display">
 	{#each $answers[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
@@ -40,7 +40,7 @@
 					<i class="material-symbols-rounded">arrow_drop_down</i>
 				</button>
 			</div>
-			<div class="choice-in">
+			<div class="choice-input display">
 				{choice}
 			</div>
 		</div>
@@ -48,26 +48,17 @@
 </div>
 
 <style>
-	.choice-in {
+	.choice-input {
 		cursor: default;
 	}
 
-	.choice-in:hover {
+	.choice-input:hover {
 		background-color: var(--primary-color);
 	}
 
 	.rank {
-		margin-right: 0.25em;
-		font-size: 1.25em;
 		color: var(--text-color);
 		cursor: default;
-		width: 1.75em;
-		min-width: 1.75em;
-		text-align: right;
-	}
-
-	.arrows {
-		font-size: 1.25em;
 	}
 
 	.arrows i {
@@ -79,14 +70,8 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-in,
-		.arrows,
-		.rank {
+		.arrows {
 			font-size: 1em;
-		}
-
-		.rank {
-			width: 2em;
 		}
 	}
 </style>

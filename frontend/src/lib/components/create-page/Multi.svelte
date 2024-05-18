@@ -35,7 +35,8 @@
 			</div>
 			<button
 				title="Remove choice"
-				class:remove-choice={isButtonHidden}
+				class="remove-choice"
+				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
 				<i class="material-symbols-rounded">cancel</i>
@@ -53,7 +54,6 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-input,
 		button {
 			font-size: 1em;
 		}

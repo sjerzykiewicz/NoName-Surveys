@@ -4,7 +4,7 @@
 	export let required: boolean;
 </script>
 
-<div class="question-area">
+<div class="question-area display">
 	<div class="index">{questionIndex + 1}.</div>
 	<div title="Question" class="question-title">
 		{question}
@@ -15,17 +15,6 @@
 </div>
 
 <style>
-	.question-area {
-		display: flex;
-		flex-flow: row;
-		align-items: flex-start;
-		margin-bottom: 1em;
-		font-size: 1.25em;
-		font-weight: bold;
-		color: var(--text-color);
-		cursor: default;
-	}
-
 	.question-title {
 		flex: 1;
 		text-shadow: 0px 4px 4px var(--shadow-color);

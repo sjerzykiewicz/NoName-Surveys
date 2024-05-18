@@ -5,7 +5,7 @@
 	$answers[questionIndex].choices[0] = '';
 </script>
 
-<div class="choice-area">
+<div class="choice-area display">
 	<div title="Question details" class="details">
 		{$questions[questionIndex].choices[0]}
 	</div>
@@ -20,12 +20,9 @@
 </div>
 
 <style>
-	.choice-area {
-		padding-left: 2.3em;
-	}
-
 	.text-area {
-		font-size: 1.25em;
+		margin-left: 2.25em;
+		margin-right: 0em;
 		min-height: 6em;
 	}
 
@@ -34,8 +31,6 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-area,
-		.details,
 		.text-area {
 			font-size: 1em;
 		}

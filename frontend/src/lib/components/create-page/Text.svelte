@@ -20,8 +20,6 @@
 <style>
 	.details {
 		display: flex;
-		font-size: 1.25em;
-		margin-left: 2.25em;
 	}
 
 	.details-input {
@@ -33,8 +31,7 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-area,
-		.details {
+		.choice-area {
 			font-size: 1em;
 		}
 	}

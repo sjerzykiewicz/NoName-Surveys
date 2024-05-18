@@ -42,7 +42,6 @@
 		align-items: center;
 		justify-content: space-between;
 		width: calc(86% - 2.25em);
-		font-size: 1.25em;
 		margin-left: 2.25em;
 	}
 
@@ -50,7 +49,6 @@
 		flex-flow: column;
 		text-align: center;
 		margin: 0em;
-		font-size: 0.8em;
 	}
 
 	.choice-input {
@@ -67,14 +65,13 @@
 	}
 
 	i {
-		font-size: 1.25em;
+		font-size: 1em;
 		color: var(--border-color);
 		cursor: default;
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-area,
-		i {
+		.choice-area {
 			font-size: 1em;
 		}
 

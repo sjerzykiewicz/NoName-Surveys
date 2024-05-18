@@ -4,7 +4,7 @@
 	export let questionIndex: number;
 </script>
 
-<div class="choice-area">
+<div class="choice-area display">
 	<label
 		class="choice"
 		class:selected={$answers[questionIndex].choices[0] === $questions[questionIndex].choices[0]}
@@ -17,7 +17,7 @@
 			}}
 		/>
 		<i class="material-symbols-rounded">thumb_up</i>
-		<div title="Select your answer" class="choice-in">
+		<div title="Select your answer" class="choice-input display">
 			{$questions[questionIndex].choices[0]}
 		</div>
 	</label>
@@ -33,7 +33,7 @@
 			}}
 		/>
 		<i class="material-symbols-rounded">thumb_down</i>
-		<div title="Select your answer" class="choice-in">
+		<div title="Select your answer" class="choice-input display">
 			{$questions[questionIndex].choices[1]}
 		</div>
 	</label>
@@ -44,32 +44,30 @@
 		display: flex;
 		flex-flow: row;
 		align-items: center;
-		justify-content: space-evenly;
-		width: calc(86% - 2.25em);
+		justify-content: space-around;
 		margin-left: 2.25em;
+		width: calc(100% - 4.5em);
 	}
 
 	.choice {
 		flex-flow: column;
 		text-align: center;
+		margin-top: -0.5em;
 		margin-bottom: 0em;
-		padding: 0em 0.5em;
 		cursor: pointer;
 	}
 
-	.choice-in {
+	.choice-input {
 		margin: 0.5em 0em 0em 0em;
-		width: fit-content;
-		max-width: 11em;
+		max-width: 12em;
 		overflow-wrap: break-word;
 	}
 
-	.selected .choice-in,
-	.selected .choice-in:hover {
+	.selected .choice-input,
+	.selected .choice-input:hover {
 		background-color: var(--secondary-dark-color);
-		border: 2px solid var(--accent-color);
+		border: 1px solid var(--accent-color);
 		color: var(--accent-color);
-		font-weight: bold;
 	}
 
 	input {
@@ -82,7 +80,7 @@
 	}
 
 	i {
-		font-size: 1.25em;
+		font-size: 1em;
 	}
 
 	.selected i {
@@ -93,13 +91,8 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-in,
-		i {
-			font-size: 1em;
-		}
-
-		.choice-in {
-			max-width: 5em;
+		.choice-input {
+			max-width: 6em;
 		}
 	}
 </style>

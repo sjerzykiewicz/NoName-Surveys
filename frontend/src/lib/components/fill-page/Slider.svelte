@@ -21,7 +21,20 @@
 	}
 </script>
 
-<div class="choice-area">
+<div class="choice-area display">
+	<div class="choice">
+		<input
+			title="Selected value"
+			class="limit-input"
+			type="number"
+			autocomplete="off"
+			min={$questions[questionIndex].choices[0]}
+			max={$questions[questionIndex].choices[1]}
+			name={questionIndex.toString()}
+			bind:value
+			on:change={handleChange}
+		/>
+	</div>
 	<div class="slider">
 		<input
 			class="range"
@@ -36,17 +49,6 @@
 	</div>
 	<div class="limits">
 		<div title="Minimum value" class="limit">{$questions[questionIndex].choices[0]}</div>
-		<input
-			title="Your answer"
-			class="current-value"
-			type="number"
-			autocomplete="off"
-			min={$questions[questionIndex].choices[0]}
-			max={$questions[questionIndex].choices[1]}
-			name={questionIndex.toString()}
-			bind:value
-			on:change={handleChange}
-		/>
 		<div title="Maximum value" class="limit">{$questions[questionIndex].choices[1]}</div>
 	</div>
 </div>
@@ -57,26 +59,29 @@
 		flex-flow: column;
 		align-items: center;
 		justify-content: center;
+		margin-left: 2.25em;
 	}
 
-	.slider {
-		display: flex;
-		align-items: center;
+	.choice {
 		justify-content: center;
-		width: 100%;
-		margin-top: 0.5em;
-		margin-bottom: 1em;
+		width: calc(100% - 2.25em);
+		margin-right: 2.25em;
+	}
+
+	.limit-input {
+		color: var(--accent-color);
+		border: 1px solid var(--accent-color);
+	}
+
+	.limit {
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		font-weight: bold;
+		color: var(--text-color);
+		cursor: default;
 	}
 
 	.range {
-		appearance: none;
-		width: 100%;
-		height: 0.5em;
-		border-radius: 0.5em;
 		background: var(--text-color);
-		outline: none;
-		opacity: 1;
-		margin-left: 2.75em;
 		cursor: pointer;
 	}
 
@@ -85,19 +90,11 @@
 	}
 
 	.range::-webkit-slider-thumb {
-		appearance: none;
-		width: 1.5em;
-		height: 1.5em;
-		border-radius: 1.5em;
 		background: var(--accent-color);
 		cursor: grab;
 	}
 
 	.range::-moz-range-thumb {
-		appearance: none;
-		width: 1.5em;
-		height: 1.5em;
-		border-radius: 1.5em;
 		background: var(--accent-color);
 		cursor: grab;
 	}
@@ -118,42 +115,9 @@
 		cursor: grabbing;
 	}
 
-	.limits {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		width: 100%;
-	}
-
-	.limit {
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		font-size: 1.25em;
-		font-weight: bold;
-		color: var(--text-color);
-		cursor: default;
-		margin-left: 2em;
-	}
-
-	.current-value {
-		background-color: var(--secondary-dark-color);
-		padding: 0.25em;
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		font-size: 1.25em;
-		font-weight: normal;
-		color: var(--text-color);
-		cursor: text;
-		overflow: hidden;
-		width: 3.5em;
-		margin-left: 2em;
-		text-align: center;
-	}
-
 	@media screen and (max-width: 767px) {
 		.choice-area,
-		.limit,
-		.current-value {
+		.limit {
 			font-size: 1em;
 		}
 	}

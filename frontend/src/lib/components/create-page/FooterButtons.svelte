@@ -80,9 +80,13 @@
 		const numQuestions = $questions.length;
 
 		for (let i = 0; i < numQuestions; i++) {
-			if (!$questions[i].question) {
+			const q = $questions[i].question;
+			if (q === null || q === undefined || q.length === 0) {
 				$questions[i].error = QuestionError.QuestionRequired;
-			} else if ($questions[i].component != Text && $questions[i].choices.some((c) => !c)) {
+			} else if (
+				$questions[i].component != Text &&
+				$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+			) {
 				switch ($questions[i].component) {
 					case Slider:
 						$questions[i].error = QuestionError.SliderValuesRequired;

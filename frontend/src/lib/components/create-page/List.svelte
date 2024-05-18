@@ -26,7 +26,7 @@
 
 <div class="choice-area">
 	<div class="dropdown">
-		<select class="dropdown-top" disabled />
+		<select disabled />
 	</div>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
@@ -35,7 +35,6 @@
 			</div>
 			<button
 				title="Remove choice"
-				class="create-page-button"
 				class:remove-choice={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
@@ -43,27 +42,27 @@
 			</button>
 		</div>
 	{/each}
-	<button title="Add choice" class="create-page-button add-choice" on:click={addChoice}>
+	<button title="Add choice" class="add-choice" on:click={addChoice}>
 		<i class="material-symbols-rounded">add_circle</i>Choice
 	</button>
 </div>
 
 <style>
-	.choice {
+	.choice-input {
 		margin-left: 2.25em;
 	}
 
-	.dropdown-top {
+	select {
 		flex: 1;
 		background-color: var(--primary-color);
 		border: 1px solid var(--border-color);
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--box-shadow-color);
 		font-size: 1.25em;
-		height: 1em;
+		height: 0.75em;
 	}
 
-	.dropdown-top:disabled {
+	select:disabled {
 		background-color: var(--secondary-color);
 		color: var(--text-dark-color);
 		opacity: 1;
@@ -73,24 +72,18 @@
 		display: flex;
 		align-items: center;
 		flex-flow: row;
+		font-size: 1.25em;
 		margin-bottom: 0.5em;
 		margin-left: 2.25em;
-		margin-right: 2.81em;
+		margin-right: 2.25em;
 	}
 
 	@media screen and (max-width: 767px) {
 		.choice-input,
-		.dropdown-top,
+		select,
+		.dropdown,
 		button {
 			font-size: 1em;
-		}
-
-		.dropdown {
-			margin-right: 2.275em;
-		}
-
-		.add-choice {
-			margin-left: 2.25em;
 		}
 	}
 </style>

@@ -11,7 +11,7 @@
 	import { type ComponentType, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import QuestionType from './QuestionType.svelte';
+	import QuestionTypeButton from './QuestionTypeButton.svelte';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 
@@ -66,7 +66,7 @@
 		} else if (component === Binary) {
 			return ['Yes', 'No'];
 		} else if (component === Slider) {
-			return ['0', '10'];
+			return ['1', '10'];
 		} else {
 			return [''];
 		}
@@ -122,7 +122,7 @@
 			<i class="material-symbols-rounded">add</i>Question
 		</button>
 		{#if previousQuestionType}
-			<QuestionType
+			<QuestionTypeButton
 				questionType={previousQuestionType}
 				questionTypeIndex={-1}
 				on:addQuestionType={(event) => addQuestion(event.detail.component)}
@@ -136,7 +136,7 @@
 			on:introstart={() => scrollToElement('.add-question')}
 		>
 			{#each questionTypes as questionType, questionTypeIndex}
-				<QuestionType
+				<QuestionTypeButton
 					{questionType}
 					{questionTypeIndex}
 					on:addQuestionType={(event) => addQuestion(event.detail.component)}

@@ -1,7 +1,12 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import { beforeUpdate, type ComponentType } from 'svelte';
 
 	export let questionIndex: number;
+	export let questionType: ComponentType;
+
+	let questionTypeData: { title: string; icon: string; text: string };
 
 	function removeQuestion() {
 		$questions.splice(questionIndex, 1);
@@ -24,14 +29,23 @@
 		$questions[questionIndex].required = !$questions[questionIndex].required;
 		$questions = $questions;
 	}
+
+	beforeUpdate(() => {
+		questionTypeData = getQuestionTypeData(questionType);
+	});
 </script>
 
+<div class="question-label">
+	<div title="Question no. {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
+	<div title={questionTypeData.title} class="type">
+		<i class="material-symbols-rounded">{questionTypeData.icon}</i>{questionTypeData.text}
+	</div>
+</div>
 <div class="question-area">
-	<div class="index">{questionIndex + 1}.</div>
 	<div class="arrows">
 		<button
 			title="Move question up"
-			class="up create-page-button"
+			class="up"
 			disabled={questionIndex === 0}
 			on:click={moveQuestionUp}
 		>
@@ -39,7 +53,7 @@
 		</button>
 		<button
 			title="Move question down"
-			class="down create-page-button"
+			class="down"
 			disabled={questionIndex === $questions.length - 1}
 			on:click={moveQuestionDown}
 		>
@@ -56,18 +70,47 @@
 	</div>
 	<button
 		title={$questions[questionIndex].required ? 'Required' : 'Not required'}
-		class="required-button create-page-button"
+		class="required-button"
 		class:checked={$questions[questionIndex].required}
 		on:click={toggleRequirement}
 	>
 		<i class="material-symbols-rounded">asterisk</i>
 	</button>
-	<button class="create-page-button" title="Remove question" on:click={removeQuestion}>
+	<button class="remove-question" title="Remove question" on:click={removeQuestion}>
 		<i class="material-symbols-rounded">close</i>
 	</button>
 </div>
 
 <style>
+	.question-label {
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+		margin-bottom: 0.25em;
+		font-size: 1.25em;
+		color: var(--border-color);
+		cursor: default;
+	}
+
+	.question-label i {
+		font-size: 1em;
+		margin-right: 0.25em;
+	}
+
+	.index {
+		margin-right: 0.5em;
+		width: 1.75em;
+		font-weight: bold;
+		text-align: right;
+		color: var(--text-color);
+	}
+
+	.type {
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+	}
+
 	.question-area {
 		display: flex;
 		flex-flow: row;
@@ -83,20 +126,8 @@
 		color: var(--text-dark-color);
 	}
 
-	.index {
-		margin-right: 0.3em;
-		font-size: 1.1em;
-		cursor: default;
-		width: 1.4em;
-		text-align: right;
-	}
-
 	.required-button {
 		margin-right: 0.5em;
-	}
-
-	.required-button i {
-		font-variation-settings: 'wght' 400;
 	}
 
 	.required-button.checked {
@@ -116,11 +147,12 @@
 		font-size: 1em;
 	}
 
-	i {
+	.remove-question i {
 		font-variation-settings: 'wght' 700;
 	}
 
 	@media screen and (max-width: 767px) {
+		.question-label,
 		.question-area,
 		.index,
 		button {
@@ -129,10 +161,6 @@
 
 		.arrows i {
 			font-size: 1.2em;
-		}
-
-		.index {
-			width: 2em;
 		}
 	}
 </style>

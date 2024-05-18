@@ -23,7 +23,7 @@
 </form>
 
 {#if form?.error}
-	<p class="error"><i class="material-symbols-rounded">error</i>{form.error}</p>
+	<p title="Error" class="error"><i class="material-symbols-rounded">error</i>{form.error}</p>
 {/if}
 
 <style>
@@ -65,7 +65,7 @@
 		justify-content: center;
 	}
 
-	i {
+	.save i {
 		font-variation-settings: 'wght' 700;
 	}
 

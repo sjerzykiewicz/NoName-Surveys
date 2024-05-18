@@ -37,6 +37,8 @@
 		color: var(--text-color);
 		max-width: 100%;
 		transition: 0.2s;
+		overflow-wrap: break-word;
+		text-overflow: ellipsis;
 	}
 
 	@media screen and (max-width: 767px) {

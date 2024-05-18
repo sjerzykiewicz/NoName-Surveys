@@ -26,12 +26,6 @@
 		cursor: default;
 	}
 
-	.question-title {
-		flex: 1;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		overflow: hidden;
-	}
-
 	.index {
 		width: 1.4em;
 		text-align: right;

@@ -26,17 +26,8 @@
 	}
 
 	select {
-		background-color: var(--primary-color);
-		padding: 0.25em;
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		font-size: 1em;
 		cursor: pointer;
-		font-weight: normal;
-		color: var(--text-color);
 		max-width: calc(100% - 2.25em);
-		transition: 0.2s;
 		overflow-wrap: break-word;
 		text-overflow: ellipsis;
 	}

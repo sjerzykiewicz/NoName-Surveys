@@ -21,8 +21,8 @@
 	}
 </script>
 
-<div class="choice-area display">
-	<div class="choice">
+<div class="choice-area display slider">
+	<div class="choice slider">
 		<input
 			title="Selected value"
 			class="limit-input"
@@ -35,7 +35,7 @@
 			on:change={handleChange}
 		/>
 	</div>
-	<div title="Select your answer" class="slider">
+	<div title="Select your answer" class="slider-area">
 		<input
 			class="range"
 			type="range"
@@ -54,31 +54,10 @@
 </div>
 
 <style>
-	.choice-area {
-		display: flex;
-		flex-flow: column;
-		align-items: center;
-		justify-content: center;
-		margin-left: 2.25em;
-	}
-
-	.choice {
-		justify-content: center;
-		width: calc(100% - 2.25em);
-		margin-right: 2.25em;
-	}
-
 	.limit-input {
 		color: var(--accent-color);
 		border: 1px solid var(--accent-color);
 		width: 15em;
-	}
-
-	.limit {
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		font-weight: bold;
-		color: var(--text-color);
-		cursor: default;
 	}
 
 	.range {
@@ -117,11 +96,6 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-area,
-		.limit {
-			font-size: 1em;
-		}
-
 		.limit-input {
 			width: 10em;
 		}

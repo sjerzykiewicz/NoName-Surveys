@@ -6,13 +6,13 @@
 	}
 </script>
 
-<div class="choice-area">
+<div class="choice-area display">
 	{#each data.choices as choice}
 		<div class="choice">
-			<div class="choice-in">
+			<div title="Choice" class="choice-input display">
 				{choice}
 			</div>
-			<div class="choice-percentage" title="Average">
+			<div title="Average" class="choice-percentage">
 				{calculatePercentage(choice, data.answers)}%
 			</div>
 		</div>
@@ -21,27 +21,13 @@
 
 <style>
 	.choice-area {
-		padding-left: 2.3em;
+		margin-left: 2.25em;
+		width: calc(100% - 4.5em);
 	}
 
-	.choice {
+	.choice-input,
+	.choice-input:hover {
+		background-color: var(--primary-dark-color);
 		cursor: default;
-	}
-
-	.choice-in {
-		cursor: default;
-		overflow: hidden;
-		overflow-wrap: break-word;
-	}
-
-	.choice-in:hover {
-		background-color: var(--primary-color);
-	}
-
-	@media screen and (max-width: 767px) {
-		.choice-area,
-		.choice-in {
-			font-size: 1em;
-		}
 	}
 </style>

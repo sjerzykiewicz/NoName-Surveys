@@ -90,17 +90,9 @@ button {
 	border: 1px solid var(--border-color);
 	border-radius: 5px;
 	box-shadow: 0px 4px 4px var(--shadow-color);
-	font-size: 1.25em;
+	font-size: 1em;
 	color: var(--text-color);
 	cursor: pointer;
-}
-
-button:hover {
-	background-color: var(--secondary-color);
-}
-
-button:active {
-	background-color: var(--border-color);
 }
 
 .footer-button {
@@ -108,6 +100,7 @@ button:active {
 	margin-left: 0.5em;
 }
 
+button:hover,
 .footer-button:hover {
 	background-color: var(--secondary-color);
 }
@@ -116,7 +109,6 @@ button:active {
 .back {
 	background-color: var(--accent-color);
 	color: var(--text-color-2);
-	transition: 0.2s;
 }
 
 .save:hover,
@@ -124,8 +116,10 @@ button:active {
 	background-color: var(--accent-dark-color);
 }
 
+button:active,
 .footer-button:active,
-.save:active {
+.save:active,
+.back:active {
 	background-color: var(--border-color);
 }
 
@@ -150,7 +144,8 @@ button:active {
 .footer-button i,
 .error i,
 .save i,
-.back i {
+.back i,
+.login-buttons i {
 	margin-right: 0.15em;
 }
 
@@ -313,6 +308,20 @@ button:active {
 	width: 1em;
 }
 
+.choice-area.slider {
+	display: flex;
+	flex-flow: column;
+	align-items: center;
+	justify-content: center;
+	margin-left: 2.25em;
+}
+
+.choice.slider {
+	justify-content: center;
+	width: calc(100% - 2.25em);
+	margin-right: 2.25em;
+}
+
 .choice-area.binary {
 	display: flex;
 	flex-flow: row;
@@ -392,6 +401,13 @@ button:active {
 	margin-right: 2.25em;
 }
 
+.limit {
+	text-shadow: 0px 4px 4px var(--shadow-color);
+	font-weight: bold;
+	color: var(--text-color);
+	cursor: default;
+}
+
 .limit-input {
 	background-color: var(--secondary-dark-color);
 	padding: 0.25em;
@@ -451,6 +467,12 @@ div[contenteditable] * {
 
 /* other */
 
+.rank {
+	color: var(--text-color);
+	text-shadow: 0px 4px 4px var(--shadow-color);
+	cursor: default;
+}
+
 .radio,
 .checkbox,
 .rank {
@@ -502,7 +524,7 @@ input[type='radio']:checked {
 	color: var(--accent-color);
 }
 
-.slider {
+.slider-area {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -518,6 +540,11 @@ input[type='radio']:checked {
 	background: var(--border-color);
 	outline: none;
 	opacity: 1;
+	cursor: default;
+}
+
+.range:hover {
+	background: var(--border-color);
 }
 
 .range::-webkit-slider-thumb {
@@ -538,6 +565,38 @@ input[type='radio']:checked {
 	cursor: default;
 }
 
+.range::-webkit-slider-thumb:hover {
+	background: var(--text-color);
+}
+
+.range::-moz-range-thumb:hover {
+	background: var(--text-color);
+}
+
+.range::-webkit-slider-thumb:active {
+	cursor: default;
+}
+
+.range::-moz-range-thumb:active {
+	cursor: default;
+}
+
+select {
+	background-color: var(--primary-color);
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	box-shadow: 0px 4px 4px var(--box-shadow-color);
+	color: var(--text-color);
+	font-size: 1em;
+	padding: 0.25em;
+}
+
+select:disabled {
+	background-color: var(--secondary-color);
+	color: var(--text-dark-color);
+	opacity: 1;
+}
+
 @media screen and (max-width: 767px) {
 	.title {
 		font-size: 1.25em;
@@ -549,20 +608,19 @@ input[type='radio']:checked {
 	.checkbox,
 	.rank,
 	.index,
+	.question-label,
 	.question-area,
 	.choice-area,
 	.details,
 	.text-area,
-	.dropdown {
+	.dropdown,
+	.limit,
+	.arrows {
 		font-size: 1em;
 	}
 
 	.error {
 		font-size: 0.8em;
-	}
-
-	.limit-input {
-		width: 6em;
 	}
 
 	.choice-area.binary {

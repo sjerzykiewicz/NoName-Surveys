@@ -167,7 +167,7 @@
 	}
 </script>
 
-<button title="Preview survey" class="footer-button">
+<button title="Preview survey" class="footer-button" disabled>
 	<i class="material-symbols-rounded">search</i>Preview
 </button>
 <button
@@ -188,7 +188,7 @@
 </button>
 
 <style>
-	.save:disabled {
+	.footer-button:disabled {
 		color: var(--text-dark-color);
 		background-color: var(--secondary-color);
 		cursor: not-allowed;

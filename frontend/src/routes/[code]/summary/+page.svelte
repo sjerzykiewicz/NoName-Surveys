@@ -34,6 +34,7 @@
 
 <Footer>
 	<button
+		title="Go back"
 		class="footer-button"
 		on:click={() => {
 			history.back();

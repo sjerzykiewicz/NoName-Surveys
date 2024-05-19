@@ -26,7 +26,7 @@
 
 <div class="choice-area">
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<div class="choice">
+		<div title="Choice no. {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
 			<div title="Enter choice" class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}
@@ -49,6 +49,5 @@
 <style>
 	.rank {
 		color: var(--border-color);
-		cursor: default;
 	}
 </style>

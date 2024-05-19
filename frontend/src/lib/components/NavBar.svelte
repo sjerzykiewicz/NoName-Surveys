@@ -203,6 +203,7 @@
 		.bar {
 			border-bottom: none;
 		}
+
 		a {
 			border-top: 1px solid var(--border-color);
 			border-right: none;

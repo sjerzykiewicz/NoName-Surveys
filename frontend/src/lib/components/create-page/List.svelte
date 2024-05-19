@@ -55,18 +55,7 @@
 
 	select {
 		flex: 1;
-		background-color: var(--primary-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
-		font-size: 1em;
 		height: 0.75em;
-	}
-
-	select:disabled {
-		background-color: var(--secondary-color);
-		color: var(--text-dark-color);
-		opacity: 1;
 	}
 
 	.dropdown {

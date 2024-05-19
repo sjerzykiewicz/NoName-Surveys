@@ -22,11 +22,7 @@
 		margin-left: auto;
 		margin-right: auto;
 		margin-bottom: 4em;
-	}
-
-	i {
-		font-size: 1.15em;
-		margin-right: 0.15em;
+		font-size: 1.25em;
 	}
 
 	@media screen and (max-width: 767px) {
@@ -36,11 +32,6 @@
 
 		.login-buttons {
 			width: 12em;
-		}
-
-		button,
-		i {
-			font-size: 1em;
 		}
 	}
 </style>

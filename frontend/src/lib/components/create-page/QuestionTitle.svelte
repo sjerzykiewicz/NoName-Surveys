@@ -125,17 +125,7 @@
 		background-color: var(--border-color);
 	}
 
-	button {
-		font-size: 1em;
-	}
-
 	.remove-question i {
 		font-variation-settings: 'wght' 700;
-	}
-
-	@media screen and (max-width: 767px) {
-		.question-label {
-			font-size: 1em;
-		}
 	}
 </style>

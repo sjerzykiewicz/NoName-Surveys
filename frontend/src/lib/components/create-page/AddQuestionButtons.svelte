@@ -159,6 +159,7 @@
 	.button-group {
 		width: fit-content;
 		margin-bottom: 17em;
+		font-size: 1.25em;
 	}
 
 	.add-buttons {
@@ -212,6 +213,7 @@
 	@media screen and (max-width: 767px) {
 		.button-group {
 			margin-bottom: 12.5em;
+			font-size: 1em;
 		}
 	}
 </style>

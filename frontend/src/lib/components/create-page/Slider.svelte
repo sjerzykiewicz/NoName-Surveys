@@ -1,11 +1,17 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
-	import { beforeUpdate } from 'svelte';
+	import { afterUpdate, beforeUpdate } from 'svelte';
 
 	export let questionIndex: number;
 
 	let innerWidth: number;
 	let placeholder: Array<string>;
+
+	let value: number = Math.round(
+		(parseFloat($questions[questionIndex].choices[0]) +
+			parseFloat($questions[questionIndex].choices[1])) /
+			2
+	);
 
 	beforeUpdate(() => {
 		if (innerWidth <= 767) {
@@ -14,12 +20,20 @@
 			placeholder = ['Enter minimum value...', 'Enter maximum value...'];
 		}
 	});
+
+	afterUpdate(() => {
+		value = Math.round(
+			(parseFloat($questions[questionIndex].choices[0]) +
+				parseFloat($questions[questionIndex].choices[1])) /
+				2
+		);
+	});
 </script>
 
 <svelte:window bind:innerWidth />
 
-<div class="choice-area">
-	<div class="slider">
+<div class="choice-area slider">
+	<div class="slider-area">
 		<input
 			class="range"
 			type="range"
@@ -28,6 +42,7 @@
 			max={$questions[questionIndex].choices[1]}
 			name={questionIndex.toString()}
 			disabled
+			bind:value
 		/>
 	</div>
 	<div class="limits">
@@ -55,11 +70,9 @@
 </div>
 
 <style>
-	.choice-area {
-		display: flex;
-		flex-flow: column;
-		align-items: center;
-		justify-content: center;
-		margin-left: 2.25em;
+	@media screen and (max-width: 767px) {
+		.limit-input {
+			width: 6em;
+		}
 	}
 </style>

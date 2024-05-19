@@ -2,11 +2,11 @@
 	export let data: { answer: string[] };
 </script>
 
-<div class="choice-area">
+<div class="choice-area display">
 	{#each data.answer as answer, answerIndex}
-		<div title="Answer" class="choice">
+		<div title="Answer no. {answerIndex + 1}" class="choice">
 			<div class="rank">{answerIndex + 1}.</div>
-			<div class="choice-in">
+			<div class="choice-input display">
 				{answer}
 			</div>
 		</div>
@@ -14,37 +14,9 @@
 </div>
 
 <style>
-	.choice-in {
-		border: 2px solid var(--accent-color);
-		background-color: var(--secondary-dark-color);
-		font-weight: bold;
-		color: var(--accent-color);
+	.choice-input,
+	.choice-input:hover {
+		background-color: var(--primary-dark-color);
 		cursor: default;
-	}
-
-	.choice-in:hover {
-		background-color: var(--secondary-dark-color);
-	}
-
-	.rank {
-		margin-right: 0.25em;
-		font-size: 1.25em;
-		font-weight: bold;
-		color: var(--accent-color);
-		cursor: default;
-		width: 1.75em;
-		min-width: 1.75em;
-		text-align: right;
-	}
-
-	@media screen and (max-width: 767px) {
-		.choice-in,
-		.rank {
-			font-size: 1em;
-		}
-
-		.rank {
-			width: 2em;
-		}
 	}
 </style>

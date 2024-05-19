@@ -20,7 +20,7 @@
 
 <div class="choice-area display">
 	{#each $answers[questionIndex].choices as choice, choiceIndex}
-		<div class="choice">
+		<div title="Answer no. {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
 			<div class="arrows">
 				<button
@@ -40,7 +40,7 @@
 					<i class="material-symbols-rounded">arrow_drop_down</i>
 				</button>
 			</div>
-			<div title="Answer no. {choiceIndex + 1}" class="choice-input display">
+			<div class="choice-input display">
 				{choice}
 			</div>
 		</div>
@@ -52,24 +52,5 @@
 	.choice-input:hover {
 		background-color: var(--primary-dark-color);
 		cursor: default;
-	}
-
-	.rank {
-		color: var(--text-color);
-		cursor: default;
-	}
-
-	.arrows i {
-		font-variation-settings: 'wght' 700;
-	}
-
-	button {
-		font-size: 1em;
-	}
-
-	@media screen and (max-width: 767px) {
-		.arrows {
-			font-size: 1em;
-		}
 	}
 </style>

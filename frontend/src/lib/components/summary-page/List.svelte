@@ -2,32 +2,30 @@
 	export let data: { answer: string; choices: string[] };
 </script>
 
-<div class="choice-area">
-	<div title="Answer" class="select">{data.answer}</div>
+<div class="choice-area display">
+	{#each data.choices as choice}
+		<div title={choice === data.answer ? 'Selected answer' : 'Other choice'} class="choice">
+			<div class="choice-input display" class:selected={choice === data.answer}>
+				{choice}
+			</div>
+		</div>
+	{/each}
 </div>
 
 <style>
 	.choice-area {
-		padding-left: 2.3em;
+		margin-left: 2.25em;
+		width: calc(100% - 4.5em);
 	}
 
-	.select {
-		background-color: var(--secondary-dark-color);
-		padding: 0.25em;
-		border: 2px solid var(--accent-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		font-size: 1.25em;
+	.choice-input,
+	.choice-input:hover {
+		background-color: var(--primary-dark-color);
 		cursor: default;
-		font-weight: bold;
-		color: var(--accent-color);
-		transition: 0.2s;
-		overflow-wrap: break-word;
 	}
 
-	@media screen and (max-width: 767px) {
-		.select {
-			font-size: 1em;
-		}
+	.choice-input.selected,
+	.choice-input.selected:hover {
+		background-color: var(--secondary-dark-color);
 	}
 </style>

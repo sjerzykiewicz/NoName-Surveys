@@ -57,6 +57,29 @@ i {
 	box-shadow: none;
 }
 
+:root::-webkit-scrollbar {
+	width: 1em;
+}
+
+:root::-webkit-scrollbar-track {
+	background-color: var(--secondary-dark-color);
+}
+
+:root::-webkit-scrollbar-thumb {
+	background-color: var(--primary-color);
+	background-clip: padding-box;
+	border-radius: 5px;
+	border: 2px solid var(--secondary-dark-color);
+}
+
+:root::-webkit-scrollbar-thumb:hover {
+	background-color: var(--text-dark-color);
+}
+
+:root::-webkit-scrollbar-thumb:active {
+	background-color: var(--border-color);
+}
+
 /* buttons */
 
 button {
@@ -126,7 +149,8 @@ button:active {
 .add-choice i,
 .footer-button i,
 .error i,
-.save i {
+.save i,
+.back i {
 	margin-right: 0.15em;
 }
 
@@ -189,6 +213,7 @@ button:active {
 	font-weight: bold;
 	cursor: default;
 	width: calc(100% - 2.25em);
+	margin-bottom: 0em;
 }
 
 .question-input {
@@ -198,8 +223,16 @@ button:active {
 .question-title {
 	flex: 1;
 	text-shadow: 0px 4px 4px var(--shadow-color);
+	padding-bottom: 1em;
 	overflow: hidden;
 	overflow-wrap: break-word;
+}
+
+.question-title i {
+	position: relative;
+	top: 0.1em;
+	font-size: 1em;
+	color: var(--accent-color);
 }
 
 .details {
@@ -207,6 +240,25 @@ button:active {
 	margin-left: 2.25em;
 	text-shadow: 0px 4px 4px var(--shadow-color);
 	cursor: default;
+	overflow-wrap: break-word;
+}
+
+.text-area {
+	margin-left: 2.25em;
+	margin-right: 0em;
+	min-height: 6em;
+}
+
+.text-area.display {
+	background-color: var(--primary-dark-color);
+	padding: 0.25em;
+	border: 1px solid var(--text-dark-color);
+	border-radius: 5px;
+	box-shadow: 0px 4px 4px var(--shadow-color);
+	color: var(--text-color);
+	min-height: auto;
+	cursor: default;
+	overflow: hidden;
 	overflow-wrap: break-word;
 }
 
@@ -221,18 +273,6 @@ button:active {
 
 .choice-area.display {
 	width: calc(100% - 2.25em);
-}
-
-.choice {
-	display: flex;
-	align-items: center;
-	flex-flow: row;
-	margin-bottom: 0.5em;
-}
-
-.choice-input[contenteditable]:empty::before {
-	content: 'Enter choice...';
-	color: var(--text-dark-color);
 }
 
 .choice-input.display {
@@ -251,8 +291,85 @@ button:active {
 	background-color: var(--secondary-color);
 }
 
+.choice-area.scale {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: space-around;
+	width: calc(100% - 4.5em);
+	margin-left: 2.25em;
+}
+
+.choice.scale {
+	flex-flow: column;
+	text-align: center;
+	margin-bottom: 0em;
+	padding: 0.5em;
+	cursor: default;
+}
+
+.choice-input.scale {
+	margin-top: 0.5em;
+	width: 1em;
+}
+
+.choice-area.binary {
+	display: flex;
+	flex-flow: row;
+	align-items: flex-start;
+	justify-content: space-around;
+	margin-left: 2.25em;
+	width: calc(100% - 4.5em);
+}
+
+.choice.binary {
+	flex-flow: column;
+	text-align: center;
+	margin-top: -0.5em;
+	margin-bottom: 0em;
+	cursor: default;
+}
+
+.choice-input.binary {
+	margin: 0.5em 0em 0em 0em;
+	max-width: 15em;
+	overflow-wrap: break-word;
+}
+
+.binary .icon {
+	display: flex;
+	flex-flow: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	width: 1.75em;
+	min-width: 1.75em;
+}
+
+.binary input {
+	appearance: none;
+	position: relative;
+	top: 1.5em;
+	height: 1.5em;
+	width: 1.5em;
+}
+
+.choice {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	margin-bottom: 0.5em;
+}
+
+.choice-input[contenteditable]:empty::before {
+	content: 'Enter choice...';
+	color: var(--text-dark-color);
+}
+
 .choice-input.selected,
-.choice-input.selected:hover {
+.choice-input.selected:hover,
+.selected .choice-input,
+.selected .choice-input:hover {
 	background-color: var(--secondary-dark-color);
 	border: 1px solid var(--accent-color);
 	color: var(--accent-color);
@@ -345,6 +462,7 @@ div[contenteditable] * {
 
 input[type='checkbox'],
 input[type='radio'] {
+	margin: 0em;
 	cursor: pointer;
 }
 
@@ -374,6 +492,14 @@ input[type='radio']:checked {
 	max-width: 100%;
 	overflow-wrap: break-word;
 	overflow: hidden;
+	padding-bottom: 1em;
+	margin-bottom: -1em;
+}
+
+.answers {
+	padding-bottom: 1em;
+	margin-bottom: 0em;
+	color: var(--accent-color);
 }
 
 .slider {
@@ -426,6 +552,7 @@ input[type='radio']:checked {
 	.question-area,
 	.choice-area,
 	.details,
+	.text-area,
 	.dropdown {
 		font-size: 1em;
 	}
@@ -436,5 +563,35 @@ input[type='radio']:checked {
 
 	.limit-input {
 		width: 6em;
+	}
+
+	.choice-area.binary {
+		flex-flow: column;
+		align-items: flex-start;
+		margin-left: 0em;
+		width: calc(100% - 2.25em);
+	}
+
+	.choice.binary {
+		flex-flow: row;
+		text-align: left;
+		margin-top: 0em;
+		margin-bottom: 0.5em;
+	}
+
+	.choice-input.binary {
+		max-width: none;
+		margin-top: 0em;
+	}
+
+	.binary .icon {
+		flex-flow: row;
+		text-align: right;
+		margin-right: 0.5em;
+	}
+
+	.binary input {
+		top: 0em;
+		left: 1em;
 	}
 }

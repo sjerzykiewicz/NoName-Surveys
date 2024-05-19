@@ -2,6 +2,7 @@
 	import { questions, answers } from '$lib/stores/fill-page';
 
 	export let questionIndex: number;
+
 	$answers[questionIndex].choices[0] = '';
 </script>
 
@@ -20,19 +21,7 @@
 </div>
 
 <style>
-	.text-area {
-		margin-left: 2.25em;
-		margin-right: 0em;
-		min-height: 6em;
-	}
-
 	.text-area[contenteditable]:empty::before {
 		content: 'Enter your answer...';
-	}
-
-	@media screen and (max-width: 767px) {
-		.text-area {
-			font-size: 1em;
-		}
 	}
 </style>

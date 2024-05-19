@@ -16,29 +16,25 @@
 </script>
 
 <Header>
-	<div class="title">{data.survey.survey_structure.title}</div>
+	<div title="Survey title" class="title">{data.survey.survey_structure.title}</div>
 </Header>
 
 <Content>
-	<div class="answers-number">Number of answers: {numbers.length}</div>
+	<div title="Number of answers" class="title answers">Number of answers: {numbers.length}</div>
 	<AnswersSummary surveyAnswers={data.answers} />
-	{#if data.answers.length === 0}
-		<h2>No answers yet!</h2>
-	{:else}
-		<h2>All answers:</h2>
-	{/if}
+	<div title="Answers" class="title answers">
+		{data.answers.length === 0 ? 'No answers yet!' : 'All answers:'}
+	</div>
 	{#each numbers as i}
 		<div class="entry">
-			<div>
-				<a href="{$page.url.pathname}/{i}">{i + 1}. Answer</a>
-			</div>
+			<a href="{$page.url.pathname}/{i}">{i + 1}. Answer</a>
 		</div>
 	{/each}
 </Content>
 
 <Footer>
 	<button
-		class="back"
+		class="footer-button"
 		on:click={() => {
 			history.back();
 		}}><i class="material-symbols-rounded">undo</i>Back</button
@@ -65,16 +61,5 @@
 		width: 100%;
 		text-decoration: none;
 		transition: background-color 0.2s;
-	}
-
-	h2 {
-		margin-top: 2em;
-		color: var(--text-color);
-	}
-
-	.answers-number {
-		color: var(--text-color);
-		font-size: 1.5em;
-		margin: 0.5em;
 	}
 </style>

@@ -18,7 +18,7 @@
 
 <Footer>
 	<button
-		class="back"
+		class="footer-button"
 		on:click={() => {
 			history.back();
 		}}><i class="material-symbols-rounded">undo</i>Back</button

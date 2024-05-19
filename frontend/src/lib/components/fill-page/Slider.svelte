@@ -35,7 +35,7 @@
 			on:change={handleChange}
 		/>
 	</div>
-	<div class="slider">
+	<div title="Select your answer" class="slider">
 		<input
 			class="range"
 			type="range"

@@ -40,7 +40,7 @@
 					<i class="material-symbols-rounded">arrow_drop_down</i>
 				</button>
 			</div>
-			<div class="choice-input display">
+			<div title="Answer no. {choiceIndex + 1}" class="choice-input display">
 				{choice}
 			</div>
 		</div>
@@ -48,12 +48,10 @@
 </div>
 
 <style>
-	.choice-input {
-		cursor: default;
-	}
-
+	.choice-input,
 	.choice-input:hover {
-		background-color: var(--primary-color);
+		background-color: var(--primary-dark-color);
+		cursor: default;
 	}
 
 	.rank {

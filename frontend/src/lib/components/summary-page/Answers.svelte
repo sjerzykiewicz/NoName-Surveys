@@ -25,7 +25,9 @@
 	};
 </script>
 
-<div class="title">{parseFloat(id) + 1}. Answer</div>
+<div title="Answer no. {parseFloat(id) + 1}" class="title answers">
+	{parseFloat(id) + 1}. Answer
+</div>
 {#each answer.questions as question, questionIndex}
 	<div class="question">
 		<QuestionTitle question={question.question} {questionIndex} required={question.required} />
@@ -34,8 +36,4 @@
 {/each}
 
 <style>
-	.title {
-		font-size: 2em;
-		margin-bottom: 1em;
-	}
 </style>

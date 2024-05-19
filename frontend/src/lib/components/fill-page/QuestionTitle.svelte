@@ -15,10 +15,4 @@
 </div>
 
 <style>
-	i {
-		position: relative;
-		top: 0.1em;
-		font-size: 1em;
-		color: var(--accent-color);
-	}
 </style>

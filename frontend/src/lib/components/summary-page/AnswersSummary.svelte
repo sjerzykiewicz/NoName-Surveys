@@ -128,3 +128,6 @@
 		<svelte:component this={componentTypeMap[question.question_type]} data={question} />
 	</div>
 {/each}
+
+<style>
+</style>

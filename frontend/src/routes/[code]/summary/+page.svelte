@@ -4,9 +4,9 @@
 	import AnswersSummary from '$lib/components/summary-page/AnswersSummary.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { page } from '$app/stores';
-	import type { PageServerData } from './$types';
+	import type { LayoutServerData } from './$types';
 
-	export let data: PageServerData;
+	export let data: LayoutServerData;
 
 	let numbers: Array<number> = [];
 

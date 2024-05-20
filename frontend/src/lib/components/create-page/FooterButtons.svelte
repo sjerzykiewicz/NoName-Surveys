@@ -72,8 +72,8 @@
 
 	async function checkCorrectness() {
 		titleError = false;
-
-		if (!$title) {
+		const t = $title;
+		if (t === null || t === undefined || t.length === 0) {
 			titleError = true;
 		}
 

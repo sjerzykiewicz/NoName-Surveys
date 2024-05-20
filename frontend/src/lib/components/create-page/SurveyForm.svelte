@@ -26,7 +26,11 @@
 	}
 
 	$: checkQuestionError = (i: number) => {
-		return $questions[i].error === QuestionError.QuestionRequired && !$questions[i].question;
+		const q = $questions[i].question;
+		return (
+			$questions[i].error === QuestionError.QuestionRequired &&
+			(q === null || q === undefined || q.length === 0)
+		);
 	};
 
 	$: checkChoicesError = (i: number) => {
@@ -35,7 +39,7 @@
 			case QuestionError.ChoicesRequired:
 			case QuestionError.BinaryChoicesRequired:
 			case QuestionError.SliderValuesRequired:
-				if ($questions[i].choices.some((c) => !c)) {
+				if ($questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)) {
 					return true;
 				}
 				break;

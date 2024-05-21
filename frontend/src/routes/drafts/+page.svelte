@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageServerData } from '../$types';
+	import type { PageServerData } from './$types';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
 	import Entry from '$lib/components/draft-page/Entry.svelte';

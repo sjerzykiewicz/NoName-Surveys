@@ -2,13 +2,11 @@
 	export let data: { answer: number };
 </script>
 
-<div class="choice-area">
+<div class="choice-area display scale">
 	{#each [1, 2, 3, 4, 5] as choice}
-		<label title={choice === data.answer ? 'Answer' : ''} class="choice">
-			<div class="scale" class:selected={choice === data.answer}>
-				<input type="radio" checked={choice === data.answer} disabled />
-			</div>
-			<div class="number" class:selected={choice === data.answer}>
+		<label title={choice === data.answer ? 'Selected answer' : 'Other choice'} class="choice scale">
+			<input type="radio" checked={choice === data.answer} disabled />
+			<div class="choice-input display scale" class:selected={choice === data.answer}>
 				{choice}
 			</div>
 		</label>
@@ -16,52 +14,17 @@
 </div>
 
 <style>
-	.choice-area {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
-		justify-content: space-around;
-		width: calc(86% - 2.25em);
-		margin-left: 2.25em;
-	}
-
-	.choice {
-		flex-flow: column;
-		padding: 0.5em;
-		margin-bottom: 0em;
+	.choice-input,
+	.choice-input:hover {
+		background-color: var(--primary-dark-color);
 		cursor: default;
 	}
 
-	.number {
-		font-size: 1.25em;
-		margin-top: 0.25em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-	}
-
-	.number.selected {
-		font-weight: bold;
-		color: var(--accent-color);
-	}
-
-	.scale.selected {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 11px;
-		width: 11px;
-		border: 4px solid var(--accent-color);
-		border-radius: 50%;
+	.choice-input.selected {
+		background-color: var(--secondary-dark-color);
 	}
 
 	input[type='radio'] {
-		margin: 0em;
 		cursor: default;
-	}
-
-	@media screen and (max-width: 767px) {
-		.choice-area,
-		.number {
-			font-size: 1em;
-		}
 	}
 </style>

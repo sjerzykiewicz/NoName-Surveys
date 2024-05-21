@@ -72,17 +72,21 @@
 
 	async function checkCorrectness() {
 		titleError = false;
-
-		if (!$title) {
+		const t = $title;
+		if (t === null || t === undefined || t.length === 0) {
 			titleError = true;
 		}
 
 		const numQuestions = $questions.length;
 
 		for (let i = 0; i < numQuestions; i++) {
-			if (!$questions[i].question) {
+			const q = $questions[i].question;
+			if (q === null || q === undefined || q.length === 0) {
 				$questions[i].error = QuestionError.QuestionRequired;
-			} else if ($questions[i].component != Text && $questions[i].choices.some((c) => !c)) {
+			} else if (
+				$questions[i].component != Text &&
+				$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+			) {
 				switch ($questions[i].component) {
 					case Slider:
 						$questions[i].error = QuestionError.SliderValuesRequired;
@@ -163,7 +167,7 @@
 	}
 </script>
 
-<button title="Preview survey" class="footer-button">
+<button title="Preview survey" class="footer-button" disabled>
 	<i class="material-symbols-rounded">search</i>Preview
 </button>
 <button
@@ -184,15 +188,9 @@
 </button>
 
 <style>
-	.save:disabled {
+	.footer-button:disabled {
 		color: var(--text-dark-color);
 		background-color: var(--secondary-color);
 		cursor: not-allowed;
-	}
-
-	@media screen and (max-width: 767px) {
-		.footer-button {
-			font-size: 1em;
-		}
 	}
 </style>

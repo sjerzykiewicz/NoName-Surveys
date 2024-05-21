@@ -76,7 +76,7 @@
 	>
 		<i class="material-symbols-rounded">asterisk</i>
 	</button>
-	<button class="remove-question" title="Remove question" on:click={removeQuestion}>
+	<button title="Remove question" class="remove-question" on:click={removeQuestion}>
 		<i class="material-symbols-rounded">close</i>
 	</button>
 </div>
@@ -97,28 +97,10 @@
 		margin-right: 0.25em;
 	}
 
-	.index {
-		margin-right: 0.5em;
-		width: 1.75em;
-		font-weight: bold;
-		text-align: right;
-		color: var(--text-color);
-	}
-
 	.type {
 		display: flex;
 		flex-flow: row;
 		align-items: center;
-	}
-
-	.question-area {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
-		margin-bottom: 1em;
-		font-size: 1.25em;
-		font-weight: normal;
-		color: var(--text-color);
 	}
 
 	.question-input[contenteditable]:empty::before {
@@ -143,24 +125,7 @@
 		background-color: var(--border-color);
 	}
 
-	button {
-		font-size: 1em;
-	}
-
 	.remove-question i {
 		font-variation-settings: 'wght' 700;
-	}
-
-	@media screen and (max-width: 767px) {
-		.question-label,
-		.question-area,
-		.index,
-		button {
-			font-size: 1em;
-		}
-
-		.arrows i {
-			font-size: 1.2em;
-		}
 	}
 </style>

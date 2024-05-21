@@ -29,9 +29,13 @@
 	];
 
 	function checkError(i: number) {
-		if (!$questions[i].question) {
+		const q = $questions[i].question;
+		if (q === null || q === undefined || q.length === 0) {
 			$questions[i].error = QuestionError.QuestionRequired;
-		} else if ($questions[i].component != Text && $questions[i].choices.some((c) => !c)) {
+		} else if (
+			$questions[i].component != Text &&
+			$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+		) {
 			switch ($questions[i].component) {
 				case Slider:
 					$questions[i].error = QuestionError.SliderValuesRequired;
@@ -155,6 +159,7 @@
 	.button-group {
 		width: fit-content;
 		margin-bottom: 17em;
+		font-size: 1.25em;
 	}
 
 	.add-buttons {
@@ -206,12 +211,9 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		button {
-			font-size: 1em;
-		}
-
 		.button-group {
-			margin-bottom: 13.5em;
+			margin-bottom: 12.5em;
+			font-size: 1em;
 		}
 	}
 </style>

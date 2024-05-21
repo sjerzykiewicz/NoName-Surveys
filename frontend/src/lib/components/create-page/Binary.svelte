@@ -4,12 +4,15 @@
 	export let questionIndex: number;
 </script>
 
-<div class="choice-area">
-	<div class="choice">
-		<i class="material-symbols-rounded">thumb_up</i>
+<div class="choice-area binary">
+	<label class="choice binary">
+		<div class="icon">
+			<input type="radio" disabled name={questionIndex.toString()} />
+			<i class="material-symbols-rounded">thumb_up</i>
+		</div>
 		<div
 			title="Enter positive choice"
-			class="choice-input yes"
+			class="choice-input yes binary"
 			contenteditable
 			role="textbox"
 			tabindex="0"
@@ -18,12 +21,15 @@
 		>
 			{$questions[questionIndex].choices[0]}
 		</div>
-	</div>
-	<div class="choice">
-		<i class="material-symbols-rounded">thumb_down</i>
+	</label>
+	<label class="choice binary">
+		<div class="icon">
+			<input type="radio" disabled name={questionIndex.toString()} />
+			<i class="material-symbols-rounded">thumb_down</i>
+		</div>
 		<div
 			title="Enter negative choice"
-			class="choice-input no"
+			class="choice-input no binary"
 			contenteditable
 			role="textbox"
 			tabindex="0"
@@ -32,30 +38,21 @@
 		>
 			{$questions[questionIndex].choices[1]}
 		</div>
-	</div>
+	</label>
 </div>
 
 <style>
 	.choice-area {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
 		justify-content: space-between;
 		width: calc(86% - 2.25em);
-		font-size: 1.25em;
-		margin-left: 2.25em;
-	}
-
-	.choice {
-		flex-flow: column;
-		text-align: center;
-		margin: 0em;
-		font-size: 0.8em;
 	}
 
 	.choice-input {
-		margin: 0.5em 0em 0em 0em;
 		width: 12em;
+	}
+
+	input {
+		cursor: default;
 	}
 
 	.yes[contenteditable]:empty::before {
@@ -67,19 +64,18 @@
 	}
 
 	i {
-		font-size: 1.25em;
+		font-size: 1em;
 		color: var(--border-color);
 		cursor: default;
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-area,
-		i {
-			font-size: 1em;
+		.choice-area {
+			width: 86%;
 		}
 
-		.choice-input {
-			width: 6em;
+		.choice {
+			width: 100%;
 		}
 	}
 </style>

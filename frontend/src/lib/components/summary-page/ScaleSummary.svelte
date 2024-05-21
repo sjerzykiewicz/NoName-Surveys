@@ -2,13 +2,11 @@
 	export let data: { answers: number[] };
 </script>
 
-<div class="choice-area">
+<div class="choice-area display scale">
 	{#each [1, 2, 3, 4, 5] as choice}
-		<label class="choice">
-			<div class="scale">
-				<input type="radio" disabled />
-			</div>
-			<div class="number">
+		<label title="Choice" class="choice scale">
+			<input type="radio" disabled />
+			<div class="choice-input display scale">
 				{choice}
 			</div>
 			<div class="choice-percentage" title="Average">
@@ -22,42 +20,29 @@
 </div>
 
 <style>
-	.choice-area {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
-		justify-content: space-around;
-		width: calc(86% - 2.25em);
-		margin-left: 2.25em;
-	}
-
-	.choice {
-		flex-flow: column;
-		padding: 0.5em;
-		margin-bottom: 0em;
+	.choice-input,
+	.choice-input:hover {
+		background-color: var(--primary-dark-color);
 		cursor: default;
 	}
 
-	.number {
-		font-size: 1.25em;
-		margin-top: 0.25em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-	}
-
 	input[type='radio'] {
-		margin: 0em;
 		cursor: default;
 	}
 
 	.choice-percentage {
-		margin-left: none;
+		margin-left: 0em;
 		margin-top: 0.5em;
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-area,
-		.number {
-			font-size: 1em;
+		.choice-area {
+			width: 100%;
+			margin-left: 0em;
+		}
+
+		.choice {
+			padding: 0em;
 		}
 	}
 </style>

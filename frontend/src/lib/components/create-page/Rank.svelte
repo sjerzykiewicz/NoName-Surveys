@@ -26,14 +26,15 @@
 
 <div class="choice-area">
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<div class="choice">
+		<div title="Choice no. {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
 			<div title="Enter choice" class="choice-input" contenteditable bind:textContent={choice}>
 				{choice}
 			</div>
 			<button
 				title="Remove choice"
-				class:remove-choice={isButtonHidden}
+				class="remove-choice"
+				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
 				<i class="material-symbols-rounded">cancel</i>
@@ -48,15 +49,5 @@
 <style>
 	.rank {
 		color: var(--border-color);
-		cursor: default;
-	}
-
-	@media screen and (max-width: 767px) {
-		.choice-input,
-		.remove-choice,
-		.rank,
-		button {
-			font-size: 1em;
-		}
 	}
 </style>

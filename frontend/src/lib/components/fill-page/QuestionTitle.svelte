@@ -4,46 +4,12 @@
 	export let questionIndex: number;
 </script>
 
-<div class="question-area">
+<div title="Question no. {questionIndex + 1}" class="question-area display">
 	<div class="index">{questionIndex + 1}.</div>
-	<div title="Question" class="question-title">
+	<div class="question-title">
 		{$questions[questionIndex].question}
 		{#if $questions[questionIndex].required}
-			<span class="required">*</span>
+			<i title="Required" class="material-symbols-rounded">asterisk</i>
 		{/if}
 	</div>
 </div>
-
-<style>
-	.question-area {
-		display: flex;
-		flex-flow: row;
-		align-items: flex-start;
-		margin-bottom: 1em;
-		font-size: 1.25em;
-		font-weight: bold;
-		color: var(--text-color);
-		cursor: default;
-	}
-
-	.index {
-		width: 1.4em;
-		text-align: right;
-		padding-right: 0.5em;
-	}
-
-	.required {
-		color: var(--accent-color);
-	}
-
-	@media screen and (max-width: 767px) {
-		.question-area,
-		.index {
-			font-size: 1em;
-		}
-
-		.index {
-			width: 2em;
-		}
-	}
-</style>

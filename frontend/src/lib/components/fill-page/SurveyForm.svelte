@@ -153,7 +153,9 @@
 			if ($questions[i].required) {
 				if ($answers[i].choices.length === 0) {
 					unansweredRequired[i] = i;
-				} else if ($answers[i].choices.some((c) => !c)) {
+				} else if (
+					$answers[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+				) {
 					unansweredRequired[i] = i;
 				}
 			}
@@ -207,20 +209,10 @@
 
 <style>
 	.error {
-		margin: -1em 0em 0.5em 0em;
+		margin: -1em 0em 0.5em 2.8em;
 	}
 
 	.save i {
 		font-variation-settings: 'wght' 700;
-	}
-
-	@media screen and (max-width: 767px) {
-		.title {
-			font-size: 1.25em;
-		}
-
-		.footer-button {
-			font-size: 1em;
-		}
 	}
 </style>

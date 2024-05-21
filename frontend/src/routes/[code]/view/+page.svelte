@@ -36,11 +36,7 @@
 	<h1>{data.code}</h1>
 	<button title="Copy code" class="save" on:click={copyCode}
 		><i class="material-symbols-rounded">content_copy</i>
-		{#if isCopied}
-			Copied!
-		{:else}
-			Copy
-		{/if}</button
+		{isCopied ? 'Copied!' : 'Copy'}</button
 	>
 	<a href="/{data.code}/fill" title="Go to fill page" class="qr-code">
 		<QrCode data={url} size={calculateSize(innerWidth)} />

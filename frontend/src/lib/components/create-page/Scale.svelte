@@ -4,11 +4,11 @@
 	export let questionIndex: number;
 </script>
 
-<div class="choice-area">
+<div class="choice-area scale">
 	{#each $questions[questionIndex].choices as choice}
-		<div class="choice">
+		<div title={choice} class="choice scale">
 			<input type="radio" disabled name={questionIndex.toString()} />
-			<div class="number">
+			<div class="choice-input display scale">
 				{choice}
 			</div>
 		</div>
@@ -17,34 +17,25 @@
 
 <style>
 	.choice-area {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
-		justify-content: space-around;
+		justify-content: space-between;
 		width: calc(86% - 2.25em);
-		font-size: 1.25em;
-		margin-left: 2.25em;
 	}
 
 	.choice {
-		flex-flow: column;
-		margin: 0em;
+		padding: 0em;
 	}
 
-	.number {
-		margin-top: 0.25em;
+	.choice-input {
+		background-color: var(--secondary-color);
+		color: var(--text-dark-color);
 		cursor: default;
+	}
+
+	.choice-input:hover {
+		background-color: var(--secondary-color);
 	}
 
 	input[type='radio'] {
-		margin: 0em;
 		cursor: default;
-	}
-
-	@media screen and (max-width: 767px) {
-		.choice-area,
-		.number {
-			font-size: 1em;
-		}
 	}
 </style>

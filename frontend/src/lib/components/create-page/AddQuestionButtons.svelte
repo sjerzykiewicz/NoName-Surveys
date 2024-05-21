@@ -7,6 +7,14 @@
 	import Rank from '$lib/components/create-page/Rank.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
+	import SinglePreview from '$lib/components/create-page/preview/SinglePreview.svelte';
+	import MultiPreview from '$lib/components/create-page/preview/MultiPreview.svelte';
+	import ScalePreview from '$lib/components/create-page/preview/ScalePreview.svelte';
+	import SliderPreview from '$lib/components/create-page/preview/SliderPreview.svelte';
+	import ListPreview from '$lib/components/create-page/preview/ListPreview.svelte';
+	import RankPreview from '$lib/components/create-page/preview/RankPreview.svelte';
+	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
+	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
 	import { questions } from '$lib/stores/create-page';
 	import { type ComponentType, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -27,6 +35,27 @@
 		Rank,
 		List
 	];
+
+	function getPreviewComponent(component: ComponentType) {
+		switch (component) {
+			case Single:
+				return SinglePreview;
+			case Multi:
+				return MultiPreview;
+			case Scale:
+				return ScalePreview;
+			case Slider:
+				return SliderPreview;
+			case List:
+				return ListPreview;
+			case Rank:
+				return RankPreview;
+			case Binary:
+				return BinaryPreview;
+			default:
+				return TextPreview;
+		}
+	}
 
 	function checkError(i: number) {
 		const q = $questions[i].question;
@@ -88,6 +117,7 @@
 			...$questions,
 			{
 				component: component,
+				preview: getPreviewComponent(component),
 				required: false,
 				question: '',
 				choices: choices,

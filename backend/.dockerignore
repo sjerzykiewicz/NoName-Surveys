@@ -1,0 +1,11 @@
+Dockerfile
+.dockerignore
+.git
+.gitignore
+.gitattributes
+README.md
+.mypy_cache
+.ruff_cache
+.venv
+.codespell
+**/.env

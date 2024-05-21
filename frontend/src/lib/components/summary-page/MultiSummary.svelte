@@ -8,16 +8,16 @@
 	}
 </script>
 
-<div class="choice-area">
+<div class="choice-area display">
 	{#each data.choices as choice}
-		<label class="choice">
+		<label title="Choice" class="choice">
 			<div class="radio">
 				<input type="checkbox" disabled />
 			</div>
-			<div class="choice-in">
+			<div class="choice-input display">
 				{choice}
 			</div>
-			<div class="choice-percentage" title="Average">
+			<div title="Average" class="choice-percentage">
 				{calculatePercentage(choice)}
 			</div>
 		</label>
@@ -29,22 +29,13 @@
 		cursor: default;
 	}
 
-	.choice-in {
+	.choice-input,
+	.choice-input:hover {
+		background-color: var(--primary-dark-color);
 		cursor: default;
-	}
-
-	.choice-in:hover {
-		background-color: var(--primary-color);
 	}
 
 	input {
 		cursor: default;
-	}
-
-	@media screen and (max-width: 767px) {
-		.choice-area,
-		.choice-in {
-			font-size: 1em;
-		}
 	}
 </style>

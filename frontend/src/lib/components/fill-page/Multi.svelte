@@ -19,7 +19,7 @@
 	}
 </script>
 
-<div class="choice-area">
+<div class="choice-area display">
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<label title="Select your answer" class="choice">
 			<div class="radio">
@@ -32,7 +32,7 @@
 					}}
 				/>
 			</div>
-			<div class="choice-in" class:selected={selected[choiceIndex]}>
+			<div class="choice-input display" class:selected={selected[choiceIndex]}>
 				{choice}
 			</div>
 		</label>
@@ -45,8 +45,7 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice-area,
-		.choice-in {
+		.choice-area {
 			font-size: 1em;
 		}
 	}

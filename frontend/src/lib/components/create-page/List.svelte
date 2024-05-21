@@ -35,7 +35,8 @@
 			</div>
 			<button
 				title="Remove choice"
-				class:remove-choice={isButtonHidden}
+				class="remove-choice"
+				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
 				<i class="material-symbols-rounded">cancel</i>
@@ -48,42 +49,21 @@
 </div>
 
 <style>
-	.choice-input {
+	.choice {
 		margin-left: 2.25em;
 	}
 
 	select {
 		flex: 1;
-		background-color: var(--primary-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--box-shadow-color);
-		font-size: 1.25em;
 		height: 0.75em;
-	}
-
-	select:disabled {
-		background-color: var(--secondary-color);
-		color: var(--text-dark-color);
-		opacity: 1;
 	}
 
 	.dropdown {
 		display: flex;
 		align-items: center;
 		flex-flow: row;
-		font-size: 1.25em;
 		margin-bottom: 0.5em;
 		margin-left: 2.25em;
 		margin-right: 2.25em;
-	}
-
-	@media screen and (max-width: 767px) {
-		.choice-input,
-		select,
-		.dropdown,
-		button {
-			font-size: 1em;
-		}
 	}
 </style>

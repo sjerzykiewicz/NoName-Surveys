@@ -148,7 +148,6 @@
 	.entry {
 		border: 1px solid var(--border-color);
 		border-radius: 10px;
-		font-family: 'Jura';
 		color: var(--text-color);
 		padding: 5px;
 		padding-left: 10px;
@@ -160,15 +159,14 @@
 
 	.entry-title {
 		color: var(--text-color);
-		font-family: 'Jura';
 		font-weight: bold;
 		font-size: 1.5em;
 		width: 100%;
 		text-decoration: none;
-		transition: background-color 0.2s;
 	}
 
 	.open-button {
+		font-size: 1.25em;
 		margin: 5px;
 	}
 </style>

@@ -26,29 +26,6 @@
 		background-color: var(--secondary-color);
 	}
 
-	:root::-webkit-scrollbar {
-		width: 1em;
-	}
-
-	:root::-webkit-scrollbar-track {
-		background-color: var(--secondary-dark-color);
-	}
-
-	:root::-webkit-scrollbar-thumb {
-		background-color: var(--primary-color);
-		background-clip: padding-box;
-		border-radius: 5px;
-		border: 2px solid var(--secondary-dark-color);
-	}
-
-	:root::-webkit-scrollbar-thumb:hover {
-		background-color: var(--text-dark-color);
-	}
-
-	:root::-webkit-scrollbar-thumb:active {
-		background-color: var(--border-color);
-	}
-
 	@media screen and (max-width: 767px) {
 		.box {
 			width: 100%;

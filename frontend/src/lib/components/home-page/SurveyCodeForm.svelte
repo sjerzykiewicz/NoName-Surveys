@@ -57,7 +57,6 @@
 	}
 
 	.save {
-		font-size: 1em;
 		margin: 0.75em auto 0em auto;
 	}
 
@@ -77,10 +76,6 @@
 
 		form {
 			font-size: 1.5em;
-		}
-
-		.save {
-			font-size: 0.75em;
 		}
 	}
 </style>

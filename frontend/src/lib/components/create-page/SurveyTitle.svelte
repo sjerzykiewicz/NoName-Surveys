@@ -8,7 +8,9 @@
 	{$title}
 </div>
 {#if titleError && !$title}
-	<p class="error"><i class="material-symbols-rounded">error</i>Please enter survey title.</p>
+	<p title="Error" class="error">
+		<i class="material-symbols-rounded">error</i>Please enter survey title.
+	</p>
 {/if}
 
 <style>
@@ -27,10 +29,6 @@
 	@media screen and (max-width: 767px) {
 		.title-input {
 			font-size: 1.25em;
-		}
-
-		.error {
-			font-size: 1em;
 		}
 	}
 </style>

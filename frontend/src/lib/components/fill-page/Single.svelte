@@ -32,7 +32,6 @@
 
 <style>
 	.choice {
-		width: fit-content;
 		cursor: pointer;
 	}
 

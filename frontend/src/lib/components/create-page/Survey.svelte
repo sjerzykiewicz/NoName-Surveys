@@ -1,5 +1,5 @@
 <script lang="ts">
-	import QuestionButtons from '$lib/components/create-page/QuestionButtons.svelte';
+	import AddQuestionButtons from '$lib/components/create-page/AddQuestionButtons.svelte';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { questions } from '$lib/stores/create-page';
@@ -60,7 +60,7 @@
 		in:slide={{ duration: 200, easing: cubicInOut }}
 		on:introend={() => scrollToElement('.add-question')}
 	>
-		<QuestionTitle {questionIndex} />
+		<QuestionTitle {questionIndex} questionType={question.component} />
 
 		{#key question.error}
 			{#if checkQuestionError(questionIndex)}
@@ -79,11 +79,11 @@
 		{/key}
 	</div>
 {/each}
-<QuestionButtons />
+<AddQuestionButtons />
 
 <style>
 	.error {
-		padding-left: 2em;
+		padding-left: 2.8em;
 	}
 
 	.question-error {
@@ -93,11 +93,5 @@
 
 	.choice-error {
 		margin-top: 0.5em;
-	}
-
-	@media screen and (max-width: 767px) {
-		.error {
-			font-size: 1em;
-		}
 	}
 </style>

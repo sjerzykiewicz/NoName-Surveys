@@ -107,7 +107,7 @@ button:active {
 }
 
 .add-choice {
-	margin-left: 1.8em;
+	margin-left: 2.25em;
 }
 
 .material-symbols-rounded {
@@ -136,7 +136,7 @@ button:active {
 }
 
 .question {
-	margin-bottom: 1.875em;
+	margin-bottom: 1.5em;
 }
 
 .question-input {
@@ -170,6 +170,26 @@ div[contenteditable]:empty::before {
 	color: var(--text-dark-color);
 }
 
+/*	pasting text into div[contenteditable] carries over its style */
+/*	this eliminates most such cases */
+div[contenteditable] * {
+	font-size: inherit !important;
+	font-family: inherit !important;
+	font-weight: inherit !important;
+	font-style: inherit !important;
+	color: inherit !important;
+	background-color: inherit !important;
+	border: none !important;
+	outline: none !important;
+	text-decoration: none !important;
+	text-shadow: none !important;
+	box-shadow: none !important;
+	display: inline !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	cursor: inherit !important;
+}
+
 .remove-choice {
 	visibility: hidden;
 }
@@ -181,19 +201,20 @@ div[contenteditable]:empty::before {
 }
 
 .arrows i {
+	font-variation-settings: 'wght' 700;
 	line-height: 0.7em;
 	overflow: hidden;
 }
 
 .up {
 	border-radius: 5px 5px 0px 0px;
-	border-bottom: 1px solid var(--border-color);
+	border-bottom: 0.5px solid var(--border-color);
 	padding: 0em 0.25em 0em 0.25em;
 }
 
 .down {
 	border-radius: 0px 0px 5px 5px;
-	border-top: 0px;
+	border-top: 0.5px solid var(--border-color);
 	padding: 0em 0.25em 0em 0.25em;
 }
 
@@ -205,8 +226,14 @@ div[contenteditable]:empty::before {
 }
 
 /* styles for fill-page components */
-.choice-in {
+.question-title {
 	flex: 1;
+	text-shadow: 0px 4px 4px var(--shadow-color);
+	overflow: hidden;
+	overflow-wrap: break-word;
+}
+
+.choice-in {
 	background-color: var(--primary-color);
 	padding: 0.25em;
 	border: 1px solid var(--border-color);
@@ -215,7 +242,8 @@ div[contenteditable]:empty::before {
 	font-size: 1.25em;
 	cursor: pointer;
 	overflow: hidden;
-	margin-right: 0.5em;
+	overflow-wrap: break-word;
+	width: fit-content;
 }
 
 .choice-in.selected,
@@ -226,8 +254,20 @@ div[contenteditable]:empty::before {
 	font-weight: bold;
 }
 
-.radio {
+.details {
+	font-size: 1.25em;
+	margin-top: -0.5em;
+	margin-bottom: 0.5em;
+	text-shadow: 0px 4px 4px var(--shadow-color);
+	cursor: default;
+	overflow-wrap: break-word;
+}
+
+.radio,
+.checkbox,
+.rank {
 	text-align: right;
+	font-size: 1.25em;
 	width: 1.75em;
 	margin-right: 0.5em;
 }
@@ -247,7 +287,7 @@ input[type='radio']:checked {
 	align-items: center;
 	color: var(--error-color);
 	font-weight: bold;
-	font-size: 1.15em;
+	font-size: 1em;
 	text-shadow: 0px 4px 4px var(--shadow-color);
 	cursor: default;
 	margin: 0.5em 0em 0em 0em;
@@ -260,13 +300,9 @@ input[type='radio']:checked {
 	font-weight: bold;
 	color: var(--text-color);
 	cursor: default;
+	max-width: 100%;
+	overflow-wrap: break-word;
 	overflow: hidden;
-}
-
-@media screen and (max-width: 767px) {
-	.title {
-		font-size: 1.25em;
-	}
 }
 
 .choice-percentage {
@@ -274,4 +310,20 @@ input[type='radio']:checked {
 	font-weight: bold;
 	color: var(--accent-color);
 	cursor: default;
+}
+
+@media screen and (max-width: 767px) {
+	.title {
+		font-size: 1.25em;
+	}
+
+	.radio,
+	.checkbox,
+	.rank {
+		font-size: 1em;
+	}
+
+	.error {
+		font-size: 0.8em;
+	}
 }

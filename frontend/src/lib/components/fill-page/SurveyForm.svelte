@@ -193,7 +193,7 @@
 			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
 		</div>
 		{#if unansweredRequired.includes(questionIndex)}
-			<p class="error">
+			<p title="Error" class="error">
 				<i class="material-symbols-rounded">error</i>Please answer question {questionIndex + 1}.
 			</p>
 		{/if}
@@ -207,12 +207,10 @@
 
 <style>
 	.error {
-		padding-left: 2em;
 		margin: -1em 0em 0.5em 0em;
-		font-size: 1em;
 	}
 
-	i {
+	.save i {
 		font-variation-settings: 'wght' 700;
 	}
 

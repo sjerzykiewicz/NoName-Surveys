@@ -24,14 +24,11 @@
 
 <style>
 	.choice {
-		width: fit-content;
 		cursor: default;
 	}
 
 	.choice-in {
 		cursor: default;
-		overflow: hidden;
-		overflow-wrap: break-word;
 	}
 
 	.choice-in:hover {

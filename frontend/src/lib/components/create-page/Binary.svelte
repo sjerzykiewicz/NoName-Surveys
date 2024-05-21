@@ -11,7 +11,10 @@
 			title="Enter positive choice"
 			class="choice-input yes"
 			contenteditable
+			role="textbox"
+			tabindex="0"
 			bind:textContent={$questions[questionIndex].choices[0]}
+			on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
 		>
 			{$questions[questionIndex].choices[0]}
 		</div>
@@ -22,7 +25,10 @@
 			title="Enter negative choice"
 			class="choice-input no"
 			contenteditable
+			role="textbox"
+			tabindex="0"
 			bind:textContent={$questions[questionIndex].choices[1]}
+			on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
 		>
 			{$questions[questionIndex].choices[1]}
 		</div>
@@ -34,20 +40,22 @@
 		display: flex;
 		flex-flow: row;
 		align-items: center;
-		justify-content: space-evenly;
+		justify-content: space-between;
 		width: calc(86% - 2.25em);
+		font-size: 1.25em;
 		margin-left: 2.25em;
 	}
 
 	.choice {
 		flex-flow: column;
 		text-align: center;
-		margin: 0em 0.5em;
+		margin: 0em;
+		font-size: 0.8em;
 	}
 
 	.choice-input {
 		margin: 0.5em 0em 0em 0em;
-		width: 11em;
+		width: 12em;
 	}
 
 	.yes[contenteditable]:empty::before {
@@ -66,13 +74,12 @@
 
 	@media screen and (max-width: 767px) {
 		.choice-area,
-		.choice-input,
 		i {
 			font-size: 1em;
 		}
 
 		.choice-input {
-			width: 5em;
+			width: 6em;
 		}
 	}
 </style>

@@ -24,13 +24,6 @@
 		padding-left: 2.3em;
 	}
 
-	.details {
-		font-size: 1.25em;
-		margin-top: -0.5em;
-		margin-bottom: 0.5em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		cursor: default;
-	}
 	.text-answers {
 		overflow-y: auto;
 		overflow-x: hidden;

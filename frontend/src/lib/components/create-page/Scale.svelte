@@ -22,17 +22,16 @@
 		align-items: center;
 		justify-content: space-around;
 		width: calc(86% - 2.25em);
+		font-size: 1.25em;
 		margin-left: 2.25em;
 	}
 
 	.choice {
 		flex-flow: column;
-		text-align: center;
 		margin: 0em;
 	}
 
 	.number {
-		font-size: 1.25em;
 		margin-top: 0.25em;
 		cursor: default;
 	}

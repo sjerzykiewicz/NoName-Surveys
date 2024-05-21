@@ -10,10 +10,11 @@ services:
   frontend:
     build:
       context: ./frontend
+      args:
+        - PUBLIC_BACKEND_HOST=http://backend:8000
     ports:
       - "3000:3000"
     depends_on:
       - backend
     environment:
       - ORIGIN=http://localhost:3000
-      - BACKEND_HOST=http://backend:8000

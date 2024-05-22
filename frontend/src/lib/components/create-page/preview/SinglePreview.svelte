@@ -1,14 +1,9 @@
 <script lang="ts">
-	import { questions, answers } from '$lib/stores/fill-page';
+	import { questions } from '$lib/stores/create-page';
 
 	export let questionIndex: number;
 
 	let checked: number;
-
-	function updateAnswers(choice: string, choiceIndex: number) {
-		$answers[questionIndex].choices[0] = choice;
-		checked = choiceIndex;
-	}
 </script>
 
 <div class="choice-area display">
@@ -19,7 +14,7 @@
 					type="radio"
 					name={questionIndex.toString()}
 					on:change={() => {
-						updateAnswers(choice, choiceIndex);
+						checked = choiceIndex;
 					}}
 				/>
 			</div>

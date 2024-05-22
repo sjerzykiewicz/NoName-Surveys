@@ -1,21 +1,11 @@
 <script lang="ts">
-	import { questions, answers } from '$lib/stores/fill-page';
+	import { questions } from '$lib/stores/create-page';
 
 	export let questionIndex: number;
 
 	let selected: Array<boolean> = [];
 	for (let i = 0; i < $questions[questionIndex].choices.length; i++) {
 		selected[i] = false;
-	}
-
-	function updateAnswers(choice: string) {
-		if ($answers[questionIndex].choices.includes(choice)) {
-			$answers[questionIndex].choices = $answers[questionIndex].choices.filter(
-				(ch) => ch !== choice
-			);
-		} else {
-			$answers[questionIndex].choices = [...$answers[questionIndex].choices, choice];
-		}
 	}
 </script>
 
@@ -27,7 +17,6 @@
 					type="checkbox"
 					name={questionIndex.toString()}
 					on:change={() => {
-						updateAnswers(choice);
 						selected[choiceIndex] = !selected[choiceIndex];
 					}}
 				/>

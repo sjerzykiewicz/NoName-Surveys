@@ -11,7 +11,7 @@
 <div class="choice-area display">
 	{#each data.choices as choice}
 		<label title="Choice" class="choice">
-			<div class="radio">
+			<div class="checkbox">
 				<input type="checkbox" disabled />
 			</div>
 			<div class="choice-input display">

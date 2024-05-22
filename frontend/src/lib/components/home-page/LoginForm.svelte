@@ -1,7 +1,15 @@
-<div class="login-box">Log in or register</div>
+<script lang="ts">
+	import { signIn, signOut } from '@auth/sveltekit/client';
+</script>
+
+<div class="login-box">Log in or log out</div>
 <div class="login-buttons">
-	<button title="Log in"><i class="material-symbols-rounded">login</i>Log in</button>
-	<button title="Register"><i class="material-symbols-rounded">person_edit</i>Register</button>
+	<button title="Log in" on:click={() => signIn('google')}
+		><i class="material-symbols-rounded">login</i>Log in</button
+	>
+	<button title="Log out" on:click={() => signOut()}
+		><i class="material-symbols-rounded">person_edit</i>Log out</button
+	>
 </div>
 
 <style>

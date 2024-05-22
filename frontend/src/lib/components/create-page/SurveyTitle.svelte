@@ -1,22 +1,14 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
+	import TitleError from './TitleError.svelte';
 
 	export let titleError: boolean;
-
-	$: checkTitleError = () => {
-		const t = $title;
-		return titleError && (t === null || t === undefined || t.length === 0);
-	};
 </script>
 
 <div title="Enter survey title" class="title-input" contenteditable bind:textContent={$title}>
 	{$title}
 </div>
-{#if checkTitleError()}
-	<p title="Error" class="error">
-		<i class="material-symbols-rounded">error</i>Please enter survey title.
-	</p>
-{/if}
+<TitleError {titleError} />
 
 <style>
 	.title-input {

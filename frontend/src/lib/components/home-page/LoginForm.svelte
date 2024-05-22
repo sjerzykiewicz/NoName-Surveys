@@ -1,31 +1,36 @@
 <script lang="ts">
 	import { signIn, signOut } from '@auth/sveltekit/client';
+	import { page } from '$app/stores';
+	console.log($page.data.session);
 </script>
 
-<div class="login-box">Log in or log out</div>
 <div class="login-buttons">
-	<button title="Log in" on:click={() => signIn('google')}
-		><i class="material-symbols-rounded">login</i>Log in</button
-	>
-	<button title="Log out" on:click={() => signOut()}
-		><i class="material-symbols-rounded">person_edit</i>Log out</button
-	>
+	{#if $page.data.session}
+		<div class="logged-in-box">Logged in with {$page.data.session.user?.email}</div>
+		<button title="Log out" on:click={() => signOut()}
+			><i class="material-symbols-rounded">person_edit</i>Log out</button
+		>
+	{:else}
+		<button title="Log in" on:click={() => signIn('google')}
+			><i class="material-symbols-rounded">login</i>Log in</button
+		>
+	{/if}
 </div>
 
 <style>
-	.login-box {
+	.logged-in-box {
 		margin: 1em 0 0.5em 0;
 		text-align: center;
 		color: var(--text-color);
 		font-weight: bold;
-		font-size: 2em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
 		cursor: default;
 	}
 
 	.login-buttons {
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
+		flex-direction: column;
 		width: 15em;
 		margin-left: auto;
 		margin-right: auto;
@@ -34,10 +39,9 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.login-box {
+		.logged-in-box {
 			font-size: 1.5em;
 		}
-
 		.login-buttons {
 			width: 12em;
 		}

@@ -1,6 +1,12 @@
 import { fail, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
+
+export const load: PageServerLoad = async ({ locals }) => {
+	return {
+		session: await locals.auth()
+	};
+};
 
 export const actions: Actions = {
 	default: async ({ request }) => {

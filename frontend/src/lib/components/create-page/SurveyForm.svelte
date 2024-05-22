@@ -16,7 +16,7 @@
 {#each $questions as question, questionIndex (question)}
 	<div
 		class="question"
-		transition:slide={{ duration: 200, easing: cubicInOut }}
+		in:slide={{ duration: 200, easing: cubicInOut }}
 		animate:flip={{ duration: 200, easing: cubicInOut }}
 		on:introend={() => scrollToElement('.add-question')}
 	>

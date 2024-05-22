@@ -5,10 +5,15 @@ from config import settings
 
 def db_connection_is_provided():
     return (
-        settings.db_type
+        hasattr(settings, "db_type")
+        and settings.db_type
+        and hasattr(settings, "db_user")
         and settings.db_user
+        and hasattr(settings, "db_password")
         and settings.db_password
+        and hasattr(settings, "db_host")
         and settings.db_host
+        and hasattr(settings, "db_name")
         and settings.db_name
     )
 

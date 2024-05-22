@@ -96,6 +96,7 @@ button {
 }
 
 .footer-button {
+	font-size: 1.25em;
 	text-decoration: none;
 	margin-left: 0.5em;
 }
@@ -602,6 +603,7 @@ select:disabled {
 	}
 
 	button,
+	.footer-button,
 	select,
 	.radio,
 	.checkbox,

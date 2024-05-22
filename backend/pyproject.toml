@@ -13,6 +13,7 @@ sqlmodel = "^0.0.16"
 dynaconf = "^3.2.5"
 mysql-connector-python = "^8.4.0"
 pymysql = "^1.1.1"
+psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"

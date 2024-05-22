@@ -188,7 +188,7 @@
 
 	.button-group {
 		width: fit-content;
-		margin-bottom: 17em;
+		margin-bottom: 13.25em;
 		font-size: 1.25em;
 	}
 
@@ -242,7 +242,6 @@
 
 	@media screen and (max-width: 767px) {
 		.button-group {
-			margin-bottom: 12.5em;
 			font-size: 1em;
 		}
 	}

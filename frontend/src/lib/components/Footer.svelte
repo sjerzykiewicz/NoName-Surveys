@@ -14,14 +14,12 @@
 		min-width: calc(767px - 1.5em);
 		width: calc(50% - 1.5em);
 		background-color: var(--secondary-color);
-		font-size: 1.25em;
 	}
 
 	@media screen and (max-width: 767px) {
 		.footer {
 			width: calc(100% - 1.5em);
 			min-width: 0px;
-			font-size: 1em;
 		}
 	}
 </style>

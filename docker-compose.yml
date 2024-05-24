@@ -3,9 +3,7 @@ services:
     build:
       context: ./backend
     ports:
-      - "8000:8000"
-    expose:
-      - "8000"
+      - "127.0.0.1:8000:8000"
 
   frontend:
     build:
@@ -17,4 +15,4 @@ services:
     depends_on:
       - backend
     environment:
-      - ORIGIN=http://localhost:3000
+      - ORIGIN=${ORIGIN}

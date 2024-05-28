@@ -26,6 +26,12 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { tick } from 'svelte';
 
+	export let isPreview: boolean = false;
+
+	function togglePreview() {
+		isPreview = !isPreview;
+	}
+
 	function constructQuestionList() {
 		let questionList: Array<Question> = [];
 		$questions.forEach((q) => {
@@ -167,21 +173,27 @@
 	}
 </script>
 
-<button title="Preview survey" class="footer-button" disabled>
-	<i class="material-symbols-rounded">search</i>Preview
-</button>
+{#if isPreview}
+	<button title="Edit survey" class="footer-button" on:click={togglePreview}>
+		<i class="material-symbols-rounded">edit</i>Edit
+	</button>
+{:else}
+	<button title="Preview survey" class="footer-button" on:click={togglePreview}>
+		<i class="material-symbols-rounded">search</i>Preview
+	</button>
+{/if}
 <button
 	title="Save draft"
 	class="footer-button save"
-	disabled={$questions.length === 0}
+	disabled={$questions.length === 0 || isPreview}
 	on:click={saveDraft}
 >
-	<i class="material-symbols-rounded">save</i>Save draft
+	<i class="material-symbols-rounded">save</i>Save
 </button>
 <button
-	title="Finish"
-	class="footer-button save"
-	disabled={$questions.length === 0}
+	title="Finish survey creation"
+	class="footer-button save done"
+	disabled={$questions.length === 0 || isPreview}
 	on:click={createSurvey}
 >
 	<i class="material-symbols-rounded">done</i>Finish
@@ -192,5 +204,9 @@
 		color: var(--text-dark-color);
 		background-color: var(--secondary-color);
 		cursor: not-allowed;
+	}
+
+	.done i {
+		font-variation-settings: 'wght' 700;
 	}
 </style>

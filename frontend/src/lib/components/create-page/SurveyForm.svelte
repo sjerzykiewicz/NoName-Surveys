@@ -1,11 +1,14 @@
 <script lang="ts">
 	import AddQuestionButtons from '$lib/components/create-page/AddQuestionButtons.svelte';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
+	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
+
+	export let isPreview: boolean;
 
 	function errorMessage(i: number) {
 		const error = $questions[i].error;
@@ -64,26 +67,33 @@
 		in:slide={{ duration: 200, easing: cubicInOut }}
 		on:introend={() => scrollToElement('.add-question')}
 	>
-		<QuestionTitle {questionIndex} questionType={question.component} />
+		{#if isPreview}
+			<QuestionTitlePreview {questionIndex} />
+			<svelte:component this={question.preview} {questionIndex} />
+		{:else}
+			<QuestionTitle {questionIndex} questionType={question.component} />
 
-		{#key question.error}
-			{#if checkQuestionError(questionIndex)}
-				<p title="Error" class="error question-error">
-					<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
-				</p>
-			{/if}
+			{#key question.error}
+				{#if checkQuestionError(questionIndex)}
+					<p title="Error" class="error question-error">
+						<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
+					</p>
+				{/if}
 
-			<svelte:component this={question.component} {questionIndex} />
+				<svelte:component this={question.component} {questionIndex} />
 
-			{#if checkChoicesError(questionIndex)}
-				<p title="Error" class="error choice-error">
-					<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
-				</p>
-			{/if}
-		{/key}
+				{#if checkChoicesError(questionIndex)}
+					<p title="Error" class="error choice-error">
+						<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
+					</p>
+				{/if}
+			{/key}
+		{/if}
 	</div>
 {/each}
-<AddQuestionButtons />
+{#if !isPreview}
+	<AddQuestionButtons />
+{/if}
 
 <style>
 	.error {

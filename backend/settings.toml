@@ -1,0 +1,10 @@
+environment_type = "dev"
+
+# Provide below fields in the .secrets.toml file
+# db_type = ""
+# db_dialect =  "" [OPTIONAL]
+# db_user = ""
+# db_password = ""
+# db_host = ""
+# db_port = "" [OPTIONAL]
+# db_name = ""

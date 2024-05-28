@@ -179,6 +179,9 @@ coverage
 .env
 .env.test
 
+# dynaconf secret files
+.secrets.*
+
 # build output
 dist
 .vercel

@@ -2,6 +2,9 @@
 	import { title } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import TitleError from './TitleError.svelte';
+
+	export let titleError: boolean;
 </script>
 
 <div
@@ -13,6 +16,7 @@
 >
 	{$title}
 </div>
+<TitleError {titleError} />
 
 <style>
 	.title-input {

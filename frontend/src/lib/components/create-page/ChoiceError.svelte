@@ -48,21 +48,14 @@
 </script>
 
 {#if checkChoicesError(questionIndex)}
-	<p
-		title="Error"
-		class="error choice-error"
-		transition:slide={{ duration: 200, easing: cubicInOut }}
-	>
+	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
 	</p>
 {/if}
 
 <style>
 	.error {
-		margin-left: 2.8em;
-	}
-
-	.choice-error {
 		margin-top: 0.5em;
+		margin-left: 2.8em;
 	}
 </style>

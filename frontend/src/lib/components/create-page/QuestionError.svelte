@@ -20,22 +20,15 @@
 </script>
 
 {#if checkQuestionError(questionIndex)}
-	<p
-		title="Error"
-		class="error question-error"
-		transition:slide={{ duration: 200, easing: cubicInOut }}
-	>
+	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
 	</p>
 {/if}
 
 <style>
 	.error {
-		margin-left: 2.8em;
-	}
-
-	.question-error {
-		margin-top: -0.5em;
+		margin-top: -0.75em;
 		margin-bottom: 0.5em;
+		margin-left: 2.8em;
 	}
 </style>

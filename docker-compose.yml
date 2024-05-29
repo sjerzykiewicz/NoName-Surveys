@@ -1,19 +1,14 @@
 services:
   backend:
-    build:
-      context: ./backend
+    image: sjerzykiewicz/noname-surveys-backend:dev
     ports:
       - "127.0.0.1:8000:8000"
 
   frontend:
-    build:
-      context: ./frontend
-      args:
-        - PUBLIC_BACKEND_HOST=http://backend:8000
+    image: sjerzykiewicz/noname-surveys-frontend:dev
     ports:
       - "3000:3000"
     depends_on:
       - backend
-    environment:
-      - ORIGIN=${ORIGIN}
-      - AUTH_SECRET=${AUTH_SECRET}
+    env_file:
+      - ./frontend/.env

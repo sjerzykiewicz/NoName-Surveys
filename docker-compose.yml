@@ -1,13 +1,11 @@
 services:
   backend:
-    build:
-      context: ./backend
+    image: sjerzykiewicz/noname-surveys-backend:dev
     ports:
       - "127.0.0.1:8000:8000"
 
   frontend:
-    build:
-      context: ./frontend
+    image: sjerzykiewicz/noname-surveys-frontend:dev
     ports:
       - "3000:3000"
     depends_on:

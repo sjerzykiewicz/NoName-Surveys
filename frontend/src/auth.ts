@@ -8,5 +8,10 @@ export const { handle } = SvelteKitAuth({
 			clientId: GOOGLE_CLIENT_ID,
 			clientSecret: GOOGLE_CLIENT_SECRET
 		})
-	]
+	],
+	trustHost: true,
+	session: {
+		maxAge: 60 * 60 * 2,
+		updateAge: 60 * 5
+	}
 });

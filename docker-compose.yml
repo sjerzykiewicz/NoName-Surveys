@@ -16,3 +16,4 @@ services:
       - backend
     environment:
       - ORIGIN=${ORIGIN}
+      - AUTH_SECRET=${AUTH_SECRET}

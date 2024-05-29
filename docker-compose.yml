@@ -17,3 +17,5 @@ services:
     environment:
       - ORIGIN=${ORIGIN}
       - AUTH_SECRET=${AUTH_SECRET}
+    env_file:
+      - ./frontend/.env

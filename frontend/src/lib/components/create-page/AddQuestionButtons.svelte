@@ -194,7 +194,6 @@
 
 	.button-group {
 		width: fit-content;
-		/* margin-bottom: 13.25em; */
 		font-size: 1.25em;
 	}
 

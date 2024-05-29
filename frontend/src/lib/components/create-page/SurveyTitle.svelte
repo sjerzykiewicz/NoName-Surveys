@@ -12,7 +12,8 @@
 	class="title-input"
 	contenteditable
 	bind:textContent={$title}
-	in:slide={{ duration: 200, easing: cubicInOut }}
+	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	out:slide={{ duration: 200, easing: cubicInOut }}
 >
 	{$title}
 </div>

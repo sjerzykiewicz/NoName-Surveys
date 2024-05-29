@@ -4,6 +4,7 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import SurveyTitle from '$lib/components/create-page/SurveyTitle.svelte';
 	import SurveyTitlePreview from '$lib/components/create-page/preview/SurveyTitlePreview.svelte';
+	import TitleError from '$lib/components/create-page/TitleError.svelte';
 	import SurveyForm from '$lib/components/create-page/SurveyForm.svelte';
 	import FooterButtons from '$lib/components/create-page/FooterButtons.svelte';
 
@@ -15,7 +16,8 @@
 	{#if isPreview}
 		<SurveyTitlePreview />
 	{:else}
-		<SurveyTitle {titleError} />
+		<SurveyTitle />
+		<TitleError {titleError} />
 	{/if}
 </Header>
 <Content>

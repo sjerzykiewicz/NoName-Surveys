@@ -9,7 +9,6 @@ on:
 
 jobs:
   dockerize-front:
-    if: ${{ github.files_changed.contains('frontend/') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -30,7 +29,6 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-frontend:dev
 
   dockerize-back:
-    if: ${{ github.files_changed.contains('backend/') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

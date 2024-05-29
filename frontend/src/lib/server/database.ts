@@ -3,12 +3,12 @@ import type Survey from '$lib/entities/surveys/Survey';
 import type { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
 import type SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
 import { error } from '@sveltejs/kit';
-import { env } from '$env/dynamic/public';
+import { env } from '$env/dynamic/private';
 
 let host = 'http://localhost:8000';
 
-if (env.PUBLIC_BACKEND_HOST) {
-	host = env.PUBLIC_BACKEND_HOST;
+if (env.BACKEND_HOST) {
+	host = env.BACKEND_HOST;
 }
 
 export const createSurvey = async (info: SurveyCreateInfo) => {

@@ -5,7 +5,7 @@ from sqlmodel import Field, SQLModel
 
 
 class SurveyDraftBase(SQLModel):
-    creator: int = Field(foreign_key="user.id", nullable=False)
+    creator_id: int = Field(foreign_key="user.id", nullable=False)
     survey_structure: str
 
 
@@ -14,3 +14,4 @@ class SurveyDraft(SurveyDraftBase, table=True):
     creation_date: str = Field(
         default_factory=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     )
+    is_deleted: bool = Field(default=False)

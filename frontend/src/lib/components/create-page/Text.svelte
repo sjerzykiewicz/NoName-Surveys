@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
+	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let questionIndex: number;
 </script>
@@ -11,6 +12,9 @@
 			class="details-input"
 			contenteditable
 			bind:textContent={$questions[questionIndex].choices[0]}
+			role="textbox"
+			tabindex="0"
+			on:keydown={handleNewLine}
 		>
 			{$questions[questionIndex].choices[0]}
 		</div>

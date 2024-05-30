@@ -1,3 +1,4 @@
+from datetime import datetime
 from secrets import randbelow
 from typing import Optional
 
@@ -22,3 +23,6 @@ class Survey(SurveyBase, table=True):
     survey_code: str = Field(default_factory=generate_survey_code, unique=True)
     is_deleted: bool = Field(default=False)
     deadline: str = Field(default="")
+    creation_date: str = Field(
+        default_factory=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    )

@@ -42,6 +42,7 @@ async def get_surveys_for_user(
                 ).survey_structure
             ).title,
             survey_code=survey.survey_code,
+            creation_date=survey.creation_date,
         )
         for survey in user_surveys
     ]

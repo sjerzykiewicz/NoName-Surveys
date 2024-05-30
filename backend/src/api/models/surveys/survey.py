@@ -48,6 +48,7 @@ class SurveyStructure(BaseModel):
 class SurveyHeadersOutput(BaseModel):
     title: str
     survey_code: str
+    creation_date: str
 
 
 class SurveyStructureFetchInput(BaseModel):

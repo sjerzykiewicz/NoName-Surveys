@@ -1,22 +1,19 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
-
-	export let titleError: boolean;
-
-	$: checkTitleError = () => {
-		const t = $title;
-		return titleError && (t === null || t === undefined || t.length === 0);
-	};
+	import { cubicInOut } from 'svelte/easing';
+	import { slide } from 'svelte/transition';
 </script>
 
-<div title="Enter survey title" class="title-input" contenteditable bind:textContent={$title}>
+<div
+	title="Enter survey title"
+	class="title-input"
+	contenteditable
+	bind:textContent={$title}
+	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	out:slide={{ duration: 200, easing: cubicInOut }}
+>
 	{$title}
 </div>
-{#if checkTitleError()}
-	<p title="Error" class="error">
-		<i class="material-symbols-rounded">error</i>Please enter survey title.
-	</p>
-{/if}
 
 <style>
 	.title-input {

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
 	import { afterUpdate } from 'svelte';
+	import { cubicInOut } from 'svelte/easing';
+	import { slide } from 'svelte/transition';
 
 	export let questionIndex: number;
 
@@ -24,7 +26,11 @@
 	});
 </script>
 
-<div class="choice-area">
+<div
+	class="choice-area"
+	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	out:slide={{ duration: 200, easing: cubicInOut }}
+>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
 			<div class="radio">

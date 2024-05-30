@@ -1,10 +1,16 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
+	import { cubicInOut } from 'svelte/easing';
+	import { slide } from 'svelte/transition';
 
 	export let questionIndex: number;
 </script>
 
-<div class="choice-area">
+<div
+	class="choice-area"
+	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	out:slide={{ duration: 200, easing: cubicInOut }}
+>
 	<div class="details">
 		<div
 			title="Enter question details"

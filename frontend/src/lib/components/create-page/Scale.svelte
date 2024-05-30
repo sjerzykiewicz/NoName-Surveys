@@ -1,10 +1,16 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
+	import { cubicInOut } from 'svelte/easing';
+	import { slide } from 'svelte/transition';
 
 	export let questionIndex: number;
 </script>
 
-<div class="choice-area scale">
+<div
+	class="choice-area scale"
+	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	out:slide={{ duration: 200, easing: cubicInOut }}
+>
 	{#each $questions[questionIndex].choices as choice}
 		<div title={choice} class="choice scale">
 			<input type="radio" disabled name={questionIndex.toString()} />

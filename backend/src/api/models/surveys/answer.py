@@ -13,7 +13,6 @@ from src.api.models.questions.slider_question import SliderQuestion
 from src.api.models.questions.text_question import TextQuestion
 
 
-# "Base" because there will be another model for NoName module usage
 class SurveyAnswerBase(BaseModel):
     survey_code: str
     questions: list[
@@ -51,6 +50,7 @@ class SurveyAnswerBase(BaseModel):
 
 
 class SurveyAnswersFetchInput(BaseModel):
+    user_email: str
     survey_code: str
 
     @field_validator("survey_code")

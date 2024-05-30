@@ -1,3 +1,5 @@
+from sqlmodel import select
+
 from src.db.base import Session
 from src.db.models.survey_draft import SurveyDraft, SurveyDraftBase
 
@@ -5,20 +7,16 @@ from src.db.models.survey_draft import SurveyDraft, SurveyDraftBase
 def get_survey_drafts_for_user(
     user_id: int, session: Session
 ) -> list[SurveyDraft]:
-    drafts = (
-        session.query(SurveyDraft).filter(SurveyDraft.creator == user_id).all()
-    )
+    statement = select(SurveyDraft).where(SurveyDraft.creator_id == user_id)
+    drafts = session.exec(statement).all()
     return [draft for draft in drafts]
 
 
 def get_survey_draft_by_id(
     survey_draft_id: int, session: Session
 ) -> SurveyDraft:
-    survey_draft = (
-        session.query(SurveyDraft)
-        .filter(SurveyDraft.id == survey_draft_id)
-        .first()
-    )
+    statement = select(SurveyDraft).where(SurveyDraft.id == survey_draft_id)
+    survey_draft = session.exec(statement).first()
     return survey_draft
 
 

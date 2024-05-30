@@ -25,6 +25,7 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { tick } from 'svelte';
+	import { page } from '$app/stores';
 
 	export let isPreview: boolean = false;
 
@@ -128,7 +129,7 @@
 		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
 		// TODO - user id
-		const draftInfo = new DraftCreateInfo(1, parsedSurvey);
+		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
 		const response = await fetch('/api/surveys/drafts/create', {
 			method: 'POST',
@@ -151,7 +152,7 @@
 		const parsedSurvey = new Survey($title, constructQuestionList());
 
 		// TODO - replace dummy values with proper data
-		const surveyInfo = new SurveyInfo(1, parsedSurvey, '31-12-9999', false);
+		const surveyInfo = new SurveyInfo($page.data.session!.user!.email!, parsedSurvey, false, []);
 
 		const response = await fetch('/api/surveys/create', {
 			method: 'POST',

@@ -1,19 +1,19 @@
 import type Survey from '$lib/entities/surveys/Survey';
 
 export default class SurveyCreateInfo {
-	creator: number;
+	user_email: string;
 	survey_structure: Survey;
-	deadline: string;
 	uses_cryptographic_module: boolean;
+	ring_members: Array<string>;
 	constructor(
-		creator: number,
+		user_email: string,
 		survey_structure: Survey,
-		deadline: string,
-		uses_cryptographic_module: boolean
+		uses_cryptographic_module: boolean,
+		ring_members: Array<string>
 	) {
-		this.creator = creator;
+		this.user_email = user_email;
 		this.survey_structure = survey_structure;
-		this.deadline = deadline;
+		this.ring_members = ring_members;
 		this.uses_cryptographic_module = uses_cryptographic_module;
 	}
 }

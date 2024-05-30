@@ -58,6 +58,8 @@ async def get_survey_by_code(
     session: Session = Depends(get_session),
 ):
     survey = survey_crud.get_survey_by_code(survey_fetch.survey_code, session)
+    if survey is None:
+        raise HTTPException(status_code=404, detail="Survey does not exist")
     return SurveyStructureFetchOutput(
         survey_structure=SurveyStructure.model_validate_json(
             survey_draft_crud.get_survey_draft_by_id(

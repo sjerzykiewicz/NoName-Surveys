@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { signIn, signOut } from '@auth/sveltekit/client';
 	import { page } from '$app/stores';
-	console.log($page.data.session);
 </script>
 
 <div class="login-buttons">

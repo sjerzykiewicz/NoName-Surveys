@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
+	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let titleError: boolean;
 
@@ -9,7 +10,15 @@
 	};
 </script>
 
-<div title="Enter survey title" class="title-input" contenteditable bind:textContent={$title}>
+<div
+	title="Enter survey title"
+	class="title-input"
+	contenteditable
+	bind:textContent={$title}
+	role="textbox"
+	tabindex="0"
+	on:keydown={handleNewLine}
+>
 	{$title}
 </div>
 {#if checkTitleError()}

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
+	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let questionIndex: number;
 </script>
@@ -18,6 +19,7 @@
 			tabindex="0"
 			bind:textContent={$questions[questionIndex].choices[0]}
 			on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
+			on:keydown={handleNewLine}
 		>
 			{$questions[questionIndex].choices[0]}
 		</div>
@@ -35,6 +37,7 @@
 			tabindex="0"
 			bind:textContent={$questions[questionIndex].choices[1]}
 			on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
+			on:keydown={handleNewLine}
 		>
 			{$questions[questionIndex].choices[1]}
 		</div>

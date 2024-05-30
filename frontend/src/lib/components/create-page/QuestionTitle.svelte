@@ -2,6 +2,7 @@
 	import { questions } from '$lib/stores/create-page';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { beforeUpdate, type ComponentType } from 'svelte';
+	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let questionIndex: number;
 	export let questionType: ComponentType;
@@ -65,6 +66,9 @@
 		class="question-input"
 		contenteditable
 		bind:textContent={$questions[questionIndex].question}
+		role="textbox"
+		tabindex="0"
+		on:keydown={handleNewLine}
 	>
 		{$questions[questionIndex].question}
 	</div>

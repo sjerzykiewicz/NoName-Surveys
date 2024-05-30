@@ -3,6 +3,7 @@
 	import { afterUpdate } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let questionIndex: number;
 
@@ -34,7 +35,15 @@
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div title="Choice no. {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
-			<div title="Enter choice" class="choice-input" contenteditable bind:textContent={choice}>
+			<div
+				title="Enter choice"
+				class="choice-input"
+				contenteditable
+				bind:textContent={choice}
+				role="textbox"
+				tabindex="0"
+				on:keydown={handleNewLine}
+			>
 				{choice}
 			</div>
 			<button

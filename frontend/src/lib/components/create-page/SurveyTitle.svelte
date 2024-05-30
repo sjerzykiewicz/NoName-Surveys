@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
+	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 </script>
@@ -9,6 +10,9 @@
 	class="title-input"
 	contenteditable
 	bind:textContent={$title}
+	role="textbox"
+	tabindex="0"
+	on:keydown={handleNewLine}
 	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
 	out:slide={{ duration: 200, easing: cubicInOut }}
 >

@@ -2,6 +2,7 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let questionIndex: number;
 
@@ -21,6 +22,9 @@
 		class="text-area"
 		contenteditable
 		bind:textContent={$questions[questionIndex].choices[1]}
+		role="textbox"
+		tabindex="0"
+		on:keydown={handleNewLine}
 	>
 		{$questions[questionIndex].choices[1]}
 	</div>

@@ -3,6 +3,7 @@
 	import { afterUpdate } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let questionIndex: number;
 
@@ -36,7 +37,15 @@
 			<div class="radio">
 				<input type="radio" disabled name={questionIndex.toString()} />
 			</div>
-			<div title="Enter choice" class="choice-input" contenteditable bind:textContent={choice}>
+			<div
+				title="Enter choice"
+				class="choice-input"
+				contenteditable
+				bind:textContent={choice}
+				role="textbox"
+				tabindex="0"
+				on:keydown={handleNewLine}
+			>
 				{choice}
 			</div>
 			<button

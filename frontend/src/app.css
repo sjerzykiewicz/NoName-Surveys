@@ -219,6 +219,7 @@ button:active,
 
 .question-input {
 	font-size: 1em;
+	white-space: pre-wrap !important;
 }
 
 .question-label {
@@ -248,6 +249,7 @@ button:active,
 	padding-bottom: 1em;
 	overflow: hidden;
 	overflow-wrap: break-word;
+	white-space: pre-wrap !important;
 }
 
 .question-title i {
@@ -263,12 +265,14 @@ button:active,
 	text-shadow: 0px 4px 4px var(--shadow-color);
 	cursor: default;
 	overflow-wrap: break-word;
+	white-space: pre-wrap !important;
 }
 
 .text-area {
 	margin-left: 2.25em;
 	margin-right: 0em;
 	min-height: 6em;
+	white-space: pre-wrap !important;
 }
 
 .text-area.display {
@@ -282,6 +286,7 @@ button:active,
 	cursor: default;
 	overflow: hidden;
 	overflow-wrap: break-word;
+	white-space: pre-wrap !important;
 }
 
 /* choices */
@@ -307,6 +312,7 @@ button:active,
 	overflow: hidden;
 	overflow-wrap: break-word;
 	width: fit-content;
+	white-space: pre-wrap !important;
 }
 
 .choice-input.display:hover {
@@ -466,6 +472,7 @@ div[contenteditable] {
 	cursor: text;
 	overflow: hidden;
 	margin-right: 0.5em;
+	white-space: pre-wrap !important;
 }
 
 div[contenteditable]:empty::before {
@@ -490,6 +497,7 @@ div[contenteditable] * {
 	margin: 0 !important;
 	padding: 0 !important;
 	cursor: inherit !important;
+	white-space: inherit !important;
 }
 
 /* other */
@@ -543,6 +551,7 @@ input[type='radio']:checked {
 	overflow: hidden;
 	padding-bottom: 1em;
 	margin-bottom: -1em;
+	white-space: pre-wrap !important;
 }
 
 .answers {
@@ -615,6 +624,7 @@ select {
 	color: var(--text-color);
 	font-size: 1em;
 	padding: 0.25em;
+	white-space: pre-wrap !important;
 }
 
 select:disabled {

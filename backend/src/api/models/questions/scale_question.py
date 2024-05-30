@@ -17,5 +17,13 @@ class ScaleQuestion(Question):
             raise ValueError("scale answer must be between 1 and 5")
         return v
 
+    def validate_structure_against(self, answer) -> None:
+        if (
+            not isinstance(answer, ScaleQuestion)
+            or self.required != answer.required
+            or self.question != answer.question
+        ):
+            raise ValueError("Invalid answer!")
+
     class Config:
         extra = "forbid"

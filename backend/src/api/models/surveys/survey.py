@@ -1,5 +1,5 @@
 import re
-from typing import Union
+from typing import Optional, Union
 
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
@@ -45,6 +45,12 @@ class SurveyStructure(BaseModel):
         extra = "forbid"
 
 
+class SurveyHeadersOutput(BaseModel):
+    title: str
+    survey_code: str
+    creation_date: str
+
+
 class SurveyStructureFetchInput(BaseModel):
     survey_code: str
 
@@ -64,36 +70,39 @@ class SurveyStructureFetchInput(BaseModel):
 
 class SurveyStructureFetchOutput(BaseModel):
     survey_structure: SurveyStructure
-    uses_cryptographic_module: bool
     survey_code: str
-
-    class Config:
-        extra = "forbid"
-
-
-class SurveyStructureGetForUserOutput(BaseModel):
-    survey_structure_id: int
     uses_cryptographic_module: bool
-    survey_code: str
 
     class Config:
         extra = "forbid"
 
 
 class SurveyStructureCreateInput(BaseModel):
-    creator: int
+    user_email: str
     survey_structure: SurveyStructure
-    deadline: str
     uses_cryptographic_module: bool
+    ring_members: Optional[list[str]] = Field(default=[])
+
+    @field_validator("ring_members")
+    def validate_emails(cls, v, info: ValidationInfo) -> str:
+        if not info.data["uses_cryptographic_module"]:
+            return v
+        if v is None or len(v) == 0:
+            raise ValueError(
+                "emails must be provided for cryptographic module"
+            )
+        for email in v:
+            if not re.match(
+                r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email
+            ):
+                raise ValueError("invalid email format")
+        return v
 
     class Config:
         extra = "forbid"
 
 
 class SurveyStructureCreateOutput(BaseModel):
-    creator: int
-    survey_structure_id: int
-    uses_cryptographic_module: bool
     survey_code: str
 
     class Config:

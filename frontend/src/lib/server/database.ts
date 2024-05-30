@@ -117,6 +117,7 @@ export const getDraftsOfUser = async (id: number) => {
 		throw error(response.status, response.statusText);
 	}
 
-	const drafts = await response.json();
-	return { drafts };
+	const drafts: Array<{ creator: number; survey_structure: Survey; creation_date: string }> =
+		await response.json();
+	return drafts;
 };

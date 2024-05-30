@@ -2,6 +2,8 @@
 	import { questions } from '$lib/stores/create-page';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { beforeUpdate, type ComponentType } from 'svelte';
+	import { cubicInOut } from 'svelte/easing';
+	import { slide } from 'svelte/transition';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let questionIndex: number;
@@ -36,13 +38,21 @@
 	});
 </script>
 
-<div class="question-label">
+<div
+	class="question-label"
+	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	out:slide={{ duration: 200, easing: cubicInOut }}
+>
 	<div title="Question no. {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
 	<div title={questionTypeData.title} class="type">
 		<i class="material-symbols-rounded">{questionTypeData.icon}</i>{questionTypeData.text}
 	</div>
 </div>
-<div class="question-area">
+<div
+	class="question-area"
+	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	out:slide={{ duration: 200, easing: cubicInOut }}
+>
 	<div class="arrows">
 		<button
 			title="Move question up"
@@ -86,27 +96,6 @@
 </div>
 
 <style>
-	.question-label {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
-		margin-bottom: 0.25em;
-		font-size: 1.25em;
-		color: var(--border-color);
-		cursor: default;
-	}
-
-	.question-label i {
-		font-size: 1em;
-		margin-right: 0.25em;
-	}
-
-	.type {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
-	}
-
 	.question-input[contenteditable]:empty::before {
 		content: 'Enter question...';
 		color: var(--text-dark-color);

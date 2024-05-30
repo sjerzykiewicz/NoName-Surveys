@@ -43,6 +43,7 @@ body {
 	background: linear-gradient(0deg, var(--secondary-dark-color) 0%, var(--secondary-color) 100%);
 	background-attachment: fixed;
 	margin: 0px;
+	overflow-y: scroll;
 }
 
 i {
@@ -62,6 +63,10 @@ i {
 }
 
 :root::-webkit-scrollbar-track {
+	background-color: var(--secondary-dark-color);
+}
+
+:root::-webkit-scrollbar-corner {
 	background-color: var(--secondary-dark-color);
 }
 
@@ -96,6 +101,7 @@ button {
 }
 
 .footer-button {
+	font-size: 1.25em;
 	text-decoration: none;
 	margin-left: 0.5em;
 }
@@ -214,6 +220,27 @@ button:active,
 .question-input {
 	font-size: 1em;
 	white-space: pre-wrap !important;
+}
+
+.question-label {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	margin-bottom: 0.25em;
+	font-size: 1.25em;
+	color: var(--border-color);
+	cursor: default;
+}
+
+.question-label i {
+	font-size: 1em;
+	margin-right: 0.25em;
+}
+
+.type {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
 }
 
 .question-title {
@@ -612,6 +639,7 @@ select:disabled {
 	}
 
 	button,
+	.footer-button,
 	select,
 	.radio,
 	.checkbox,

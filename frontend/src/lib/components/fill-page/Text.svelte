@@ -21,6 +21,10 @@
 </div>
 
 <style>
+	.text-area {
+		margin-right: 0em;
+	}
+
 	.text-area[contenteditable]:empty::before {
 		content: 'Enter your answer...';
 	}

@@ -29,7 +29,7 @@ export const createSurvey = async (info: SurveyCreateInfo) => {
 };
 
 export const getSurveyByCode = async (survey_code: string) => {
-	const response = await fetch(`${host}/surveys`, {
+	const response = await fetch(`${host}/surveys/fetch`, {
 		method: 'POST',
 		body: JSON.stringify({ survey_code }),
 		headers: {
@@ -61,8 +61,14 @@ export const saveAnswer = async (answer: SurveyAnswer) => {
 	return (await response.json()).message;
 };
 
-export const getSurveysOfUser = async (id: number) => {
-	const response = await fetch(`${host}/surveys/all/${id}`, { method: 'GET' });
+export const getSurveysOfUser = async (user_email: string) => {
+	const response = await fetch(`${host}/surveys/all`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!response.ok) {
 		throw error(response.status, response.statusText);
 	}
@@ -82,10 +88,10 @@ export const getSurveysOfUser = async (id: number) => {
 	return entry_list;
 };
 
-export const getSurveyAnswers = async (survey_code: string) => {
+export const getSurveyAnswers = async (user_email: string, survey_code: string) => {
 	const response = await fetch(`${host}/answers/fetch`, {
 		method: 'POST',
-		body: JSON.stringify({ survey_code }),
+		body: JSON.stringify({ user_email, survey_code }),
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -111,8 +117,14 @@ export const saveDraft = async (info: DraftCreateInfo) => {
 	return response.ok;
 };
 
-export const getDraftsOfUser = async (id: number) => {
-	const response = await fetch(`${host}/survey-drafts/all/${id}`, { method: 'GET' });
+export const getDraftsOfUser = async (user_email: string) => {
+	const response = await fetch(`${host}/survey-drafts/all`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
 	if (!response.ok) {
 		throw error(response.status, response.statusText);
 	}
@@ -120,4 +132,27 @@ export const getDraftsOfUser = async (id: number) => {
 	const drafts: Array<{ creator: number; survey_structure: Survey; creation_date: string }> =
 		await response.json();
 	return drafts;
+};
+
+export const registerUser = async (user_email: string, public_key: string) => {
+	const response = await fetch(`${host}/users/register`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, public_key }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	return response;
+};
+
+export const validateUser = async (user_email: string) => {
+	const response = await fetch(`${host}/users/validate`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	const value = await response.json();
+	return value === true;
 };

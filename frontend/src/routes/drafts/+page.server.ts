@@ -8,7 +8,6 @@ export const load: PageServerLoad = async ({ parent }) => {
 		error(403, 'You must be logged in to access this page.');
 	}
 
-	const userid = 1; // TODO = user id
-	const drafts = await db.getDraftsOfUser(userid);
+	const drafts = await db.getDraftsOfUser(session.user!.email!);
 	return { session, drafts };
 };

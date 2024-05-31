@@ -24,7 +24,7 @@ def create_url():
     db_user = settings.db_user
     db_password = settings.db_password
     db_host = settings.db_host
-    db_port = ":" + settings.db_port if settings.db_port else ""
+    db_port = ":" + str(settings.db_port) if settings.db_port else ""
     db_name = settings.db_name
 
     return f"{db_type}{db_dialect}://{db_user}:{db_password}@{db_host}{db_port}/{db_name}"

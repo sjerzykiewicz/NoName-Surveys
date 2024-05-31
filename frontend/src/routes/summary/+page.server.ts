@@ -8,7 +8,6 @@ export const load: PageServerLoad = async ({ parent }) => {
 		error(403, 'You must be logged in to access this page.');
 	}
 
-	const userid = 1; // TODO = user id
-	const survey_list = await db.getSurveysOfUser(userid);
+	const survey_list = await db.getSurveysOfUser(session.user!.email!);
 	return { session, survey_list };
 };

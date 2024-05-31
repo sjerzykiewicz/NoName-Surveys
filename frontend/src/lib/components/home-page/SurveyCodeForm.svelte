@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
 
 	export let form: ActionData;
 </script>
 
-<form method="POST">
+<form method="POST" use:enhance>
 	<label for="code-input"
 		>Enter survey code
 		<input

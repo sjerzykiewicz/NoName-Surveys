@@ -3,6 +3,8 @@ services:
     image: sjerzykiewicz/noname-surveys-backend:dev
     ports:
       - "127.0.0.1:8000:8000"
+    env_file:
+      - ./backend/.env
 
   frontend:
     image: sjerzykiewicz/noname-surveys-frontend:dev

@@ -128,7 +128,6 @@
 	async function saveDraft() {
 		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
-		// TODO - user id
 		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
 		const response = await fetch('/api/surveys/drafts/create', {
@@ -151,7 +150,6 @@
 		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
 
-		// TODO - replace dummy values with proper data
 		const surveyInfo = new SurveyInfo($page.data.session!.user!.email!, parsedSurvey, false, []);
 
 		const response = await fetch('/api/surveys/create', {

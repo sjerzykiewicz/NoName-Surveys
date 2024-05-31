@@ -18,6 +18,14 @@
 	import Single from '../create-page/Single.svelte';
 	import Slider from '../create-page/Slider.svelte';
 	import Text from '../create-page/Text.svelte';
+	import SinglePreview from '../create-page/preview/SinglePreview.svelte';
+	import MultiPreview from '../create-page/preview/MultiPreview.svelte';
+	import ScalePreview from '../create-page/preview/ScalePreview.svelte';
+	import SliderPreview from '../create-page/preview/SliderPreview.svelte';
+	import ListPreview from '../create-page/preview/ListPreview.svelte';
+	import RankPreview from '../create-page/preview/RankPreview.svelte';
+	import BinaryPreview from '../create-page/preview/BinaryPreview.svelte';
+	import TextPreview from '../create-page/preview/TextPreview.svelte';
 
 	export let structure: Survey;
 	export let creationDate: string;
@@ -32,6 +40,7 @@
 						...$questions,
 						{
 							component: Single,
+							preview: SinglePreview,
 							required: q.required,
 							question: q.question,
 							choices: (q as SingleQuestion).choices,
@@ -44,6 +53,7 @@
 						...$questions,
 						{
 							component: Multi,
+							preview: MultiPreview,
 							required: q.required,
 							question: q.question,
 							choices: (q as MultiQuestion).choices,
@@ -56,6 +66,7 @@
 						...$questions,
 						{
 							component: List,
+							preview: ListPreview,
 							required: q.required,
 							question: q.question,
 							choices: (q as ListQuestion).choices,
@@ -68,6 +79,7 @@
 						...$questions,
 						{
 							component: Rank,
+							preview: RankPreview,
 							required: q.required,
 							question: q.question,
 							choices: (q as RankQuestion).choices,
@@ -80,6 +92,7 @@
 						...$questions,
 						{
 							component: Binary,
+							preview: BinaryPreview,
 							required: q.required,
 							question: q.question,
 							choices: (q as BinaryQuestion).choices,
@@ -92,6 +105,7 @@
 						...$questions,
 						{
 							component: Scale,
+							preview: ScalePreview,
 							required: q.required,
 							question: q.question,
 							choices: ['1', '2', '3', '4', '5'],
@@ -104,6 +118,7 @@
 						...$questions,
 						{
 							component: Slider,
+							preview: SliderPreview,
 							required: q.required,
 							question: q.question,
 							choices: [
@@ -119,6 +134,7 @@
 						...$questions,
 						{
 							component: Text,
+							preview: TextPreview,
 							required: q.required,
 							question: q.question,
 							choices: [(q as TextQuestion).details],

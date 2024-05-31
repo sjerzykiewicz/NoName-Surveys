@@ -74,13 +74,18 @@ export const getSurveysOfUser = async (user_email: string) => {
 	}
 
 	const surveys = await response.json();
-	const entry_list: Array<{ title: string; uses_crypto: boolean; code: string }> = [];
+	const entry_list: Array<{
+		title: string;
+		uses_crypto: boolean;
+		code: string;
+		creation_date: string;
+	}> = [];
 	for (let i = 0; i < surveys.length; i++) {
-		const { survey_structure } = await getSurveyByCode(surveys[i].survey_code);
 		const entry = {
-			title: survey_structure.title,
+			title: surveys[i].title,
 			uses_crypto: surveys[i].uses_cryptographic_module,
-			code: surveys[i].survey_code
+			code: surveys[i].survey_code,
+			creation_date: surveys[i].creation_date
 		};
 		entry_list[i] = entry;
 	}

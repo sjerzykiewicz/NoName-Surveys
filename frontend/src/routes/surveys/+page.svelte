@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
-	import SummaryEntry from '$lib/components/summary-page/SummaryEntry.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
+	import SurveyTable from '$lib/components/SurveyTable.svelte';
 
 	export let data: PageServerData;
 </script>
@@ -12,7 +12,5 @@
 </Header>
 
 <Content>
-	{#each data.survey_list as entry}
-		<SummaryEntry title={entry.title} code={entry.code} />
-	{/each}
+	<SurveyTable survey_list={data.survey_list} />
 </Content>

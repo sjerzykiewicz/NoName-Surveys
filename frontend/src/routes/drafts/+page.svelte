@@ -2,7 +2,7 @@
 	import type { PageServerData } from './$types';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
-	import Entry from '$lib/components/drafts-page/Entry.svelte';
+	import DraftsTable from '$lib/components/drafts-page/DraftsTable.svelte';
 
 	export let data: PageServerData;
 </script>
@@ -12,7 +12,5 @@
 </Header>
 
 <Content>
-	{#each data.drafts as draft}
-		<Entry structure={draft.survey_structure} creationDate={draft.creation_date} />
-	{/each}
+	<DraftsTable drafts={data.drafts.toReversed()} />
 </Content>

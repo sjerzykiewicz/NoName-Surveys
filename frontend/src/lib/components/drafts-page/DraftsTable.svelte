@@ -27,13 +27,16 @@
 	import BinaryPreview from '../create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '../create-page/preview/TextPreview.svelte';
 
-	export let structure: Survey;
-	export let creationDate: string;
+	export let drafts: {
+		creator: number;
+		survey_structure: Survey;
+		creation_date: string;
+	}[];
 
-	function loadDraft() {
-		$title = structure.title;
+	function loadDraft(i: number) {
+		$title = drafts[i].survey_structure.title;
 		$questions = [];
-		structure.questions.forEach((q) => {
+		drafts[i].survey_structure.questions.forEach((q) => {
 			switch (q.question_type) {
 				case 'single':
 					$questions = [
@@ -148,41 +151,118 @@
 	}
 </script>
 
-<div class="entry">
-	<div class="data">
-		<div class="entry-title">{structure.title}</div>
-		<div class="entry-code">
-			Created on: {creationDate}
-		</div>
-	</div>
-	<div class="buttons">
-		<button title="Open draft" class="open-button" on:click={loadDraft}>Open</button>
-	</div>
-</div>
+<table>
+	<tr>
+		<th title="Draft title" id="title-header">Draft Title</th>
+		<th title="Creation date" id="date-header">Date</th>
+	</tr>
+	{#each drafts as draft, draftIndex}
+		<tr>
+			<td title="Click to open draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
+				>{draft.survey_structure.title}</td
+			>
+			<td title="Creation date" class="date-entry">{draft.creation_date}</td>
+		</tr>
+	{/each}
+</table>
 
 <style>
-	.entry {
-		border: 1px solid var(--border-color);
-		border-radius: 10px;
-		color: var(--text-color);
-		padding: 5px;
-		padding-left: 10px;
-		margin: 5px;
-		margin-bottom: 15px;
-		display: flex;
-		justify-content: space-between;
-	}
-
-	.entry-title {
-		color: var(--text-color);
-		font-weight: bold;
-		font-size: 1.5em;
+	table {
 		width: 100%;
-		text-decoration: none;
+		border: 1px solid var(--border-color);
+		border-collapse: separate;
+		border-spacing: 0;
+		border-radius: 5px;
+		box-shadow: 0px 4px 4px var(--shadow-color);
+		font-size: 1.25em;
+		color: var(--text-color);
 	}
 
-	.open-button {
-		font-size: 1.25em;
-		margin: 5px;
+	th,
+	td {
+		padding: 0.25em;
+		text-align: left;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+	}
+
+	th {
+		background-color: var(--secondary-dark-color);
+		font-weight: bold;
+		cursor: default;
+		overflow-wrap: break-word;
+	}
+
+	td {
+		overflow-wrap: anywhere;
+	}
+
+	tr:nth-child(2n + 1) td {
+		background-color: var(--primary-dark-color);
+	}
+
+	tr:nth-child(2n + 2) td {
+		background-color: var(--primary-color);
+	}
+
+	tr:first-of-type {
+		border-radius: 4px 4px 0px 0px;
+	}
+
+	tr:last-of-type {
+		border-radius: 0px 0px 4px 4px;
+	}
+
+	th:first-of-type {
+		border-top-left-radius: 4px;
+	}
+
+	th:last-of-type {
+		border-top-right-radius: 4px;
+	}
+
+	tr:last-of-type td:first-of-type {
+		border-bottom-left-radius: 4px;
+	}
+
+	tr:last-of-type td:last-of-type {
+		border-bottom-right-radius: 4px;
+	}
+
+	#title-header {
+		width: 82%;
+	}
+
+	.title-entry {
+		cursor: pointer;
+	}
+
+	.title-entry:hover {
+		background-color: var(--secondary-color);
+	}
+
+	.title-entry:active {
+		background-color: var(--border-color);
+	}
+
+	#date-header {
+		width: 18%;
+	}
+
+	.date-entry {
+		cursor: default;
+	}
+
+	@media screen and (max-width: 767px) {
+		table {
+			font-size: 0.8em;
+		}
+
+		#title-header {
+			width: 74%;
+		}
+
+		#date-header {
+			width: 26%;
+		}
 	}
 </style>

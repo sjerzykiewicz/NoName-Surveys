@@ -1,5 +1,5 @@
 <script lang="ts">
-	import QuestionTitle from './QuestionTitle.svelte';
+	import QuestionTitle from '../QuestionTitle.svelte';
 	import Single from './Single.svelte';
 	import Text from './Text.svelte';
 	import List from './List.svelte';

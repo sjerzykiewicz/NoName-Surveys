@@ -2,7 +2,7 @@
 	import type { PageServerData } from './$types';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
-	import SurveyTable from '$lib/components/surveys-page/SurveyTable.svelte';
+	import SurveysTable from '$lib/components/surveys-page/SurveysTable.svelte';
 
 	export let data: PageServerData;
 </script>
@@ -12,5 +12,5 @@
 </Header>
 
 <Content>
-	<SurveyTable survey_list={data.survey_list} />
+	<SurveysTable survey_list={data.survey_list} />
 </Content>

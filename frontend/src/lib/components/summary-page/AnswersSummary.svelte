@@ -122,6 +122,7 @@
 	});
 </script>
 
+<div title="Number of answers" class="title answers">Number of answers: {surveyAnswers.length}</div>
 {#each groupedAnswers as question, questionIndex}
 	<div class="question">
 		<QuestionTitle question={question.question} {questionIndex} required={question.required} />

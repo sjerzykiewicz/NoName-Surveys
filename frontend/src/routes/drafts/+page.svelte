@@ -2,7 +2,7 @@
 	import type { PageServerData } from './$types';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
-	import Entry from '$lib/components/draft-page/Entry.svelte';
+	import Entry from '$lib/components/drafts-page/Entry.svelte';
 
 	export let data: PageServerData;
 </script>

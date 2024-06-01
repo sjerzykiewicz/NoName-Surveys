@@ -1,5 +1,5 @@
 import re
-from typing import Union
+from typing import Optional, Union
 
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
@@ -30,6 +30,8 @@ class SurveyAnswerBase(BaseModel):
         min_length=1,
         description="Questions list must have at least 1 element",
     )
+    signature: Optional[str] = Field(default="")
+    y0: Optional[str] = Field(default="")
 
     @field_validator("survey_code")
     def validate_survey_join_code(cls, v, info: ValidationInfo) -> str:
@@ -39,6 +41,13 @@ class SurveyAnswerBase(BaseModel):
             raise ValueError(
                 "survey code must be a string consisting of 6 digits"
             )
+        return v
+
+    @field_validator("y0")
+    def validate_y0(cls, v, info: ValidationInfo) -> str:
+        if v is None or v == "":
+            return v
+        # if y0 is provided, it must be a string
         return v
 
     def validate(self) -> None:

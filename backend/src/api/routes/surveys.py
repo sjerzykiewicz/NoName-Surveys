@@ -43,6 +43,7 @@ async def get_surveys_for_user(
             ).title,
             survey_code=survey.survey_code,
             creation_date=survey.creation_date,
+            uses_cryptographic_module=survey.uses_cryptographic_module,
         )
         for survey in user_surveys
     ]
@@ -60,6 +61,7 @@ async def get_survey_by_code(
     survey = survey_crud.get_survey_by_code(survey_fetch.survey_code, session)
     if survey is None:
         raise HTTPException(status_code=404, detail="Survey does not exist")
+
     return SurveyStructureFetchOutput(
         survey_structure=SurveyStructure.model_validate_json(
             survey_draft_crud.get_survey_draft_by_id(
@@ -68,6 +70,14 @@ async def get_survey_by_code(
         ),
         survey_code=survey.survey_code,
         uses_cryptographic_module=survey.uses_cryptographic_module,
+        public_keys=[
+            ring_member.public_key
+            for ring_member in ring_member_crud.get_ring_members_for_survey(
+                survey.id, session
+            )
+        ]
+        if survey.uses_cryptographic_module
+        else [],
     )
 
 

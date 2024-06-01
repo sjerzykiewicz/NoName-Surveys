@@ -12,13 +12,10 @@ router = APIRouter()
 @router.get(
     "/all",
     response_description="List of all active user emails",
-    response_model=list[User],
+    response_model=list[str],
 )
-async def get_user(session: Session = Depends(get_session)):
-    return [
-        User(user_email=user.email)
-        for user in user_crud.get_all_users(session)
-    ]
+async def get_users(session: Session = Depends(get_session)):
+    return [user.email for user in user_crud.get_all_users(session)]
 
 
 @router.post(

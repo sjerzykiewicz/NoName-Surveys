@@ -43,11 +43,18 @@ class SurveyAnswerBase(BaseModel):
             )
         return v
 
+    @field_validator("signature")
+    def validate_signature(cls, v, info: ValidationInfo) -> str:
+        if v is None or v == "":
+            return v
+        # implement checks for what signature should consist of
+        return v
+
     @field_validator("y0")
     def validate_y0(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             return v
-        # if y0 is provided, it must be a string
+        # implement checks for what y0 should consist of
         return v
 
     def validate(self) -> None:

@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 import src.db.crud.answer as answer_crud
+import src.db.crud.ring_member as ring_member_crud
 import src.db.crud.survey as survey_crud
 import src.db.crud.survey_draft as survey_draft_crud
 import src.db.crud.user as user_crud
@@ -11,6 +12,7 @@ from src.api.models.surveys.answer import (
     SurveyAnswersFetchOutput,
 )
 from src.api.models.surveys.survey import SurveyStructure
+from src.cryptography.ring_signature import Ring
 from src.db.base import get_session
 from src.db.models.answer import Answer
 
@@ -82,6 +84,30 @@ async def save_survey_answer(
             status_code=404, detail="No survey found with this code"
         )
 
+    if survey.uses_cryptographic_module:
+        if not survey_answer.signature or not survey_answer.y0:
+            raise HTTPException(
+                status_code=400,
+                detail="Survey requires cryptographic signature and y0",
+            )
+
+        if answer_crud.user_already_answered_survey(
+            survey.id, survey_answer.y0, session
+        ):
+            raise HTTPException(
+                status_code=400, detail="User already answered this survey"
+            )
+
+        public_keys = [
+            ring_member.public_key
+            for ring_member in ring_member_crud.get_ring_members_for_survey(
+                survey.id, session
+            )
+        ]
+        ring = Ring(public_keys)
+        if not ring.verify(survey_answer.questions, survey_answer.signature):
+            raise HTTPException(status_code=400, detail="Invalid signature")
+
     survey_draft = survey_draft_crud.get_survey_draft_by_id(
         survey.survey_structure_id, session
     )
@@ -101,7 +127,9 @@ async def save_survey_answer(
 
     # save answer
     answer = Answer(
-        survey_id=survey.id, answer=survey_answer.model_dump_json()
+        survey_id=survey.id,
+        answer=survey_answer.model_dump_json(),
+        y0=survey_answer.y0 if survey.uses_cryptographic_module else "",
     )
     answer_crud.save_answer(answer, session)
 

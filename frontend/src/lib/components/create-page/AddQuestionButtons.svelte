@@ -99,7 +99,7 @@
 		} else if (component === Binary) {
 			return ['Yes', 'No'];
 		} else if (component === Slider) {
-			return ['1', '10'];
+			return ['0', '10'];
 		} else {
 			return [''];
 		}

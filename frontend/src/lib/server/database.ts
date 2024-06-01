@@ -74,23 +74,7 @@ export const getSurveysOfUser = async (user_email: string) => {
 	}
 
 	const surveys = await response.json();
-	const entry_list: Array<{
-		title: string;
-		uses_crypto: boolean;
-		code: string;
-		creation_date: string;
-	}> = [];
-	for (let i = 0; i < surveys.length; i++) {
-		const entry = {
-			title: surveys[i].title,
-			uses_crypto: surveys[i].uses_cryptographic_module,
-			code: surveys[i].survey_code,
-			creation_date: surveys[i].creation_date
-		};
-		entry_list[i] = entry;
-	}
-
-	return entry_list;
+	return surveys;
 };
 
 export const getSurveyAnswers = async (user_email: string, survey_code: string) => {

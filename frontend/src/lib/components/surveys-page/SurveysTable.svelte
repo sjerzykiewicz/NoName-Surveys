@@ -6,8 +6,8 @@
 
 	export let survey_list: {
 		title: string;
-		uses_crypto: boolean;
-		code: string;
+		uses_cryptographic_module: boolean;
+		survey_code: string;
 		creation_date: string;
 	}[];
 </script>
@@ -23,15 +23,15 @@
 			<td
 				title="Click to view summary"
 				class="title-entry"
-				on:click={() => goto('/' + entry.code + '/summary')}>{entry.title}</td
+				on:click={() => goto('/' + entry.survey_code + '/summary')}>{entry.title}</td
 			>
 			<td
 				title={copiedIndex === entryIndex ? 'Copied!' : 'Click to copy code'}
 				class="code-entry"
 				on:click={() => {
-					copyCode(entry.code);
+					copyCode(entry.survey_code);
 					copiedIndex = entryIndex;
-				}}>{entry.code}</td
+				}}>{entry.survey_code}</td
 			>
 			<td title="Creation date" class="date-entry">{entry.creation_date}</td>
 		</tr>

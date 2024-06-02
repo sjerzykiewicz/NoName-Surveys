@@ -18,21 +18,20 @@
 		const fileInput = document.querySelector<HTMLInputElement>('#file');
 		const file = fileInput?.files?.[0];
 		const reader = new FileReader();
-		let text = '';
-		reader.onload = function (e) {
-			const fileData = e.target?.result;
-			text = fileData as string;
-		};
 		if (file) {
 			reader.readAsText(file);
-			const publicKey = getKeyFromFile(text);
-			fetch('/api/users/update-public-key', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ email: data.session.user?.email, public_key: publicKey })
-			});
+			reader.onload = function (e) {
+				const fileData = e.target?.result;
+				const text = fileData as string;
+				const publicKey = getKeyFromFile(text);
+				fetch('/api/users/update-public-key', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ email: data.session.user?.email, public_key: publicKey })
+				});
+			};
 		}
 	}
 </script>

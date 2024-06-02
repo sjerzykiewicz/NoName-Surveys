@@ -1,6 +1,7 @@
 import { SvelteKitAuth } from '@auth/sveltekit';
 import Google from '@auth/sveltekit/providers/google';
 import { env } from '$env/dynamic/private';
+import * as db from '$lib/server/database';
 
 export const { handle } = SvelteKitAuth({
 	providers: [
@@ -18,13 +19,10 @@ export const { handle } = SvelteKitAuth({
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				fetch(`${env.ORIGIN}/api/users/register`, {
-					method: 'POST',
-					body: JSON.stringify({ email: user.email }),
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				});
+				const isUserRegistered = await db.validateUser(user.email!);
+				if (!isUserRegistered) {
+					await db.registerUser(user.email!);
+				}
 			}
 			return token;
 		}

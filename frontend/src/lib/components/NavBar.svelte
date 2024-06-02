@@ -28,7 +28,7 @@
 		},
 		Account: {
 			href: '/account',
-			disabled: true
+			disabled: false
 		}
 	};
 

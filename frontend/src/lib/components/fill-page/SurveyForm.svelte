@@ -27,6 +27,9 @@
 	import Binary from './Binary.svelte';
 	import Rank from './Rank.svelte';
 	import type { ComponentType } from 'svelte';
+	import AnswerError from './AnswerError.svelte';
+	import { cubicInOut } from 'svelte/easing';
+	import { slide } from 'svelte/transition';
 
 	export let survey: Survey;
 
@@ -184,23 +187,21 @@
 </script>
 
 <Header>
-	<div title="Survey title" class="title">
+	<div title="Survey title" class="title" in:slide={{ duration: 200, easing: cubicInOut }}>
 		{$title}
 	</div>
 </Header>
+
 <Content>
-	{#each $questions as question, questionIndex}
-		<div class="question">
+	{#each $questions as question, questionIndex (question)}
+		<div class="question" in:slide={{ duration: 200, easing: cubicInOut }}>
 			<QuestionTitle {questionIndex} />
 			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
 		</div>
-		{#if unansweredRequired.includes(questionIndex)}
-			<p title="Error" class="error">
-				<i class="material-symbols-rounded">error</i>Please answer question {questionIndex + 1}.
-			</p>
-		{/if}
+		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
 </Content>
+
 <Footer>
 	<button title="Submit survey" class="footer-button save" on:click={processForm}>
 		<i class="material-symbols-rounded">done</i>Submit
@@ -208,10 +209,6 @@
 </Footer>
 
 <style>
-	.error {
-		margin: -1em 0em 0.5em 2.8em;
-	}
-
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}

@@ -22,13 +22,13 @@
 			href: '/drafts',
 			disabled: false
 		},
-		Summary: {
-			href: '/summary',
+		Surveys: {
+			href: '/surveys',
 			disabled: false
 		},
 		Account: {
 			href: '/account',
-			disabled: true
+			disabled: false
 		}
 	};
 

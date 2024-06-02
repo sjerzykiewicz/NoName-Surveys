@@ -40,6 +40,10 @@
 		text-decoration: none;
 	}
 
+	.text-area:hover {
+		background-color: var(--secondary-color);
+	}
+
 	.text-area:last-of-type {
 		margin-bottom: 0em;
 	}

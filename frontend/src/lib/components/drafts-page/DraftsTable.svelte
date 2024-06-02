@@ -18,20 +18,32 @@
 	import Single from '../create-page/Single.svelte';
 	import Slider from '../create-page/Slider.svelte';
 	import Text from '../create-page/Text.svelte';
+	import SinglePreview from '../create-page/preview/SinglePreview.svelte';
+	import MultiPreview from '../create-page/preview/MultiPreview.svelte';
+	import ScalePreview from '../create-page/preview/ScalePreview.svelte';
+	import SliderPreview from '../create-page/preview/SliderPreview.svelte';
+	import ListPreview from '../create-page/preview/ListPreview.svelte';
+	import RankPreview from '../create-page/preview/RankPreview.svelte';
+	import BinaryPreview from '../create-page/preview/BinaryPreview.svelte';
+	import TextPreview from '../create-page/preview/TextPreview.svelte';
 
-	export let structure: Survey;
-	export let creationDate: string;
+	export let drafts: {
+		creator: number;
+		survey_structure: Survey;
+		creation_date: string;
+	}[];
 
-	function loadDraft() {
-		$title = structure.title;
+	function loadDraft(i: number) {
+		$title = drafts[i].survey_structure.title;
 		$questions = [];
-		structure.questions.forEach((q) => {
+		drafts[i].survey_structure.questions.forEach((q) => {
 			switch (q.question_type) {
 				case 'single':
 					$questions = [
 						...$questions,
 						{
 							component: Single,
+							preview: SinglePreview,
 							required: q.required,
 							question: q.question,
 							choices: (q as SingleQuestion).choices,
@@ -44,6 +56,7 @@
 						...$questions,
 						{
 							component: Multi,
+							preview: MultiPreview,
 							required: q.required,
 							question: q.question,
 							choices: (q as MultiQuestion).choices,
@@ -56,6 +69,7 @@
 						...$questions,
 						{
 							component: List,
+							preview: ListPreview,
 							required: q.required,
 							question: q.question,
 							choices: (q as ListQuestion).choices,
@@ -68,6 +82,7 @@
 						...$questions,
 						{
 							component: Rank,
+							preview: RankPreview,
 							required: q.required,
 							question: q.question,
 							choices: (q as RankQuestion).choices,
@@ -80,6 +95,7 @@
 						...$questions,
 						{
 							component: Binary,
+							preview: BinaryPreview,
 							required: q.required,
 							question: q.question,
 							choices: (q as BinaryQuestion).choices,
@@ -92,6 +108,7 @@
 						...$questions,
 						{
 							component: Scale,
+							preview: ScalePreview,
 							required: q.required,
 							question: q.question,
 							choices: ['1', '2', '3', '4', '5'],
@@ -104,6 +121,7 @@
 						...$questions,
 						{
 							component: Slider,
+							preview: SliderPreview,
 							required: q.required,
 							question: q.question,
 							choices: [
@@ -119,6 +137,7 @@
 						...$questions,
 						{
 							component: Text,
+							preview: TextPreview,
 							required: q.required,
 							question: q.question,
 							choices: [(q as TextQuestion).details],
@@ -132,41 +151,37 @@
 	}
 </script>
 
-<div class="entry">
-	<div class="data">
-		<div class="entry-title">{structure.title}</div>
-		<div class="entry-code">
-			Created on: {creationDate}
-		</div>
-	</div>
-	<div class="buttons">
-		<button title="Open draft" class="open-button" on:click={loadDraft}>Open</button>
-	</div>
-</div>
+<table>
+	<tr>
+		<th title="Draft title" id="title-header">Draft Title</th>
+		<th title="Creation date" id="date-header">Date</th>
+	</tr>
+	{#each drafts as draft, draftIndex}
+		<tr>
+			<td title="Click to open draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
+				>{draft.survey_structure.title}</td
+			>
+			<td title="Creation date" class="date-entry">{draft.creation_date}</td>
+		</tr>
+	{/each}
+</table>
 
 <style>
-	.entry {
-		border: 1px solid var(--border-color);
-		border-radius: 10px;
-		color: var(--text-color);
-		padding: 5px;
-		padding-left: 10px;
-		margin: 5px;
-		margin-bottom: 15px;
-		display: flex;
-		justify-content: space-between;
+	#title-header {
+		width: 82%;
 	}
 
-	.entry-title {
-		color: var(--text-color);
-		font-weight: bold;
-		font-size: 1.5em;
-		width: 100%;
-		text-decoration: none;
+	#date-header {
+		width: 18%;
 	}
 
-	.open-button {
-		font-size: 1.25em;
-		margin: 5px;
+	@media screen and (max-width: 767px) {
+		#title-header {
+			width: 74%;
+		}
+
+		#date-header {
+			width: 26%;
+		}
 	}
 </style>

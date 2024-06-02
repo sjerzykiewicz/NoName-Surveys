@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
-	import Answers from '$lib/components/summary-page/Answers.svelte';
+	import Answers from '$lib/components/summary-page/answer/Answers.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import type { PageData } from './$types';
 

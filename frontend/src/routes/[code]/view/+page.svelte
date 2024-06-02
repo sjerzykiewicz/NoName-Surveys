@@ -2,21 +2,13 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import QrCode from '$lib/components/QrCode.svelte';
+	import { copyCode } from '$lib/utils/copyCode';
 
 	export let data: PageData;
 
 	let url: string = $page.url.origin + '/' + data.code + '/fill';
 
 	let isCopied: boolean = false;
-
-	function copyCode(): void {
-		if (window.isSecureContext) {
-			navigator.clipboard.writeText(data.code);
-			isCopied = true;
-		} else {
-			alert('The code could not be copied due to an insecure connection.');
-		}
-	}
 
 	let innerWidth: number;
 	function calculateSize(width: number): number {
@@ -34,7 +26,13 @@
 	<h2>Survey created successfully.</h2>
 	<h2>Access code:</h2>
 	<h1>{data.code}</h1>
-	<button title="Copy code" class="save" on:click={copyCode}
+	<button
+		title="Copy code"
+		class="save"
+		on:click={() => {
+			copyCode(data.code);
+			isCopied = true;
+		}}
 		><i class="material-symbols-rounded">content_copy</i>
 		{isCopied ? 'Copied!' : 'Copy'}</button
 	>

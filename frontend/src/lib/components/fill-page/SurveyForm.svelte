@@ -16,7 +16,6 @@
 	import { ScaleQuestionAnswered } from '$lib/entities/questions/Scale';
 	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 	import QuestionTitle from './QuestionTitle.svelte';
 	import Single from './Single.svelte';
 	import Text from './Text.svelte';
@@ -30,10 +29,11 @@
 	import AnswerError from './AnswerError.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { Ring } from '$lib/entities/cryptography/ring';
 
 	export let survey: Survey;
 	export let uses_crypto: boolean;
-	// export let keys: Array<string>;
+	export let keys: Array<string>;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -173,7 +173,8 @@
 	async function processForm() {
 		const pubKeyInput = document.querySelector<HTMLInputElement>('#public-key');
 		const keyInput = document.querySelector<HTMLInputElement>('#private-key');
-		let publicKey, privateKey;
+		let publicKey: string = '';
+		let privateKey: string = '';
 		const publicReader = new FileReader();
 		const publicFile = pubKeyInput?.files?.[0];
 		const privateFile = keyInput?.files?.[0];
@@ -198,38 +199,53 @@
 
 		console.log(publicKey, privateKey);
 
-		unansweredRequired = [];
-		for (let i = 0; i < numQuestions; i++) {
-			if ($questions[i].required) {
-				if ($answers[i].choices.length === 0) {
-					unansweredRequired[i] = i;
-				} else if (
-					$answers[i].choices.some((c) => c === null || c === undefined || c.length === 0)
-				) {
-					unansweredRequired[i] = i;
-				}
-			}
-		}
-		if (unansweredRequired.length > 0) {
-			return;
-		}
+		// unansweredRequired = [];
+		// for (let i = 0; i < numQuestions; i++) {
+		// 	if ($questions[i].required) {
+		// 		if ($answers[i].choices.length === 0) {
+		// 			unansweredRequired[i] = i;
+		// 		} else if (
+		// 			$answers[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+		// 		) {
+		// 			unansweredRequired[i] = i;
+		// 		}
+		// 	}
+		// }
+		// if (unansweredRequired.length > 0) {
+		// 	return;
+		// }
 		const answerList: Array<Question> = constructAnswerList();
 		const answer = new SurveyAnswer($page.params.code, answerList);
 
-		const response = await fetch('/api/surveys/fill', {
-			method: 'POST',
-			body: JSON.stringify(answer),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			// TODO - display what exactly is wrong
-			alert(response.statusText);
+		if (!keys.includes(publicKey)) {
+			alert('Provided public key is not on the list');
 		} else {
-			return await goto(`/`, { replaceState: true, invalidateAll: true });
+			keys = keys.filter((key) => key !== publicKey);
+			keys = [...keys, privateKey];
 		}
+
+		let ring = new Ring(keys, 2048);
+
+		let y0 = ring.hash($page.data.session!.user!.email!);
+
+		const res = (ring.sign(JSON.stringify(answer), keys.length - 1), y0);
+
+		// const response = await fetch('/api/surveys/fill', {
+		// 	method: 'POST',
+		// 	body: JSON.stringify(answer),
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	}
+		// });
+
+		// if (!response.ok) {
+		// 	// TODO - display what exactly is wrong
+		// 	alert(response.statusText);
+		// } else {
+		// 	return await goto(`/`, { replaceState: true, invalidateAll: true });
+		// }
+
+		console.log(res);
 	}
 </script>
 

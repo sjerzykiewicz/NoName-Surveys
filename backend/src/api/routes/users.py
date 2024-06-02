@@ -31,6 +31,21 @@ async def does_user_exist(
 
 
 @router.post(
+    "/has-public-key",
+    response_description="Check if user has a non-empty public key",
+    response_model=bool,
+)
+async def check_if_user_has_public_key(
+    user_input: User,
+    session: Session = Depends(get_session),
+):
+    user = user_crud.get_user_by_email(user_input.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not registered")
+    return user.public_key != ""
+
+
+@router.post(
     "/register",
     response_description="Register a new user",
     response_model=dict,

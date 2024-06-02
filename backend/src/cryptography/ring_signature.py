@@ -4,7 +4,7 @@ import Crypto.Hash.SHA384 as SHA384
 
 
 class Ring:
-    def __init__(self, keys, bit_length: int = 1024) -> None:
+    def __init__(self, keys, bit_length: int = 2048) -> None:
         self.keys = keys
         self.bit_length = bit_length
         self.num_keys = len(keys)

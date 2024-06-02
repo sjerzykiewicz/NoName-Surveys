@@ -129,7 +129,7 @@ async def save_survey_answer(
     answer = Answer(
         survey_id=survey.id,
         answer=survey_answer.model_dump_json(),
-        y0=survey_answer.y0 if survey.uses_cryptographic_module else "",
+        y0=survey_answer.y0,
     )
     answer_crud.save_answer(answer, session)
 

@@ -32,7 +32,7 @@ ruff = "^0.0.286"
 yesqa = "^1.4.0"
 
 [tool.ruff]
-line-length = 79
+line-length = 90
 target-version = "py310"
 
 [tool.isort]

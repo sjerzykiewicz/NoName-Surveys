@@ -723,6 +723,7 @@ tr:last-of-type th:last-of-type {
 	}
 
 	button,
+	input[type='file']::file-selector-button,
 	.footer-button,
 	select,
 	.radio,

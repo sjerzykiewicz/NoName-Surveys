@@ -68,6 +68,7 @@
 		.logged-in-box {
 			font-size: 1.5em;
 		}
+
 		.login-buttons {
 			width: 12em;
 		}

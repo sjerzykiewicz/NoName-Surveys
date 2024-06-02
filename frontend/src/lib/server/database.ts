@@ -168,3 +168,9 @@ export const userHasPublicKey = async (user_email: string) => {
 	const value = await response.json();
 	return value === true;
 };
+
+export const getAllUsers = async () => {
+	const response = await fetch(`${host}/users/all-with-public-keys`, { method: 'GET' });
+	const user_list = await response.json();
+	return user_list;
+};

@@ -18,6 +18,18 @@ async def get_users(session: Session = Depends(get_session)):
     return [user.email for user in user_crud.get_all_users(session)]
 
 
+@router.get(
+    "/all-with-public-keys",
+    response_description="List of all active user emails with public key",
+    response_model=list[str],
+)
+async def get_users_with_keys(session: Session = Depends(get_session)):
+    return [
+        user.email
+        for user in user_crud.get_all_users_with_public_keys(session)
+    ]
+
+
 @router.post(
     "/validate", response_description="Validate a user", response_model=bool
 )

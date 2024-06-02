@@ -9,6 +9,11 @@ def get_all_users(session: Session) -> list[User]:
     return [user for user in users]
 
 
+def get_all_users_with_public_keys(session: Session) -> list[User]:
+    users = session.exec(select(User).filter(User.public_key != "")).all()
+    return [user for user in users]
+
+
 def get_user_by_email(email: str, session: Session) -> User:
     user = session.exec(select(User).filter(User.email == email)).first()
     return user

@@ -14,3 +14,5 @@ export const questions: Writable<
 		error: QuestionError;
 	}[]
 > = writable([]);
+
+export const ringMembers: Writable<Array<string>> = writable([]);

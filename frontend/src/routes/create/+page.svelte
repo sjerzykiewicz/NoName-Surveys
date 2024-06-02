@@ -7,9 +7,11 @@
 	import TitleError from '$lib/components/create-page/TitleError.svelte';
 	import SurveyForm from '$lib/components/create-page/SurveyForm.svelte';
 	import FooterButtons from '$lib/components/create-page/FooterButtons.svelte';
+	import type { PageServerData } from './$types';
 
 	export let titleError: boolean;
 	export let isPreview: boolean;
+	export let data: PageServerData;
 </script>
 
 <Header>
@@ -21,7 +23,7 @@
 	{/if}
 </Header>
 <Content>
-	<SurveyForm {isPreview} />
+	<SurveyForm {isPreview} user_list={data.user_list} />
 </Content>
 <Footer>
 	<FooterButtons bind:titleError bind:isPreview />

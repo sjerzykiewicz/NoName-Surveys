@@ -8,8 +8,12 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
+	import { MultiSelect } from 'svelte-multiselect';
+	import { ringMembers } from '$lib/stores/create-page';
 
+	export let user_list: string[];
 	export let isPreview: boolean;
+	let isLimited = false;
 </script>
 
 {#each $questions as question, questionIndex (question)}
@@ -31,4 +35,10 @@
 {/each}
 {#if !isPreview}
 	<AddQuestionButtons />
+	<input type="checkbox" title="Define respondent group" bind:checked={isLimited} />Limit access
+	{#if isLimited}
+		<div class="user-list" title="Select users">
+			<MultiSelect bind:selected={$ringMembers} options={user_list} />
+		</div>
+	{/if}
 {/if}

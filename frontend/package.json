@@ -37,6 +37,7 @@
 	"dependencies": {
 		"@auth/core": "^0.31.0",
 		"@auth/sveltekit": "^1.1.0",
-		"dotenv": "^16.4.5"
+		"dotenv": "^16.4.5",
+		"svelte-multiselect": "^10.3.0"
 	}
 }

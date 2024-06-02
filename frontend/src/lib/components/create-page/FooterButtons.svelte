@@ -26,6 +26,7 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { tick } from 'svelte';
 	import { page } from '$app/stores';
+	import { ringMembers } from '$lib/stores/create-page';
 
 	export let isPreview: boolean = false;
 
@@ -150,7 +151,13 @@
 		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
 
-		const surveyInfo = new SurveyInfo($page.data.session!.user!.email!, parsedSurvey, false, []);
+		const useCrypto = $ringMembers.length !== 0;
+		const surveyInfo = new SurveyInfo(
+			$page.data.session!.user!.email!,
+			parsedSurvey,
+			useCrypto,
+			$ringMembers
+		);
 
 		const response = await fetch('/api/surveys/create', {
 			method: 'POST',

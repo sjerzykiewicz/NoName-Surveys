@@ -15,6 +15,7 @@ from src.api.models.surveys.survey import (
 )
 from src.api.models.users.user import User
 from src.db.base import get_session
+from src.db.models.ring_member import RingMemberBase
 from src.db.models.survey import SurveyBase
 from src.db.models.survey_draft import SurveyDraftBase
 
@@ -43,6 +44,7 @@ async def get_surveys_for_user(
             ).title,
             survey_code=survey.survey_code,
             creation_date=survey.creation_date,
+            uses_cryptographic_module=survey.uses_cryptographic_module,
         )
         for survey in user_surveys
     ]
@@ -60,6 +62,7 @@ async def get_survey_by_code(
     survey = survey_crud.get_survey_by_code(survey_fetch.survey_code, session)
     if survey is None:
         raise HTTPException(status_code=404, detail="Survey does not exist")
+
     return SurveyStructureFetchOutput(
         survey_structure=SurveyStructure.model_validate_json(
             survey_draft_crud.get_survey_draft_by_id(
@@ -68,6 +71,14 @@ async def get_survey_by_code(
         ),
         survey_code=survey.survey_code,
         uses_cryptographic_module=survey.uses_cryptographic_module,
+        public_keys=[
+            ring_member.public_key
+            for ring_member in ring_member_crud.get_ring_members_for_survey(
+                survey.id, session
+            )
+        ]
+        if survey.uses_cryptographic_module
+        else [],
     )
 
 
@@ -97,6 +108,18 @@ async def create_survey(
                 detail=f"Users not found: {', '.join(not_found_emails)}",
             )
 
+        users_with_no_public_key = [
+            email
+            for email in survey_create.ring_members
+            if user_crud.get_user_by_email(email, session).public_key == ""
+        ]
+        if len(users_with_no_public_key) > 0:
+            message = f"Users with no public key: {', '.join(users_with_no_public_key)}"
+            raise HTTPException(
+                status_code=400,
+                detail=message,
+            )
+
     try:
         survey_create.survey_structure.validate()
     except ValueError as e:
@@ -122,6 +145,13 @@ async def create_survey(
     if survey_create.uses_cryptographic_module:
         for email in survey_create.ring_members:
             public_key = user_crud.get_user_by_email(email, session).public_key
-            ring_member_crud.add_ring_member(survey.id, public_key, session)
+            ring_member_crud.add_ring_member(
+                RingMemberBase(
+                    survey_id=survey.id,
+                    user_email=email,
+                    public_key=public_key,
+                ),
+                session,
+            )
 
     return SurveyStructureCreateOutput(survey_code=survey.survey_code)

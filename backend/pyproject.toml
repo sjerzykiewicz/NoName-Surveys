@@ -14,6 +14,7 @@ dynaconf = "^3.2.5"
 mysql-connector-python = "^8.4.0"
 pymysql = "^1.1.1"
 psycopg2-binary = "^2.9.9"
+pycryptodome = "^3.20.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
@@ -31,7 +32,7 @@ ruff = "^0.0.286"
 yesqa = "^1.4.0"
 
 [tool.ruff]
-line-length = 79
+line-length = 90
 target-version = "py310"
 
 [tool.isort]

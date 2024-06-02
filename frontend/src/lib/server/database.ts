@@ -123,10 +123,10 @@ export const getDraftsOfUser = async (user_email: string) => {
 	return drafts;
 };
 
-export const registerUser = async (user_email: string, public_key: string) => {
+export const registerUser = async (user_email: string) => {
 	const response = await fetch(`${host}/users/register`, {
 		method: 'POST',
-		body: JSON.stringify({ user_email, public_key }),
+		body: JSON.stringify({ user_email }),
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -136,6 +136,29 @@ export const registerUser = async (user_email: string, public_key: string) => {
 
 export const validateUser = async (user_email: string) => {
 	const response = await fetch(`${host}/users/validate`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	const value = await response.json();
+	return value === true;
+};
+
+export const updatePublicKey = async (user_email: string, public_key: string) => {
+	const response = await fetch(`${host}/users/update-public-key`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, public_key }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+	return response;
+};
+
+export const userHasPublicKey = async (user_email: string) => {
+	const response = await fetch(`${host}/users/has-public-key`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {

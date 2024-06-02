@@ -73,7 +73,7 @@ class SurveyStructureFetchOutput(BaseModel):
     survey_structure: SurveyStructure
     survey_code: str
     uses_cryptographic_module: bool
-    public_keys = Optional[list[str]] = Field(default=[])
+    public_keys: Optional[list[str]] = Field(default=[])
 
     class Config:
         extra = "forbid"

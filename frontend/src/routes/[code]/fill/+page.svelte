@@ -1,7 +1,11 @@
 <script lang="ts">
 	import SurveyForm from '$lib/components/fill-page/SurveyForm.svelte';
-	import type Survey from '$lib/entities/surveys/Survey';
-	export let data: Survey;
+	import type { PageServerData } from './$types';
+	export let data: PageServerData;
 </script>
 
-<SurveyForm survey={data} />
+<SurveyForm
+	survey={data.survey_structure}
+	uses_crypto={data.uses_cryptographic_module}
+	keys={data.public_keys}
+/>

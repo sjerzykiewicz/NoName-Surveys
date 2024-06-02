@@ -41,8 +41,8 @@ export const getSurveyByCode = async (survey_code: string) => {
 		throw error(response.status, response.statusText);
 	}
 
-	const survey_structure: Survey = (await response.json()).survey_structure;
-	return { survey_structure };
+	const survey_info = await response.json();
+	return survey_info;
 };
 
 export const saveAnswer = async (answer: SurveyAnswer) => {

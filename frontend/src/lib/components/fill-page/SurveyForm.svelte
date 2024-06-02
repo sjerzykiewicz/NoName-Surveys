@@ -32,6 +32,8 @@
 	import { slide } from 'svelte/transition';
 
 	export let survey: Survey;
+	export let uses_crypto: boolean;
+	// export let keys: Array<string>;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -150,7 +152,52 @@
 
 	let unansweredRequired: Array<number> = [];
 
+	function getPublicKeyFromFile(text: string): string {
+		const words = text.split(' ');
+		if (words.length > 1) {
+			if (words[0] == 'ssh-rsa') {
+				return words[1];
+			}
+		}
+		return '';
+	}
+
+	function getPrivateKeyFromFile(text: string) {
+		let lines = text.split('\n');
+		lines.shift();
+		lines.pop();
+		const key = lines.join('');
+		return key;
+	}
+
 	async function processForm() {
+		const pubKeyInput = document.querySelector<HTMLInputElement>('#public-key');
+		const keyInput = document.querySelector<HTMLInputElement>('#private-key');
+		let publicKey, privateKey;
+		const publicReader = new FileReader();
+		const publicFile = pubKeyInput?.files?.[0];
+		const privateFile = keyInput?.files?.[0];
+		if (publicFile) {
+			publicReader.readAsText(publicFile);
+			publicReader.onload = (e) => {
+				const fileData = e.target?.result;
+				const text = fileData as string;
+				publicKey = getPublicKeyFromFile(text);
+			};
+		}
+
+		const privateReader = new FileReader();
+		if (privateFile) {
+			privateReader.readAsText(privateFile);
+			privateReader.onload = (e) => {
+				const fileData = e.target?.result;
+				const text = fileData as string;
+				privateKey = getPrivateKeyFromFile(text);
+			};
+		}
+
+		console.log(publicKey, privateKey);
+
 		unansweredRequired = [];
 		for (let i = 0; i < numQuestions; i++) {
 			if ($questions[i].required) {
@@ -200,6 +247,12 @@
 		</div>
 		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
+	{#if uses_crypto}
+		<label for="file">Choose public key file</label>
+		<input type="file" name="public" id="public-key" />
+		<label for="file">Choose private key file</label>
+		<input type="file" name="private" id="private-key" />
+	{/if}
 </Content>
 
 <Footer>

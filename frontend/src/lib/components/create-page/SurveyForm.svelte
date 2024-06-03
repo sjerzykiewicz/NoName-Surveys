@@ -14,15 +14,6 @@
 	export let user_list: string[];
 	export let isPreview: boolean;
 
-	user_list.push('zxczxczxdzsd@gmail.com');
-	user_list.push('bfdsya@gmail.com');
-	user_list.push('s567w54myt@gmail.com');
-	user_list.push('bmncgfdsgvmfgkhj@gmail.com');
-	user_list.push('efqwer23@gmail.com');
-	user_list.push('dsafggasgdf@gmail.com');
-	user_list.push('faef@gmail.com');
-	user_list.push('y4567467456bergsfag46w534e6ndrg@gmail.com');
-
 	let isLimited: boolean = false;
 
 	function toggleAccess() {

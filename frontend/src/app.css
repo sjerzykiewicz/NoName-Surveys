@@ -58,6 +58,11 @@ i.material-symbols-rounded {
 	box-shadow: none;
 }
 
+/* *:where(div.multiselect),
+*:where(div.multiselect.open) {
+	border: none !important;
+} */
+
 :root::-webkit-scrollbar {
 	width: 1em;
 }

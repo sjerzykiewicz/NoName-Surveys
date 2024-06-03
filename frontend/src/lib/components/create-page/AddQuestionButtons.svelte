@@ -144,13 +144,7 @@
 	});
 </script>
 
-<div
-	class="button-group"
-	class:clicked={isPanelVisible}
-	class:previous={previousQuestionType}
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="button-group" class:clicked={isPanelVisible} class:previous={previousQuestionType}>
 	<div class="add-buttons">
 		<button
 			title="Choose question type"

@@ -2,8 +2,9 @@
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores';
 	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
 	import KeyError from '$lib/components/account-page/KeyError.svelte';
+	import SignIn from '$lib/components/account-page/SignIn.svelte';
+	import SignOut from '$lib/components/account-page/SignOut.svelte';
 
 	export let data: PageServerData;
 
@@ -40,17 +41,19 @@
 					},
 					body: JSON.stringify({ email: data.session.user?.email, public_key: publicKey })
 				});
-				isSubmitted = true;
 			};
 		}
+		isSubmitted = true;
 	}
 </script>
 
-<Header>
-	<div title="Your account" class="title">{$page.data.session?.user?.email}</div>
-</Header>
+{#if $page.data.session}
+	<Header>
+		<div title="Your account" class="title">
+			Signed in as {$page.data.session.user?.email}
+		</div>
+	</Header>
 
-<Content>
 	<form on:submit={handleSubmit}>
 		<label title="Select and upload public key file" for="file"
 			>Select and upload public key file
@@ -65,7 +68,10 @@
 			><i class="material-symbols-rounded">upload_file</i>Upload</button
 		>
 	</form>
-</Content>
+	<SignOut />
+{:else}
+	<SignIn />
+{/if}
 
 <style>
 	form {
@@ -78,6 +84,12 @@
 		font-size: 1.5em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
 		width: 100%;
+		margin-top: 1em;
+		margin-bottom: 1em;
+	}
+
+	label {
+		font-weight: bold;
 	}
 
 	input[type='file'] {

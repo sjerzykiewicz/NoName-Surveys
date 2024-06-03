@@ -46,7 +46,7 @@ body {
 	overflow-y: scroll;
 }
 
-i {
+i.material-symbols-rounded {
 	font-variation-settings:
 		'FILL' 0,
 		'wght' 400,
@@ -151,7 +151,7 @@ button:active,
 .error i,
 .save i,
 .back i,
-.login-buttons i {
+.sign-out i {
 	margin-right: 0.15em;
 }
 
@@ -179,8 +179,7 @@ button:active,
 	padding: 0em 0.25em 0em 0.25em;
 }
 
-.up:disabled,
-.down:disabled {
+button:disabled {
 	background-color: var(--secondary-color);
 	color: var(--text-dark-color);
 	cursor: not-allowed;

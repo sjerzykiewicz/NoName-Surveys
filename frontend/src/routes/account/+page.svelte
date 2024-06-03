@@ -102,6 +102,7 @@
 	}
 
 	input[type='file']::file-selector-button {
+		padding: 0.25em;
 		background-color: var(--primary-color);
 		border: none;
 		border-right: 1px solid var(--border-color);

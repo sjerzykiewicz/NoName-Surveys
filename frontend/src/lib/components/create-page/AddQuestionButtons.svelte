@@ -189,6 +189,7 @@
 	.button-group {
 		width: fit-content;
 		font-size: 1.25em;
+		margin-right: 0.5em;
 	}
 
 	.add-buttons {
@@ -232,6 +233,7 @@
 		width: fit-content;
 		height: auto;
 		position: absolute;
+		z-index: 100;
 	}
 
 	.add-question i {

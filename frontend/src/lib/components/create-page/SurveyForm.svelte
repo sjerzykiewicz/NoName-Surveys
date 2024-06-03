@@ -18,6 +18,10 @@
 	user_list.push('bfdsya@gmail.com');
 	user_list.push('s567w54myt@gmail.com');
 	user_list.push('bmncgfdsgvmfgkhj@gmail.com');
+	user_list.push('efqwer23@gmail.com');
+	user_list.push('dsafggasgdf@gmail.com');
+	user_list.push('faef@gmail.com');
+	user_list.push('y4567467456bergsfag46w534e6ndrg@gmail.com');
 
 	let isLimited: boolean = false;
 
@@ -67,18 +71,24 @@
 				<MultiSelect
 					bind:selected={$ringMembers}
 					options={user_list}
+					--sms-max-width="100%"
+					--sms-min-height="2.2em"
 					--sms-border="1px solid var(--border-color)"
 					--sms-border-radius="5px"
-					--sms-min-height="2.2em"
-					--sms-active-color="var(--text-color)"
-					--sms-open-z-index="0"
-					--sms-selected-bg="var(--primary-dark-color)"
-					--sms-text-color="var(--text-color)"
 					--sms-bg="var(--secondary-dark-color)"
-					--sms-max-width="100%"
-					--sms-options-bg="var(--primary-color)"
+					--sms-selected-bg="var(--primary-color)"
+					--sms-active-color="var(--text-color)"
 					--sms-li-active-bg="var(--secondary-color)"
+					--sms-text-color="var(--text-color)"
+					--sms-open-z-index="0"
+					--sms-options-max-height="16.5em"
 					--sms-options-border="1px solid var(--border-color)"
+					--sms-options-border-radius="5px"
+					--sms-options-border-width="1px"
+					--sms-options-bg="var(--primary-color)"
+					--sms-options-shadow="0px 4px 4px var(--shadow-color)"
+					--sms-remove-btn-hover-color="var(--error-color)"
+					--sms-remove-btn-hover-bg="var(--secondary-color)"
 				/>
 			</div>
 		{/if}
@@ -88,13 +98,14 @@
 <style>
 	.button-row {
 		display: flex;
-		flex-flow: row;
+		flex-flow: row wrap;
 		align-items: flex-start;
 		justify-content: flex-start;
+		align-content: space-between;
+		height: 4em;
 	}
 
 	.access-button {
-		margin-left: 0.5em;
 		margin-right: 0.5em;
 		font-size: 1.25em;
 	}
@@ -120,6 +131,10 @@
 	@media screen and (max-width: 767px) {
 		.access-button {
 			font-size: 1em;
+		}
+
+		.user-list {
+			font-size: 0.8em;
 		}
 	}
 </style>

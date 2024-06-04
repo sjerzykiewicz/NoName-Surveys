@@ -10,14 +10,13 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { MultiSelect } from 'svelte-multiselect';
 	import { ringMembers } from '$lib/stores/create-page';
+	import { isAccessLimited } from '$lib/stores/create-page';
 
 	export let user_list: string[];
 	export let isPreview: boolean;
 
-	let isLimited: boolean = false;
-
 	function toggleAccess() {
-		isLimited = !isLimited;
+		$isAccessLimited = !$isAccessLimited;
 	}
 </script>
 
@@ -46,14 +45,14 @@
 	>
 		<AddQuestionButtons />
 		<button
-			title={isLimited ? 'Respondent group defined' : 'Define respondent group'}
+			title={$isAccessLimited ? 'Respondent group defined' : 'Define respondent group'}
 			class="access-button"
-			class:checked={isLimited}
+			class:checked={$isAccessLimited}
 			on:click={toggleAccess}
 		>
 			<i class="material-symbols-rounded">passkey</i>
 		</button>
-		{#if isLimited}
+		{#if $isAccessLimited}
 			<div
 				title="Select users"
 				class="user-list"

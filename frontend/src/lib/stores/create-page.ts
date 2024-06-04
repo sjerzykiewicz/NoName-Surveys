@@ -15,4 +15,8 @@ export const questions: Writable<
 	}[]
 > = writable([]);
 
+export const previousQuestion: Writable<ComponentType> = writable();
+
+export const isAccessLimited: Writable<boolean> = writable(false);
+
 export const ringMembers: Writable<Array<string>> = writable([]);

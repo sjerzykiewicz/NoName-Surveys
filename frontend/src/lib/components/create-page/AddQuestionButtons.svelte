@@ -22,9 +22,9 @@
 	import QuestionTypeButton from './QuestionTypeButton.svelte';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
+	import { previousQuestion } from '$lib/stores/create-page';
 
 	let isPanelVisible: boolean = false;
-	let previousQuestionType: ComponentType;
 	let questionTypes: Array<ComponentType> = [
 		Text,
 		Single,
@@ -125,7 +125,7 @@
 			}
 		];
 
-		previousQuestionType = component;
+		$previousQuestion = component;
 		isPanelVisible = false;
 	}
 
@@ -144,20 +144,20 @@
 	});
 </script>
 
-<div class="button-group" class:clicked={isPanelVisible} class:previous={previousQuestionType}>
+<div class="button-group" class:clicked={isPanelVisible} class:previous={$previousQuestion}>
 	<div class="add-buttons">
 		<button
 			title="Choose question type"
 			class="add-question"
 			class:clicked={isPanelVisible}
-			class:previous={previousQuestionType}
+			class:previous={$previousQuestion}
 			on:click={togglePanel}
 		>
 			<i class="material-symbols-rounded">add</i>Question
 		</button>
-		{#if previousQuestionType}
+		{#if $previousQuestion}
 			<QuestionTypeButton
-				questionType={previousQuestionType}
+				questionType={$previousQuestion}
 				questionTypeIndex={-1}
 				on:addQuestionType={(event) => addQuestion(event.detail.component)}
 			/>

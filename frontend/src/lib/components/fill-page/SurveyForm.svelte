@@ -28,7 +28,7 @@
 	import AnswerError from './AnswerError.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { Ring } from '$lib/entities/cryptography/ring';
+	import { goto } from '$app/navigation';
 
 	export let survey: Survey;
 	export let uses_crypto: boolean;
@@ -229,28 +229,20 @@
 			keys = [...keys, privateKey];
 		}
 
-		let ring = new Ring(keys, 2048);
+		const response = await fetch('/api/surveys/fill', {
+			method: 'POST',
+			body: JSON.stringify(answer),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
 
-		let y0 = ring.hash($page.data.session!.user!.email!);
-
-		const res = (ring.sign(JSON.stringify(answer), keys.length - 1), y0);
-
-		// const response = await fetch('/api/surveys/fill', {
-		// 	method: 'POST',
-		// 	body: JSON.stringify(answer),
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 	}
-		// });
-
-		// if (!response.ok) {
-		// 	// TODO - display what exactly is wrong
-		// 	alert(response.statusText);
-		// } else {
-		// 	return await goto(`/`, { replaceState: true, invalidateAll: true });
-		// }
-
-		console.log(res);
+		if (!response.ok) {
+			// TODO - display what exactly is wrong
+			alert(response.statusText);
+		} else {
+			return await goto(`/`, { replaceState: true, invalidateAll: true });
+		}
 	}
 </script>
 

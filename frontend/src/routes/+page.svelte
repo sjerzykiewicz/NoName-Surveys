@@ -9,7 +9,7 @@
 	$questions = [];
 	$answers = [];
 
-	import init, { greet } from 'wasm';
+	import init, { get_keypair } from 'wasm';
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
@@ -23,7 +23,9 @@
 <div>
 	<button
 		on:click={() => {
-			greet('Eloi');
+			let keypair = get_keypair();
+			console.log(keypair.get_public_key());
+			console.log(keypair.get_private_key());
 		}}>Click Me</button
 	>
 </div>

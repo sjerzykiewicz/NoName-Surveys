@@ -2,48 +2,75 @@
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores';
 	import Header from '$lib/components/Header.svelte';
-	import KeyError from '$lib/components/account-page/KeyError.svelte';
+	// import KeyError from '$lib/components/account-page/KeyError.svelte';
 	import SignIn from '$lib/components/account-page/SignIn.svelte';
 	import SignOut from '$lib/components/account-page/SignOut.svelte';
 
 	export let data: PageServerData;
 
-	let isKeyValid: boolean = false;
-	let isSubmitted: boolean = false;
+	// let isKeyValid: boolean = false;
+	// let isSubmitted: boolean = false;
 
-	function getKeyFromFile(text: string): string {
-		const words = text.split(' ');
-		if (words.length > 1) {
-			if (words[0] === 'ssh-rsa') {
-				isKeyValid = true;
-				return words[1];
-			}
-		}
-		isKeyValid = false;
-		return '';
+	// function getKeyFromFile(text: string): string {
+	// 	const words = text.split(' ');
+	// 	if (words.length > 1) {
+	// 		if (words[0] === 'ssh-rsa') {
+	// 			isKeyValid = true;
+	// 			return words[1];
+	// 		}
+	// 	}
+	// 	isKeyValid = false;
+	// 	return '';
+	// }
+
+	// function handleSubmit(event: Event) {
+	// 	event.preventDefault();
+	// 	const fileInput = document.querySelector<HTMLInputElement>('#file');
+	// 	const file = fileInput?.files?.[0];
+	// 	const reader = new FileReader();
+	// 	if (file) {
+	// 		reader.readAsText(file);
+	// 		reader.onload = function (e) {
+	// 			const fileData = e.target?.result;
+	// 			const text = fileData as string;
+	// 			const publicKey = getKeyFromFile(text);
+	// 			fetch('/api/users/update-public-key', {
+	// 				method: 'POST',
+	// 				headers: {
+	// 					'Content-Type': 'application/json'
+	// 				},
+	// 				body: JSON.stringify({ email: data.session?.user?.email, public_key: publicKey })
+	// 			});
+	// 		};
+	// 	}
+	// 	isSubmitted = true;
+	// }
+
+	import init, { get_keypair } from 'wasm';
+	import { onMount } from 'svelte';
+
+	onMount(async () => {
+		await init();
+	});
+
+	function download(filename: string, text: string) {
+		var element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+		element.setAttribute('download', filename);
+
+		element.style.display = 'none';
+		document.body.appendChild(element);
+
+		element.click();
+
+		document.body.removeChild(element);
 	}
 
-	function handleSubmit(event: Event) {
-		event.preventDefault();
-		const fileInput = document.querySelector<HTMLInputElement>('#file');
-		const file = fileInput?.files?.[0];
-		const reader = new FileReader();
-		if (file) {
-			reader.readAsText(file);
-			reader.onload = function (e) {
-				const fileData = e.target?.result;
-				const text = fileData as string;
-				const publicKey = getKeyFromFile(text);
-				fetch('/api/users/update-public-key', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ email: data.session?.user?.email, public_key: publicKey })
-				});
-			};
-		}
-		isSubmitted = true;
+	function pluckKey(text: string): string {
+		let lines = text.split('\n');
+		lines.shift();
+		lines.pop();
+		return lines.join('');
 	}
 </script>
 
@@ -54,7 +81,7 @@
 		</div>
 	</Header>
 
-	<form on:submit={handleSubmit}>
+	<!-- <form on:submit={handleSubmit}>
 		<label title="Select and upload public key file" for="file"
 			>Select and upload public key file
 			<div>
@@ -67,14 +94,38 @@
 		<button title="Upload file" class="save" type="submit"
 			><i class="material-symbols-rounded">upload_file</i>Upload</button
 		>
-	</form>
+	</form> -->
+	<div class="download-key">
+		<button
+			class="save"
+			on:click={async () => {
+				const keyPair = get_keypair();
+				fetch('/api/users/update-public-key', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						email: data.session?.user?.email,
+						public_key: pluckKey(keyPair.get_public_key())
+					})
+				}).then((res) => {
+					if (res.ok) {
+						download('keys.txt', keyPair.get_public_key() + '\n' + keyPair.get_private_key());
+					}
+				});
+			}}
+		>
+			Download keys file
+		</button>
+	</div>
 	<SignOut />
 {:else}
 	<SignIn />
 {/if}
 
 <style>
-	form {
+	.download-key {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -87,47 +138,8 @@
 		margin-top: 1em;
 		margin-bottom: 1em;
 	}
-
-	label {
-		font-weight: bold;
-	}
-
-	input[type='file'] {
-		margin-top: 0.5em;
-		background-color: var(--secondary-dark-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		font-size: 0.8em;
-		cursor: default;
-	}
-
-	input[type='file']::file-selector-button {
-		padding: 0.25em;
-		background-color: var(--primary-color);
-		border: none;
-		border-right: 1px solid var(--border-color);
-		color: var(--text-color);
-		font-family: 'Jura';
-		cursor: pointer;
-		transition: 0.2s;
-	}
-
-	input[type='file']::file-selector-button:hover {
-		background-color: var(--secondary-color);
-	}
-
-	input[type='file']::file-selector-button:active {
-		background-color: var(--border-color);
-	}
-
 	.save {
 		margin-top: 0.5em;
 		font-size: 1em;
-	}
-
-	@media screen and (max-width: 767px) {
-		form {
-			font-size: 1em;
-		}
 	}
 </style>

@@ -2,7 +2,10 @@ from datetime import datetime
 from secrets import randbelow
 from typing import Optional
 
+import pytz
 from sqlmodel import Field, SQLModel
+
+tz = pytz.timezone("Europe/Warsaw")
 
 
 # TODO: change to a secure way of generating survey codes (???)
@@ -24,5 +27,5 @@ class Survey(SurveyBase, table=True):
     is_deleted: bool = Field(default=False)
     deadline: str = Field(default="")
     creation_date: str = Field(
-        default_factory=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        default_factory=lambda: datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
     )

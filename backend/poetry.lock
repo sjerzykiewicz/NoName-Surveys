@@ -951,6 +951,17 @@ pytest = ">=4.6"
 testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtualenv"]
 
 [[package]]
+name = "pytz"
+version = "2024.1"
+description = "World timezone definitions, modern and historical"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pytz-2024.1-py2.py3-none-any.whl", hash = "sha256:328171f4e3623139da4983451950b28e95ac706e13f3f2630a879749e7a8b319"},
+    {file = "pytz-2024.1.tar.gz", hash = "sha256:2a29735ea9c18baf14b448846bde5a48030ed267578472d8955cd0e7443a9812"},
+]
+
+[[package]]
 name = "pyupgrade"
 version = "3.15.2"
 description = "A tool to automatically upgrade syntax for newer versions."
@@ -1285,4 +1296,4 @@ tokenize-rt = ">=2.1"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "0a8394716293140fcdf6ed68ccdc10d48a2d8fcf8ae16a31e1075f6d58ebda05"
+content-hash = "39ca059b2c678c8a33df0b974ace6e1d46e5ea5077971d49102a2f99221de4bd"

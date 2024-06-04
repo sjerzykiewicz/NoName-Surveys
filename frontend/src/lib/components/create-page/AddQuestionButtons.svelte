@@ -22,9 +22,9 @@
 	import QuestionTypeButton from './QuestionTypeButton.svelte';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
+	import { previousQuestion } from '$lib/stores/create-page';
 
 	let isPanelVisible: boolean = false;
-	let previousQuestionType: ComponentType;
 	let questionTypes: Array<ComponentType> = [
 		Text,
 		Single,
@@ -125,7 +125,7 @@
 			}
 		];
 
-		previousQuestionType = component;
+		$previousQuestion = component;
 		isPanelVisible = false;
 	}
 
@@ -144,26 +144,20 @@
 	});
 </script>
 
-<div
-	class="button-group"
-	class:clicked={isPanelVisible}
-	class:previous={previousQuestionType}
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="button-group" class:clicked={isPanelVisible} class:previous={$previousQuestion}>
 	<div class="add-buttons">
 		<button
 			title="Choose question type"
 			class="add-question"
 			class:clicked={isPanelVisible}
-			class:previous={previousQuestionType}
+			class:previous={$previousQuestion}
 			on:click={togglePanel}
 		>
 			<i class="material-symbols-rounded">add</i>Question
 		</button>
-		{#if previousQuestionType}
+		{#if $previousQuestion}
 			<QuestionTypeButton
-				questionType={previousQuestionType}
+				questionType={$previousQuestion}
 				questionTypeIndex={-1}
 				on:addQuestionType={(event) => addQuestion(event.detail.component)}
 			/>
@@ -195,6 +189,7 @@
 	.button-group {
 		width: fit-content;
 		font-size: 1.25em;
+		margin-right: 0.5em;
 	}
 
 	.add-buttons {
@@ -238,6 +233,7 @@
 		width: fit-content;
 		height: auto;
 		position: absolute;
+		z-index: 100;
 	}
 
 	.add-question i {

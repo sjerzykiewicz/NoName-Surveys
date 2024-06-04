@@ -1,7 +1,10 @@
 from datetime import datetime
 from typing import Optional
 
+import pytz
 from sqlmodel import Field, SQLModel
+
+tz = pytz.timezone("Europe/Warsaw")
 
 
 class SurveyDraftBase(SQLModel):
@@ -12,6 +15,6 @@ class SurveyDraftBase(SQLModel):
 class SurveyDraft(SurveyDraftBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     creation_date: str = Field(
-        default_factory=lambda: datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        default_factory=lambda: datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
     )
     is_deleted: bool = Field(default=False)

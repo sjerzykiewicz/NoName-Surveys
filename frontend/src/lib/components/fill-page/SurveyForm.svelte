@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { answers, questions } from '$lib/stores/fill-page';
+	import { title, questions, answers } from '$lib/stores/fill-page';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
-	import { title } from '$lib/stores/fill-page';
 	import { SingleQuestion, SingleQuestionAnswered } from '$lib/entities/questions/Single';
 	import { SliderQuestionAnswered, type SliderQuestion } from '$lib/entities/questions/Slider';
 	import type Survey from '$lib/entities/surveys/Survey';
@@ -55,6 +54,7 @@
 			question: survey.questions[i].question,
 			choices: []
 		};
+
 		switch (survey.questions[i].question_type) {
 			case 'text':
 				$questions[i].choices[0] = (survey.questions[i] as TextQuestion).details;
@@ -214,6 +214,11 @@
 		// if (unansweredRequired.length > 0) {
 		// 	return;
 		// }
+
+		if (unansweredRequired.length > 0) {
+			return;
+		}
+
 		const answerList: Array<Question> = constructAnswerList();
 		const answer = new SurveyAnswer($page.params.code, answerList);
 

@@ -2,11 +2,14 @@
 	import '../app.css';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import ScrollToTop from '$lib/components/ScrollToTop.svelte';
+	import { page } from '$app/stores';
 </script>
 
 <NavBar />
 <div class="box">
-	<slot />
+	{#key $page.url}
+		<slot />
+	{/key}
 </div>
 <ScrollToTop />
 

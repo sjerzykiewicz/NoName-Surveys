@@ -1,11 +1,11 @@
 import type { PageServerLoad } from '../$types';
 import * as db from '$lib/server/database';
-import { error } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { session } = await parent();
 	if (!session) {
-		error(401, 'You must be logged in to access this page.');
+		redirect(303, `/account`);
 	}
 
 	const survey_list = await db.getSurveysOfUser(session.user!.email!);

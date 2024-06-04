@@ -11,7 +11,7 @@ extern "C" {
 
 #[wasm_bindgen]
 pub struct KeyPair {
-    private_key: Zeroizing<String>,
+    private_key: String,
     public_key: String,
 }
 
@@ -22,7 +22,7 @@ impl KeyPair {
     }
 
     pub fn get_private_key(&self) -> String {
-        self.private_key.to_string().clone()
+        self.private_key.clone()
     }
 }
 
@@ -36,7 +36,7 @@ pub fn get_keypair() -> KeyPair {
     let public_pem = pub_key.to_pkcs1_pem(rsa::pkcs1::LineEnding::LF).expect("failed to convert to pem");
 
     return KeyPair {
-        private_key: private_pem,
+        private_key: private_pem.to_string(),
         public_key: public_pem,
     };
 }

@@ -1,6 +1,11 @@
 <script lang="ts">
-	import { title } from '$lib/stores/create-page';
-	import { questions } from '$lib/stores/create-page';
+	import {
+		title,
+		questions,
+		previousQuestion,
+		isAccessLimited,
+		ringMembers
+	} from '$lib/stores/create-page';
 	import Question from '$lib/entities/questions/Question';
 	import { SingleQuestion } from '$lib/entities/questions/Single';
 	import { MultiQuestion } from '$lib/entities/questions/Multi';
@@ -26,7 +31,6 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { tick } from 'svelte';
 	import { page } from '$app/stores';
-	import { ringMembers } from '$lib/stores/create-page';
 
 	export let isPreview: boolean = false;
 
@@ -174,6 +178,9 @@
 			const code = (await response.json()).code;
 			$title = '';
 			$questions = [];
+			$previousQuestion = null;
+			$isAccessLimited = false;
+			$ringMembers = [];
 			return await goto(`/${code}/view`, { replaceState: true, invalidateAll: true });
 		}
 	}

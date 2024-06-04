@@ -15,7 +15,7 @@ export const questions: Writable<
 	}[]
 > = writable([]);
 
-export const previousQuestion: Writable<ComponentType> = writable();
+export const previousQuestion: Writable<ComponentType | null> = writable();
 
 export const isAccessLimited: Writable<boolean> = writable(false);
 

@@ -39,7 +39,7 @@
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify({ email: data.session.user?.email, public_key: publicKey })
+					body: JSON.stringify({ email: data.session?.user?.email, public_key: publicKey })
 				});
 			};
 		}

@@ -28,7 +28,7 @@
 
 	@media screen and (max-width: 767px) {
 		.sign-out {
-			font-size: 1em;
+			font-size: 2em;
 		}
 	}
 </style>

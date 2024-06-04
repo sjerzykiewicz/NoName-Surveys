@@ -70,7 +70,9 @@
 		let lines = text.split('\n');
 		lines.shift();
 		lines.pop();
-		return lines.join('');
+		lines.pop();
+		const key = lines.join('');
+		return key;
 	}
 </script>
 

@@ -39,7 +39,7 @@ async def get_surveys_for_user(
         SurveyHeadersOutput(
             title=SurveyStructure.model_validate_json(
                 survey_draft_crud.get_survey_draft_by_id(
-                    survey.id, session
+                    survey.survey_structure_id, session
                 ).survey_structure
             ).title,
             survey_code=survey.survey_code,
@@ -66,7 +66,7 @@ async def get_survey_by_code(
     return SurveyStructureFetchOutput(
         survey_structure=SurveyStructure.model_validate_json(
             survey_draft_crud.get_survey_draft_by_id(
-                survey.id, session
+                survey.survey_structure_id, session
             ).survey_structure
         ),
         survey_code=survey.survey_code,

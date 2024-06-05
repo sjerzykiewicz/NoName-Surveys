@@ -2,49 +2,10 @@
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores';
 	import Header from '$lib/components/Header.svelte';
-	// import KeyError from '$lib/components/account-page/KeyError.svelte';
 	import SignIn from '$lib/components/account-page/SignIn.svelte';
 	import SignOut from '$lib/components/account-page/SignOut.svelte';
 
 	export let data: PageServerData;
-
-	// let isKeyValid: boolean = false;
-	// let isSubmitted: boolean = false;
-
-	// function getKeyFromFile(text: string): string {
-	// 	const words = text.split(' ');
-	// 	if (words.length > 1) {
-	// 		if (words[0] === 'ssh-rsa') {
-	// 			isKeyValid = true;
-	// 			return words[1];
-	// 		}
-	// 	}
-	// 	isKeyValid = false;
-	// 	return '';
-	// }
-
-	// function handleSubmit(event: Event) {
-	// 	event.preventDefault();
-	// 	const fileInput = document.querySelector<HTMLInputElement>('#file');
-	// 	const file = fileInput?.files?.[0];
-	// 	const reader = new FileReader();
-	// 	if (file) {
-	// 		reader.readAsText(file);
-	// 		reader.onload = function (e) {
-	// 			const fileData = e.target?.result;
-	// 			const text = fileData as string;
-	// 			const publicKey = getKeyFromFile(text);
-	// 			fetch('/api/users/update-public-key', {
-	// 				method: 'POST',
-	// 				headers: {
-	// 					'Content-Type': 'application/json'
-	// 				},
-	// 				body: JSON.stringify({ email: data.session?.user?.email, public_key: publicKey })
-	// 			});
-	// 		};
-	// 	}
-	// 	isSubmitted = true;
-	// }
 
 	import init, { get_keypair } from 'wasm';
 	import { onMount } from 'svelte';
@@ -65,15 +26,6 @@
 
 		document.body.removeChild(element);
 	}
-
-	function pluckKey(text: string): string {
-		let lines = text.split('\n');
-		lines.shift();
-		lines.pop();
-		lines.pop();
-		const key = lines.join('');
-		return key;
-	}
 </script>
 
 {#if $page.data.session}
@@ -83,20 +35,6 @@
 		</div>
 	</Header>
 
-	<!-- <form on:submit={handleSubmit}>
-		<label title="Select and upload public key file" for="file"
-			>Select and upload public key file
-			<div>
-				<input title="Select file" type="file" name="file" id="file" />
-			</div>
-		</label>
-		{#if isSubmitted}
-			<KeyError {isKeyValid} />
-		{/if}
-		<button title="Upload file" class="save" type="submit"
-			><i class="material-symbols-rounded">upload_file</i>Upload</button
-		>
-	</form> -->
 	<div class="download-key">
 		<button
 			class="save"
@@ -109,7 +47,7 @@
 					},
 					body: JSON.stringify({
 						email: data.session?.user?.email,
-						public_key: pluckKey(keyPair.get_public_key())
+						public_key: keyPair.get_public_key()
 					})
 				}).then((res) => {
 					if (res.ok) {

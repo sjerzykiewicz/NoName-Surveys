@@ -31,6 +31,13 @@
 	import { goto } from '$app/navigation';
 	import KeyPair from '$lib/entities/KeyPair';
 
+	// import { onMount } from 'svelte';
+	// import init, { Ring } from 'wasm';
+
+	// onMount(async () => {
+	// 	await init();
+	// });
+
 	export let survey: Survey;
 	export let uses_crypto: boolean;
 	export let keys: Array<string>;
@@ -174,15 +181,15 @@
 			return;
 		}
 
-		let signature = '';
-		let y0 = '';
+		let signature = [123];
+		let y0 = '1234';
 
 		const answerList: Array<Question> = constructAnswerList();
 
 		if (uses_crypto) {
-			const privateKey = keyPair!.privateKey;
+			// const privateKey = keyPair!.privateKey;
+			// const index = keys.indexOf(keyPair!.publicKey);
 			keys = keys.filter((k) => k !== keyPair!.publicKey);
-			keys.push(privateKey);
 		}
 
 		const answer = new SurveyAnswer($page.params.code, answerList, signature, y0);
@@ -204,16 +211,10 @@
 	}
 
 	function getKeys(text: string): KeyPair {
-		const words = text.split('-\n');
-		words.splice(2, 1);
-		words.shift();
-		words.pop();
+		const words = text.split('\n\n');
 
-		let publicKey = words[0].split('\n-')[0];
-		let privateKey = words[1].split('\n-')[0];
-
-		publicKey = publicKey.split('\n').join('');
-		privateKey = privateKey.split('\n').join('');
+		let publicKey = words[0] + '\n';
+		let privateKey = words[1];
 
 		return new KeyPair(privateKey, publicKey);
 	}
@@ -270,6 +271,39 @@
 </Footer>
 
 <style>
+	input[type='file'] {
+		margin-top: 0.5em;
+		background-color: var(--secondary-dark-color);
+		border: 1px solid var(--border-color);
+		border-radius: 5px;
+		font-size: 0.8em;
+		cursor: default;
+	}
+
+	input[type='file']::file-selector-button {
+		padding: 0.25em;
+		background-color: var(--primary-color);
+		border: none;
+		border-right: 1px solid var(--border-color);
+		color: var(--text-color);
+		font-family: 'Jura';
+		cursor: pointer;
+		transition: 0.2s;
+	}
+
+	input[type='file']::file-selector-button:hover {
+		background-color: var(--secondary-color);
+	}
+
+	input[type='file']::file-selector-button:active {
+		background-color: var(--border-color);
+	}
+
+	.save {
+		margin-top: 0.5em;
+		font-size: 1em;
+	}
+
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}

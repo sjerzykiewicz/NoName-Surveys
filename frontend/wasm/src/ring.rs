@@ -7,7 +7,9 @@ use std::str::FromStr;
 
 #[wasm_bindgen]
 pub struct Ring {
-    keys: Vec<RsaPublicKey>,
+    pub_keys: Vec<RsaPublicKey>,
+    priv_key : RsaPrivateKey,
+    priv_key_index: usize,
     bit_length: usize,
     num_keys: usize,
     q_value: BigUint,
@@ -16,12 +18,22 @@ pub struct Ring {
 
 #[wasm_bindgen]
 impl Ring {
-    pub fn new(keys: Vec<RsaPublicKey>, bit_length: usize) -> Ring {
-        let num_keys = keys.len();
+    pub fn new(pub_keys: Vec<String>, priv_key: String, bit_length: usize) -> Ring {
+        let num_keys = pub_keys.len();
         let q_value = BigUint::one() << (bit_length - 1);
+
+        let mut keys = Vec<RsaPublicKey>::new();
+
+        for key in &pub_keys {
+            let rsa_key = RsaPublicKey::from_pkcs1_pem(&key).unwrap();
+            keys.push(rsa_key);
+        }
+
+        let priv_key = RsaPrivateKey::from_pkcs1_pem(&priv_key).unwrap();
 
         Ring {
             keys,
+            priv_key,
             bit_length,
             num_keys,
             q_value,

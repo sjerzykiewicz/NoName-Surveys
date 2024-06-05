@@ -1,3 +1,4 @@
+import Crypto.PublicKey.RSA as RSA
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
@@ -99,7 +100,7 @@ async def save_survey_answer(
             )
 
         public_keys = [
-            ring_member.public_key
+            RSA.import_key(ring_member.public_key)
             for ring_member in ring_member_crud.get_ring_members_for_survey(
                 survey.id, session
             )

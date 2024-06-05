@@ -31,12 +31,12 @@
 	import { goto } from '$app/navigation';
 	import KeyPair from '$lib/entities/KeyPair';
 
-	// import { onMount } from 'svelte';
-	// import init, { Ring } from 'wasm';
+	import { onMount } from 'svelte';
+	import init, { Ring } from 'wasm';
 
-	// onMount(async () => {
-	// 	await init();
-	// });
+	onMount(async () => {
+		await init();
+	});
 
 	export let survey: Survey;
 	export let uses_crypto: boolean;
@@ -181,18 +181,25 @@
 			return;
 		}
 
-		let signature = [123];
-		let y0 = '1234';
+		let signature: string[] = [];
+		let y0 = '';
 
 		const answerList: Array<Question> = constructAnswerList();
 
 		if (uses_crypto) {
-			// const privateKey = keyPair!.privateKey;
-			// const index = keys.indexOf(keyPair!.publicKey);
-			keys = keys.filter((k) => k !== keyPair!.publicKey);
+			const privateKey = keyPair!.privateKey;
+			const publicKey = keyPair!.publicKey;
+			const index = keys.indexOf(publicKey);
+			keys = keys.filter((k) => k !== publicKey);
+
+			const ring = Ring.new(keys, privateKey, index, 2048);
+			signature = ring.sign($page.params.code);
+			y0 = ring.compute_y0(publicKey, privateKey);
 		}
 
 		const answer = new SurveyAnswer($page.params.code, answerList, signature, y0);
+
+		console.log(JSON.stringify(answer));
 
 		const response = await fetch('/api/surveys/fill', {
 			method: 'POST',
@@ -259,8 +266,10 @@
 		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
 	{#if uses_crypto}
-		<label for="file">Upload your keys</label>
-		<input type="file" name="keys" id="keys-file" />
+		<div class="upload-div">
+			<label for="file">Upload your keys</label>
+			<input type="file" name="keys" id="keys-file" />
+		</div>
 	{/if}
 </Content>
 
@@ -271,6 +280,19 @@
 </Footer>
 
 <style>
+	.upload-div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		color: var(--text-color);
+		font-size: 1.5em;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		width: 100%;
+		margin-top: 1em;
+		margin-bottom: 1em;
+	}
 	input[type='file'] {
 		margin-top: 0.5em;
 		background-color: var(--secondary-dark-color);

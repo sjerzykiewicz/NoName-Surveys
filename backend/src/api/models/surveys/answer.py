@@ -30,7 +30,7 @@ class SurveyAnswerBase(BaseModel):
         min_length=1,
         description="Questions list must have at least 1 element",
     )
-    signature: list[int] = Field(default=[])
+    signature: list[str] = Field(default=[])
     y0: Optional[str] = Field(default="")
 
     @field_validator("survey_code")

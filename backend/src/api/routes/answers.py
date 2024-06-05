@@ -106,7 +106,9 @@ async def save_survey_answer(
             )
         ]
         ring = Ring(public_keys)
-        if not ring.verify(survey.survey_code, survey_answer.signature):
+        if not ring.verify(
+            survey.survey_code, [int(x) for x in survey_answer.signature]
+        ):
             raise HTTPException(status_code=400, detail="Invalid signature")
 
     survey_draft = survey_draft_crud.get_survey_draft_by_id(

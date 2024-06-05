@@ -5,7 +5,7 @@ use rsa::{RsaPrivateKey, RsaPublicKey};
 use rsa::pkcs1::{EncodeRsaPrivateKey, EncodeRsaPublicKey, DecodeRsaPrivateKey, DecodeRsaPublicKey};
 use num_bigint_dig::algorithms::div_rem;
 use num_bigint_dig::{BigUint, RandomBits};
-use num_traits::One;
+use num_traits::{One, Zero};
 use rand::Rng;
 
 // import Javascript's alert method to Rust
@@ -145,8 +145,39 @@ impl Ring {
         for i in z..(n as u32) {
             sign_str.push(signatures[i as usize].to_string());
         }
-
         sign_str
     }
 
+    fn mod_pow(&mut self, base: BigUint, exp: BigUint, modulus: BigUint) -> BigUint {
+        if modulus == BigUint::one() {
+            return BigUint::zero();
+        }
+
+        let mut result = BigUint::one();
+        let mut base = base.clone() % modulus.clone();
+        let mut exp = exp.clone();
+
+        while exp > BigUint::zero() {
+            if exp.clone() % (BigUint::one() + BigUint::one()) == BigUint::one() {
+                result = (result.clone() * base.clone()) % modulus.clone();
+            }
+            exp >>= 1;
+            base = (base.clone() * base.clone()) % modulus.clone();
+        }
+
+        result
+    }
+
+    #[wasm_bindgen]
+    pub fn compute_y0(&mut self, public_key: String, private_key: String) -> String {
+        let mut hasher = sha2::Sha384::new();
+        hasher.update(public_key.as_bytes());
+        let pub_key_hashed = hasher.finalize();
+
+        let priv_key = RsaPrivateKey::from_pkcs1_pem(&private_key).unwrap();
+
+        let y0 = self.mod_pow(BigUint::from_bytes_be(&pub_key_hashed), priv_key.d().clone(), priv_key.n().clone());
+
+        return y0.to_string();
+    }
 }

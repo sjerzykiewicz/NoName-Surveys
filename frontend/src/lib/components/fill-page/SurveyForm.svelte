@@ -29,6 +29,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import KeyPair from '$lib/entities/KeyPair';
 
 	export let survey: Survey;
 	export let uses_crypto: boolean;
@@ -152,82 +153,39 @@
 
 	let unansweredRequired: Array<number> = [];
 
-	function getPublicKeyFromFile(text: string): string {
-		const words = text.split(' ');
-		if (words.length > 1) {
-			if (words[0] == 'ssh-rsa') {
-				return words[1];
+	async function processForm(keyPair: KeyPair | undefined) {
+		unansweredRequired = [];
+		for (let i = 0; i < numQuestions; i++) {
+			if ($questions[i].required) {
+				if ($answers[i].choices.length === 0) {
+					unansweredRequired[i] = i;
+				} else if (
+					$answers[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+				) {
+					unansweredRequired[i] = i;
+				}
 			}
 		}
-		return '';
-	}
-
-	function getPrivateKeyFromFile(text: string) {
-		let lines = text.split('\n');
-		lines.shift();
-		lines.pop();
-		const key = lines.join('');
-		return key;
-	}
-
-	async function processForm() {
-		const pubKeyInput = document.querySelector<HTMLInputElement>('#public-key');
-		const keyInput = document.querySelector<HTMLInputElement>('#private-key');
-		let publicKey: string = '';
-		let privateKey: string = '';
-		const publicReader = new FileReader();
-		const publicFile = pubKeyInput?.files?.[0];
-		const privateFile = keyInput?.files?.[0];
-		if (publicFile) {
-			publicReader.readAsText(publicFile);
-			publicReader.onload = (e) => {
-				const fileData = e.target?.result;
-				const text = fileData as string;
-				publicKey = getPublicKeyFromFile(text);
-			};
+		if (unansweredRequired.length > 0) {
+			return;
 		}
-
-		const privateReader = new FileReader();
-		if (privateFile) {
-			privateReader.readAsText(privateFile);
-			privateReader.onload = (e) => {
-				const fileData = e.target?.result;
-				const text = fileData as string;
-				privateKey = getPrivateKeyFromFile(text);
-			};
-		}
-
-		console.log(publicKey, privateKey);
-
-		// unansweredRequired = [];
-		// for (let i = 0; i < numQuestions; i++) {
-		// 	if ($questions[i].required) {
-		// 		if ($answers[i].choices.length === 0) {
-		// 			unansweredRequired[i] = i;
-		// 		} else if (
-		// 			$answers[i].choices.some((c) => c === null || c === undefined || c.length === 0)
-		// 		) {
-		// 			unansweredRequired[i] = i;
-		// 		}
-		// 	}
-		// }
-		// if (unansweredRequired.length > 0) {
-		// 	return;
-		// }
 
 		if (unansweredRequired.length > 0) {
 			return;
 		}
 
-		const answerList: Array<Question> = constructAnswerList();
-		const answer = new SurveyAnswer($page.params.code, answerList);
+		let signature = '';
+		let y0 = '';
 
-		if (!keys.includes(publicKey)) {
-			alert('Provided public key is not on the list');
-		} else {
-			keys = keys.filter((key) => key !== publicKey);
-			keys = [...keys, privateKey];
+		const answerList: Array<Question> = constructAnswerList();
+
+		if (uses_crypto) {
+			const privateKey = keyPair!.privateKey;
+			keys = keys.filter((k) => k !== keyPair!.publicKey);
+			keys.push(privateKey);
 		}
+
+		const answer = new SurveyAnswer($page.params.code, answerList, signature, y0);
 
 		const response = await fetch('/api/surveys/fill', {
 			method: 'POST',
@@ -243,6 +201,45 @@
 		} else {
 			return await goto(`/`, { replaceState: true, invalidateAll: true });
 		}
+	}
+
+	function getKeys(text: string): KeyPair {
+		const words = text.split('-\n');
+		words.splice(2, 1);
+		words.shift();
+		words.pop();
+
+		let publicKey = words[0].split('\n-')[0];
+		let privateKey = words[1].split('\n-')[0];
+
+		publicKey = publicKey.split('\n').join('');
+		privateKey = privateKey.split('\n').join('');
+
+		return new KeyPair(privateKey, publicKey);
+	}
+
+	function processCrypto() {
+		const keyInput = document.querySelector<HTMLInputElement>('#keys-file');
+
+		const keysReader = new FileReader();
+		const keysFile = keyInput?.files?.[0];
+		keysReader.readAsText(keysFile!);
+		let keyPair: KeyPair | undefined;
+		keysReader.onload = (e) => {
+			const fileData = e.target?.result;
+			const text = fileData as string;
+			keyPair = getKeys(text);
+			if (!keys.includes(keyPair.publicKey)) {
+				alert('Your public key is not on the list');
+			}
+			processForm(keyPair);
+		};
+	}
+
+	async function submitSurvey() {
+		if (uses_crypto) {
+			processCrypto();
+		} else processForm(undefined);
 	}
 </script>
 
@@ -261,15 +258,13 @@
 		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
 	{#if uses_crypto}
-		<label for="file">Choose public key file</label>
-		<input type="file" name="public" id="public-key" />
-		<label for="file">Choose private key file</label>
-		<input type="file" name="private" id="private-key" />
+		<label for="file">Upload your keys</label>
+		<input type="file" name="keys" id="keys-file" />
 	{/if}
 </Content>
 
 <Footer>
-	<button title="Submit survey" class="footer-button save" on:click={processForm}>
+	<button title="Submit survey" class="footer-button save" on:click={submitSurvey}>
 		<i class="material-symbols-rounded">done</i>Submit
 	</button>
 </Footer>

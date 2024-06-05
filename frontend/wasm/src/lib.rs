@@ -1,6 +1,7 @@
 use wasm_bindgen::prelude::*;
 use rsa::{RsaPrivateKey, RsaPublicKey};
 use rsa::pkcs1::{EncodeRsaPrivateKey, EncodeRsaPublicKey};
+use pkcs8::{der::Encode, Document, EncodePrivateKey, EncodePublicKey, SecretDocument};
 use zeroize::Zeroizing;
 
 // import Javascript's alert method to Rust

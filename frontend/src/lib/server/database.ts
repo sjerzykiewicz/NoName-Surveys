@@ -55,10 +55,11 @@ export const saveAnswer = async (answer: SurveyAnswer) => {
 	});
 
 	if (!response.ok) {
-		throw error(response.status, response.statusText);
+		const body = await response.json();
+		throw error(response.status, body.detail);
 	}
 
-	return (await response.json()).message;
+	return response;
 };
 
 export const getSurveysOfUser = async (user_email: string) => {

@@ -190,9 +190,9 @@
 			const privateKey = keyPair!.privateKey;
 			const publicKey = keyPair!.publicKey;
 			const index = keys.indexOf(publicKey);
-			keys = keys.filter((k) => k !== publicKey);
+			const keysFiltered = keys.filter((k) => k !== publicKey);
 
-			const ring = Ring.new(keys, privateKey, index, 2048);
+			const ring = Ring.new(keysFiltered, privateKey, index, 2048);
 			signature = ring.sign($page.params.code);
 			y0 = ring.compute_y0(publicKey, privateKey);
 		}
@@ -208,8 +208,8 @@
 		});
 
 		if (!response.ok) {
-			// TODO - display what exactly is wrong
-			alert(response.statusText);
+			const body = await response.json();
+			alert(body.message);
 		} else {
 			return await goto(`/`, { replaceState: true, invalidateAll: true });
 		}

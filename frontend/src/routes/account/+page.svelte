@@ -59,7 +59,7 @@
 				});
 			}}
 		>
-			Download keys file
+			Generate new key pair
 		</button>
 	</div>
 	<SignOut />

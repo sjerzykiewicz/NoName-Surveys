@@ -27,7 +27,7 @@
 	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import { goto } from '$app/navigation';
 	import { QuestionError } from '$lib/entities/QuestionError';
-	import { scrollToElement } from '$lib/utils/scrollToElement';
+	import { scrollToElementById } from '$lib/utils/scrollToElement';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { tick } from 'svelte';
 	import { page } from '$app/stores';
@@ -121,9 +121,17 @@
 			}
 		}
 
-		if (!$questions.every((q) => q.error === QuestionError.NoError) || titleError) {
+		if (titleError) {
 			await tick();
-			scrollToElement('.error');
+			scrollToElementById('header');
+			return false;
+		}
+
+		if (!$questions.every((q) => q.error === QuestionError.NoError)) {
+			await tick();
+			scrollToElementById(
+				$questions.indexOf($questions.find((q) => q.error !== QuestionError.NoError)!).toString()
+			);
 			return false;
 		}
 

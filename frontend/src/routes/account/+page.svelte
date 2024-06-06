@@ -10,6 +10,8 @@
 	import init, { get_keypair } from 'wasm';
 	import { onMount } from 'svelte';
 
+	let updateKeyButtonClicked = false;
+
 	onMount(async () => {
 		await init();
 	});
@@ -39,6 +41,15 @@
 		<button
 			class="save"
 			on:click={async () => {
+				if (!updateKeyButtonClicked) {
+					const confirmChange = confirm('Are you sure you want to change your keys?');
+					if (confirmChange) {
+						updateKeyButtonClicked = true;
+					} else {
+						return;
+					}
+				}
+
 				const keyPair = get_keypair();
 				fetch('/api/users/update-public-key', {
 					method: 'POST',
@@ -63,11 +74,14 @@
 		>
 			Generate new key pair
 		</button>
-		<p class="details">
-			These keys allow you to participate in secure surveys. Once they are generated, it is your
-			responsibility to keep them safe. When submitting a secure survey, you will be asked to
-			provide these keys to your browser for encryption.
-		</p>
+		<div title="Key information" class="info">
+			<i class="material-symbols-rounded">info</i>
+			<div class="text">
+				These keys allow you to participate in secure surveys. Once they are generated, it is your
+				responsibility to keep them safe. When submitting a secure survey, you will be asked to
+				provide these keys to your browser for encryption.
+			</div>
+		</div>
 	</div>
 	<SignOut />
 {:else}
@@ -88,12 +102,42 @@
 		margin-top: 1em;
 		margin-bottom: 1em;
 	}
+
 	.save {
 		margin-top: 0.5em;
 		font-size: 1em;
 	}
-	.details {
-		font-size: 0.7em;
-		padding: 2%;
+
+	.info {
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+		justify-content: center;
+		margin-top: 0.5em;
+		font-size: 0.67em;
+		margin: 0.75em;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: default;
+		overflow-wrap: break-word;
+	}
+
+	.info i {
+		font-size: 1.5em;
+		margin-right: 0.5em;
+	}
+
+	.text {
+		text-align: justify;
+	}
+
+	@media screen and (max-width: 767px) {
+		.info {
+			flex-flow: column;
+		}
+
+		.info i {
+			margin-right: 0em;
+			margin-bottom: 0.5em;
+		}
 	}
 </style>

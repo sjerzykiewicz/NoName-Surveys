@@ -190,6 +190,7 @@
 		width: fit-content;
 		font-size: 1.25em;
 		margin-right: 0.5em;
+		margin-bottom: 0.5em;
 	}
 
 	.add-buttons {

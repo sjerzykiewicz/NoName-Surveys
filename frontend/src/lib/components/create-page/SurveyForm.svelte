@@ -44,44 +44,59 @@
 		out:slide={{ duration: 200, easing: cubicInOut }}
 	>
 		<AddQuestionButtons />
-		<button
-			title={$isAccessLimited ? 'Respondent group defined' : 'Define respondent group'}
-			class="access-button"
-			class:checked={$isAccessLimited}
-			on:click={toggleAccess}
-		>
-			<i class="material-symbols-rounded">passkey</i>
-		</button>
-		{#if $isAccessLimited}
-			<div
-				title="Select users"
-				class="user-list"
-				transition:slide={{ duration: 200, easing: cubicInOut }}
+		<div class="crypto-row">
+			<button
+				title={$isAccessLimited ? 'Respondent group defined' : 'Define respondent group'}
+				class="access-button"
+				class:checked={$isAccessLimited}
+				on:click={toggleAccess}
 			>
-				<MultiSelect
-					bind:selected={$ringMembers}
-					options={user_list}
-					--sms-max-width="100%"
-					--sms-min-height="2.2em"
-					--sms-border="1px solid var(--border-color)"
-					--sms-border-radius="5px"
-					--sms-bg="var(--secondary-dark-color)"
-					--sms-selected-bg="var(--primary-color)"
-					--sms-active-color="var(--text-color)"
-					--sms-li-active-bg="var(--secondary-color)"
-					--sms-text-color="var(--text-color)"
-					--sms-open-z-index="0"
-					--sms-options-max-height="16.5em"
-					--sms-options-border="1px solid var(--border-color)"
-					--sms-options-border-radius="5px"
-					--sms-options-border-width="1px"
-					--sms-options-bg="var(--primary-color)"
-					--sms-options-shadow="0px 4px 4px var(--shadow-color)"
-					--sms-remove-btn-hover-color="var(--error-color)"
-					--sms-remove-btn-hover-bg="var(--secondary-color)"
-				/>
-			</div>
-		{/if}
+				<i class="material-symbols-rounded">passkey</i>
+			</button>
+			{#if $isAccessLimited}
+				<div
+					title="Select users"
+					class="user-list"
+					in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+					out:slide={{ duration: 200, easing: cubicInOut }}
+				>
+					<MultiSelect
+						bind:selected={$ringMembers}
+						options={user_list}
+						--sms-max-width="100%"
+						--sms-min-height="2.2em"
+						--sms-border="1px solid var(--border-color)"
+						--sms-border-radius="5px"
+						--sms-bg="var(--secondary-dark-color)"
+						--sms-selected-bg="var(--primary-color)"
+						--sms-active-color="var(--text-color)"
+						--sms-li-active-bg="var(--secondary-color)"
+						--sms-text-color="var(--text-color)"
+						--sms-open-z-index="0"
+						--sms-options-max-height="16.5em"
+						--sms-options-border="1px solid var(--border-color)"
+						--sms-options-border-radius="5px"
+						--sms-options-border-width="1px"
+						--sms-options-bg="var(--primary-color)"
+						--sms-options-shadow="0px 4px 4px var(--shadow-color)"
+						--sms-remove-btn-hover-color="var(--error-color)"
+						--sms-remove-btn-hover-bg="var(--secondary-color)"
+					/>
+				</div>
+			{:else}
+				<div
+					title="Cryptography information"
+					class="info"
+					in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+					out:slide={{ duration: 200, easing: cubicInOut }}
+				>
+					<i class="material-symbols-rounded">info</i>
+					<div class="text">
+						Use cryptography to allow only selected users to fill out the survey.
+					</div>
+				</div>
+			{/if}
+		</div>
 	</div>
 {/if}
 
@@ -92,7 +107,14 @@
 		align-items: flex-start;
 		justify-content: flex-start;
 		align-content: space-between;
-		height: 4em;
+	}
+
+	.crypto-row {
+		flex: 1;
+		display: flex;
+		flex-flow: row;
+		align-items: flex-start;
+		justify-content: flex-start;
 	}
 
 	.access-button {
@@ -118,12 +140,35 @@
 		box-shadow: 0px 4px 4px var(--shadow-color);
 	}
 
+	.info {
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+		font-size: 1em;
+		height: 2.2em;
+		min-width: 14em;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: default;
+		overflow-wrap: break-word;
+		color: var(--text-color);
+	}
+
+	.info i {
+		font-size: 1.25em;
+		margin-right: 0.5em;
+	}
+
+	.text {
+		text-align: justify;
+	}
+
 	@media screen and (max-width: 767px) {
 		.access-button {
 			font-size: 1em;
 		}
 
-		.user-list {
+		.user-list,
+		.info {
 			font-size: 0.8em;
 		}
 	}

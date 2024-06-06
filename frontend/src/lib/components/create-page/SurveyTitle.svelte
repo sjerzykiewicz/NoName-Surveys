@@ -8,6 +8,7 @@
 <div
 	title="Enter survey title"
 	class="title-input"
+	id="title"
 	contenteditable
 	bind:textContent={$title}
 	role="textbox"

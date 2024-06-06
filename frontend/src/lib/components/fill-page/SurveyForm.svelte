@@ -30,8 +30,8 @@
 	import { slide } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import KeyPair from '$lib/entities/KeyPair';
-
-	import { onMount } from 'svelte';
+	import { scrollToElementById } from '$lib/utils/scrollToElement';
+	import { onMount, tick } from 'svelte';
 	import init, { Ring } from 'wasm';
 
 	onMount(async () => {
@@ -173,11 +173,10 @@
 				}
 			}
 		}
-		if (unansweredRequired.length > 0) {
-			return;
-		}
 
 		if (unansweredRequired.length > 0) {
+			await tick();
+			scrollToElementById(unansweredRequired[0].toString());
 			return;
 		}
 
@@ -304,6 +303,7 @@
 		margin-top: 1em;
 		margin-bottom: 1em;
 	}
+
 	input[type='file'] {
 		margin-top: 0.5em;
 		background-color: var(--secondary-dark-color);
@@ -330,11 +330,6 @@
 
 	input[type='file']::file-selector-button:active {
 		background-color: var(--border-color);
-	}
-
-	.save {
-		margin-top: 0.2em;
-		font-size: 1em;
 	}
 
 	.save i {

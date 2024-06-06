@@ -192,9 +192,11 @@
 				const index = keys.indexOf(publicKey);
 				const keysFiltered = keys.filter((k) => k !== publicKey);
 
+				let pubkeyConcat = keysFiltered.join('');
+
 				const ring = Ring.new(keysFiltered, privateKey, index, 2048);
 				signature = ring.sign($page.params.code);
-				y0 = ring.compute_y0(publicKey, privateKey);
+				y0 = ring.compute_y0(pubkeyConcat, privateKey);
 			} catch {
 				alert(
 					'Key file could not be processed. Make sure to select the file you have downloaded when generating keys.'

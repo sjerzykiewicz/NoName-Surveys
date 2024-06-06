@@ -187,14 +187,21 @@
 		const answerList: Array<Question> = constructAnswerList();
 
 		if (uses_crypto) {
-			const privateKey = keyPair!.privateKey;
-			const publicKey = keyPair!.publicKey;
-			const index = keys.indexOf(publicKey);
-			const keysFiltered = keys.filter((k) => k !== publicKey);
+			try {
+				const privateKey = keyPair!.privateKey;
+				const publicKey = keyPair!.publicKey;
+				const index = keys.indexOf(publicKey);
+				const keysFiltered = keys.filter((k) => k !== publicKey);
 
-			const ring = Ring.new(keysFiltered, privateKey, index, 2048);
-			signature = ring.sign($page.params.code);
-			y0 = ring.compute_y0(publicKey, privateKey);
+				const ring = Ring.new(keysFiltered, privateKey, index, 2048);
+				signature = ring.sign($page.params.code);
+				y0 = ring.compute_y0(publicKey, privateKey);
+			} catch {
+				alert(
+					'Key file could not be processed. Make sure to select the file you have downloaded when generating keys.'
+				);
+				return;
+			}
 		}
 
 		const answer = new SurveyAnswer($page.params.code, answerList, signature, y0);

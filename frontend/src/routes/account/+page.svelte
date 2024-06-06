@@ -52,7 +52,7 @@
 				}).then((res) => {
 					if (res.ok) {
 						download(
-							'keys.txt',
+							'noname-keys.txt',
 							keyPair.get_public_key() + '----------\n' + keyPair.get_private_key()
 						);
 					}
@@ -61,6 +61,11 @@
 		>
 			Generate new key pair
 		</button>
+		<p class="details">
+			These keys allow you to participate in secure surveys. Once they are generated, it is your
+			responsibility to keep them safe. When submitting a secure survey, you will be asked to
+			provide these keys to your browser for encryption.
+		</p>
 	</div>
 	<SignOut />
 {:else}
@@ -84,5 +89,9 @@
 	.save {
 		margin-top: 0.5em;
 		font-size: 1em;
+	}
+	.details {
+		font-size: 0.7em;
+		padding: 2%;
 	}
 </style>

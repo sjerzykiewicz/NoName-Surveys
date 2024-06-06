@@ -236,7 +236,12 @@
 
 		const keysReader = new FileReader();
 		const keysFile = keyInput?.files?.[0];
-		keysReader.readAsText(keysFile!);
+		try {
+			keysReader.readAsText(keysFile!);
+		} catch {
+			alert('No key file has been provided.');
+			return;
+		}
 		let keyPair: KeyPair | undefined;
 		keysReader.onload = (e) => {
 			const fileData = e.target?.result;
@@ -244,6 +249,7 @@
 			keyPair = getKeys(text);
 			if (!keys.includes(keyPair.publicKey)) {
 				alert('Your public key is not on the list');
+				return;
 			}
 			processForm(keyPair);
 		};

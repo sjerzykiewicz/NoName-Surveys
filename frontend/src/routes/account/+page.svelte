@@ -51,7 +51,10 @@
 					})
 				}).then((res) => {
 					if (res.ok) {
-						download('keys.txt', keyPair.get_public_key() + '\n' + keyPair.get_private_key());
+						download(
+							'keys.txt',
+							keyPair.get_public_key() + '----------\n' + keyPair.get_private_key()
+						);
 					}
 				});
 			}}

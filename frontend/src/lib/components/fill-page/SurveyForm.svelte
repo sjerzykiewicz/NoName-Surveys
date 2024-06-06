@@ -199,8 +199,6 @@
 
 		const answer = new SurveyAnswer($page.params.code, answerList, signature, y0);
 
-		console.log(JSON.stringify(answer));
-
 		const response = await fetch('/api/surveys/fill', {
 			method: 'POST',
 			body: JSON.stringify(answer),
@@ -218,9 +216,9 @@
 	}
 
 	function getKeys(text: string): KeyPair {
-		const words = text.split('\n\n');
+		const words = text.split('----------\n');
 
-		let publicKey = words[0] + '\n';
+		let publicKey = words[0];
 		let privateKey = words[1];
 
 		return new KeyPair(privateKey, publicKey);
@@ -322,7 +320,7 @@
 	}
 
 	.save {
-		margin-top: 0.5em;
+		margin-top: 0.2em;
 		font-size: 1em;
 	}
 

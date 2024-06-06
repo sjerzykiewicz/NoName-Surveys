@@ -15,7 +15,6 @@
 	import { ScaleQuestionAnswered } from '$lib/entities/questions/Scale';
 	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 	import QuestionTitle from './QuestionTitle.svelte';
 	import Single from './Single.svelte';
 	import Text from './Text.svelte';
@@ -29,8 +28,19 @@
 	import AnswerError from './AnswerError.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { goto } from '$app/navigation';
+	import KeyPair from '$lib/entities/KeyPair';
+	import { scrollToElementById } from '$lib/utils/scrollToElement';
+	import { onMount, tick } from 'svelte';
+	import init, { Ring } from 'wasm';
+
+	onMount(async () => {
+		await init();
+	});
 
 	export let survey: Survey;
+	export let uses_crypto: boolean;
+	export let keys: Array<string>;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -150,7 +160,7 @@
 
 	let unansweredRequired: Array<number> = [];
 
-	async function processForm() {
+	async function processForm(keyPair: KeyPair | undefined) {
 		unansweredRequired = [];
 		for (let i = 0; i < numQuestions; i++) {
 			if ($questions[i].required) {
@@ -165,11 +175,37 @@
 		}
 
 		if (unansweredRequired.length > 0) {
+			await tick();
+			scrollToElementById(unansweredRequired[0].toString());
 			return;
 		}
 
+		let signature: string[] = [];
+		let y0 = '';
+
 		const answerList: Array<Question> = constructAnswerList();
-		const answer = new SurveyAnswer($page.params.code, answerList);
+
+		if (uses_crypto) {
+			try {
+				const privateKey = keyPair!.privateKey;
+				const publicKey = keyPair!.publicKey;
+				const index = keys.indexOf(publicKey);
+				const keysFiltered = keys.filter((k) => k !== publicKey);
+
+				let pubkeyConcat = keysFiltered.join('');
+
+				const ring = Ring.new(keysFiltered, privateKey, index, 2048);
+				signature = ring.sign($page.params.code);
+				y0 = ring.compute_y0(pubkeyConcat, privateKey);
+			} catch {
+				alert(
+					'Key file could not be processed. Make sure to select the file you have downloaded when generating keys.'
+				);
+				return;
+			}
+		}
+
+		const answer = new SurveyAnswer($page.params.code, answerList, signature, y0);
 
 		const response = await fetch('/api/surveys/fill', {
 			method: 'POST',
@@ -180,11 +216,50 @@
 		});
 
 		if (!response.ok) {
-			// TODO - display what exactly is wrong
-			alert(response.statusText);
+			const body = await response.json();
+			alert(body.message);
 		} else {
 			return await goto(`/`, { replaceState: true, invalidateAll: true });
 		}
+	}
+
+	function getKeys(text: string): KeyPair {
+		const words = text.split('----------------------------------------------------------------\n');
+
+		let publicKey = words[0];
+		let privateKey = words[1];
+
+		return new KeyPair(privateKey, publicKey);
+	}
+
+	function processCrypto() {
+		const keyInput = document.querySelector<HTMLInputElement>('#keys-file');
+
+		const keysReader = new FileReader();
+		const keysFile = keyInput?.files?.[0];
+		try {
+			keysReader.readAsText(keysFile!);
+		} catch {
+			alert('No key file has been provided.');
+			return;
+		}
+		let keyPair: KeyPair | undefined;
+		keysReader.onload = (e) => {
+			const fileData = e.target?.result;
+			const text = fileData as string;
+			keyPair = getKeys(text);
+			if (!keys.includes(keyPair.publicKey)) {
+				alert('Your public key is not on the list');
+				return;
+			}
+			processForm(keyPair);
+		};
+	}
+
+	async function submitSurvey() {
+		if (uses_crypto) {
+			processCrypto();
+		} else processForm(undefined);
 	}
 </script>
 
@@ -202,15 +277,63 @@
 		</div>
 		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
+	{#if uses_crypto}
+		<div class="upload-div">
+			<label for="file">Upload your keys</label>
+			<input type="file" name="keys" id="keys-file" />
+		</div>
+	{/if}
 </Content>
 
 <Footer>
-	<button title="Submit survey" class="footer-button save" on:click={processForm}>
+	<button title="Submit survey" class="footer-button save" on:click={submitSurvey}>
 		<i class="material-symbols-rounded">done</i>Submit
 	</button>
 </Footer>
 
 <style>
+	.upload-div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		color: var(--text-color);
+		font-size: 1.5em;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		width: 100%;
+		margin-top: 1em;
+		margin-bottom: 1em;
+	}
+
+	input[type='file'] {
+		margin-top: 0.5em;
+		background-color: var(--secondary-dark-color);
+		border: 1px solid var(--border-color);
+		border-radius: 5px;
+		font-size: 0.8em;
+		cursor: default;
+	}
+
+	input[type='file']::file-selector-button {
+		padding: 0.25em;
+		background-color: var(--primary-color);
+		border: none;
+		border-right: 1px solid var(--border-color);
+		color: var(--text-color);
+		font-family: 'Jura';
+		cursor: pointer;
+		transition: 0.2s;
+	}
+
+	input[type='file']::file-selector-button:hover {
+		background-color: var(--secondary-color);
+	}
+
+	input[type='file']::file-selector-button:active {
+		background-color: var(--border-color);
+	}
+
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}

@@ -41,8 +41,8 @@ export const getSurveyByCode = async (survey_code: string) => {
 		throw error(response.status, response.statusText);
 	}
 
-	const survey_structure: Survey = (await response.json()).survey_structure;
-	return { survey_structure };
+	const survey_info = await response.json();
+	return survey_info;
 };
 
 export const saveAnswer = async (answer: SurveyAnswer) => {
@@ -55,10 +55,11 @@ export const saveAnswer = async (answer: SurveyAnswer) => {
 	});
 
 	if (!response.ok) {
-		throw error(response.status, response.statusText);
+		const body = await response.json();
+		throw error(response.status, body.detail);
 	}
 
-	return (await response.json()).message;
+	return response;
 };
 
 export const getSurveysOfUser = async (user_email: string) => {

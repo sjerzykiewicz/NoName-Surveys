@@ -40,6 +40,7 @@
 
 <div
 	class="question-label"
+	id={questionIndex.toString()}
 	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
 	out:slide={{ duration: 200, easing: cubicInOut }}
 >

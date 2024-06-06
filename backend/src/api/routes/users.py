@@ -1,3 +1,4 @@
+import Crypto.PublicKey.RSA as RSA
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
@@ -92,6 +93,11 @@ async def update_user_public_key(
         is None
     ):
         raise HTTPException(status_code=400, detail="User not registered")
+
+    try:
+        RSA.import_key(update_user_public_key.public_key)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid public key")
 
     user_crud.update_user_public_key(
         UserWithKey(

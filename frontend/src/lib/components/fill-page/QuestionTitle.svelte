@@ -4,7 +4,11 @@
 	export let questionIndex: number;
 </script>
 
-<div title="Question no. {questionIndex + 1}" class="question-area display">
+<div
+	title="Question no. {questionIndex + 1}"
+	class="question-area display"
+	id={questionIndex.toString()}
+>
 	<div class="index">{questionIndex + 1}.</div>
 	<div class="question-title">
 		{$questions[questionIndex].question}

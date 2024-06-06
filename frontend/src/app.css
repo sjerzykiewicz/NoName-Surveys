@@ -72,7 +72,6 @@ body {
 	background: linear-gradient(0deg, var(--secondary-dark-color) 0%, var(--secondary-color) 100%);
 	background-attachment: fixed;
 	margin: 0px;
-	overflow-y: scroll;
 }
 
 .hamburger {

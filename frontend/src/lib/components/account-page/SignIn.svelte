@@ -34,16 +34,12 @@
 	}
 
 	.sign-in {
-		font-size: 1.75em;
+		font-size: 2em;
 	}
 
 	@media screen and (max-width: 767px) {
 		h1 {
 			font-size: 2em;
-		}
-
-		.sign-in {
-			font-size: 1.5em;
 		}
 	}
 </style>

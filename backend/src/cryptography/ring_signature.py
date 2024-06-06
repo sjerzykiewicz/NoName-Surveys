@@ -10,7 +10,7 @@ class Ring:
         self.num_keys = len(keys)
         self.q_value = 1 << (bit_length - 1)
 
-    def verify(self, message: str, signature) -> bool:
+    def verify(self, message: str, signature: list[int]) -> bool:
         self._compute_permutation(message)
 
         y_values = map(

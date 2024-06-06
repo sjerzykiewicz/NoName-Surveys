@@ -1,3 +1,4 @@
+import Crypto.PublicKey.RSA as RSA
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
@@ -88,7 +89,7 @@ async def save_survey_answer(
         if not survey_answer.signature or not survey_answer.y0:
             raise HTTPException(
                 status_code=400,
-                detail="Survey requires cryptographic signature and y0",
+                detail="Survey requires cryptographic signature",
             )
 
         if answer_crud.user_already_answered_survey(
@@ -99,14 +100,19 @@ async def save_survey_answer(
             )
 
         public_keys = [
-            ring_member.public_key
+            RSA.import_key(ring_member.public_key)
             for ring_member in ring_member_crud.get_ring_members_for_survey(
                 survey.id, session
             )
         ]
         ring = Ring(public_keys)
-        if not ring.verify(survey_answer.questions, survey_answer.signature):
-            raise HTTPException(status_code=400, detail="Invalid signature")
+        if not ring.verify(
+            survey.survey_code, [int(x) for x in survey_answer.signature]
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail="Answer has not been saved because the signature was invalid.",
+            )
 
     survey_draft = survey_draft_crud.get_survey_draft_by_id(
         survey.survey_structure_id, session
@@ -118,7 +124,10 @@ async def save_survey_answer(
     questions = survey_structure.questions
     # validate answer
     if len(survey_answer.questions) != len(questions):
-        raise HTTPException(status_code=400, detail="Invalid answer")
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid answer. Number of questions did not match.",
+        )
     try:
         for q1, q2 in zip(survey_answer.questions, questions):
             q1.validate_structure_against(q2)

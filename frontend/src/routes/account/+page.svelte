@@ -2,48 +2,31 @@
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores';
 	import Header from '$lib/components/Header.svelte';
-	import KeyError from '$lib/components/account-page/KeyError.svelte';
 	import SignIn from '$lib/components/account-page/SignIn.svelte';
 	import SignOut from '$lib/components/account-page/SignOut.svelte';
 
 	export let data: PageServerData;
 
-	let isKeyValid: boolean = false;
-	let isSubmitted: boolean = false;
+	import init, { get_keypair } from 'wasm';
+	import { onMount } from 'svelte';
 
-	function getKeyFromFile(text: string): string {
-		const words = text.split(' ');
-		if (words.length > 1) {
-			if (words[0] === 'ssh-rsa') {
-				isKeyValid = true;
-				return words[1];
-			}
-		}
-		isKeyValid = false;
-		return '';
-	}
+	let updateKeyButtonClicked = false;
 
-	function handleSubmit(event: Event) {
-		event.preventDefault();
-		const fileInput = document.querySelector<HTMLInputElement>('#file');
-		const file = fileInput?.files?.[0];
-		const reader = new FileReader();
-		if (file) {
-			reader.readAsText(file);
-			reader.onload = function (e) {
-				const fileData = e.target?.result;
-				const text = fileData as string;
-				const publicKey = getKeyFromFile(text);
-				fetch('/api/users/update-public-key', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ email: data.session?.user?.email, public_key: publicKey })
-				});
-			};
-		}
-		isSubmitted = true;
+	onMount(async () => {
+		await init();
+	});
+
+	function download(filename: string, text: string) {
+		var element = document.createElement('a');
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+		element.setAttribute('download', filename);
+
+		element.style.display = 'none';
+		document.body.appendChild(element);
+
+		element.click();
+
+		document.body.removeChild(element);
 	}
 </script>
 
@@ -54,27 +37,59 @@
 		</div>
 	</Header>
 
-	<form on:submit={handleSubmit}>
-		<label title="Select and upload public key file" for="file"
-			>Select and upload public key file
-			<div>
-				<input title="Select file" type="file" name="file" id="file" />
-			</div>
-		</label>
-		{#if isSubmitted}
-			<KeyError {isKeyValid} />
-		{/if}
-		<button title="Upload file" class="save" type="submit"
-			><i class="material-symbols-rounded">upload_file</i>Upload</button
+	<div class="download-key">
+		<button
+			class="save"
+			on:click={async () => {
+				if (!updateKeyButtonClicked) {
+					const confirmChange = confirm('Are you sure you want to change your keys?');
+					if (confirmChange) {
+						updateKeyButtonClicked = true;
+					} else {
+						return;
+					}
+				}
+
+				const keyPair = get_keypair();
+				fetch('/api/users/update-public-key', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						email: data.session?.user?.email,
+						public_key: keyPair.get_public_key()
+					})
+				}).then((res) => {
+					if (res.ok) {
+						download(
+							'noname-keys.txt',
+							keyPair.get_public_key() +
+								'----------------------------------------------------------------\n' +
+								keyPair.get_private_key()
+						);
+					}
+				});
+			}}
 		>
-	</form>
+			Generate new key pair
+		</button>
+		<div title="Key information" class="info">
+			<i class="material-symbols-rounded">info</i>
+			<div class="text">
+				These keys allow you to participate in secure surveys. Once they are generated, it is your
+				responsibility to keep them safe. When submitting a secure survey, you will be asked to
+				provide these keys to your browser for encryption.
+			</div>
+		</div>
+	</div>
 	<SignOut />
 {:else}
 	<SignIn />
 {/if}
 
 <style>
-	form {
+	.download-key {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -88,46 +103,41 @@
 		margin-bottom: 1em;
 	}
 
-	label {
-		font-weight: bold;
-	}
-
-	input[type='file'] {
-		margin-top: 0.5em;
-		background-color: var(--secondary-dark-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		font-size: 0.8em;
-		cursor: default;
-	}
-
-	input[type='file']::file-selector-button {
-		padding: 0.25em;
-		background-color: var(--primary-color);
-		border: none;
-		border-right: 1px solid var(--border-color);
-		color: var(--text-color);
-		font-family: 'Jura';
-		cursor: pointer;
-		transition: 0.2s;
-	}
-
-	input[type='file']::file-selector-button:hover {
-		background-color: var(--secondary-color);
-	}
-
-	input[type='file']::file-selector-button:active {
-		background-color: var(--border-color);
-	}
-
 	.save {
 		margin-top: 0.5em;
 		font-size: 1em;
 	}
 
+	.info {
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+		justify-content: center;
+		margin-top: 0.5em;
+		font-size: 0.67em;
+		margin: 0.75em;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: default;
+		overflow-wrap: break-word;
+	}
+
+	.info i {
+		font-size: 1.5em;
+		margin-right: 0.5em;
+	}
+
+	.text {
+		text-align: justify;
+	}
+
 	@media screen and (max-width: 767px) {
-		form {
-			font-size: 1em;
+		.info {
+			flex-flow: column;
+		}
+
+		.info i {
+			margin-right: 0em;
+			margin-bottom: 0.5em;
 		}
 	}
 </style>

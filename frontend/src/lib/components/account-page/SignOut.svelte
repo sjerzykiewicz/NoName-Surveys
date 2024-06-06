@@ -17,18 +17,7 @@
 	}
 
 	.sign-out {
-		margin-left: 0.5em;
-		margin-right: 0.5em;
-	}
-
-	.sign-out {
-		margin-top: 2em;
-		font-size: 1.5em;
-	}
-
-	@media screen and (max-width: 767px) {
-		.sign-out {
-			font-size: 1em;
-		}
+		margin-top: 1.5em;
+		font-size: 2em;
 	}
 </style>

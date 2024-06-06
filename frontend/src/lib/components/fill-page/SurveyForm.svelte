@@ -223,7 +223,7 @@
 	}
 
 	function getKeys(text: string): KeyPair {
-		const words = text.split('----------\n');
+		const words = text.split('----------------------------------------------------------------\n');
 
 		let publicKey = words[0];
 		let privateKey = words[1];

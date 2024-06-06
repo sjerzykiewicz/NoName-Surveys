@@ -53,7 +53,9 @@
 					if (res.ok) {
 						download(
 							'noname-keys.txt',
-							keyPair.get_public_key() + '----------\n' + keyPair.get_private_key()
+							keyPair.get_public_key() +
+								'----------------------------------------------------------------\n' +
+								keyPair.get_private_key()
 						);
 					}
 				});

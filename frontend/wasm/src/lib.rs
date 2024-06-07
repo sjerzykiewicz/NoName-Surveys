@@ -113,7 +113,7 @@ impl Ring {
         let mut rng = rand::thread_rng();
         self.compute_permutation(message);
         let n = self.num_keys;
-        let mut signatures: Vec<BigUint> = Vec::new();
+        let mut signatures: Vec<BigUint> = vec![BigUint::zero(); n];
         let z = self.priv_key_index;
         let u: BigUint = rng.sample(RandomBits::new(self.q_value.bits()));
         let new_val = self.compute_e(&u);
@@ -122,14 +122,14 @@ impl Ring {
 
         for i in z..(n as u32) {
             let sig:BigUint = rng.sample(RandomBits::new(self.q_value.bits()));
-            signatures.push(sig.clone());
+            signatures[i as usize] = sig.clone();
             let e = self.compute_g(&sig, self.pub_keys[i as usize].e(), self.pub_keys[i as usize].n());
             v = self.compute_e(&(v.clone() ^ e.clone())).clone();
             c = v.clone();
         }
         for i in 0..z {
             let sig:BigUint = rng.sample(RandomBits::new(self.q_value.bits()));
-            signatures.push(sig.clone());
+            signatures[i as usize] = sig.clone();
             let e = self.compute_g(&sig, self.pub_keys[i as usize].e(), self.pub_keys[i as usize].n());
             v = self.compute_e(&(v.clone() ^ e.clone())).clone();
         }
@@ -138,11 +138,11 @@ impl Ring {
 
         let mut sign_str: Vec<String> = Vec::new();
         sign_str.push(c.to_string());
-        for i in 0..z {
+		for i in 0..z {
             sign_str.push(signatures[i as usize].to_string());
         }
         sign_str.push(priv_big.to_string());
-        for i in z..(n as u32) {
+		for i in z..(n as u32) {
             sign_str.push(signatures[i as usize].to_string());
         }
         sign_str

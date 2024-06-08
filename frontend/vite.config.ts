@@ -3,8 +3,9 @@ import { defineConfig } from 'vite';
 import wasmPack from 'vite-plugin-wasm-pack';
 
 export default defineConfig({
-	plugins: [sveltekit(), wasmPack('./wasm')],
+	assetsInclude: ['./wasm/pkg/wasm.js'],
+	plugins: [wasmPack('./wasm'), sveltekit()],
 	optimizeDeps: {
-		exclude: ['crypto']
+		exclude: ['wasm']
 	}
 });

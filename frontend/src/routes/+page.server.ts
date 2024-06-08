@@ -25,6 +25,6 @@ export const actions: Actions = {
 			return fail(404, { description: code, error: 'Survey not found' });
 		}
 
-		redirect(303, `/${code}/fill`);
+		redirect(303, `/fill?code=${code}`);
 	}
 };

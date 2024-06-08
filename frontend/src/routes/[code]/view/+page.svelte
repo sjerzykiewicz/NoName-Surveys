@@ -6,7 +6,7 @@
 
 	export let data: PageData;
 
-	let url: string = $page.url.origin + '/' + data.code + '/fill';
+	let url: string = $page.url.origin + '/fill?code=' + data.code;
 
 	let isCopied: boolean = false;
 
@@ -36,7 +36,7 @@
 		><i class="material-symbols-rounded">content_copy</i>
 		{isCopied ? 'Copied!' : 'Copy'}</button
 	>
-	<a href="/{data.code}/fill" title="Go to fill page" class="qr-code">
+	<a href="/fill?code={data.code}" title="Go to fill page" class="qr-code">
 		<QrCode data={url} size={calculateSize(innerWidth)} />
 	</a>
 </div>

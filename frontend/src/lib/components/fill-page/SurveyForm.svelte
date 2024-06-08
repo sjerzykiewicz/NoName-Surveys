@@ -14,7 +14,6 @@
 	import { ListQuestionAnswered } from '$lib/entities/questions/List';
 	import { ScaleQuestionAnswered } from '$lib/entities/questions/Scale';
 	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
-	import { page } from '$app/stores';
 	import QuestionTitle from './QuestionTitle.svelte';
 	import Single from './Single.svelte';
 	import Text from './Text.svelte';
@@ -31,16 +30,13 @@
 	import { goto } from '$app/navigation';
 	import KeyPair from '$lib/entities/KeyPair';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
-	import { onMount, tick } from 'svelte';
-	import init, { Ring } from 'wasm';
-
-	onMount(async () => {
-		await init();
-	});
+	import { tick } from 'svelte';
+	import { Ring } from 'wasm';
 
 	export let survey: Survey;
 	export let uses_crypto: boolean;
 	export let keys: Array<string>;
+	export let code: string;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -195,7 +191,7 @@
 				let pubkeyConcat = keysFiltered.join('');
 
 				const ring = Ring.new(keysFiltered, privateKey, index, 2048);
-				signature = ring.sign($page.params.code);
+				signature = ring.sign(code);
 				y0 = ring.compute_y0(pubkeyConcat, privateKey);
 			} catch {
 				alert(
@@ -205,7 +201,7 @@
 			}
 		}
 
-		const answer = new SurveyAnswer($page.params.code, answerList, signature, y0);
+		const answer = new SurveyAnswer(code, answerList, signature, y0);
 
 		const response = await fetch('/api/surveys/fill', {
 			method: 'POST',

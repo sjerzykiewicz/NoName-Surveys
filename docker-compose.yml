@@ -1,13 +1,17 @@
 services:
   backend:
-    image: sjerzykiewicz/noname-surveys-backend:dev
+    build:
+      context: ./backend
+    # image: sjerzykiewicz/noname-surveys-backend:dev
     ports:
       - "127.0.0.1:8000:8000"
     env_file:
       - ./backend/.env
 
   frontend:
-    image: sjerzykiewicz/noname-surveys-frontend:dev
+    build:
+      context: ./frontend
+    # image: sjerzykiewicz/noname-surveys-frontend:dev
     ports:
       - "127.0.0.1:3000:3000"
     depends_on:

@@ -203,8 +203,8 @@
 					alert('Link failed.');
 					return;
 				}
-			} catch {
-				alert('Failed to create ring.');
+			} catch (e) {
+				alert(e);
 				return;
 			}
 		}

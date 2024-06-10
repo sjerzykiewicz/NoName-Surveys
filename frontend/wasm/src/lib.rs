@@ -28,22 +28,30 @@ impl KeyPair {
 }
 
 #[wasm_bindgen]
-pub fn get_keypair() -> KeyPair {
+pub fn get_keypair() -> Result<KeyPair, JsValue> {
     let mut rng = rand::thread_rng();
     let bits = 2048;
-    let priv_key = RsaPrivateKey::new(&mut rng, bits).expect("failed to generate a key");
-    let pub_key = RsaPublicKey::from(&priv_key);
-    let private_pem = priv_key
-        .to_pkcs1_pem(rsa::pkcs1::LineEnding::LF)
-        .expect("failed to convert to pem");
-    let public_pem = pub_key
-        .to_pkcs1_pem(rsa::pkcs1::LineEnding::LF)
-        .expect("failed to convert to pem");
 
-    return KeyPair {
+    let priv_key = match RsaPrivateKey::new(&mut rng, bits) {
+        Ok(key) => key,
+        Err(_) => return Err(JsValue::from_str("Failed to generate a key.")),
+    };
+
+    let pub_key = RsaPublicKey::from(&priv_key);
+
+    let private_pem = match priv_key.to_pkcs1_pem(rsa::pkcs1::LineEnding::LF) {
+        Ok(k) => k,
+        Err(_) => return Err(JsValue::from_str("Failed to export private key.")),
+    };
+    let public_pem = match pub_key.to_pkcs1_pem(rsa::pkcs1::LineEnding::LF) {
+        Ok(k) => k,
+        Err(_) => return Err(JsValue::from_str("Failed to export public key.")),
+    };
+
+    Ok(KeyPair {
         private_key: private_pem.to_string(),
         public_key: public_pem,
-    };
+    })
 }
 
 #[wasm_bindgen]
@@ -64,20 +72,26 @@ impl Ring {
         priv_key: String,
         priv_key_index: u32,
         bit_length: u32,
-    ) -> Ring {
+    ) -> Result<Ring, JsValue> {
         let num_keys = pub_keys.len();
         let q_value = BigUint::one() << ((bit_length as usize) - 1);
 
         let mut keys = Vec::new();
 
         for key in &pub_keys {
-            let rsa_key = RsaPublicKey::from_pkcs1_pem(&key).unwrap();
+            let rsa_key = match RsaPublicKey::from_pkcs1_pem(&key) {
+                Ok(k) => k,
+                Err(_) => return Err(JsValue::from_str("Public key could not be processed.")),
+            };
             keys.push(rsa_key);
         }
 
-        let priv_key = RsaPrivateKey::from_pkcs1_pem(&priv_key).unwrap();
+        let priv_key = match RsaPrivateKey::from_pkcs1_pem(&priv_key) {
+            Ok(k) => k,
+            Err(_) => return Err(JsValue::from_str("Private key could not be processed.")),
+        };
 
-        Ring {
+        Ok(Ring {
             pub_keys: keys,
             priv_key,
             priv_key_index,
@@ -85,7 +99,7 @@ impl Ring {
             num_keys,
             q_value: q_value.into(),
             permutation: BigUint::default(),
-        }
+        })
     }
 
     fn compute_permutation(&mut self, message: &str) {
@@ -162,15 +176,18 @@ impl Ring {
     }
 
     #[wasm_bindgen]
-    pub fn compute_y0(&mut self, public_key: String, private_key: String) -> String {
+    pub fn compute_y0(&self, public_key: String, private_key: String) -> Result<String, JsValue> {
         let mut hasher = sha2::Sha384::new();
         hasher.update(public_key.as_bytes());
         let pub_key_hashed = hasher.finalize();
 
-        let priv_key = RsaPrivateKey::from_pkcs1_pem(&private_key).unwrap();
+        let priv_key = match RsaPrivateKey::from_pkcs1_pem(&private_key) {
+            Ok(k) => k,
+            Err(_) => return Err(JsValue::from_str("Private key could not be processed.")),
+        };
 
         let y0 = BigUint::from_bytes_be(&pub_key_hashed).modpow(priv_key.d(), priv_key.n());
 
-        return y0.to_string();
+        Ok(y0.to_string())
     }
 }

@@ -53,4 +53,10 @@
 		background-color: var(--primary-dark-color);
 		cursor: default;
 	}
+
+	@media screen and (max-width: 767px) {
+		.arrows {
+			font-size: 1.2em;
+		}
+	}
 </style>

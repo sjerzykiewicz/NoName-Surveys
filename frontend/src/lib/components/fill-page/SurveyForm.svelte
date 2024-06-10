@@ -298,7 +298,7 @@
 		font-size: 1.5em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
 		width: 100%;
-		margin-top: 1em;
+		margin-top: 1.5em;
 		margin-bottom: 1em;
 	}
 
@@ -332,5 +332,26 @@
 
 	.save i {
 		font-variation-settings: 'wght' 700;
+	}
+
+	@media screen and (max-width: 767px) {
+		.upload-div {
+			font-size: 1.1em;
+		}
+
+		.save {
+			font-size: 1.5em;
+		}
+
+		input[type='file']::file-selector-button {
+			display: block;
+			width: 100%;
+			padding: 0.5em;
+			font-size: 1.25em;
+		}
+
+		input[type='file'] {
+			text-align: center;
+		}
 	}
 </style>

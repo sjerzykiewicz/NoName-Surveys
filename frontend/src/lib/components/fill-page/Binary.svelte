@@ -58,4 +58,13 @@
 			'FILL' 1,
 			'GRAD' 200;
 	}
+
+	@media screen and (max-width: 767px) {
+		.choice {
+			font-size: 1.2em;
+		}
+		i {
+			font-size: 1.5em;
+		}
+	}
 </style>

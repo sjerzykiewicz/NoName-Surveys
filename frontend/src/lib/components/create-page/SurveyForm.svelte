@@ -54,12 +54,7 @@
 				<i class="material-symbols-rounded">passkey</i>
 			</button>
 			{#if $isAccessLimited}
-				<div
-					title="Select users"
-					class="user-list"
-					in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-					out:slide={{ duration: 200, easing: cubicInOut }}
-				>
+				<div title="Select users" class="user-list">
 					<MultiSelect
 						bind:selected={$ringMembers}
 						options={user_list}
@@ -84,12 +79,7 @@
 					/>
 				</div>
 			{:else}
-				<div
-					title="Cryptography information"
-					class="info"
-					in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-					out:slide={{ duration: 200, easing: cubicInOut }}
-				>
+				<div title="Cryptography information" class="info">
 					<i class="material-symbols-rounded">info</i>
 					<div class="text">
 						Use cryptography to allow only selected users to fill out the survey.

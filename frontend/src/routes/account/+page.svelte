@@ -51,6 +51,8 @@
 				}
 
 				const keyPair = get_keypair();
+				const publicKey = keyPair.get_public_key();
+				const privateKey = keyPair.get_private_key();
 				fetch('/api/users/update-public-key', {
 					method: 'POST',
 					headers: {
@@ -58,15 +60,15 @@
 					},
 					body: JSON.stringify({
 						email: data.session?.user?.email,
-						public_key: keyPair.get_public_key()
+						public_key: publicKey
 					})
 				}).then((res) => {
 					if (res.ok) {
 						download(
 							'noname-keys.txt',
-							keyPair.get_public_key() +
+							publicKey +
 								'----------------------------------------------------------------\n' +
-								keyPair.get_private_key()
+								privateKey
 						);
 					}
 				});

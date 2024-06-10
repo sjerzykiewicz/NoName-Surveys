@@ -183,21 +183,28 @@
 		const answerList: Array<Question> = constructAnswerList();
 
 		if (uses_crypto) {
+			const privateKey = keyPair!.privateKey;
+			const publicKey = keyPair!.publicKey;
+			const index = keys.indexOf(publicKey);
+			const keysFiltered = keys.filter((k) => k !== publicKey);
+
+			let pubkeyConcat = keysFiltered.join('');
 			try {
-				const privateKey = keyPair!.privateKey;
-				const publicKey = keyPair!.publicKey;
-				const index = keys.indexOf(publicKey);
-				const keysFiltered = keys.filter((k) => k !== publicKey);
-
-				let pubkeyConcat = keysFiltered.join('');
-
 				const ring = Ring.new(keysFiltered, privateKey, index, 2048);
-				signature = ring.sign(code);
-				y0 = ring.compute_y0(pubkeyConcat, privateKey);
+				try {
+					signature = ring.sign(code);
+				} catch {
+					alert('Singature failed.');
+					return;
+				}
+				try {
+					y0 = ring.compute_y0(pubkeyConcat, privateKey);
+				} catch {
+					alert('Link failed.');
+					return;
+				}
 			} catch {
-				alert(
-					'Key file could not be processed. Make sure to select the file you have downloaded when generating keys.'
-				);
+				alert('Failed to create ring.');
 				return;
 			}
 		}

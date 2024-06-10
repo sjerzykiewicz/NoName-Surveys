@@ -31,6 +31,7 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { tick } from 'svelte';
 	import { page } from '$app/stores';
+	import { responseErrorHandler } from '$lib/utils/responseErrorHandler';
 
 	export let isPreview: boolean = false;
 
@@ -152,7 +153,7 @@
 		});
 
 		if (!response.ok) {
-			alert(response.statusText);
+			responseErrorHandler(response);
 		} else {
 			// TODO - display in UI
 			alert('Saved');
@@ -180,16 +181,15 @@
 		});
 
 		if (!response.ok) {
-			// TODO - display what exactly is wrong
-			alert(response.statusText);
+			responseErrorHandler(response);
 		} else {
-			const code = (await response.json()).code;
+			const body = await response.json();
 			$title = '';
 			$questions = [];
 			$previousQuestion = null;
 			$isAccessLimited = false;
 			$ringMembers = [];
-			return await goto(`/${code}/view`, { replaceState: true, invalidateAll: true });
+			return await goto(`/${body.survey_code}/view`, { replaceState: true, invalidateAll: true });
 		}
 	}
 </script>

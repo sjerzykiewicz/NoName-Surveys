@@ -71,7 +71,7 @@
 
 {#if innerWidth <= 767}
 	<div class="nav-burger">
-		<i class="material-symbols-rounded">shield_person</i>
+		<a href="/" class="nav-burger-logo"><i class="material-symbols-rounded">shield_person</i></a>
 		<Hamburger bind:open --color="var(--text-color)" />
 	</div>
 {/if}
@@ -153,6 +153,10 @@
 
 	.toggle-mode:active {
 		background-color: var(--border-color);
+	}
+
+	.nav-burger-logo {
+		all: unset;
 	}
 
 	a {

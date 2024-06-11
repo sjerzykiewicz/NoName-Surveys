@@ -4,7 +4,7 @@ from src.db.base import Session
 from src.db.models.survey_draft import SurveyDraft, SurveyDraftBase
 
 
-def get_survey_drafts_for_user(
+def get_not_deleted_survey_drafts_for_user(
     user_id: int, session: Session
 ) -> list[SurveyDraft]:
     statement = select(SurveyDraft).where(
@@ -14,12 +14,20 @@ def get_survey_drafts_for_user(
     return [draft for draft in drafts]
 
 
-def get_survey_draft_by_id(
+def get_not_deleted_survey_draft_by_id(
     survey_draft_id: int, session: Session
 ) -> SurveyDraft:
     statement = select(SurveyDraft).where(
         (SurveyDraft.id == survey_draft_id) & (SurveyDraft.is_deleted is False)
     )
+    survey_draft = session.exec(statement).first()
+    return survey_draft
+
+
+def get_survey_draft_by_id(
+    survey_draft_id: int, session: Session
+) -> SurveyDraft:
+    statement = select(SurveyDraft).where(SurveyDraft.id == survey_draft_id)
     survey_draft = session.exec(statement).first()
     return survey_draft
 

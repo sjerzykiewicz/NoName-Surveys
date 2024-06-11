@@ -37,7 +37,7 @@ async def get_survey_drafts(
             ).title,
             creation_date=survey_draft.creation_date,
         )
-        for survey_draft in survey_draft_crud.get_survey_drafts_for_user(
+        for survey_draft in survey_draft_crud.get_not_deleted_survey_drafts_for_user(
             user.id, session
         )
     ]
@@ -56,7 +56,7 @@ async def get_survey_draft(
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
 
-    survey_draft = survey_draft_crud.get_survey_draft_by_id(
+    survey_draft = survey_draft_crud.get_not_deleted_survey_draft_by_id(
         survey_draft_fetch.id, session
     )
     if survey_draft is None:
@@ -90,7 +90,7 @@ async def delete_survey_draft(
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
 
-    survey_draft = survey_draft_crud.get_survey_draft_by_id(
+    survey_draft = survey_draft_crud.get_not_deleted_survey_draft_by_id(
         survey_draft_delete.id, session
     )
     if survey_draft is None:

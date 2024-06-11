@@ -9,7 +9,7 @@ if (env.BACKEND_HOST) {
 	host = env.BACKEND_HOST;
 }
 
-export const createSurvey = async (info: SurveyCreateInfo) => {
+export const createSurvey = (info: SurveyCreateInfo) => {
 	return fetch(`${host}/surveys/create`, {
 		method: 'POST',
 		body: JSON.stringify(info),
@@ -19,7 +19,7 @@ export const createSurvey = async (info: SurveyCreateInfo) => {
 	});
 };
 
-export const getSurveyByCode = async (survey_code: string) => {
+export const getSurveyByCode = (survey_code: string) => {
 	return fetch(`${host}/surveys/fetch`, {
 		method: 'POST',
 		body: JSON.stringify({ survey_code }),
@@ -29,7 +29,7 @@ export const getSurveyByCode = async (survey_code: string) => {
 	});
 };
 
-export const saveAnswer = async (answer: SurveyAnswer) => {
+export const saveAnswer = (answer: SurveyAnswer) => {
 	return fetch(`${host}/answers/fill`, {
 		method: 'POST',
 		body: JSON.stringify(answer),
@@ -39,7 +39,7 @@ export const saveAnswer = async (answer: SurveyAnswer) => {
 	});
 };
 
-export const getSurveysOfUser = async (user_email: string) => {
+export const getSurveysOfUser = (user_email: string) => {
 	return fetch(`${host}/surveys/all`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
@@ -49,7 +49,7 @@ export const getSurveysOfUser = async (user_email: string) => {
 	});
 };
 
-export const getSurveyAnswers = async (user_email: string, survey_code: string) => {
+export const getSurveyAnswers = (user_email: string, survey_code: string) => {
 	return fetch(`${host}/answers/fetch`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_code }),
@@ -59,7 +59,7 @@ export const getSurveyAnswers = async (user_email: string, survey_code: string) 
 	});
 };
 
-export const saveDraft = async (info: DraftCreateInfo) => {
+export const saveDraft = (info: DraftCreateInfo) => {
 	return fetch(`${host}/survey-drafts/create`, {
 		method: 'POST',
 		body: JSON.stringify(info),
@@ -69,7 +69,7 @@ export const saveDraft = async (info: DraftCreateInfo) => {
 	});
 };
 
-export const getDraftsOfUser = async (user_email: string) => {
+export const getDraftsOfUser = (user_email: string) => {
 	return fetch(`${host}/survey-drafts/all`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
@@ -79,7 +79,17 @@ export const getDraftsOfUser = async (user_email: string) => {
 	});
 };
 
-export const registerUser = async (user_email: string) => {
+export const getDraftStructureById = (user_email: string, id: number) => {
+	return fetch(`${host}/survey-drafts/fetch`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, id }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const registerUser = (user_email: string) => {
 	return fetch(`${host}/users/register`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
@@ -89,7 +99,7 @@ export const registerUser = async (user_email: string) => {
 	});
 };
 
-export const validateUser = async (user_email: string) => {
+export const validateUser = (user_email: string) => {
 	return fetch(`${host}/users/validate`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
@@ -99,7 +109,7 @@ export const validateUser = async (user_email: string) => {
 	});
 };
 
-export const updatePublicKey = async (user_email: string, public_key: string) => {
+export const updatePublicKey = (user_email: string, public_key: string) => {
 	return fetch(`${host}/users/update-public-key`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email, public_key }),
@@ -109,7 +119,7 @@ export const updatePublicKey = async (user_email: string, public_key: string) =>
 	});
 };
 
-export const userHasPublicKey = async (user_email: string) => {
+export const userHasPublicKey = (user_email: string) => {
 	return fetch(`${host}/users/has-public-key`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
@@ -119,6 +129,6 @@ export const userHasPublicKey = async (user_email: string) => {
 	});
 };
 
-export const getAllUsers = async () => {
+export const getAllUsers = () => {
 	return fetch(`${host}/users/all-with-public-keys`, { method: 'GET' });
 };

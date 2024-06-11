@@ -8,7 +8,6 @@
 	import type { SingleQuestion } from '$lib/entities/questions/Single';
 	import type { SliderQuestion } from '$lib/entities/questions/Slider';
 	import type { TextQuestion } from '$lib/entities/questions/Text';
-	import type Survey from '$lib/entities/surveys/Survey';
 	import { title, questions } from '$lib/stores/create-page';
 	import Binary from '../create-page/Binary.svelte';
 	import List from '../create-page/List.svelte';
@@ -26,128 +25,141 @@
 	import RankPreview from '../create-page/preview/RankPreview.svelte';
 	import BinaryPreview from '../create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '../create-page/preview/TextPreview.svelte';
+	import { page } from '$app/stores';
+	import type Question from '$lib/entities/questions/Question';
 
 	export let drafts: {
-		creator: number;
-		survey_structure: Survey;
+		id: number;
+		title: string;
 		creation_date: string;
 	}[];
 
 	function loadDraft(i: number) {
-		$title = drafts[i].survey_structure.title;
-		$questions = [];
-		drafts[i].survey_structure.questions.forEach((q) => {
-			switch (q.question_type) {
-				case 'single':
-					$questions = [
-						...$questions,
-						{
-							component: Single,
-							preview: SinglePreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as SingleQuestion).choices,
-							error: QuestionError.NoError
-						}
-					];
-					break;
-				case 'multi':
-					$questions = [
-						...$questions,
-						{
-							component: Multi,
-							preview: MultiPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as MultiQuestion).choices,
-							error: QuestionError.NoError
-						}
-					];
-					break;
-				case 'list':
-					$questions = [
-						...$questions,
-						{
-							component: List,
-							preview: ListPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as ListQuestion).choices,
-							error: QuestionError.NoError
-						}
-					];
-					break;
-				case 'rank':
-					$questions = [
-						...$questions,
-						{
-							component: Rank,
-							preview: RankPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as RankQuestion).choices,
-							error: QuestionError.NoError
-						}
-					];
-					break;
-				case 'binary':
-					$questions = [
-						...$questions,
-						{
-							component: Binary,
-							preview: BinaryPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as BinaryQuestion).choices,
-							error: QuestionError.NoError
-						}
-					];
-					break;
-				case 'scale':
-					$questions = [
-						...$questions,
-						{
-							component: Scale,
-							preview: ScalePreview,
-							required: q.required,
-							question: q.question,
-							choices: ['1', '2', '3', '4', '5'],
-							error: QuestionError.NoError
-						}
-					];
-					break;
-				case 'slider':
-					$questions = [
-						...$questions,
-						{
-							component: Slider,
-							preview: SliderPreview,
-							required: q.required,
-							question: q.question,
-							choices: [
-								(q as SliderQuestion).min_value.toString(),
-								(q as SliderQuestion).max_value.toString()
-							],
-							error: QuestionError.NoError
-						}
-					];
-					break;
-				case 'text':
-					$questions = [
-						...$questions,
-						{
-							component: Text,
-							preview: TextPreview,
-							required: q.required,
-							question: q.question,
-							choices: [(q as TextQuestion).details],
-							error: QuestionError.NoError
-						}
-					];
-					break;
+		fetch('/api/surveys/drafts/fetch', {
+			method: 'POST',
+			body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: drafts[i].id }),
+			headers: {
+				'Content-Type': 'application/json'
 			}
-		});
-		goto('/create');
+		})
+			.then(async (response) => {
+				const body = await response.json();
+				$title = drafts[i].title;
+				$questions = [];
+				body.survey_structure.questions.forEach((q: Question) => {
+					switch (q.question_type) {
+						case 'single':
+							$questions = [
+								...$questions,
+								{
+									component: Single,
+									preview: SinglePreview,
+									required: q.required,
+									question: q.question,
+									choices: (q as SingleQuestion).choices,
+									error: QuestionError.NoError
+								}
+							];
+							break;
+						case 'multi':
+							$questions = [
+								...$questions,
+								{
+									component: Multi,
+									preview: MultiPreview,
+									required: q.required,
+									question: q.question,
+									choices: (q as MultiQuestion).choices,
+									error: QuestionError.NoError
+								}
+							];
+							break;
+						case 'list':
+							$questions = [
+								...$questions,
+								{
+									component: List,
+									preview: ListPreview,
+									required: q.required,
+									question: q.question,
+									choices: (q as ListQuestion).choices,
+									error: QuestionError.NoError
+								}
+							];
+							break;
+						case 'rank':
+							$questions = [
+								...$questions,
+								{
+									component: Rank,
+									preview: RankPreview,
+									required: q.required,
+									question: q.question,
+									choices: (q as RankQuestion).choices,
+									error: QuestionError.NoError
+								}
+							];
+							break;
+						case 'binary':
+							$questions = [
+								...$questions,
+								{
+									component: Binary,
+									preview: BinaryPreview,
+									required: q.required,
+									question: q.question,
+									choices: (q as BinaryQuestion).choices,
+									error: QuestionError.NoError
+								}
+							];
+							break;
+						case 'scale':
+							$questions = [
+								...$questions,
+								{
+									component: Scale,
+									preview: ScalePreview,
+									required: q.required,
+									question: q.question,
+									choices: ['1', '2', '3', '4', '5'],
+									error: QuestionError.NoError
+								}
+							];
+							break;
+						case 'slider':
+							$questions = [
+								...$questions,
+								{
+									component: Slider,
+									preview: SliderPreview,
+									required: q.required,
+									question: q.question,
+									choices: [
+										(q as SliderQuestion).min_value.toString(),
+										(q as SliderQuestion).max_value.toString()
+									],
+									error: QuestionError.NoError
+								}
+							];
+							break;
+						case 'text':
+							$questions = [
+								...$questions,
+								{
+									component: Text,
+									preview: TextPreview,
+									required: q.required,
+									question: q.question,
+									choices: [(q as TextQuestion).details],
+									error: QuestionError.NoError
+								}
+							];
+							break;
+					}
+				});
+				goto('/create');
+			})
+			.catch(() => alert('Error loading draft'));
 	}
 </script>
 
@@ -159,7 +171,7 @@
 	{#each drafts as draft, draftIndex}
 		<tr>
 			<td title="Click to open draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
-				>{draft.survey_structure.title}</td
+				>{draft.title}</td
 			>
 			<td title="Creation date" class="date-entry">{draft.creation_date}</td>
 		</tr>

@@ -193,14 +193,9 @@
 				const ring = Ring.new(keysFiltered, privateKey, index, 2048);
 				try {
 					signature = ring.sign(code);
-				} catch {
-					alert('Singature failed.');
-					return;
-				}
-				try {
 					y0 = ring.compute_y0(pubkeyConcat, privateKey);
 				} catch {
-					alert('Link failed.');
+					alert('Unexpected error.');
 					return;
 				}
 			} catch (e) {

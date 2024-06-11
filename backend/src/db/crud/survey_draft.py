@@ -8,7 +8,8 @@ def get_not_deleted_survey_drafts_for_user(
     user_id: int, session: Session
 ) -> list[SurveyDraft]:
     statement = select(SurveyDraft).where(
-        (SurveyDraft.creator_id == user_id) & (SurveyDraft.is_deleted is False)
+        (SurveyDraft.creator_id == user_id)
+        & (SurveyDraft.is_deleted == False)  # noqa: E712
     )
     drafts = session.exec(statement).all()
     return [draft for draft in drafts]
@@ -18,7 +19,8 @@ def get_not_deleted_survey_draft_by_id(
     survey_draft_id: int, session: Session
 ) -> SurveyDraft:
     statement = select(SurveyDraft).where(
-        (SurveyDraft.id == survey_draft_id) & (SurveyDraft.is_deleted is False)
+        (SurveyDraft.id == survey_draft_id)
+        & (SurveyDraft.is_deleted == False)  # noqa: E712
     )
     survey_draft = session.exec(statement).first()
     return survey_draft

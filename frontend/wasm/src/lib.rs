@@ -1,18 +1,14 @@
-use rsa::traits::{PrivateKeyParts, PublicKeyParts};
-use sha2::Digest;
-use wasm_bindgen::prelude::*;
-use rsa::{RsaPrivateKey, RsaPublicKey};
-use rsa::pkcs1::{EncodeRsaPrivateKey, EncodeRsaPublicKey, DecodeRsaPrivateKey, DecodeRsaPublicKey};
 use num_bigint_dig::algorithms::div_rem;
 use num_bigint_dig::{BigUint, RandomBits};
 use num_traits::{One, Zero};
 use rand::Rng;
-
-// import Javascript's alert method to Rust
-#[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-}
+use rsa::pkcs1::{
+    DecodeRsaPrivateKey, DecodeRsaPublicKey, EncodeRsaPrivateKey, EncodeRsaPublicKey,
+};
+use rsa::traits::{PrivateKeyParts, PublicKeyParts};
+use rsa::{RsaPrivateKey, RsaPublicKey};
+use sha2::Digest;
+use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub struct KeyPair {
@@ -32,24 +28,36 @@ impl KeyPair {
 }
 
 #[wasm_bindgen]
-pub fn get_keypair() -> KeyPair {
+pub fn get_keypair() -> Result<KeyPair, JsValue> {
     let mut rng = rand::thread_rng();
     let bits = 2048;
-    let priv_key = RsaPrivateKey::new(&mut rng, bits).expect("failed to generate a key");
-    let pub_key = RsaPublicKey::from(&priv_key);
-    let private_pem = priv_key.to_pkcs1_pem(rsa::pkcs1::LineEnding::LF).expect("failed to convert to pem");
-    let public_pem = pub_key.to_pkcs1_pem(rsa::pkcs1::LineEnding::LF).expect("failed to convert to pem");
 
-    return KeyPair {
+    let priv_key = match RsaPrivateKey::new(&mut rng, bits) {
+        Ok(key) => key,
+        Err(_) => return Err(JsValue::from_str("Failed to generate a key.")),
+    };
+
+    let pub_key = RsaPublicKey::from(&priv_key);
+
+    let private_pem = match priv_key.to_pkcs1_pem(rsa::pkcs1::LineEnding::LF) {
+        Ok(k) => k,
+        Err(_) => return Err(JsValue::from_str("Failed to export private key.")),
+    };
+    let public_pem = match pub_key.to_pkcs1_pem(rsa::pkcs1::LineEnding::LF) {
+        Ok(k) => k,
+        Err(_) => return Err(JsValue::from_str("Failed to export public key.")),
+    };
+
+    Ok(KeyPair {
         private_key: private_pem.to_string(),
         public_key: public_pem,
-    };
+    })
 }
 
 #[wasm_bindgen]
 pub struct Ring {
     pub_keys: Vec<RsaPublicKey>,
-    priv_key : RsaPrivateKey,
+    priv_key: RsaPrivateKey,
     priv_key_index: u32,
     bit_length: u32,
     num_keys: usize,
@@ -59,20 +67,31 @@ pub struct Ring {
 
 #[wasm_bindgen]
 impl Ring {
-    pub fn new(pub_keys: Vec<String>, priv_key: String, priv_key_index: u32, bit_length: u32) -> Ring {
+    pub fn new(
+        pub_keys: Vec<String>,
+        priv_key: String,
+        priv_key_index: u32,
+        bit_length: u32,
+    ) -> Result<Ring, JsValue> {
         let num_keys = pub_keys.len();
         let q_value = BigUint::one() << ((bit_length as usize) - 1);
 
         let mut keys = Vec::new();
 
         for key in &pub_keys {
-            let rsa_key = RsaPublicKey::from_pkcs1_pem(&key).unwrap();
+            let rsa_key = match RsaPublicKey::from_pkcs1_pem(&key) {
+                Ok(k) => k,
+                Err(_) => return Err(JsValue::from_str("Public key could not be processed.")),
+            };
             keys.push(rsa_key);
         }
 
-        let priv_key = RsaPrivateKey::from_pkcs1_pem(&priv_key).unwrap();
+        let priv_key = match RsaPrivateKey::from_pkcs1_pem(&priv_key) {
+            Ok(k) => k,
+            Err(_) => return Err(JsValue::from_str("Private key could not be processed.")),
+        };
 
-        Ring {
+        Ok(Ring {
             pub_keys: keys,
             priv_key,
             priv_key_index,
@@ -80,7 +99,7 @@ impl Ring {
             num_keys,
             q_value: q_value.into(),
             permutation: BigUint::default(),
-        }
+        })
     }
 
     fn compute_permutation(&mut self, message: &str) {
@@ -116,68 +135,59 @@ impl Ring {
         let mut signatures: Vec<BigUint> = vec![BigUint::zero(); n];
         let z = self.priv_key_index;
         let u: BigUint = rng.sample(RandomBits::new(self.q_value.bits()));
-        let new_val = self.compute_e(&u);
-        let mut c = new_val.clone();
-        let mut v = new_val.clone();
+        let mut v = self.compute_e(&u);
+        let mut sign_str: Vec<String> = Vec::new();
 
         for i in z..(n as u32) {
-            let sig:BigUint = rng.sample(RandomBits::new(self.q_value.bits()));
-            signatures[i as usize] = sig.clone();
-            let e = self.compute_g(&sig, self.pub_keys[i as usize].e(), self.pub_keys[i as usize].n());
-            v = self.compute_e(&(v.clone() ^ e.clone())).clone();
-            c = v.clone();
+            signatures[i as usize] = rng.sample(RandomBits::new(self.q_value.bits()));
+            let e = self.compute_g(
+                &signatures[i as usize],
+                self.pub_keys[i as usize].e(),
+                self.pub_keys[i as usize].n(),
+            );
+            let x = v ^ e;
+            v = self.compute_e(&x);
         }
+
+        sign_str.push(v.to_string());
+
         for i in 0..z {
-            let sig:BigUint = rng.sample(RandomBits::new(self.q_value.bits()));
-            signatures[i as usize] = sig.clone();
-            let e = self.compute_g(&sig, self.pub_keys[i as usize].e(), self.pub_keys[i as usize].n());
-            v = self.compute_e(&(v.clone() ^ e.clone())).clone();
+            signatures[i as usize] = rng.sample(RandomBits::new(self.q_value.bits()));
+            let e = self.compute_g(
+                &signatures[i as usize],
+                self.pub_keys[i as usize].e(),
+                self.pub_keys[i as usize].n(),
+            );
+            let x = v ^ e;
+            v = self.compute_e(&x);
         }
 
-        let priv_big = self.compute_g(&(v.clone() ^ u.clone()), &self.priv_key.d(), &self.priv_key.n());
+        let x = v ^ u;
+        let priv_big = self.compute_g(&x, &self.priv_key.d(), &self.priv_key.n());
 
-        let mut sign_str: Vec<String> = Vec::new();
-        sign_str.push(c.to_string());
-		for i in 0..z {
+        for i in 0..z {
             sign_str.push(signatures[i as usize].to_string());
         }
         sign_str.push(priv_big.to_string());
-		for i in z..(n as u32) {
+        for i in z..(n as u32) {
             sign_str.push(signatures[i as usize].to_string());
         }
         sign_str
     }
 
-    fn mod_pow(&mut self, base: BigUint, exp: BigUint, modulus: BigUint) -> BigUint {
-        if modulus == BigUint::one() {
-            return BigUint::zero();
-        }
-
-        let mut result = BigUint::one();
-        let mut base = base.clone() % modulus.clone();
-        let mut exp = exp.clone();
-
-        while exp > BigUint::zero() {
-            if exp.clone() % (BigUint::one() + BigUint::one()) == BigUint::one() {
-                result = (result.clone() * base.clone()) % modulus.clone();
-            }
-            exp >>= 1;
-            base = (base.clone() * base.clone()) % modulus.clone();
-        }
-
-        result
-    }
-
     #[wasm_bindgen]
-    pub fn compute_y0(&mut self, public_key: String, private_key: String) -> String {
+    pub fn compute_y0(&self, public_key: String, private_key: String) -> Result<String, JsValue> {
         let mut hasher = sha2::Sha384::new();
         hasher.update(public_key.as_bytes());
         let pub_key_hashed = hasher.finalize();
 
-        let priv_key = RsaPrivateKey::from_pkcs1_pem(&private_key).unwrap();
+        let priv_key = match RsaPrivateKey::from_pkcs1_pem(&private_key) {
+            Ok(k) => k,
+            Err(_) => return Err(JsValue::from_str("Private key could not be processed.")),
+        };
 
-        let y0 = self.mod_pow(BigUint::from_bytes_be(&pub_key_hashed), priv_key.d().clone(), priv_key.n().clone());
+        let y0 = BigUint::from_bytes_be(&pub_key_hashed).modpow(priv_key.d(), priv_key.n());
 
-        return y0.to_string();
+        Ok(y0.to_string())
     }
 }

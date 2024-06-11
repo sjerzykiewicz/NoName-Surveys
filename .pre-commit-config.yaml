@@ -79,3 +79,9 @@ repos:
         language: system
         files: ^frontend/
         pass_filenames: false
+
+      - id: rustfmt
+        name: rustfmt
+        entry: bash -c 'cd frontend/wasm && cargo fmt'
+        language: system
+        pass_filenames: false

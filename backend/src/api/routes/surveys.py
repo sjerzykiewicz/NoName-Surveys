@@ -129,6 +129,7 @@ async def create_survey(
         SurveyDraftBase(
             creator_id=user_id,
             survey_structure=survey_create.survey_structure.model_dump_json(),
+            is_deleted=True,
         ),
         session,
     )

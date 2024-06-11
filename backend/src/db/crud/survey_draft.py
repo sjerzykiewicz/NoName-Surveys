@@ -7,7 +7,9 @@ from src.db.models.survey_draft import SurveyDraft, SurveyDraftBase
 def get_survey_drafts_for_user(
     user_id: int, session: Session
 ) -> list[SurveyDraft]:
-    statement = select(SurveyDraft).where(SurveyDraft.creator_id == user_id)
+    statement = select(SurveyDraft).where(
+        (SurveyDraft.creator_id == user_id) & (SurveyDraft.is_deleted is False)
+    )
     drafts = session.exec(statement).all()
     return [draft for draft in drafts]
 
@@ -15,8 +17,20 @@ def get_survey_drafts_for_user(
 def get_survey_draft_by_id(
     survey_draft_id: int, session: Session
 ) -> SurveyDraft:
+    statement = select(SurveyDraft).where(
+        (SurveyDraft.id == survey_draft_id) & (SurveyDraft.is_deleted is False)
+    )
+    survey_draft = session.exec(statement).first()
+    return survey_draft
+
+
+def delete_survey_draft_by_id(
+    survey_draft_id: int, session: Session
+) -> SurveyDraft:
     statement = select(SurveyDraft).where(SurveyDraft.id == survey_draft_id)
     survey_draft = session.exec(statement).first()
+    survey_draft.is_deleted = True
+    session.commit()
     return survey_draft
 
 

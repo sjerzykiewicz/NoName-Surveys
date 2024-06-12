@@ -12,7 +12,7 @@
 	{#each numbers as i}
 		<tr>
 			<td
-				title="Click to view answer no. {i + 1}"
+				title="View answer no. {i + 1}"
 				class="title-entry"
 				on:click={() => goto($page.url.pathname + '/' + i)}>{i + 1}. Answer</td
 			>

@@ -182,34 +182,30 @@
 
 <table>
 	<tr>
-		<th title="Draft title" id="title-header" colspan="2">Draft Title</th>
-		<th title="Creation date" id="date-header">Date</th>
+		<th title="Draft title" id="title-header">Draft Title</th>
+		<th title="Creation date" id="date-header" colspan="2">Date</th>
 	</tr>
 	{#each drafts as draft, draftIndex}
 		<tr>
-			<td
-				title="Click to delete draft"
-				class="delete-entry"
-				on:click={() => deleteDraft(draftIndex)}
-			>
-				<i class="material-symbols-rounded">close</i></td
-			>
-			<td title="Click to open draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
+			<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
 				>{draft.title}</td
 			>
 			<td title="Creation date" class="date-entry">{draft.creation_date}</td>
+			<td title="Delete the draft" class="delete-entry" on:click={() => deleteDraft(draftIndex)}>
+				<i class="material-symbols-rounded">delete</i></td
+			>
 		</tr>
 	{/each}
 </table>
 
 <style>
-	#date-header {
-		width: 18%;
+	#title-header {
+		width: 77%;
 	}
 
 	@media screen and (max-width: 767px) {
-		#date-header {
-			width: 27%;
+		#title-header {
+			width: 62%;
 		}
 	}
 </style>

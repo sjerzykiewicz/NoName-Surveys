@@ -1,5 +1,4 @@
 <script lang="ts">
-	import WelcomingBanner from '$lib/components/home-page/WelcomingBanner.svelte';
 	import SurveyCodeForm from '$lib/components/home-page/SurveyCodeForm.svelte';
 	import { title, questions, answers } from '$lib/stores/fill-page';
 
@@ -10,5 +9,4 @@
 	$answers = [];
 </script>
 
-<WelcomingBanner />
 <SurveyCodeForm {form} />

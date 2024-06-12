@@ -21,12 +21,12 @@
 	{#each survey_list.toReversed() as entry, entryIndex}
 		<tr>
 			<td
-				title="Click to view summary"
+				title="View the summary"
 				class="title-entry"
 				on:click={() => goto('/' + entry.survey_code + '/summary')}>{entry.title}</td
 			>
 			<td
-				title={copiedIndex === entryIndex ? 'Copied!' : 'Click to copy code'}
+				title={copiedIndex === entryIndex ? 'Copied!' : 'Copy the code'}
 				class="code-entry"
 				on:click={() => {
 					copyCode(entry.survey_code);

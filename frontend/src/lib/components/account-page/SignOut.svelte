@@ -17,7 +17,6 @@
 	}
 
 	.sign-out {
-		margin-top: 1.5em;
 		font-size: 2em;
 	}
 </style>

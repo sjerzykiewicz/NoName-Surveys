@@ -5,11 +5,12 @@
 	export let form: ActionData;
 </script>
 
+<h1>NoName Anonymous Surveys</h1>
 <form method="POST" use:enhance>
 	<label for="code-input"
-		>Enter survey code
+		>Enter a survey code to fill it out
 		<input
-			title="Enter survey code"
+			title="Enter a survey code to fill it out"
 			id="code-input"
 			name="survey-code"
 			type="text"
@@ -28,6 +29,17 @@
 {/if}
 
 <style>
+	h1 {
+		text-align: center;
+		color: var(--text-color);
+		font-size: 2.5em;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		margin-top: 1em;
+		margin-left: 1em;
+		margin-right: 1em;
+		cursor: default;
+	}
+
 	label {
 		display: flex;
 		flex-flow: column;
@@ -39,6 +51,9 @@
 		font-weight: bold;
 		font-size: 2em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
+		margin-top: 1em;
+		margin-left: 1em;
+		margin-right: 1em;
 	}
 
 	input {

@@ -209,7 +209,7 @@
 	disabled={$questions.length === 0 || isPreview}
 	on:click={saveDraft}
 >
-	<i class="material-symbols-rounded">save</i>Save
+	<i class="material-symbols-rounded">save</i>Save Draft
 </button>
 <button
 	title="Finish survey creation"
@@ -217,7 +217,7 @@
 	disabled={$questions.length === 0 || isPreview}
 	on:click={createSurvey}
 >
-	<i class="material-symbols-rounded">done</i>Finish
+	<i class="material-symbols-rounded">done</i>Create
 </button>
 
 <style>

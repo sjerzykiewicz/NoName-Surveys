@@ -10,23 +10,28 @@
 	let innerHeight: number;
 
 	const navLinks = {
-		Home: {
+		Fill: {
+			name: 'Fill Out',
 			href: '/',
 			disabled: false
 		},
 		Create: {
+			name: 'Create',
 			href: '/create',
-			disabled: false
+			disabled: !$page.data.session
 		},
 		Drafts: {
+			name: 'Drafts',
 			href: '/drafts',
-			disabled: false
+			disabled: !$page.data.session
 		},
 		Surveys: {
+			name: 'Surveys',
 			href: '/surveys',
-			disabled: false
+			disabled: !$page.data.session
 		},
 		Account: {
+			name: 'Account',
 			href: '/account',
 			disabled: false
 		}
@@ -79,13 +84,14 @@
 {#if open || innerWidth > 767}
 	<div class="bar">
 		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
-			{#each Object.entries(navLinks) as [title, data]}
+			{#each Object.entries(navLinks) as [id, data]}
 				<a
+					{id}
 					href={data.href}
-					{title}
+					title={data.name}
 					class:active={$page.url.pathname === data.href}
 					on:click={hideNav}
-					class:disabled-link={data.disabled == true}>{title}</a
+					class:disabled-link={data.disabled == true}>{data.name}</a
 				>
 			{/each}
 		</nav>

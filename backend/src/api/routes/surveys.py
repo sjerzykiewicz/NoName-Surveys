@@ -18,6 +18,7 @@ from src.db.base import get_session
 from src.db.models.ring_member import RingMemberBase
 from src.db.models.survey import SurveyBase
 from src.db.models.survey_draft import SurveyDraftBase
+from src.util.random_generator import generate_survey_code
 
 router = APIRouter()
 
@@ -134,11 +135,15 @@ async def create_survey(
         session,
     )
 
+    survey_code = generate_survey_code()
+    while survey_crud.survey_code_taken(survey_code, session):
+        survey_code = generate_survey_code()
     survey = survey_crud.create_survey(
         SurveyBase(
             creator_id=user_id,
             uses_cryptographic_module=survey_create.uses_cryptographic_module,
             survey_structure_id=survey_draft.id,
+            survey_code=survey_code,
         ),
         session,
     )

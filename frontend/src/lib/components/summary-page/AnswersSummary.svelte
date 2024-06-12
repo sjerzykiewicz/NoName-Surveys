@@ -89,9 +89,10 @@
 					break;
 			}
 
-			if (answer != '') {
-				answers = [answer];
-			}
+			// this fixes the issue with indexes on text summary, but might break something else
+			// if (answer != '') {
+			answers = [answer];
+			// }
 
 			if (groupedAnswers.length <= id) {
 				groupedAnswers.push({

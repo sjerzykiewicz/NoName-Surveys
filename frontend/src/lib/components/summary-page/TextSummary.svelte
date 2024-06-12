@@ -12,9 +12,15 @@
 	{/if}
 	<div class="text-answers">
 		{#each data.answers as answer, i}
-			<a href="{$page.url.pathname}/{i}" title="Click to get all answers" class="text-area display">
-				{answer}
-			</a>
+			{#if answer}
+				<a
+					href="{$page.url.pathname}/{i}"
+					title="Click to get all answers"
+					class="text-area display"
+				>
+					{answer}
+				</a>
+			{/if}
 		{/each}
 	</div>
 </div>
@@ -22,6 +28,7 @@
 <style>
 	.text-answers {
 		overflow-y: auto;
+		min-height: 1.15em;
 		max-height: 15em;
 		background-color: var(--secondary-dark-color);
 		margin-left: 2.25em;
@@ -38,6 +45,7 @@
 		margin-bottom: 0.5em;
 		cursor: pointer;
 		text-decoration: none;
+		min-height: 1.15em;
 	}
 
 	.text-area:hover {

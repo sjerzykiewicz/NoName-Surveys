@@ -16,5 +16,6 @@
 		border: 1px solid var(--accent-color);
 		background-color: var(--secondary-dark-color);
 		color: var(--accent-color);
+		min-height: 1.15em;
 	}
 </style>

@@ -131,21 +131,14 @@
 	}
 
 	.info {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
 		font-size: 1em;
 		height: 2.2em;
 		min-width: 14em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		cursor: default;
-		overflow-wrap: break-word;
-		color: var(--text-color);
+		margin: 0em;
 	}
 
 	.info i {
 		font-size: 1.25em;
-		margin-right: 0.5em;
 	}
 
 	.text {
@@ -160,6 +153,15 @@
 		.user-list,
 		.info {
 			font-size: 0.8em;
+		}
+
+		.info {
+			flex-flow: row;
+		}
+
+		.info i {
+			margin-right: 0.5em;
+			margin-bottom: 0em;
 		}
 	}
 </style>

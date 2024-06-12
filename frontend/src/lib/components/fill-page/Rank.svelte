@@ -3,7 +3,7 @@
 
 	export let questionIndex: number;
 
-	$answers[questionIndex].choices = $questions[questionIndex].choices;
+	$answers[questionIndex].choices = [...$questions[questionIndex].choices];
 
 	function moveChoiceUp(index: number) {
 		const higher = $answers[questionIndex].choices[index - 1];

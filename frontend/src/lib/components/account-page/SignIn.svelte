@@ -1,15 +1,40 @@
 <script lang="ts">
 	import { signIn } from '@auth/sveltekit/client';
+	import Content from '$lib/components/Content.svelte';
 </script>
 
-<h1>Sign in with:</h1>
-<div class="sign-buttons">
-	<button title="Google" class="sign-in" on:click={() => signIn('google')}
-		><i class="fa-brands fa-google"></i></button
-	>
-	<button title="Microsoft" class="sign-in" disabled><i class="fa-brands fa-microsoft"></i></button>
-	<button title="GitHub" class="sign-in" disabled><i class="fa-brands fa-github"></i></button>
-</div>
+<Content>
+	<h1>Sign in with:</h1>
+	<div class="sign-buttons">
+		<button title="Google" class="sign-in" on:click={() => signIn('google')}
+			><i class="fa-brands fa-google"></i></button
+		>
+		<button title="Microsoft" class="sign-in" disabled
+			><i class="fa-brands fa-microsoft"></i></button
+		>
+		<button title="GitHub" class="sign-in" disabled><i class="fa-brands fa-github"></i></button>
+	</div>
+	<div title="Account information" class="info">
+		<div class="text">
+			Authorizing yourself will enable you to:
+			<ul>
+				<li>Create your own surveys,</li>
+				<li>Save survey drafts,</li>
+				<li>View your survey's results,</li>
+				<li>
+					Generate encryption keys that allow you to participate in secure surveys without needing
+					to sign in each time.
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div title="Account information" class="info">
+		<div class="text">
+			We do not recommend signing in if you only wish to fill out a survey. For secure surveys, if
+			you have already generated your encryption keys, signing in is also not necessary.
+		</div>
+	</div>
+</Content>
 
 <style>
 	h1 {
@@ -26,6 +51,7 @@
 		flex-flow: row;
 		align-items: center;
 		justify-content: center;
+		margin-bottom: 2em;
 	}
 
 	.sign-in {
@@ -37,9 +63,18 @@
 		font-size: 2em;
 	}
 
+	.info {
+		font-size: 1.1em;
+	}
+
 	@media screen and (max-width: 767px) {
 		h1 {
 			font-size: 2em;
+		}
+
+		.info {
+			margin-left: 0em;
+			margin-right: 0em;
 		}
 	}
 </style>

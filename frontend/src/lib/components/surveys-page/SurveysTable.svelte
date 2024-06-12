@@ -39,10 +39,6 @@
 </table>
 
 <style>
-	#title-header {
-		width: 70%;
-	}
-
 	#code-header {
 		width: 12%;
 	}
@@ -52,16 +48,12 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		#title-header {
-			width: 55%;
-		}
-
 		#code-header {
-			width: 19%;
+			width: 20%;
 		}
 
 		#date-header {
-			width: 26%;
+			width: 27%;
 		}
 	}
 </style>

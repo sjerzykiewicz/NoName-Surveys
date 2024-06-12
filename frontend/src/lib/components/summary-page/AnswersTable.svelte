@@ -19,9 +19,3 @@
 		</tr>
 	{/each}
 </table>
-
-<style>
-	#title-header {
-		width: 100%;
-	}
-</style>

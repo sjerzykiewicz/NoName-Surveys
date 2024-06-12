@@ -89,6 +89,16 @@ export const getDraftStructureById = (user_email: string, id: number) => {
 	});
 };
 
+export const deleteDraftStructureById = (user_email: string, id: number) => {
+	return fetch(`${host}/survey-drafts/delete`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, id }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
 export const registerUser = (user_email: string) => {
 	return fetch(`${host}/users/register`, {
 		method: 'POST',

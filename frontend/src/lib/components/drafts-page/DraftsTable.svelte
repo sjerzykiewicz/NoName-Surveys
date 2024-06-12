@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import type { BinaryQuestion } from '$lib/entities/questions/Binary';
 	import type { ListQuestion } from '$lib/entities/questions/List';
@@ -33,6 +33,23 @@
 		title: string;
 		creation_date: string;
 	}[];
+
+	function deleteDraft(i: number) {
+		fetch('/api/surveys/drafts/delete', {
+			method: 'POST',
+			body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: drafts[i].id }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(() => {
+				$title = '';
+				$questions = [];
+				drafts.splice(i, 1);
+				invalidateAll();
+			})
+			.catch(() => alert('Error deleting draft'));
+	}
 
 	function loadDraft(i: number) {
 		fetch('/api/surveys/drafts/fetch', {
@@ -165,11 +182,18 @@
 
 <table>
 	<tr>
-		<th title="Draft title" id="title-header">Draft Title</th>
+		<th title="Draft title" id="title-header" colspan="2">Draft Title</th>
 		<th title="Creation date" id="date-header">Date</th>
 	</tr>
 	{#each drafts as draft, draftIndex}
 		<tr>
+			<td
+				title="Click to delete draft"
+				class="delete-entry"
+				on:click={() => deleteDraft(draftIndex)}
+			>
+				<i class="material-symbols-rounded">close</i></td
+			>
 			<td title="Click to open draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
 				>{draft.title}</td
 			>
@@ -179,21 +203,13 @@
 </table>
 
 <style>
-	#title-header {
-		width: 82%;
-	}
-
 	#date-header {
 		width: 18%;
 	}
 
 	@media screen and (max-width: 767px) {
-		#title-header {
-			width: 74%;
-		}
-
 		#date-header {
-			width: 26%;
+			width: 27%;
 		}
 	}
 </style>

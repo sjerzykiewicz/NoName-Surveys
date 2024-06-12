@@ -1,3 +1,5 @@
+from secrets import randbelow
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
@@ -18,7 +20,6 @@ from src.db.base import get_session
 from src.db.models.ring_member import RingMemberBase
 from src.db.models.survey import SurveyBase
 from src.db.models.survey_draft import SurveyDraftBase
-from src.util.random_generator import generate_survey_code
 
 router = APIRouter()
 
@@ -135,9 +136,9 @@ async def create_survey(
         session,
     )
 
-    survey_code = generate_survey_code()
+    survey_code = "".join(str(randbelow(10)) for _ in range(6))
     while survey_crud.survey_code_taken(survey_code, session):
-        survey_code = generate_survey_code()
+        survey_code = "".join(str(randbelow(10)) for _ in range(6))
     survey = survey_crud.create_survey(
         SurveyBase(
             creator_id=user_id,

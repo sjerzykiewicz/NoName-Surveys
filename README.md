@@ -5,7 +5,7 @@ There are limited and unlimited access options:
 - **limited surveys** can be accessed only by specified users, and filled only one time.
 - **unlimited surveys** can be accessed by anyone.
 
-**Technology stack**: frontend is written in Svelte (TypeScript) and backend is written in FastAPI (python). Database can be anything that is supported by SQLAlchemy. Fsor cryptography stuff on the user side we've used rust (WebAssembly).
+**Technology stack**: frontend is written in Svelte (TypeScript) and backend is written in FastAPI (python). Database can be anything that is supported by SQLAlchemy. For cryptography stuff on the user side we've used rust (WebAssembly).
 
 ## Dependencies
 - npm

@@ -15,6 +15,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!frontend/src/lib
 lib64/
 parts/
 sdist/
@@ -177,6 +178,9 @@ coverage
 # dotenv environment variables file
 .env
 .env.test
+
+# dynaconf secret files
+.secrets.*
 
 # build output
 dist

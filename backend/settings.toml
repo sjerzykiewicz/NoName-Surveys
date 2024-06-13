@@ -1,0 +1,5 @@
+[prod]
+environment_type = "prod"
+
+[dev]
+environment_type = "dev"

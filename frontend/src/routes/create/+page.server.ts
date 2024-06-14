@@ -1,6 +1,6 @@
 import type { PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { session } = await parent();
@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 
 	const response = await db.getAllUsers();
 	if (!response.ok) {
-		error(response.status, await response.json());
+		error(response.status, { message: await response.json() });
 	}
 
 	const user_list = await response.json();

@@ -31,7 +31,7 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { tick } from 'svelte';
 	import { page } from '$app/stores';
-	import { responseErrorHandler } from '$lib/utils/responseErrorHandler';
+	import { error } from '@sveltejs/kit';
 
 	export let isPreview: boolean = false;
 
@@ -153,7 +153,7 @@
 		});
 
 		if (!response.ok) {
-			responseErrorHandler(response);
+			error(response.status, { message: await response.json() });
 		} else {
 			// TODO - display in UI
 			alert('Saved');
@@ -181,7 +181,7 @@
 		});
 
 		if (!response.ok) {
-			responseErrorHandler(response);
+			error(response.status, { message: await response.json() });
 		} else {
 			const body = await response.json();
 			$title = '';

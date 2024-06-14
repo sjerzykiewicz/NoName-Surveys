@@ -1,7 +1,6 @@
 import type { LayoutServerLoad } from './$types';
 import * as db from '$lib/server/database';
 import { error } from '@sveltejs/kit';
-import { responseErrorHandler } from '$lib/utils/responseErrorHandler';
 
 export const load: LayoutServerLoad = async ({ params, parent }) => {
 	const { session } = await parent();
@@ -11,11 +10,11 @@ export const load: LayoutServerLoad = async ({ params, parent }) => {
 	const code = params.code;
 	const surveyResponse = await db.getSurveyByCode(code);
 	if (!surveyResponse.ok) {
-		responseErrorHandler(surveyResponse);
+		error(surveyResponse.status, { message: await surveyResponse.json() });
 	}
 	const answersResponse = await db.getSurveyAnswers(session.user!.email!, code);
 	if (!answersResponse.ok) {
-		responseErrorHandler(answersResponse);
+		error(answersResponse.status, { message: await answersResponse.json() });
 	}
 
 	const survey = await surveyResponse.json();

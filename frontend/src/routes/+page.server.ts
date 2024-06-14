@@ -19,10 +19,9 @@ export const actions: Actions = {
 			});
 		}
 
-		try {
-			await db.getSurveyByCode(code.toString());
-		} catch (e) {
-			return fail(404, { description: code, error: 'Survey not found' });
+		const response = await db.getSurveyByCode(code.toString());
+		if (!response.ok) {
+			return fail(404, { error: 'Survey not found.' });
 		}
 
 		redirect(303, `/fill?code=${code}`);

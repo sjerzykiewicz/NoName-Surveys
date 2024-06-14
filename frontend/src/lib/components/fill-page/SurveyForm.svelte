@@ -32,7 +32,6 @@
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
 	import { Ring } from 'wasm';
-	import { error } from '@sveltejs/kit';
 
 	export let survey: Survey;
 	export let uses_crypto: boolean;
@@ -215,7 +214,8 @@
 		});
 
 		if (!response.ok) {
-			error(response.status, { message: await response.json() });
+			const body = await response.json();
+			alert(body.detail);
 		} else {
 			return await goto(`/`, { replaceState: true, invalidateAll: true });
 		}

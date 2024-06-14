@@ -19,7 +19,7 @@ export const { handle } = SvelteKitAuth({
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				const isUserRegistered = await db.validateUser(user.email!);
+				const isUserRegistered = await (await db.validateUser(user.email!)).json();
 				if (!isUserRegistered) {
 					await db.registerUser(user.email!);
 				}

@@ -801,7 +801,8 @@ tr:last-of-type th:last-of-type {
 	background-color: var(--border-color);
 }
 
-.date-entry {
+.date-entry,
+.crypto-entry {
 	cursor: default;
 }
 
@@ -812,7 +813,13 @@ tr:last-of-type th:last-of-type {
 	padding-right: 0.5em;
 }
 
-.delete-entry i {
+.crypto-entry {
+	width: 0em;
+	text-align: center;
+}
+
+.delete-entry i,
+.crypto-entry i {
 	padding-top: 0.2em;
 }
 

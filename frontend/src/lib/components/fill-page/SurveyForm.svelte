@@ -259,6 +259,13 @@
 			processCrypto();
 		} else processForm(undefined);
 	}
+
+	let filename: string = 'No file chosen';
+
+	function handleFileChange() {
+		filename =
+			document.querySelector<HTMLInputElement>('#keys-file')?.files?.[0]?.name ?? 'No file chosen';
+	}
 </script>
 
 <Header>
@@ -276,9 +283,17 @@
 		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
 	{#if uses_crypto}
-		<div class="upload-div">
-			<label for="file">Upload your keys</label>
-			<input type="file" name="keys" id="keys-file" />
+		<div title="Upload your encryption keys" class="upload-div">
+			<label for="keys-file"
+				>Upload your keys
+				<div class="file-input">
+					<span class="file-button"
+						><i class="material-symbols-rounded">upload_file</i>Choose File</span
+					>
+					<span class="file-name">{filename}</span>
+				</div>
+				<input type="file" name="keys" id="keys-file" on:change={handleFileChange} /></label
+			>
 		</div>
 	{/if}
 </Content>
@@ -291,45 +306,65 @@
 
 <style>
 	.upload-div {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
 		text-align: center;
 		color: var(--text-color);
 		font-size: 1.5em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
-		width: 100%;
-		margin-top: 1.5em;
-		margin-bottom: 1em;
+		width: fit-content;
+		max-width: 100%;
+		overflow: hidden;
+		margin-inline: auto;
+		margin-top: 3em;
 	}
 
 	input[type='file'] {
+		display: none;
+	}
+
+	.file-input {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
 		margin-top: 0.5em;
 		background-color: var(--secondary-dark-color);
 		border: 1px solid var(--border-color);
 		border-radius: 5px;
+		box-shadow: 0px 4px 4px var(--shadow-color);
+		padding: 0.5em;
 		font-size: 0.8em;
 		cursor: default;
 	}
 
-	input[type='file']::file-selector-button {
+	.file-button {
+		display: flex;
+		align-items: center;
 		padding: 0.25em;
 		background-color: var(--primary-color);
-		border: none;
-		border-right: 1px solid var(--border-color);
+		border: 1px solid var(--border-color);
+		border-radius: 5px;
+		box-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: none;
 		color: var(--text-color);
-		font-family: 'Jura';
 		cursor: pointer;
 		transition: 0.2s;
+		margin-right: 0.5em;
+		min-width: 7em;
 	}
 
-	input[type='file']::file-selector-button:hover {
+	.file-button:hover {
 		background-color: var(--secondary-color);
 	}
 
-	input[type='file']::file-selector-button:active {
+	.file-button:active {
 		background-color: var(--border-color);
+	}
+
+	.file-name {
+		overflow: hidden;
+		overflow-wrap: anywhere;
+		text-overflow: ellipsis;
+		height: 1.15em;
 	}
 
 	.save i {
@@ -338,22 +373,20 @@
 
 	@media screen and (max-width: 767px) {
 		.upload-div {
-			font-size: 1.1em;
+			font-size: 1.25em;
 		}
 
 		.save {
 			font-size: 1.5em;
 		}
 
-		input[type='file']::file-selector-button {
-			display: block;
-			width: 100%;
-			padding: 0.5em;
-			font-size: 1.25em;
+		.file-input {
+			flex-flow: column;
 		}
 
-		input[type='file'] {
-			text-align: center;
+		.file-button {
+			margin-right: 0em;
+			margin-bottom: 0.5em;
 		}
 	}
 </style>

@@ -1,7 +1,6 @@
 import type { PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
 import { error } from '@sveltejs/kit';
-import { responseErrorHandler } from '$lib/utils/responseErrorHandler';
 
 export const load: PageServerLoad = async ({ parent, url }) => {
 	const session = await parent();
@@ -13,7 +12,7 @@ export const load: PageServerLoad = async ({ parent, url }) => {
 
 	const response = await db.getSurveyByCode(survey_code);
 	if (!response.ok) {
-		responseErrorHandler(response);
+		error(response.status, { message: await response.json() });
 	}
 	const { survey_structure, uses_cryptographic_module, public_keys } = await response.json();
 

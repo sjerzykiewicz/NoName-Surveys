@@ -76,8 +76,12 @@
 
 {#if innerWidth <= 767}
 	<div class="nav-burger">
-		<a href="/" class="nav-burger-logo"><i class="material-symbols-rounded">shield_person</i></a>
-		<Hamburger bind:open --color="var(--text-color)" />
+		<a href="/" title="Fill Out" class="nav-burger-logo"
+			><i class="material-symbols-rounded">shield_person</i></a
+		>
+		<div title={open ? 'Close menu' : 'Open menu'}>
+			<Hamburger bind:open --color="var(--text-color)" />
+		</div>
 	</div>
 {/if}
 
@@ -87,11 +91,12 @@
 			{#each Object.entries(navLinks) as [id, data]}
 				<a
 					{id}
-					href={data.href}
-					title={data.name}
+					href={data.disabled ? '' : data.href}
+					title={data.disabled ? 'Sign in to access ' + data.name : data.name}
+					class="nav-link"
 					class:active={$page.url.pathname === data.href}
-					on:click={hideNav}
-					class:disabled-link={data.disabled == true}>{data.name}</a
+					class:disabled={data.disabled}
+					on:click={hideNav}>{data.name}</a
 				>
 			{/each}
 		</nav>
@@ -102,6 +107,7 @@
 	<button
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={toggleThemeMode}
+		title="Toggle theme mode"
 		class="toggle-mode"
 	>
 		<i class="material-symbols-rounded">{bulb}</i>
@@ -138,14 +144,13 @@
 
 	.nav-burger i {
 		font-size: 3em;
-		cursor: default;
 	}
 
 	.toggle-mode {
 		position: fixed;
 		justify-content: center;
 		top: 0.25em;
-		right: 0.5em;
+		right: 0.25em;
 		background-color: var(--primary-dark-color);
 		border: none;
 		font-size: 1.5em;
@@ -162,10 +167,19 @@
 	}
 
 	.nav-burger-logo {
-		all: unset;
+		color: var(--text-color);
+		text-decoration: none;
+		transition: 0.2s;
+		cursor: pointer;
 	}
 
-	a {
+	.nav-burger-logo:hover,
+	.nav-burger-logo:active {
+		background-color: transparent;
+		opacity: 0.7;
+	}
+
+	.nav-link {
 		padding: 0.5em 0 0.5em 0;
 		text-align: center;
 		color: var(--text-color);
@@ -176,22 +190,24 @@
 		text-decoration: none;
 	}
 
-	a:hover {
+	.nav-link:hover {
 		background-color: var(--primary-dark-color);
 	}
 
-	a:active {
+	.nav-link:active {
 		background-color: var(--border-color);
 	}
 
-	.active,
-	.active:hover {
+	.nav-link.active,
+	.nav-link.active:hover {
 		background-color: var(--accent-color);
 		color: var(--text-color-2);
 	}
 
-	.disabled-link {
-		pointer-events: none;
+	.nav-link.disabled,
+	.nav-link.disabled:hover,
+	.nav-link.disabled:active {
+		cursor: not-allowed;
 		color: var(--text-dark-color);
 		background-color: var(--secondary-color);
 	}
@@ -214,7 +230,7 @@
 			border-bottom: none;
 		}
 
-		a {
+		.nav-link {
 			border-top: 1px solid var(--border-color);
 			border-right: none;
 			border-bottom: none;

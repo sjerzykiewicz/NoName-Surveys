@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cubicInOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
+	import { page } from '$app/stores';
 
 	let scrollHeight: number;
 
@@ -11,7 +12,10 @@
 
 {#if showScrollToTop}
 	<button
+		title="Scroll to the top of the page"
 		class="scroll-to-top"
+		class:create-page={$page.url.pathname === '/create'}
+		class:fill-page={$page.url.pathname.startsWith('/fill')}
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
 	>
@@ -24,7 +28,7 @@
 		position: fixed;
 		justify-content: center;
 		bottom: 0.25em;
-		left: 0.5em;
+		left: 0.25em;
 		background-color: var(--primary-dark-color);
 		border: none;
 		font-size: 1.5em;
@@ -40,8 +44,15 @@
 		background-color: var(--border-color);
 	}
 
-	@media screen and (max-width: 360px) {
-		.scroll-to-top {
+	@media screen and (max-width: 767px) {
+		.scroll-to-top.fill-page {
+			left: 0.5em;
+			bottom: 0.5em;
+		}
+	}
+
+	@media screen and (max-width: 355px) {
+		.scroll-to-top.create-page {
 			bottom: 2.5em;
 		}
 	}

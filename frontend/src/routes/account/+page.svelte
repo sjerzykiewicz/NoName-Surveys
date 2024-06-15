@@ -101,7 +101,7 @@
 		text-shadow: 0px 4px 4px var(--shadow-color);
 		width: 100%;
 		margin-top: 1em;
-		margin-bottom: 5em;
+		margin-bottom: 3em;
 	}
 
 	.save {

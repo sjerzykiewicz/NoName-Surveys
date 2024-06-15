@@ -6,7 +6,7 @@ import { redirect } from '@sveltejs/kit';
 export const load: PageServerLoad = async ({ parent }) => {
 	const { session } = await parent();
 	if (!session) {
-		redirect(303, `/account?redirectTo=/drafts`);
+		redirect(303, `/account`);
 	}
 
 	const response = await db.getDraftsOfUser(session.user!.email!);

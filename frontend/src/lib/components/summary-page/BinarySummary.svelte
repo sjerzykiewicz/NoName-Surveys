@@ -49,7 +49,14 @@
 	}
 
 	.choice-percentage {
-		margin-left: none;
+		margin-left: 0em;
 		margin-top: 0.5em;
+	}
+
+	@media screen and (max-width: 767px) {
+		.choice-percentage {
+			margin-left: 0.5em;
+			margin-top: 0em;
+		}
 	}
 </style>

@@ -60,11 +60,8 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.choice {
-			font-size: 1.2em;
-		}
 		i {
-			font-size: 1.5em;
+			font-size: 1.25em;
 		}
 	}
 </style>

@@ -259,6 +259,13 @@
 			processCrypto();
 		} else processForm(undefined);
 	}
+
+	let filename: string = 'No file chosen';
+
+	function handleFileChange() {
+		filename =
+			document.querySelector<HTMLInputElement>('#keys-file')?.files?.[0]?.name ?? 'No file chosen';
+	}
 </script>
 
 <Header>
@@ -276,9 +283,25 @@
 		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
 	{#if uses_crypto}
-		<div class="upload-div">
-			<label for="file">Upload your keys</label>
-			<input type="file" name="keys" id="keys-file" />
+		<div title="Load your encryption keys" class="load-div">
+			<label for="keys-file"
+				>Load your keys
+				<div class="file-input">
+					<span class="file-button"
+						><i class="material-symbols-rounded">upload_file</i>Choose File</span
+					>
+					<span class="file-name">{filename}</span>
+				</div>
+				<input type="file" name="keys" id="keys-file" on:change={handleFileChange} /></label
+			>
+		</div>
+		<div title="Key information" class="info">
+			<i class="material-symbols-rounded">info</i>
+			<div class="text">
+				Please load the file which you have previously generated on this application. The file
+				contains your keys, necessary for cryptographic calculations which are needed for validating
+				your right to fill out this survey.
+			</div>
 		</div>
 	{/if}
 </Content>
@@ -290,70 +313,97 @@
 </Footer>
 
 <style>
-	.upload-div {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+	.load-div {
 		text-align: center;
 		color: var(--text-color);
 		font-size: 1.5em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
-		width: 100%;
-		margin-top: 1.5em;
-		margin-bottom: 1em;
+		width: fit-content;
+		max-width: 100%;
+		overflow: hidden;
+		margin-inline: auto;
+		margin-top: 3em;
 	}
 
 	input[type='file'] {
+		display: none;
+	}
+
+	.file-input {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
 		margin-top: 0.5em;
 		background-color: var(--secondary-dark-color);
 		border: 1px solid var(--border-color);
 		border-radius: 5px;
+		box-shadow: 0px 4px 4px var(--shadow-color);
+		padding: 0.5em;
 		font-size: 0.8em;
 		cursor: default;
 	}
 
-	input[type='file']::file-selector-button {
+	.file-button {
+		display: flex;
+		align-items: center;
 		padding: 0.25em;
 		background-color: var(--primary-color);
-		border: none;
-		border-right: 1px solid var(--border-color);
+		border: 1px solid var(--border-color);
+		border-radius: 5px;
+		box-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: none;
 		color: var(--text-color);
-		font-family: 'Jura';
 		cursor: pointer;
 		transition: 0.2s;
+		margin-right: 0.5em;
+		min-width: 7em;
 	}
 
-	input[type='file']::file-selector-button:hover {
+	.file-button:hover {
 		background-color: var(--secondary-color);
 	}
 
-	input[type='file']::file-selector-button:active {
+	.file-button:active {
 		background-color: var(--border-color);
+	}
+
+	.file-name {
+		overflow: hidden;
+		overflow-wrap: anywhere;
+		text-overflow: ellipsis;
+		height: 1.15em;
 	}
 
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}
 
+	.info {
+		font-size: 1em;
+		margin-left: 0em;
+	}
+
 	@media screen and (max-width: 767px) {
-		.upload-div {
-			font-size: 1.1em;
+		.load-div {
+			font-size: 1.25em;
 		}
 
 		.save {
 			font-size: 1.5em;
 		}
 
-		input[type='file']::file-selector-button {
-			display: block;
-			width: 100%;
-			padding: 0.5em;
-			font-size: 1.25em;
+		.file-input {
+			flex-flow: column;
 		}
 
-		input[type='file'] {
-			text-align: center;
+		.file-button {
+			margin-right: 0em;
+			margin-bottom: 0.5em;
+		}
+
+		.info {
+			font-size: 0.9em;
 		}
 	}
 </style>

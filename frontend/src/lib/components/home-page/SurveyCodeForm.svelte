@@ -7,10 +7,9 @@
 
 <h1>NoName Anonymous Surveys</h1>
 <form method="POST" use:enhance>
-	<label for="code-input"
+	<label title="Enter a survey code to fill it out" for="code-input"
 		>Enter a survey code to fill it out
 		<input
-			title="Enter a survey code to fill it out"
 			id="code-input"
 			name="survey-code"
 			type="text"

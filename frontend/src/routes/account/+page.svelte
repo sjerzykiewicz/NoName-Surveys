@@ -109,13 +109,17 @@
 	}
 
 	.info {
-		font-size: 0.67em;
+		font-size: 0.75em;
 		margin-left: 0em;
 	}
 
 	@media screen and (max-width: 767px) {
 		.save {
 			font-size: 0.9em;
+		}
+
+		.info {
+			font-size: 0.6em;
 		}
 	}
 </style>

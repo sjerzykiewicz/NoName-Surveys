@@ -17,3 +17,20 @@ test('disallows short code', async ({ page }) => {
 
 	await expect(page.getByTitle('Error')).toBeVisible();
 });
+
+// To pass this test you must remove BACKEND_HOST from env and run backend server locally
+test('warns about nonexistent survey', async ({ page }) => {
+	await page.goto('/');
+	// intercept all fetches and return 404
+	await page.route('**/surveys/fetch', async (route) => {
+		await route.fulfill({
+			status: 404,
+			contentType: 'text/plain',
+			body: '{ "detail": "Survey does not exist." }'
+		});
+	});
+	await page.getByTitle('Enter a survey code to fill it out').fill('123456');
+	await page.getByTitle('Submit code').click();
+
+	await expect(page.getByTitle('Error')).toBeVisible();
+});

@@ -15,6 +15,7 @@
 		title="Scroll to the top of the page"
 		class="scroll-to-top"
 		class:create-page={$page.url.pathname === '/create'}
+		class:fill-page={$page.url.pathname.startsWith('/fill')}
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
 	>
@@ -41,6 +42,13 @@
 
 	.scroll-to-top:active {
 		background-color: var(--border-color);
+	}
+
+	@media screen and (max-width: 767px) {
+		.scroll-to-top.fill-page {
+			left: 0.5em;
+			bottom: 0.5em;
+		}
 	}
 
 	@media screen and (max-width: 355px) {

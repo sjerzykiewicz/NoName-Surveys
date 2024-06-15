@@ -283,9 +283,9 @@
 		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
 	{#if uses_crypto}
-		<div title="Upload your encryption keys" class="upload-div">
+		<div title="Load your encryption keys" class="load-div">
 			<label for="keys-file"
-				>Upload your keys
+				>Load your keys
 				<div class="file-input">
 					<span class="file-button"
 						><i class="material-symbols-rounded">upload_file</i>Choose File</span
@@ -313,7 +313,7 @@
 </Footer>
 
 <style>
-	.upload-div {
+	.load-div {
 		text-align: center;
 		color: var(--text-color);
 		font-size: 1.5em;
@@ -385,7 +385,7 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.upload-div {
+		.load-div {
 			font-size: 1.25em;
 		}
 

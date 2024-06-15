@@ -295,6 +295,14 @@
 				<input type="file" name="keys" id="keys-file" on:change={handleFileChange} /></label
 			>
 		</div>
+		<div title="Key information" class="info">
+			<i class="material-symbols-rounded">info</i>
+			<div class="text">
+				Please load the file which you have previously generated on this application. The file
+				contains your keys, necessary for cryptographic calculations which are needed for validating
+				your right to fill out this survey.
+			</div>
+		</div>
 	{/if}
 </Content>
 
@@ -371,6 +379,11 @@
 		font-variation-settings: 'wght' 700;
 	}
 
+	.info {
+		font-size: 1em;
+		margin-left: 0em;
+	}
+
 	@media screen and (max-width: 767px) {
 		.upload-div {
 			font-size: 1.25em;
@@ -387,6 +400,10 @@
 		.file-button {
 			margin-right: 0em;
 			margin-bottom: 0.5em;
+		}
+
+		.info {
+			font-size: 0.9em;
 		}
 	}
 </style>

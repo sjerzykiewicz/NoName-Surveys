@@ -2,18 +2,22 @@ package server
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/sjerzykiewicz/NoName-Surveys/backend-go/internal/handlers"
 )
 
 func Create(port string) (*http.Server, error) {
-	server := &http.Server{}
-	server.Addr = port
-
 	sm := http.NewServeMux()
 	sm.HandleFunc("/ping", handlers.PingPong)
 
-	server.Handler = sm
+	//nolint: gomnd // 10 seconds now hardcoded
+	server := &http.Server{
+		Addr:              port,
+		Handler:           sm,
+		ReadTimeout:       10 * time.Second,
+		ReadHeaderTimeout: 0,
+	}
 
 	return server, nil
 }

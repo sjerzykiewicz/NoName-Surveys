@@ -18,25 +18,26 @@ func main() {
 
 	config, err := config.LoadConfig("dev")
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("unable to load config: %v", err)
 	}
 
 	log.Println(config)
 
 	server, err := server.Create(config.ServerPort)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("unable to create server: %v", err)
 	}
 
 	go func() {
-		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Fatalf("listen and serve returned an err: %v", err)
+		if err = server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			log.Printf("listen and serve returned an err: %v", err)
 		}
 	}()
 
 	<-ctx.Done()
 	log.Println("got interruption signal")
-	if err := server.Shutdown(context.TODO()); err != nil {
+
+	if err = server.Shutdown(context.TODO()); err != nil {
 		log.Printf("server shutdown returned an err: %v", err)
 	}
 

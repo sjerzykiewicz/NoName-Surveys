@@ -7,28 +7,28 @@ import (
 )
 
 type Config struct {
-	DbHost     string
-	DbPort     string
-	DbUser     string
-	DbPassword string
-	DbName     string
+	DBHost     string
+	DBPort     string
+	DBUser     string
+	DBPassword string
+	DBName     string
 	ServerPort string
 }
 
 func LoadConfig(appMode string) (Config, error) {
-	config := Config{}
+	var config Config
 
 	viper.SetConfigName("config")
 	viper.AddConfigPath("./")
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		return config, fmt.Errorf("fatal error config file: %v", err)
+		return config, fmt.Errorf("fatal error config file: %w", err)
 	}
 
 	err = viper.UnmarshalKey(appMode, &config)
 	if err != nil {
-		return config, fmt.Errorf("unable to decode maMode into struct, %v", err)
+		return config, fmt.Errorf("unable to decode maMode into struct, %w", err)
 	}
 
 	return config, nil

@@ -1,0 +1,15 @@
+[prod]
+DbHost = ""
+DbPort = ""
+DbUser = ""
+DbPassword = ""
+DbName = ""
+ServerPort = ":8000"
+
+[dev]
+DbHost = ""
+DbPort = ""
+DbUser = ""
+DbPassword = ""
+DbName = ""
+ServerPort = ":8000"

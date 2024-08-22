@@ -85,3 +85,10 @@ repos:
         entry: bash -c 'cd frontend/wasm && cargo fmt'
         language: system
         pass_filenames: false
+
+      - id: go-lint
+        name: go-lint
+        entry: bash -c 'cd backend-go && make lint'
+        language: system
+        files: ^backend-go/
+        pass_filenames: false

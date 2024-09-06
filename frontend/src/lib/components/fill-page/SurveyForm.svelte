@@ -30,8 +30,12 @@
 	import { goto } from '$app/navigation';
 	import KeyPair from '$lib/entities/KeyPair';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
-	import { tick } from 'svelte';
-	import { Ring } from 'wasm';
+	import { onMount, tick } from 'svelte';
+	import init, { linkable_ring_signature } from 'wasm';
+
+	onMount(async () => {
+		await init();
+	});
 
 	export let survey: Survey;
 	export let uses_crypto: boolean;
@@ -177,7 +181,6 @@
 		}
 
 		let signature: string[] = [];
-		let y0 = '';
 
 		const answerList: Array<Question> = constructAnswerList();
 
@@ -185,25 +188,16 @@
 			const privateKey = keyPair!.privateKey;
 			const publicKey = keyPair!.publicKey;
 			const index = keys.indexOf(publicKey);
-			const keysFiltered = keys.filter((k) => k !== publicKey);
 
-			let pubkeyConcat = keysFiltered.join('');
 			try {
-				const ring = Ring.new(keysFiltered, privateKey, index, 2048);
-				try {
-					signature = ring.sign(code);
-					y0 = ring.compute_y0(pubkeyConcat, privateKey);
-				} catch {
-					alert('Unexpected error.');
-					return;
-				}
+				signature = linkable_ring_signature(code, keys, privateKey, index);
 			} catch (e) {
 				alert(e);
 				return;
 			}
 		}
 
-		const answer = new SurveyAnswer(code, answerList, signature, y0);
+		const answer = new SurveyAnswer(code, answerList, signature);
 
 		const response = await fetch('/api/surveys/fill', {
 			method: 'POST',
@@ -222,7 +216,7 @@
 	}
 
 	function getKeys(text: string): KeyPair {
-		const words = text.split('----------------------------------------------------------------\n');
+		const words = text.split('\n');
 
 		let publicKey = words[0];
 		let privateKey = words[1];

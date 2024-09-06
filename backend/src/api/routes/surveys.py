@@ -73,14 +73,16 @@ async def get_survey_by_code(
         ),
         survey_code=survey.survey_code,
         uses_cryptographic_module=survey.uses_cryptographic_module,
-        public_keys=[
-            ring_member.public_key
-            for ring_member in ring_member_crud.get_ring_members_for_survey(
-                survey.id, session
-            )
-        ]
-        if survey.uses_cryptographic_module
-        else [],
+        public_keys=(
+            [
+                ring_member.public_key
+                for ring_member in ring_member_crud.get_ring_members_for_survey(
+                    survey.id, session
+                )
+            ]
+            if survey.uses_cryptographic_module
+            else []
+        ),
     )
 
 

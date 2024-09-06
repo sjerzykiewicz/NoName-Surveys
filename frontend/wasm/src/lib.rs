@@ -1,12 +1,9 @@
-use num_bigint_dig::algorithms::div_rem;
-use num_bigint_dig::{BigUint, RandomBits};
+/*
+    First attempt at LRS implementation. This implementation is not confirmed to be secure and is only for testing and demonstration purposes.
+*/
+
+use num_bigint::{BigUint, RandBigInt};
 use num_traits::{One, Zero};
-use rand::Rng;
-use rsa::pkcs1::{
-    DecodeRsaPrivateKey, DecodeRsaPublicKey, EncodeRsaPrivateKey, EncodeRsaPublicKey,
-};
-use rsa::traits::{PrivateKeyParts, PublicKeyParts};
-use rsa::{RsaPrivateKey, RsaPublicKey};
 use sha2::Digest;
 use wasm_bindgen::prelude::*;
 
@@ -29,165 +26,143 @@ impl KeyPair {
 
 #[wasm_bindgen]
 pub fn get_keypair() -> Result<KeyPair, JsValue> {
+    let prime: BigUint = BigUint::parse_bytes(b"87A8E61DB4B6663CFFBBD19C651959998CEEF608660DD0F25D2CEED4435E3B00E00DF8F1D61957D4FAF7DF4561B2AA3016C3D91134096FAA3BF4296D830E9A7C209E0C6497517ABD5A8A9D306BCF67ED91F9E6725B4758C022E0B1EF4275BF7B6C5BFC11D45F9088B941F54EB1E59BB8BC39A0BF12307F5C4FDB70C581B23F76B63ACAE1CAA6B7902D52526735488A0EF13C6D9A51BFA4AB3AD8347796524D8EF6A167B5A41825D967E144E5140564251CCACB83E6B486F6B3CA3F7971506026C0B857F689962856DED4010ABD0BE621C3A3960A54E710C375F26375D7014103A4B54330C198AF126116D2276E11715F693877FAD7EF09CADB094AE91E1A1597", 16).unwrap();
+    let order: BigUint = BigUint::parse_bytes(
+        b"8CF83642A709A097B447997640129DA299B1A47D1EB3750BA308B0FE64F5FBD3",
+        16,
+    )
+    .unwrap();
+    let generator: BigUint = BigUint::parse_bytes(b"3FB32C9B73134D0B2E77506660EDBD484CA7B18F21EF205407F4793A1A0BA12510DBC15077BE463FFF4FED4AAC0BB555BE3A6C1B0C6B47B1BC3773BF7E8C6F62901228F8C28CBB18A55AE31341000A650196F931C77A57F2DDF463E5E9EC144B777DE62AAAB8A8628AC376D282D6ED3864E67982428EBC831D14348F6F2F9193B5045AF2767164E1DFC967C1FB3F2E55A4BD1BFFE83B9C80D052B985D182EA0ADB2A3B7313D3FE14C8484B1E052588B9B7D2BBD2DF016199ECD06E1557CD0915B3353BBB64E0EC377FD028370DF92B52C7891428CDC67EB6184B523D1DB246C32F63078490F00EF8D647D148D47954515E2327CFEF98C582664B4C0F6CC41659", 16).unwrap();
+
     let mut rng = rand::thread_rng();
-    let bits = 2048;
-
-    let priv_key = match RsaPrivateKey::new(&mut rng, bits) {
-        Ok(key) => key,
-        Err(_) => return Err(JsValue::from_str("Failed to generate a key.")),
-    };
-
-    let pub_key = RsaPublicKey::from(&priv_key);
-
-    let private_pem = match priv_key.to_pkcs1_pem(rsa::pkcs1::LineEnding::LF) {
-        Ok(k) => k,
-        Err(_) => return Err(JsValue::from_str("Failed to export private key.")),
-    };
-    let public_pem = match pub_key.to_pkcs1_pem(rsa::pkcs1::LineEnding::LF) {
-        Ok(k) => k,
-        Err(_) => return Err(JsValue::from_str("Failed to export public key.")),
-    };
+    let priv_key = rng.gen_biguint_below(&order);
+    let pub_key = generator.modpow(&priv_key, &prime);
 
     Ok(KeyPair {
-        private_key: private_pem.to_string(),
-        public_key: public_pem,
+        private_key: priv_key.to_string(),
+        public_key: pub_key.to_string(),
     })
 }
 
-#[wasm_bindgen]
-pub struct Ring {
-    pub_keys: Vec<RsaPublicKey>,
-    priv_key: RsaPrivateKey,
-    priv_key_index: u32,
-    bit_length: u32,
-    num_keys: usize,
-    q_value: BigUint,
-    permutation: BigUint,
+// h1 : {0,1}* -> Zq
+// k = 384 >= log2(q) + 128
+// hash to {0,1}^k, reduce mod q
+// TODO - first version, might change in future
+fn h1(x: &String) -> BigUint {
+    let mut hasher = sha2::Sha384::new();
+    hasher.update(x.as_bytes());
+    let h = hasher.finalize();
+    let int = BigUint::from_bytes_be(&h);
+
+    let q: BigUint = BigUint::parse_bytes(
+        b"8CF83642A709A097B447997640129DA299B1A47D1EB3750BA308B0FE64F5FBD3",
+        16,
+    )
+    .unwrap();
+
+    int.modpow(&BigUint::one(), &q)
+}
+
+// h2 : {0,1}* -> <g>
+// TODO - this is a naive version and will be replaced by a different hash
+fn h2(x: &String) -> BigUint {
+    let p: BigUint = BigUint::parse_bytes(b"87A8E61DB4B6663CFFBBD19C651959998CEEF608660DD0F25D2CEED4435E3B00E00DF8F1D61957D4FAF7DF4561B2AA3016C3D91134096FAA3BF4296D830E9A7C209E0C6497517ABD5A8A9D306BCF67ED91F9E6725B4758C022E0B1EF4275BF7B6C5BFC11D45F9088B941F54EB1E59BB8BC39A0BF12307F5C4FDB70C581B23F76B63ACAE1CAA6B7902D52526735488A0EF13C6D9A51BFA4AB3AD8347796524D8EF6A167B5A41825D967E144E5140564251CCACB83E6B486F6B3CA3F7971506026C0B857F689962856DED4010ABD0BE621C3A3960A54E710C375F26375D7014103A4B54330C198AF126116D2276E11715F693877FAD7EF09CADB094AE91E1A1597", 16).unwrap();
+    let g: BigUint = BigUint::parse_bytes(b"3FB32C9B73134D0B2E77506660EDBD484CA7B18F21EF205407F4793A1A0BA12510DBC15077BE463FFF4FED4AAC0BB555BE3A6C1B0C6B47B1BC3773BF7E8C6F62901228F8C28CBB18A55AE31341000A650196F931C77A57F2DDF463E5E9EC144B777DE62AAAB8A8628AC376D282D6ED3864E67982428EBC831D14348F6F2F9193B5045AF2767164E1DFC967C1FB3F2E55A4BD1BFFE83B9C80D052B985D182EA0ADB2A3B7313D3FE14C8484B1E052588B9B7D2BBD2DF016199ECD06E1557CD0915B3353BBB64E0EC377FD028370DF92B52C7891428CDC67EB6184B523D1DB246C32F63078490F00EF8D647D148D47954515E2327CFEF98C582664B4C0F6CC41659", 16).unwrap();
+
+    g.modpow(&h1(x), &p)
 }
 
 #[wasm_bindgen]
-impl Ring {
-    pub fn new(
-        pub_keys: Vec<String>,
-        priv_key: String,
-        priv_key_index: u32,
-        bit_length: u32,
-    ) -> Result<Ring, JsValue> {
-        let num_keys = pub_keys.len();
-        let q_value = BigUint::one() << ((bit_length as usize) - 1);
 
-        let mut keys = Vec::new();
+pub fn linkable_ring_signature(
+    m: String,
+    pub_keys: Vec<String>,
+    priv_key: String,
+    index: u32,
+) -> Vec<String> {
+    let p: BigUint = BigUint::parse_bytes(b"87A8E61DB4B6663CFFBBD19C651959998CEEF608660DD0F25D2CEED4435E3B00E00DF8F1D61957D4FAF7DF4561B2AA3016C3D91134096FAA3BF4296D830E9A7C209E0C6497517ABD5A8A9D306BCF67ED91F9E6725B4758C022E0B1EF4275BF7B6C5BFC11D45F9088B941F54EB1E59BB8BC39A0BF12307F5C4FDB70C581B23F76B63ACAE1CAA6B7902D52526735488A0EF13C6D9A51BFA4AB3AD8347796524D8EF6A167B5A41825D967E144E5140564251CCACB83E6B486F6B3CA3F7971506026C0B857F689962856DED4010ABD0BE621C3A3960A54E710C375F26375D7014103A4B54330C198AF126116D2276E11715F693877FAD7EF09CADB094AE91E1A1597", 16).unwrap();
+    let q: BigUint = BigUint::parse_bytes(
+        b"8CF83642A709A097B447997640129DA299B1A47D1EB3750BA308B0FE64F5FBD3",
+        16,
+    )
+    .unwrap();
+    let g: BigUint = BigUint::parse_bytes(b"3FB32C9B73134D0B2E77506660EDBD484CA7B18F21EF205407F4793A1A0BA12510DBC15077BE463FFF4FED4AAC0BB555BE3A6C1B0C6B47B1BC3773BF7E8C6F62901228F8C28CBB18A55AE31341000A650196F931C77A57F2DDF463E5E9EC144B777DE62AAAB8A8628AC376D282D6ED3864E67982428EBC831D14348F6F2F9193B5045AF2767164E1DFC967C1FB3F2E55A4BD1BFFE83B9C80D052B985D182EA0ADB2A3B7313D3FE14C8484B1E052588B9B7D2BBD2DF016199ECD06E1557CD0915B3353BBB64E0EC377FD028370DF92B52C7891428CDC67EB6184B523D1DB246C32F63078490F00EF8D647D148D47954515E2327CFEF98C582664B4C0F6CC41659", 16).unwrap();
 
-        for key in &pub_keys {
-            let rsa_key = match RsaPublicKey::from_pkcs1_pem(&key) {
-                Ok(k) => k,
-                Err(_) => return Err(JsValue::from_str("Public key could not be processed.")),
-            };
-            keys.push(rsa_key);
-        }
+    // TODO - concatenation of keys is not an ideal method, some encoding will be used in future
+    let keys_concatenated = pub_keys.join("");
 
-        let priv_key = match RsaPrivateKey::from_pkcs1_pem(&priv_key) {
-            Ok(k) => k,
-            Err(_) => return Err(JsValue::from_str("Private key could not be processed.")),
-        };
+    let h = h2(&keys_concatenated);
+    let y0 = h.modpow(&priv_key.parse::<BigUint>().unwrap(), &p);
 
-        Ok(Ring {
-            pub_keys: keys,
-            priv_key,
-            priv_key_index,
-            bit_length,
-            num_keys,
-            q_value: q_value.into(),
-            permutation: BigUint::default(),
-        })
+    let mut rng = rand::thread_rng();
+    let r = rng.gen_biguint_below(&q);
+
+    let n = pub_keys.len();
+    let mut c: Vec<BigUint> = vec![BigUint::zero(); n];
+    let mut s: Vec<BigUint> = vec![BigUint::zero(); n];
+    let mut z_1: Vec<BigUint> = vec![BigUint::zero(); n];
+    let mut z_2: Vec<BigUint> = vec![BigUint::zero(); n];
+    let mut sum_c_i = BigUint::zero();
+
+    for i in 0..index {
+        s[i as usize] = rng.gen_biguint_below(&q);
+        c[i as usize] = rng.gen_biguint_below(&q);
+        sum_c_i += &c[i as usize];
+        let y_i = pub_keys[i as usize].parse::<BigUint>().unwrap();
+        z_1[i as usize] = (g.modpow(&s[i as usize], &p) * y_i.modpow(&c[i as usize], &p)) % &p;
+        z_2[i as usize] = (h.modpow(&s[i as usize], &p) * y0.modpow(&c[i as usize], &p)) % &p;
     }
 
-    fn compute_permutation(&mut self, message: &str) {
-        let mut hasher = sha2::Sha384::new();
-        hasher.update(message.as_bytes());
-        let result = hasher.finalize();
-        self.permutation = BigUint::from_bytes_be(&result);
+    z_1[index as usize] = g.modpow(&r, &p);
+    z_2[index as usize] = h.modpow(&r, &p);
+
+    for i in index + 1..n as u32 {
+        s[i as usize] = rng.gen_biguint_below(&q);
+        c[i as usize] = rng.gen_biguint_below(&q);
+        sum_c_i += &c[i as usize];
+        let y_i = pub_keys[i as usize].parse::<BigUint>().unwrap();
+        z_1[i as usize] = (g.modpow(&s[i as usize], &p) * y_i.modpow(&c[i as usize], &p)) % &p;
+        z_2[i as usize] = (h.modpow(&s[i as usize], &p) * y0.modpow(&c[i as usize], &p)) % &p;
     }
 
-    fn compute_e(&self, x: &BigUint) -> BigUint {
-        let input = format!("{}{}", x, self.permutation);
-        let mut hasher = sha2::Sha384::new();
-        hasher.update(input.as_bytes());
-        BigUint::from_bytes_be(&hasher.finalize())
+    let z_1_concatenated = z_1
+        .iter()
+        .map(|x| x.to_string())
+        .collect::<Vec<String>>()
+        .join("");
+    let z_2_concatenated = z_2
+        .iter()
+        .map(|x| x.to_string())
+        .collect::<Vec<String>>()
+        .join("");
+
+    let for_hash: String =
+        keys_concatenated + &y0.to_string() + &m + &z_1_concatenated + &z_2_concatenated;
+
+    let hash_val: BigUint = h1(&for_hash);
+
+    sum_c_i = sum_c_i % &q;
+
+    c[index as usize] = if hash_val >= sum_c_i {
+        hash_val - sum_c_i
+    } else {
+        &q - sum_c_i + hash_val
+    };
+
+    let prod: BigUint = (&c[index as usize] * priv_key.parse::<BigUint>().unwrap()) % &q;
+
+    s[index as usize] = if r >= prod { r - prod } else { &q - prod + r };
+
+    let mut sig: Vec<String> = Vec::new();
+    sig.push(y0.to_string());
+
+    for i in 0..n {
+        sig.push(s[i as usize].to_string());
     }
 
-    fn compute_g(&self, x: &BigUint, e: &BigUint, n: &BigUint) -> BigUint {
-        let (quotient, remainder) = div_rem(x, n);
-        let result = remainder.modpow(e, n);
-        let n_quotient = quotient.clone();
-        if (n_quotient + 1u8) * n <= (BigUint::one() << self.bit_length as usize) - 1u8 {
-            quotient * n + result
-        } else {
-            x.clone()
-        }
+    for i in 0..n {
+        sig.push(c[i as usize].to_string());
     }
 
-    #[wasm_bindgen]
-    pub fn sign(&mut self, message: &str) -> Vec<String> {
-        let mut rng = rand::thread_rng();
-        self.compute_permutation(message);
-        let n = self.num_keys;
-        let mut signatures: Vec<BigUint> = vec![BigUint::zero(); n];
-        let z = self.priv_key_index;
-        let u: BigUint = rng.sample(RandomBits::new(self.q_value.bits()));
-        let mut v = self.compute_e(&u);
-        let mut sign_str: Vec<String> = Vec::new();
-
-        for i in z..(n as u32) {
-            signatures[i as usize] = rng.sample(RandomBits::new(self.q_value.bits()));
-            let e = self.compute_g(
-                &signatures[i as usize],
-                self.pub_keys[i as usize].e(),
-                self.pub_keys[i as usize].n(),
-            );
-            let x = v ^ e;
-            v = self.compute_e(&x);
-        }
-
-        sign_str.push(v.to_string());
-
-        for i in 0..z {
-            signatures[i as usize] = rng.sample(RandomBits::new(self.q_value.bits()));
-            let e = self.compute_g(
-                &signatures[i as usize],
-                self.pub_keys[i as usize].e(),
-                self.pub_keys[i as usize].n(),
-            );
-            let x = v ^ e;
-            v = self.compute_e(&x);
-        }
-
-        let x = v ^ u;
-        let priv_big = self.compute_g(&x, &self.priv_key.d(), &self.priv_key.n());
-
-        for i in 0..z {
-            sign_str.push(signatures[i as usize].to_string());
-        }
-        sign_str.push(priv_big.to_string());
-        for i in z..(n as u32) {
-            sign_str.push(signatures[i as usize].to_string());
-        }
-        sign_str
-    }
-
-    #[wasm_bindgen]
-    pub fn compute_y0(&self, public_key: String, private_key: String) -> Result<String, JsValue> {
-        let mut hasher = sha2::Sha384::new();
-        hasher.update(public_key.as_bytes());
-        let pub_key_hashed = hasher.finalize();
-
-        let priv_key = match RsaPrivateKey::from_pkcs1_pem(&private_key) {
-            Ok(k) => k,
-            Err(_) => return Err(JsValue::from_str("Private key could not be processed.")),
-        };
-
-        let y0 = BigUint::from_bytes_be(&pub_key_hashed).modpow(priv_key.d(), priv_key.n());
-
-        Ok(y0.to_string())
-    }
+    sig
 }

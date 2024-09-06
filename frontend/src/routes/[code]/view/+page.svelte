@@ -36,7 +36,7 @@
 		><i class="material-symbols-rounded">content_copy</i>
 		{isCopied ? 'Copied!' : 'Copy'}</button
 	>
-	<a href="/fill?code={data.code}" title="Go to fill page" class="qr-code">
+	<a href="/fill?code={data.code}" title="Fill out the survey" class="qr-code">
 		<QrCode data={url} size={calculateSize(innerWidth)} />
 	</a>
 </div>

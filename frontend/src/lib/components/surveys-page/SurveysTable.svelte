@@ -14,12 +14,24 @@
 
 <table>
 	<tr>
-		<th title="Survey title" id="title-header">Survey Title</th>
+		<th title="Survey title" id="title-header" colspan="2">Survey Title</th>
 		<th title="Access code" id="code-header">Code</th>
 		<th title="Creation date" id="date-header">Date</th>
 	</tr>
 	{#each survey_list.toReversed() as entry, entryIndex}
 		<tr>
+			{#if entry.uses_cryptographic_module}
+				<td
+					title="This survey has an established group of possible respondents"
+					class="crypto-entry"
+				>
+					<i class="material-symbols-rounded">encrypted</i>
+				</td>
+			{:else}
+				<td title="Everyone can submit an answer to this survey" class="crypto-entry">
+					<i class="material-symbols-rounded">public</i>
+				</td>
+			{/if}
 			<td
 				title="View the summary"
 				class="title-entry"

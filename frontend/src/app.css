@@ -99,28 +99,38 @@ body {
 	box-shadow: none !important;
 }
 
+.user-list *:where(div.multiselect > ul.selected) {
+	max-height: 19em;
+	overflow-y: auto;
+}
+
 :root::-webkit-scrollbar,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar {
+.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar,
+.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar {
 	width: 1em;
 }
 
 :root::-webkit-scrollbar-track,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-track {
+.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-track,
+.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-track {
 	background-color: var(--secondary-dark-color);
 }
 
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-track {
+.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-track,
+.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-track {
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
 }
 
 :root::-webkit-scrollbar-corner,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-corner {
+.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-corner,
+.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-corner {
 	background-color: var(--secondary-dark-color);
 }
 
 :root::-webkit-scrollbar-thumb,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb {
+.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb,
+.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb {
 	background-color: var(--primary-color);
 	background-clip: padding-box;
 	border-radius: 5px;
@@ -128,12 +138,14 @@ body {
 }
 
 :root::-webkit-scrollbar-thumb:hover,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:hover {
+.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:hover,
+.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb:hover {
 	background-color: var(--text-dark-color);
 }
 
 :root::-webkit-scrollbar-thumb:active,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:active {
+.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:active,
+.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb:active {
 	background-color: var(--border-color);
 }
 
@@ -206,7 +218,8 @@ button:active,
 .error i,
 .save i,
 .back i,
-.sign-out i {
+.sign-out i,
+.file-button i {
 	margin-right: 0.15em;
 }
 
@@ -791,7 +804,8 @@ tr:last-of-type th:last-of-type {
 	background-color: var(--border-color);
 }
 
-.date-entry {
+.date-entry,
+.crypto-entry {
 	cursor: default;
 }
 
@@ -802,7 +816,13 @@ tr:last-of-type th:last-of-type {
 	padding-right: 0.5em;
 }
 
-.delete-entry i {
+.crypto-entry {
+	width: 0em;
+	text-align: center;
+}
+
+.delete-entry i,
+.crypto-entry i {
 	padding-top: 0.2em;
 }
 
@@ -994,5 +1014,9 @@ tr:last-of-type th:last-of-type {
 
 	.delete-entry {
 		width: 1.5em;
+	}
+
+	.user-list *:where(div.multiselect > ul.selected) {
+		max-height: 15.5em;
 	}
 }

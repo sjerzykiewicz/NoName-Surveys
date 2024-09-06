@@ -64,7 +64,7 @@
 	}
 
 	.info {
-		font-size: 1.1em;
+		font-size: 1.25em;
 	}
 
 	@media screen and (max-width: 767px) {
@@ -73,6 +73,7 @@
 		}
 
 		.info {
+			font-size: 1em;
 			margin-left: 0em;
 			margin-right: 0em;
 		}

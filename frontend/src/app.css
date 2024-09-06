@@ -12,6 +12,8 @@
 	--accent-color: #0075ff;
 	--accent-dark-color: #005cc8;
 	--error-color: #ff3333;
+
+	--tooltip-width: 12em;
 }
 
 :root[data-color-scheme='light'] {
@@ -72,6 +74,7 @@ body {
 	background: linear-gradient(0deg, var(--secondary-dark-color) 0%, var(--secondary-color) 100%);
 	background-attachment: fixed;
 	margin: 0px;
+	overflow-x: hidden;
 }
 
 .hamburger {
@@ -803,6 +806,122 @@ tr:last-of-type th:last-of-type {
 	padding-top: 0.2em;
 }
 
+/* tooltips */
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+	cursor: help;
+}
+
+.tooltip i {
+	font-size: 1.5em;
+	color: var(--border-color);
+}
+
+.tooltip .tooltip-text {
+	position: absolute;
+	z-index: 1;
+
+	width: var(--tooltip-width);
+	padding: 0.5em;
+	border-radius: 5px;
+	background: var(--secondary-dark-color);
+	color: var(--text-color);
+	text-align: center;
+
+	visibility: hidden;
+	opacity: 0;
+	transition: 0.2s opacity;
+}
+
+.tooltip .tooltip-text.top {
+	left: 50%;
+	margin-left: calc(var(--tooltip-width) / -2);
+
+	bottom: 100%;
+	margin-bottom: 0.5em;
+}
+
+.tooltip .tooltip-text.right {
+	top: 50%;
+	transform: translateY(-50%);
+
+	left: 100%;
+	margin-left: 0.5em;
+}
+
+.tooltip .tooltip-text.bottom {
+	left: 50%;
+	margin-left: calc(var(--tooltip-width) / -2);
+
+	top: 100%;
+	margin-top: 0.5em;
+}
+
+.tooltip .tooltip-text.left {
+	top: 50%;
+	transform: translateY(-50%);
+
+	right: 100%;
+	margin-right: 0.5em;
+}
+
+.tooltip .tooltip-text::after {
+	content: ' ';
+	position: absolute;
+
+	border: 0.5em solid var(--secondary-dark-color);
+
+	visibility: hidden;
+	opacity: 0;
+	transition: 0.2s opacity;
+}
+
+.tooltip .tooltip-text.top::after {
+	top: 100%;
+
+	left: 50%;
+	margin-left: -1em;
+
+	border-color: var(--secondary-dark-color) transparent transparent transparent;
+}
+
+.tooltip .tooltip-text.right::after {
+	right: 100%;
+	margin-left: -0.5em;
+
+	top: 50%;
+	transform: translateY(-50%);
+
+	border-color: transparent var(--secondary-dark-color) transparent transparent;
+}
+
+.tooltip .tooltip-text.bottom::after {
+	bottom: 100%;
+
+	left: 50%;
+	margin-left: -1em;
+
+	border-color: transparent transparent var(--secondary-dark-color) transparent;
+}
+
+.tooltip .tooltip-text.left::after {
+	left: 100%;
+	margin-right: -0.5em;
+
+	top: 50%;
+	transform: translateY(-50%);
+
+	border-color: transparent transparent transparent var(--secondary-dark-color);
+}
+
+.tooltip:hover .tooltip-text,
+.tooltip:hover .tooltip-text::after {
+	visibility: visible;
+	opacity: 1;
+}
+
 @media screen and (max-width: 767px) {
 	.title {
 		font-size: 1.25em;
@@ -828,7 +947,8 @@ tr:last-of-type th:last-of-type {
 	}
 
 	.error,
-	table {
+	table,
+	.tooltip-text {
 		font-size: 0.8em;
 	}
 

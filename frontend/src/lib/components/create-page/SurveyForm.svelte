@@ -15,10 +15,14 @@
 	export let user_list: string[];
 	export let isPreview: boolean;
 
+	let innerWidth: number;
+
 	function toggleAccess() {
 		$isAccessLimited = !$isAccessLimited;
 	}
 </script>
+
+<svelte:window bind:innerWidth />
 
 {#each $questions as question, questionIndex (question)}
 	<div
@@ -79,11 +83,11 @@
 					/>
 				</div>
 			{:else}
-				<div title="Cryptography information" class="info">
+				<div class="tooltip">
 					<i class="material-symbols-rounded">info</i>
-					<div class="text">
-						Use cryptography to allow only selected users to fill out the survey.
-					</div>
+					<span class="tooltip-text {innerWidth <= 509 ? 'bottom' : 'right'}"
+						>Use cryptography to allow only selected users to fill out the survey.</span
+					>
 				</div>
 			{/if}
 		</div>
@@ -91,6 +95,10 @@
 {/if}
 
 <style>
+	.tooltip {
+		--tooltip-width: 18em;
+	}
+
 	.button-row {
 		display: flex;
 		flex-flow: row wrap;
@@ -103,7 +111,7 @@
 		flex: 1;
 		display: flex;
 		flex-flow: row;
-		align-items: flex-start;
+		align-items: center;
 		justify-content: flex-start;
 	}
 
@@ -130,38 +138,19 @@
 		box-shadow: 0px 4px 4px var(--shadow-color);
 	}
 
-	.info {
-		font-size: 1em;
-		height: 2.2em;
-		min-width: 14em;
-		margin: 0em;
-	}
-
-	.info i {
-		font-size: 1.25em;
-	}
-
-	.text {
-		text-align: justify;
-	}
-
 	@media screen and (max-width: 767px) {
 		.access-button {
 			font-size: 1em;
 		}
 
-		.user-list,
-		.info {
+		.user-list {
 			font-size: 0.8em;
 		}
+	}
 
-		.info {
-			flex-flow: row;
-		}
-
-		.info i {
-			margin-right: 0.5em;
-			margin-bottom: 0em;
+	@media screen and (max-width: 509px) {
+		.tooltip {
+			--tooltip-width: 9em;
 		}
 	}
 </style>

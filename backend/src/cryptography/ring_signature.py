@@ -79,7 +79,7 @@ def verify_lrs(message: str, keys: list[int], signature: list[int]) -> bool:
 
     y0 = signature[0]
 
-    n = int((len(signature) - 1) / 2)
+    n = (len(signature) - 1) // 2
 
     s = signature[1 : n + 1]
     c = signature[n + 1 : 2 * n + 1]

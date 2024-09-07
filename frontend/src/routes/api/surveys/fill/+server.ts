@@ -4,6 +4,5 @@ import * as db from '$lib/server/database';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const answer: SurveyAnswer = await request.json();
-	console.log(answer);
 	return db.saveAnswer(answer);
 };

@@ -43,6 +43,3 @@ you have to setup needed enviroment variables (.env files in frontend/backend di
 
 ## Open source licensing info
 1. [LICENSE](LICENSE)
-
-## Credits and references
-- [NoName WMI Team](https://git.wmi.amu.edu.pl/s452628/NoName1.0)

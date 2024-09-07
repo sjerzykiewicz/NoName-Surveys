@@ -47,12 +47,7 @@
 			})
 		}).then((res) => {
 			if (res.ok) {
-				download(
-					'noname-keys.txt',
-					publicKey +
-						'----------------------------------------------------------------\n' +
-						privateKey
-				);
+				download('noname-keys.txt', publicKey + '\n' + privateKey);
 			}
 		});
 	}

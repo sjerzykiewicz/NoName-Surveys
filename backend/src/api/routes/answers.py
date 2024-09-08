@@ -1,4 +1,3 @@
-import Crypto.PublicKey.RSA as RSA
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
@@ -13,7 +12,7 @@ from src.api.models.surveys.answer import (
     SurveyAnswersFetchOutput,
 )
 from src.api.models.surveys.survey import SurveyStructure
-from src.cryptography.ring_signature import Ring
+from src.cryptography.ring_signature import verify_lrs
 from src.db.base import get_session
 from src.db.models.answer import Answer
 
@@ -86,28 +85,29 @@ async def save_survey_answer(
         )
 
     if survey.uses_cryptographic_module:
-        if not survey_answer.signature or not survey_answer.y0:
+        if not survey_answer.signature:
             raise HTTPException(
                 status_code=400,
                 detail="Survey requires cryptographic signature",
             )
 
         if answer_crud.user_already_answered_survey(
-            survey.id, survey_answer.y0, session
+            survey.id, survey_answer.signature[0], session
         ):
             raise HTTPException(
                 status_code=400, detail="User already answered this survey"
             )
 
         public_keys = [
-            RSA.import_key(ring_member.public_key)
+            ring_member.public_key
             for ring_member in ring_member_crud.get_ring_members_for_survey(
                 survey.id, session
             )
         ]
-        ring = Ring(public_keys)
-        if not ring.verify(
-            survey.survey_code, [int(x) for x in survey_answer.signature]
+        if not verify_lrs(
+            survey.survey_code,
+            public_keys,
+            [int(x) for x in survey_answer.signature],
         ):
             raise HTTPException(
                 status_code=400,
@@ -138,7 +138,7 @@ async def save_survey_answer(
     answer = Answer(
         survey_id=survey.id,
         answer=survey_answer.model_dump_json(),
-        y0=survey_answer.y0,
+        y0=survey_answer.signature[0],
     )
     answer_crud.save_answer(answer, session)
 

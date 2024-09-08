@@ -58,12 +58,6 @@ repos:
         language: system
         files: ^backend/
 
-      - id: flake8
-        name: flake8
-        entry: bash -c 'cd backend && make flake8'
-        language: system
-        files: ^backend/
-
       - id: prettier
         name: prettier
         entry: npm run format

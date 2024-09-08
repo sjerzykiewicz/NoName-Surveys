@@ -12,6 +12,7 @@
 	--accent-color: #0075ff;
 	--accent-dark-color: #005cc8;
 	--error-color: #ff3333;
+	--error-dark-color: #990000;
 
 	--tooltip-width: 12em;
 }
@@ -29,6 +30,7 @@
 	--accent-color: #0075ff;
 	--accent-dark-color: #005cc8;
 	--error-color: #ff3333;
+	--error-dark-color: #990000;
 }
 
 @font-face {
@@ -189,10 +191,20 @@ button:hover,
 	background-color: var(--accent-dark-color);
 }
 
+.sign-out {
+	background-color: var(--error-color);
+	color: var(--text-color-2);
+}
+
+.sign-out:hover {
+	background-color: var(--error-dark-color);
+}
+
 button:active,
 .footer-button:active,
 .save:active,
-.back:active {
+.back:active,
+.sign-out:active {
 	background-color: var(--border-color);
 }
 
@@ -830,7 +842,7 @@ tr:last-of-type th:last-of-type {
 
 .tooltip {
 	position: relative;
-	display: inline-block;
+	display: flex;
 	cursor: help;
 }
 
@@ -852,7 +864,7 @@ tr:last-of-type th:last-of-type {
 
 .tooltip .tooltip-text.top {
 	left: 50%;
-	margin-left: calc(var(--tooltip-width) / -2);
+	margin-left: calc((var(--tooltip-width) + 0.5em) / -2);
 
 	bottom: 100%;
 	margin-bottom: 0.5em;
@@ -868,7 +880,7 @@ tr:last-of-type th:last-of-type {
 
 .tooltip .tooltip-text.bottom {
 	left: 50%;
-	margin-left: calc(var(--tooltip-width) / -2);
+	margin-left: calc((var(--tooltip-width) + 0.5em) / -2);
 
 	top: 100%;
 	margin-top: 0.5em;
@@ -897,7 +909,7 @@ tr:last-of-type th:last-of-type {
 	top: 100%;
 
 	left: 50%;
-	margin-left: -1em;
+	margin-left: -0.75em;
 
 	border-color: var(--secondary-dark-color) transparent transparent transparent;
 }
@@ -916,7 +928,7 @@ tr:last-of-type th:last-of-type {
 	bottom: 100%;
 
 	left: 50%;
-	margin-left: -1em;
+	margin-left: -0.75em;
 
 	border-color: transparent transparent var(--secondary-dark-color) transparent;
 }

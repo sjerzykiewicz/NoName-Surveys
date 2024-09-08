@@ -13,10 +13,15 @@
 		display: flex;
 		flex-flow: row;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-start;
+		padding-top: 1.5em;
+		padding-bottom: 1.5em;
+		font-size: 1.5em;
 	}
 
-	.sign-out {
-		font-size: 1.5em;
+	@media screen and (max-width: 767px) {
+		.sign-buttons {
+			font-size: 1.25em;
+		}
 	}
 </style>

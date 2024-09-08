@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { copyCode } from '$lib/utils/copyCode';
+	import { cubicInOut } from 'svelte/easing';
+	import { fade } from 'svelte/transition';
+	import QrCode from '$lib/components/QrCode.svelte';
 
 	let copiedIndex: number;
+	let innerWidth: number;
 
 	export let survey_list: {
 		title: string;
@@ -12,6 +16,8 @@
 	}[];
 </script>
 
+<svelte:window bind:innerWidth />
+
 <table>
 	<tr>
 		<th title="Survey title" id="title-header" colspan="2">Survey Title</th>
@@ -20,37 +26,74 @@
 	</tr>
 	{#each survey_list.toReversed() as entry, entryIndex}
 		<tr>
-			{#if entry.uses_cryptographic_module}
-				<td
-					title="This survey has an established group of possible respondents"
-					class="crypto-entry"
-				>
+			<td class="crypto-entry tooltip">
+				{#if entry.uses_cryptographic_module}
 					<i class="material-symbols-rounded">encrypted</i>
-				</td>
-			{:else}
-				<td title="Everyone can submit an answer to this survey" class="crypto-entry">
+					<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
+						>This survey has an established group of possible respondents.</span
+					>
+				{:else}
 					<i class="material-symbols-rounded">public</i>
-				</td>
-			{/if}
+					<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
+						>Everyone can submit an answer to this survey.</span
+					>
+				{/if}
+			</td>
 			<td
 				title="View the summary"
 				class="title-entry"
 				on:click={() => goto('/' + entry.survey_code + '/summary')}>{entry.title}</td
 			>
 			<td
-				title={copiedIndex === entryIndex ? 'Copied!' : 'Copy the code'}
-				class="code-entry"
+				title="Copy the code"
+				class="code-entry tooltip"
 				on:click={() => {
 					copyCode(entry.survey_code);
 					copiedIndex = entryIndex;
-				}}>{entry.survey_code}</td
+				}}
 			>
+				{entry.survey_code}
+				{#if copiedIndex === entryIndex}
+					<span
+						title=""
+						class="tooltip-text left"
+						transition:fade={{ duration: 200, easing: cubicInOut }}>Copied!</span
+					>
+				{/if}
+				{#if innerWidth > 767}
+					<a
+						href="/fill?code={entry.survey_code}"
+						title="Fill out the survey"
+						class="tooltip-text right"
+						transition:fade={{ duration: 200, easing: cubicInOut }}
+					>
+						<QrCode code={entry.survey_code} size={100} />
+					</a>
+				{/if}
+			</td>
 			<td title="Creation date" class="date-entry">{entry.creation_date}</td>
 		</tr>
 	{/each}
 </table>
 
 <style>
+	.tooltip {
+		display: table-cell;
+	}
+
+	.code-entry.tooltip {
+		cursor: pointer;
+	}
+
+	.code-entry.tooltip .tooltip-text.right {
+		--tooltip-width: 100px;
+		margin-left: 0em;
+	}
+
+	.code-entry.tooltip .tooltip-text.left {
+		--tooltip-width: 4em;
+	}
+
 	#code-header {
 		width: 12%;
 	}

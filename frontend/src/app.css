@@ -834,11 +834,6 @@ tr:last-of-type th:last-of-type {
 	cursor: help;
 }
 
-.tooltip i {
-	font-size: 1.5em;
-	color: var(--border-color);
-}
-
 .tooltip .tooltip-text {
 	position: absolute;
 	z-index: 1;

@@ -1,22 +1,18 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import QrCode from '$lib/components/QrCode.svelte';
 	import { copyCode } from '$lib/utils/copyCode';
 
 	export let data: PageData;
 
-	let url: string = $page.url.origin + '/fill?code=' + data.code;
-
 	let isCopied: boolean = false;
-
 	let innerWidth: number;
+
 	function calculateSize(width: number): number {
 		if (width < 768) {
 			return 300;
-		} else {
-			return 400;
 		}
+		return 400;
 	}
 </script>
 
@@ -37,7 +33,7 @@
 		{isCopied ? 'Copied!' : 'Copy'}</button
 	>
 	<a href="/fill?code={data.code}" title="Fill out the survey" class="qr-code">
-		<QrCode data={url} size={calculateSize(innerWidth)} />
+		<QrCode code={data.code} size={calculateSize(innerWidth)} />
 	</a>
 </div>
 

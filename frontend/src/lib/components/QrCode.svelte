@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
-	export let data: string;
+	export let code: string;
 	export let size: number;
+
+	let data: string = $page.url.origin + '/fill?code=' + code;
 
 	onMount(() => {
 		let script = document.createElement('script');
@@ -30,7 +33,7 @@
 				}
 			});
 
-			const element = document.getElementById('qr-code');
+			const element = document.getElementById(code);
 			if (element) {
 				qrCode.append(element);
 			}
@@ -38,4 +41,10 @@
 	});
 </script>
 
-<div id="qr-code"></div>
+<div id={code}></div>
+
+<style>
+	div {
+		display: flex;
+	}
+</style>

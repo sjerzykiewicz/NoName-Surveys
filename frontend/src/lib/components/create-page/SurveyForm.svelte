@@ -99,6 +99,11 @@
 		--tooltip-width: 18em;
 	}
 
+	.tooltip i {
+		font-size: 1.5em;
+		color: var(--border-color);
+	}
+
 	.button-row {
 		display: flex;
 		flex-flow: row wrap;

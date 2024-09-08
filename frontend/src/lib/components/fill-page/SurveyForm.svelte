@@ -38,6 +38,8 @@
 	export let keys: Array<string>;
 	export let code: string;
 
+	let innerWidth: number;
+
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
 		single: Single,
@@ -268,6 +270,8 @@
 	}
 </script>
 
+<svelte:window bind:innerWidth />
+
 <Header>
 	<div title="Survey title" class="title" in:slide={{ duration: 200, easing: cubicInOut }}>
 		{$title}
@@ -284,24 +288,27 @@
 	{/each}
 	{#if uses_crypto}
 		<div title="Load your encryption keys" class="load-div">
-			<label for="keys-file"
-				>Load your keys
+			<div class="load-text">
+				<span class="load-label">Load your keys</span>
+				<div title="" class="tooltip">
+					<i class="material-symbols-rounded">info</i>
+					<span class="tooltip-text {innerWidth <= 615 ? 'top' : 'right'}"
+						>Please load the file which you have previously generated on this application. The file
+						contains your keys, necessary for cryptographic calculations which are needed for
+						validating your right to fill out this survey.<br /><br />Default filename:
+						"noname-keys.txt"</span
+					>
+				</div>
+			</div>
+			<label for="keys-file">
 				<div class="file-input">
 					<span class="file-button"
 						><i class="material-symbols-rounded">upload_file</i>Choose File</span
 					>
 					<span class="file-name">{filename}</span>
 				</div>
-				<input type="file" name="keys" id="keys-file" on:change={handleFileChange} /></label
-			>
-		</div>
-		<div title="Key information" class="info">
-			<i class="material-symbols-rounded">info</i>
-			<div class="text">
-				Please load the file which you have previously generated on this application. The file
-				contains your keys, necessary for cryptographic calculations which are needed for validating
-				your right to fill out this survey.
-			</div>
+				<input type="file" name="keys" id="keys-file" on:change={handleFileChange} />
+			</label>
 		</div>
 	{/if}
 </Content>
@@ -313,16 +320,45 @@
 </Footer>
 
 <style>
+	.tooltip {
+		--tooltip-width: 38em;
+		margin-left: 0.5em;
+	}
+
+	.tooltip i {
+		font-size: 1em;
+		color: var(--border-color);
+	}
+
+	.tooltip .tooltip-text {
+		font-size: 0.8em;
+	}
+
 	.load-div {
-		text-align: center;
 		color: var(--text-color);
-		font-size: 1.5em;
+		font-size: 1.25em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
-		width: fit-content;
-		max-width: 100%;
-		overflow: hidden;
-		margin-inline: auto;
-		margin-top: 3em;
+		width: 100%;
+		text-align: center;
+		margin-top: 2.25em;
+		padding-top: 1.5em;
+		border-top: 1px solid var(--border-color);
+	}
+
+	.load-text {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+	}
+
+	.load-label {
+		cursor: default;
+	}
+
+	.load-text,
+	.load-div label {
+		font-size: 1.2em;
 	}
 
 	input[type='file'] {
@@ -334,6 +370,8 @@
 		flex-direction: row;
 		justify-content: flex-start;
 		align-items: center;
+		text-align: left;
+		width: fit-content;
 		margin-top: 0.5em;
 		background-color: var(--secondary-dark-color);
 		border: 1px solid var(--border-color);
@@ -379,14 +417,15 @@
 		font-variation-settings: 'wght' 700;
 	}
 
-	.info {
-		font-size: 1em;
-		margin-left: 0em;
+	@media screen and (max-width: 1193px) {
+		.tooltip {
+			--tooltip-width: 26.9em;
+		}
 	}
 
 	@media screen and (max-width: 767px) {
 		.load-div {
-			font-size: 1.25em;
+			font-size: 1em;
 		}
 
 		.save {
@@ -401,9 +440,11 @@
 			margin-right: 0em;
 			margin-bottom: 0.5em;
 		}
+	}
 
-		.info {
-			font-size: 0.9em;
+	@media screen and (max-width: 615px) {
+		.tooltip {
+			--tooltip-width: 17em;
 		}
 	}
 </style>

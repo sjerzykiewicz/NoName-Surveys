@@ -107,14 +107,27 @@
 	<button
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={toggleThemeMode}
-		title="Toggle theme mode"
-		class="toggle-mode"
+		class="toggle-mode tooltip"
 	>
 		<i class="material-symbols-rounded">{bulb}</i>
+		<span class="tooltip-text left">Toggle theme.</span>
 	</button>
 {/if}
 
 <style>
+	.tooltip {
+		--tooltip-width: 7em;
+	}
+
+	.tooltip .tooltip-text {
+		font-size: 0.8em;
+		background-color: var(--primary-dark-color);
+	}
+
+	.tooltip .tooltip-text::after {
+		border-color: transparent transparent transparent var(--primary-dark-color);
+	}
+
 	nav {
 		display: flex;
 		flex-flow: row;
@@ -156,6 +169,7 @@
 		font-size: 1.5em;
 		z-index: 5;
 		transition: 0.2s;
+		cursor: pointer;
 	}
 
 	.toggle-mode:hover {
@@ -219,6 +233,10 @@
 	}
 
 	@media screen and (max-width: 767px) {
+		.tooltip .tooltip-text {
+			font-size: 0.6em;
+		}
+
 		nav {
 			flex-flow: column;
 			border-left: none;

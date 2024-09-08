@@ -140,6 +140,7 @@
 
 		.tooltip .tooltip-text.bottom::after {
 			left: 85%;
+			margin-left: -0.75em;
 		}
 	}
 </style>

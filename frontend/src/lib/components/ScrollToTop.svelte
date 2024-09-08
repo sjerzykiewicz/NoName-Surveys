@@ -12,18 +12,31 @@
 
 {#if showScrollToTop}
 	<button
-		title="Scroll to the top of the page"
-		class="scroll-to-top"
+		class="scroll-to-top tooltip"
 		class:create-page={$page.url.pathname === '/create'}
 		class:fill-page={$page.url.pathname.startsWith('/fill')}
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
 	>
 		<i class="material-symbols-rounded">north</i>
+		<span class="tooltip-text right">Scroll to the top.</span>
 	</button>
 {/if}
 
 <style>
+	.tooltip {
+		--tooltip-width: 8em;
+	}
+
+	.tooltip .tooltip-text {
+		font-size: 0.8em;
+		background-color: var(--primary-dark-color);
+	}
+
+	.tooltip .tooltip-text::after {
+		border-color: transparent var(--primary-dark-color) transparent transparent;
+	}
+
 	.scroll-to-top {
 		position: fixed;
 		justify-content: center;
@@ -34,6 +47,7 @@
 		font-size: 1.5em;
 		z-index: 5;
 		transition: 0.2s;
+		cursor: pointer;
 	}
 
 	.scroll-to-top:hover {
@@ -45,6 +59,10 @@
 	}
 
 	@media screen and (max-width: 767px) {
+		.tooltip .tooltip-text {
+			font-size: 0.6em;
+		}
+
 		.scroll-to-top.fill-page {
 			left: 0.5em;
 			bottom: 0.5em;

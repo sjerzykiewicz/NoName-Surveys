@@ -864,7 +864,7 @@ tr:last-of-type th:last-of-type {
 
 .tooltip .tooltip-text.top {
 	left: 50%;
-	margin-left: calc((var(--tooltip-width) + 0.5em) / -2);
+	margin-left: calc((var(--tooltip-width) + 1em) / -2);
 
 	bottom: 100%;
 	margin-bottom: 0.5em;
@@ -880,7 +880,7 @@ tr:last-of-type th:last-of-type {
 
 .tooltip .tooltip-text.bottom {
 	left: 50%;
-	margin-left: calc((var(--tooltip-width) + 0.5em) / -2);
+	margin-left: calc((var(--tooltip-width) + 1em) / -2);
 
 	top: 100%;
 	margin-top: 0.5em;
@@ -909,7 +909,7 @@ tr:last-of-type th:last-of-type {
 	top: 100%;
 
 	left: 50%;
-	margin-left: -0.75em;
+	margin-left: -0.5em;
 
 	border-color: var(--secondary-dark-color) transparent transparent transparent;
 }
@@ -928,7 +928,7 @@ tr:last-of-type th:last-of-type {
 	bottom: 100%;
 
 	left: 50%;
-	margin-left: -0.75em;
+	margin-left: -0.5em;
 
 	border-color: transparent transparent var(--secondary-dark-color) transparent;
 }

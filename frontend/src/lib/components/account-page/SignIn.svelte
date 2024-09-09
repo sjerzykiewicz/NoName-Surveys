@@ -18,8 +18,8 @@
 			<li>Save survey drafts,</li>
 			<li>View your survey's results,</li>
 			<li>
-				Generate encryption keys that allow you to participate in secure surveys without needing to
-				sign in each time.
+				Generate digital signature keys that allow you to participate in secure surveys without
+				needing to sign in each time.
 			</li>
 		</ul>
 	</div>
@@ -27,7 +27,7 @@
 <div title="Account information" class="info">
 	<div class="text">
 		We do not recommend signing in if you only wish to fill out a survey. For secure surveys, if you
-		have already generated your encryption keys, signing in is also not necessary.
+		have already generated your digital signature keys, signing in is also not necessary.
 	</div>
 </div>
 

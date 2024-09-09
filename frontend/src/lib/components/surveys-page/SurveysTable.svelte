@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { copyCode } from '$lib/utils/copyCode';
+	import { delay } from '$lib/utils/delay';
 	import { cubicInOut } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
 	import QrCode from '$lib/components/QrCode.svelte';
 
 	let copiedIndex: number;
 	let innerWidth: number;
+	let isCopyPopupVisible: boolean = false;
 
 	export let survey_list: {
 		title: string;
@@ -46,17 +48,21 @@
 			>
 			<td
 				title="Copy the code"
-				class="code-entry tooltip"
-				on:click={() => {
-					copyCode(entry.survey_code);
-					copiedIndex = entryIndex;
+				class="code-entry tooltip popup"
+				on:click={async () => {
+					if (copyCode(entry.survey_code)) {
+						copiedIndex = entryIndex;
+						isCopyPopupVisible = true;
+						await delay(2000);
+						isCopyPopupVisible = false;
+					}
 				}}
 			>
 				{entry.survey_code}
-				{#if copiedIndex === entryIndex}
+				{#if copiedIndex === entryIndex && isCopyPopupVisible}
 					<span
 						title=""
-						class="tooltip-text left"
+						class="popup-text left"
 						transition:fade={{ duration: 200, easing: cubicInOut }}>Copied!</span
 					>
 				{/if}
@@ -88,9 +94,10 @@
 	.code-entry.tooltip .tooltip-text.right {
 		--tooltip-width: 100px;
 		margin-left: 0em;
+		pointer-events: auto;
 	}
 
-	.code-entry.tooltip .tooltip-text.left {
+	.code-entry.popup .popup-text.left {
 		--tooltip-width: 4em;
 	}
 

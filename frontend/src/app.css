@@ -838,15 +838,17 @@ tr:last-of-type th:last-of-type {
 	padding-top: 0.2em;
 }
 
-/* tooltips */
+/* tooltips & popups */
 
-.tooltip {
+.tooltip,
+.popup {
 	position: relative;
 	display: flex;
 	cursor: help;
 }
 
-.tooltip .tooltip-text {
+.tooltip .tooltip-text,
+.popup .popup-text {
 	position: absolute;
 	z-index: 1;
 
@@ -857,12 +859,14 @@ tr:last-of-type th:last-of-type {
 	color: var(--text-color);
 	text-align: center;
 
+	pointer-events: none;
 	visibility: hidden;
 	opacity: 0;
 	transition: 0.2s opacity;
 }
 
-.tooltip .tooltip-text.top {
+.tooltip .tooltip-text.top,
+.popup .popup-text.top {
 	left: 50%;
 	margin-left: calc((var(--tooltip-width) + 1em) / -2);
 
@@ -870,7 +874,8 @@ tr:last-of-type th:last-of-type {
 	margin-bottom: 0.5em;
 }
 
-.tooltip .tooltip-text.right {
+.tooltip .tooltip-text.right,
+.popup .popup-text.right {
 	top: 50%;
 	transform: translateY(-50%);
 
@@ -878,7 +883,8 @@ tr:last-of-type th:last-of-type {
 	margin-left: 0.5em;
 }
 
-.tooltip .tooltip-text.bottom {
+.tooltip .tooltip-text.bottom,
+.popup .popup-text.bottom {
 	left: 50%;
 	margin-left: calc((var(--tooltip-width) + 1em) / -2);
 
@@ -886,7 +892,8 @@ tr:last-of-type th:last-of-type {
 	margin-top: 0.5em;
 }
 
-.tooltip .tooltip-text.left {
+.tooltip .tooltip-text.left,
+.popup .popup-text.left {
 	top: 50%;
 	transform: translateY(-50%);
 
@@ -894,7 +901,8 @@ tr:last-of-type th:last-of-type {
 	margin-right: 0.5em;
 }
 
-.tooltip .tooltip-text::after {
+.tooltip .tooltip-text::after,
+.popup .popup-text::after {
 	content: ' ';
 	position: absolute;
 
@@ -905,7 +913,8 @@ tr:last-of-type th:last-of-type {
 	transition: 0.2s opacity;
 }
 
-.tooltip .tooltip-text.top::after {
+.tooltip .tooltip-text.top::after,
+.popup .popup-text.top::after {
 	top: 100%;
 
 	left: 50%;
@@ -914,7 +923,8 @@ tr:last-of-type th:last-of-type {
 	border-color: var(--secondary-dark-color) transparent transparent transparent;
 }
 
-.tooltip .tooltip-text.right::after {
+.tooltip .tooltip-text.right::after,
+.popup .popup-text.right::after {
 	right: 100%;
 	margin-left: -0.5em;
 
@@ -924,7 +934,8 @@ tr:last-of-type th:last-of-type {
 	border-color: transparent var(--secondary-dark-color) transparent transparent;
 }
 
-.tooltip .tooltip-text.bottom::after {
+.tooltip .tooltip-text.bottom::after,
+.popup .popup-text.bottom::after {
 	bottom: 100%;
 
 	left: 50%;
@@ -933,7 +944,8 @@ tr:last-of-type th:last-of-type {
 	border-color: transparent transparent var(--secondary-dark-color) transparent;
 }
 
-.tooltip .tooltip-text.left::after {
+.tooltip .tooltip-text.left::after,
+.popup .popup-text.left::after {
 	left: 100%;
 	margin-right: -0.5em;
 
@@ -945,6 +957,18 @@ tr:last-of-type th:last-of-type {
 
 .tooltip:hover .tooltip-text,
 .tooltip:hover .tooltip-text::after {
+	visibility: visible;
+	opacity: 1;
+}
+
+button.tooltip,
+button.popup {
+	cursor: pointer;
+}
+
+.popup .popup-text,
+.popup .popup-text::after {
+	cursor: default;
 	visibility: visible;
 	opacity: 1;
 }
@@ -975,7 +999,8 @@ tr:last-of-type th:last-of-type {
 
 	.error,
 	table,
-	.tooltip-text {
+	.tooltip-text,
+	.popup-text {
 		font-size: 0.8em;
 	}
 

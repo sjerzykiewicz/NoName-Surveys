@@ -52,7 +52,7 @@
 <svelte:window bind:innerWidth />
 
 <div class="download-key">
-	<button class="save" on:click={generateKeyPair}>
+	<button title="Generate new key pair" class="save" on:click={generateKeyPair}>
 		<i class="material-symbols-rounded">encrypted</i>Generate new key pair
 	</button>
 	<div class="tooltip">
@@ -60,7 +60,7 @@
 		<span class="tooltip-text {innerWidth <= 638 ? 'bottom' : 'right'}">
 			These keys allow you to participate in secure surveys. Once they are generated, it is your
 			responsibility to keep them safe. When submitting a secure survey, you will be asked to
-			provide these keys to your browser for encryption.
+			provide these keys to your browser for digital signature.
 		</span>
 	</div>
 </div>

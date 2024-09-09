@@ -281,7 +281,7 @@
 		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
 	{#if uses_crypto}
-		<div title="Load your encryption keys" class="load-div">
+		<div title="Load your digital signature keys" class="load-div">
 			<div class="load-text">
 				<span class="load-label">Load your keys</span>
 				<div title="" class="tooltip">

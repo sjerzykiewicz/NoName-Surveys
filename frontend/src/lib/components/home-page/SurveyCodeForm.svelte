@@ -10,7 +10,7 @@
 	<h1>NoName Anonymous Surveys</h1>
 	<form method="POST" use:enhance>
 		<label title="Enter a survey code to fill it out" for="code-input"
-			>Enter a survey code to fill it out
+			>Enter a survey code to fill it out:
 			<input
 				id="code-input"
 				name="survey-code"
@@ -19,7 +19,7 @@
 				maxlength="6"
 				autocomplete="off"
 			/>
-			<button title="Submit code" class="save" type="submit">
+			<button title="Submit the code" class="save" type="submit">
 				<i class="material-symbols-rounded">done</i>Submit
 			</button>
 		</label>
@@ -32,14 +32,15 @@
 
 <style>
 	h1 {
-		text-align: center;
 		color: var(--text-color);
-		font-size: 2.5em;
+		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color);
-		margin-top: 1em;
-		margin-left: 1em;
-		margin-right: 1em;
+		margin: 0em;
+		padding: 0.25em 0em 0.5em;
+		font-size: 3em;
+		font-weight: bold;
 		cursor: default;
+		border-bottom: 1px solid var(--border-color);
 	}
 
 	label {
@@ -53,9 +54,7 @@
 		font-weight: bold;
 		font-size: 2em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
-		margin-top: 1em;
-		margin-left: 1em;
-		margin-right: 1em;
+		padding-top: 0.75em;
 	}
 
 	input {

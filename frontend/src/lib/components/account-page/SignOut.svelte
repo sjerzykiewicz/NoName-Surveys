@@ -3,7 +3,7 @@
 </script>
 
 <div class="sign-buttons">
-	<button title="Sign Out" class="sign-out" on:click={() => signOut()}
+	<button title="Sign out" class="sign-out" on:click={() => signOut()}
 		><i class="material-symbols-rounded">logout</i>Sign Out</button
 	>
 </div>

@@ -2,6 +2,7 @@
 	import type { PageData } from './$types';
 	import QrCode from '$lib/components/QrCode.svelte';
 	import { copyCode } from '$lib/utils/copyCode';
+	import Content from '$lib/components/Content.svelte';
 
 	export let data: PageData;
 
@@ -18,12 +19,12 @@
 
 <svelte:window bind:innerWidth />
 
-<div class="content">
-	<h2>Survey created successfully.</h2>
+<Content>
+	<h2 id="title">Survey created successfully.</h2>
 	<h2>Access code:</h2>
 	<h1>{data.code}</h1>
 	<button
-		title="Copy code"
+		title="Copy the code"
 		class="save"
 		on:click={() => {
 			copyCode(data.code);
@@ -35,18 +36,25 @@
 	<a href="/fill?code={data.code}" title="Fill out the survey" class="qr-code">
 		<QrCode code={data.code} size={calculateSize(innerWidth)} />
 	</a>
-</div>
+</Content>
 
 <style>
-	.content {
+	h2#title {
+		border-bottom: 1px solid var(--border-color);
+		padding: 0.25em 0em 0.5em;
+	}
+
+	h2,
+	h1 {
+		color: var(--text-color);
 		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color);
-		color: var(--text-color);
 		font-weight: bold;
 	}
 
 	h2 {
-		margin: 0.5em 0em;
+		margin: 0em;
+		padding-top: 0.5em;
 		font-size: 3em;
 		cursor: default;
 	}

@@ -138,7 +138,7 @@ async def save_survey_answer(
     answer = Answer(
         survey_id=survey.id,
         answer=survey_answer.model_dump_json(),
-        y0=survey_answer.signature[0],
+        y0=survey_answer.signature[0] if survey_answer.signature else "",
     )
     answer_crud.save_answer(answer, session)
 

@@ -28,10 +28,13 @@
 	import { goto } from '$app/navigation';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
+	import { delay } from '$lib/utils/delay';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { tick } from 'svelte';
 	import { page } from '$app/stores';
 	import { error } from '@sveltejs/kit';
+	import { fade } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
 
 	export let isPreview: boolean = false;
 
@@ -139,6 +142,8 @@
 		return true;
 	}
 
+	let isDraftPopupVisible: boolean = false;
+
 	async function saveDraft() {
 		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
@@ -155,8 +160,9 @@
 		if (!response.ok) {
 			error(response.status, { message: await response.json() });
 		} else {
-			// TODO - display in UI
-			alert('Saved');
+			isDraftPopupVisible = true;
+			await delay(2000);
+			isDraftPopupVisible = false;
 		}
 	}
 
@@ -205,11 +211,16 @@
 {/if}
 <button
 	title="Save draft"
-	class="footer-button save"
+	class="footer-button save popup"
 	disabled={$questions.length === 0 || isPreview}
 	on:click={saveDraft}
 >
 	<i class="material-symbols-rounded">save</i>Save Draft
+	{#if isDraftPopupVisible}
+		<span class="popup-text top" transition:fade={{ duration: 200, easing: cubicInOut }}
+			>Saved!</span
+		>
+	{/if}
 </button>
 <button
 	title="Finish survey creation"
@@ -221,6 +232,10 @@
 </button>
 
 <style>
+	.popup {
+		--tooltip-width: 4em;
+	}
+
 	.footer-button:disabled {
 		color: var(--text-dark-color);
 		background-color: var(--secondary-color);

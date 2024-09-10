@@ -1,31 +1,34 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
+	import Content from '$lib/components/Content.svelte';
 
 	export let form: ActionData;
 </script>
 
-<h1>NoName Anonymous Surveys</h1>
-<form method="POST" use:enhance>
-	<label title="Enter a survey code to fill it out" for="code-input"
-		>Enter a survey code to fill it out
-		<input
-			id="code-input"
-			name="survey-code"
-			type="text"
-			required
-			maxlength="6"
-			autocomplete="off"
-		/>
-		<button title="Submit code" class="save" type="submit">
-			<i class="material-symbols-rounded">done</i>Submit
-		</button>
-	</label>
-</form>
+<Content>
+	<h1>NoName Anonymous Surveys</h1>
+	<form method="POST" use:enhance>
+		<label title="Enter a survey code to fill it out" for="code-input"
+			>Enter a survey code to fill it out
+			<input
+				id="code-input"
+				name="survey-code"
+				type="text"
+				required
+				maxlength="6"
+				autocomplete="off"
+			/>
+			<button title="Submit code" class="save" type="submit">
+				<i class="material-symbols-rounded">done</i>Submit
+			</button>
+		</label>
+	</form>
 
-{#if form?.error}
-	<p title="Error" class="error"><i class="material-symbols-rounded">error</i>{form.error}</p>
-{/if}
+	{#if form?.error}
+		<p title="Error" class="error"><i class="material-symbols-rounded">error</i>{form.error}</p>
+	{/if}
+</Content>
 
 <style>
 	h1 {

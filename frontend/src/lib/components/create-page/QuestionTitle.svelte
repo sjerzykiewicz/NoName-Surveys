@@ -84,12 +84,14 @@
 		{$questions[questionIndex].question}
 	</div>
 	<button
-		title={$questions[questionIndex].required ? 'Required' : 'Not required'}
-		class="required-button"
+		class="required-button tooltip"
 		class:checked={$questions[questionIndex].required}
 		on:click={toggleRequirement}
 	>
 		<i class="material-symbols-rounded">asterisk</i>
+		<span class="tooltip-text top"
+			>{$questions[questionIndex].required ? 'Required.' : 'Not required.'}</span
+		>
 	</button>
 	<button title="Remove question" class="remove-question" on:click={removeQuestion}>
 		<i class="material-symbols-rounded">close</i>
@@ -97,6 +99,10 @@
 </div>
 
 <style>
+	.tooltip {
+		--tooltip-width: 6.5em;
+	}
+
 	.question-input[contenteditable]:empty::before {
 		content: 'Enter question...';
 		color: var(--text-dark-color);
@@ -104,6 +110,11 @@
 
 	.required-button {
 		margin-right: 0.5em;
+		cursor: pointer;
+	}
+
+	.required-button .tooltip-text {
+		cursor: help;
 	}
 
 	.required-button.checked {

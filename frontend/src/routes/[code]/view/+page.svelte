@@ -3,10 +3,13 @@
 	import QrCode from '$lib/components/QrCode.svelte';
 	import { copyCode } from '$lib/utils/copyCode';
 	import Content from '$lib/components/Content.svelte';
+	import { delay } from '$lib/utils/delay';
+	import { cubicInOut } from 'svelte/easing';
+	import { fade } from 'svelte/transition';
 
 	export let data: PageData;
 
-	let isCopied: boolean = false;
+	let isCopyPopupVisible: boolean = false;
 	let innerWidth: number;
 
 	function calculateSize(width: number): number {
@@ -25,13 +28,19 @@
 	<h1>{data.code}</h1>
 	<button
 		title="Copy the code"
-		class="save"
-		on:click={() => {
+		class="save popup"
+		on:click={async () => {
 			copyCode(data.code);
-			isCopied = true;
+			isCopyPopupVisible = true;
+			await delay(2000);
+			isCopyPopupVisible = false;
 		}}
-		><i class="material-symbols-rounded">content_copy</i>
-		{isCopied ? 'Copied!' : 'Copy'}</button
+		><i class="material-symbols-rounded">content_copy</i>Copy
+		{#if isCopyPopupVisible}
+			<span class="popup-text left" transition:fade={{ duration: 200, easing: cubicInOut }}
+				>Copied!</span
+			>
+		{/if}</button
 	>
 	<a href="/fill?code={data.code}" title="Fill out the survey" class="qr-code">
 		<QrCode code={data.code} size={calculateSize(innerWidth)} />
@@ -39,6 +48,11 @@
 </Content>
 
 <style>
+	.popup .popup-text.left {
+		--tooltip-width: 4em;
+		font-size: 0.75em;
+	}
+
 	h2#title {
 		border-bottom: 1px solid var(--border-color);
 		padding: 0.25em 0em 0.5em;

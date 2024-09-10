@@ -213,7 +213,7 @@
 			const body = await response.json();
 			alert(body.detail);
 		} else {
-			return await goto(`/`, { replaceState: true, invalidateAll: true });
+			return await goto('/fill/success', { replaceState: true, invalidateAll: true });
 		}
 	}
 

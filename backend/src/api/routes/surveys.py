@@ -14,6 +14,7 @@ from src.api.models.surveys.survey import (
     SurveyStructureCreateOutput,
     SurveyStructureFetchInput,
     SurveyStructureFetchOutput,
+    SurveyUserActions,
 )
 from src.api.models.users.user import User
 from src.db.base import get_session
@@ -36,7 +37,9 @@ async def get_surveys_for_user(
         raise HTTPException(status_code=400, detail="User not found")
 
     user_id = user_crud.get_user_by_email(user.user_email, session).id
-    user_surveys = survey_crud.get_all_surveys_for_user(user_id, session)
+    user_surveys = survey_crud.get_not_deleted_surveys_for_user(
+        user_id, session
+    )
     return [
         SurveyHeadersOutput(
             title=SurveyStructure.model_validate_json(
@@ -84,6 +87,31 @@ async def get_survey_by_code(
             else []
         ),
     )
+
+
+@router.post(
+    "/delete", response_description="Delete a survey", response_model=dict
+)
+async def delete_survey(
+    survey_delete: SurveyUserActions, session: Session = Depends(get_session)
+):
+    user = user_crud.get_user_by_email(survey_delete.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    survey = survey_crud.get_survey_by_code(survey_delete.survey_code, session)
+    if survey is None:
+        raise HTTPException(status_code=404, detail="Survey does not exist")
+
+    if survey.creator_id != user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="User does not have access to this survey",
+        )
+
+    survey_crud.delete_survey_by_code(survey_delete.survey_code, session)
+
+    return {"message": "survey deleted successfully"}
 
 
 @router.post(

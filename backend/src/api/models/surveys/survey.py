@@ -109,3 +109,31 @@ class SurveyStructureCreateOutput(BaseModel):
 
     class Config:
         extra = "forbid"
+
+
+class SurveyUserActions(BaseModel):
+    user_email: str
+    survey_code: str
+
+    @field_validator("user_email")
+    def validate_user_email(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("email must be provided")
+        if not re.match(
+            r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v
+        ):
+            raise ValueError("invalid email format")
+        return v
+
+    @field_validator("survey_code")
+    def validate_survey_code(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("survey code must be provided")
+        if not re.match(r"^\d{6}$", v):
+            raise ValueError(
+                "survey code must be a string consisting of 6 digits"
+            )
+        return v
+
+    class Config:
+        extra = "forbid"

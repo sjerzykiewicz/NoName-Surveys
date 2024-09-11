@@ -8,6 +8,7 @@
 
 	export let questionIndex: number;
 	export let questionType: ComponentType;
+	export let questionInput: HTMLDivElement;
 
 	let questionTypeData: { title: string; icon: string; text: string };
 
@@ -72,13 +73,12 @@
 			<i class="material-symbols-rounded">arrow_drop_down</i>
 		</button>
 	</div>
-	<!-- svelte-ignore a11y-autofocus -->
 	<div
 		title="Enter question"
 		class="question-input"
 		contenteditable
 		bind:textContent={$questions[questionIndex].question}
-		autofocus
+		bind:this={questionInput}
 		role="textbox"
 		tabindex="0"
 		on:keydown={handleNewLine}

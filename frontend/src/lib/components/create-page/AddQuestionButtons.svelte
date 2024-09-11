@@ -16,13 +16,15 @@
 	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
 	import { questions } from '$lib/stores/create-page';
-	import { type ComponentType, onMount } from 'svelte';
+	import { type ComponentType, onMount, tick } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import QuestionTypeButton from './QuestionTypeButton.svelte';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { previousQuestion } from '$lib/stores/create-page';
+
+	export let questionInput: HTMLDivElement;
 
 	let isPanelVisible: boolean = false;
 	let questionTypes: Array<ComponentType> = [
@@ -105,7 +107,7 @@
 		}
 	}
 
-	function addQuestion(component: ComponentType) {
+	async function addQuestion(component: ComponentType) {
 		const i: number = $questions.length - 1;
 		if (i >= 0) {
 			checkError(i);
@@ -127,6 +129,9 @@
 
 		$previousQuestion = component;
 		isPanelVisible = false;
+
+		await tick();
+		questionInput.focus();
 	}
 
 	onMount(() => {

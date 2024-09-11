@@ -5,12 +5,14 @@
 	import { slide } from 'svelte/transition';
 </script>
 
+<!-- svelte-ignore a11y-autofocus -->
 <div
 	title="Enter survey title"
 	class="title-input"
 	id="title"
 	contenteditable
 	bind:textContent={$title}
+	autofocus
 	role="textbox"
 	tabindex="0"
 	on:keydown={handleNewLine}

@@ -72,11 +72,13 @@
 			<i class="material-symbols-rounded">arrow_drop_down</i>
 		</button>
 	</div>
+	<!-- svelte-ignore a11y-autofocus -->
 	<div
 		title="Enter question"
 		class="question-input"
 		contenteditable
 		bind:textContent={$questions[questionIndex].question}
+		autofocus
 		role="textbox"
 		tabindex="0"
 		on:keydown={handleNewLine}

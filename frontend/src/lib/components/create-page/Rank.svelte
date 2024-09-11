@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
-	import { afterUpdate } from 'svelte';
+	import { afterUpdate, tick } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
@@ -8,9 +8,12 @@
 	export let questionIndex: number;
 
 	let isButtonHidden: boolean = true;
+	let choiceInput: HTMLDivElement;
 
-	function addChoice() {
+	async function addChoice() {
 		$questions[questionIndex].choices = [...$questions[questionIndex].choices, ''];
+		await tick();
+		choiceInput.focus();
 	}
 
 	function removeChoice(index: number) {
@@ -40,6 +43,7 @@
 				class="choice-input"
 				contenteditable
 				bind:textContent={choice}
+				bind:this={choiceInput}
 				role="textbox"
 				tabindex="0"
 				on:keydown={handleNewLine}

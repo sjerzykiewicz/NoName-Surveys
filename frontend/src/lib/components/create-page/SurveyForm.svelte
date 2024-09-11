@@ -16,6 +16,7 @@
 	export let isPreview: boolean;
 
 	let innerWidth: number;
+	let questionInput: HTMLDivElement;
 
 	function toggleAccess() {
 		$isAccessLimited = !$isAccessLimited;
@@ -34,7 +35,7 @@
 			<QuestionTitlePreview {questionIndex} />
 			<svelte:component this={question.preview} {questionIndex} />
 		{:else}
-			<QuestionTitle {questionIndex} questionType={question.component} />
+			<QuestionTitle {questionIndex} questionType={question.component} bind:questionInput />
 			<QuestionError {questionIndex} />
 			<svelte:component this={question.component} {questionIndex} />
 			<ChoiceError {questionIndex} />
@@ -47,7 +48,7 @@
 		in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
 		out:slide={{ duration: 200, easing: cubicInOut }}
 	>
-		<AddQuestionButtons />
+		<AddQuestionButtons {questionInput} />
 		<div class="crypto-row">
 			<button
 				title={$isAccessLimited ? 'Respondent group defined' : 'Define respondent group'}

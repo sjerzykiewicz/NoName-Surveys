@@ -8,6 +8,7 @@
 
 	export let questionIndex: number;
 	export let questionType: ComponentType;
+	export let questionInput: HTMLDivElement;
 
 	let questionTypeData: { title: string; icon: string; text: string };
 
@@ -77,6 +78,7 @@
 		class="question-input"
 		contenteditable
 		bind:textContent={$questions[questionIndex].question}
+		bind:this={questionInput}
 		role="textbox"
 		tabindex="0"
 		on:keydown={handleNewLine}

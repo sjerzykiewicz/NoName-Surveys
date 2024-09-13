@@ -30,7 +30,12 @@
 </div>
 {#each answer.questions as question, questionIndex}
 	<div class="question">
-		<QuestionTitle question={question.question} {questionIndex} required={question.required} />
+		<QuestionTitle
+			question={question.question}
+			{questionIndex}
+			questionType={componentTypeMap[question.question_type]}
+			required={question.required}
+		/>
 		<svelte:component this={componentTypeMap[question.question_type]} data={question} />
 	</div>
 {/each}

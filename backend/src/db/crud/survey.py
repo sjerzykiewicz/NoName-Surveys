@@ -36,7 +36,10 @@ def get_not_deleted_surveys_for_user(
 
 
 def survey_code_taken(survey_code: str, session: Session) -> bool:
-    statement = select(Survey).where(Survey.survey_code == survey_code)
+    statement = select(Survey).where(
+        (Survey.survey_code == survey_code)
+        & (Survey.is_deleted == False)  # noqa: E712
+    )
     return session.exec(statement).first() is not None
 
 

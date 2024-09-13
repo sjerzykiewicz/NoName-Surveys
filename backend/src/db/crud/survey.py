@@ -6,7 +6,8 @@ from src.db.models.survey import Survey, SurveyBase
 
 def get_survey_by_code(survey_code: str, session: Session) -> Survey:
     statement = select(Survey).where(
-        (Survey.survey_code == survey_code) & (Survey.is_deleted is False)
+        (Survey.survey_code == survey_code)
+        & (Survey.is_deleted == False)  # noqa: E712
     )
     return session.exec(statement).first()
 
@@ -28,7 +29,8 @@ def get_not_deleted_surveys_for_user(
     user_id: int, session: Session
 ) -> list[Survey]:
     statement = select(Survey).where(
-        (Survey.creator_id == user_id) & (Survey.is_deleted is False)
+        (Survey.creator_id == user_id)
+        & (Survey.is_deleted == False)  # noqa: E712
     )
     return [survey for survey in session.exec(statement).all()]
 

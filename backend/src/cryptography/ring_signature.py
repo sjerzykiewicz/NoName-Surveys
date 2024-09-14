@@ -72,7 +72,6 @@ def h2(x: str):
 
 
 def verify_lrs(message: str, keys: list[int], signature: list[int]) -> bool:
-
     concatenated_keys: str = "".join([str(k) for k in keys])
 
     h = h2(concatenated_keys)

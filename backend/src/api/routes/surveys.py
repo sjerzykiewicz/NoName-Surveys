@@ -37,9 +37,7 @@ async def get_surveys_for_user(
         raise HTTPException(status_code=400, detail="User not found")
 
     user_id = user_crud.get_user_by_email(user.user_email, session).id
-    user_surveys = survey_crud.get_not_deleted_surveys_for_user(
-        user_id, session
-    )
+    user_surveys = survey_crud.get_all_surveys_for_user(user_id, session)
     return [
         SurveyHeadersOutput(
             title=SurveyStructure.model_validate_json(

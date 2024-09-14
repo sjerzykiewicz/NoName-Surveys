@@ -21,13 +21,6 @@ def delete_survey_by_code(survey_code: str, session: Session) -> Survey:
 
 
 def get_all_surveys_for_user(user_id: int, session: Session) -> list[Survey]:
-    statement = select(Survey).where(Survey.creator_id == user_id)
-    return [survey for survey in session.exec(statement).all()]
-
-
-def get_not_deleted_surveys_for_user(
-    user_id: int, session: Session
-) -> list[Survey]:
     statement = select(Survey).where(
         (Survey.creator_id == user_id)
         & (Survey.is_deleted == False)  # noqa: E712

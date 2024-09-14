@@ -43,7 +43,7 @@
 	<tr>
 		<th title="Survey title" id="title-header" colspan="2">Survey Title</th>
 		<th title="Access code" id="code-header">Code</th>
-		<th title="Creation date" id="date-header">Date</th>
+		<th title="Creation date" id="date-header" colspan="2">Date</th>
 	</tr>
 	{#each survey_list.toReversed() as entry, entryIndex}
 		<tr>
@@ -98,7 +98,7 @@
 			</td>
 			<td title="Creation date" class="date-entry">{entry.creation_date}</td>
 			<td
-				title="Delete the draft"
+				title="Delete the survey"
 				class="delete-entry"
 				on:click={() => deleteSurvey(survey_list.length - entryIndex - 1)}
 			>
@@ -132,7 +132,7 @@
 	}
 
 	#date-header {
-		width: 18%;
+		width: 19%;
 	}
 
 	@media screen and (max-width: 767px) {
@@ -141,7 +141,7 @@
 		}
 
 		#date-header {
-			width: 27%;
+			width: 32%;
 		}
 	}
 </style>

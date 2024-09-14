@@ -4,7 +4,7 @@ test('disallows nondigit code', async ({ page }) => {
 	await page.goto('/');
 
 	await page.getByTitle('Enter a survey code to fill it out').fill('abcdef');
-	await page.getByTitle('Submit code').click();
+	await page.getByTitle('Submit the code').click();
 
 	await expect(page.getByTitle('Error')).toBeVisible();
 });
@@ -13,7 +13,7 @@ test('disallows short code', async ({ page }) => {
 	await page.goto('/');
 
 	await page.getByTitle('Enter a survey code to fill it out').fill('1');
-	await page.getByTitle('Submit code').click();
+	await page.getByTitle('Submit the code').click();
 
 	await expect(page.getByTitle('Error')).toBeVisible();
 });
@@ -22,7 +22,7 @@ test('disallows short code', async ({ page }) => {
 test('warns about nonexistent survey', async ({ page }) => {
 	await page.goto('/');
 	await page.getByTitle('Enter a survey code to fill it out').fill('123456');
-	await page.getByTitle('Submit code').click();
+	await page.getByTitle('Submit the code').click();
 
 	await expect(page.getByTitle('Error')).toBeVisible();
 });

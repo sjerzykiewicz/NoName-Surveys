@@ -52,13 +52,10 @@ async def get_survey_answers_by_code(
 
     answers = answer_crud.get_answers_by_survey_id(survey.id, session)
     answer_structures = [
-        SurveyAnswerBase.model_validate_json(answer.answer)
-        for answer in answers
+        SurveyAnswerBase.model_validate_json(answer.answer) for answer in answers
     ]
     return [
-        SurveyAnswersFetchOutput(
-            title=survey_title, questions=answer.questions
-        )
+        SurveyAnswersFetchOutput(title=survey_title, questions=answer.questions)
         for answer in answer_structures
     ]
 
@@ -80,9 +77,7 @@ async def save_survey_answer(
     # fetch target survey structure
     survey = survey_crud.get_survey_by_code(survey_answer.survey_code, session)
     if not survey:
-        raise HTTPException(
-            status_code=404, detail="No survey found with this code"
-        )
+        raise HTTPException(status_code=404, detail="No survey found with this code")
 
     if survey.uses_cryptographic_module:
         if not survey_answer.signature:

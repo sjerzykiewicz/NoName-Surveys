@@ -10,9 +10,7 @@ tz = pytz.timezone("Europe/Warsaw")
 class SurveyBase(SQLModel):
     creator_id: int = Field(foreign_key="user.id", nullable=False)
     uses_cryptographic_module: bool
-    survey_structure_id: int = Field(
-        foreign_key="surveydraft.id", nullable=False
-    )
+    survey_structure_id: int = Field(foreign_key="surveydraft.id", nullable=False)
     survey_code: str = Field(unique=True)
 
 

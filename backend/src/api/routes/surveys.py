@@ -30,9 +30,7 @@ router = APIRouter()
     response_description="Get all survey headers of a user",
     response_model=list[SurveyHeadersOutput],
 )
-async def get_surveys_for_user(
-    user: User, session: Session = Depends(get_session)
-):
+async def get_surveys_for_user(user: User, session: Session = Depends(get_session)):
     if user_crud.get_user_by_email(user.user_email, session) is None:
         raise HTTPException(status_code=400, detail="User not found")
 
@@ -87,9 +85,7 @@ async def get_survey_by_code(
     )
 
 
-@router.post(
-    "/delete", response_description="Delete a survey", response_model=dict
-)
+@router.post("/delete", response_description="Delete a survey", response_model=dict)
 async def delete_survey(
     survey_delete: SurveyUserActions, session: Session = Depends(get_session)
 ):

@@ -60,9 +60,7 @@ class SurveyStructureFetchInput(BaseModel):
         if v is None:
             raise ValueError("survey code must be provided")
         if not re.match(r"^\d{6}$", v):
-            raise ValueError(
-                "survey code must be a string consisting of 6 digits"
-            )
+            raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
     class Config:
@@ -90,13 +88,9 @@ class SurveyStructureCreateInput(BaseModel):
         if not info.data["uses_cryptographic_module"]:
             return v
         if v is None or len(v) == 0:
-            raise ValueError(
-                "emails must be provided for cryptographic module"
-            )
+            raise ValueError("emails must be provided for cryptographic module")
         for email in v:
-            if not re.match(
-                r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email
-            ):
+            if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
                 raise ValueError("invalid email format")
         return v
 
@@ -119,9 +113,7 @@ class SurveyUserActions(BaseModel):
     def validate_user_email(cls, v, info: ValidationInfo) -> str:
         if v is None:
             raise ValueError("email must be provided")
-        if not re.match(
-            r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v
-        ):
+        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
             raise ValueError("invalid email format")
         return v
 
@@ -130,9 +122,7 @@ class SurveyUserActions(BaseModel):
         if v is None:
             raise ValueError("survey code must be provided")
         if not re.match(r"^\d{6}$", v):
-            raise ValueError(
-                "survey code must be a string consisting of 6 digits"
-            )
+            raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
     class Config:

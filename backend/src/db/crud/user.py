@@ -32,9 +32,7 @@ def create_user(user_create: UserBase, session: Session) -> User:
     return user
 
 
-def update_user_public_key(
-    user_update_key: UserWithKey, session: Session
-) -> User:
+def update_user_public_key(user_update_key: UserWithKey, session: Session) -> User:
     user = session.exec(
         select(User).filter(User.email == user_update_key.email)
     ).first()

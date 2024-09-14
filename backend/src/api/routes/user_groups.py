@@ -39,7 +39,7 @@ async def get_user_groups(
     response_description="List of user emails in a given user group",
     response_model=list[str],
 )
-async def get_user_groups(
+async def get_user_group(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
@@ -55,25 +55,19 @@ async def get_user_groups(
             status_code=400, detail="User group not found for the given user"
         )
 
-    user_group_members = user_groups_crud.get_user_group_members(
-        user_group.id, session
-    )
+    user_group_members = user_groups_crud.get_user_group_members(user_group.id, session)
     return [
         user_crud.get_user_by_id(user_group_member.user_id, session).email
         for user_group_member in user_group_members
     ]
 
 
-@router.post(
-    "/create", response_description="Create a user group", response_model=dict
-)
+@router.post("/create", response_description="Create a user group", response_model=dict)
 async def create_user_group(
     user_group_creation_request: UserGroupCreate,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(
-        user_group_creation_request.user_email, session
-    )
+    user = user_crud.get_user_by_email(user_group_creation_request.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
 
@@ -107,9 +101,7 @@ async def create_user_group(
         user_groups_crud.add_user_to_group(
             UserGroupMemberBase(
                 group_id=user_group.id,
-                user_id=user_crud.get_user_by_email(
-                    user_group_member, session
-                ).id,
+                user_id=user_crud.get_user_by_email(user_group_member, session).id,
             ),
             session,
         )
@@ -126,9 +118,7 @@ async def update_user_group(
     user_group_update_request: UserGroupNameUpdate,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(
-        user_group_update_request.user_email, session
-    )
+    user = user_crud.get_user_by_email(user_group_update_request.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
 
@@ -147,9 +137,7 @@ async def update_user_group(
     return {"message": "user group updated successfully"}
 
 
-@router.post(
-    "/delete", response_description="Delete a user group", response_model=dict
-)
+@router.post("/delete", response_description="Delete a user group", response_model=dict)
 async def delete_user_group(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),

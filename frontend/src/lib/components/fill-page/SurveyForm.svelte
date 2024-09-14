@@ -275,7 +275,7 @@
 <Content>
 	{#each $questions as question, questionIndex (question)}
 		<div class="question" in:slide={{ duration: 200, easing: cubicInOut }}>
-			<QuestionTitle {questionIndex} />
+			<QuestionTitle {questionIndex} questionType={componentTypeMap[question.type]} />
 			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
 		</div>
 		<AnswerError {unansweredRequired} {questionIndex} />

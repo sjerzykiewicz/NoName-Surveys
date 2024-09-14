@@ -32,7 +32,7 @@
 		on:introend={() => scrollToElement('.add-question')}
 	>
 		{#if isPreview}
-			<QuestionTitlePreview {questionIndex} />
+			<QuestionTitlePreview {questionIndex} questionType={question.component} />
 			<svelte:component this={question.preview} {questionIndex} />
 		{:else}
 			<QuestionTitle {questionIndex} questionType={question.component} bind:questionInput />

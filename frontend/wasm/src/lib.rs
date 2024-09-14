@@ -138,41 +138,33 @@ pub fn linkable_ring_signature(
 
     let n = pub_keys.len();
     let mut c: Vec<BigUint> = vec![BigUint::zero(); n];
-    let mut s: Vec<BigUint> = vec![BigUint::zero(); n];
-    let mut z_1: Vec<BigUint> = vec![BigUint::zero(); n];
-    let mut z_2: Vec<BigUint> = vec![BigUint::zero(); n];
     let mut sum_c_i = BigUint::zero();
+    let mut prod_y_i_c_i = BigUint::one();
 
     for i in 0..index {
-        s[i as usize] = rng.gen_biguint_below(&q);
         c[i as usize] = rng.gen_biguint_below(&q);
         sum_c_i += &c[i as usize];
-        z_1[i as usize] =
-            (g.modpow(&s[i as usize], &p) * y[i as usize].modpow(&c[i as usize], &p)) % &p;
-        z_2[i as usize] = (h.modpow(&s[i as usize], &p) * y0.modpow(&c[i as usize], &p)) % &p;
+        prod_y_i_c_i *= &y[i as usize].modpow(&c[i as usize], &p);
     }
-
-    z_1[index as usize] = g.modpow(&r, &p);
-    z_2[index as usize] = h.modpow(&r, &p);
 
     for i in index + 1..n as u32 {
-        s[i as usize] = rng.gen_biguint_below(&q);
         c[i as usize] = rng.gen_biguint_below(&q);
         sum_c_i += &c[i as usize];
-        z_1[i as usize] =
-            (g.modpow(&s[i as usize], &p) * y[i as usize].modpow(&c[i as usize], &p)) % &p;
-        z_2[i as usize] = (h.modpow(&s[i as usize], &p) * y0.modpow(&c[i as usize], &p)) % &p;
+        prod_y_i_c_i *= &y[i as usize].modpow(&c[i as usize], &p);
     }
 
-    let z_1_concatenated = z_1.iter().map(|x| x.to_string()).collect::<String>();
-    let z_2_concatenated = z_2.iter().map(|x| x.to_string()).collect::<String>();
+    sum_c_i %= &q;
 
-    let for_hash: String =
-        keys_concatenated + &y0.to_string() + &m + &z_1_concatenated + &z_2_concatenated;
+    let g_to_r = g.modpow(&r, &p);
+    let h_to_r = h.modpow(&r, &p);
+
+    let for_hash: String = keys_concatenated
+        + &y0.to_string()
+        + &m
+        + &((&g_to_r * &prod_y_i_c_i) % &p).to_string()
+        + &((&h_to_r * &y0.modpow(&sum_c_i, &p)) % &p).to_string();
 
     let hash_val: BigUint = h1(&for_hash);
-
-    sum_c_i = sum_c_i % &q;
 
     c[index as usize] = if hash_val >= sum_c_i {
         hash_val - sum_c_i
@@ -182,14 +174,11 @@ pub fn linkable_ring_signature(
 
     let prod: BigUint = (&c[index as usize] * pk) % &q;
 
-    s[index as usize] = if r >= prod { r - prod } else { &q - prod + r };
+    let s = if r >= prod { r - prod } else { &q - prod + r };
 
     let mut sig: Vec<String> = Vec::new();
     sig.push(y0.to_string());
-
-    for i in 0..n {
-        sig.push(s[i as usize].to_string());
-    }
+    sig.push(s.to_string());
 
     for i in 0..n {
         sig.push(c[i as usize].to_string());

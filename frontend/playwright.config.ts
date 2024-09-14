@@ -6,7 +6,10 @@ const config: PlaywrightTestConfig = {
 		port: 3000
 	},
 	testDir: 'tests',
-	testMatch: /(.+\.)?(test|spec)\.[jt]s/
+	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
+	use: {
+		storageState: 'playwright/.auth/user.json'
+	}
 };
 
 export default config;

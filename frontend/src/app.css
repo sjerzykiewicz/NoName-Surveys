@@ -837,7 +837,7 @@ tr:last-of-type th:last-of-type {
 }
 
 .delete-entry {
-	width: 1em;
+	width: 0em;
 	text-align: center;
 	padding-left: 0.5em;
 	padding-right: 0.5em;

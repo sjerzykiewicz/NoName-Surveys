@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { copyCode } from '$lib/utils/copyCode';
 	import { delay } from '$lib/utils/delay';
 	import { cubicInOut } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
 	import QrCode from '$lib/components/QrCode.svelte';
+	import { page } from '$app/stores';
 
 	let copiedIndex: number;
 	let innerWidth: number;
@@ -16,6 +17,24 @@
 		survey_code: string;
 		creation_date: string;
 	}[];
+
+	function deleteSurvey(i: number) {
+		fetch('/api/surveys/delete', {
+			method: 'POST',
+			body: JSON.stringify({
+				user_email: $page.data.session?.user?.email,
+				survey_code: survey_list[i].survey_code
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(() => {
+				survey_list.splice(i, 1);
+				invalidateAll();
+			})
+			.catch(() => alert('Error deleting survey'));
+	}
 </script>
 
 <svelte:window bind:innerWidth />
@@ -24,7 +43,7 @@
 	<tr>
 		<th title="Survey title" id="title-header" colspan="2">Survey Title</th>
 		<th title="Access code" id="code-header">Code</th>
-		<th title="Creation date" id="date-header">Date</th>
+		<th title="Creation date" id="date-header" colspan="2">Date</th>
 	</tr>
 	{#each survey_list.toReversed() as entry, entryIndex}
 		<tr>
@@ -78,6 +97,13 @@
 				{/if}
 			</td>
 			<td title="Creation date" class="date-entry">{entry.creation_date}</td>
+			<td
+				title="Delete the survey"
+				class="delete-entry"
+				on:click={() => deleteSurvey(survey_list.length - entryIndex - 1)}
+			>
+				<i class="material-symbols-rounded">delete</i></td
+			>
 		</tr>
 	{/each}
 </table>
@@ -106,7 +132,7 @@
 	}
 
 	#date-header {
-		width: 18%;
+		width: 19%;
 	}
 
 	@media screen and (max-width: 767px) {
@@ -115,7 +141,7 @@
 		}
 
 		#date-header {
-			width: 27%;
+			width: 32%;
 		}
 	}
 </style>

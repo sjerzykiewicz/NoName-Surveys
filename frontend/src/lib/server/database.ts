@@ -29,6 +29,16 @@ export const getSurveyByCode = (survey_code: string) => {
 	});
 };
 
+export const deleteSurveyByCode = (user_email: string, survey_code: string) => {
+	return fetch(`${host}/surveys/delete`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, survey_code }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
 export const saveAnswer = (answer: SurveyAnswer) => {
 	return fetch(`${host}/answers/fill`, {
 		method: 'POST',

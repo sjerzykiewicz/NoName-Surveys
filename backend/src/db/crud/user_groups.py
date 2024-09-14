@@ -2,10 +2,7 @@ from sqlmodel import select
 
 from src.db.base import Session
 from src.db.models.user_group import UserGroup, UserGroupBase
-from src.db.models.user_group_member import (
-    UserGroupMember,
-    UserGroupMemberBase,
-)
+from src.db.models.user_group_member import UserGroupMember, UserGroupMemberBase
 
 
 def get_user_groups(user_id: int, session: Session) -> list[UserGroup]:

@@ -11,6 +11,7 @@
 	import { MultiSelect } from 'svelte-multiselect';
 	import { ringMembers } from '$lib/stores/create-page';
 	import { isAccessLimited } from '$lib/stores/create-page';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	export let user_list: string[];
 	export let isPreview: boolean;
@@ -32,10 +33,17 @@
 		on:introend={() => scrollToElement('.add-question')}
 	>
 		{#if isPreview}
-			<QuestionTitlePreview {questionIndex} questionType={question.component} />
+			<QuestionTitlePreview
+				{questionIndex}
+				questionTypeData={getQuestionTypeData(question.component)}
+			/>
 			<svelte:component this={question.preview} {questionIndex} />
 		{:else}
-			<QuestionTitle {questionIndex} questionType={question.component} bind:questionInput />
+			<QuestionTitle
+				{questionIndex}
+				questionTypeData={getQuestionTypeData(question.component)}
+				bind:questionInput
+			/>
 			<QuestionError {questionIndex} />
 			<svelte:component this={question.component} {questionIndex} />
 			<ChoiceError {questionIndex} />

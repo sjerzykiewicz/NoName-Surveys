@@ -32,6 +32,7 @@
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
 	import { onMount, tick } from 'svelte';
 	import init, { linkable_ring_signature } from 'wasm';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	onMount(async () => {
 		await init();
@@ -275,7 +276,10 @@
 <Content>
 	{#each $questions as question, questionIndex (question)}
 		<div class="question" in:slide={{ duration: 200, easing: cubicInOut }}>
-			<QuestionTitle {questionIndex} questionType={componentTypeMap[question.type]} />
+			<QuestionTitle
+				{questionIndex}
+				questionTypeData={getQuestionTypeData(componentTypeMap[question.type])}
+			/>
 			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
 		</div>
 		<AnswerError {unansweredRequired} {questionIndex} />

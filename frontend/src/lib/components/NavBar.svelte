@@ -30,6 +30,11 @@
 			href: '/surveys',
 			disabled: !$page.data.session
 		},
+		Groups: {
+			name: 'Groups',
+			href: '/groups',
+			disabled: !$page.data.session
+		},
 		Account: {
 			name: 'Account',
 			href: '/account',

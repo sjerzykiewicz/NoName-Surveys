@@ -815,19 +815,19 @@ tr:last-of-type th:last-of-type {
 
 .title-entry,
 .code-entry,
-.delete-entry {
+.button-entry {
 	cursor: pointer;
 }
 
 .title-entry:hover,
 .code-entry:hover,
-.delete-entry:hover {
+.button-entry:hover {
 	background-color: var(--secondary-color);
 }
 
 .title-entry:active,
 .code-entry:active,
-.delete-entry:active {
+.button-entry:active {
 	background-color: var(--border-color);
 }
 
@@ -836,7 +836,7 @@ tr:last-of-type th:last-of-type {
 	cursor: default;
 }
 
-.delete-entry {
+.button-entry {
 	width: 0em;
 	text-align: center;
 	padding-left: 0.5em;
@@ -848,7 +848,7 @@ tr:last-of-type th:last-of-type {
 	text-align: center;
 }
 
-.delete-entry i,
+.button-entry i,
 .crypto-entry i {
 	padding-top: 0.2em;
 }
@@ -1057,10 +1057,6 @@ button.popup {
 	.info i {
 		margin-right: 0em;
 		margin-bottom: 0.5em;
-	}
-
-	.delete-entry {
-		width: 1.5em;
 	}
 
 	.user-list *:where(div.multiselect > ul.selected) {

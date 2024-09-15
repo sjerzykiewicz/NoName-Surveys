@@ -99,7 +99,7 @@
 			<td title="Creation date" class="date-entry">{entry.creation_date}</td>
 			<td
 				title="Delete the survey"
-				class="delete-entry"
+				class="button-entry"
 				on:click={() => deleteSurvey(survey_list.length - entryIndex - 1)}
 			>
 				<i class="material-symbols-rounded">delete</i></td

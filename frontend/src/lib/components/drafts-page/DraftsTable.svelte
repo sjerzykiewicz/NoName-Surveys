@@ -191,7 +191,7 @@
 				>{draft.title}</td
 			>
 			<td title="Creation date" class="date-entry">{draft.creation_date}</td>
-			<td title="Delete the draft" class="delete-entry" on:click={() => deleteDraft(draftIndex)}>
+			<td title="Delete the draft" class="button-entry" on:click={() => deleteDraft(draftIndex)}>
 				<i class="material-symbols-rounded">delete</i></td
 			>
 		</tr>

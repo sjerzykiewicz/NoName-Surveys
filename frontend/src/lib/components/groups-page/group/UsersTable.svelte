@@ -12,3 +12,14 @@
 		</tr>
 	{/each}
 </table>
+
+<style>
+	.title-entry {
+		cursor: default;
+	}
+
+	.title-entry:hover,
+	.title-entry:active {
+		background-color: initial;
+	}
+</style>

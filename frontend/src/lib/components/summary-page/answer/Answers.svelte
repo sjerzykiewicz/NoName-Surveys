@@ -9,6 +9,7 @@
 	import Binary from './Binary.svelte';
 	import Rank from './Rank.svelte';
 	import type { ComponentType } from 'svelte';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	export let answer;
 	export let id: string;
@@ -33,7 +34,7 @@
 		<QuestionTitle
 			question={question.question}
 			{questionIndex}
-			questionType={componentTypeMap[question.question_type]}
+			questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
 			required={question.required}
 		/>
 		<svelte:component this={componentTypeMap[question.question_type]} data={question} />

@@ -1,16 +1,12 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
-	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
-	import { beforeUpdate, type ComponentType } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let questionIndex: number;
-	export let questionType: ComponentType;
+	export let questionTypeData: { title: string; icon: string; text: string };
 	export let questionInput: HTMLDivElement;
-
-	let questionTypeData: { title: string; icon: string; text: string };
 
 	function removeQuestion() {
 		$questions.splice(questionIndex, 1);
@@ -33,10 +29,6 @@
 		$questions[questionIndex].required = !$questions[questionIndex].required;
 		$questions = $questions;
 	}
-
-	beforeUpdate(() => {
-		questionTypeData = getQuestionTypeData(questionType);
-	});
 </script>
 
 <div

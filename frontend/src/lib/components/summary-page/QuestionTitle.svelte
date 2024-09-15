@@ -1,17 +1,8 @@
 <script lang="ts">
-	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
-	import { beforeUpdate, type ComponentType } from 'svelte';
-
 	export let question: string;
 	export let questionIndex: number;
-	export let questionType: ComponentType;
+	export let questionTypeData: { title: string; icon: string; text: string };
 	export let required: boolean;
-
-	let questionTypeData: { title: string; icon: string; text: string };
-
-	beforeUpdate(() => {
-		questionTypeData = getQuestionTypeData(questionType);
-	});
 </script>
 
 <div class="question-label" id={questionIndex.toString()}>

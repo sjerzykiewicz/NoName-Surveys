@@ -82,6 +82,13 @@ async def create_user_group(
             detail=f"Users not found: {', '.join(not_found_emails)}",
         )
 
+    if len(set(user_group_creation_request.user_group_members)) != len(
+        user_group_creation_request.user_group_members
+    ):
+        raise HTTPException(
+            status_code=400, detail="Duplicate user group members not allowed"
+        )
+
     existing_user_group = user_groups_crud.get_user_group_by_name(
         user.id, user_group_creation_request.user_group_name, session
     )
@@ -110,20 +117,28 @@ async def create_user_group(
 
 
 @router.post(
-    "/update",
-    response_description="Update a user group name",
+    "/rename",
+    response_description="Rename a user group name",
     response_model=dict,
 )
-async def update_user_group(
-    user_group_update_request: UserGroupNameUpdate,
+async def rename_user_group(
+    user_group_rename_request: UserGroupNameUpdate,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_update_request.user_email, session)
+    user = user_crud.get_user_by_email(user_group_rename_request.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
 
+    existing_user_group_with_new_name = user_groups_crud.get_user_group_by_name(
+        user.id, user_group_rename_request.new_name, session
+    )
+    if existing_user_group_with_new_name is not None:
+        raise HTTPException(
+            status_code=400, detail="User group with the new name already exists"
+        )
+
     user_group = user_groups_crud.get_user_group_by_name(
-        user.id, user_group_update_request.name, session
+        user.id, user_group_rename_request.name, session
     )
     if user_group is None:
         raise HTTPException(
@@ -131,7 +146,7 @@ async def update_user_group(
         )
 
     user_groups_crud.update_user_group_name(
-        user_group.id, user_group_update_request.new_name, session
+        user_group.id, user_group_rename_request.new_name, session
     )
 
     return {"message": "user group updated successfully"}

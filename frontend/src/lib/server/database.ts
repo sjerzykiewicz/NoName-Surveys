@@ -152,3 +152,57 @@ export const userHasPublicKey = (user_email: string) => {
 export const getAllUsers = () => {
 	return fetch(`${host}/users/all-with-public-keys`, { method: 'GET' });
 };
+
+export const getAllUserGroups = (user_email: string) => {
+	return fetch(`${host}/user-groups/all`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const getUserGroup = (user_email: string, name: string) => {
+	return fetch(`${host}/user-groups/fetch`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, name }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const createUserGroup = (
+	user_email: string,
+	user_group_name: string,
+	user_group_members: string[]
+) => {
+	return fetch(`${host}/user-groups/create`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, user_group_name, user_group_members }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const updateUserGroup = (user_email: string, name: string, new_name: string) => {
+	return fetch(`${host}/user-groups/update`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, name, new_name }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const deleteUserGroup = (user_email: string, name: string) => {
+	return fetch(`${host}/user-groups/delete`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, name }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};

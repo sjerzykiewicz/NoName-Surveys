@@ -3,5 +3,5 @@ import * as db from '$lib/server/database';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const { user_email, name, new_name } = await request.json();
-	return db.updateUserGroup(user_email, name, new_name);
+	return db.renameUserGroup(user_email, name, new_name);
 };

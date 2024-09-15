@@ -22,8 +22,8 @@
 			.catch(() => alert('Error deleting group'));
 	}
 
-	function updateGroup(name: string, new_name: string) {
-		fetch('/api/groups/update', {
+	function renameGroup(name: string, new_name: string) {
+		fetch('/api/groups/rename', {
 			method: 'POST',
 			body: JSON.stringify({
 				user_email: $page.data.session?.user?.email,
@@ -66,7 +66,6 @@
 						bind:textContent={newName}
 						role="textbox"
 						tabindex="0"
-						on:submit={() => updateGroup(group, newName)}
 					>
 						{newName}
 					</div>
@@ -74,7 +73,7 @@
 				<td
 					title="Save the new group name"
 					class="button-entry save-entry"
-					on:click={() => updateGroup(group, newName)}
+					on:click={() => renameGroup(group, newName)}
 				>
 					<i class="material-symbols-rounded">save</i></td
 				>

@@ -187,8 +187,8 @@ export const createUserGroup = (
 	});
 };
 
-export const updateUserGroup = (user_email: string, name: string, new_name: string) => {
-	return fetch(`${host}/user-groups/update`, {
+export const renameUserGroup = (user_email: string, name: string, new_name: string) => {
+	return fetch(`${host}/user-groups/rename`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email, name, new_name }),
 		headers: {

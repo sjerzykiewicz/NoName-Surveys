@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { invalidateAll, goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let groups: string[];
 
@@ -59,13 +60,16 @@
 					}}><i class="material-symbols-rounded">edit_off</i></td
 				>
 				<td>
+					<!-- svelte-ignore a11y-autofocus -->
 					<div
 						title="Enter a new group name"
 						class="table-input"
 						contenteditable
 						bind:textContent={newName}
+						autofocus
 						role="textbox"
 						tabindex="0"
+						on:keydown={handleNewLine}
 					>
 						{newName}
 					</div>

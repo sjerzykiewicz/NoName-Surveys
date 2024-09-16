@@ -18,8 +18,11 @@
 		cursor: default;
 	}
 
-	.title-entry:hover,
-	.title-entry:active {
-		background-color: initial;
+	tr:nth-child(2n + 1) td {
+		background-color: var(--primary-dark-color);
+	}
+
+	tr:nth-child(2n + 2) td {
+		background-color: var(--primary-color);
 	}
 </style>

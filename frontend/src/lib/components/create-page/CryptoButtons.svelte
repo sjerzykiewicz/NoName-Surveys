@@ -8,6 +8,7 @@
 	import { Access } from '$lib/entities/Access';
 	import { onMount } from 'svelte';
 	import RespondentTypeButton from './RespondentTypeButton.svelte';
+	import { getRespondentTypeData } from '$lib/utils/getRespondentTypeData';
 
 	export let users: string[];
 	export let groups: string[];
@@ -38,53 +39,65 @@
 
 <svelte:window bind:innerWidth />
 
-<div class="button-group">
-	<div class="crypto-buttons">
-		<button
-			title={$isAccessLimited ? 'Respondent group defined' : 'Define respondent group'}
-			class="access-button"
-			class:clicked={isPanelVisible}
-			on:click={togglePanel}
-		>
-			<i class="material-symbols-rounded">passkey</i>Access
-		</button>
-		<RespondentTypeButton respondentType={access} respondentTypeIndex={-1} />
-	</div>
-	{#if isPanelVisible}
-		<div
-			class="button-panel"
-			transition:slide={{ duration: 200, easing: cubicInOut }}
-			on:introstart={() => scrollToElement('.access-button')}
-		>
-			{#each respondentTypes as respondentType, respondentTypeIndex}
-				<RespondentTypeButton
-					{respondentType}
-					{respondentTypeIndex}
-					on:chooseRespondentType={(event) => (access = event.detail.type)}
-				/>
-			{/each}
-		</div>
-	{/if}
-</div>
 <div class="crypto-row">
+	<div class="button-group">
+		<div class="crypto-buttons">
+			<button
+				title={$isAccessLimited ? 'Respondent group defined' : 'Define respondent group'}
+				class="access-button"
+				class:clicked={isPanelVisible}
+				on:click={togglePanel}
+			>
+				<i class="material-symbols-rounded">passkey</i>Access
+			</button>
+			<RespondentTypeButton
+				respondentType={access}
+				respondentTypeData={getRespondentTypeData(access)}
+				respondentTypeIndex={-1}
+			/>
+		</div>
+		{#if isPanelVisible}
+			<div
+				class="button-panel"
+				transition:slide={{ duration: 200, easing: cubicInOut }}
+				on:introstart={() => scrollToElement('.access-button')}
+			>
+				{#each respondentTypes as respondentType, respondentTypeIndex}
+					<RespondentTypeButton
+						{respondentType}
+						respondentTypeData={getRespondentTypeData(respondentType)}
+						{respondentTypeIndex}
+						on:chooseRespondentType={(event) => (access = event.detail.type)}
+					/>
+				{/each}
+			</div>
+		{/if}
+	</div>
 	{#if access === Access.Users}
 		<SelectUsers {users} />
 	{:else if access === Access.Group}
 		<SelectGroup {groups} />
 	{:else}
-		<div class="tooltip">
-			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= 509 ? 'bottom' : 'right'}"
-				>Use cryptography to allow only selected users to fill out the survey.</span
-			>
+		<div class="crypto-info">
+			<div class="tooltip">
+				<i class="material-symbols-rounded">info</i>
+				<span class="tooltip-text right"
+					>Use cryptography to allow only selected users to fill out the survey.</span
+				>
+			</div>
 		</div>
 	{/if}
 </div>
 
 <style>
+	.crypto-info {
+		width: 14em;
+	}
+
 	.tooltip {
-		--tooltip-width: 18em;
-		font-size: 0.8em;
+		--tooltip-width: 15em;
+		margin-top: 0.33em;
+		width: fit-content;
 	}
 
 	.tooltip i {
@@ -107,8 +120,8 @@
 	.crypto-row {
 		flex: 1;
 		display: flex;
-		flex-flow: row;
-		align-items: center;
+		flex-flow: row wrap;
+		align-items: flex-start;
 		justify-content: flex-start;
 	}
 
@@ -158,14 +171,22 @@
 	}
 
 	@media screen and (max-width: 767px) {
-		.crypto-row {
+		.button-group {
 			font-size: 1em;
+		}
+
+		.tooltip {
+			margin-top: 0.17em;
 		}
 	}
 
-	@media screen and (max-width: 509px) {
+	@media screen and (max-width: 607px) {
+		.crypto-info {
+			width: 10.5em;
+		}
+
 		.tooltip {
-			--tooltip-width: 9em;
+			--tooltip-width: 10em;
 		}
 	}
 </style>

@@ -23,6 +23,7 @@
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { previousQuestion } from '$lib/stores/create-page';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	export let questionInput: HTMLDivElement;
 
@@ -163,6 +164,7 @@
 		{#if $previousQuestion}
 			<QuestionTypeButton
 				questionType={$previousQuestion}
+				questionTypeData={getQuestionTypeData($previousQuestion)}
 				questionTypeIndex={-1}
 				on:addQuestionType={(event) => addQuestion(event.detail.component)}
 			/>
@@ -177,6 +179,7 @@
 			{#each questionTypes as questionType, questionTypeIndex}
 				<QuestionTypeButton
 					{questionType}
+					questionTypeData={getQuestionTypeData(questionType)}
 					{questionTypeIndex}
 					on:addQuestionType={(event) => addQuestion(event.detail.component)}
 				/>

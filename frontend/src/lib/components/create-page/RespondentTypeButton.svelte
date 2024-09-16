@@ -1,25 +1,18 @@
 <script lang="ts">
-	import { beforeUpdate } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { getRespondentTypeData } from '$lib/utils/getRespondentTypeData';
 	import { Access } from '$lib/entities/Access';
 
 	export let respondentType: Access;
+	export let respondentTypeData: { title: string; icon: string; text: string };
 	export let respondentTypeIndex: number;
-
-	let respondentTypeData: { title: string; icon: string; text: string };
 
 	const dispatch = createEventDispatcher();
 
 	function handleClick() {
 		dispatch('chooseRespondentType', { type: respondentType });
 	}
-
-	beforeUpdate(() => {
-		respondentTypeData = getRespondentTypeData(respondentType);
-	});
 </script>
 
 <button
@@ -54,6 +47,8 @@
 		border-top: 1px solid var(--border-color);
 		border-bottom: 1px solid var(--border-color);
 		width: auto;
+		cursor: default;
+		background-color: var(--secondary-color);
 	}
 
 	i {

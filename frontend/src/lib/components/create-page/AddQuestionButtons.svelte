@@ -152,7 +152,7 @@
 <div class="button-group" class:clicked={isPanelVisible} class:previous={$previousQuestion}>
 	<div class="add-buttons">
 		<button
-			title="Choose question type"
+			title={isPanelVisible ? 'Stop choosing question type' : 'Choose question type'}
 			class="add-question"
 			class:clicked={isPanelVisible}
 			class:previous={$previousQuestion}

@@ -106,6 +106,10 @@
 		overflow-wrap: anywhere;
 	}
 
+	.table-input[contenteditable]:empty::before {
+		content: 'Enter group name...';
+		color: var(--text-dark-color);
+	}
 	.save-entry {
 		background-color: var(--accent-color);
 	}

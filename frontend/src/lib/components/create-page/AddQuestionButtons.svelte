@@ -149,7 +149,7 @@
 	});
 </script>
 
-<div class="button-group" class:clicked={isPanelVisible} class:previous={$previousQuestion}>
+<div class="button-group">
 	<div class="add-buttons">
 		<button
 			title={isPanelVisible ? 'Stop choosing question type' : 'Choose question type'}

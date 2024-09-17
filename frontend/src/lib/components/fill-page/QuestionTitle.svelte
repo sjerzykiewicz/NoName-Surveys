@@ -1,16 +1,8 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/fill-page';
-	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
-	import { beforeUpdate, type ComponentType } from 'svelte';
 
 	export let questionIndex: number;
-	export let questionType: ComponentType;
-
-	let questionTypeData: { title: string; icon: string; text: string };
-
-	beforeUpdate(() => {
-		questionTypeData = getQuestionTypeData(questionType);
-	});
+	export let questionTypeData: { title: string; icon: string; text: string };
 </script>
 
 <div class="question-label" id={questionIndex.toString()}>

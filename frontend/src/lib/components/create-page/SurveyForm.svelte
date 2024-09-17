@@ -9,6 +9,7 @@
 	import { slide } from 'svelte/transition';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import CryptoButtons from './CryptoButtons.svelte';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	export let users: string[];
 	export let groups: string[];
@@ -24,10 +25,17 @@
 		on:introend={() => scrollToElement('.add-question')}
 	>
 		{#if isPreview}
-			<QuestionTitlePreview {questionIndex} questionType={question.component} />
+			<QuestionTitlePreview
+				{questionIndex}
+				questionTypeData={getQuestionTypeData(question.component)}
+			/>
 			<svelte:component this={question.preview} {questionIndex} />
 		{:else}
-			<QuestionTitle {questionIndex} questionType={question.component} bind:questionInput />
+			<QuestionTitle
+				{questionIndex}
+				questionTypeData={getQuestionTypeData(question.component)}
+				bind:questionInput
+			/>
 			<QuestionError {questionIndex} />
 			<svelte:component this={question.component} {questionIndex} />
 			<ChoiceError {questionIndex} />

@@ -7,6 +7,7 @@
 	export let respondentType: Access;
 	export let respondentTypeData: { title: string; icon: string; text: string };
 	export let respondentTypeIndex: number;
+	export let groups: string[];
 
 	const dispatch = createEventDispatcher();
 
@@ -19,6 +20,7 @@
 	title={respondentTypeData.title}
 	class:chosen={respondentTypeIndex === -1}
 	class:last={respondentTypeIndex === 2}
+	disabled={respondentType === Access.Group && groups.length === 0}
 	in:slide={{ axis: 'x', duration: 200, easing: cubicInOut }}
 	on:click={handleClick}
 	><i class="material-symbols-rounded">{respondentTypeData.icon}</i
@@ -48,7 +50,7 @@
 		border-bottom: 1px solid var(--border-color);
 		width: auto;
 		cursor: default;
-		background-color: var(--secondary-color);
+		background-color: var(--primary-dark-color);
 	}
 
 	i {

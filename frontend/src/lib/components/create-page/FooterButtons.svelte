@@ -3,8 +3,9 @@
 		title,
 		questions,
 		previousQuestion,
-		isAccessLimited,
-		ringMembers
+		access,
+		ringMembers,
+		selectedGroup
 	} from '$lib/stores/create-page';
 	import Question from '$lib/entities/questions/Question';
 	import { SingleQuestion } from '$lib/entities/questions/Single';
@@ -35,6 +36,7 @@
 	import { error } from '@sveltejs/kit';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import { Access } from '$lib/entities/Access';
 
 	export let isPreview: boolean = false;
 
@@ -166,11 +168,31 @@
 		}
 	}
 
+	function fetchGroup(name: string) {
+		fetch('/api/groups/fetch', {
+			method: 'POST',
+			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				$ringMembers = data;
+			})
+			.catch(() => alert('Error deleting group'));
+	}
+
 	async function createSurvey() {
 		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
 
-		const useCrypto = $ringMembers.length !== 0;
+		if ($access === Access.Group) {
+			fetchGroup($selectedGroup);
+		}
+
+		const useCrypto = $access !== Access.Public;
+
 		const surveyInfo = new SurveyInfo(
 			$page.data.session!.user!.email!,
 			parsedSurvey,
@@ -193,8 +215,9 @@
 			$title = '';
 			$questions = [];
 			$previousQuestion = null;
-			$isAccessLimited = false;
+			$access = Access.Public;
 			$ringMembers = [];
+			$selectedGroup = '';
 			return await goto(`/${body.survey_code}/view`, { replaceState: true, invalidateAll: true });
 		}
 	}

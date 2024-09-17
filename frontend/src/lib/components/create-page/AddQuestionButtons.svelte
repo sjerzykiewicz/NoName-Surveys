@@ -137,7 +137,7 @@
 
 	onMount(() => {
 		function handleClick(event: MouseEvent) {
-			if (isPanelVisible && !(event.target as HTMLElement).closest('.button-group')) {
+			if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
 				isPanelVisible = false;
 			}
 		}

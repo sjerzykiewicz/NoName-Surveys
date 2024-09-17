@@ -1,7 +1,6 @@
 <script lang="ts">
 	import SelectUsers from './SelectUsers.svelte';
 	import SelectGroup from './SelectGroup.svelte';
-	import { isAccessLimited } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
@@ -9,12 +8,12 @@
 	import { onMount } from 'svelte';
 	import RespondentTypeButton from './RespondentTypeButton.svelte';
 	import { getRespondentTypeData } from '$lib/utils/getRespondentTypeData';
+	import { access } from '$lib/stores/create-page';
 
 	export let users: string[];
 	export let groups: string[];
 
 	let isPanelVisible: boolean = false;
-	let access: Access = Access.Public;
 	let respondentTypes: Array<Access> = [Access.Public, Access.Users, Access.Group];
 	let innerWidth: number;
 
@@ -43,7 +42,7 @@
 	<div class="button-group">
 		<div class="crypto-buttons">
 			<button
-				title={$isAccessLimited ? 'Respondent group defined' : 'Define respondent group'}
+				title={isPanelVisible ? 'Stop defining respondent group' : 'Define respondent group'}
 				class="access-button"
 				class:clicked={isPanelVisible}
 				on:click={togglePanel}
@@ -51,9 +50,10 @@
 				<i class="material-symbols-rounded">passkey</i>Access
 			</button>
 			<RespondentTypeButton
-				respondentType={access}
-				respondentTypeData={getRespondentTypeData(access)}
+				respondentType={$access}
+				respondentTypeData={getRespondentTypeData($access)}
 				respondentTypeIndex={-1}
+				{groups}
 			/>
 		</div>
 		{#if isPanelVisible}
@@ -67,15 +67,16 @@
 						{respondentType}
 						respondentTypeData={getRespondentTypeData(respondentType)}
 						{respondentTypeIndex}
-						on:chooseRespondentType={(event) => (access = event.detail.type)}
+						{groups}
+						on:chooseRespondentType={(event) => ($access = event.detail.type)}
 					/>
 				{/each}
 			</div>
 		{/if}
 	</div>
-	{#if access === Access.Users}
+	{#if $access === Access.Users}
 		<SelectUsers {users} />
-	{:else if access === Access.Group}
+	{:else if $access === Access.Group}
 		<SelectGroup {groups} />
 	{:else}
 		<div class="crypto-info">

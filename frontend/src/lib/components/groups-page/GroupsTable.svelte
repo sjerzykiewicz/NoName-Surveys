@@ -44,61 +44,65 @@
 	}
 </script>
 
-<table>
-	<tr>
-		<th title="Group title" id="title-header" colspan="3">Group Title</th>
-	</tr>
-	{#each groups as group, groupIndex}
+{#if groups.length === 0}
+	<div title="Groups" class="title empty">No groups yet!</div>
+{:else}
+	<table>
 		<tr>
-			{#if editedIndex === groupIndex}
-				<td
-					title="Stop renaming the group"
-					class="button-entry"
-					on:click={() => {
-						editedIndex = -1;
-						newName = '';
-					}}><i class="material-symbols-rounded">edit_off</i></td
-				>
-				<td>
-					<!-- svelte-ignore a11y-autofocus -->
-					<div
-						title="Enter a new group name"
-						class="table-input"
-						contenteditable
-						bind:textContent={newName}
-						autofocus
-						role="textbox"
-						tabindex="0"
-						on:keydown={handleNewLine}
-					>
-						{newName}
-					</div>
-				</td>
-				<td
-					title="Save the new group name"
-					class="button-entry save-entry"
-					on:click={() => renameGroup(group, newName)}
-				>
-					<i class="material-symbols-rounded">save</i></td
-				>
-			{:else}
-				<td
-					title="Rename the group"
-					class="button-entry"
-					on:click={() => {
-						editedIndex = groupIndex;
-					}}><i class="material-symbols-rounded">edit</i></td
-				>
-				<td title="Open the group" class="title-entry" on:click={() => goto('/groups/' + group)}
-					>{group}</td
-				>
-				<td title="Delete the group" class="button-entry" on:click={() => deleteGroup(group)}>
-					<i class="material-symbols-rounded">delete</i></td
-				>
-			{/if}
+			<th title="Group title" id="title-header" colspan="3">Group Title</th>
 		</tr>
-	{/each}
-</table>
+		{#each groups as group, groupIndex}
+			<tr>
+				{#if editedIndex === groupIndex}
+					<td
+						title="Stop renaming the group"
+						class="button-entry"
+						on:click={() => {
+							editedIndex = -1;
+							newName = '';
+						}}><i class="material-symbols-rounded">edit_off</i></td
+					>
+					<td>
+						<!-- svelte-ignore a11y-autofocus -->
+						<div
+							title="Enter a new group name"
+							class="table-input"
+							contenteditable
+							bind:textContent={newName}
+							autofocus
+							role="textbox"
+							tabindex="0"
+							on:keydown={handleNewLine}
+						>
+							{newName}
+						</div>
+					</td>
+					<td
+						title="Save the new group name"
+						class="button-entry save-entry"
+						on:click={() => renameGroup(group, newName)}
+					>
+						<i class="material-symbols-rounded">save</i></td
+					>
+				{:else}
+					<td
+						title="Rename the group"
+						class="button-entry"
+						on:click={() => {
+							editedIndex = groupIndex;
+						}}><i class="material-symbols-rounded">edit</i></td
+					>
+					<td title="Open the group" class="title-entry" on:click={() => goto('/groups/' + group)}
+						>{group}</td
+					>
+					<td title="Delete the group" class="button-entry" on:click={() => deleteGroup(group)}>
+						<i class="material-symbols-rounded">delete</i></td
+					>
+				{/if}
+			</tr>
+		{/each}
+	</table>
+{/if}
 
 <style>
 	.table-input {

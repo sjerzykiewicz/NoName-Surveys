@@ -22,7 +22,7 @@
 
 <Content>
 	{#if data.answers.length === 0}
-		<div title="Answers" class="title answers">No answers yet!</div>
+		<div title="Answers" class="title empty">No answers yet!</div>
 	{:else}
 		<AnswersSummary surveyAnswers={data.answers} />
 		<AnswersTable {numbers} />

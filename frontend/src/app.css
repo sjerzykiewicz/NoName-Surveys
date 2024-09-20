@@ -83,56 +83,56 @@ body {
 	box-shadow: none !important;
 }
 
-.user-list *::highlight(sms-search-matches) {
+.select-list *::highlight(sms-search-matches) {
 	color: var(--accent-color) !important;
 }
 
-.user-list *:where(div.multiselect) {
+.select-list *:where(div.multiselect) {
 	cursor: default !important;
 }
 
-.user-list *:where(div.multiselect > ul.selected > li),
-.user-list *:where(div.multiselect > ul.options) {
+.select-list *:where(div.multiselect > ul.selected > li),
+.select-list *:where(div.multiselect > ul.options) {
 	white-space: pre-line !important;
 	overflow-wrap: anywhere !important;
 }
 
-.user-list button {
+.select-list button {
 	box-shadow: none !important;
 }
 
-.user-list *:where(div.multiselect > ul.selected) {
+.select-list *:where(div.multiselect > ul.selected) {
 	max-height: 19em;
 	overflow-y: auto;
 }
 
 :root::-webkit-scrollbar,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar,
-.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar {
+.select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar,
+.select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar {
 	width: 1em;
 }
 
 :root::-webkit-scrollbar-track,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-track,
-.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-track {
+.select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-track,
+.select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-track {
 	background-color: var(--secondary-dark-color);
 }
 
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-track,
-.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-track {
+.select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-track,
+.select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-track {
 	border-top-right-radius: 5px;
 	border-bottom-right-radius: 5px;
 }
 
 :root::-webkit-scrollbar-corner,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-corner,
-.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-corner {
+.select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-corner,
+.select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-corner {
 	background-color: var(--secondary-dark-color);
 }
 
 :root::-webkit-scrollbar-thumb,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb,
-.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb {
+.select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb,
+.select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb {
 	background-color: var(--primary-color);
 	background-clip: padding-box;
 	border-radius: 5px;
@@ -140,14 +140,14 @@ body {
 }
 
 :root::-webkit-scrollbar-thumb:hover,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:hover,
-.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb:hover {
+.select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:hover,
+.select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb:hover {
 	background-color: var(--text-dark-color);
 }
 
 :root::-webkit-scrollbar-thumb:active,
-.user-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:active,
-.user-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb:active {
+.select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:active,
+.select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb:active {
 	background-color: var(--border-color);
 }
 
@@ -191,20 +191,10 @@ button:hover,
 	background-color: var(--accent-dark-color);
 }
 
-.sign-out {
-	background-color: var(--error-color);
-	color: var(--text-color-2);
-}
-
-.sign-out:hover {
-	background-color: var(--error-dark-color);
-}
-
 button:active,
 .footer-button:active,
 .save:active,
-.back:active,
-.sign-out:active {
+.back:active {
 	background-color: var(--border-color);
 }
 
@@ -648,8 +638,8 @@ input[type='radio']:checked {
 	white-space: pre-wrap !important;
 }
 
-.answers {
-	padding-bottom: 1em;
+.title.empty {
+	padding-bottom: 0.42em;
 	margin-bottom: 0em;
 }
 
@@ -725,6 +715,12 @@ select:disabled {
 	background-color: var(--secondary-color);
 	color: var(--text-dark-color);
 	opacity: 1;
+}
+
+.select-list {
+	flex: 1;
+	box-shadow: 0px 4px 4px var(--shadow-color);
+	margin-bottom: 0.63em;
 }
 
 .info {
@@ -1015,7 +1011,8 @@ button.popup {
 	.error,
 	table,
 	.tooltip-text,
-	.popup-text {
+	.popup-text,
+	.select-list {
 		font-size: 0.8em;
 	}
 
@@ -1059,7 +1056,7 @@ button.popup {
 		margin-bottom: 0.5em;
 	}
 
-	.user-list *:where(div.multiselect > ul.selected) {
+	.select-list *:where(div.multiselect > ul.selected) {
 		max-height: 15.5em;
 	}
 }

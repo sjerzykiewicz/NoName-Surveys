@@ -168,36 +168,44 @@
 		}
 	}
 
-	function fetchGroup(name: string) {
-		fetch('/api/groups/fetch', {
+	let ring: string[] = [];
+
+	async function fetchGroup(name: string) {
+		const response = await fetch('/api/groups/fetch', {
 			method: 'POST',
 			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
-			.then((res) => res.json())
-			.then((data) => {
-				$ringMembers = data;
-			})
-			.catch(() => alert('Error deleting group'));
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+		} else {
+			const body = await response.json();
+			ring = [...$ringMembers, ...body];
+		}
 	}
 
 	async function createSurvey() {
 		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
+		const useCrypto = $access === Access.Private;
+		let finalRing: string[] = [];
 
-		if ($access === Access.Group) {
-			fetchGroup($selectedGroup);
+		if ($selectedGroup.length > 0) {
+			await fetchGroup($selectedGroup[0]);
+			finalRing = [...new Set(ring)];
+		} else if ($ringMembers.length > 0) {
+			finalRing = [...$ringMembers];
 		}
-
-		const useCrypto = $access !== Access.Public;
 
 		const surveyInfo = new SurveyInfo(
 			$page.data.session!.user!.email!,
 			parsedSurvey,
 			useCrypto,
-			$ringMembers
+			finalRing
 		);
 
 		const response = await fetch('/api/surveys/create', {
@@ -217,7 +225,9 @@
 			$previousQuestion = null;
 			$access = Access.Public;
 			$ringMembers = [];
-			$selectedGroup = '';
+			$selectedGroup = [];
+			ring = [];
+			finalRing = [];
 			return await goto(`/${body.survey_code}/view`, { replaceState: true, invalidateAll: true });
 		}
 	}

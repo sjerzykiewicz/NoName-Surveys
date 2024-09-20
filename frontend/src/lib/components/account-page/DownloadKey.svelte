@@ -57,7 +57,7 @@
 	</button>
 	<div class="tooltip">
 		<i class="material-symbols-rounded">info</i>
-		<span class="tooltip-text {innerWidth <= 638 ? 'bottom' : 'right'}">
+		<span class="tooltip-text {innerWidth <= 633 ? 'bottom' : 'right'}">
 			These keys allow you to participate in secure surveys. Once they are generated, it is your
 			responsibility to keep them safe. When submitting a secure survey, you will be asked to
 			provide these keys to your browser for digital signature.
@@ -67,7 +67,7 @@
 
 <style>
 	.tooltip {
-		--tooltip-width: 38em;
+		--tooltip-width: 29em;
 	}
 
 	.tooltip i {
@@ -83,11 +83,11 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		justify-content: flex-start;
 		color: var(--text-color);
 		font-size: 1.5em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
 		width: fit-content;
+		margin-inline: auto;
 		padding-top: 1em;
 		padding-bottom: 1.5em;
 		border-bottom: 1px solid var(--border-color);
@@ -97,15 +97,15 @@
 		margin-right: 0.5em;
 	}
 
-	@media screen and (max-width: 1454px) {
+	@media screen and (max-width: 1512px) {
 		.tooltip {
-			--tooltip-width: 29em;
+			--tooltip-width: 17em;
 		}
 	}
 
-	@media screen and (max-width: 1108px) {
+	@media screen and (max-width: 1048px) {
 		.tooltip {
-			--tooltip-width: 20em;
+			--tooltip-width: 9.5em;
 		}
 	}
 
@@ -114,16 +114,16 @@
 			font-size: 1.25em;
 		}
 	}
-
-	@media screen and (max-width: 638px) {
+	/*
+	@media screen and (max-width: 633px) {
 		.tooltip {
 			--tooltip-width: 18em;
 		}
-	}
+	} */
 
-	@media screen and (max-width: 457px) {
+	@media screen and (max-width: 633px) {
 		.tooltip {
-			--tooltip-width: 10em;
+			--tooltip-width: 19em;
 		}
 
 		.tooltip .tooltip-text.bottom {
@@ -134,7 +134,7 @@
 		}
 
 		.tooltip .tooltip-text.bottom::after {
-			left: 85%;
+			left: 92%;
 			margin-left: -0.75em;
 		}
 	}

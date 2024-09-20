@@ -1,47 +1,15 @@
 <script lang="ts">
+	import MultiSelect from '../MultiSelect.svelte';
 	import { selectedGroup } from '$lib/stores/create-page';
 
 	export let groups: string[];
-
-	if (groups.length > 0) {
-		$selectedGroup = groups[0];
-	}
 </script>
 
-<div>
-	<select title="Select group" bind:value={$selectedGroup}>
-		{#each groups as group}
-			<option value={group}>
-				{group}
-			</option>
-		{/each}
-	</select>
+<div title="Select group" class="select-list">
+	<MultiSelect
+		bind:selected={$selectedGroup}
+		options={groups}
+		placeholder="Select group"
+		maxSelect={1}
+	/>
 </div>
-
-<style>
-	div {
-		display: flex;
-		max-width: 18.4em;
-	}
-
-	select {
-		flex: 1;
-		cursor: pointer;
-		overflow-wrap: break-word;
-		text-overflow: ellipsis;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		font-size: 1.25em;
-		height: 1.75em;
-		max-width: 100%;
-	}
-
-	@media screen and (max-width: 767px) {
-		div {
-			max-width: 16em;
-		}
-
-		select {
-			font-size: 1em;
-		}
-	}
-</style>

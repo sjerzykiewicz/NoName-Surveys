@@ -180,25 +180,42 @@
 	}
 </script>
 
-<table>
-	<tr>
-		<th title="Draft title" id="title-header">Draft Title</th>
-		<th title="Creation date" id="date-header" colspan="2">Date</th>
-	</tr>
-	{#each drafts as draft, draftIndex}
+{#if drafts.length === 0}
+	<div title="Drafts" class="title empty">No drafts yet!</div>
+{:else}
+	<table>
 		<tr>
-			<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
-				>{draft.title}</td
-			>
-			<td title="Creation date" class="date-entry">{draft.creation_date}</td>
-			<td title="Delete the draft" class="button-entry" on:click={() => deleteDraft(draftIndex)}>
-				<i class="material-symbols-rounded">delete</i></td
-			>
+			<th title="Draft title" id="title-header">Draft Title</th>
+			<th title="Creation date" id="date-header" colspan="2">Date</th>
 		</tr>
-	{/each}
-</table>
+		{#each drafts as draft, draftIndex}
+			<tr>
+				<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
+					>{draft.title}</td
+				>
+				<td title="Creation date" class="date-entry">{draft.creation_date}</td>
+				<td title="Delete the draft" class="button-entry" on:click={() => deleteDraft(draftIndex)}>
+					<i class="material-symbols-rounded">delete</i></td
+				>
+			</tr>
+		{/each}
+	</table>
+{/if}
+<button title="Create a draft" on:click={() => goto('/create')}>
+	<i class="material-symbols-rounded">add</i>Draft
+</button>
 
 <style>
+	button {
+		font-size: 1.25em;
+		margin-top: 0.5em;
+	}
+
+	button i {
+		margin-right: 0.15em;
+		font-variation-settings: 'wght' 700;
+	}
+
 	#title-header {
 		width: 77%;
 	}

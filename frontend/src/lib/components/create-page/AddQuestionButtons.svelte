@@ -245,9 +245,15 @@
 		z-index: 100;
 	}
 
+	.add-question.clicked i {
+		transform: rotate(45deg);
+	}
+
 	.add-question i {
 		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
+		transform: rotate(0deg);
+		transition: transform 0.2s;
 	}
 
 	@media screen and (max-width: 767px) {

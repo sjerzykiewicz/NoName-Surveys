@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import MultiSelect from 'svelte-multiselect';
+	import MultiSelect from '$lib/components/MultiSelect.svelte';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
@@ -66,28 +66,12 @@
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div title="Select users" class="user-list">
+		<div title="Select users" class="select-list">
 			<MultiSelect
 				bind:selected={groupMembers}
 				options={users}
-				--sms-max-width="100%"
-				--sms-min-height="2.2em"
-				--sms-border="1px solid var(--border-color)"
-				--sms-border-radius="5px"
-				--sms-bg="var(--secondary-dark-color)"
-				--sms-selected-bg="var(--primary-color)"
-				--sms-active-color="var(--text-color)"
-				--sms-li-active-bg="var(--secondary-color)"
-				--sms-text-color="var(--text-color)"
-				--sms-open-z-index="0"
-				--sms-options-max-height="16.5em"
-				--sms-options-border="1px solid var(--border-color)"
-				--sms-options-border-radius="5px"
-				--sms-options-border-width="1px"
-				--sms-options-bg="var(--primary-color)"
-				--sms-options-shadow="0px 4px 4px var(--shadow-color)"
-				--sms-remove-btn-hover-color="var(--error-color)"
-				--sms-remove-btn-hover-bg="var(--secondary-color)"
+				placeholder="Select users"
+				maxSelect={null}
 			/>
 		</div>
 		<button
@@ -120,11 +104,10 @@
 		margin-top: 0.5em;
 	}
 
-	.user-list {
-		flex: 1;
-		box-shadow: 0px 4px 4px var(--shadow-color);
+	.select-list {
 		font-size: 0.8em;
 		margin-right: 0.625em;
+		margin-bottom: 0em;
 	}
 
 	.add-group {
@@ -147,10 +130,16 @@
 		background-color: var(--border-color);
 	}
 
+	.add-group.clicked i {
+		transform: rotate(45deg);
+	}
+
 	.add-group i,
 	.save i {
 		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
+		transform: rotate(0deg);
+		transition: transform 0.2s;
 	}
 
 	@media screen and (max-width: 767px) {

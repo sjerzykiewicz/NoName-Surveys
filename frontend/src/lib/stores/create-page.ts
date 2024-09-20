@@ -22,4 +22,4 @@ export const access: Writable<Access> = writable(Access.Public);
 
 export const ringMembers: Writable<Array<string>> = writable([]);
 
-export const selectedGroup: Writable<string> = writable('');
+export const selectedGroup: Writable<Array<string>> = writable([]);

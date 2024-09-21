@@ -178,10 +178,24 @@
 			})
 			.catch(() => alert('Error loading draft'));
 	}
+
+	let innerWidth: number;
 </script>
 
+<svelte:window bind:innerWidth />
+
 {#if drafts.length === 0}
-	<div title="Drafts" class="title empty">No drafts yet!</div>
+	<div class="info-row">
+		<div title="Drafts" class="title empty">No drafts yet!</div>
+		<div class="tooltip">
+			<i class="material-symbols-rounded">info</i>
+			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+				When creating a survey, you can save it as a draft for later use. To create a survey, click
+				on the "Create" tab at the top of the page or the button below. All your saved drafts will
+				be stored on this page.
+			</span>
+		</div>
+	</div>
 {:else}
 	<table>
 		<tr>

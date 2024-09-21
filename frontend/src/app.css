@@ -638,9 +638,41 @@ input[type='radio']:checked {
 	white-space: pre-wrap !important;
 }
 
-.title.empty {
-	padding-bottom: 0.42em;
+.title.empty,
+.title.answers {
+	padding-bottom: 0.5em;
 	margin-bottom: 0em;
+}
+
+.info-row {
+	display: flex;
+	align-items: center;
+	padding-bottom: 0.5em;
+}
+
+.info-row .title.empty {
+	flex: none;
+	padding: 0em;
+	margin-right: 0.5em;
+	overflow: visible;
+}
+
+.info-row .tooltip {
+	--tooltip-width: 25em;
+	font-size: 1.5em;
+}
+
+.info-row .tooltip i,
+.download-key .tooltip i,
+.crypto-row .tooltip i,
+.load-text .tooltip i {
+	color: var(--border-color);
+}
+
+.info-row .tooltip .tooltip-text,
+.download-key .tooltip .tooltip-text,
+.load-text .tooltip .tooltip-text {
+	font-size: 0.8em;
 }
 
 .slider-area {
@@ -985,7 +1017,8 @@ button.popup {
 }
 
 @media screen and (max-width: 767px) {
-	.title {
+	.title,
+	.info-row .tooltip {
 		font-size: 1.25em;
 	}
 
@@ -1058,5 +1091,11 @@ button.popup {
 
 	.select-list *:where(div.multiselect > ul.selected) {
 		max-height: 15.5em;
+	}
+}
+
+@media screen and (max-width: 631px) {
+	.info-row .tooltip {
+		--tooltip-width: 12em;
 	}
 }

@@ -1,24 +1,18 @@
 <script lang="ts">
-	import { beforeUpdate, type ComponentType } from 'svelte';
+	import { type ComponentType } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	export let questionType: ComponentType;
+	export let questionTypeData: { title: string; icon: string; text: string };
 	export let questionTypeIndex: number;
-
-	let questionTypeData: { title: string; icon: string; text: string };
 
 	const dispatch = createEventDispatcher();
 
 	function handleClick() {
 		dispatch('addQuestionType', { component: questionType });
 	}
-
-	beforeUpdate(() => {
-		questionTypeData = getQuestionTypeData(questionType);
-	});
 </script>
 
 <button

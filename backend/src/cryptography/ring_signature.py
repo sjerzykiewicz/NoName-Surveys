@@ -78,25 +78,26 @@ def verify_lrs(message: str, keys: list[int], signature: list[int]) -> bool:
 
     y0 = signature[0]
 
-    n = (len(signature) - 1) // 2
+    n = len(signature) - 2
 
-    s = signature[1 : n + 1]
-    c = signature[n + 1 : 2 * n + 1]
+    s = signature[1]
+    c = signature[2:]
 
-    z1: list[int] = []
-    z2: list[int] = []
+    prod_y_c = 1
 
     for i in range(n):
-        z1.append(pow(int(g), s[i], p) * pow(int(keys[i]), c[i], p) % p)
-        z2.append(pow(int(h), s[i], p) * pow(int(y0), c[i], p) % p)
+        prod_y_c *= pow(int(keys[i]), c[i], p)
 
     sum_c = sum(c) % q
+
+    g_to_s = pow(g, s, p)
+    h_to_s = pow(h, s, p)
 
     for_hashing = (
         concatenated_keys
         + str(y0)
         + message
-        + "".join([str(z) for z in z1])
-        + "".join([str(z) for z in z2])
+        + str((g_to_s * prod_y_c) % p)
+        + str((h_to_s * pow(y0, sum_c, p)) % p)
     )
     return sum_c == h1(for_hashing)

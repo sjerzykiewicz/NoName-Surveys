@@ -18,6 +18,7 @@
 	import type { SliderQuestionAnswered } from '$lib/entities/questions/Slider';
 	import type { RankQuestionAnswered } from '$lib/entities/questions/Rank';
 	import type { ListQuestionAnswered } from '$lib/entities/questions/List';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	export let surveyAnswers;
 
@@ -129,7 +130,7 @@
 		<QuestionTitle
 			question={question.question}
 			{questionIndex}
-			questionType={componentTypeMap[question.question_type]}
+			questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
 			required={question.required}
 		/>
 		<svelte:component this={componentTypeMap[question.question_type]} data={question} />

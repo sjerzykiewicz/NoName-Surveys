@@ -3,8 +3,9 @@
 		title,
 		questions,
 		previousQuestion,
-		isAccessLimited,
-		ringMembers
+		access,
+		ringMembers,
+		selectedGroup
 	} from '$lib/stores/create-page';
 	import Question from '$lib/entities/questions/Question';
 	import { SingleQuestion } from '$lib/entities/questions/Single';
@@ -35,6 +36,7 @@
 	import { error } from '@sveltejs/kit';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import { Access } from '$lib/entities/Access';
 
 	export let isPreview: boolean = false;
 
@@ -166,16 +168,44 @@
 		}
 	}
 
+	let ring: string[] = [];
+
+	async function fetchGroup(name: string) {
+		const response = await fetch('/api/groups/fetch', {
+			method: 'POST',
+			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+		} else {
+			const body = await response.json();
+			ring = [...$ringMembers, ...body];
+		}
+	}
+
 	async function createSurvey() {
 		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
+		const useCrypto = $access === Access.Private;
+		let finalRing: string[] = [];
 
-		const useCrypto = $ringMembers.length !== 0;
+		if ($selectedGroup.length > 0) {
+			await fetchGroup($selectedGroup[0]);
+			finalRing = [...new Set(ring)];
+		} else if ($ringMembers.length > 0) {
+			finalRing = [...$ringMembers];
+		}
+
 		const surveyInfo = new SurveyInfo(
 			$page.data.session!.user!.email!,
 			parsedSurvey,
 			useCrypto,
-			$ringMembers
+			finalRing
 		);
 
 		const response = await fetch('/api/surveys/create', {
@@ -193,8 +223,11 @@
 			$title = '';
 			$questions = [];
 			$previousQuestion = null;
-			$isAccessLimited = false;
+			$access = Access.Public;
 			$ringMembers = [];
+			$selectedGroup = [];
+			ring = [];
+			finalRing = [];
 			return await goto(`/${body.survey_code}/view`, { replaceState: true, invalidateAll: true });
 		}
 	}

@@ -1,20 +1,20 @@
 <script lang="ts">
+	import type { PageServerData } from './$types';
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
-	import Answers from '$lib/components/summary-page/answer/Answers.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Back from '$lib/components/Back.svelte';
-	import type { PageData } from './$types';
+	import UsersTable from '$lib/components/groups-page/group/UsersTable.svelte';
 
-	export let data: PageData;
+	export let data: PageServerData;
 </script>
 
 <Header>
-	<div class="title">{data.answers[data.id].title}</div>
+	<div class="title">{data.group}</div>
 </Header>
 
 <Content>
-	<Answers answer={data.answers[data.id]} id={data.id} />
+	<UsersTable users={data.users} />
 </Content>
 
 <Footer>

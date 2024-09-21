@@ -23,7 +23,7 @@
 	{/if}
 </Header>
 <Content>
-	<SurveyForm {isPreview} user_list={data.user_list} />
+	<SurveyForm {isPreview} groups={data.group_list} users={data.user_list} />
 </Content>
 <Footer>
 	<FooterButtons bind:titleError bind:isPreview />

@@ -12,19 +12,33 @@
 	};
 </script>
 
-<div
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
-	{#if checkError()}
-		<p title="Error" class="error" {id} transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<i class="material-symbols-rounded">error</i>{message}
-		</p>
-	{/if}
-</div>
+{#if id === 'table-name'}
+	<div>
+		{#if checkError()}
+			<p title="Error" class="error" {id}>
+				<i class="material-symbols-rounded">error</i>{message}
+			</p>
+		{/if}
+	</div>
+{:else}
+	<div
+		in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+		out:slide={{ duration: 200, easing: cubicInOut }}
+	>
+		{#if checkError()}
+			<p title="Error" class="error" {id} transition:slide={{ duration: 200, easing: cubicInOut }}>
+				<i class="material-symbols-rounded">error</i>{message}
+			</p>
+		{/if}
+	</div>
+{/if}
 
 <style>
 	#name {
 		margin-left: 6.6em;
+	}
+
+	#table-name {
+		font-size: 0.8em;
 	}
 </style>

@@ -2,11 +2,31 @@
 	import { invalidateAll, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
+	import Error from './Error.svelte';
+	import { tick } from 'svelte';
+	import { scrollToElement } from '$lib/utils/scrollToElement';
 
 	export let groups: string[];
 
 	let editedIndex: number = -1;
 	let newName: string = '';
+	let nameError: boolean = false;
+
+	async function checkCorrectness(name: string) {
+		nameError = false;
+		const n = name;
+		if (n === null || n === undefined || n.length === 0) {
+			nameError = true;
+		}
+
+		if (nameError) {
+			await tick();
+			scrollToElement('.table-input');
+			return false;
+		}
+
+		return true;
+	}
 
 	function deleteGroup(name: string) {
 		fetch('/api/groups/delete', {
@@ -23,7 +43,9 @@
 			.catch(() => alert('Error deleting group'));
 	}
 
-	function renameGroup(name: string, new_name: string) {
+	async function renameGroup(name: string, new_name: string) {
+		if (!(await checkCorrectness(new_name))) return;
+
 		fetch('/api/groups/rename', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -60,6 +82,7 @@
 						on:click={() => {
 							editedIndex = -1;
 							newName = '';
+							nameError = false;
 						}}><i class="material-symbols-rounded">edit_off</i></td
 					>
 					<td>
@@ -76,6 +99,12 @@
 						>
 							{newName}
 						</div>
+						<Error
+							id="table-name"
+							data={newName}
+							error={nameError}
+							message="Please enter group name."
+						/>
 					</td>
 					<td
 						title="Save the new group name"
@@ -90,6 +119,7 @@
 						class="button-entry"
 						on:click={() => {
 							editedIndex = groupIndex;
+							nameError = false;
 						}}><i class="material-symbols-rounded">edit</i></td
 					>
 					<td title="Open the group" class="title-entry" on:click={() => goto('/groups/' + group)}

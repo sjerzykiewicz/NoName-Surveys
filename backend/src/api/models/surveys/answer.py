@@ -37,9 +37,7 @@ class SurveyAnswerBase(BaseModel):
         if v is None:
             raise ValueError("survey code must be provided")
         if not re.match(r"^\d{6}$", v):
-            raise ValueError(
-                "survey code must be a string consisting of 6 digits"
-            )
+            raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
     def validate(self) -> None:
@@ -59,9 +57,7 @@ class SurveyAnswersFetchInput(BaseModel):
         if v is None:
             raise ValueError("survey code must be provided")
         if not re.match(r"^\d{6}$", v):
-            raise ValueError(
-                "survey code must be a string consisting of 6 digits"
-            )
+            raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
     class Config:

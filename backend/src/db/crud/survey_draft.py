@@ -26,17 +26,13 @@ def get_not_deleted_survey_draft_by_id(
     return survey_draft
 
 
-def get_survey_draft_by_id(
-    survey_draft_id: int, session: Session
-) -> SurveyDraft:
+def get_survey_draft_by_id(survey_draft_id: int, session: Session) -> SurveyDraft:
     statement = select(SurveyDraft).where(SurveyDraft.id == survey_draft_id)
     survey_draft = session.exec(statement).first()
     return survey_draft
 
 
-def delete_survey_draft_by_id(
-    survey_draft_id: int, session: Session
-) -> SurveyDraft:
+def delete_survey_draft_by_id(survey_draft_id: int, session: Session) -> SurveyDraft:
     statement = select(SurveyDraft).where(SurveyDraft.id == survey_draft_id)
     survey_draft = session.exec(statement).first()
     survey_draft.is_deleted = True

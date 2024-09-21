@@ -13,7 +13,7 @@
 		display: flex;
 		flex-flow: row;
 		align-items: center;
-		justify-content: flex-start;
+		justify-content: center;
 		padding-top: 1.5em;
 		padding-bottom: 1.5em;
 		font-size: 1.5em;

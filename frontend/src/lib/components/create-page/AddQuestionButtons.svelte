@@ -23,6 +23,7 @@
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { previousQuestion } from '$lib/stores/create-page';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	export let questionInput: HTMLDivElement;
 
@@ -136,7 +137,7 @@
 
 	onMount(() => {
 		function handleClick(event: MouseEvent) {
-			if (isPanelVisible && !(event.target as HTMLElement).closest('.button-group')) {
+			if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
 				isPanelVisible = false;
 			}
 		}
@@ -149,10 +150,10 @@
 	});
 </script>
 
-<div class="button-group" class:clicked={isPanelVisible} class:previous={$previousQuestion}>
+<div class="button-group">
 	<div class="add-buttons">
 		<button
-			title="Choose question type"
+			title={isPanelVisible ? 'Stop choosing question type' : 'Choose question type'}
 			class="add-question"
 			class:clicked={isPanelVisible}
 			class:previous={$previousQuestion}
@@ -163,6 +164,7 @@
 		{#if $previousQuestion}
 			<QuestionTypeButton
 				questionType={$previousQuestion}
+				questionTypeData={getQuestionTypeData($previousQuestion)}
 				questionTypeIndex={-1}
 				on:addQuestionType={(event) => addQuestion(event.detail.component)}
 			/>
@@ -177,6 +179,7 @@
 			{#each questionTypes as questionType, questionTypeIndex}
 				<QuestionTypeButton
 					{questionType}
+					questionTypeData={getQuestionTypeData(questionType)}
 					{questionTypeIndex}
 					on:addQuestionType={(event) => addQuestion(event.detail.component)}
 				/>
@@ -242,9 +245,15 @@
 		z-index: 100;
 	}
 
+	.add-question.clicked i {
+		transform: rotate(45deg);
+	}
+
 	.add-question i {
 		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
+		transform: rotate(0deg);
+		transition: transform 0.2s;
 	}
 
 	@media screen and (max-width: 767px) {

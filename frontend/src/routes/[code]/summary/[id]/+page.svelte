@@ -3,6 +3,7 @@
 	import Content from '$lib/components/Content.svelte';
 	import Answers from '$lib/components/summary-page/answer/Answers.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import Back from '$lib/components/Back.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -17,11 +18,5 @@
 </Content>
 
 <Footer>
-	<button
-		title="Go back"
-		class="footer-button"
-		on:click={() => {
-			history.back();
-		}}><i class="material-symbols-rounded">undo</i>Back</button
-	>
+	<Back />
 </Footer>

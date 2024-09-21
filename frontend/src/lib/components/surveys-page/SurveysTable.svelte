@@ -39,76 +39,93 @@
 
 <svelte:window bind:innerWidth />
 
-<table>
-	<tr>
-		<th title="Survey title" id="title-header" colspan="2">Survey Title</th>
-		<th title="Access code" id="code-header">Code</th>
-		<th title="Creation date" id="date-header" colspan="2">Date</th>
-	</tr>
-	{#each survey_list.toReversed() as entry, entryIndex}
+{#if survey_list.length === 0}
+	<div title="Surveys" class="title empty">No surveys yet!</div>
+{:else}
+	<table>
 		<tr>
-			<td class="crypto-entry tooltip">
-				{#if entry.uses_cryptographic_module}
-					<i class="material-symbols-rounded">encrypted</i>
-					<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
-						>This survey has an established group of possible respondents.</span
-					>
-				{:else}
-					<i class="material-symbols-rounded">public</i>
-					<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
-						>Everyone can submit an answer to this survey.</span
-					>
-				{/if}
-			</td>
-			<td
-				title="View the summary"
-				class="title-entry"
-				on:click={() => goto('/' + entry.survey_code + '/summary')}>{entry.title}</td
-			>
-			<td
-				title="Copy the code"
-				class="code-entry tooltip popup"
-				on:click={async () => {
-					if (copyCode(entry.survey_code)) {
-						copiedIndex = entryIndex;
-						isCopyPopupVisible = true;
-						await delay(2000);
-						isCopyPopupVisible = false;
-					}
-				}}
-			>
-				{entry.survey_code}
-				{#if copiedIndex === entryIndex && isCopyPopupVisible}
-					<span
-						title=""
-						class="popup-text left"
-						transition:fade={{ duration: 200, easing: cubicInOut }}>Copied!</span
-					>
-				{/if}
-				{#if innerWidth > 767}
-					<a
-						href="/fill?code={entry.survey_code}"
-						title="Fill out the survey"
-						class="tooltip-text right"
-						transition:fade={{ duration: 200, easing: cubicInOut }}
-					>
-						<QrCode code={entry.survey_code} size={100} />
-					</a>
-				{/if}
-			</td>
-			<td title="Creation date" class="date-entry">{entry.creation_date}</td>
-			<td
-				title="Delete the survey"
-				class="delete-entry"
-				on:click={() => deleteSurvey(survey_list.length - entryIndex - 1)}
-			>
-				<i class="material-symbols-rounded">delete</i></td
-			>
+			<th title="Survey title" id="title-header" colspan="2">Survey Title</th>
+			<th title="Access code" id="code-header">Code</th>
+			<th title="Creation date" id="date-header" colspan="2">Date</th>
 		</tr>
-	{/each}
-</table>
+		{#each survey_list.toReversed() as entry, entryIndex}
+			<tr>
+				<td class="crypto-entry tooltip">
+					{#if entry.uses_cryptographic_module}
+						<i class="material-symbols-rounded">encrypted</i>
+						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
+							>This survey has an established group of possible respondents.</span
+						>
+					{:else}
+						<i class="material-symbols-rounded">public</i>
+						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
+							>Everyone can submit an answer to this survey.</span
+						>
+					{/if}
+				</td>
+				<td
+					title="View the summary"
+					class="title-entry"
+					on:click={() => goto('/' + entry.survey_code + '/summary')}>{entry.title}</td
+				>
+				<td
+					title="Copy the code"
+					class="code-entry tooltip popup"
+					on:click={async () => {
+						if (copyCode(entry.survey_code)) {
+							copiedIndex = entryIndex;
+							isCopyPopupVisible = true;
+							await delay(2000);
+							isCopyPopupVisible = false;
+						}
+					}}
+				>
+					{entry.survey_code}
+					{#if copiedIndex === entryIndex && isCopyPopupVisible}
+						<span
+							title=""
+							class="popup-text left"
+							transition:fade={{ duration: 200, easing: cubicInOut }}>Copied!</span
+						>
+					{/if}
+					{#if innerWidth > 767}
+						<a
+							href="/fill?code={entry.survey_code}"
+							title="Fill out the survey"
+							class="tooltip-text right"
+							transition:fade={{ duration: 200, easing: cubicInOut }}
+						>
+							<QrCode code={entry.survey_code} size={100} />
+						</a>
+					{/if}
+				</td>
+				<td title="Creation date" class="date-entry">{entry.creation_date}</td>
+				<td
+					title="Delete the survey"
+					class="button-entry"
+					on:click={() => deleteSurvey(survey_list.length - entryIndex - 1)}
+				>
+					<i class="material-symbols-rounded">delete</i></td
+				>
+			</tr>
+		{/each}
+	</table>
+{/if}
+<button title="Create a survey" on:click={() => goto('/create')}>
+	<i class="material-symbols-rounded">add</i>Survey
+</button>
 
 <style>
+	button {
+		font-size: 1.25em;
+		margin-top: 0.5em;
+	}
+
+	button i {
+		margin-right: 0.15em;
+		font-variation-settings: 'wght' 700;
+	}
+
 	.tooltip {
 		display: table-cell;
 	}

@@ -1,9 +1,0 @@
-{
-  "devDependencies": {
-    "@types/node": "^20.13.0",
-    "crypto": "^1.0.1"
-  },
-  "dependencies": {
-    "crypto-browserify": "^3.12.0"
-  }
-}

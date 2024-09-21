@@ -27,7 +27,9 @@ def create_url():
     db_port = ":" + str(settings.db_port) if settings.db_port else ""
     db_name = settings.db_name
 
-    return f"{db_type}{db_dialect}://{db_user}:{db_password}@{db_host}{db_port}/{db_name}"
+    return (
+        f"{db_type}{db_dialect}://{db_user}:{db_password}@{db_host}{db_port}/{db_name}"
+    )
 
 
 def create_db_engine():

@@ -22,9 +22,7 @@ router = APIRouter()
     response_description="Get all Survey Drafts Headers of a user",
     response_model=list[SurveyDraftHeadersOutput],
 )
-async def get_survey_drafts(
-    user_input: User, session: Session = Depends(get_session)
-):
+async def get_survey_drafts(user_input: User, session: Session = Depends(get_session)):
     user = user_crud.get_user_by_email(user_input.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
@@ -60,9 +58,7 @@ async def get_survey_draft(
         survey_draft_fetch.id, session
     )
     if survey_draft is None:
-        raise HTTPException(
-            status_code=404, detail="Survey Draft does not exist"
-        )
+        raise HTTPException(status_code=404, detail="Survey Draft does not exist")
 
     if survey_draft.creator_id != user.id:
         raise HTTPException(
@@ -94,9 +90,7 @@ async def delete_survey_draft(
         survey_draft_delete.id, session
     )
     if survey_draft is None:
-        raise HTTPException(
-            status_code=404, detail="Survey Draft does not exist"
-        )
+        raise HTTPException(status_code=404, detail="Survey Draft does not exist")
 
     if survey_draft.creator_id != user.id:
         raise HTTPException(
@@ -104,9 +98,7 @@ async def delete_survey_draft(
             detail="User does not have access to this Survey Draft",
         )
 
-    survey_draft_crud.delete_survey_draft_by_id(
-        survey_draft_delete.id, session
-    )
+    survey_draft_crud.delete_survey_draft_by_id(survey_draft_delete.id, session)
 
     return {"message": "Survey Draft deleted successfully"}
 

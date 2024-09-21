@@ -5,18 +5,55 @@
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { tick } from 'svelte';
+	import { scrollToElement } from '$lib/utils/scrollToElement';
+	import Error from '$lib/components/groups-page/Error.svelte';
 
 	export let users: string[];
 
 	let isPanelVisible: boolean = false;
 	let groupName: string = '';
 	let groupMembers: string[] = [];
+	let nameError: boolean = false;
+	let membersError: boolean = false;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
+		nameError = false;
+		membersError = false;
 	}
 
-	function createGroup(user_group_name: string, user_group_members: string[]) {
+	async function checkCorrectness(name: string, members: string[]) {
+		nameError = false;
+		const n = name;
+		if (n === null || n === undefined || n.length === 0) {
+			nameError = true;
+		}
+
+		membersError = false;
+		const m = members;
+		if (m === null || m === undefined || m.length === 0) {
+			membersError = true;
+		}
+
+		if (nameError) {
+			await tick();
+			scrollToElement('.group-input');
+			return false;
+		}
+
+		if (membersError) {
+			await tick();
+			scrollToElement('.select-list');
+			return false;
+		}
+
+		return true;
+	}
+
+	async function createGroup(user_group_name: string, user_group_members: string[]) {
+		if (!(await checkCorrectness(user_group_name, user_group_members))) return;
+
 		fetch('/api/groups/create', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -65,12 +102,13 @@
 	{/if}
 </div>
 {#if isPanelVisible}
+	<Error id="name" data={groupName} error={nameError} message="Please enter group name." />
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div title="Select users" class="select-list">
+		<div title="Select group members" class="select-list">
 			<MultiSelect
 				bind:selected={groupMembers}
 				options={users}
-				placeholder="Select users"
+				placeholder="Select group members"
 				maxSelect={null}
 			/>
 		</div>
@@ -82,6 +120,12 @@
 			<i class="material-symbols-rounded">done</i>Create
 		</button>
 	</div>
+	<Error
+		id="members"
+		data={groupMembers}
+		error={membersError}
+		message="Please select group members."
+	/>
 {/if}
 
 <style>

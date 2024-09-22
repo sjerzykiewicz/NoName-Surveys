@@ -28,22 +28,12 @@
 			case QuestionError.ChoicesRequired:
 			case QuestionError.BinaryChoicesRequired:
 			case QuestionError.SliderValuesRequired:
-				if ($questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)) {
-					return true;
-				}
-				break;
+				return $questions[i].choices.some((c) => c === null || c === undefined || c.length === 0);
 			case QuestionError.DuplicateChoices:
-				if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
-					return true;
-				}
-				break;
+				return new Set($questions[i].choices).size !== $questions[i].choices.length;
 			case QuestionError.ImproperSliderValues:
-				if (parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])) {
-					return true;
-				}
-				break;
+				return parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1]);
 		}
-		return false;
 	};
 </script>
 

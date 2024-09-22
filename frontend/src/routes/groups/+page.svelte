@@ -14,5 +14,5 @@
 
 <Content>
 	<GroupsTable groups={data.group_list} />
-	<AddGroupButtons users={data.user_list} />
+	<AddGroupButtons groups={data.group_list} users={data.user_list} />
 </Content>

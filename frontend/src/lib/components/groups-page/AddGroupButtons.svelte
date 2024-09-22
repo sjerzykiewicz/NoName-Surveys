@@ -7,42 +7,47 @@
 	import { slide } from 'svelte/transition';
 	import { tick } from 'svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
-	import Error from '$lib/components/groups-page/Error.svelte';
+	import { GroupError } from '$lib/entities/GroupError';
+	import MembersError from '$lib/components/groups-page/MembersError.svelte';
+	import NameError from '$lib/components/groups-page/NameError.svelte';
 
+	export let groups: string[];
 	export let users: string[];
 
 	let isPanelVisible: boolean = false;
 	let groupName: string = '';
 	let groupMembers: string[] = [];
-	let nameError: boolean = false;
-	let membersError: boolean = false;
+	let nameError: GroupError = GroupError.NoError;
+	let membersError: GroupError = GroupError.NoError;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
-		nameError = false;
-		membersError = false;
+		nameError = GroupError.NoError;
+		membersError = GroupError.NoError;
 	}
 
 	async function checkCorrectness(name: string, members: string[]) {
-		nameError = false;
+		nameError = GroupError.NoError;
 		const n = name;
 		if (n === null || n === undefined || n.length === 0) {
-			nameError = true;
+			nameError = GroupError.NameRequired;
+		} else if (groups.some((g) => g === n)) {
+			nameError = GroupError.NameNonUnique;
 		}
 
-		membersError = false;
+		membersError = GroupError.NoError;
 		const m = members;
 		if (m === null || m === undefined || m.length === 0) {
-			membersError = true;
+			membersError = GroupError.MembersRequired;
 		}
 
-		if (nameError) {
+		if (nameError !== GroupError.NoError) {
 			await tick();
 			scrollToElement('.group-input');
 			return false;
 		}
 
-		if (membersError) {
+		if (membersError !== GroupError.NoError) {
 			await tick();
 			scrollToElement('.select-list');
 			return false;
@@ -102,7 +107,7 @@
 	{/if}
 </div>
 {#if isPanelVisible}
-	<Error id="name" data={groupName} error={nameError} message="Please enter group name." />
+	<NameError name={groupName} error={nameError} {groups} />
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div title="Select group members" class="select-list">
 			<MultiSelect
@@ -120,12 +125,7 @@
 			<i class="material-symbols-rounded">done</i>Create
 		</button>
 	</div>
-	<Error
-		id="members"
-		data={groupMembers}
-		error={membersError}
-		message="Please select group members."
-	/>
+	<MembersError members={groupMembers} error={membersError} />
 {/if}
 
 <style>

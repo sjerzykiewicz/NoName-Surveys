@@ -2,24 +2,27 @@
 	import { invalidateAll, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
-	import Error from './Error.svelte';
 	import { tick } from 'svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
+	import { GroupError } from '$lib/entities/GroupError';
+	import NameTableError from '$lib/components/groups-page/NameTableError.svelte';
 
 	export let groups: string[];
 
 	let editedIndex: number = -1;
 	let newName: string = '';
-	let nameError: boolean = false;
+	let nameError: GroupError = GroupError.NoError;
 
 	async function checkCorrectness(name: string) {
-		nameError = false;
+		nameError = GroupError.NoError;
 		const n = name;
 		if (n === null || n === undefined || n.length === 0) {
-			nameError = true;
+			nameError = GroupError.NameRequired;
+		} else if (groups.some((g) => g === n)) {
+			nameError = GroupError.NameNonUnique;
 		}
 
-		if (nameError) {
+		if (nameError !== GroupError.NoError) {
 			await tick();
 			scrollToElement('.table-input');
 			return false;
@@ -82,7 +85,7 @@
 						on:click={() => {
 							editedIndex = -1;
 							newName = '';
-							nameError = false;
+							nameError = GroupError.NoError;
 						}}><i class="material-symbols-rounded">edit_off</i></td
 					>
 					<td>
@@ -99,12 +102,7 @@
 						>
 							{newName}
 						</div>
-						<Error
-							id="table-name"
-							data={newName}
-							error={nameError}
-							message="Please enter group name."
-						/>
+						<NameTableError name={newName} error={nameError} {groups} />
 					</td>
 					<td
 						title="Save the new group name"
@@ -119,7 +117,7 @@
 						class="button-entry"
 						on:click={() => {
 							editedIndex = groupIndex;
-							nameError = false;
+							nameError = GroupError.NoError;
 						}}><i class="material-symbols-rounded">edit</i></td
 					>
 					<td title="Open the group" class="title-entry" on:click={() => goto('/groups/' + group)}

@@ -3,8 +3,8 @@
 
 	export let selected: string[];
 	export let options: string[];
-	export let placeholder: string;
-	export let maxSelect: number | null;
+	export let placeholder: string = '';
+	export let maxSelect: number | null = null;
 </script>
 
 <MultiSelect

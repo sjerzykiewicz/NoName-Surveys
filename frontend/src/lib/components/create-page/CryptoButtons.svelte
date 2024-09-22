@@ -49,7 +49,6 @@
 
 	.tooltip i {
 		font-size: 1.5em;
-		color: var(--border-color);
 	}
 
 	.select-box {

@@ -325,11 +325,6 @@
 
 	.tooltip i {
 		font-size: 1em;
-		color: var(--border-color);
-	}
-
-	.tooltip .tooltip-text {
-		font-size: 0.8em;
 	}
 
 	.load-div {

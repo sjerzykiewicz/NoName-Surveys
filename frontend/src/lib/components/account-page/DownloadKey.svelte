@@ -72,11 +72,6 @@
 
 	.tooltip i {
 		font-size: 1.25em;
-		color: var(--border-color);
-	}
-
-	.tooltip .tooltip-text {
-		font-size: 0.8em;
 	}
 
 	.download-key {
@@ -114,12 +109,6 @@
 			font-size: 1.25em;
 		}
 	}
-	/*
-	@media screen and (max-width: 633px) {
-		.tooltip {
-			--tooltip-width: 18em;
-		}
-	} */
 
 	@media screen and (max-width: 633px) {
 		.tooltip {

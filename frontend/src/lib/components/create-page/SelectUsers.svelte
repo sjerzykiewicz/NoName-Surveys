@@ -6,10 +6,5 @@
 </script>
 
 <div title="Select users" class="select-list">
-	<MultiSelect
-		bind:selected={$ringMembers}
-		options={users}
-		placeholder="Select users"
-		maxSelect={null}
-	/>
+	<MultiSelect bind:selected={$ringMembers} options={users} placeholder="Select users" />
 </div>

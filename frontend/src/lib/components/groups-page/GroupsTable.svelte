@@ -42,10 +42,23 @@
 			})
 			.catch(() => alert('Error renaming group'));
 	}
+
+	let innerWidth: number;
 </script>
 
+<svelte:window bind:innerWidth />
+
 {#if groups.length === 0}
-	<div title="Groups" class="title empty">No groups yet!</div>
+	<div class="info-row">
+		<div title="Groups" class="title empty">No groups yet!</div>
+		<div class="tooltip">
+			<i class="material-symbols-rounded">info</i>
+			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+				When creating a secure survey, you can choose a group of possible respondents. To create a
+				group, click on the button below. All your created groups will be stored on this page.
+			</span>
+		</div>
+	</div>
 {:else}
 	<table>
 		<tr>

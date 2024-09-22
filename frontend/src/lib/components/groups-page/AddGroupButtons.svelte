@@ -67,12 +67,7 @@
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div title="Select users" class="select-list">
-			<MultiSelect
-				bind:selected={groupMembers}
-				options={users}
-				placeholder="Select users"
-				maxSelect={null}
-			/>
+			<MultiSelect bind:selected={groupMembers} options={users} placeholder="Select users" />
 		</div>
 		<button
 			title="Save the group"

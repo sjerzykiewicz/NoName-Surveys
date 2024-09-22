@@ -40,7 +40,16 @@
 <svelte:window bind:innerWidth />
 
 {#if survey_list.length === 0}
-	<div title="Surveys" class="title empty">No surveys yet!</div>
+	<div class="info-row">
+		<div title="Surveys" class="title empty">No surveys yet!</div>
+		<div class="tooltip">
+			<i class="material-symbols-rounded">info</i>
+			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+				To create a survey, click on the "Create" tab at the top of the page or the button below.
+				All your created surveys will be stored on this page.
+			</span>
+		</div>
+	</div>
 {:else}
 	<table>
 		<tr>
@@ -69,7 +78,7 @@
 					on:click={() => goto('/' + entry.survey_code + '/summary')}>{entry.title}</td
 				>
 				<td
-					title="Copy the code"
+					title="Copy"
 					class="code-entry tooltip popup"
 					on:click={async () => {
 						if (copyCode(entry.survey_code)) {
@@ -126,7 +135,7 @@
 		font-variation-settings: 'wght' 700;
 	}
 
-	.tooltip {
+	table .tooltip {
 		display: table-cell;
 	}
 

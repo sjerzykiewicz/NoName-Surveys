@@ -1,7 +1,6 @@
 import { writable, type Writable } from 'svelte/store';
 import { type ComponentType } from 'svelte';
 import { QuestionError } from '$lib/entities/QuestionError';
-import { Access } from '$lib/entities/Access';
 
 export const title: Writable<string> = writable('');
 
@@ -18,7 +17,7 @@ export const questions: Writable<
 
 export const previousQuestion: Writable<ComponentType | null> = writable(null);
 
-export const access: Writable<Access> = writable(Access.Public);
+export const useCrypto: Writable<boolean> = writable(false);
 
 export const ringMembers: Writable<Array<string>> = writable([]);
 

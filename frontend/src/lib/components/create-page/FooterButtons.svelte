@@ -3,7 +3,7 @@
 		title,
 		questions,
 		previousQuestion,
-		access,
+		useCrypto,
 		ringMembers,
 		selectedGroup
 	} from '$lib/stores/create-page';
@@ -36,7 +36,6 @@
 	import { error } from '@sveltejs/kit';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { Access } from '$lib/entities/Access';
 
 	export let isPreview: boolean = false;
 
@@ -87,6 +86,7 @@
 	}
 
 	export let titleError: boolean = false;
+	export let cryptoError: boolean = false;
 
 	async function checkCorrectness() {
 		titleError = false;
@@ -127,6 +127,17 @@
 			}
 		}
 
+		cryptoError = false;
+		const g = $selectedGroup;
+		const r = $ringMembers;
+		if (
+			$useCrypto &&
+			(g === null || g === undefined || g.length === 0) &&
+			(r === null || r === undefined || r.length === 0)
+		) {
+			cryptoError = true;
+		}
+
 		if (titleError) {
 			await tick();
 			scrollToElementById('header');
@@ -138,6 +149,12 @@
 			scrollToElementById(
 				$questions.indexOf($questions.find((q) => q.error !== QuestionError.NoError)!).toString()
 			);
+			return false;
+		}
+
+		if (cryptoError) {
+			await tick();
+			scrollToElementById('crypto');
 			return false;
 		}
 
@@ -190,8 +207,8 @@
 
 	async function createSurvey() {
 		if (!(await checkCorrectness())) return;
+
 		const parsedSurvey = new Survey($title, constructQuestionList());
-		const useCrypto = $access === Access.Private;
 		let finalRing: string[] = [];
 
 		if ($selectedGroup.length > 0) {
@@ -204,7 +221,7 @@
 		const surveyInfo = new SurveyInfo(
 			$page.data.session!.user!.email!,
 			parsedSurvey,
-			useCrypto,
+			$useCrypto,
 			finalRing
 		);
 
@@ -223,7 +240,7 @@
 			$title = '';
 			$questions = [];
 			$previousQuestion = null;
-			$access = Access.Public;
+			$useCrypto = false;
 			$ringMembers = [];
 			$selectedGroup = [];
 			ring = [];

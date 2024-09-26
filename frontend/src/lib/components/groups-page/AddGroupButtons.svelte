@@ -5,18 +5,60 @@
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { tick } from 'svelte';
+	import { scrollToElement } from '$lib/utils/scrollToElement';
+	import { GroupError } from '$lib/entities/GroupError';
+	import MembersError from '$lib/components/groups-page/MembersError.svelte';
+	import NameError from '$lib/components/groups-page/NameError.svelte';
 
+	export let groups: string[];
 	export let users: string[];
 
 	let isPanelVisible: boolean = false;
 	let groupName: string = '';
 	let groupMembers: string[] = [];
+	let nameError: GroupError = GroupError.NoError;
+	let membersError: GroupError = GroupError.NoError;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
+		nameError = GroupError.NoError;
+		membersError = GroupError.NoError;
 	}
 
-	function createGroup(user_group_name: string, user_group_members: string[]) {
+	async function checkCorrectness(name: string, members: string[]) {
+		nameError = GroupError.NoError;
+		const n = name;
+		if (n === null || n === undefined || n.length === 0) {
+			nameError = GroupError.NameRequired;
+		} else if (groups.some((g) => g === n)) {
+			nameError = GroupError.NameNonUnique;
+		}
+
+		membersError = GroupError.NoError;
+		const m = members;
+		if (m === null || m === undefined || m.length === 0) {
+			membersError = GroupError.MembersRequired;
+		}
+
+		if (nameError !== GroupError.NoError) {
+			await tick();
+			scrollToElement('.group-input');
+			return false;
+		}
+
+		if (membersError !== GroupError.NoError) {
+			await tick();
+			scrollToElement('.select-list');
+			return false;
+		}
+
+		return true;
+	}
+
+	async function createGroup(user_group_name: string, user_group_members: string[]) {
+		if (!(await checkCorrectness(user_group_name, user_group_members))) return;
+
 		fetch('/api/groups/create', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -65,9 +107,10 @@
 	{/if}
 </div>
 {#if isPanelVisible}
+	<NameError name={groupName} error={nameError} {groups} />
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div title="Select users" class="select-list">
-			<MultiSelect bind:selected={groupMembers} options={users} placeholder="Select users" />
+		<div title="Select group members" class="select-list">
+			<MultiSelect bind:selected={groupMembers} options={users} placeholder="Select group members" />
 		</div>
 		<button
 			title="Save the group"
@@ -77,6 +120,7 @@
 			<i class="material-symbols-rounded">done</i>Create
 		</button>
 	</div>
+	<MembersError members={groupMembers} error={membersError} />
 {/if}
 
 <style>

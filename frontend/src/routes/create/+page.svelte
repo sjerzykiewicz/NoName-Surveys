@@ -10,6 +10,7 @@
 	import type { PageServerData } from './$types';
 
 	export let titleError: boolean;
+	export let cryptoError: boolean;
 	export let isPreview: boolean;
 	export let data: PageServerData;
 </script>
@@ -23,8 +24,8 @@
 	{/if}
 </Header>
 <Content>
-	<SurveyForm {isPreview} groups={data.group_list} users={data.user_list} />
+	<SurveyForm {cryptoError} {isPreview} groups={data.group_list} users={data.user_list} />
 </Content>
 <Footer>
-	<FooterButtons bind:titleError bind:isPreview />
+	<FooterButtons bind:titleError bind:cryptoError bind:isPreview />
 </Footer>

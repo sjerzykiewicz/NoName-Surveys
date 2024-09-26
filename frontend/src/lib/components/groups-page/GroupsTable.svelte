@@ -2,11 +2,34 @@
 	import { invalidateAll, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
+	import { tick } from 'svelte';
+	import { scrollToElement } from '$lib/utils/scrollToElement';
+	import { GroupError } from '$lib/entities/GroupError';
+	import NameTableError from '$lib/components/groups-page/NameTableError.svelte';
 
 	export let groups: string[];
 
 	let editedIndex: number = -1;
 	let newName: string = '';
+	let nameError: GroupError = GroupError.NoError;
+
+	async function checkCorrectness(name: string) {
+		nameError = GroupError.NoError;
+		const n = name;
+		if (n === null || n === undefined || n.length === 0) {
+			nameError = GroupError.NameRequired;
+		} else if (groups.some((g) => g === n)) {
+			nameError = GroupError.NameNonUnique;
+		}
+
+		if (nameError !== GroupError.NoError) {
+			await tick();
+			scrollToElement('.table-input');
+			return false;
+		}
+
+		return true;
+	}
 
 	function deleteGroup(name: string) {
 		fetch('/api/groups/delete', {
@@ -23,7 +46,9 @@
 			.catch(() => alert('Error deleting group'));
 	}
 
-	function renameGroup(name: string, new_name: string) {
+	async function renameGroup(name: string, new_name: string) {
+		if (!(await checkCorrectness(new_name))) return;
+
 		fetch('/api/groups/rename', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -73,6 +98,7 @@
 						on:click={() => {
 							editedIndex = -1;
 							newName = '';
+							nameError = GroupError.NoError;
 						}}><i class="material-symbols-rounded">edit_off</i></td
 					>
 					<td>
@@ -89,6 +115,7 @@
 						>
 							{newName}
 						</div>
+						<NameTableError name={newName} error={nameError} {groups} />
 					</td>
 					<td
 						title="Save the new group name"
@@ -103,6 +130,7 @@
 						class="button-entry"
 						on:click={() => {
 							editedIndex = groupIndex;
+							nameError = GroupError.NoError;
 						}}><i class="material-symbols-rounded">edit</i></td
 					>
 					<td title="Open the group" class="title-entry" on:click={() => goto('/groups/' + group)}

@@ -14,6 +14,7 @@
 	export let users: string[];
 	export let groups: string[];
 	export let isPreview: boolean;
+	export let cryptoError: boolean;
 
 	let questionInput: HTMLDivElement;
 </script>
@@ -49,7 +50,7 @@
 		out:slide={{ duration: 200, easing: cubicInOut }}
 	>
 		<AddQuestionButtons {questionInput} />
-		<CryptoButtons {users} {groups} />
+		<CryptoButtons {users} {groups} {cryptoError} />
 	</div>
 {/if}
 

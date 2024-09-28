@@ -3,7 +3,11 @@
 	import { onMount } from 'svelte';
 
 	export let code: string;
-	export let size: number;
+	export let codeSize: number;
+	export let codeMargin: number = 0;
+	export let image: string = '';
+	export let imageSize: number = 1;
+	export let imageMargin: number = 0;
 
 	let data: string = $page.url.origin + '/fill?code=' + code;
 
@@ -16,10 +20,11 @@
 			// @ts-expect-error QRCodeStyling is defined in the script above
 			// eslint-disable-next-line no-undef
 			let qrCode = new QRCodeStyling({
-				width: size,
-				height: size,
+				width: codeSize,
+				height: codeSize,
+				margin: codeMargin,
 				data: data,
-				image: '',
+				image: image,
 				dotsOptions: {
 					color: '#000000',
 					type: 'rounded'
@@ -28,8 +33,14 @@
 					color: '#ffffff'
 				},
 				imageOptions: {
-					crossOrigin: 'anonymous',
-					margin: 20
+					hideBackgroundDots: true,
+					size: imageSize,
+					margin: imageMargin
+				},
+				qrOptions: {
+					typeNumber: '0',
+					mode: 'Byte',
+					errorCorrectionLevel: 'Q'
 				}
 			});
 

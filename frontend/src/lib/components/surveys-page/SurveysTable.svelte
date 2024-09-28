@@ -6,6 +6,7 @@
 	import { fade } from 'svelte/transition';
 	import QrCode from '$lib/components/QrCode.svelte';
 	import { page } from '$app/stores';
+	import noname_hat from '$lib/assets/noname_hat.png';
 
 	let copiedIndex: number;
 	let innerWidth: number;
@@ -104,7 +105,7 @@
 							class="tooltip-text right"
 							transition:fade={{ duration: 200, easing: cubicInOut }}
 						>
-							<QrCode code={entry.survey_code} size={100} />
+							<QrCode code={entry.survey_code} codeSize={150} image={noname_hat} />
 						</a>
 					{/if}
 				</td>
@@ -144,8 +145,9 @@
 	}
 
 	.code-entry.tooltip .tooltip-text.right {
-		--tooltip-width: 100px;
+		--tooltip-width: 150px;
 		margin-left: 0em;
+		padding: 0.25em;
 		pointer-events: auto;
 	}
 

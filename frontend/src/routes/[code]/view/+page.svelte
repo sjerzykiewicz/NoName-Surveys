@@ -6,6 +6,7 @@
 	import { delay } from '$lib/utils/delay';
 	import { cubicInOut } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
+	import noname_black from '$lib/assets/noname_black.png';
 
 	export let data: PageData;
 
@@ -43,7 +44,13 @@
 		{/if}</button
 	>
 	<a href="/fill?code={data.code}" title="Fill out the survey" class="qr-code">
-		<QrCode code={data.code} size={calculateSize(innerWidth)} />
+		<QrCode
+			code={data.code}
+			codeSize={calculateSize(innerWidth)}
+			codeMargin={3}
+			image={noname_black}
+			imageMargin={6}
+		/>
 	</a>
 </Content>
 

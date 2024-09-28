@@ -4,6 +4,8 @@
 	import { page } from '$app/stores';
 	import { cubicInOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
+	import noname_dark from '$lib/assets/noname_dark.png';
+	import noname_light from '$lib/assets/noname_light.png';
 
 	let open: boolean;
 	let innerWidth: number;
@@ -47,14 +49,17 @@
 	}
 
 	let bulb = 'lightbulb';
+	let logo = noname_dark;
 
 	onMount(() => {
 		const colorScheme = localStorage.getItem('colorScheme') || 'dark';
 
 		if (colorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'dark';
+			logo = noname_light;
 		} else {
 			document.documentElement.dataset.colorScheme = 'light';
+			logo = noname_dark;
 			bulb = 'light_off';
 		}
 	});
@@ -65,10 +70,12 @@
 		if (currentColorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'light';
 			bulb = 'light_off';
+			logo = noname_dark;
 			localStorage.setItem('colorScheme', 'light');
 		} else {
 			document.documentElement.dataset.colorScheme = 'dark';
 			bulb = 'lightbulb';
+			logo = noname_light;
 			localStorage.setItem('colorScheme', 'dark');
 		}
 	}
@@ -82,7 +89,7 @@
 {#if innerWidth <= 767}
 	<div class="nav-burger">
 		<a href="/" title="Fill Out" class="nav-burger-logo"
-			><i class="material-symbols-rounded">shield_person</i></a
+			><img src={logo} alt="NoName logo" width="48" height="48" /></a
 		>
 		<div title={open ? 'Close menu' : 'Open menu'}>
 			<Hamburger bind:open --color="var(--text-color)" />
@@ -160,10 +167,6 @@
 		background-color: var(--secondary-dark-color);
 	}
 
-	.nav-burger i {
-		font-size: 3em;
-	}
-
 	.toggle-mode {
 		position: fixed;
 		justify-content: center;
@@ -186,6 +189,7 @@
 	}
 
 	.nav-burger-logo {
+		display: flex;
 		color: var(--text-color);
 		text-decoration: none;
 		transition: 0.2s;

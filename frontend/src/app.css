@@ -35,12 +35,12 @@
 
 @font-face {
 	font-family: Jura;
-	src: url('fonts/Jura-VariableFont_wght.ttf');
+	src: url('lib/fonts/Jura-VariableFont_wght.ttf');
 }
 
 @font-face {
 	font-family: Material Symbols Rounded;
-	src: url('fonts/MaterialSymbolsRounded-VariableFont_FILL,GRAD,opsz,wght.ttf');
+	src: url('lib/fonts/MaterialSymbolsRounded-VariableFont_FILL,GRAD,opsz,wght.ttf');
 }
 
 .material-symbols-rounded {

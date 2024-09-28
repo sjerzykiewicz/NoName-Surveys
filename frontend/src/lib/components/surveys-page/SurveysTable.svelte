@@ -164,6 +164,10 @@
 	}
 
 	@media screen and (max-width: 767px) {
+		button {
+			font-size: 1em;
+		}
+
 		#code-header {
 			width: 20%;
 		}

@@ -95,3 +95,12 @@ def get_all_surveys_user_can_view(
     ]
 
     return [(survey, survey.creator_id == user_id) for survey in surveys]
+
+
+def user_has_access_to_survey(user_id: int, survey_id: int, session: Session) -> bool:
+    statement = select(AccessToViewResults).where(
+        (AccessToViewResults.user_id == user_id)
+        & (AccessToViewResults.survey_id == survey_id)
+        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    )
+    return session.exec(statement).first() is not None

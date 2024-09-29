@@ -193,48 +193,6 @@ async def create_survey(
 
 
 @router.post(
-    "/share-results",
-    response_description="Share survey results with other users",
-    response_model=dict,
-)
-async def create_survey(
-    input: ShareSurveyResults,
-    session: Session = Depends(get_session),
-):
-    user = user_crud.get_user_by_email(input.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not found")
-    user_id = user.id
-
-    survey = survey_crud.get_survey_by_code(input.survey_code, session)
-    if survey is None:
-        raise HTTPException(status_code=404, detail="Survey does not exist")
-
-    if survey.creator_id != user.id:
-        raise HTTPException(
-            status_code=403,
-            detail="User does not have access to this survey",
-        )
-
-    not_found_emails = [
-        email
-        for email in input.user_emails_to_share_with
-        if user_crud.get_user_by_email(email, session) is None
-    ]
-    if len(not_found_emails) > 0:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Users not found: {', '.join(not_found_emails)}",
-        )
-
-    for email in input.user_emails_to_share_with:
-        user = user_crud.get_user_by_email(email, session)
-        survey_crud.share_survey_results(survey.id, user_id, email, session)
-
-    return {"message": "Survey results shared successfully"}
-
-
-@router.post(
     "/give-access",
     response_description="Give access to a survey to other users",
     response_model=dict,

@@ -37,9 +37,9 @@ async def get_survey_answers_by_code(
     if survey is None:
         raise HTTPException(status_code=400, detail="Survey not found")
 
-    if survey.creator_id != user_id:
+    if not survey_crud.user_has_access_to_survey(user_id, survey.id, session):
         raise HTTPException(
-            status_code=403, detail="User not authorized to access this survey"
+            status_code=400, detail="User does not have access to this survey"
         )
 
     survey_draft = survey_draft_crud.get_survey_draft_by_id(

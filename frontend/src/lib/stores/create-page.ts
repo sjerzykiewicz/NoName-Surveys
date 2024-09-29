@@ -22,3 +22,5 @@ export const useCrypto: Writable<boolean> = writable(false);
 export const ringMembers: Writable<Array<string>> = writable([]);
 
 export const selectedGroup: Writable<Array<string>> = writable([]);
+
+export const isDraftModalHidden: Writable<boolean> = writable(true);

@@ -10,6 +10,7 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import CryptoButtons from './CryptoButtons.svelte';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import { isDraftModalHidden } from '$lib/stores/create-page';
 
 	export let users: string[];
 	export let groups: string[];
@@ -18,6 +19,24 @@
 
 	let questionInput: HTMLDivElement;
 </script>
+
+<section class="overlay" class:hidden={$isDraftModalHidden}>
+	<div class="modal">
+		<div class="top">
+			<div class="caption">
+				<i class="material-symbols-rounded">help</i>Save Draft
+			</div>
+			<button title="Cancel" on:click={() => ($isDraftModalHidden = true)}>
+				<i class="material-symbols-rounded">close</i>
+			</button>
+		</div>
+		<div class="text">Do you wish to overwrite the draft or save a new draft?</div>
+		<div class="buttons">
+			<button title="Overwrite draft" class="save">Overwrite Draft</button>
+			<button title="Save new draft" class="save">Save New Draft</button>
+		</div>
+	</div>
+</section>
 
 {#each $questions as question, questionIndex (question)}
 	<div
@@ -55,6 +74,82 @@
 {/if}
 
 <style>
+	.overlay {
+		display: flex;
+		justify-content: center;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(2px);
+		z-index: 1;
+	}
+
+	.modal {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		top: 10%;
+		width: 20em;
+		padding: 0.5em;
+		position: absolute;
+		background-color: var(--secondary-color);
+		border: 1px solid var(--border-color);
+		border-radius: 5px;
+		box-shadow: 0px 4px 4px var(--shadow-color);
+		font-size: 1.25em;
+		color: var(--text-color);
+		z-index: 2;
+	}
+
+	.modal div {
+		display: flex;
+	}
+
+	.modal .top {
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.modal .top .caption {
+		align-items: center;
+		font-weight: bold;
+		font-size: 1.25em;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: default;
+	}
+
+	.modal .top .caption i {
+		margin-right: 0.15em;
+	}
+
+	.modal .top button i {
+		font-variation-settings: 'wght' 700;
+	}
+
+	.modal .text {
+		justify-content: center;
+		margin-top: 0.75em;
+		margin-bottom: 0.75em;
+		text-align: center;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: default;
+	}
+
+	.modal .buttons {
+		flex-flow: row;
+		justify-content: space-around;
+	}
+
+	.modal .buttons button {
+		width: 8em;
+		justify-content: center;
+	}
+
 	.button-row {
 		display: flex;
 		flex-flow: row wrap;

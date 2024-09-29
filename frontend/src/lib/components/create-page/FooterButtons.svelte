@@ -36,6 +36,7 @@
 	import { error } from '@sveltejs/kit';
 	import { fade } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import { isDraftModalHidden } from '$lib/stores/create-page';
 
 	export let isPreview: boolean = false;
 
@@ -167,6 +168,8 @@
 		if (!(await checkCorrectness())) return;
 		const parsedSurvey = new Survey($title, constructQuestionList());
 		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
+
+		$isDraftModalHidden = false;
 
 		const response = await fetch('/api/surveys/drafts/create', {
 			method: 'POST',

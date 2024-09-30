@@ -158,7 +158,7 @@
 	}
 
 	#date-header {
-		width: 19%;
+		width: 20%;
 	}
 
 	@media screen and (max-width: 767px) {

@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Content from '$lib/components/Content.svelte';
+	import { title, questions, answers } from '$lib/stores/fill-page';
+
+	$title = '';
+	$questions = [];
+	$answers = [];
 </script>
 
 <Content>

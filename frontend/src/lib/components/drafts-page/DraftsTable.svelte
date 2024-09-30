@@ -8,7 +8,7 @@
 	import type { SingleQuestion } from '$lib/entities/questions/Single';
 	import type { SliderQuestion } from '$lib/entities/questions/Slider';
 	import type { TextQuestion } from '$lib/entities/questions/Text';
-	import { title, questions } from '$lib/stores/create-page';
+	import { title, questions, currentDraftId } from '$lib/stores/create-page';
 	import Binary from '../create-page/Binary.svelte';
 	import List from '../create-page/List.svelte';
 	import Multi from '../create-page/Multi.svelte';
@@ -61,6 +61,7 @@
 		})
 			.then(async (response) => {
 				const body = await response.json();
+				$currentDraftId = drafts[i].id;
 				$title = drafts[i].title;
 				$questions = [];
 				body.survey_structure.questions.forEach((q: Question) => {

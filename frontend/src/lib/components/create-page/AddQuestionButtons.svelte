@@ -242,7 +242,7 @@
 		width: fit-content;
 		height: auto;
 		position: absolute;
-		z-index: 100;
+		z-index: 1;
 	}
 
 	.add-question.clicked i {

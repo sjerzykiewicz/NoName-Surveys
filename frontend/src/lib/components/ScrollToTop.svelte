@@ -45,7 +45,7 @@
 		background-color: var(--primary-dark-color);
 		border: none;
 		font-size: 1.5em;
-		z-index: 5;
+		z-index: 1;
 		transition: 0.2s;
 		cursor: pointer;
 	}

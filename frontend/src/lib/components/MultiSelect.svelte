@@ -21,7 +21,7 @@
 	--sms-active-color="var(--text-color)"
 	--sms-li-active-bg="var(--secondary-color)"
 	--sms-text-color="var(--text-color)"
-	--sms-open-z-index="100"
+	--sms-open-z-index="1"
 	--sms-options-max-height="16.5em"
 	--sms-options-border="1px solid var(--border-color)"
 	--sms-options-border-radius="5px"

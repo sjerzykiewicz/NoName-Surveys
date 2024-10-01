@@ -1,10 +1,10 @@
 <script lang="ts">
 	import SurveyForm from '$lib/components/fill-page/SurveyForm.svelte';
 	import type { PageServerData } from './$types';
-	export let data: PageServerData;
-
 	import init from 'wasm';
 	import { onMount } from 'svelte';
+
+	export let data: PageServerData;
 
 	onMount(async () => {
 		await init();

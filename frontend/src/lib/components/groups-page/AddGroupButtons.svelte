@@ -110,7 +110,11 @@
 	<NameError name={groupName} error={nameError} {groups} />
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div title="Select group members" class="select-list">
-			<MultiSelect bind:selected={groupMembers} options={users} placeholder="Select group members" />
+			<MultiSelect
+				bind:selected={groupMembers}
+				options={users}
+				placeholder="Select group members"
+			/>
 		</div>
 		<button
 			title="Save the group"

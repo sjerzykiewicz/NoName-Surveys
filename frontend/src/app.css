@@ -860,7 +860,7 @@ tr:last-of-type th:last-of-type {
 }
 
 .date-entry,
-.crypto-entry {
+.info-entry {
 	cursor: default;
 }
 
@@ -871,13 +871,13 @@ tr:last-of-type th:last-of-type {
 	padding-right: 0.5em;
 }
 
-.crypto-entry {
+.info-entry {
 	width: 0em;
 	text-align: center;
 }
 
 .button-entry i,
-.crypto-entry i {
+.info-entry i {
 	padding-top: 0.2em;
 }
 

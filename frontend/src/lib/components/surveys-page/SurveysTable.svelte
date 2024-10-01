@@ -13,9 +13,10 @@
 
 	export let survey_list: {
 		title: string;
-		uses_cryptographic_module: boolean;
 		survey_code: string;
 		creation_date: string;
+		uses_cryptographic_module: boolean;
+		is_owned_by_user: boolean;
 	}[];
 
 	function deleteSurvey(i: number) {
@@ -53,13 +54,13 @@
 {:else}
 	<table>
 		<tr>
-			<th title="Survey title" id="title-header" colspan="2">Survey Title</th>
+			<th title="Survey title" id="title-header" colspan="3">Survey Title</th>
 			<th title="Access code" id="code-header">Code</th>
 			<th title="Creation date" id="date-header" colspan="2">Date</th>
 		</tr>
 		{#each survey_list.toReversed() as entry, entryIndex}
 			<tr>
-				<td class="crypto-entry tooltip">
+				<td class="info-entry tooltip">
 					{#if entry.uses_cryptographic_module}
 						<i class="material-symbols-rounded">encrypted</i>
 						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
@@ -69,6 +70,19 @@
 						<i class="material-symbols-rounded">public</i>
 						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
 							>Everyone can submit an answer to this survey.</span
+						>
+					{/if}
+				</td>
+				<td class="info-entry tooltip">
+					{#if entry.is_owned_by_user}
+						<i class="material-symbols-rounded">verified</i>
+						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
+							>You are the owner of this survey.</span
+						>
+					{:else}
+						<i class="material-symbols-rounded">share</i>
+						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
+							>Results of this survey have been shared with you.</span
 						>
 					{/if}
 				</td>

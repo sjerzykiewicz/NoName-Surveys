@@ -97,6 +97,16 @@ def get_all_surveys_user_can_view(
     return [(survey, survey.creator_id == user_id) for survey in surveys]
 
 
+def get_all_users_with_access_to_survey(
+    survey_id: int, session: Session
+) -> list[AccessToViewResults]:
+    statement = select(AccessToViewResults).where(
+        (AccessToViewResults.survey_id == survey_id)
+        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    )
+    return [access for access in session.exec(statement).all()]
+
+
 def user_has_access_to_survey(user_id: int, survey_id: int, session: Session) -> bool:
     statement = select(AccessToViewResults).where(
         (AccessToViewResults.user_id == user_id)

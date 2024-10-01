@@ -31,13 +31,12 @@ async def get_survey_answers_by_code(
     user = user_crud.get_user_by_email(survey_fetch.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
-    user_id = user.id
 
     survey = survey_crud.get_survey_by_code(survey_fetch.survey_code, session)
     if survey is None:
         raise HTTPException(status_code=400, detail="Survey not found")
 
-    if not survey_crud.user_has_access_to_survey(user_id, survey.id, session):
+    if not survey_crud.user_has_access_to_survey(user.id, survey.id, session):
         raise HTTPException(
             status_code=400, detail="User does not have access to this survey"
         )
@@ -54,8 +53,13 @@ async def get_survey_answers_by_code(
     answer_structures = [
         SurveyAnswerBase.model_validate_json(answer.answer) for answer in answers
     ]
+    is_owned_by_user = user.id == survey.creator_id
     return [
-        SurveyAnswersFetchOutput(title=survey_title, questions=answer.questions)
+        SurveyAnswersFetchOutput(
+            title=survey_title,
+            questions=answer.questions,
+            is_owned_by_user=is_owned_by_user,
+        )
         for answer in answer_structures
     ]
 

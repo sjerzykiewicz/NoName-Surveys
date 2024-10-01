@@ -5,13 +5,7 @@ import { env } from '$env/dynamic/private';
 import * as db from '$lib/server/database';
 
 export const { handle } = SvelteKitAuth({
-	providers: [
-		Google({
-			clientId: env.GOOGLE_CLIENT_ID,
-			clientSecret: env.GOOGLE_CLIENT_SECRET
-		}),
-		GitHub
-	],
+	providers: [Google, GitHub],
 	trustHost: true,
 	secret: env.AUTH_SECRET,
 	session: {

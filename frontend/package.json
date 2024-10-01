@@ -20,6 +20,7 @@
 		"@sveltejs/adapter-node": "^5.0.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@types/crypto-js": "^4.2.2",
 		"@types/eslint": "^8.56.0",
 		"@typescript-eslint/eslint-plugin": "^7.0.0",
 		"@typescript-eslint/parser": "^7.0.0",
@@ -41,6 +42,7 @@
 	"dependencies": {
 		"@auth/core": "^0.35.0",
 		"@auth/sveltekit": "^1.5.0",
+		"crypto-js": "^4.2.0",
 		"dotenv": "^16.4.5",
 		"svelte-multiselect": "^10.3.0",
 		"wasm-pack": "^0.12.1"

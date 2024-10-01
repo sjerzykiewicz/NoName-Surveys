@@ -9,37 +9,25 @@
 	import FooterButtons from '$lib/components/create-page/FooterButtons.svelte';
 	import type { PageServerData } from './$types';
 	import { beforeNavigate } from '$app/navigation';
+	import { getDraftHash } from '$lib/utils/getDraftHash';
 	import {
 		title,
-		titleCopy,
 		questions,
-		questionsCopy,
 		previousQuestion,
 		useCrypto,
 		ringMembers,
 		selectedGroup,
 		currentDraftId,
-		isDraftModalHidden,
-		isDraftPopupVisible
+		draftHash
 	} from '$lib/stores/create-page';
 
-	function checkChanges() {
-		if (
-			$title !== $titleCopy ||
-			$questions.some(
-				(q, i) =>
-					q.question !== $questionsCopy[i].question ||
-					q.choices.some((c, j) => c !== $questionsCopy[i].choices[j]) ||
-					q.required !== $questionsCopy[i].required
-			)
-		) {
-			return true;
-		}
-		return false;
-	}
+	export let titleError: boolean;
+	export let cryptoError: boolean;
+	export let isPreview: boolean;
+	export let data: PageServerData;
 
 	beforeNavigate((event) => {
-		if (checkChanges()) {
+		if (getDraftHash($title, $questions) !== $draftHash) {
 			if (
 				!confirm(
 					'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.'
@@ -51,22 +39,14 @@
 		}
 
 		$title = '';
-		$titleCopy = '';
 		$questions = [];
-		$questionsCopy = [];
 		$previousQuestion = null;
 		$useCrypto = false;
 		$ringMembers = [];
 		$selectedGroup = [];
-		$isDraftModalHidden = true;
-		$isDraftPopupVisible = false;
 		$currentDraftId = null;
+		$draftHash = getDraftHash('', []);
 	});
-
-	export let titleError: boolean;
-	export let cryptoError: boolean;
-	export let isPreview: boolean;
-	export let data: PageServerData;
 </script>
 
 <Header>

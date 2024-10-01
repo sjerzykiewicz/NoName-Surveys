@@ -8,7 +8,7 @@
 	import type { SingleQuestion } from '$lib/entities/questions/Single';
 	import type { SliderQuestion } from '$lib/entities/questions/Slider';
 	import type { TextQuestion } from '$lib/entities/questions/Text';
-	import { title, questions, currentDraftId } from '$lib/stores/create-page';
+	import { title, questions, currentDraftId, draftHash } from '$lib/stores/create-page';
 	import Binary from '../create-page/Binary.svelte';
 	import List from '../create-page/List.svelte';
 	import Multi from '../create-page/Multi.svelte';
@@ -27,6 +27,7 @@
 	import TextPreview from '../create-page/preview/TextPreview.svelte';
 	import { page } from '$app/stores';
 	import type Question from '$lib/entities/questions/Question';
+	import { getDraftHash } from '$lib/utils/getDraftHash';
 
 	export let drafts: {
 		id: number;
@@ -175,6 +176,7 @@
 							break;
 					}
 				});
+				$draftHash = getDraftHash($title, $questions);
 				goto('/create');
 			})
 			.catch(() => alert('Error loading draft'));

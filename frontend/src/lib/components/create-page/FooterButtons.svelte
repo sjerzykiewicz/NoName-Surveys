@@ -1,16 +1,15 @@
 <script lang="ts">
 	import {
 		title,
-		titleCopy,
 		questions,
-		questionsCopy,
 		previousQuestion,
 		useCrypto,
 		ringMembers,
 		selectedGroup,
 		isDraftModalHidden,
 		isDraftPopupVisible,
-		currentDraftId
+		currentDraftId,
+		draftHash
 	} from '$lib/stores/create-page';
 	import Survey from '$lib/entities/surveys/Survey';
 	import Slider from '$lib/components/create-page/Slider.svelte';
@@ -28,6 +27,7 @@
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { delay } from '$lib/utils/delay';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
+	import { getDraftHash } from '$lib/utils/getDraftHash';
 
 	export let isPreview: boolean = false;
 	export let titleError: boolean = false;
@@ -142,8 +142,7 @@
 				} else {
 					const body = await allResponse.json();
 					$currentDraftId = body[body.length - 1].id;
-					$titleCopy = $title;
-					$questionsCopy = JSON.parse(JSON.stringify($questions));
+					$draftHash = getDraftHash($title, $questions);
 					$isDraftPopupVisible = true;
 					await delay(2000);
 					$isDraftPopupVisible = false;
@@ -205,14 +204,13 @@
 		} else {
 			const body = await response.json();
 			$title = '';
-			$titleCopy = '';
 			$questions = [];
-			$questionsCopy = [];
 			$previousQuestion = null;
 			$useCrypto = false;
 			$ringMembers = [];
 			$selectedGroup = [];
 			$currentDraftId = null;
+			$draftHash = getDraftHash('', []);
 			ring = [];
 			finalRing = [];
 			return await goto(`/${body.survey_code}/view`, { replaceState: true, invalidateAll: true });

@@ -789,6 +789,10 @@ table {
 	color: var(--text-color);
 }
 
+table .tooltip {
+	display: table-cell;
+}
+
 th,
 td {
 	padding: 0.2em;
@@ -869,6 +873,12 @@ tr:last-of-type th:last-of-type {
 	text-align: center;
 	padding-left: 0.5em;
 	padding-right: 0.5em;
+}
+
+.button-entry.disabled {
+	background-color: var(--secondary-color);
+	color: var(--text-dark-color);
+	cursor: not-allowed;
 }
 
 .info-entry {

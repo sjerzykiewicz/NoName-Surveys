@@ -73,7 +73,7 @@
 						>
 					{/if}
 				</td>
-				<td class="info-entry tooltip">
+				<td class="info-entry tooltip access">
 					{#if entry.is_owned_by_user}
 						<i class="material-symbols-rounded">verified</i>
 						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
@@ -126,7 +126,10 @@
 				<td
 					title="Delete the survey"
 					class="button-entry"
-					on:click={() => deleteSurvey(survey_list.length - entryIndex - 1)}
+					class:disabled={!entry.is_owned_by_user}
+					on:click={() => {
+						if (entry.is_owned_by_user) deleteSurvey(survey_list.length - entryIndex - 1);
+					}}
 				>
 					<i class="material-symbols-rounded">delete</i></td
 				>
@@ -139,6 +142,10 @@
 </button>
 
 <style>
+	.tooltip.access {
+		--tooltip-width: 13em;
+	}
+
 	button {
 		font-size: 1.25em;
 		margin-top: 0.5em;
@@ -147,10 +154,6 @@
 	button i {
 		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
-	}
-
-	table .tooltip {
-		display: table-cell;
 	}
 
 	.code-entry.tooltip {

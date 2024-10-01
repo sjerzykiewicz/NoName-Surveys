@@ -234,3 +234,13 @@ export const takeAwayAccessToSurvey = (
 		}
 	});
 };
+
+export const checkAccessToSurvey = (user_email: string, survey_code: string) => {
+	return fetch(`${host}/surveys/get-all-with-access`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, survey_code }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};

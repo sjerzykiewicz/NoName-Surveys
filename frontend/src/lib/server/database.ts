@@ -206,3 +206,31 @@ export const deleteUserGroup = (user_email: string, name: string) => {
 		}
 	});
 };
+
+export const giveAccessToSurvey = (
+	user_email: string,
+	survey_code: string,
+	user_emails_to_share_with: string[]
+) => {
+	return fetch(`${host}/surveys/give-access`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, survey_code, user_emails_to_share_with }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const takeAwayAccessToSurvey = (
+	user_email: string,
+	survey_code: string,
+	user_email_to_take_access_from: string
+) => {
+	return fetch(`${host}/surveys/take-away-access`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, survey_code, user_email_to_take_access_from }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};

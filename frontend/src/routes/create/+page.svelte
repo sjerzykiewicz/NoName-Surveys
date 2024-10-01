@@ -9,7 +9,7 @@
 	import FooterButtons from '$lib/components/create-page/FooterButtons.svelte';
 	import type { PageServerData } from './$types';
 	import { beforeNavigate } from '$app/navigation';
-	import { getDraftHash } from '$lib/utils/getDraftHash';
+	import { getDraft } from '$lib/utils/getDraft';
 	import {
 		title,
 		questions,
@@ -18,7 +18,7 @@
 		ringMembers,
 		selectedGroup,
 		currentDraftId,
-		draftHash
+		draft
 	} from '$lib/stores/create-page';
 
 	export let titleError: boolean;
@@ -27,7 +27,7 @@
 	export let data: PageServerData;
 
 	beforeNavigate((event) => {
-		if (getDraftHash($title, $questions) !== $draftHash) {
+		if (getDraft($title, $questions) !== $draft) {
 			if (
 				!confirm(
 					'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.'
@@ -45,7 +45,7 @@
 		$ringMembers = [];
 		$selectedGroup = [];
 		$currentDraftId = null;
-		$draftHash = getDraftHash('', []);
+		$draft = getDraft('', []);
 	});
 </script>
 

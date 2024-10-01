@@ -9,7 +9,7 @@
 		isDraftModalHidden,
 		isDraftPopupVisible,
 		currentDraftId,
-		draftHash
+		draft
 	} from '$lib/stores/create-page';
 	import Survey from '$lib/entities/surveys/Survey';
 	import Slider from '$lib/components/create-page/Slider.svelte';
@@ -27,7 +27,7 @@
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { delay } from '$lib/utils/delay';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
-	import { getDraftHash } from '$lib/utils/getDraftHash';
+	import { getDraft } from '$lib/utils/getDraft';
 
 	export let isPreview: boolean = false;
 	export let titleError: boolean = false;
@@ -142,7 +142,7 @@
 				} else {
 					const body = await allResponse.json();
 					$currentDraftId = body[body.length - 1].id;
-					$draftHash = getDraftHash($title, $questions);
+					$draft = getDraft($title, $questions);
 					$isDraftPopupVisible = true;
 					await delay(2000);
 					$isDraftPopupVisible = false;
@@ -210,7 +210,7 @@
 			$ringMembers = [];
 			$selectedGroup = [];
 			$currentDraftId = null;
-			$draftHash = getDraftHash('', []);
+			$draft = getDraft('', []);
 			ring = [];
 			finalRing = [];
 			return await goto(`/${body.survey_code}/view`, { replaceState: true, invalidateAll: true });

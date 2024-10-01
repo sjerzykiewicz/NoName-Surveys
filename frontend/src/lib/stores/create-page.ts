@@ -1,7 +1,7 @@
 import { writable, type Writable } from 'svelte/store';
 import { type ComponentType } from 'svelte';
 import { QuestionError } from '$lib/entities/QuestionError';
-import { getDraftHash } from '$lib/utils/getDraftHash';
+import { getDraft } from '$lib/utils/getDraft';
 
 export const title: Writable<string> = writable('');
 
@@ -30,4 +30,4 @@ export const isDraftPopupVisible: Writable<boolean> = writable(false);
 
 export const currentDraftId: Writable<number | null> = writable(null);
 
-export const draftHash: Writable<string> = writable(getDraftHash('', []));
+export const draft: Writable<string> = writable(getDraft('', []));

@@ -5,7 +5,7 @@
 		isDraftModalHidden,
 		isDraftPopupVisible,
 		currentDraftId,
-		draftHash
+		draft
 	} from '$lib/stores/create-page';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
@@ -24,7 +24,7 @@
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { error } from '@sveltejs/kit';
 	import { delay } from '$lib/utils/delay';
-	import { getDraftHash } from '$lib/utils/getDraftHash';
+	import { getDraft } from '$lib/utils/getDraft';
 
 	export let users: string[];
 	export let groups: string[];
@@ -75,7 +75,7 @@
 			} else {
 				const body = await allResponse.json();
 				$currentDraftId = body[body.length - 1].id;
-				$draftHash = getDraftHash($title, $questions);
+				$draft = getDraft($title, $questions);
 				$isDraftPopupVisible = true;
 				await delay(2000);
 				$isDraftPopupVisible = false;

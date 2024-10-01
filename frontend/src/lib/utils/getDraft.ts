@@ -1,10 +1,8 @@
 import QuestionsStore from '$lib/entities/questions/QuestionsStore';
 import { getQuestionTypeData } from './getQuestionTypeData';
-import pkg from 'crypto-js';
-const { MD5 } = pkg;
 
-export function getDraftHash(title: string, questions: Array<QuestionsStore>) {
-	const data = {
+export function getDraft(title: string, questions: Array<QuestionsStore>) {
+	return JSON.stringify({
 		title: title,
 		questions: questions.map((q) => ({
 			component: getQuestionTypeData(q.component).text,
@@ -13,6 +11,5 @@ export function getDraftHash(title: string, questions: Array<QuestionsStore>) {
 			required: q.required,
 			error: q.error
 		}))
-	};
-	return MD5(JSON.stringify(data)).toString();
+	});
 }

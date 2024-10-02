@@ -1,12 +1,29 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	export let users: string[];
+	export let code: string;
 
 	let innerWidth: number;
 
-	function takeAwayAccess(user: string) {
-		return user;
+	function takeAwayAccess(user_email_to_take_access_from: string, i: number) {
+		fetch('/api/surveys/take-away-access', {
+			method: 'POST',
+			body: JSON.stringify({
+				user_email: $page.data.session?.user?.email,
+				survey_code: code,
+				user_email_to_take_access_from: user_email_to_take_access_from
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(() => {
+				users.splice(i, 1);
+				invalidateAll();
+			})
+			.catch(() => alert('Error taking away access'));
 	}
 </script>
 
@@ -16,7 +33,7 @@
 	<tr>
 		<th title="Users with access" id="title-header" colspan="3">Users With Access</th>
 	</tr>
-	{#each users as user}
+	{#each users.toSorted() as user, userIndex}
 		<tr>
 			<td class="info-entry tooltip">
 				{#if user === $page.data.session?.user?.email}
@@ -34,7 +51,11 @@
 				colspan={user === $page.data.session?.user?.email ? 2 : 1}>{user}</td
 			>
 			{#if user !== $page.data.session?.user?.email}
-				<td title="Take away access" class="button-entry" on:click={() => takeAwayAccess(user)}>
+				<td
+					title="Take away access"
+					class="button-entry"
+					on:click={() => takeAwayAccess(user, userIndex)}
+				>
 					<i class="material-symbols-rounded">delete</i></td
 				>
 			{/if}

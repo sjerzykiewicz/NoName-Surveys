@@ -6,7 +6,7 @@
 	<tr>
 		<th title="Group members" id="title-header">Group Members</th>
 	</tr>
-	{#each users as user}
+	{#each users.toSorted() as user}
 		<tr>
 			<td title={user} class="title-entry">{user}</td>
 		</tr>

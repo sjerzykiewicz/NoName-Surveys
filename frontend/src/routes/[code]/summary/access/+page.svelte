@@ -24,7 +24,7 @@
 </Header>
 
 <Content>
-	<UsersTable users={data.usersWithAccess} />
+	<UsersTable users={data.usersWithAccess} code={data.code} />
 	<AddUserButtons users={usersWithoutAccess} code={data.code} />
 </Content>
 

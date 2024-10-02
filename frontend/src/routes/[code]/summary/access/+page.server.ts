@@ -8,11 +8,18 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 		error(401, 'You must be logged in to access this page.');
 	}
 
-	const response = await db.checkAccessToSurvey(session.user!.email!, params.code);
-	if (!response.ok) {
-		error(response.status, { message: await response.json() });
+	const accessResponse = await db.checkAccessToSurvey(session.user!.email!, params.code);
+	if (!accessResponse.ok) {
+		error(accessResponse.status, { message: await accessResponse.json() });
 	}
 
-	const users = await response.json();
-	return { users };
+	const usersResponse = await db.getAllUsers();
+	if (!usersResponse.ok) {
+		error(usersResponse.status, { message: await usersResponse.json() });
+	}
+
+	const usersWithAccess = await accessResponse.json();
+	const allUsers = await usersResponse.json();
+
+	return { usersWithAccess, allUsers };
 };

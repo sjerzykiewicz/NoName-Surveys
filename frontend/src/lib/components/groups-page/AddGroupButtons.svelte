@@ -105,33 +105,7 @@
 		margin-bottom: 0em;
 	}
 
-	.add-group {
-		margin-right: 0.5em;
-		transition:
-			background-color 0.2s,
-			color 0.2s;
-	}
-
-	.add-group.clicked {
-		background-color: var(--accent-color);
-		color: var(--text-color-2);
-	}
-
-	.add-group.clicked:hover {
-		background-color: var(--accent-dark-color);
-	}
-
-	.add-group.clicked:active {
-		background-color: var(--border-color);
-	}
-
-	.add-group.clicked i {
-		transform: rotate(45deg);
-	}
-
-	.add-group i,
 	.save i {
-		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
 		transform: rotate(0deg);
 		transition: transform 0.2s;

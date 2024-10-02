@@ -5,8 +5,18 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Back from '$lib/components/Back.svelte';
 	import UsersTable from '$lib/components/summary-page/access/UsersTable.svelte';
+	import AddUserButtons from '$lib/components/summary-page/access/AddUserButtons.svelte';
+	import { afterUpdate } from 'svelte';
 
 	export let data: PageData;
+
+	let usersWithoutAccess: string[] = [];
+
+	afterUpdate(() => {
+		usersWithoutAccess = data.allUsers.filter(
+			(user: string) => !data.usersWithAccess.includes(user)
+		);
+	});
 </script>
 
 <Header>
@@ -14,7 +24,8 @@
 </Header>
 
 <Content>
-	<UsersTable users={data.users} />
+	<UsersTable users={data.usersWithAccess} />
+	<AddUserButtons users={usersWithoutAccess} code={data.code} />
 </Content>
 
 <Footer>

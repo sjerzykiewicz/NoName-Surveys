@@ -3,14 +3,18 @@
 
 	export let users: string[];
 
+	let innerWidth: number;
+
 	function takeAwayAccess(user: string) {
 		return user;
 	}
 </script>
 
+<svelte:window bind:innerWidth />
+
 <table>
 	<tr>
-		<th title="Users with access" id="title-header" colspan="3">Users with access</th>
+		<th title="Users with access" id="title-header" colspan="3">Users With Access</th>
 	</tr>
 	{#each users as user}
 		<tr>

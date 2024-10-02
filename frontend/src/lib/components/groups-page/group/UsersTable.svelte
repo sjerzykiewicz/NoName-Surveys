@@ -4,7 +4,7 @@
 
 <table>
 	<tr>
-		<th title="Group members" id="title-header">Group members</th>
+		<th title="Group members" id="title-header">Group Members</th>
 	</tr>
 	{#each users as user}
 		<tr>

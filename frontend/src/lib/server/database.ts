@@ -150,6 +150,10 @@ export const userHasPublicKey = (user_email: string) => {
 };
 
 export const getAllUsers = () => {
+	return fetch(`${host}/users/all`, { method: 'GET' });
+};
+
+export const getAllUsersWithKeys = () => {
 	return fetch(`${host}/users/all-with-public-keys`, { method: 'GET' });
 };
 

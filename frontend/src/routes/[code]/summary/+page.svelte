@@ -3,8 +3,10 @@
 	import Content from '$lib/components/Content.svelte';
 	import AnswersSummary from '$lib/components/summary-page/AnswersSummary.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import Back from '$lib/components/Back.svelte';
 	import type { LayoutServerData } from './$types';
 	import AnswersTable from '$lib/components/summary-page/AnswersTable.svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: LayoutServerData;
 
@@ -21,7 +23,7 @@
 
 <Content>
 	{#if data.answers.length === 0}
-		<div title="Answers" class="title answers">No answers yet!</div>
+		<div title="Answers" class="title empty">No answers yet!</div>
 	{:else}
 		<AnswersSummary surveyAnswers={data.answers} />
 		<AnswersTable {numbers} />
@@ -29,11 +31,14 @@
 </Content>
 
 <Footer>
-	<button
-		title="Go back"
-		class="footer-button"
-		on:click={() => {
-			history.back();
-		}}><i class="material-symbols-rounded">undo</i>Back</button
-	>
+	{#if data.answers.length > 0 && data.answers[0].is_owned_by_user}
+		<button
+			title="Manage access to this summary"
+			class="footer-button"
+			on:click={() => goto('/' + data.code + '/summary/access')}
+		>
+			<i class="material-symbols-rounded">passkey</i>Access
+		</button>
+	{/if}
+	<Back />
 </Footer>

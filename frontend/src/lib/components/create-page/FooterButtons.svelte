@@ -3,85 +3,39 @@
 		title,
 		questions,
 		previousQuestion,
-		isAccessLimited,
-		ringMembers
+		useCrypto,
+		ringMembers,
+		selectedGroup,
+		isDraftModalHidden,
+		isDraftPopupVisible,
+		currentDraftId,
+		draft
 	} from '$lib/stores/create-page';
-	import Question from '$lib/entities/questions/Question';
-	import { SingleQuestion } from '$lib/entities/questions/Single';
-	import { MultiQuestion } from '$lib/entities/questions/Multi';
-	import { ScaleQuestion } from '$lib/entities/questions/Scale';
-	import { SliderQuestion } from '$lib/entities/questions/Slider';
-	import { ListQuestion } from '$lib/entities/questions/List';
-	import { RankQuestion } from '$lib/entities/questions/Rank';
-	import { TextQuestion } from '$lib/entities/questions/Text';
-	import { BinaryQuestion } from '$lib/entities/questions/Binary';
 	import Survey from '$lib/entities/surveys/Survey';
-	import Single from '$lib/components/create-page/Single.svelte';
-	import Multi from '$lib/components/create-page/Multi.svelte';
-	import Scale from '$lib/components/create-page/Scale.svelte';
 	import Slider from '$lib/components/create-page/Slider.svelte';
-	import List from '$lib/components/create-page/List.svelte';
-	import Rank from '$lib/components/create-page/Rank.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
 	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import { goto } from '$app/navigation';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
-	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { tick } from 'svelte';
 	import { page } from '$app/stores';
 	import { error } from '@sveltejs/kit';
+	import { fade } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
+	import { constructQuestionList } from '$lib/utils/constructQuestionList';
+	import { delay } from '$lib/utils/delay';
+	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
+	import { getDraft } from '$lib/utils/getDraft';
 
 	export let isPreview: boolean = false;
+	export let titleError: boolean = false;
+	export let cryptoError: boolean = false;
 
 	function togglePreview() {
 		isPreview = !isPreview;
 	}
-
-	function constructQuestionList() {
-		let questionList: Array<Question> = [];
-		$questions.forEach((q) => {
-			switch (q.component) {
-				case Single:
-					questionList = [...questionList, new SingleQuestion(q.required, q.question, q.choices)];
-					break;
-				case Multi:
-					questionList = [...questionList, new MultiQuestion(q.required, q.question, q.choices)];
-					break;
-				case Scale:
-					questionList = [...questionList, new ScaleQuestion(q.required, q.question)];
-					break;
-				case Slider:
-					questionList = [
-						...questionList,
-						new SliderQuestion(
-							q.required,
-							q.question,
-							parseFloat(q.choices[0]),
-							parseFloat(q.choices[1])
-						)
-					];
-					break;
-				case List:
-					questionList = [...questionList, new ListQuestion(q.required, q.question, q.choices)];
-					break;
-				case Rank:
-					questionList = [...questionList, new RankQuestion(q.required, q.question, q.choices)];
-					break;
-				case Text:
-					questionList = [...questionList, new TextQuestion(q.required, q.question, q.choices[0])];
-					break;
-				case Binary:
-					questionList = [...questionList, new BinaryQuestion(q.required, q.question, q.choices)];
-					break;
-			}
-		});
-
-		return questionList;
-	}
-
-	export let titleError: boolean = false;
 
 	async function checkCorrectness() {
 		titleError = false;
@@ -122,6 +76,17 @@
 			}
 		}
 
+		cryptoError = false;
+		const g = $selectedGroup;
+		const r = $ringMembers;
+		if (
+			$useCrypto &&
+			(g === null || g === undefined || g.length === 0) &&
+			(r === null || r === undefined || r.length === 0)
+		) {
+			cryptoError = true;
+		}
+
 		if (titleError) {
 			await tick();
 			scrollToElementById('header');
@@ -136,40 +101,94 @@
 			return false;
 		}
 
+		if (cryptoError) {
+			await tick();
+			scrollToElementById('crypto');
+			return false;
+		}
+
 		return true;
 	}
 
 	async function saveDraft() {
 		if (!(await checkCorrectness())) return;
-		const parsedSurvey = new Survey($title, constructQuestionList());
-		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
+		if ($currentDraftId !== null) {
+			$isDraftModalHidden = false;
+		} else {
+			const parsedSurvey = new Survey($title, constructQuestionList($questions));
+			const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
-		const response = await fetch('/api/surveys/drafts/create', {
+			const createResponse = await fetch('/api/surveys/drafts/create', {
+				method: 'POST',
+				body: JSON.stringify(draftInfo),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!createResponse.ok) {
+				error(createResponse.status, { message: await createResponse.json() });
+			} else {
+				const allResponse = await fetch('/api/surveys/drafts/all', {
+					method: 'POST',
+					body: JSON.stringify({ user_email: $page.data.session?.user?.email }),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+
+				if (!allResponse.ok) {
+					error(allResponse.status, { message: await allResponse.json() });
+				} else {
+					const body = await allResponse.json();
+					$currentDraftId = body[body.length - 1].id;
+					$draft = getDraft($title, $questions);
+					$isDraftPopupVisible = true;
+					await delay(2000);
+					$isDraftPopupVisible = false;
+				}
+			}
+		}
+	}
+
+	let ring: string[] = [];
+
+	async function fetchGroup(name: string) {
+		const response = await fetch('/api/groups/fetch', {
 			method: 'POST',
-			body: JSON.stringify(draftInfo),
+			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		});
 
 		if (!response.ok) {
-			error(response.status, { message: await response.json() });
+			const body = await response.json();
+			alert(body.detail);
 		} else {
-			// TODO - display in UI
-			alert('Saved');
+			const body = await response.json();
+			ring = [...$ringMembers, ...body];
 		}
 	}
 
 	async function createSurvey() {
 		if (!(await checkCorrectness())) return;
-		const parsedSurvey = new Survey($title, constructQuestionList());
 
-		const useCrypto = $ringMembers.length !== 0;
+		const parsedSurvey = new Survey($title, constructQuestionList($questions));
+		let finalRing: string[] = [];
+
+		if ($selectedGroup.length > 0) {
+			await fetchGroup($selectedGroup[0]);
+			finalRing = [...new Set(ring)];
+		} else if ($ringMembers.length > 0) {
+			finalRing = [...$ringMembers];
+		}
+
 		const surveyInfo = new SurveyInfo(
 			$page.data.session!.user!.email!,
 			parsedSurvey,
-			useCrypto,
-			$ringMembers
+			$useCrypto,
+			finalRing
 		);
 
 		const response = await fetch('/api/surveys/create', {
@@ -187,8 +206,13 @@
 			$title = '';
 			$questions = [];
 			$previousQuestion = null;
-			$isAccessLimited = false;
+			$useCrypto = false;
 			$ringMembers = [];
+			$selectedGroup = [];
+			$currentDraftId = null;
+			$draft = getDraft('', []);
+			ring = [];
+			finalRing = [];
 			return await goto(`/${body.survey_code}/view`, { replaceState: true, invalidateAll: true });
 		}
 	}
@@ -205,11 +229,16 @@
 {/if}
 <button
 	title="Save draft"
-	class="footer-button save"
-	disabled={$questions.length === 0 || isPreview}
+	class="footer-button save popup"
+	disabled={$questions.length === 0 || isPreview || $isDraftPopupVisible}
 	on:click={saveDraft}
 >
 	<i class="material-symbols-rounded">save</i>Save Draft
+	{#if $isDraftPopupVisible}
+		<span class="popup-text top" transition:fade={{ duration: 200, easing: cubicInOut }}
+			>Saved!</span
+		>
+	{/if}
 </button>
 <button
 	title="Finish survey creation"
@@ -221,6 +250,10 @@
 </button>
 
 <style>
+	.popup {
+		--tooltip-width: 4em;
+	}
+
 	.footer-button:disabled {
 		color: var(--text-dark-color);
 		background-color: var(--secondary-color);

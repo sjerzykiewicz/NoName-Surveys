@@ -4,6 +4,8 @@
 	import { page } from '$app/stores';
 	import { cubicInOut } from 'svelte/easing';
 	import { onMount } from 'svelte';
+	import noname_dark from '$lib/assets/noname_dark.png';
+	import noname_light from '$lib/assets/noname_light.png';
 
 	let open: boolean;
 	let innerWidth: number;
@@ -30,6 +32,11 @@
 			href: '/surveys',
 			disabled: !$page.data.session
 		},
+		Groups: {
+			name: 'Groups',
+			href: '/groups',
+			disabled: !$page.data.session
+		},
 		Account: {
 			name: 'Account',
 			href: '/account',
@@ -42,14 +49,17 @@
 	}
 
 	let bulb = 'lightbulb';
+	let logo = noname_dark;
 
 	onMount(() => {
 		const colorScheme = localStorage.getItem('colorScheme') || 'dark';
 
 		if (colorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'dark';
+			logo = noname_light;
 		} else {
 			document.documentElement.dataset.colorScheme = 'light';
+			logo = noname_dark;
 			bulb = 'light_off';
 		}
 	});
@@ -60,10 +70,12 @@
 		if (currentColorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'light';
 			bulb = 'light_off';
+			logo = noname_dark;
 			localStorage.setItem('colorScheme', 'light');
 		} else {
 			document.documentElement.dataset.colorScheme = 'dark';
 			bulb = 'lightbulb';
+			logo = noname_light;
 			localStorage.setItem('colorScheme', 'dark');
 		}
 	}
@@ -77,7 +89,7 @@
 {#if innerWidth <= 767}
 	<div class="nav-burger">
 		<a href="/" title="Fill Out" class="nav-burger-logo"
-			><i class="material-symbols-rounded">shield_person</i></a
+			><img src={logo} alt="NoName logo" width="48" height="48" /></a
 		>
 		<div title={open ? 'Close menu' : 'Open menu'}>
 			<Hamburger bind:open --color="var(--text-color)" />
@@ -107,14 +119,27 @@
 	<button
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={toggleThemeMode}
-		title="Toggle theme mode"
-		class="toggle-mode"
+		class="toggle-mode tooltip"
 	>
 		<i class="material-symbols-rounded">{bulb}</i>
+		<span class="tooltip-text left">Toggle theme.</span>
 	</button>
 {/if}
 
 <style>
+	.tooltip {
+		--tooltip-width: 7em;
+	}
+
+	.tooltip .tooltip-text {
+		font-size: 0.8em;
+		background-color: var(--primary-dark-color);
+	}
+
+	.tooltip .tooltip-text::after {
+		border-color: transparent transparent transparent var(--primary-dark-color);
+	}
+
 	nav {
 		display: flex;
 		flex-flow: row;
@@ -142,10 +167,6 @@
 		background-color: var(--secondary-dark-color);
 	}
 
-	.nav-burger i {
-		font-size: 3em;
-	}
-
 	.toggle-mode {
 		position: fixed;
 		justify-content: center;
@@ -154,8 +175,9 @@
 		background-color: var(--primary-dark-color);
 		border: none;
 		font-size: 1.5em;
-		z-index: 5;
+		z-index: 1;
 		transition: 0.2s;
+		cursor: pointer;
 	}
 
 	.toggle-mode:hover {
@@ -167,6 +189,7 @@
 	}
 
 	.nav-burger-logo {
+		display: flex;
 		color: var(--text-color);
 		text-decoration: none;
 		transition: 0.2s;
@@ -219,6 +242,10 @@
 	}
 
 	@media screen and (max-width: 767px) {
+		.tooltip .tooltip-text {
+			font-size: 0.6em;
+		}
+
 		nav {
 			flex-flow: column;
 			border-left: none;

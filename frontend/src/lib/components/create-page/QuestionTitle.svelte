@@ -1,15 +1,12 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
-	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
-	import { beforeUpdate, type ComponentType } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 
 	export let questionIndex: number;
-	export let questionType: ComponentType;
-
-	let questionTypeData: { title: string; icon: string; text: string };
+	export let questionTypeData: { title: string; icon: string; text: string };
+	export let questionInput: HTMLDivElement;
 
 	function removeQuestion() {
 		$questions.splice(questionIndex, 1);
@@ -32,10 +29,6 @@
 		$questions[questionIndex].required = !$questions[questionIndex].required;
 		$questions = $questions;
 	}
-
-	beforeUpdate(() => {
-		questionTypeData = getQuestionTypeData(questionType);
-	});
 </script>
 
 <div
@@ -77,6 +70,7 @@
 		class="question-input"
 		contenteditable
 		bind:textContent={$questions[questionIndex].question}
+		bind:this={questionInput}
 		role="textbox"
 		tabindex="0"
 		on:keydown={handleNewLine}
@@ -84,12 +78,14 @@
 		{$questions[questionIndex].question}
 	</div>
 	<button
-		title={$questions[questionIndex].required ? 'Required' : 'Not required'}
-		class="required-button"
+		class="required-button tooltip"
 		class:checked={$questions[questionIndex].required}
 		on:click={toggleRequirement}
 	>
 		<i class="material-symbols-rounded">asterisk</i>
+		<span class="tooltip-text top"
+			>{$questions[questionIndex].required ? 'Required.' : 'Not required.'}</span
+		>
 	</button>
 	<button title="Remove question" class="remove-question" on:click={removeQuestion}>
 		<i class="material-symbols-rounded">close</i>
@@ -97,6 +93,10 @@
 </div>
 
 <style>
+	.tooltip {
+		--tooltip-width: 6.5em;
+	}
+
 	.question-input[contenteditable]:empty::before {
 		content: 'Enter question...';
 		color: var(--text-dark-color);
@@ -104,6 +104,11 @@
 
 	.required-button {
 		margin-right: 0.5em;
+		cursor: pointer;
+	}
+
+	.required-button .tooltip-text {
+		cursor: help;
 	}
 
 	.required-button.checked {

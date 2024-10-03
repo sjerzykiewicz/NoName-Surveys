@@ -16,13 +16,16 @@
 	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
 	import { questions } from '$lib/stores/create-page';
-	import { type ComponentType, onMount } from 'svelte';
+	import { type ComponentType, onMount, tick } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import QuestionTypeButton from './QuestionTypeButton.svelte';
 	import { QuestionError } from '$lib/entities/QuestionError';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { previousQuestion } from '$lib/stores/create-page';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+
+	export let questionInput: HTMLDivElement;
 
 	let isPanelVisible: boolean = false;
 	let questionTypes: Array<ComponentType> = [
@@ -105,7 +108,7 @@
 		}
 	}
 
-	function addQuestion(component: ComponentType) {
+	async function addQuestion(component: ComponentType) {
 		const i: number = $questions.length - 1;
 		if (i >= 0) {
 			checkError(i);
@@ -127,11 +130,14 @@
 
 		$previousQuestion = component;
 		isPanelVisible = false;
+
+		await tick();
+		questionInput.focus();
 	}
 
 	onMount(() => {
 		function handleClick(event: MouseEvent) {
-			if (isPanelVisible && !(event.target as HTMLElement).closest('.button-group')) {
+			if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
 				isPanelVisible = false;
 			}
 		}
@@ -144,10 +150,10 @@
 	});
 </script>
 
-<div class="button-group" class:clicked={isPanelVisible} class:previous={$previousQuestion}>
+<div class="button-group">
 	<div class="add-buttons">
 		<button
-			title="Choose question type"
+			title={isPanelVisible ? 'Stop choosing question type' : 'Choose question type'}
 			class="add-question"
 			class:clicked={isPanelVisible}
 			class:previous={$previousQuestion}
@@ -158,6 +164,7 @@
 		{#if $previousQuestion}
 			<QuestionTypeButton
 				questionType={$previousQuestion}
+				questionTypeData={getQuestionTypeData($previousQuestion)}
 				questionTypeIndex={-1}
 				on:addQuestionType={(event) => addQuestion(event.detail.component)}
 			/>
@@ -172,6 +179,7 @@
 			{#each questionTypes as questionType, questionTypeIndex}
 				<QuestionTypeButton
 					{questionType}
+					questionTypeData={getQuestionTypeData(questionType)}
 					{questionTypeIndex}
 					on:addQuestionType={(event) => addQuestion(event.detail.component)}
 				/>
@@ -207,14 +215,13 @@
 	}
 
 	.add-question.clicked {
-		background-color: var(--accent-color);
+		background-color: var(--primary-dark-color);
 		border-bottom-right-radius: 0px;
 		border-bottom-left-radius: 0px;
-		color: var(--text-color-2);
 	}
 
 	.add-question.clicked:hover {
-		background-color: var(--accent-dark-color);
+		background-color: var(--secondary-color);
 	}
 
 	.add-question.clicked:active {
@@ -234,12 +241,18 @@
 		width: fit-content;
 		height: auto;
 		position: absolute;
-		z-index: 100;
+		z-index: 1;
+	}
+
+	.add-question.clicked i {
+		transform: rotate(45deg);
 	}
 
 	.add-question i {
 		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
+		transform: rotate(0deg);
+		transition: transform 0.2s;
 	}
 
 	@media screen and (max-width: 767px) {

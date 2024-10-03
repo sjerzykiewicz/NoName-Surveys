@@ -1,5 +1,5 @@
 import re
-from typing import Optional, Union
+from typing import Union
 
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
 
@@ -31,24 +31,13 @@ class SurveyAnswerBase(BaseModel):
         description="Questions list must have at least 1 element",
     )
     signature: list[str] = Field(default=[])
-    y0: Optional[str] = Field(default="")
 
     @field_validator("survey_code")
     def validate_survey_join_code(cls, v, info: ValidationInfo) -> str:
         if v is None:
             raise ValueError("survey code must be provided")
         if not re.match(r"^\d{6}$", v):
-            raise ValueError(
-                "survey code must be a string consisting of 6 digits"
-            )
-        return v
-
-    @field_validator("y0")
-    def validate_y0(cls, v, info: ValidationInfo) -> str:
-        if v is None or v == "":
-            return v
-        if not re.match(r"^[0-9]+$", v):
-            raise ValueError("invalid y0 format")
+            raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
     def validate(self) -> None:
@@ -68,9 +57,7 @@ class SurveyAnswersFetchInput(BaseModel):
         if v is None:
             raise ValueError("survey code must be provided")
         if not re.match(r"^\d{6}$", v):
-            raise ValueError(
-                "survey code must be a string consisting of 6 digits"
-            )
+            raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
     class Config:
@@ -94,6 +81,7 @@ class SurveyAnswersFetchOutput(BaseModel):
         min_length=1,
         description="Questions list must have at least 1 element",
     )
+    is_owned_by_user: bool
 
     class Config:
         extra = "forbid"

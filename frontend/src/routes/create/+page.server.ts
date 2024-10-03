@@ -8,11 +8,17 @@ export const load: PageServerLoad = async ({ parent }) => {
 		redirect(303, `/account`);
 	}
 
-	const response = await db.getAllUsers();
-	if (!response.ok) {
-		error(response.status, { message: await response.json() });
+	const groupsResponse = await db.getAllUserGroups(session.user!.email!);
+	if (!groupsResponse.ok) {
+		error(groupsResponse.status, { message: await groupsResponse.json() });
 	}
+	const group_list = await groupsResponse.json();
 
-	const user_list = await response.json();
-	return { session, user_list };
+	const usersResponse = await db.getAllUsersWithKeys();
+	if (!usersResponse.ok) {
+		error(usersResponse.status, { message: await usersResponse.json() });
+	}
+	const user_list = await usersResponse.json();
+
+	return { session, group_list, user_list };
 };

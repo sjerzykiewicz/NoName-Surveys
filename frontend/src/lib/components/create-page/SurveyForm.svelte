@@ -1,24 +1,134 @@
 <script lang="ts">
+	import {
+		questions,
+		title,
+		isDraftModalHidden,
+		isDraftPopupVisible,
+		currentDraftId,
+		draft
+	} from '$lib/stores/create-page';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import QuestionError from './QuestionError.svelte';
 	import ChoiceError from './ChoiceError.svelte';
 	import AddQuestionButtons from '$lib/components/create-page/AddQuestionButtons.svelte';
-	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
-	import { MultiSelect } from 'svelte-multiselect';
-	import { ringMembers } from '$lib/stores/create-page';
-	import { isAccessLimited } from '$lib/stores/create-page';
+	import CryptoButtons from './CryptoButtons.svelte';
+	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import Survey from '$lib/entities/surveys/Survey';
+	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
+	import { constructQuestionList } from '$lib/utils/constructQuestionList';
+	import { error } from '@sveltejs/kit';
+	import { delay } from '$lib/utils/delay';
+	import { getDraft } from '$lib/utils/getDraft';
 
-	export let user_list: string[];
+	export let users: string[];
+	export let groups: string[];
 	export let isPreview: boolean;
+	export let cryptoError: boolean;
 
-	function toggleAccess() {
-		$isAccessLimited = !$isAccessLimited;
+	let questionInput: HTMLDivElement;
+
+	async function saveDraft(overwrite: boolean) {
+		const parsedSurvey = new Survey($title, constructQuestionList($questions));
+		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
+
+		if (overwrite) {
+			const deleteResponse = await fetch('/api/surveys/drafts/delete', {
+				method: 'POST',
+				body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: $currentDraftId }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!deleteResponse.ok) {
+				error(deleteResponse.status, { message: await deleteResponse.json() });
+			}
+		}
+
+		const createResponse = await fetch('/api/surveys/drafts/create', {
+			method: 'POST',
+			body: JSON.stringify(draftInfo),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!createResponse.ok) {
+			error(createResponse.status, { message: await createResponse.json() });
+		} else {
+			const allResponse = await fetch('/api/surveys/drafts/all', {
+				method: 'POST',
+				body: JSON.stringify({ user_email: $page.data.session?.user?.email }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!allResponse.ok) {
+				error(allResponse.status, { message: await allResponse.json() });
+			} else {
+				const body = await allResponse.json();
+				$currentDraftId = body[body.length - 1].id;
+				$draft = getDraft($title, $questions);
+				$isDraftPopupVisible = true;
+				await delay(2000);
+				$isDraftPopupVisible = false;
+			}
+		}
 	}
+
+	onMount(() => {
+		function handleEscape(event: KeyboardEvent) {
+			if (!$isDraftModalHidden && event.key === 'Escape') {
+				$isDraftModalHidden = true;
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEscape);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEscape);
+		};
+	});
 </script>
+
+<section class="overlay" class:hidden={$isDraftModalHidden}>
+	<div class="modal">
+		<div class="top">
+			<div class="caption">
+				<i class="material-symbols-rounded">help</i>Save Draft
+			</div>
+			<button title="Cancel" on:click={() => ($isDraftModalHidden = true)}>
+				<i class="material-symbols-rounded">close</i>
+			</button>
+		</div>
+		<div class="text">Do you wish to overwrite the draft or save a new draft?</div>
+		<div class="buttons">
+			<button
+				title="Overwrite draft"
+				class="save"
+				on:click={() => {
+					saveDraft(true);
+					$isDraftModalHidden = true;
+				}}>Overwrite Draft</button
+			>
+			<button
+				title="Save new draft"
+				class="save"
+				on:click={() => {
+					saveDraft(false);
+					$isDraftModalHidden = true;
+				}}>Save New Draft</button
+			>
+		</div>
+	</div>
+</section>
 
 {#each $questions as question, questionIndex (question)}
 	<div
@@ -27,10 +137,17 @@
 		on:introend={() => scrollToElement('.add-question')}
 	>
 		{#if isPreview}
-			<QuestionTitlePreview {questionIndex} />
+			<QuestionTitlePreview
+				{questionIndex}
+				questionTypeData={getQuestionTypeData(question.component)}
+			/>
 			<svelte:component this={question.preview} {questionIndex} />
 		{:else}
-			<QuestionTitle {questionIndex} questionType={question.component} />
+			<QuestionTitle
+				{questionIndex}
+				questionTypeData={getQuestionTypeData(question.component)}
+				bind:questionInput
+			/>
 			<QuestionError {questionIndex} />
 			<svelte:component this={question.component} {questionIndex} />
 			<ChoiceError {questionIndex} />
@@ -43,125 +160,104 @@
 		in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
 		out:slide={{ duration: 200, easing: cubicInOut }}
 	>
-		<AddQuestionButtons />
-		<div class="crypto-row">
-			<button
-				title={$isAccessLimited ? 'Respondent group defined' : 'Define respondent group'}
-				class="access-button"
-				class:checked={$isAccessLimited}
-				on:click={toggleAccess}
-			>
-				<i class="material-symbols-rounded">passkey</i>
-			</button>
-			{#if $isAccessLimited}
-				<div title="Select users" class="user-list">
-					<MultiSelect
-						bind:selected={$ringMembers}
-						options={user_list}
-						--sms-max-width="100%"
-						--sms-min-height="2.2em"
-						--sms-border="1px solid var(--border-color)"
-						--sms-border-radius="5px"
-						--sms-bg="var(--secondary-dark-color)"
-						--sms-selected-bg="var(--primary-color)"
-						--sms-active-color="var(--text-color)"
-						--sms-li-active-bg="var(--secondary-color)"
-						--sms-text-color="var(--text-color)"
-						--sms-open-z-index="0"
-						--sms-options-max-height="16.5em"
-						--sms-options-border="1px solid var(--border-color)"
-						--sms-options-border-radius="5px"
-						--sms-options-border-width="1px"
-						--sms-options-bg="var(--primary-color)"
-						--sms-options-shadow="0px 4px 4px var(--shadow-color)"
-						--sms-remove-btn-hover-color="var(--error-color)"
-						--sms-remove-btn-hover-bg="var(--secondary-color)"
-					/>
-				</div>
-			{:else}
-				<div title="Cryptography information" class="info">
-					<i class="material-symbols-rounded">info</i>
-					<div class="text">
-						Use cryptography to allow only selected users to fill out the survey.
-					</div>
-				</div>
-			{/if}
-		</div>
+		<AddQuestionButtons {questionInput} />
+		<CryptoButtons {users} {groups} {cryptoError} />
 	</div>
 {/if}
 
 <style>
+	.overlay {
+		display: flex;
+		justify-content: center;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(2px);
+		z-index: 2;
+		opacity: 1;
+		transition: opacity 0.2s;
+	}
+
+	.overlay.hidden {
+		visibility: hidden;
+		opacity: 0;
+	}
+
+	.modal {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		top: 10%;
+		width: 20em;
+		position: absolute;
+		background-color: var(--secondary-color);
+		border: 1px solid var(--border-color);
+		border-radius: 5px;
+		box-shadow: 0px 4px 4px var(--shadow-color);
+		font-size: 1.25em;
+		color: var(--text-color);
+		z-index: 3;
+	}
+
+	.modal div {
+		display: flex;
+	}
+
+	.modal .top {
+		align-items: center;
+		justify-content: space-between;
+		background-color: var(--secondary-dark-color);
+		border-bottom: 1px solid var(--border-color);
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		padding: 0.5em;
+	}
+
+	.modal .top .caption {
+		align-items: center;
+		font-weight: bold;
+		font-size: 1.25em;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: default;
+	}
+
+	.modal .top .caption i {
+		margin-right: 0.15em;
+	}
+
+	.modal .top button i {
+		font-variation-settings: 'wght' 700;
+	}
+
+	.modal .text {
+		justify-content: center;
+		padding: 1em;
+		text-align: center;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: default;
+	}
+
+	.modal .buttons {
+		flex-flow: row;
+		justify-content: space-around;
+		padding-bottom: 1em;
+	}
+
+	.modal .buttons button {
+		width: 8em;
+		justify-content: center;
+	}
+
 	.button-row {
 		display: flex;
 		flex-flow: row wrap;
 		align-items: flex-start;
 		justify-content: flex-start;
 		align-content: space-between;
-	}
-
-	.crypto-row {
-		flex: 1;
-		display: flex;
-		flex-flow: row;
-		align-items: flex-start;
-		justify-content: flex-start;
-	}
-
-	.access-button {
-		margin-right: 0.5em;
-		font-size: 1.25em;
-	}
-
-	.access-button.checked {
-		background-color: var(--accent-color);
-		color: var(--text-color-2);
-	}
-
-	.access-button.checked:hover {
-		background-color: var(--accent-dark-color);
-	}
-
-	.access-button.checked:active {
-		background-color: var(--border-color);
-	}
-
-	.user-list {
-		flex: 1;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-	}
-
-	.info {
-		font-size: 1em;
-		height: 2.2em;
-		min-width: 14em;
-		margin: 0em;
-	}
-
-	.info i {
-		font-size: 1.25em;
-	}
-
-	.text {
-		text-align: justify;
-	}
-
-	@media screen and (max-width: 767px) {
-		.access-button {
-			font-size: 1em;
-		}
-
-		.user-list,
-		.info {
-			font-size: 0.8em;
-		}
-
-		.info {
-			flex-flow: row;
-		}
-
-		.info i {
-			margin-right: 0.5em;
-			margin-bottom: 0em;
-		}
 	}
 </style>

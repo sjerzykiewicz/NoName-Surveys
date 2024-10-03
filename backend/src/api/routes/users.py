@@ -1,4 +1,3 @@
-import Crypto.PublicKey.RSA as RSA
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
@@ -25,22 +24,12 @@ async def get_users(session: Session = Depends(get_session)):
     response_model=list[str],
 )
 async def get_users_with_keys(session: Session = Depends(get_session)):
-    return [
-        user.email
-        for user in user_crud.get_all_users_with_public_keys(session)
-    ]
+    return [user.email for user in user_crud.get_all_users_with_public_keys(session)]
 
 
-@router.post(
-    "/validate", response_description="Validate a user", response_model=bool
-)
-async def does_user_exist(
-    user_create: User, session: Session = Depends(get_session)
-):
-    return (
-        user_crud.get_user_by_email(user_create.user_email, session)
-        is not None
-    )
+@router.post("/validate", response_description="Validate a user", response_model=bool)
+async def does_user_exist(user_create: User, session: Session = Depends(get_session)):
+    return user_crud.get_user_by_email(user_create.user_email, session) is not None
 
 
 @router.post(
@@ -63,13 +52,8 @@ async def check_if_user_has_public_key(
     response_description="Register a new user",
     response_model=dict,
 )
-async def create_user(
-    user_create: User, session: Session = Depends(get_session)
-):
-    if (
-        user_crud.get_user_by_email(user_create.user_email, session)
-        is not None
-    ):
+async def create_user(user_create: User, session: Session = Depends(get_session)):
+    if user_crud.get_user_by_email(user_create.user_email, session) is not None:
         raise HTTPException(status_code=400, detail="User already registered")
 
     user_crud.create_user(
@@ -88,16 +72,8 @@ async def update_user_public_key(
     update_user_public_key: UserUpdatePublicKey,
     session: Session = Depends(get_session),
 ):
-    if (
-        user_crud.get_user_by_email(update_user_public_key.user_email, session)
-        is None
-    ):
+    if user_crud.get_user_by_email(update_user_public_key.user_email, session) is None:
         raise HTTPException(status_code=400, detail="User not registered")
-
-    try:
-        RSA.import_key(update_user_public_key.public_key)
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid public key")
 
     user_crud.update_user_public_key(
         UserWithKey(

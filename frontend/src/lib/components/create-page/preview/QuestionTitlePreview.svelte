@@ -4,19 +4,32 @@
 	import { slide } from 'svelte/transition';
 
 	export let questionIndex: number;
+	export let questionTypeData: { title: string; icon: string; text: string };
 </script>
 
 <div
-	title="Question no. {questionIndex + 1}"
-	class="question-area display"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	class="question-label"
+	id={questionIndex.toString()}
+	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	out:slide={{ duration: 200, easing: cubicInOut }}
 >
-	<div class="index">{questionIndex + 1}.</div>
+	<div title="Question no. {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
+	<div title={questionTypeData.title} class="type">
+		<i class="material-symbols-rounded">{questionTypeData.icon}</i>{questionTypeData.text}
+	</div>
+	{#if $questions[questionIndex].required}
+		<div class="tooltip">
+			<i class="material-symbols-rounded">asterisk</i>
+			<span class="tooltip-text right">Required.</span>
+		</div>
+	{/if}
+</div>
+<div
+	class="question-area display"
+	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	out:slide={{ duration: 200, easing: cubicInOut }}
+>
 	<div class="question-title">
 		{$questions[questionIndex].question}
-		{#if $questions[questionIndex].required}
-			<i title="Required" class="material-symbols-rounded">asterisk</i>
-		{/if}
 	</div>
 </div>

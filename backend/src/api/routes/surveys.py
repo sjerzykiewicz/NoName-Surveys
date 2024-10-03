@@ -8,12 +8,15 @@ import src.db.crud.survey as survey_crud
 import src.db.crud.survey_draft as survey_draft_crud
 import src.db.crud.user as user_crud
 from src.api.models.surveys.survey import (
+    ShareSurveyResults,
     SurveyHeadersOutput,
     SurveyStructure,
     SurveyStructureCreateInput,
     SurveyStructureCreateOutput,
     SurveyStructureFetchInput,
     SurveyStructureFetchOutput,
+    SurveyUserActions,
+    TakeAwaySurveyAccess,
 )
 from src.api.models.users.user import User
 from src.db.base import get_session
@@ -29,14 +32,12 @@ router = APIRouter()
     response_description="Get all survey headers of a user",
     response_model=list[SurveyHeadersOutput],
 )
-async def get_surveys_for_user(
-    user: User, session: Session = Depends(get_session)
-):
-    if user_crud.get_user_by_email(user.user_email, session) is None:
+async def get_surveys_for_user(user: User, session: Session = Depends(get_session)):
+    user = user_crud.get_user_by_email(user.user_email, session)
+    if user is None:
         raise HTTPException(status_code=400, detail="User not found")
 
-    user_id = user_crud.get_user_by_email(user.user_email, session).id
-    user_surveys = survey_crud.get_all_surveys_for_user(user_id, session)
+    user_surveys = survey_crud.get_all_surveys_user_can_view(user.id, session)
     return [
         SurveyHeadersOutput(
             title=SurveyStructure.model_validate_json(
@@ -47,8 +48,9 @@ async def get_surveys_for_user(
             survey_code=survey.survey_code,
             creation_date=survey.creation_date,
             uses_cryptographic_module=survey.uses_cryptographic_module,
+            is_owned_by_user=ownership,
         )
-        for survey in user_surveys
+        for survey, ownership in user_surveys
     ]
 
 
@@ -73,15 +75,40 @@ async def get_survey_by_code(
         ),
         survey_code=survey.survey_code,
         uses_cryptographic_module=survey.uses_cryptographic_module,
-        public_keys=[
-            ring_member.public_key
-            for ring_member in ring_member_crud.get_ring_members_for_survey(
-                survey.id, session
-            )
-        ]
-        if survey.uses_cryptographic_module
-        else [],
+        public_keys=(
+            [
+                ring_member.public_key
+                for ring_member in ring_member_crud.get_ring_members_for_survey(
+                    survey.id, session
+                )
+            ]
+            if survey.uses_cryptographic_module
+            else []
+        ),
     )
+
+
+@router.post("/delete", response_description="Delete a survey", response_model=dict)
+async def delete_survey(
+    survey_delete: SurveyUserActions, session: Session = Depends(get_session)
+):
+    user = user_crud.get_user_by_email(survey_delete.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    survey = survey_crud.get_survey_by_code(survey_delete.survey_code, session)
+    if survey is None:
+        raise HTTPException(status_code=404, detail="Survey does not exist")
+
+    if survey.creator_id != user.id:
+        raise HTTPException(
+            status_code=403,
+            detail="User does not have access to this survey",
+        )
+
+    survey_crud.delete_survey_by_code(survey_delete.survey_code, session)
+
+    return {"message": "survey deleted successfully"}
 
 
 @router.post(
@@ -96,7 +123,6 @@ async def create_survey(
     user = user_crud.get_user_by_email(survey_create.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
-    user_id = user.id
 
     if survey_create.uses_cryptographic_module:
         not_found_emails = [
@@ -129,7 +155,7 @@ async def create_survey(
 
     survey_draft = survey_draft_crud.create_survey_draft(
         SurveyDraftBase(
-            creator_id=user_id,
+            creator_id=user.id,
             survey_structure=survey_create.survey_structure.model_dump_json(),
             is_deleted=True,
         ),
@@ -141,7 +167,7 @@ async def create_survey(
         survey_code = "".join(str(randbelow(10)) for _ in range(6))
     survey = survey_crud.create_survey(
         SurveyBase(
-            creator_id=user_id,
+            creator_id=user.id,
             uses_cryptographic_module=survey_create.uses_cryptographic_module,
             survey_structure_id=survey_draft.id,
             survey_code=survey_code,
@@ -161,4 +187,114 @@ async def create_survey(
                 session,
             )
 
+    survey_crud.give_survey_access(survey.id, user.id, session)
     return SurveyStructureCreateOutput(survey_code=survey.survey_code)
+
+
+@router.post(
+    "/give-access",
+    response_description="Give access to a survey to other users",
+    response_model=dict,
+)
+async def give_access_to_surveys(
+    share_surveys_input: ShareSurveyResults, session: Session = Depends(get_session)
+):
+    owner = user_crud.get_user_by_email(share_surveys_input.user_email, session)
+    if owner is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    survey = survey_crud.get_survey_by_code(share_surveys_input.survey_code, session)
+    if survey is None:
+        raise HTTPException(status_code=404, detail="Survey does not exist")
+
+    if survey.creator_id != owner.id:
+        raise HTTPException(
+            status_code=403, detail="User does not have access to this survey"
+        )
+
+    not_found_emails = [
+        email
+        for email in share_surveys_input.user_emails_to_share_with
+        if user_crud.get_user_by_email(email, session) is None
+    ]
+    if len(not_found_emails) > 0:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Users not found: {', '.join(not_found_emails)}",
+        )
+
+    for email in share_surveys_input.user_emails_to_share_with:
+        user = user_crud.get_user_by_email(email, session)
+        survey_crud.give_survey_access(survey.id, user.id, session)
+
+    return {"message": "Survey access given successfully"}
+
+
+@router.post(
+    "/take-away-access",
+    response_description="Take away access to a survey from another user",
+    response_model=dict,
+)
+async def take_away_access_to_surveys(
+    take_away_access_input: TakeAwaySurveyAccess,
+    session: Session = Depends(get_session),
+):
+    owner = user_crud.get_user_by_email(take_away_access_input.user_email, session)
+    if owner is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    survey = survey_crud.get_survey_by_code(take_away_access_input.survey_code, session)
+    if survey is None:
+        raise HTTPException(status_code=404, detail="Survey does not exist")
+
+    if survey.creator_id != owner.id:
+        raise HTTPException(
+            status_code=403, detail="User does not have access to this survey"
+        )
+
+    user = user_crud.get_user_by_email(
+        take_away_access_input.user_email_to_take_access_from, session
+    )
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    if user.id == survey.creator_id:
+        raise HTTPException(
+            status_code=400, detail="Cannot take away access from the survey creator"
+        )
+
+    survey_crud.take_away_survey_access(survey.id, user.id, session)
+
+    return {"message": "Survey access taken away successfully"}
+
+
+@router.post(
+    "/get-all-with-access",
+    response_description="Check who has access to results of a given survey",
+    response_model=list[str],
+)
+async def check_access_to_surveys(
+    check_survey_access_input: SurveyUserActions,
+    session: Session = Depends(get_session),
+):
+    owner = user_crud.get_user_by_email(check_survey_access_input.user_email, session)
+    if owner is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    survey = survey_crud.get_survey_by_code(
+        check_survey_access_input.survey_code, session
+    )
+    if survey is None:
+        raise HTTPException(status_code=404, detail="Survey does not exist")
+
+    if survey.creator_id != owner.id:
+        raise HTTPException(
+            status_code=403, detail="User does not have access to this survey"
+        )
+
+    return [
+        user_crud.get_user_by_id(access.user_id, session).email
+        for access in survey_crud.get_all_users_with_access_to_survey(
+            survey.id, session
+        )
+    ]

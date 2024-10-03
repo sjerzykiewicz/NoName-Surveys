@@ -1,56 +1,81 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import QrCode from '$lib/components/QrCode.svelte';
 	import { copyCode } from '$lib/utils/copyCode';
+	import Content from '$lib/components/Content.svelte';
+	import { delay } from '$lib/utils/delay';
+	import { cubicInOut } from 'svelte/easing';
+	import { fade } from 'svelte/transition';
+	import noname_black from '$lib/assets/noname_black.png';
 
 	export let data: PageData;
 
-	let url: string = $page.url.origin + '/fill?code=' + data.code;
-
-	let isCopied: boolean = false;
-
+	let isCopyPopupVisible: boolean = false;
 	let innerWidth: number;
+
 	function calculateSize(width: number): number {
 		if (width < 768) {
 			return 300;
-		} else {
-			return 400;
 		}
+		return 400;
 	}
 </script>
 
 <svelte:window bind:innerWidth />
 
-<div class="content">
-	<h2>Survey created successfully.</h2>
+<Content>
+	<h2 id="title">Survey created successfully.</h2>
 	<h2>Access code:</h2>
 	<h1>{data.code}</h1>
 	<button
-		title="Copy code"
-		class="save"
-		on:click={() => {
+		title="Copy the code"
+		class="save popup"
+		on:click={async () => {
 			copyCode(data.code);
-			isCopied = true;
+			isCopyPopupVisible = true;
+			await delay(2000);
+			isCopyPopupVisible = false;
 		}}
-		><i class="material-symbols-rounded">content_copy</i>
-		{isCopied ? 'Copied!' : 'Copy'}</button
+		><i class="material-symbols-rounded">content_copy</i>Copy
+		{#if isCopyPopupVisible}
+			<span class="popup-text left" transition:fade={{ duration: 200, easing: cubicInOut }}
+				>Copied!</span
+			>
+		{/if}</button
 	>
 	<a href="/fill?code={data.code}" title="Fill out the survey" class="qr-code">
-		<QrCode data={url} size={calculateSize(innerWidth)} />
+		<QrCode
+			code={data.code}
+			codeSize={calculateSize(innerWidth)}
+			codeMargin={3}
+			image={noname_black}
+			imageMargin={6}
+		/>
 	</a>
-</div>
+</Content>
 
 <style>
-	.content {
+	.popup .popup-text.left {
+		--tooltip-width: 4em;
+		font-size: 0.75em;
+	}
+
+	h2#title {
+		border-bottom: 1px solid var(--border-color);
+		padding: 0.25em 0em 0.5em;
+	}
+
+	h2,
+	h1 {
+		color: var(--text-color);
 		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color);
-		color: var(--text-color);
 		font-weight: bold;
 	}
 
 	h2 {
-		margin: 0.5em 0em;
+		margin: 0em;
+		padding-top: 0.5em;
 		font-size: 3em;
 		cursor: default;
 	}

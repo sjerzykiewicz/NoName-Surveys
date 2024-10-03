@@ -50,6 +50,7 @@ class SurveyHeadersOutput(BaseModel):
     survey_code: str
     creation_date: str
     uses_cryptographic_module: bool
+    is_owned_by_user: bool
 
 
 class SurveyStructureFetchInput(BaseModel):
@@ -60,9 +61,7 @@ class SurveyStructureFetchInput(BaseModel):
         if v is None:
             raise ValueError("survey code must be provided")
         if not re.match(r"^\d{6}$", v):
-            raise ValueError(
-                "survey code must be a string consisting of 6 digits"
-            )
+            raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
     class Config:
@@ -90,13 +89,9 @@ class SurveyStructureCreateInput(BaseModel):
         if not info.data["uses_cryptographic_module"]:
             return v
         if v is None or len(v) == 0:
-            raise ValueError(
-                "emails must be provided for cryptographic module"
-            )
+            raise ValueError("emails must be provided for cryptographic module")
         for email in v:
-            if not re.match(
-                r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email
-            ):
+            if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
                 raise ValueError("invalid email format")
         return v
 
@@ -106,6 +101,79 @@ class SurveyStructureCreateInput(BaseModel):
 
 class SurveyStructureCreateOutput(BaseModel):
     survey_code: str
+
+    class Config:
+        extra = "forbid"
+
+
+class SurveyUserActions(BaseModel):
+    user_email: str
+    survey_code: str
+
+    @field_validator("user_email")
+    def validate_user_email(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("email must be provided")
+        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
+            raise ValueError("invalid email format")
+        return v
+
+    @field_validator("survey_code")
+    def validate_survey_code(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("survey code must be provided")
+        if not re.match(r"^\d{6}$", v):
+            raise ValueError("survey code must be a string consisting of 6 digits")
+        return v
+
+    class Config:
+        extra = "forbid"
+
+
+class ShareSurveyResults(BaseModel):
+    user_email: str
+    survey_code: str
+    user_emails_to_share_with: list[str]
+
+    @field_validator("user_email")
+    def validate_user_email(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("email must be provided")
+        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
+            raise ValueError("invalid email format")
+        return v
+
+    @field_validator("survey_code")
+    def validate_survey_code(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("survey code must be provided")
+        if not re.match(r"^\d{6}$", v):
+            raise ValueError("survey code must be a string consisting of 6 digits")
+        return v
+
+    @field_validator("user_emails_to_share_with")
+    def validate_emails(cls, v, info: ValidationInfo) -> str:
+        if v is None or len(v) == 0:
+            raise ValueError("emails to share the survey with must be provided")
+        for email in v:
+            if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
+                raise ValueError("invalid email format")
+        return v
+
+    class Config:
+        extra = "forbid"
+
+
+class TakeAwaySurveyAccess(SurveyUserActions):
+    user_email_to_take_access_from: str
+
+    @field_validator("user_email_to_take_access_from")
+    def validate_other_user_email(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("email must be provided")
+        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
+            raise ValueError("invalid email format")
+        return v
 
     class Config:
         extra = "forbid"

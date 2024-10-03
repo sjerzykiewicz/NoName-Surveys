@@ -8,7 +8,7 @@
 	import type { SingleQuestion } from '$lib/entities/questions/Single';
 	import type { SliderQuestion } from '$lib/entities/questions/Slider';
 	import type { TextQuestion } from '$lib/entities/questions/Text';
-	import { title, questions } from '$lib/stores/create-page';
+	import { title, questions, currentDraftId, draft } from '$lib/stores/create-page';
 	import Binary from '../create-page/Binary.svelte';
 	import List from '../create-page/List.svelte';
 	import Multi from '../create-page/Multi.svelte';
@@ -27,6 +27,7 @@
 	import TextPreview from '../create-page/preview/TextPreview.svelte';
 	import { page } from '$app/stores';
 	import type Question from '$lib/entities/questions/Question';
+	import { getDraft } from '$lib/utils/getDraft';
 
 	export let drafts: {
 		id: number;
@@ -61,6 +62,7 @@
 		})
 			.then(async (response) => {
 				const body = await response.json();
+				$currentDraftId = drafts[i].id;
 				$title = drafts[i].title;
 				$questions = [];
 				body.survey_structure.questions.forEach((q: Question) => {
@@ -174,36 +176,71 @@
 							break;
 					}
 				});
+				$draft = getDraft($title, $questions);
 				goto('/create');
 			})
 			.catch(() => alert('Error loading draft'));
 	}
+
+	let innerWidth: number;
 </script>
 
-<table>
-	<tr>
-		<th title="Draft title" id="title-header">Draft Title</th>
-		<th title="Creation date" id="date-header" colspan="2">Date</th>
-	</tr>
-	{#each drafts as draft, draftIndex}
+<svelte:window bind:innerWidth />
+
+{#if drafts.length === 0}
+	<div class="info-row">
+		<div title="Drafts" class="title empty">No drafts yet!</div>
+		<div class="tooltip">
+			<i class="material-symbols-rounded">info</i>
+			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+				When creating a survey, you can save it as a draft for later use. To create a survey, click
+				on the "Create" tab at the top of the page or the button below. All your saved drafts will
+				be stored on this page.
+			</span>
+		</div>
+	</div>
+{:else}
+	<table>
 		<tr>
-			<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
-				>{draft.title}</td
-			>
-			<td title="Creation date" class="date-entry">{draft.creation_date}</td>
-			<td title="Delete the draft" class="delete-entry" on:click={() => deleteDraft(draftIndex)}>
-				<i class="material-symbols-rounded">delete</i></td
-			>
+			<th title="Draft title" id="title-header">Draft Title</th>
+			<th title="Creation date" id="date-header" colspan="2">Date</th>
 		</tr>
-	{/each}
-</table>
+		{#each drafts as draft, draftIndex}
+			<tr>
+				<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
+					>{draft.title}</td
+				>
+				<td title="Creation date" class="date-entry">{draft.creation_date}</td>
+				<td title="Delete the draft" class="button-entry" on:click={() => deleteDraft(draftIndex)}>
+					<i class="material-symbols-rounded">delete</i></td
+				>
+			</tr>
+		{/each}
+	</table>
+{/if}
+<button title="Create a draft" on:click={() => goto('/create')}>
+	<i class="material-symbols-rounded">add</i>Draft
+</button>
 
 <style>
+	button {
+		font-size: 1.25em;
+		margin-top: 0.5em;
+	}
+
+	button i {
+		margin-right: 0.15em;
+		font-variation-settings: 'wght' 700;
+	}
+
 	#title-header {
 		width: 77%;
 	}
 
 	@media screen and (max-width: 767px) {
+		button {
+			font-size: 1em;
+		}
 		#title-header {
 			width: 62%;
 		}

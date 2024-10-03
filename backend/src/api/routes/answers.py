@@ -1,4 +1,3 @@
-import Crypto.PublicKey.RSA as RSA
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
@@ -13,7 +12,7 @@ from src.api.models.surveys.answer import (
     SurveyAnswersFetchOutput,
 )
 from src.api.models.surveys.survey import SurveyStructure
-from src.cryptography.ring_signature import Ring
+from src.cryptography.ring_signature import verify_lrs
 from src.db.base import get_session
 from src.db.models.answer import Answer
 
@@ -32,15 +31,14 @@ async def get_survey_answers_by_code(
     user = user_crud.get_user_by_email(survey_fetch.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
-    user_id = user.id
 
     survey = survey_crud.get_survey_by_code(survey_fetch.survey_code, session)
     if survey is None:
         raise HTTPException(status_code=400, detail="Survey not found")
 
-    if survey.creator_id != user_id:
+    if not survey_crud.user_has_access_to_survey(user.id, survey.id, session):
         raise HTTPException(
-            status_code=403, detail="User not authorized to access this survey"
+            status_code=400, detail="User does not have access to this survey"
         )
 
     survey_draft = survey_draft_crud.get_survey_draft_by_id(
@@ -53,12 +51,14 @@ async def get_survey_answers_by_code(
 
     answers = answer_crud.get_answers_by_survey_id(survey.id, session)
     answer_structures = [
-        SurveyAnswerBase.model_validate_json(answer.answer)
-        for answer in answers
+        SurveyAnswerBase.model_validate_json(answer.answer) for answer in answers
     ]
+    is_owned_by_user = user.id == survey.creator_id
     return [
         SurveyAnswersFetchOutput(
-            title=survey_title, questions=answer.questions
+            title=survey_title,
+            questions=answer.questions,
+            is_owned_by_user=is_owned_by_user,
         )
         for answer in answer_structures
     ]
@@ -81,33 +81,32 @@ async def save_survey_answer(
     # fetch target survey structure
     survey = survey_crud.get_survey_by_code(survey_answer.survey_code, session)
     if not survey:
-        raise HTTPException(
-            status_code=404, detail="No survey found with this code"
-        )
+        raise HTTPException(status_code=404, detail="No survey found with this code")
 
     if survey.uses_cryptographic_module:
-        if not survey_answer.signature or not survey_answer.y0:
+        if not survey_answer.signature:
             raise HTTPException(
                 status_code=400,
                 detail="Survey requires cryptographic signature",
             )
 
         if answer_crud.user_already_answered_survey(
-            survey.id, survey_answer.y0, session
+            survey.id, survey_answer.signature[0], session
         ):
             raise HTTPException(
                 status_code=400, detail="User already answered this survey"
             )
 
         public_keys = [
-            RSA.import_key(ring_member.public_key)
+            ring_member.public_key
             for ring_member in ring_member_crud.get_ring_members_for_survey(
                 survey.id, session
             )
         ]
-        ring = Ring(public_keys)
-        if not ring.verify(
-            survey.survey_code, [int(x) for x in survey_answer.signature]
+        if not verify_lrs(
+            survey.survey_code,
+            public_keys,
+            [int(x) for x in survey_answer.signature],
         ):
             raise HTTPException(
                 status_code=400,
@@ -138,7 +137,7 @@ async def save_survey_answer(
     answer = Answer(
         survey_id=survey.id,
         answer=survey_answer.model_dump_json(),
-        y0=survey_answer.y0,
+        y0=survey_answer.signature[0] if survey_answer.signature else "",
     )
     answer_crud.save_answer(answer, session)
 

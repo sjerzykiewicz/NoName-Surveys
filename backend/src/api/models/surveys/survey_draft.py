@@ -13,9 +13,7 @@ class SurveyDraftCreate(BaseModel):
     def validate_user_email(cls, v, info: ValidationInfo) -> str:
         if v is None:
             raise ValueError("email must be provided")
-        if not re.match(
-            r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v
-        ):
+        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
             raise ValueError("invalid email format")
         return v
 
@@ -40,9 +38,7 @@ class SurveyDraftUserActions(BaseModel):
     def validate_user_email(cls, v, info: ValidationInfo) -> str:
         if v is None:
             raise ValueError("email must be provided")
-        if not re.match(
-            r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v
-        ):
+        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
             raise ValueError("invalid email format")
         return v
 

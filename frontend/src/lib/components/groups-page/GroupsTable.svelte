@@ -31,7 +31,7 @@
 		return true;
 	}
 
-	function deleteGroup(name: string) {
+	function deleteGroup(name: string, i: number) {
 		fetch('/api/groups/delete', {
 			method: 'POST',
 			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
@@ -40,7 +40,7 @@
 			}
 		})
 			.then(() => {
-				groups.splice(groups.indexOf(name), 1);
+				groups.splice(i, 1);
 				invalidateAll();
 			})
 			.catch(() => alert('Error deleting group'));
@@ -136,7 +136,11 @@
 					<td title="Open the group" class="title-entry" on:click={() => goto('/groups/' + group)}
 						>{group}</td
 					>
-					<td title="Delete the group" class="button-entry" on:click={() => deleteGroup(group)}>
+					<td
+						title="Delete the group"
+						class="button-entry"
+						on:click={() => deleteGroup(group, groupIndex)}
+					>
 						<i class="material-symbols-rounded">delete</i></td
 					>
 				{/if}

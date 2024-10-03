@@ -4,6 +4,7 @@
 	import Answers from '$lib/components/summary-page/answer/Answers.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Back from '$lib/components/Back.svelte';
+	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -18,5 +19,14 @@
 </Content>
 
 <Footer>
+	{#if data.answers[data.id].is_owned_by_user}
+		<button
+			title="Manage access to this summary"
+			class="footer-button"
+			on:click={() => goto('/' + data.code + '/summary/access')}
+		>
+			<i class="material-symbols-rounded">passkey</i>Access
+		</button>
+	{/if}
 	<Back />
 </Footer>

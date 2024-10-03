@@ -215,14 +215,13 @@
 	}
 
 	.add-question.clicked {
-		background-color: var(--accent-color);
+		background-color: var(--primary-dark-color);
 		border-bottom-right-radius: 0px;
 		border-bottom-left-radius: 0px;
-		color: var(--text-color-2);
 	}
 
 	.add-question.clicked:hover {
-		background-color: var(--accent-dark-color);
+		background-color: var(--secondary-color);
 	}
 
 	.add-question.clicked:active {

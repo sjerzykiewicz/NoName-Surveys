@@ -150,6 +150,10 @@ export const userHasPublicKey = (user_email: string) => {
 };
 
 export const getAllUsers = () => {
+	return fetch(`${host}/users/all`, { method: 'GET' });
+};
+
+export const getAllUsersWithKeys = () => {
 	return fetch(`${host}/users/all-with-public-keys`, { method: 'GET' });
 };
 
@@ -201,6 +205,44 @@ export const deleteUserGroup = (user_email: string, name: string) => {
 	return fetch(`${host}/user-groups/delete`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email, name }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const giveAccessToSurvey = (
+	user_email: string,
+	survey_code: string,
+	user_emails_to_share_with: string[]
+) => {
+	return fetch(`${host}/surveys/give-access`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, survey_code, user_emails_to_share_with }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const takeAwayAccessToSurvey = (
+	user_email: string,
+	survey_code: string,
+	user_email_to_take_access_from: string
+) => {
+	return fetch(`${host}/surveys/take-away-access`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, survey_code, user_email_to_take_access_from }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const checkAccessToSurvey = (user_email: string, survey_code: string) => {
+	return fetch(`${host}/surveys/get-all-with-access`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, survey_code }),
 		headers: {
 			'Content-Type': 'application/json'
 		}

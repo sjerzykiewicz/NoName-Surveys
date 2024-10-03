@@ -11,6 +11,7 @@
 	<form method="POST" use:enhance>
 		<label title="Enter a survey code to fill it out" for="code-input"
 			>Enter a survey code to fill it out:
+			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				id="code-input"
 				name="survey-code"
@@ -18,6 +19,7 @@
 				required
 				maxlength="6"
 				autocomplete="off"
+				autofocus
 			/>
 			<button title="Submit the code" class="save" type="submit">
 				<i class="material-symbols-rounded">done</i>Submit

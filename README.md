@@ -24,11 +24,13 @@ or build it locally:
 you have to set up the needed environment variables (.env files in the frontend/backend directory):
 - frontend:
   ```sh
-  GOOGLE_CLIENT_ID = "<google_client_id>" # used for oauth2.0 authentication
-  GOOGLE_CLIENT_SECRET = "<google_client_secret>" # used for oauth2.0 authentication
+  AUTH_GOOGLE_ID = "<google_client_id>" # used for oauth2.0 authentication
+  AUTH_GOOGLE_SECRET = "<google_client_secret>" # used for oauth2.0 authentication
+  AUTH_GITHUB_ID = "<github_client_id>" # used for oauth2.0 authentication
+  AUTH_GITHUB_SECRET = "<github_client_secret>" # used for oauth2.0 authentication
+  AUTH_SECRET = "<random_string>" # used for auth.js token generation
   BACKEND_HOST = "http://backend:8000" # change it if docker is not used
   ORIGIN = "http://localhost:3000" # change it if docker is not used
-  AUTH_SECRET = "<random_string>" # used for auth.js token generation
   ```
 - backend:
   ```sh

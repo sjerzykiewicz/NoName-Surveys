@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 
-	let errorMessage = '';
+	let errorMessage: string = '';
 	if (typeof $page.error!.message === 'string') errorMessage = $page.error!.message;
 	// @ts-expect-error message is not necessarily a string
 	else errorMessage = $page.error!.message.detail;
@@ -26,6 +26,7 @@
 		border: 1px solid var(--error-color);
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: 0px 4px 4px var(--shadow-color);
 		cursor: default;
 	}
 

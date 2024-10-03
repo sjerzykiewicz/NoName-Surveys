@@ -10,7 +10,7 @@
 </script>
 
 <Header>
-	<div class="title">{data.group}</div>
+	<div title="Group title" class="title">{data.group}</div>
 </Header>
 
 <Content>

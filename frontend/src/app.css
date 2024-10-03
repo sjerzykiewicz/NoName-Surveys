@@ -207,6 +207,35 @@ button:active,
 	font-size: 1em;
 }
 
+.add-group {
+	margin-right: 0.5em;
+	transition:
+		background-color 0.2s,
+		color 0.2s;
+}
+
+.add-group.clicked {
+	background-color: var(--primary-dark-color);
+}
+
+.add-group.clicked:hover {
+	background-color: var(--secondary-color);
+}
+
+.add-group.clicked:active {
+	background-color: var(--border-color);
+}
+
+.add-group.clicked i {
+	transform: rotate(45deg);
+}
+
+.add-group i {
+	font-variation-settings: 'wght' 700;
+	transform: rotate(0deg);
+	transition: transform 0.2s;
+}
+
 .hidden {
 	visibility: hidden;
 }
@@ -221,7 +250,8 @@ button:active,
 .save i,
 .back i,
 .sign-out i,
-.file-button i {
+.file-button i,
+.add-group i {
 	margin-right: 0.15em;
 }
 
@@ -789,6 +819,10 @@ table {
 	color: var(--text-color);
 }
 
+table .tooltip {
+	display: table-cell;
+}
+
 th,
 td {
 	padding: 0.2em;
@@ -860,7 +894,7 @@ tr:last-of-type th:last-of-type {
 }
 
 .date-entry,
-.crypto-entry {
+.info-entry {
 	cursor: default;
 }
 
@@ -871,13 +905,19 @@ tr:last-of-type th:last-of-type {
 	padding-right: 0.5em;
 }
 
-.crypto-entry {
+.button-entry.disabled {
+	background-color: var(--secondary-color);
+	color: var(--text-dark-color);
+	cursor: not-allowed;
+}
+
+.info-entry {
 	width: 0em;
 	text-align: center;
 }
 
 .button-entry i,
-.crypto-entry i {
+.info-entry i {
 	padding-top: 0.2em;
 }
 

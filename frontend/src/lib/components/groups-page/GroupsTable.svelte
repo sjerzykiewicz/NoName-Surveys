@@ -4,7 +4,6 @@
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { tick } from 'svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
-	import { urlify } from '$lib/utils/urlify';
 	import { GroupError } from '$lib/entities/GroupError';
 	import NameTableError from '$lib/components/groups-page/NameTableError.svelte';
 
@@ -137,7 +136,7 @@
 					<td
 						title="Open the group"
 						class="title-entry"
-						on:click={() => goto('/groups/' + urlify(group))}>{group}</td
+						on:click={() => goto('/groups/' + encodeURI(group))}>{group}</td
 					>
 					<td title="Delete the group" class="button-entry" on:click={() => deleteGroup(group)}>
 						<i class="material-symbols-rounded">delete</i></td

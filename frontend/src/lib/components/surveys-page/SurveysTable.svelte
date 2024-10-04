@@ -94,13 +94,16 @@
 					class="title-entry"
 					on:click={() => goto('/' + entry.survey_code + '/summary')}>{entry.title}</td
 				>
-				<td class="group-size-entry">
-					{#if entry.uses_cryptographic_module}
+				{#if entry.uses_cryptographic_module}
+					<td
+						class="group-size-entry"
+						on:click={() => goto('/' + entry.survey_code + '/summary#survey-respondents')}
+					>
 						{entry.group_size}
-					{:else}
-						N/A
-					{/if}
-				</td>
+					</td>
+				{:else}
+					<td class="group-size-entry"> N/A </td>
+				{/if}
 				<td
 					title="Copy"
 					class="code-entry tooltip popup"

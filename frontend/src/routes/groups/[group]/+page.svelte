@@ -14,7 +14,7 @@
 </Header>
 
 <Content>
-	<UsersTable users={data.users} />
+	<UsersTable users={data.users} title="Group Members" />
 </Content>
 
 <Footer>

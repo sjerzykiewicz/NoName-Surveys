@@ -69,6 +69,21 @@ class SurveyStructureFetchInput(BaseModel):
         extra = "forbid"
 
 
+class SurveyRespondentsFetchInput(BaseModel):
+    survey_code: str
+
+    @field_validator("survey_code")
+    def validate_survey_join_code(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("survey code must be provided")
+        if not re.match(r"^\d{6}$", v):
+            raise ValueError("survey code must be a string consisting of 6 digits")
+        return v
+
+    class Config:
+        extra = "forbid"
+
+
 class SurveyStructureFetchOutput(BaseModel):
     survey_structure: SurveyStructure
     survey_code: str

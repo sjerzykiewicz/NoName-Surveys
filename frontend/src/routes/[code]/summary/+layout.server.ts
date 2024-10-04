@@ -16,8 +16,13 @@ export const load: LayoutServerLoad = async ({ params, parent }) => {
 	if (!answersResponse.ok) {
 		error(answersResponse.status, { message: await answersResponse.json() });
 	}
+	const respondentsResponse = await db.getSurveyRespondentsByCode(code);
+	if (!respondentsResponse.ok) {
+		error(respondentsResponse.status, { message: await respondentsResponse.json() });
+	}
 
 	const survey = await surveyResponse.json();
 	const answers = await answersResponse.json();
-	return { survey, answers, code };
+	const respondents = await respondentsResponse.json();
+	return { survey, answers, respondents, code };
 };

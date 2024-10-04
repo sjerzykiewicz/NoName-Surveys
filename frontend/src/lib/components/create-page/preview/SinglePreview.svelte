@@ -25,7 +25,7 @@
 				/>
 			</div>
 			<div class="choice-input display" class:selected={checked === choiceIndex}>
-				{choice}
+				{choice.trim()}
 			</div>
 		</label>
 	{/each}

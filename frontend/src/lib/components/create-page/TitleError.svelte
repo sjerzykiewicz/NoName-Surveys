@@ -11,7 +11,7 @@
 
 	$: checkTitleError = () => {
 		const t = $title;
-		return titleError && (t === null || t === undefined || t.length === 0);
+		return titleError && (t === null || t === undefined || t.trim().length === 0);
 	};
 </script>
 

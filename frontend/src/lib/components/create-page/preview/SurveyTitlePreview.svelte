@@ -10,5 +10,5 @@
 	in:slide={{ duration: 200, easing: cubicInOut }}
 	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
 >
-	{$title}
+	{$title.trim()}
 </div>

@@ -25,6 +25,7 @@
 	import { error } from '@sveltejs/kit';
 	import { delay } from '$lib/utils/delay';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { trimQuestions } from '$lib/utils/trimQuestions';
 
 	export let users: string[];
 	export let groups: string[];
@@ -34,7 +35,8 @@
 	let questionInput: HTMLDivElement;
 
 	async function saveDraft(overwrite: boolean) {
-		const parsedSurvey = new Survey($title, constructQuestionList($questions));
+		const trimmedQuestions = trimQuestions($questions);
+		const parsedSurvey = new Survey($title.trim(), constructQuestionList(trimmedQuestions));
 		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
 		if (overwrite) {

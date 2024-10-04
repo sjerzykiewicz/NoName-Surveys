@@ -28,6 +28,8 @@
 	import { delay } from '$lib/utils/delay';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { trimQuestions } from '$lib/utils/trimQuestions';
+	import QuestionsStore from '$lib/entities/questions/QuestionsStore';
 
 	export let isPreview: boolean = false;
 	export let titleError: boolean = false;
@@ -37,24 +39,24 @@
 		isPreview = !isPreview;
 	}
 
-	async function checkCorrectness() {
+	async function checkCorrectness(trimmedQuestions: Array<QuestionsStore>) {
 		titleError = false;
-		const t = $title;
+		const t = $title.trim();
 		if (t === null || t === undefined || t.length === 0) {
 			titleError = true;
 		}
 
-		const numQuestions = $questions.length;
+		const numQuestions = trimmedQuestions.length;
 
 		for (let i = 0; i < numQuestions; i++) {
-			const q = $questions[i].question;
+			const q = trimmedQuestions[i].question;
 			if (q === null || q === undefined || q.length === 0) {
 				$questions[i].error = QuestionError.QuestionRequired;
 			} else if (
-				$questions[i].component != Text &&
-				$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+				trimmedQuestions[i].component != Text &&
+				trimmedQuestions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
 			) {
-				switch ($questions[i].component) {
+				switch (trimmedQuestions[i].component) {
 					case Slider:
 						$questions[i].error = QuestionError.SliderValuesRequired;
 						break;
@@ -65,11 +67,11 @@
 						$questions[i].error = QuestionError.ChoicesRequired;
 				}
 			} else if (
-				$questions[i].component === Slider &&
-				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
+				trimmedQuestions[i].component === Slider &&
+				parseFloat(trimmedQuestions[i].choices[0]) >= parseFloat(trimmedQuestions[i].choices[1])
 			) {
 				$questions[i].error = QuestionError.ImproperSliderValues;
-			} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
+			} else if (new Set(trimmedQuestions[i].choices).size !== trimmedQuestions[i].choices.length) {
 				$questions[i].error = QuestionError.DuplicateChoices;
 			} else {
 				$questions[i].error = QuestionError.NoError;
@@ -111,11 +113,14 @@
 	}
 
 	async function saveDraft() {
-		if (!(await checkCorrectness())) return;
+		const trimmedQuestions = trimQuestions($questions);
+
+		if (!(await checkCorrectness(trimmedQuestions))) return;
+
 		if ($currentDraftId !== null) {
 			$isDraftModalHidden = false;
 		} else {
-			const parsedSurvey = new Survey($title, constructQuestionList($questions));
+			const parsedSurvey = new Survey($title.trim(), constructQuestionList(trimmedQuestions));
 			const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
 			const createResponse = await fetch('/api/surveys/drafts/create', {
@@ -172,9 +177,11 @@
 	}
 
 	async function createSurvey() {
-		if (!(await checkCorrectness())) return;
+		const trimmedQuestions = trimQuestions($questions);
 
-		const parsedSurvey = new Survey($title, constructQuestionList($questions));
+		if (!(await checkCorrectness(trimmedQuestions))) return;
+
+		const parsedSurvey = new Survey($title.trim(), constructQuestionList(trimmedQuestions));
 		let finalRing: string[] = [];
 
 		if ($selectedGroup.length > 0) {

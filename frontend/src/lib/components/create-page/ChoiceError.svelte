@@ -28,7 +28,9 @@
 			case QuestionError.ChoicesRequired:
 			case QuestionError.BinaryChoicesRequired:
 			case QuestionError.SliderValuesRequired:
-				return $questions[i].choices.some((c) => c === null || c === undefined || c.length === 0);
+				return $questions[i].choices.some(
+					(c) => c === null || c === undefined || c.trim().length === 0
+				);
 			case QuestionError.DuplicateChoices:
 				return new Set($questions[i].choices).size !== $questions[i].choices.length;
 			case QuestionError.ImproperSliderValues:

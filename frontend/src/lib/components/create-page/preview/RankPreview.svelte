@@ -45,7 +45,7 @@
 				</button>
 			</div>
 			<div class="choice-input display">
-				{choice}
+				{choice.trim()}
 			</div>
 		</div>
 	{/each}

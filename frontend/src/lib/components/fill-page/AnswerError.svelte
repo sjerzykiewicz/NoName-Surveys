@@ -14,7 +14,7 @@
 		return (
 			unansweredRequired.includes(questionIndex) &&
 			($answers[i].choices.length === 0 ||
-				$answers[i].choices.some((c) => c === null || c === undefined || c.length === 0))
+				$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0))
 		);
 	};
 </script>

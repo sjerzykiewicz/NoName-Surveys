@@ -18,6 +18,7 @@
 		creation_date: string;
 		uses_cryptographic_module: boolean;
 		is_owned_by_user: boolean;
+		group_size: number;
 	}[];
 
 	function deleteSurvey(i: number) {
@@ -56,6 +57,7 @@
 	<table>
 		<tr>
 			<th title="Survey title" id="title-header" colspan="3">Survey Title</th>
+			<th title="Group size" id="group-header">Group Size</th>
 			<th title="Access code" id="code-header">Code</th>
 			<th title="Creation date" id="date-header" colspan="2">Date</th>
 		</tr>
@@ -92,6 +94,13 @@
 					class="title-entry"
 					on:click={() => goto('/' + entry.survey_code + '/summary')}>{entry.title}</td
 				>
+				<td class="group-size-entry">
+					{#if entry.uses_cryptographic_module}
+						{entry.group_size}
+					{:else}
+						N/A
+					{/if}
+				</td>
 				<td
 					title="Copy"
 					class="code-entry tooltip popup"

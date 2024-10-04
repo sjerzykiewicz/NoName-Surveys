@@ -51,6 +51,7 @@ class SurveyHeadersOutput(BaseModel):
     creation_date: str
     uses_cryptographic_module: bool
     is_owned_by_user: bool
+    group_size: int
 
 
 class SurveyStructureFetchInput(BaseModel):

@@ -49,6 +49,9 @@ async def get_surveys_for_user(user: User, session: Session = Depends(get_sessio
             creation_date=survey.creation_date,
             uses_cryptographic_module=survey.uses_cryptographic_module,
             is_owned_by_user=ownership,
+            group_size=ring_member_crud.get_ring_member_count_for_survey(
+                survey.id, session
+            ),
         )
         for survey, ownership in user_surveys
     ]

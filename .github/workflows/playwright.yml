@@ -18,7 +18,7 @@ jobs:
           node-version: lts/*
 
       - name: Setup backend
-        working-directory: ../backend
+        working-directory: ./backend
         run: |
           docker build . --file Dockerfile --tag noname-surveys-backend:latest
           docker run -d -p 3000:3000 --name noname-surveys-backend noname-surveys-backend:latest

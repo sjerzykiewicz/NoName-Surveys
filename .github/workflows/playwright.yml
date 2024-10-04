@@ -21,7 +21,7 @@ jobs:
         working-directory: ./backend
         run: |
           docker build . --file Dockerfile --tag noname-surveys-backend:latest
-          docker run -d -p 3000:3000 --name noname-surveys-backend noname-surveys-backend:latest
+          docker run -d -p 8000:8000 --name noname-surveys-backend noname-surveys-backend:latest
         
 
       - name: Install dependencies
@@ -30,7 +30,7 @@ jobs:
       - name: Generate auth secret
         run: |
           echo "AUTH_SECRET=$(npx auth secret)" > .env
-          echo "BACKEND_HOST=http://localhost:3000" >> .env
+          echo "BACKEND_HOST=http://localhost:8000" >> .env
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps

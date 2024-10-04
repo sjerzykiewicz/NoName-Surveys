@@ -13,7 +13,7 @@
 >
 	<select title="Select your answer" name={questionIndex.toString()}>
 		{#each $questions[questionIndex].choices as choice}
-			<option value={choice}>
+			<option value={choice.trim()}>
 				{choice.trim()}
 			</option>
 		{/each}

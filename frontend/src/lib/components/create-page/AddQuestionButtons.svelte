@@ -131,8 +131,10 @@
 		$previousQuestion = component;
 		isPanelVisible = false;
 
-		await tick();
-		questionInput.focus();
+		if (innerWidth > 767) {
+			await tick();
+			questionInput.focus();
+		}
 	}
 
 	onMount(() => {
@@ -148,7 +150,11 @@
 			document.body.removeEventListener('click', handleClick);
 		};
 	});
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div class="button-group">
 	<div class="add-buttons">

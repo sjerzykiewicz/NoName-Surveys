@@ -108,7 +108,7 @@
 							class="table-input"
 							contenteditable
 							bind:textContent={newName}
-							autofocus
+							autofocus={innerWidth > 767}
 							role="textbox"
 							tabindex="0"
 							on:keydown={handleNewLine}

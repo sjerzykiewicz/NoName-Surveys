@@ -3,7 +3,11 @@
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <!-- svelte-ignore a11y-autofocus -->
 <div
@@ -12,7 +16,7 @@
 	id="title"
 	contenteditable
 	bind:textContent={$title}
-	autofocus
+	autofocus={innerWidth > 767}
 	role="textbox"
 	tabindex="0"
 	on:keydown={handleNewLine}

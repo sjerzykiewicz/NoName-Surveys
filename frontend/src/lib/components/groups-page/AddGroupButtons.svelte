@@ -78,7 +78,11 @@
 			})
 			.catch(() => alert('Error deleting group'));
 	}
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div class="button-row">
 	<button
@@ -96,7 +100,7 @@
 			class="group-input"
 			contenteditable
 			bind:textContent={groupName}
-			autofocus
+			autofocus={innerWidth > 767}
 			role="textbox"
 			tabindex="0"
 			on:keydown={handleNewLine}

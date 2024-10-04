@@ -11,6 +11,6 @@
 <style>
 	.title.respondent-list {
 		margin-top: 1em;
-		margin-bottom: 5px;
+		margin-bottom: 0.1em;
 	}
 </style>

@@ -17,8 +17,7 @@ def get_ring_member_count_for_survey(survey_id: int, session: Session) -> int:
     statement = select(func.count(RingMember.id)).where(
         RingMember.survey_id == survey_id
     )
-    member_count = session.exec(statement).one()
-    return member_count
+    return session.exec(statement).one()
 
 
 def add_ring_member(ring_member: RingMemberBase, session: Session) -> None:

@@ -10,11 +10,10 @@ import src.db.crud.user as user_crud
 from src.api.models.surveys.survey import (
     ShareSurveyResults,
     SurveyHeadersOutput,
-    SurveyRespondentsFetchInput,
+    SurveyInfoFetchInput,
     SurveyStructure,
     SurveyStructureCreateInput,
     SurveyStructureCreateOutput,
-    SurveyStructureFetchInput,
     SurveyStructureFetchOutput,
     SurveyUserActions,
     TakeAwaySurveyAccess,
@@ -64,7 +63,7 @@ async def get_surveys_for_user(user: User, session: Session = Depends(get_sessio
     response_model=SurveyStructureFetchOutput,
 )
 async def get_survey_by_code(
-    survey_fetch: SurveyStructureFetchInput,
+    survey_fetch: SurveyInfoFetchInput,
     session: Session = Depends(get_session),
 ):
     survey = survey_crud.get_survey_by_code(survey_fetch.survey_code, session)
@@ -98,7 +97,7 @@ async def get_survey_by_code(
     response_model=list[str],
 )
 async def get_respondents_by_code(
-    respondents_fetch: SurveyRespondentsFetchInput,
+    respondents_fetch: SurveyInfoFetchInput,
     session: Session = Depends(get_session),
 ):
     survey = survey_crud.get_survey_by_code(respondents_fetch.survey_code, session)

@@ -10,10 +10,10 @@ import src.db.crud.user as user_crud
 from src.api.models.surveys.survey import (
     ShareSurveyResults,
     SurveyHeadersOutput,
+    SurveyInfoFetchInput,
     SurveyStructure,
     SurveyStructureCreateInput,
     SurveyStructureCreateOutput,
-    SurveyStructureFetchInput,
     SurveyStructureFetchOutput,
     SurveyUserActions,
     TakeAwaySurveyAccess,
@@ -49,6 +49,9 @@ async def get_surveys_for_user(user: User, session: Session = Depends(get_sessio
             creation_date=survey.creation_date,
             uses_cryptographic_module=survey.uses_cryptographic_module,
             is_owned_by_user=ownership,
+            group_size=ring_member_crud.get_ring_member_count_for_survey(
+                survey.id, session
+            ),
         )
         for survey, ownership in user_surveys
     ]
@@ -60,7 +63,7 @@ async def get_surveys_for_user(user: User, session: Session = Depends(get_sessio
     response_model=SurveyStructureFetchOutput,
 )
 async def get_survey_by_code(
-    survey_fetch: SurveyStructureFetchInput,
+    survey_fetch: SurveyInfoFetchInput,
     session: Session = Depends(get_session),
 ):
     survey = survey_crud.get_survey_by_code(survey_fetch.survey_code, session)
@@ -86,6 +89,30 @@ async def get_survey_by_code(
             else []
         ),
     )
+
+
+@router.post(
+    "/respondents",
+    response_description="Get emails of respondents",
+    response_model=list[str],
+)
+async def get_respondents_by_code(
+    respondents_fetch: SurveyInfoFetchInput,
+    session: Session = Depends(get_session),
+):
+    survey = survey_crud.get_survey_by_code(respondents_fetch.survey_code, session)
+    if survey is None:
+        raise HTTPException(status_code=404, detail="Survey does not exist")
+
+    if survey.uses_cryptographic_module:
+        return [
+            ring_member.user_email
+            for ring_member in ring_member_crud.get_ring_members_for_survey(
+                survey.id, session
+            )
+        ]
+    else:
+        return []
 
 
 @router.post("/delete", response_description="Delete a survey", response_model=dict)

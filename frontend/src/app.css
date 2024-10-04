@@ -883,12 +883,14 @@ tr:last-of-type th:last-of-type {
 
 .title-entry:hover,
 .code-entry:hover,
+.group-size-entry:hover,
 .button-entry:hover {
 	background-color: var(--secondary-color);
 }
 
 .title-entry:active,
 .code-entry:active,
+.group-size-entry:active,
 .button-entry:active {
 	background-color: var(--border-color);
 }

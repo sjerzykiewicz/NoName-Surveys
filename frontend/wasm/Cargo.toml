@@ -8,7 +8,6 @@ crate-type = ["cdylib"]
 
 [dependencies]
 wasm-bindgen = "0.2.63"
-rsa = "0.9.6"
 getrandom = { version = "0.2", features = ["js"] }
 rand = "0.8.5"
 sha2 = "0.10"

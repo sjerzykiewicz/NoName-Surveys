@@ -24,6 +24,21 @@ def get_user_by_email(email: str, session: Session) -> User:
     return user
 
 
+def all_users_exist(users_emails: list[str], session: Session) -> bool:
+    users = session.exec(select(User).filter(User.email.in_(users_emails))).all()
+    return len(users) == len(users_emails)
+
+
+def all_users_exist_and_have_public_keys(
+    users_emails: list[str], session: Session
+) -> bool:
+    users = session.exec(
+        select(User).filter(User.email.in_(users_emails), User.public_key != "")
+    ).all()
+
+    return len(users) == len(users_emails)
+
+
 def create_user(user_create: UserBase, session: Session) -> User:
     user = User.model_validate(user_create)
     session.add(user)

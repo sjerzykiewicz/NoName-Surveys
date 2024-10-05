@@ -106,7 +106,7 @@ async def delete_survey_draft(
 @router.post(
     "/create",
     response_description="Create a new SurveyStructure Draft",
-    response_model=dict,
+    response_model=int,
 )
 async def create_survey_draft(
     survey_draft_create: SurveyDraftCreate,
@@ -121,7 +121,7 @@ async def create_survey_draft(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    survey_draft_crud.create_survey_draft(
+    created_survey_draft = survey_draft_crud.create_survey_draft(
         SurveyDraftBase(
             creator_id=user.id,
             survey_structure=survey_draft_create.survey_structure.model_dump_json(),
@@ -130,4 +130,4 @@ async def create_survey_draft(
         session,
     )
 
-    return {"message": "Survey Draft created successfully"}
+    return created_survey_draft.id

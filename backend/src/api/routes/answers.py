@@ -90,7 +90,7 @@ async def save_survey_answer(
                 detail="Survey requires cryptographic signature",
             )
 
-        if answer_crud.user_already_answered_survey(
+        if answer_crud.signature_already_present_for_user(
             survey.id, survey_answer.signature[0], session
         ):
             raise HTTPException(

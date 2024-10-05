@@ -6,7 +6,6 @@
 		useCrypto,
 		ringMembers,
 		selectedGroup,
-		isDraftModalHidden,
 		isDraftPopupVisible,
 		currentDraftId,
 		draft
@@ -32,6 +31,7 @@
 	export let isPreview: boolean = false;
 	export let titleError: boolean = false;
 	export let cryptoError: boolean = false;
+	export let isDraftModalHidden: boolean = true;
 
 	function togglePreview() {
 		isPreview = !isPreview;
@@ -113,7 +113,7 @@
 	async function saveDraft() {
 		if (!(await checkCorrectness())) return;
 		if ($currentDraftId !== null) {
-			$isDraftModalHidden = false;
+			isDraftModalHidden = false;
 		} else {
 			const parsedSurvey = new Survey($title, constructQuestionList($questions));
 			const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);

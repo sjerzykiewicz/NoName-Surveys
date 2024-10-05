@@ -16,7 +16,7 @@
 	id="title"
 	contenteditable
 	bind:textContent={$title}
-	autofocus={innerWidth > 767}
+	autofocus={innerWidth > 767 && $title.length === 0}
 	role="textbox"
 	tabindex="0"
 	on:keydown={handleNewLine}

@@ -25,6 +25,7 @@
 	export let cryptoError: boolean;
 	export let isPreview: boolean;
 	export let data: PageServerData;
+	export let isDraftModalHidden: boolean = true;
 
 	beforeNavigate((event) => {
 		if (getDraft($title, $questions) !== $draft) {
@@ -58,8 +59,14 @@
 	{/if}
 </Header>
 <Content>
-	<SurveyForm {cryptoError} {isPreview} groups={data.group_list} users={data.user_list} />
+	<SurveyForm
+		{cryptoError}
+		{isPreview}
+		groups={data.group_list}
+		users={data.user_list}
+		bind:isDraftModalHidden
+	/>
 </Content>
 <Footer>
-	<FooterButtons bind:titleError bind:cryptoError bind:isPreview />
+	<FooterButtons bind:titleError bind:cryptoError bind:isPreview bind:isDraftModalHidden />
 </Footer>

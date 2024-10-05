@@ -24,8 +24,6 @@ export const ringMembers: Writable<Array<string>> = writable([]);
 
 export const selectedGroup: Writable<Array<string>> = writable([]);
 
-export const isDraftModalHidden: Writable<boolean> = writable(true);
-
 export const isDraftPopupVisible: Writable<boolean> = writable(false);
 
 export const currentDraftId: Writable<number | null> = writable(null);

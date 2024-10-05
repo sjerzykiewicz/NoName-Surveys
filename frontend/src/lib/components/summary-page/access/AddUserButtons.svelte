@@ -4,18 +4,42 @@
 	import MultiSelect from '$lib/components/MultiSelect.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { tick } from 'svelte';
+	import { scrollToElement } from '$lib/utils/scrollToElement';
+	import { GroupError } from '$lib/entities/GroupError';
+	import UsersError from './UsersError.svelte';
 
 	export let users: string[];
 	export let code: string;
 
 	let isPanelVisible: boolean = false;
 	let selectedUsers: string[] = [];
+	let usersError: GroupError = GroupError.NoError;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
+		usersError = GroupError.NoError;
 	}
 
-	function giveAccess(survey_code: string, user_emails_to_share_with: string[]) {
+	async function checkCorrectness(users: string[]) {
+		usersError = GroupError.NoError;
+		const u = users;
+		if (u === null || u === undefined || u.length === 0) {
+			usersError = GroupError.MembersRequired;
+		}
+
+		if (usersError !== GroupError.NoError) {
+			await tick();
+			scrollToElement('.select-list');
+			return false;
+		}
+
+		return true;
+	}
+
+	async function giveAccess(survey_code: string, user_emails_to_share_with: string[]) {
+		if (!(await checkCorrectness(user_emails_to_share_with))) return;
+
 		fetch('/api/surveys/give-access', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -56,6 +80,9 @@
 		</div>
 	{/if}
 </div>
+{#if isPanelVisible}
+	<UsersError users={selectedUsers} error={usersError} />
+{/if}
 
 <style>
 	.users-panel {

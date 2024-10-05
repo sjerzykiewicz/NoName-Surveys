@@ -73,6 +73,17 @@ html,
 body {
 	display: contents;
 	height: 100%;
+	background: var(--secondary-color);
+	background: -moz-linear-gradient(
+		0deg,
+		var(--secondary-dark-color) 0%,
+		var(--secondary-color) 100%
+	);
+	background: -webkit-linear-gradient(
+		0deg,
+		var(--secondary-dark-color) 0%,
+		var(--secondary-color) 100%
+	);
 	background: linear-gradient(0deg, var(--secondary-dark-color) 0%, var(--secondary-color) 100%);
 	background-attachment: fixed;
 	margin: 0px;
@@ -940,7 +951,8 @@ tr:last-of-type th:last-of-type {
 	width: var(--tooltip-width);
 	padding: 0.5em;
 	border-radius: 5px;
-	background: var(--secondary-dark-color);
+	background: var(--shadow-color);
+	box-shadow: 0px 4px 4px var(--shadow-color);
 	color: var(--text-color);
 	text-align: center;
 
@@ -988,10 +1000,10 @@ tr:last-of-type th:last-of-type {
 
 .tooltip .tooltip-text::after,
 .popup .popup-text::after {
-	content: ' ';
+	content: '';
 	position: absolute;
 
-	border: 0.5em solid var(--secondary-dark-color);
+	border: 0.5em solid var(--shadow-color);
 
 	visibility: hidden;
 	opacity: 0;
@@ -1005,7 +1017,7 @@ tr:last-of-type th:last-of-type {
 	left: 50%;
 	margin-left: -0.5em;
 
-	border-color: var(--secondary-dark-color) transparent transparent transparent;
+	border-color: var(--shadow-color) transparent transparent transparent;
 }
 
 .tooltip .tooltip-text.right::after,
@@ -1016,7 +1028,7 @@ tr:last-of-type th:last-of-type {
 	top: 50%;
 	transform: translateY(-50%);
 
-	border-color: transparent var(--secondary-dark-color) transparent transparent;
+	border-color: transparent var(--shadow-color) transparent transparent;
 }
 
 .tooltip .tooltip-text.bottom::after,
@@ -1026,7 +1038,7 @@ tr:last-of-type th:last-of-type {
 	left: 50%;
 	margin-left: -0.5em;
 
-	border-color: transparent transparent var(--secondary-dark-color) transparent;
+	border-color: transparent transparent var(--shadow-color) transparent;
 }
 
 .tooltip .tooltip-text.left::after,
@@ -1037,7 +1049,7 @@ tr:last-of-type th:last-of-type {
 	top: 50%;
 	transform: translateY(-50%);
 
-	border-color: transparent transparent transparent var(--secondary-dark-color);
+	border-color: transparent transparent transparent var(--shadow-color);
 }
 
 .tooltip:hover .tooltip-text,

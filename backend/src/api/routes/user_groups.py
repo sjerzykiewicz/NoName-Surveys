@@ -71,22 +71,12 @@ async def create_user_group(
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
 
-    not_found_emails = [
-        email
-        for email in user_group_creation_request.user_group_members
-        if user_crud.get_user_by_email(email, session) is None
-    ]
-    if len(not_found_emails) > 0:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Users not found: {', '.join(not_found_emails)}",
-        )
-
-    if len(set(user_group_creation_request.user_group_members)) != len(
-        user_group_creation_request.user_group_members
+    if not user_crud.all_users_exist_and_have_public_keys(
+        user_group_creation_request.user_group_members, session
     ):
         raise HTTPException(
-            status_code=400, detail="Duplicate user group members not allowed"
+            status_code=400,
+            detail="Not all users are registered or have public keys created (or perhaps duplicate emails cause this issue)",
         )
 
     existing_user_group = user_groups_crud.get_user_group_by_name(

@@ -4,7 +4,11 @@
 	import Content from '$lib/components/Content.svelte';
 
 	export let form: ActionData;
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <Content>
 	<h1>NoName Anonymous Surveys</h1>
@@ -19,7 +23,7 @@
 				required
 				maxlength="6"
 				autocomplete="off"
-				autofocus
+				autofocus={innerWidth > 767}
 			/>
 			<button title="Submit the code" class="save" type="submit">
 				<i class="material-symbols-rounded">done</i>Submit

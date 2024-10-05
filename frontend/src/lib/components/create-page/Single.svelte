@@ -12,8 +12,10 @@
 
 	async function addChoice() {
 		$questions[questionIndex].choices = [...$questions[questionIndex].choices, ''];
-		await tick();
-		choiceInput.focus();
+		if (innerWidth > 767) {
+			await tick();
+			choiceInput.focus();
+		}
 	}
 
 	function removeChoice(index: number) {
@@ -28,7 +30,11 @@
 			isButtonHidden = true;
 		}
 	});
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div
 	class="choice-area"

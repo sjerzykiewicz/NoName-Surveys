@@ -33,6 +33,7 @@
 	import { onMount, tick } from 'svelte';
 	import init, { linkable_ring_signature } from 'wasm';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import Modal from '$lib/components/Modal.svelte';
 
 	onMount(async () => {
 		await init();
@@ -44,6 +45,7 @@
 	export let code: string;
 
 	let innerWidth: number;
+	let isModalHidden: boolean = true;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -214,7 +216,7 @@
 			const body = await response.json();
 			alert(body.detail);
 		} else {
-			return await goto('/fill/success', { replaceState: true, invalidateAll: true });
+			isModalHidden = false;
 		}
 	}
 
@@ -251,7 +253,7 @@
 		};
 	}
 
-	async function submitSurvey() {
+	function submitSurvey() {
 		if (uses_crypto) {
 			processCrypto();
 		} else processForm(undefined);
@@ -263,9 +265,21 @@
 		filename =
 			document.querySelector<HTMLInputElement>('#keys-file')?.files?.[0]?.name ?? 'No file chosen';
 	}
+
+	function hideModal() {
+		isModalHidden = true;
+		goto('/', { replaceState: true, invalidateAll: true });
+	}
 </script>
 
 <svelte:window bind:innerWidth />
+
+<Modal icon="check_circle" title="Survey Answered" bind:isHidden={isModalHidden} hide={hideModal}>
+	<span slot="content">Your answer has been submitted successfully.</span>
+	<button title="Ok" class="save" on:click={hideModal}
+		><i class="material-symbols-rounded">done</i>OK</button
+	>
+</Modal>
 
 <Header>
 	<div title="Survey title" class="title" in:slide={{ duration: 200, easing: cubicInOut }}>
@@ -422,7 +436,7 @@
 		}
 
 		.save {
-			font-size: 1.5em;
+			font-size: 1.25em;
 		}
 
 		.file-input {

@@ -233,16 +233,16 @@
 		font-variation-settings: 'wght' 700;
 	}
 
-	#title-header {
-		width: 77%;
+	#date-header {
+		width: 24%;
 	}
 
 	@media screen and (max-width: 767px) {
 		button {
 			font-size: 1em;
 		}
-		#title-header {
-			width: 62%;
+		#date-header {
+			width: 39%;
 		}
 	}
 </style>

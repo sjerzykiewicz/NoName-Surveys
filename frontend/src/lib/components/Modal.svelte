@@ -5,11 +5,12 @@
 	export let icon: string;
 	export let title: string;
 	export let width: number = 20;
+	export let hide: () => void = () => (isHidden = true);
 
 	onMount(() => {
 		function handleEscape(event: KeyboardEvent) {
 			if (!isHidden && event.key === 'Escape') {
-				isHidden = true;
+				hide();
 			}
 		}
 
@@ -27,7 +28,7 @@
 			<div class="caption">
 				<i class="material-symbols-rounded">{icon}</i>{title}
 			</div>
-			<button title="Cancel" class="cancel" on:click={() => (isHidden = true)}>
+			<button title="Cancel" class="cancel" on:click={hide}>
 				<i class="material-symbols-rounded">close</i>
 			</button>
 		</div>

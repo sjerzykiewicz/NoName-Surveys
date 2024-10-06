@@ -191,21 +191,28 @@ button:hover,
 	background-color: var(--secondary-color);
 }
 
-.save,
-.back {
+.save {
 	background-color: var(--accent-color);
 	color: var(--text-color-2);
 }
 
-.save:hover,
-.back:hover {
+.save:hover {
 	background-color: var(--accent-dark-color);
+}
+
+.not {
+	background-color: var(--error-color);
+	color: var(--text-color-2);
+}
+
+.not:hover {
+	background-color: var(--error-dark-color);
 }
 
 button:active,
 .footer-button:active,
 .save:active,
-.back:active {
+.not:active {
 	background-color: var(--border-color);
 }
 
@@ -259,7 +266,6 @@ button:active,
 .footer-button i,
 .error i,
 .save i,
-.back i,
 .sign-out i,
 .file-button i,
 .add-group i {

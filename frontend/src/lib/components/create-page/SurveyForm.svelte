@@ -17,9 +17,7 @@
 	import { error } from '@sveltejs/kit';
 	import { getDraft } from '$lib/utils/getDraft';
 	import Modal from '$lib/components/Modal.svelte';
-	import QrCode from '../QrCode.svelte';
-	import noname_black from '$lib/assets/noname_black.png';
-	import { copy } from '$lib/utils/copy';
+	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
 	import { popup } from '$lib/utils/popup';
 
 	export let users: string[];
@@ -79,18 +77,7 @@
 			}
 		}
 	}
-
-	async function handleCopy(str: string, id: string) {
-		if (copy(str)) {
-			popup(id);
-		}
-	}
-
-	let innerWidth: number;
-	let innerHeight: number;
 </script>
-
-<svelte:window bind:innerWidth bind:innerHeight />
 
 <Modal icon="save" title="Saving Draft" bind:isHidden={isDraftModalHidden}>
 	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
@@ -112,41 +99,7 @@
 	>
 </Modal>
 
-<Modal
-	icon="qr_code_2"
-	title="Survey Created Successfully"
-	bind:isHidden={isSurveyModalHidden}
-	width={innerWidth > 767 && innerHeight > 707 ? 30 : 20}
->
-	<div slot="content" class="content">
-		<span class="survey-code">{surveyCode}</span>
-		<a href="/fill?code={surveyCode}" title="Fill out the survey" class="qr-code">
-			{#if !isSurveyModalHidden}
-				<QrCode
-					code={surveyCode}
-					codeSize={innerWidth > 767 && innerHeight > 707 ? 360 : 260}
-					codeMargin={3}
-					image={noname_black}
-					imageMargin={6}
-				/>
-			{/if}
-		</a>
-	</div>
-	<button
-		title="Copy the link"
-		class="save popup"
-		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
-		><i class="material-symbols-rounded">content_copy</i>Copy Link
-		<span class="popup-text top" id="link-popup">Copied!</span></button
-	>
-	<button
-		title="Copy the code"
-		class="save popup"
-		on:click={() => handleCopy(surveyCode, 'code-popup')}
-		><i class="material-symbols-rounded">content_copy</i>Copy Code
-		<span class="popup-text top" id="code-popup">Copied!</span></button
-	>
-</Modal>
+<QrCodeModal bind:isHidden={isSurveyModalHidden} title="Survey Created Successfully" {surveyCode} />
 
 {#each $questions as question, questionIndex (question)}
 	<div
@@ -184,30 +137,6 @@
 {/if}
 
 <style>
-	.popup .popup-text {
-		--tooltip-width: 4em;
-	}
-
-	.content {
-		display: inherit;
-		flex-flow: inherit;
-		justify-content: inherit;
-		align-items: inherit;
-	}
-
-	.survey-code {
-		display: block;
-		width: 7em;
-		padding-bottom: 0.25em;
-		font-size: 4em;
-		font-weight: 700;
-		cursor: text;
-	}
-
-	.qr-code {
-		padding-bottom: 1em;
-	}
-
 	.button-row {
 		display: flex;
 		flex-flow: row wrap;

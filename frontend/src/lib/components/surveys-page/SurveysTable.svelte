@@ -1,16 +1,11 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import { copy } from '$lib/utils/copy';
-	import { delay } from '$lib/utils/delay';
-	import { cubicInOut } from 'svelte/easing';
-	import { fade } from 'svelte/transition';
-	import QrCode from '$lib/components/QrCode.svelte';
+	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
 	import { page } from '$app/stores';
-	import noname_hat from '$lib/assets/noname_hat.png';
 
-	let copiedIndex: number;
 	let innerWidth: number;
-	let isCopyPopupVisible: boolean = false;
+	let isModalHidden: boolean = true;
+	let selectedCode: string;
 
 	export let survey_list: {
 		title: string;
@@ -42,6 +37,8 @@
 
 <svelte:window bind:innerWidth />
 
+<QrCodeModal bind:isHidden={isModalHidden} title="Access Code" surveyCode={selectedCode} />
+
 {#if survey_list.length === 0}
 	<div class="info-row">
 		<div title="Surveys" class="title empty">No surveys yet!</div>
@@ -57,7 +54,7 @@
 	<table>
 		<tr>
 			<th title="Survey title" id="title-header" colspan="3">Survey Title</th>
-			<th title="Group size" id="group-header">Group Size</th>
+			<th title="Group size" id="group-header">Size</th>
 			<th title="Access code" id="code-header">Code</th>
 			<th title="Creation date" id="date-header" colspan="2">Date</th>
 		</tr>
@@ -66,12 +63,12 @@
 				<td class="info-entry tooltip">
 					{#if entry.uses_cryptographic_module}
 						<i class="material-symbols-rounded">encrypted</i>
-						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
+						<span class="tooltip-text {innerWidth <= 1239 ? 'right' : 'left'}"
 							>This survey has an established group of possible respondents.</span
 						>
 					{:else}
 						<i class="material-symbols-rounded">public</i>
-						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
+						<span class="tooltip-text {innerWidth <= 1239 ? 'right' : 'left'}"
 							>Everyone can submit an answer to this survey.</span
 						>
 					{/if}
@@ -79,12 +76,12 @@
 				<td class="info-entry tooltip access">
 					{#if entry.is_owned_by_user}
 						<i class="material-symbols-rounded">verified</i>
-						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
+						<span class="tooltip-text {innerWidth <= 1239 ? 'right' : 'left'}"
 							>You are the owner of this survey.</span
 						>
 					{:else}
 						<i class="material-symbols-rounded">share</i>
-						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
+						<span class="tooltip-text {innerWidth <= 1239 ? 'right' : 'left'}"
 							>Results of this survey have been shared with you.</span
 						>
 					{/if}
@@ -96,44 +93,24 @@
 				>
 				{#if entry.uses_cryptographic_module}
 					<td
-						class="group-size-entry"
+						title="View the respondents"
+						class="code-entry"
 						on:click={() => goto('/' + entry.survey_code + '/summary#survey-respondents')}
 					>
 						{entry.group_size}
 					</td>
 				{:else}
-					<td class="group-size-entry"> N/A </td>
+					<td title="Not Available" class="info-entry">N/A</td>
 				{/if}
 				<td
-					title="Copy"
-					class="code-entry tooltip popup"
-					on:click={async () => {
-						if (copy(entry.survey_code)) {
-							copiedIndex = entryIndex;
-							isCopyPopupVisible = true;
-							await delay(2000);
-							isCopyPopupVisible = false;
-						}
+					title="View QR code"
+					class="code-entry"
+					on:click={() => {
+						selectedCode = entry.survey_code;
+						isModalHidden = false;
 					}}
 				>
 					{entry.survey_code}
-					{#if copiedIndex === entryIndex && isCopyPopupVisible}
-						<span
-							title=""
-							class="popup-text left"
-							transition:fade={{ duration: 200, easing: cubicInOut }}>Copied!</span
-						>
-					{/if}
-					{#if innerWidth > 767}
-						<a
-							href="/fill?code={entry.survey_code}"
-							title="Fill out the survey"
-							class="tooltip-text right"
-							transition:fade={{ duration: 200, easing: cubicInOut }}
-						>
-							<QrCode code={entry.survey_code} codeSize={150} image={noname_hat} />
-						</a>
-					{/if}
 				</td>
 				<td title="Creation date" class="date-entry">{entry.creation_date}</td>
 				<td
@@ -169,27 +146,16 @@
 		font-variation-settings: 'wght' 700;
 	}
 
-	.code-entry.tooltip {
-		cursor: pointer;
-	}
-
-	.code-entry.tooltip .tooltip-text.right {
-		--tooltip-width: 150px;
-		margin-left: 0em;
-		padding: 0.25em;
-		pointer-events: auto;
-	}
-
-	.code-entry.popup .popup-text.left {
-		--tooltip-width: 4em;
+	#group-header {
+		width: 8%;
 	}
 
 	#code-header {
-		width: 12%;
+		width: 11%;
 	}
 
 	#date-header {
-		width: 20%;
+		width: 14%;
 	}
 
 	@media screen and (max-width: 767px) {
@@ -197,12 +163,16 @@
 			font-size: 1em;
 		}
 
+		#group-header {
+			width: 13%;
+		}
+
 		#code-header {
-			width: 20%;
+			width: 18%;
 		}
 
 		#date-header {
-			width: 32%;
+			width: 25%;
 		}
 	}
 </style>

@@ -326,6 +326,7 @@ dependencies = [
  "num-bigint",
  "num-bigint-dig",
  "num-traits",
+ "rand",
  "sha2",
  "wasm-bindgen",
 ]

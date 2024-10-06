@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import { copyCode } from '$lib/utils/copyCode';
+	import { copy } from '$lib/utils/copy';
 	import { delay } from '$lib/utils/delay';
 	import { cubicInOut } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
@@ -108,7 +108,7 @@
 					title="Copy"
 					class="code-entry tooltip popup"
 					on:click={async () => {
-						if (copyCode(entry.survey_code)) {
+						if (copy(entry.survey_code)) {
 							copiedIndex = entryIndex;
 							isCopyPopupVisible = true;
 							await delay(2000);

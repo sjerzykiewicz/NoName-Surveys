@@ -1065,8 +1065,12 @@ button.popup {
 
 .popup .popup-text,
 .popup .popup-text::after {
-	cursor: default;
 	visibility: visible;
+	opacity: 0;
+}
+
+.popup .popup-text.visible,
+.popup .popup-text.visible::after {
 	opacity: 1;
 }
 

@@ -1,11 +1,5 @@
 <script lang="ts">
-	import {
-		questions,
-		title,
-		isDraftPopupVisible,
-		currentDraftId,
-		draft
-	} from '$lib/stores/create-page';
+	import { questions, title, currentDraftId, draft } from '$lib/stores/create-page';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import QuestionError from './QuestionError.svelte';
@@ -21,15 +15,20 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { error } from '@sveltejs/kit';
-	import { delay } from '$lib/utils/delay';
 	import { getDraft } from '$lib/utils/getDraft';
 	import Modal from '$lib/components/Modal.svelte';
+	import QrCode from '../QrCode.svelte';
+	import noname_black from '$lib/assets/noname_black.png';
+	import { copy } from '$lib/utils/copy';
+	import { popup } from '$lib/utils/popup';
 
 	export let users: string[];
 	export let groups: string[];
 	export let isPreview: boolean;
 	export let cryptoError: boolean;
 	export let isDraftModalHidden: boolean = true;
+	export let isSurveyModalHidden: boolean = true;
+	export let surveyCode: string;
 
 	let questionInput: HTMLDivElement;
 
@@ -76,15 +75,24 @@
 				const body = await allResponse.json();
 				$currentDraftId = body[body.length - 1].id;
 				$draft = getDraft($title, $questions);
-				$isDraftPopupVisible = true;
-				await delay(2000);
-				$isDraftPopupVisible = false;
+				popup('draft-popup');
 			}
 		}
 	}
+
+	async function handleCopy(str: string, id: string) {
+		if (copy(str)) {
+			popup(id);
+		}
+	}
+
+	let innerWidth: number;
+	let innerHeight: number;
 </script>
 
-<Modal icon="save" title="Save Draft" bind:isHidden={isDraftModalHidden}>
+<svelte:window bind:innerWidth bind:innerHeight />
+
+<Modal icon="save" title="Saving Draft" bind:isHidden={isDraftModalHidden}>
 	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
 	<button
 		title="Overwrite draft"
@@ -101,6 +109,42 @@
 			saveDraft(false);
 			isDraftModalHidden = true;
 		}}>Save New Draft</button
+	>
+</Modal>
+
+<Modal
+	icon="qr_code_2"
+	title="Survey Created Successfully"
+	bind:isHidden={isSurveyModalHidden}
+	width={innerWidth > 767 && innerHeight > 707 ? 30 : 20}
+>
+	<div slot="content" class="content">
+		<span class="survey-code">{surveyCode}</span>
+		<a href="/fill?code={surveyCode}" title="Fill out the survey" class="qr-code">
+			{#if !isSurveyModalHidden}
+				<QrCode
+					code={surveyCode}
+					codeSize={innerWidth > 767 && innerHeight > 707 ? 360 : 260}
+					codeMargin={3}
+					image={noname_black}
+					imageMargin={6}
+				/>
+			{/if}
+		</a>
+	</div>
+	<button
+		title="Copy the link"
+		class="save popup"
+		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
+		><i class="material-symbols-rounded">content_copy</i>Copy Link
+		<span class="popup-text top" id="link-popup">Copied!</span></button
+	>
+	<button
+		title="Copy the code"
+		class="save popup"
+		on:click={() => handleCopy(surveyCode, 'code-popup')}
+		><i class="material-symbols-rounded">content_copy</i>Copy Code
+		<span class="popup-text top" id="code-popup">Copied!</span></button
 	>
 </Modal>
 
@@ -140,6 +184,30 @@
 {/if}
 
 <style>
+	.popup .popup-text {
+		--tooltip-width: 4em;
+	}
+
+	.content {
+		display: inherit;
+		flex-flow: inherit;
+		justify-content: inherit;
+		align-items: inherit;
+	}
+
+	.survey-code {
+		display: block;
+		width: 7em;
+		padding-bottom: 0.25em;
+		font-size: 4em;
+		font-weight: 700;
+		cursor: text;
+	}
+
+	.qr-code {
+		padding-bottom: 1em;
+	}
+
 	.button-row {
 		display: flex;
 		flex-flow: row wrap;

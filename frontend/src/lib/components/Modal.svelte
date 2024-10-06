@@ -4,7 +4,7 @@
 	export let isHidden: boolean = true;
 	export let icon: string;
 	export let title: string;
-	export let width: string = '20em';
+	export let width: number = 20;
 
 	onMount(() => {
 		function handleEscape(event: KeyboardEvent) {
@@ -22,7 +22,7 @@
 </script>
 
 <section class="overlay" class:hidden={isHidden}>
-	<div class="modal" style="width: {width}">
+	<div class="modal" class:hidden={isHidden} style="width: {width}em">
 		<div class="top">
 			<div class="caption">
 				<i class="material-symbols-rounded">{icon}</i>{title}
@@ -55,7 +55,7 @@
 		backdrop-filter: blur(2px);
 		z-index: 9;
 		opacity: 1;
-		transition: opacity 0.2s;
+		transition: 0.2s;
 	}
 
 	.overlay.hidden {
@@ -73,9 +73,18 @@
 		border: 1px solid var(--border-color);
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color);
-		font-size: 1.25em;
+		font-size: 1.2em;
 		color: var(--text-color);
 		z-index: 10;
+		opacity: 1;
+		transform: scale(100%);
+		transition: 0.2s;
+	}
+
+	.modal.hidden {
+		visibility: hidden;
+		opacity: 0;
+		transform: scale(0%);
 	}
 
 	.modal div {
@@ -95,7 +104,7 @@
 	.caption {
 		align-items: center;
 		font-weight: bold;
-		font-size: 1.25em;
+		font-size: 1.2em;
 		text-shadow: 0px 4px 4px var(--shadow-color);
 		cursor: default;
 	}
@@ -109,7 +118,9 @@
 	}
 
 	.content {
+		flex-flow: column;
 		justify-content: center;
+		align-items: center;
 		padding: 1em;
 		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color);
@@ -118,7 +129,13 @@
 
 	.buttons {
 		flex-flow: row;
-		justify-content: space-around;
+		justify-content: space-evenly;
 		padding-bottom: 1em;
+	}
+
+	@media screen and (max-width: 767px) {
+		.modal {
+			font-size: 0.9em;
+		}
 	}
 </style>

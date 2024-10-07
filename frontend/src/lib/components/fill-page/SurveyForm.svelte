@@ -270,6 +270,8 @@
 		isModalHidden = true;
 		goto('/', { replaceState: true, invalidateAll: true });
 	}
+
+	const TOOLTIP_BREAKPOINT = 615;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -304,7 +306,7 @@
 				<span class="load-label">Load your keys</span>
 				<div title="" class="tooltip">
 					<i class="material-symbols-rounded">info</i>
-					<span class="tooltip-text {innerWidth <= 615 ? 'top' : 'right'}"
+					<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'top' : 'right'}"
 						>Please load the file which you have previously generated on this application. The file
 						contains your keys, necessary for cryptographic calculations which are needed for
 						validating your right to fill out this survey.<br /><br />Default filename:

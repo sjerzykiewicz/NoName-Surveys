@@ -6,10 +6,10 @@
 	import { onMount } from 'svelte';
 	import noname_dark from '$lib/assets/noname_dark.png';
 	import noname_light from '$lib/assets/noname_light.png';
+	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
 
 	let open: boolean;
 	let innerWidth: number;
-	let innerHeight: number;
 
 	const navLinks = {
 		Fill: {
@@ -84,9 +84,9 @@
 	$: showToggleThemeMode = scrollHeight == 0;
 </script>
 
-<svelte:window bind:innerWidth bind:innerHeight bind:scrollY={scrollHeight} />
+<svelte:window bind:innerWidth bind:scrollY={scrollHeight} />
 
-{#if innerWidth <= 767}
+{#if innerWidth <= $MOBILE_DEVICE_BREAKPOINT}
 	<div class="nav-burger">
 		<a href="/" title="Fill Out" class="nav-burger-logo"
 			><img src={logo} alt="NoName logo" width="48" height="48" /></a
@@ -97,7 +97,7 @@
 	</div>
 {/if}
 
-{#if open || innerWidth > 767}
+{#if open || innerWidth > $MOBILE_DEVICE_BREAKPOINT}
 	<div class="bar">
 		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
 			{#each Object.entries(navLinks) as [id, data]}

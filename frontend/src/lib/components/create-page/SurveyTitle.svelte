@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
+	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
@@ -16,7 +17,7 @@
 	id="title"
 	contenteditable
 	bind:textContent={$title}
-	autofocus={innerWidth > 767 && $title.length === 0}
+	autofocus={innerWidth > $MOBILE_DEVICE_BREAKPOINT && $title.length === 0}
 	role="textbox"
 	tabindex="0"
 	on:keydown={handleNewLine}

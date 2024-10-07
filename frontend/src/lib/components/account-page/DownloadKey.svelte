@@ -2,6 +2,8 @@
 	export let isModalHidden: boolean = true;
 
 	let innerWidth: number;
+
+	const TOOLTIP_BREAKPOINT = 608;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -12,7 +14,7 @@
 	</button>
 	<div class="tooltip">
 		<i class="material-symbols-rounded">info</i>
-		<span class="tooltip-text {innerWidth <= 608 ? 'bottom' : 'right'}">
+		<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'bottom' : 'right'}">
 			These keys allow you to participate in secure surveys. Once they are generated, it is your
 			responsibility to keep them safe. When submitting a secure survey, you will be asked to
 			provide these keys to your browser for digital signature.

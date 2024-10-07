@@ -14,6 +14,8 @@
 	function toggleCrypto() {
 		$useCrypto = !$useCrypto;
 	}
+
+	const TOOLTIP_BREAKPOINT = 454;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -26,7 +28,7 @@
 	{#if !$useCrypto}
 		<div class="tooltip">
 			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= 454 ? 'left' : 'right'}"
+			<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'left' : 'right'}"
 				>Use cryptography to allow only selected users to fill out the survey.</span
 			>
 		</div>

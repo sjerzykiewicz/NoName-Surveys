@@ -10,6 +10,7 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import NameError from '$lib/components/groups-page/NameError.svelte';
+	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
 
 	export let groups: string[];
 	export let users: string[];
@@ -100,7 +101,7 @@
 			class="group-input"
 			contenteditable
 			bind:textContent={groupName}
-			autofocus={innerWidth > 767}
+			autofocus={innerWidth > $MOBILE_DEVICE_BREAKPOINT}
 			role="textbox"
 			tabindex="0"
 			on:keydown={handleNewLine}

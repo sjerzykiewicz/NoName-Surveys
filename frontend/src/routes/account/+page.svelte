@@ -8,6 +8,7 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import init, { get_keypair } from 'wasm';
 	import { onMount } from 'svelte';
+	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
 
 	export let isModalHidden: boolean = true;
 
@@ -58,7 +59,7 @@
 		icon="encrypted"
 		title="Generating Keys"
 		bind:isHidden={isModalHidden}
-		width={innerWidth <= 767 ? 18 : 22}
+		width={innerWidth <= $MOBILE_DEVICE_BREAKPOINT ? 18 : 22}
 	>
 		<span slot="content"
 			>Are you sure you want to generate new keys? Doing so will take away your ability to answer

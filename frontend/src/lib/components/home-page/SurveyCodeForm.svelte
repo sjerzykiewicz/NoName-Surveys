@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
 	import Content from '$lib/components/Content.svelte';
+	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
 
 	export let form: ActionData;
 
@@ -23,7 +24,7 @@
 				required
 				maxlength="6"
 				autocomplete="off"
-				autofocus={innerWidth > 767}
+				autofocus={innerWidth > $MOBILE_DEVICE_BREAKPOINT}
 			/>
 			<button title="Submit the code" class="save" type="submit">
 				<i class="material-symbols-rounded">done</i>Submit

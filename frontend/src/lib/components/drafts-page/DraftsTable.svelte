@@ -183,6 +183,8 @@
 	}
 
 	let innerWidth: number;
+
+	const TOOLTIP_BREAKPOINT = 423;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -192,7 +194,7 @@
 		<div title="Drafts" class="title empty">No drafts yet!</div>
 		<div class="tooltip">
 			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+			<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'bottom' : 'right'}">
 				When creating a survey, you can save it as a draft for later use. To create a survey, click
 				on the "Create" tab at the top of the page or the button below. All your saved drafts will
 				be stored on this page.

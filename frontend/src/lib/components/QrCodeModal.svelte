@@ -5,6 +5,7 @@
 	import { page } from '$app/stores';
 	import { copy } from '$lib/utils/copy';
 	import { popup } from '$lib/utils/popup';
+	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
 
 	export let isHidden: boolean = true;
 	export let title: string;
@@ -18,6 +19,8 @@
 
 	let innerWidth: number;
 	let innerHeight: number;
+
+	const MODAL_BREAKPOINT = 707;
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -26,7 +29,7 @@
 	icon="qr_code_2"
 	{title}
 	bind:isHidden
-	width={innerWidth > 767 && innerHeight > 707 ? 30 : 20}
+	width={innerWidth > $MOBILE_DEVICE_BREAKPOINT && innerHeight > MODAL_BREAKPOINT ? 30 : 20}
 >
 	<div slot="content" class="content">
 		<span class="survey-code">{surveyCode}</span>
@@ -34,7 +37,9 @@
 			{#if !isHidden}
 				<QrCode
 					code={surveyCode}
-					codeSize={innerWidth > 767 && innerHeight > 707 ? 360 : 260}
+					codeSize={innerWidth > $MOBILE_DEVICE_BREAKPOINT && innerHeight > MODAL_BREAKPOINT
+						? 360
+						: 260}
 					codeMargin={3}
 					image={noname_black}
 					imageMargin={6}

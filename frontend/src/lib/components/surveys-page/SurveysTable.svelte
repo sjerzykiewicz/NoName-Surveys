@@ -33,6 +33,9 @@
 			})
 			.catch(() => alert('Error deleting survey'));
 	}
+
+	const EMPTY_TOOLTIP_BREAKPOINT = 423;
+	const TABLE_TOOLTIP_BREAKPOINT = 1239;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -44,7 +47,7 @@
 		<div title="Surveys" class="title empty">No surveys yet!</div>
 		<div class="tooltip">
 			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+			<span class="tooltip-text {innerWidth <= EMPTY_TOOLTIP_BREAKPOINT ? 'bottom' : 'right'}">
 				To create a survey, click on the "Create" tab at the top of the page or the button below.
 				All your created surveys will be stored on this page.
 			</span>
@@ -63,12 +66,12 @@
 				<td class="info-entry tooltip">
 					{#if entry.uses_cryptographic_module}
 						<i class="material-symbols-rounded">encrypted</i>
-						<span class="tooltip-text {innerWidth <= 1239 ? 'right' : 'left'}"
+						<span class="tooltip-text {innerWidth <= TABLE_TOOLTIP_BREAKPOINT ? 'right' : 'left'}"
 							>This survey has an established group of possible respondents.</span
 						>
 					{:else}
 						<i class="material-symbols-rounded">public</i>
-						<span class="tooltip-text {innerWidth <= 1239 ? 'right' : 'left'}"
+						<span class="tooltip-text {innerWidth <= TABLE_TOOLTIP_BREAKPOINT ? 'right' : 'left'}"
 							>Everyone can submit an answer to this survey.</span
 						>
 					{/if}
@@ -76,12 +79,12 @@
 				<td class="info-entry tooltip access">
 					{#if entry.is_owned_by_user}
 						<i class="material-symbols-rounded">verified</i>
-						<span class="tooltip-text {innerWidth <= 1239 ? 'right' : 'left'}"
+						<span class="tooltip-text {innerWidth <= TABLE_TOOLTIP_BREAKPOINT ? 'right' : 'left'}"
 							>You are the owner of this survey.</span
 						>
 					{:else}
 						<i class="material-symbols-rounded">share</i>
-						<span class="tooltip-text {innerWidth <= 1239 ? 'right' : 'left'}"
+						<span class="tooltip-text {innerWidth <= TABLE_TOOLTIP_BREAKPOINT ? 'right' : 'left'}"
 							>Results of this survey have been shared with you.</span
 						>
 					{/if}

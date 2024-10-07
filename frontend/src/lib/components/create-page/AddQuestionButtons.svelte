@@ -24,6 +24,7 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { previousQuestion } from '$lib/stores/create-page';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
 
 	export let questionInput: HTMLDivElement;
 
@@ -131,7 +132,7 @@
 		$previousQuestion = component;
 		isPanelVisible = false;
 
-		if (innerWidth > 767) {
+		if (innerWidth > $MOBILE_DEVICE_BREAKPOINT) {
 			await tick();
 			questionInput.focus();
 		}

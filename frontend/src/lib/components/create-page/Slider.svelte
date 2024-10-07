@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
+	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
 	import { afterUpdate, beforeUpdate } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
@@ -16,7 +17,7 @@
 	);
 
 	beforeUpdate(() => {
-		if (innerWidth <= 767) {
+		if (innerWidth <= $MOBILE_DEVICE_BREAKPOINT) {
 			placeholder = ['Enter min...', 'Enter max...'];
 		} else {
 			placeholder = ['Enter minimum value...', 'Enter maximum value...'];

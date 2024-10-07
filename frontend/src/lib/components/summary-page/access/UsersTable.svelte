@@ -25,6 +25,8 @@
 			})
 			.catch(() => alert('Error taking away access'));
 	}
+
+	const TOOLTIP_BREAKPOINT = 1160;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -38,10 +40,13 @@
 			<td class="info-entry tooltip">
 				{#if user === $page.data.session?.user?.email}
 					<i class="material-symbols-rounded">verified</i>
-					<span class="tooltip-text {innerWidth <= 1160 ? 'right' : 'left'}">Owner.</span>
+					<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'right' : 'left'}"
+						>Owner.</span
+					>
 				{:else}
 					<i class="material-symbols-rounded">share</i>
-					<span class="tooltip-text {innerWidth <= 1160 ? 'right' : 'left'}">User with access.</span
+					<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'right' : 'left'}"
+						>User with access.</span
 					>
 				{/if}
 			</td>

@@ -6,6 +6,7 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
 	import NameTableError from '$lib/components/groups-page/NameTableError.svelte';
+	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
 
 	export let groups: string[];
 
@@ -69,6 +70,8 @@
 	}
 
 	let innerWidth: number;
+
+	const TOOLTIP_BREAKPOINT = 423;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -78,7 +81,7 @@
 		<div title="Groups" class="title empty">No groups yet!</div>
 		<div class="tooltip">
 			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+			<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'bottom' : 'right'}">
 				When creating a secure survey, you can choose a group of possible respondents. To create a
 				group, click on the button below. All your created groups will be stored on this page.
 			</span>
@@ -108,7 +111,7 @@
 							class="table-input"
 							contenteditable
 							bind:textContent={newName}
-							autofocus={innerWidth > 767}
+							autofocus={innerWidth > $MOBILE_DEVICE_BREAKPOINT}
 							role="textbox"
 							tabindex="0"
 							on:keydown={handleNewLine}

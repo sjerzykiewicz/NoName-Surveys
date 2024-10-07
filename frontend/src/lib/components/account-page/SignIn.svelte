@@ -7,7 +7,9 @@
 	<button title="Google" class="sign-in" on:click={() => signIn('google')}
 		><i class="fa-brands fa-google"></i></button
 	>
-	<button title="Microsoft" class="sign-in" disabled><i class="fa-brands fa-microsoft"></i></button>
+	<button title="Microsoft" class="sign-in" on:click={() => signIn('usos')}
+		><i class="fa-brands fa-microsoft"></i></button
+	>
 	<button title="GitHub" class="sign-in" on:click={() => signIn('github')}
 		><i class="fa-brands fa-github"></i></button
 	>

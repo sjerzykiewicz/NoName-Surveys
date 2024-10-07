@@ -5,8 +5,23 @@ import { env } from '$env/dynamic/private';
 import * as db from '$lib/server/database';
 
 export const { handle } = SvelteKitAuth({
-	providers: [Google, GitHub],
+	providers: [
+		Google,
+		GitHub,
+		{
+			id: 'usos', // signIn("my-provider") and will be part of the callback URL
+			name: 'Usos', // optional, used on the default login page as the button text.
+			type: 'oidc', // or "oauth" for OAuth 2 providers
+			issuer: 'https://usosapps.amu.edu.pl', // to infer the .well-known/openid-configuration URL
+			authorization: {
+				url: 'https://usosapps.amu.edu.pl/services/oauth2/impersonated_token'
+			},
+			clientId: env.AUTH_USOS_ID, // from the provider's dashboard
+			clientSecret: env.AUTH_USOS_SECRET // from the provider's dashboard
+		}
+	],
 	trustHost: true,
+	debug: true,
 	secret: env.AUTH_SECRET,
 	session: {
 		maxAge: 60 * 60 * 2,

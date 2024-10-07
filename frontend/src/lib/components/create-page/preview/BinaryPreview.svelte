@@ -25,7 +25,7 @@
 			<i class="material-symbols-rounded">thumb_up</i>
 		</div>
 		<div class="choice-input display binary">
-			{$questions[questionIndex].choices[0].trim()}
+			{$questions[questionIndex].choices[0]}
 		</div>
 	</label>
 	<label title="Select your answer" class="choice binary" class:selected={checked === 1}
@@ -40,7 +40,7 @@
 			<i class="material-symbols-rounded">thumb_down</i>
 		</div>
 		<div class="choice-input display binary">
-			{$questions[questionIndex].choices[1].trim()}
+			{$questions[questionIndex].choices[1]}
 		</div>
 	</label>
 </div>

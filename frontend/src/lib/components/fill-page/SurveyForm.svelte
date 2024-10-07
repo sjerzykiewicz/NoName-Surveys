@@ -145,7 +145,7 @@
 						$questions[i].required,
 						$questions[i].question,
 						$questions[i].choices[0],
-						$answers[i].choices[0].trim()
+						$answers[i].choices[0].trim().replace(/\n\s*\n/g, '\n\n')
 					);
 					break;
 				case 'slider':

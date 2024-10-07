@@ -15,7 +15,7 @@
 	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
 >
 	<div title="Question details" class="details">
-		{$questions[questionIndex].choices[0].trim()}
+		{$questions[questionIndex].choices[0]}
 	</div>
 	<div
 		title="Enter your answer"
@@ -26,7 +26,7 @@
 		tabindex="0"
 		on:keydown={handleNewLine}
 	>
-		{$questions[questionIndex].choices[1].trim()}
+		{$questions[questionIndex].choices[1]}
 	</div>
 </div>
 

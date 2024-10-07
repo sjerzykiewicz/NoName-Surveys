@@ -35,8 +35,10 @@
 	let questionInput: HTMLDivElement;
 
 	async function saveDraft(overwrite: boolean) {
-		const trimmedQuestions = trimQuestions($questions);
-		const parsedSurvey = new Survey($title.trim(), constructQuestionList(trimmedQuestions));
+		$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+		$questions = trimQuestions($questions);
+
+		const parsedSurvey = new Survey($title, constructQuestionList($questions));
 		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
 		if (overwrite) {

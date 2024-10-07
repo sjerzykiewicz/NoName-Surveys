@@ -29,7 +29,6 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
-	import QuestionsStore from '$lib/entities/questions/QuestionsStore';
 
 	export let isPreview: boolean = false;
 	export let titleError: boolean = false;
@@ -39,24 +38,24 @@
 		isPreview = !isPreview;
 	}
 
-	async function checkCorrectness(trimmedQuestions: Array<QuestionsStore>) {
+	async function checkCorrectness() {
 		titleError = false;
-		const t = $title.trim();
+		const t = $title;
 		if (t === null || t === undefined || t.length === 0) {
 			titleError = true;
 		}
 
-		const numQuestions = trimmedQuestions.length;
+		const numQuestions = $questions.length;
 
 		for (let i = 0; i < numQuestions; i++) {
-			const q = trimmedQuestions[i].question;
+			const q = $questions[i].question;
 			if (q === null || q === undefined || q.length === 0) {
 				$questions[i].error = QuestionError.QuestionRequired;
 			} else if (
-				trimmedQuestions[i].component != Text &&
-				trimmedQuestions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+				$questions[i].component != Text &&
+				$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
 			) {
-				switch (trimmedQuestions[i].component) {
+				switch ($questions[i].component) {
 					case Slider:
 						$questions[i].error = QuestionError.SliderValuesRequired;
 						break;
@@ -67,11 +66,11 @@
 						$questions[i].error = QuestionError.ChoicesRequired;
 				}
 			} else if (
-				trimmedQuestions[i].component === Slider &&
-				parseFloat(trimmedQuestions[i].choices[0]) >= parseFloat(trimmedQuestions[i].choices[1])
+				$questions[i].component === Slider &&
+				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
 			) {
 				$questions[i].error = QuestionError.ImproperSliderValues;
-			} else if (new Set(trimmedQuestions[i].choices).size !== trimmedQuestions[i].choices.length) {
+			} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
 				$questions[i].error = QuestionError.DuplicateChoices;
 			} else {
 				$questions[i].error = QuestionError.NoError;
@@ -113,14 +112,15 @@
 	}
 
 	async function saveDraft() {
-		const trimmedQuestions = trimQuestions($questions);
+		$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+		$questions = trimQuestions($questions);
 
-		if (!(await checkCorrectness(trimmedQuestions))) return;
+		if (!(await checkCorrectness())) return;
 
 		if ($currentDraftId !== null) {
 			$isDraftModalHidden = false;
 		} else {
-			const parsedSurvey = new Survey($title.trim(), constructQuestionList(trimmedQuestions));
+			const parsedSurvey = new Survey($title, constructQuestionList($questions));
 			const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
 			const createResponse = await fetch('/api/surveys/drafts/create', {
@@ -177,11 +177,12 @@
 	}
 
 	async function createSurvey() {
-		const trimmedQuestions = trimQuestions($questions);
+		$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+		$questions = trimQuestions($questions);
 
-		if (!(await checkCorrectness(trimmedQuestions))) return;
+		if (!(await checkCorrectness())) return;
 
-		const parsedSurvey = new Survey($title.trim(), constructQuestionList(trimmedQuestions));
+		const parsedSurvey = new Survey($title, constructQuestionList($questions));
 		let finalRing: string[] = [];
 
 		if ($selectedGroup.length > 0) {
@@ -230,7 +231,15 @@
 		<i class="material-symbols-rounded">edit</i>Edit
 	</button>
 {:else}
-	<button title="Preview survey" class="footer-button" on:click={togglePreview}>
+	<button
+		title="Preview survey"
+		class="footer-button"
+		on:click={() => {
+			$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+			$questions = trimQuestions($questions);
+			togglePreview();
+		}}
+	>
 		<i class="material-symbols-rounded">search</i>Preview
 	</button>
 {/if}

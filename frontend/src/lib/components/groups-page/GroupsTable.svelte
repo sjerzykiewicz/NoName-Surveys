@@ -115,12 +115,16 @@
 						>
 							{newName}
 						</div>
-						<NameTableError name={newName.trim()} error={nameError} {groups} />
+						<NameTableError
+							name={newName.trim().replace(/\n\s*\n/g, '\n\n')}
+							error={nameError}
+							{groups}
+						/>
 					</td>
 					<td
 						title="Save the new group name"
 						class="button-entry save-entry"
-						on:click={() => renameGroup(group, newName.trim())}
+						on:click={() => renameGroup(group, newName.trim().replace(/\n\s*\n/g, '\n\n'))}
 					>
 						<i class="material-symbols-rounded">save</i></td
 					>

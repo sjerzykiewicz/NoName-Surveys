@@ -107,7 +107,7 @@
 	{/if}
 </div>
 {#if isPanelVisible}
-	<NameError name={groupName.trim()} error={nameError} {groups} />
+	<NameError name={groupName.trim().replace(/\n\s*\n/g, '\n\n')} error={nameError} {groups} />
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div title="Select group members" class="select-list">
 			<MultiSelect
@@ -119,7 +119,7 @@
 		<button
 			title="Save the group"
 			class="save"
-			on:click={() => createGroup(groupName.trim(), groupMembers)}
+			on:click={() => createGroup(groupName.trim().replace(/\n\s*\n/g, '\n\n'), groupMembers)}
 		>
 			<i class="material-symbols-rounded">done</i>Create
 		</button>

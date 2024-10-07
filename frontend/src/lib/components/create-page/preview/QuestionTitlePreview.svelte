@@ -30,6 +30,6 @@
 	out:slide={{ duration: 200, easing: cubicInOut }}
 >
 	<div class="question-title">
-		{$questions[questionIndex].question.trim()}
+		{$questions[questionIndex].question}
 	</div>
 </div>

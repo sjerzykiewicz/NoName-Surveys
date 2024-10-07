@@ -14,7 +14,7 @@
 		const q = $questions[i].question;
 		return (
 			$questions[i].error === QuestionError.QuestionRequired &&
-			(q === null || q === undefined || q.length === 0)
+			(q === null || q === undefined || q.trim().length === 0)
 		);
 	};
 </script>

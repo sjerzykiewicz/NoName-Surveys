@@ -10,6 +10,7 @@
 	import type { PageServerData } from './$types';
 	import { beforeNavigate } from '$app/navigation';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { trimQuestions } from '$lib/utils/trimQuestions';
 	import {
 		title,
 		questions,
@@ -27,7 +28,7 @@
 	export let data: PageServerData;
 
 	beforeNavigate((event) => {
-		if (getDraft($title, $questions) !== $draft) {
+		if (getDraft($title.trim().replace(/\n\s*\n/g, '\n\n'), trimQuestions($questions)) !== $draft) {
 			if (
 				!confirm(
 					'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.'

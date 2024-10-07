@@ -28,6 +28,7 @@
 	import { delay } from '$lib/utils/delay';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { trimQuestions } from '$lib/utils/trimQuestions';
 
 	export let isPreview: boolean = false;
 	export let titleError: boolean = false;
@@ -111,7 +112,11 @@
 	}
 
 	async function saveDraft() {
+		$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+		$questions = trimQuestions($questions);
+
 		if (!(await checkCorrectness())) return;
+
 		if ($currentDraftId !== null) {
 			$isDraftModalHidden = false;
 		} else {
@@ -172,6 +177,9 @@
 	}
 
 	async function createSurvey() {
+		$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+		$questions = trimQuestions($questions);
+
 		if (!(await checkCorrectness())) return;
 
 		const parsedSurvey = new Survey($title, constructQuestionList($questions));
@@ -223,7 +231,15 @@
 		<i class="material-symbols-rounded">edit</i>Edit
 	</button>
 {:else}
-	<button title="Preview survey" class="footer-button" on:click={togglePreview}>
+	<button
+		title="Preview survey"
+		class="footer-button"
+		on:click={() => {
+			$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+			$questions = trimQuestions($questions);
+			togglePreview();
+		}}
+	>
 		<i class="material-symbols-rounded">search</i>Preview
 	</button>
 {/if}

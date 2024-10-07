@@ -115,12 +115,16 @@
 						>
 							{newName}
 						</div>
-						<NameTableError name={newName} error={nameError} {groups} />
+						<NameTableError
+							name={newName.trim().replace(/\n\s*\n/g, '\n\n')}
+							error={nameError}
+							{groups}
+						/>
 					</td>
 					<td
 						title="Save the new group name"
 						class="button-entry save-entry"
-						on:click={() => renameGroup(group, newName)}
+						on:click={() => renameGroup(group, newName.trim().replace(/\n\s*\n/g, '\n\n'))}
 					>
 						<i class="material-symbols-rounded">save</i></td
 					>
@@ -133,8 +137,10 @@
 							nameError = GroupError.NoError;
 						}}><i class="material-symbols-rounded">edit</i></td
 					>
-					<td title="Open the group" class="title-entry" on:click={() => goto('/groups/' + group)}
-						>{group}</td
+					<td
+						title="Open the group"
+						class="title-entry"
+						on:click={() => goto('/groups/' + encodeURI(group))}>{group}</td
 					>
 					<td
 						title="Delete the group"

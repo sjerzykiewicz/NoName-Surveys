@@ -25,6 +25,7 @@
 	import { error } from '@sveltejs/kit';
 	import { delay } from '$lib/utils/delay';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { trimQuestions } from '$lib/utils/trimQuestions';
 
 	export let users: string[];
 	export let groups: string[];
@@ -34,6 +35,9 @@
 	let questionInput: HTMLDivElement;
 
 	async function saveDraft(overwrite: boolean) {
+		$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+		$questions = trimQuestions($questions);
+
 		const parsedSurvey = new Survey($title, constructQuestionList($questions));
 		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 

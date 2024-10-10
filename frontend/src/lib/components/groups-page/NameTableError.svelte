@@ -11,6 +11,8 @@
 				return 'Please enter group name.';
 			case GroupError.NameNonUnique:
 				return 'This group name already exists.';
+			case GroupError.NameInvalid:
+				return 'Group name can only contain letters, numbers, spaces, and hyphens.';
 		}
 	}
 
@@ -21,6 +23,8 @@
 				return n === null || n === undefined || n.length === 0;
 			case GroupError.NameNonUnique:
 				return groups.some((g) => g === n);
+			case GroupError.NameInvalid:
+				return n.match(/^[\w -]+$/) === null;
 		}
 	};
 </script>

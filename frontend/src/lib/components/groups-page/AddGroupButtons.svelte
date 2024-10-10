@@ -33,6 +33,8 @@
 			nameError = GroupError.NameRequired;
 		} else if (groups.some((g) => g === n)) {
 			nameError = GroupError.NameNonUnique;
+		} else if (n.match(/^[\w -]+$/) === null) {
+			nameError = GroupError.NameInvalid;
 		}
 
 		membersError = GroupError.NoError;

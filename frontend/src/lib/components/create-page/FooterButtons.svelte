@@ -187,7 +187,8 @@
 		});
 
 		if (!response.ok) {
-			error(response.status, { message: await response.json() });
+			const body = await response.json();
+			alert(body.detail);
 		} else {
 			const body = await response.json();
 			$title = '';

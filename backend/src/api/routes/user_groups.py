@@ -76,7 +76,8 @@ async def create_user_group(
     ):
         raise HTTPException(
             status_code=400,
-            detail="Not all users are registered or have public keys created (or perhaps duplicate emails cause this issue)",
+            detail="Not all users are registered or have public keys created "
+            "(or perhaps duplicate emails cause this issue)",
         )
 
     existing_user_group = user_groups_crud.get_user_group_by_name(

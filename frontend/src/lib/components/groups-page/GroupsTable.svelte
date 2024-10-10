@@ -20,7 +20,7 @@
 			nameError = GroupError.NameRequired;
 		} else if (groups.some((g) => g === n)) {
 			nameError = GroupError.NameNonUnique;
-		} else if (n.match(/^[\w -]+$/) === null) {
+		} else if (n.match(/^[\p{L}\p{N} -]+$/u) === null) {
 			nameError = GroupError.NameInvalid;
 		}
 

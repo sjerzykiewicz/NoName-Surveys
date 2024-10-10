@@ -24,7 +24,7 @@
 			case GroupError.NameNonUnique:
 				return groups.some((g) => g === n);
 			case GroupError.NameInvalid:
-				return n.match(/^[\w -]+$/) === null;
+				return n.match(/^[\p{L}\p{N} -]+$/u) === null;
 		}
 	};
 </script>

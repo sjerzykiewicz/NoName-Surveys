@@ -584,6 +584,35 @@ div[contenteditable] * {
 	white-space: inherit !important;
 }
 
+.input-container {
+	flex: 1;
+	overflow: hidden;
+	padding: 0.2em;
+	margin: -0.2em;
+}
+
+.input-container div[contenteditable]:focus + .char-count {
+	visibility: visible;
+}
+
+.input-container.max .char-count {
+	color: var(--error-color);
+	border-color: var(--error-color);
+}
+
+.char-count {
+	position: relative;
+	bottom: 12px;
+	font-weight: 700;
+	color: var(--text-color);
+	background-color: var(--secondary-dark-color);
+	border-radius: 5px;
+	border: 1px solid white;
+	padding: 0.1em 0.2em;
+	cursor: default;
+	visibility: hidden;
+}
+
 /* other */
 
 .rank {

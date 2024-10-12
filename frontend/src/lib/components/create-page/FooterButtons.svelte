@@ -112,7 +112,7 @@
 	}
 
 	async function saveDraft() {
-		$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+		$title = $title.trim();
 		$questions = trimQuestions($questions);
 
 		if (!(await checkCorrectness())) return;
@@ -177,7 +177,7 @@
 	}
 
 	async function createSurvey() {
-		$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+		$title = $title.trim();
 		$questions = trimQuestions($questions);
 
 		if (!(await checkCorrectness())) return;
@@ -235,7 +235,7 @@
 		title="Preview survey"
 		class="footer-button"
 		on:click={() => {
-			$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+			$title = $title.trim();
 			$questions = trimQuestions($questions);
 			togglePreview();
 		}}

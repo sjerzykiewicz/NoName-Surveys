@@ -35,7 +35,7 @@
 	let questionInput: HTMLDivElement;
 
 	async function saveDraft(overwrite: boolean) {
-		$title = $title.trim().replace(/\n\s*\n/g, '\n\n');
+		$title = $title.trim();
 		$questions = trimQuestions($questions);
 
 		const parsedSurvey = new Survey($title, constructQuestionList($questions));

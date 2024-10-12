@@ -5,9 +5,9 @@ export function trimQuestions(questions: Array<QuestionsStore>): Array<Questions
 		q.component;
 		q.preview;
 		q.required;
-		q.question = q.question.trim().replace(/\n\s*\n/g, '\n\n');
+		q.question = q.question.trim();
 		q.choices = q.choices.map((c) => {
-			if (typeof c === 'string') return c.trim().replace(/\n\s*\n/g, '\n\n');
+			if (typeof c === 'string') return c.trim();
 			return c;
 		});
 		q.error;

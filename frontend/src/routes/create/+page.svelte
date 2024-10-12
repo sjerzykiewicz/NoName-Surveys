@@ -28,7 +28,7 @@
 	export let data: PageServerData;
 
 	beforeNavigate((event) => {
-		if (getDraft($title.trim().replace(/\n\s*\n/g, '\n\n'), trimQuestions($questions)) !== $draft) {
+		if (getDraft($title.trim(), trimQuestions($questions)) !== $draft) {
 			if (
 				!confirm(
 					'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.'

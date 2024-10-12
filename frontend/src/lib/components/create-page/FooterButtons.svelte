@@ -129,24 +129,11 @@
 			if (!createResponse.ok) {
 				error(createResponse.status, { message: await createResponse.json() });
 			} else {
-				const allResponse = await fetch('/api/surveys/drafts/all', {
-					method: 'POST',
-					body: JSON.stringify({ user_email: $page.data.session?.user?.email }),
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				});
-
-				if (!allResponse.ok) {
-					error(allResponse.status, { message: await allResponse.json() });
-				} else {
-					const body = await allResponse.json();
-					$currentDraftId = body[body.length - 1].id;
-					$draft = getDraft($title, $questions);
-					$isDraftPopupVisible = true;
-					await delay(2000);
-					$isDraftPopupVisible = false;
-				}
+				$currentDraftId = await createResponse.json();
+				$draft = getDraft($title, $questions);
+				$isDraftPopupVisible = true;
+				await delay(2000);
+				$isDraftPopupVisible = false;
 			}
 		}
 	}
@@ -200,7 +187,8 @@
 		});
 
 		if (!response.ok) {
-			error(response.status, { message: await response.json() });
+			const body = await response.json();
+			alert(body.detail);
 		} else {
 			const body = await response.json();
 			$title = '';

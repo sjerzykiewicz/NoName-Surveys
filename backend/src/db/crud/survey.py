@@ -29,6 +29,13 @@ def get_all_surveys_user_has_ownership_over(
     return [survey for survey in session.exec(statement).all()]
 
 
+def get_count_of_active_surveys_of_user(user_id: int, session: Session) -> int:
+    statement = select(Survey).where(
+        (Survey.creator_id == user_id) & (Survey.is_deleted == False)  # noqa: E712
+    )
+    return len(session.exec(statement).all())
+
+
 def survey_code_taken(survey_code: str, session: Session) -> bool:
     statement = select(Survey).where(
         (Survey.survey_code == survey_code) & (Survey.is_deleted == False)  # noqa: E712

@@ -42,7 +42,7 @@
 			<div class="checkbox">
 				<input type="checkbox" disabled name={questionIndex.toString()} />
 			</div>
-			<div class="input-container" class:max={choice.length >= $LIMIT_OF_CHARS}>
+			<div class="input-container" class:max={choice.length > $LIMIT_OF_CHARS}>
 				<div
 					title="Enter choice"
 					class="choice-input"

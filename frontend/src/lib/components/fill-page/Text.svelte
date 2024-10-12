@@ -15,7 +15,7 @@
 	</div>
 	<div
 		class="input-container"
-		class:max={$answers[questionIndex].choices[0].length >= $LIMIT_OF_CHARS}
+		class:max={$answers[questionIndex].choices[0].length > $LIMIT_OF_CHARS}
 	>
 		<div
 			title="Enter your answer"

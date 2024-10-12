@@ -35,10 +35,10 @@
 	let questionInput: HTMLDivElement;
 
 	async function saveDraft(overwrite: boolean) {
-		$title = $title.trim();
+		$title.title = $title.title.trim();
 		$questions = trimQuestions($questions);
 
-		const parsedSurvey = new Survey($title, constructQuestionList($questions));
+		const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
 		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
 		if (overwrite) {
@@ -79,7 +79,7 @@
 			} else {
 				const body = await allResponse.json();
 				$currentDraftId = body[body.length - 1].id;
-				$draft = getDraft($title, $questions);
+				$draft = getDraft($title.title, $questions);
 				$isDraftPopupVisible = true;
 				await delay(2000);
 				$isDraftPopupVisible = false;

@@ -42,7 +42,7 @@
 	</div>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
-			<div class="input-container" class:max={choice.length >= $LIMIT_OF_CHARS}>
+			<div class="input-container" class:max={choice.length > $LIMIT_OF_CHARS}>
 				<div
 					title="Enter choice"
 					class="choice-input"

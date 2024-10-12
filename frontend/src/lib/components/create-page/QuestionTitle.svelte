@@ -69,7 +69,7 @@
 	</div>
 	<div
 		class="input-container"
-		class:max={$questions[questionIndex].question.length >= $LIMIT_OF_CHARS}
+		class:max={$questions[questionIndex].question.length > $LIMIT_OF_CHARS}
 	>
 		<div
 			title="Enter question"

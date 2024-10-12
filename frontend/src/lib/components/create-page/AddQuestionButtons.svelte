@@ -20,7 +20,7 @@
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import QuestionTypeButton from './QuestionTypeButton.svelte';
-	import { QuestionError } from '$lib/entities/QuestionError';
+	import { SurveyError } from '$lib/entities/SurveyError';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { previousQuestion } from '$lib/stores/create-page';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
@@ -63,30 +63,30 @@
 	function checkError(i: number) {
 		const q = $questions[i].question;
 		if (q === null || q === undefined || q.length === 0) {
-			$questions[i].error = QuestionError.QuestionRequired;
+			$questions[i].error = SurveyError.QuestionRequired;
 		} else if (
 			$questions[i].component != Text &&
 			$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
 		) {
 			switch ($questions[i].component) {
 				case Slider:
-					$questions[i].error = QuestionError.SliderValuesRequired;
+					$questions[i].error = SurveyError.SliderValuesRequired;
 					break;
 				case Binary:
-					$questions[i].error = QuestionError.BinaryChoicesRequired;
+					$questions[i].error = SurveyError.BinaryChoicesRequired;
 					break;
 				default:
-					$questions[i].error = QuestionError.ChoicesRequired;
+					$questions[i].error = SurveyError.ChoicesRequired;
 			}
 		} else if (
 			$questions[i].component === Slider &&
 			parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
 		) {
-			$questions[i].error = QuestionError.ImproperSliderValues;
+			$questions[i].error = SurveyError.ImproperSliderValues;
 		} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
-			$questions[i].error = QuestionError.DuplicateChoices;
+			$questions[i].error = SurveyError.DuplicateChoices;
 		} else {
-			$questions[i].error = QuestionError.NoError;
+			$questions[i].error = SurveyError.NoError;
 		}
 	}
 
@@ -124,7 +124,7 @@
 				required: false,
 				question: '',
 				choices: choices,
-				error: QuestionError.NoError
+				error: SurveyError.NoError
 			}
 		];
 

@@ -33,6 +33,8 @@
 		const n = name;
 		if (n === null || n === undefined || n.length === 0) {
 			nameError = GroupError.NameRequired;
+		} else if (n.length > $LIMIT_OF_CHARS) {
+			nameError = GroupError.NameTooLong;
 		} else if (groups.some((g) => g === n)) {
 			nameError = GroupError.NameNonUnique;
 		}
@@ -94,7 +96,7 @@
 	{#if isPanelVisible}
 		<div
 			class="input-container"
-			class:max={groupName.length >= $LIMIT_OF_CHARS}
+			class:max={groupName.length > $LIMIT_OF_CHARS}
 			transition:slide={{ duration: 200, easing: cubicInOut }}
 		>
 			<!-- svelte-ignore a11y-autofocus -->

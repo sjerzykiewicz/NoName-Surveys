@@ -7,27 +7,27 @@
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 </script>
 
-<div class="input-container" class:max={$title.length >= $LIMIT_OF_CHARS}>
+<div class="input-container" class:max={$title.title.length > $LIMIT_OF_CHARS}>
 	<!-- svelte-ignore a11y-autofocus -->
 	<div
 		title="Enter survey title"
 		class="title-input"
 		id="title"
 		contenteditable
-		bind:textContent={$title}
+		bind:textContent={$title.title}
 		autofocus
 		role="textbox"
 		tabindex="0"
 		on:keydown={(e) => {
 			handleNewLine(e);
-			limitInput(e, $title, $LIMIT_OF_CHARS);
+			limitInput(e, $title.title, $LIMIT_OF_CHARS);
 		}}
 		in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
 		out:slide={{ duration: 200, easing: cubicInOut }}
 	>
-		{$title}
+		{$title.title}
 	</div>
-	<span class="char-count">{$title.length} / {$LIMIT_OF_CHARS}</span>
+	<span class="char-count">{$title.title.length} / {$LIMIT_OF_CHARS}</span>
 </div>
 
 <style>

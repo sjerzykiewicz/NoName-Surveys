@@ -603,6 +603,7 @@ div[contenteditable] * {
 .input-container.max .char-count {
 	color: var(--error-color);
 	border-color: var(--error-color);
+	visibility: visible;
 }
 
 .char-count {

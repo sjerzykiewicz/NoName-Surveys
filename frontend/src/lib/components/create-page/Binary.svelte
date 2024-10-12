@@ -21,7 +21,7 @@
 		</div>
 		<div
 			class="input-container"
-			class:max={$questions[questionIndex].choices[0].length >= $LIMIT_OF_CHARS}
+			class:max={$questions[questionIndex].choices[0].length > $LIMIT_OF_CHARS}
 		>
 			<div
 				title="Enter positive choice"
@@ -50,7 +50,7 @@
 		</div>
 		<div
 			class="input-container"
-			class:max={$questions[questionIndex].choices[1].length >= $LIMIT_OF_CHARS}
+			class:max={$questions[questionIndex].choices[1].length > $LIMIT_OF_CHARS}
 		>
 			<div
 				title="Enter negative choice"

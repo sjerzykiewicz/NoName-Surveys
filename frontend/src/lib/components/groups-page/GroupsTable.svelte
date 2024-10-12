@@ -6,6 +6,8 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
 	import NameTableError from '$lib/components/groups-page/NameTableError.svelte';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { limitInput } from '$lib/utils/limitInput';
 
 	export let groups: string[];
 
@@ -102,18 +104,24 @@
 						}}><i class="material-symbols-rounded">edit_off</i></td
 					>
 					<td>
-						<!-- svelte-ignore a11y-autofocus -->
-						<div
-							title="Enter a new group name"
-							class="table-input"
-							contenteditable
-							bind:textContent={newName}
-							autofocus
-							role="textbox"
-							tabindex="0"
-							on:keydown={handleNewLine}
-						>
-							{newName}
+						<div class="input-container" class:max={newName.length >= $LIMIT_OF_CHARS}>
+							<!-- svelte-ignore a11y-autofocus -->
+							<div
+								title="Enter a new group name"
+								class="table-input"
+								contenteditable
+								bind:textContent={newName}
+								autofocus
+								role="textbox"
+								tabindex="0"
+								on:keydown={(e) => {
+									handleNewLine(e);
+									limitInput(e, newName, $LIMIT_OF_CHARS);
+								}}
+							>
+								{newName}
+							</div>
+							<span class="char-count">{newName.length} / {$LIMIT_OF_CHARS}</span>
 						</div>
 						<NameTableError
 							name={newName.trim().replace(/\n\s*\n/g, '\n\n')}
@@ -171,5 +179,9 @@
 
 	.save-entry:active {
 		background-color: var(--border-color);
+	}
+
+	.input-container {
+		margin-bottom: -1.35em;
 	}
 </style>

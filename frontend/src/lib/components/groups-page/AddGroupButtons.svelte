@@ -10,6 +10,8 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import NameError from '$lib/components/groups-page/NameError.svelte';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { limitInput } from '$lib/utils/limitInput';
 
 	export let groups: string[];
 	export let users: string[];
@@ -90,19 +92,28 @@
 		<i class="material-symbols-rounded">add</i>Group
 	</button>
 	{#if isPanelVisible}
-		<!-- svelte-ignore a11y-autofocus -->
 		<div
-			title="Enter a group name"
-			class="group-input"
-			contenteditable
-			bind:textContent={groupName}
-			autofocus
-			role="textbox"
-			tabindex="0"
-			on:keydown={handleNewLine}
+			class="input-container"
+			class:max={groupName.length >= $LIMIT_OF_CHARS}
 			transition:slide={{ duration: 200, easing: cubicInOut }}
 		>
-			{groupName}
+			<!-- svelte-ignore a11y-autofocus -->
+			<div
+				title="Enter a group name"
+				class="group-input"
+				contenteditable
+				bind:textContent={groupName}
+				autofocus
+				role="textbox"
+				tabindex="0"
+				on:keydown={(e) => {
+					handleNewLine(e);
+					limitInput(e, groupName, $LIMIT_OF_CHARS);
+				}}
+			>
+				{groupName}
+			</div>
+			<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
 		</div>
 	{/if}
 </div>
@@ -183,6 +194,10 @@
 		font-variation-settings: 'wght' 700;
 		transform: rotate(0deg);
 		transition: transform 0.2s;
+	}
+
+	.input-container {
+		margin-bottom: -1.4em;
 	}
 
 	@media screen and (max-width: 767px) {

@@ -59,22 +59,9 @@
 		if (!createResponse.ok) {
 			error(createResponse.status, { message: await createResponse.json() });
 		} else {
-			const allResponse = await fetch('/api/surveys/drafts/all', {
-				method: 'POST',
-				body: JSON.stringify({ user_email: $page.data.session?.user?.email }),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!allResponse.ok) {
-				error(allResponse.status, { message: await allResponse.json() });
-			} else {
-				const body = await allResponse.json();
-				$currentDraftId = body[body.length - 1].id;
-				$draft = getDraft($title, $questions);
-				popup('draft-popup');
-			}
+			$currentDraftId = await createResponse.json();
+			$draft = getDraft($title, $questions);
+			popup('draft-popup');
 		}
 	}
 </script>

@@ -26,6 +26,8 @@ from src.db.models.survey_draft import SurveyDraftBase
 
 router = APIRouter()
 
+LIMIT_OF_ACTIVE_SURVEYS = 200
+
 
 @router.post(
     "/all",
@@ -151,29 +153,25 @@ async def create_survey(
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
 
-    if survey_create.uses_cryptographic_module:
-        not_found_emails = [
-            email
-            for email in survey_create.ring_members
-            if user_crud.get_user_by_email(email, session) is None
-        ]
-        if len(not_found_emails) > 0:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Users not found: {', '.join(not_found_emails)}",
-            )
+    if (
+        survey_crud.get_count_of_active_surveys_of_user(user.id, session)
+        >= LIMIT_OF_ACTIVE_SURVEYS
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="User already has too many active surveys, delete some to create more",
+        )
 
-        users_with_no_public_key = [
-            email
-            for email in survey_create.ring_members
-            if user_crud.get_user_by_email(email, session).public_key == ""
-        ]
-        if len(users_with_no_public_key) > 0:
-            message = f"Users with no public key: {', '.join(users_with_no_public_key)}"
-            raise HTTPException(
-                status_code=400,
-                detail=message,
-            )
+    if (
+        survey_create.uses_cryptographic_module
+        and not user_crud.all_users_exist_and_have_public_keys(
+            survey_create.ring_members, session
+        )
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail="Not all users are registered or have public keys created",
+        )
 
     try:
         survey_create.survey_structure.validate()
@@ -239,16 +237,10 @@ async def give_access_to_surveys(
             status_code=403, detail="User does not have access to this survey"
         )
 
-    not_found_emails = [
-        email
-        for email in share_surveys_input.user_emails_to_share_with
-        if user_crud.get_user_by_email(email, session) is None
-    ]
-    if len(not_found_emails) > 0:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Users not found: {', '.join(not_found_emails)}",
-        )
+    if not user_crud.all_users_exist(
+        share_surveys_input.user_emails_to_share_with, session
+    ):
+        raise HTTPException(status_code=400, detail="Not all users are registered")
 
     for email in share_surveys_input.user_emails_to_share_with:
         user = user_crud.get_user_by_email(email, session)

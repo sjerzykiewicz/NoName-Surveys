@@ -1,12 +1,13 @@
 <script lang="ts">
 	export let users: string[];
+	export let title: string;
 </script>
 
 <table>
 	<tr>
-		<th title="Users" id="title-header">Users</th>
+		<th title="User Table" id="title-header">{title}</th>
 	</tr>
-	{#each users as user}
+	{#each users.toSorted() as user}
 		<tr>
 			<td title={user} class="title-entry">{user}</td>
 		</tr>

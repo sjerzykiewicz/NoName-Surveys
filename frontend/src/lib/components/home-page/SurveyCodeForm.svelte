@@ -4,13 +4,18 @@
 	import Content from '$lib/components/Content.svelte';
 
 	export let form: ActionData;
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <Content>
 	<h1>NoName Anonymous Surveys</h1>
 	<form method="POST" use:enhance>
 		<label title="Enter a survey code to fill it out" for="code-input"
 			>Enter a survey code to fill it out:
+			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				id="code-input"
 				name="survey-code"
@@ -18,6 +23,7 @@
 				required
 				maxlength="6"
 				autocomplete="off"
+				autofocus={innerWidth > 767}
 			/>
 			<button title="Submit the code" class="save" type="submit">
 				<i class="material-symbols-rounded">done</i>Submit

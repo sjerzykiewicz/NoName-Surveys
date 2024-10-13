@@ -5,7 +5,11 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div class="input-container" class:max={$title.title.length > $LIMIT_OF_CHARS}>
 	<!-- svelte-ignore a11y-autofocus -->
@@ -15,7 +19,7 @@
 		id="title"
 		contenteditable
 		bind:textContent={$title.title}
-		autofocus
+		autofocus={innerWidth > 767}
 		role="textbox"
 		tabindex="0"
 		on:keydown={(e) => {

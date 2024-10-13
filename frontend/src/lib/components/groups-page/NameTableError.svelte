@@ -14,6 +14,8 @@
 				return 'Group name must be ' + $LIMIT_OF_CHARS + ' or less characters long.';
 			case GroupError.NameNonUnique:
 				return 'This group name already exists.';
+			case GroupError.NameInvalid:
+				return 'Group name can only contain letters, numbers, spaces, and hyphens.';
 		}
 	}
 
@@ -26,6 +28,8 @@
 				return n.length > $LIMIT_OF_CHARS;
 			case GroupError.NameNonUnique:
 				return groups.some((g) => g === n);
+			case GroupError.NameInvalid:
+				return n.match(/^[\p{L}\p{N} -]+$/u) === null;
 		}
 	};
 </script>

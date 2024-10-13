@@ -73,6 +73,17 @@ html,
 body {
 	display: contents;
 	height: 100%;
+	background: var(--secondary-color);
+	background: -moz-linear-gradient(
+		0deg,
+		var(--secondary-dark-color) 0%,
+		var(--secondary-color) 100%
+	);
+	background: -webkit-linear-gradient(
+		0deg,
+		var(--secondary-dark-color) 0%,
+		var(--secondary-color) 100%
+	);
 	background: linear-gradient(0deg, var(--secondary-dark-color) 0%, var(--secondary-color) 100%);
 	background-attachment: fixed;
 	margin: 0px;
@@ -207,6 +218,35 @@ button:active,
 	font-size: 1em;
 }
 
+.add-group {
+	margin-right: 0.5em;
+	transition:
+		background-color 0.2s,
+		color 0.2s;
+}
+
+.add-group.clicked {
+	background-color: var(--primary-dark-color);
+}
+
+.add-group.clicked:hover {
+	background-color: var(--secondary-color);
+}
+
+.add-group.clicked:active {
+	background-color: var(--border-color);
+}
+
+.add-group.clicked i {
+	transform: rotate(45deg);
+}
+
+.add-group i {
+	font-variation-settings: 'wght' 700;
+	transform: rotate(0deg);
+	transition: transform 0.2s;
+}
+
 .hidden {
 	visibility: hidden;
 }
@@ -221,7 +261,8 @@ button:active,
 .save i,
 .back i,
 .sign-out i,
-.file-button i {
+.file-button i,
+.add-group i {
 	margin-right: 0.15em;
 }
 
@@ -833,6 +874,10 @@ table {
 	color: var(--text-color);
 }
 
+table .tooltip {
+	display: table-cell;
+}
+
 th,
 td {
 	padding: 0.2em;
@@ -893,18 +938,20 @@ tr:last-of-type th:last-of-type {
 
 .title-entry:hover,
 .code-entry:hover,
+.group-size-entry:hover,
 .button-entry:hover {
 	background-color: var(--secondary-color);
 }
 
 .title-entry:active,
 .code-entry:active,
+.group-size-entry:active,
 .button-entry:active {
 	background-color: var(--border-color);
 }
 
 .date-entry,
-.crypto-entry {
+.info-entry {
 	cursor: default;
 }
 
@@ -915,13 +962,19 @@ tr:last-of-type th:last-of-type {
 	padding-right: 0.5em;
 }
 
-.crypto-entry {
+.button-entry.disabled {
+	background-color: var(--secondary-color);
+	color: var(--text-dark-color);
+	cursor: not-allowed;
+}
+
+.info-entry {
 	width: 0em;
 	text-align: center;
 }
 
 .button-entry i,
-.crypto-entry i {
+.info-entry i {
 	padding-top: 0.2em;
 }
 
@@ -942,7 +995,8 @@ tr:last-of-type th:last-of-type {
 	width: var(--tooltip-width);
 	padding: 0.5em;
 	border-radius: 5px;
-	background: var(--secondary-dark-color);
+	background: var(--shadow-color);
+	box-shadow: 0px 4px 4px var(--shadow-color);
 	color: var(--text-color);
 	text-align: center;
 
@@ -990,10 +1044,10 @@ tr:last-of-type th:last-of-type {
 
 .tooltip .tooltip-text::after,
 .popup .popup-text::after {
-	content: ' ';
+	content: '';
 	position: absolute;
 
-	border: 0.5em solid var(--secondary-dark-color);
+	border: 0.5em solid var(--shadow-color);
 
 	visibility: hidden;
 	opacity: 0;
@@ -1007,7 +1061,7 @@ tr:last-of-type th:last-of-type {
 	left: 50%;
 	margin-left: -0.5em;
 
-	border-color: var(--secondary-dark-color) transparent transparent transparent;
+	border-color: var(--shadow-color) transparent transparent transparent;
 }
 
 .tooltip .tooltip-text.right::after,
@@ -1018,7 +1072,7 @@ tr:last-of-type th:last-of-type {
 	top: 50%;
 	transform: translateY(-50%);
 
-	border-color: transparent var(--secondary-dark-color) transparent transparent;
+	border-color: transparent var(--shadow-color) transparent transparent;
 }
 
 .tooltip .tooltip-text.bottom::after,
@@ -1028,7 +1082,7 @@ tr:last-of-type th:last-of-type {
 	left: 50%;
 	margin-left: -0.5em;
 
-	border-color: transparent transparent var(--secondary-dark-color) transparent;
+	border-color: transparent transparent var(--shadow-color) transparent;
 }
 
 .tooltip .tooltip-text.left::after,
@@ -1039,7 +1093,7 @@ tr:last-of-type th:last-of-type {
 	top: 50%;
 	transform: translateY(-50%);
 
-	border-color: transparent transparent transparent var(--secondary-dark-color);
+	border-color: transparent transparent transparent var(--shadow-color);
 }
 
 .tooltip:hover .tooltip-text,

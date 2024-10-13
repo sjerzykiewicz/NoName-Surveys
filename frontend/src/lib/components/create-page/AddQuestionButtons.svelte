@@ -131,8 +131,10 @@
 		$previousQuestion = component;
 		isPanelVisible = false;
 
-		await tick();
-		questionInput.focus();
+		if (innerWidth > 767) {
+			await tick();
+			questionInput.focus();
+		}
 	}
 
 	onMount(() => {
@@ -148,7 +150,11 @@
 			document.body.removeEventListener('click', handleClick);
 		};
 	});
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div class="button-group">
 	<div class="add-buttons">
@@ -215,14 +221,13 @@
 	}
 
 	.add-question.clicked {
-		background-color: var(--accent-color);
+		background-color: var(--primary-dark-color);
 		border-bottom-right-radius: 0px;
 		border-bottom-left-radius: 0px;
-		color: var(--text-color-2);
 	}
 
 	.add-question.clicked:hover {
-		background-color: var(--accent-dark-color);
+		background-color: var(--secondary-color);
 	}
 
 	.add-question.clicked:active {

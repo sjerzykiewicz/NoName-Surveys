@@ -24,6 +24,8 @@
 			nameError = GroupError.NameTooLong;
 		} else if (groups.some((g) => g === n)) {
 			nameError = GroupError.NameNonUnique;
+		} else if (n.match(/^[\p{L}\p{N} -]+$/u) === null) {
+			nameError = GroupError.NameInvalid;
 		}
 
 		if (nameError !== GroupError.NoError) {
@@ -35,7 +37,7 @@
 		return true;
 	}
 
-	function deleteGroup(name: string) {
+	function deleteGroup(name: string, i: number) {
 		fetch('/api/groups/delete', {
 			method: 'POST',
 			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
@@ -44,7 +46,7 @@
 			}
 		})
 			.then(() => {
-				groups.splice(groups.indexOf(name), 1);
+				groups.splice(i, 1);
 				invalidateAll();
 			})
 			.catch(() => alert('Error deleting group'));
@@ -113,7 +115,7 @@
 								class="table-input"
 								contenteditable
 								bind:textContent={newName}
-								autofocus
+								autofocus={innerWidth > 767}
 								role="textbox"
 								tabindex="0"
 								on:keydown={(e) => {
@@ -148,7 +150,11 @@
 						class="title-entry"
 						on:click={() => goto('/groups/' + encodeURI(group))}>{group}</td
 					>
-					<td title="Delete the group" class="button-entry" on:click={() => deleteGroup(group)}>
+					<td
+						title="Delete the group"
+						class="button-entry"
+						on:click={() => deleteGroup(group, groupIndex)}
+					>
 						<i class="material-symbols-rounded">delete</i></td
 					>
 				{/if}

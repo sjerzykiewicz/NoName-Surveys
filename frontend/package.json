@@ -44,6 +44,6 @@
 		"@auth/sveltekit": "^1.5.0",
 		"dotenv": "^16.4.5",
 		"svelte-multiselect": "^10.3.0",
-		"wasm-pack": "^0.12.1"
+		"wasm-pack": "^0.13.0"
 	}
 }

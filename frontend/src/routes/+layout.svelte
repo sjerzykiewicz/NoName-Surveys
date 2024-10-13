@@ -17,7 +17,7 @@
 		height: auto;
 		min-height: calc(100% - 4.875em);
 		width: 50%;
-		min-width: 767px;
+		min-width: 768px;
 		margin: auto;
 		margin-top: 1.5em;
 		border: 1px solid var(--border-color);
@@ -26,7 +26,7 @@
 		background-color: var(--secondary-color);
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.box {
 			width: 100%;
 			min-width: 0px;

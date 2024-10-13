@@ -134,7 +134,7 @@
 		padding-bottom: 1em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.modal {
 			font-size: 0.9em;
 		}

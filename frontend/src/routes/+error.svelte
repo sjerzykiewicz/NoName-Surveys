@@ -29,7 +29,7 @@
 		font-size: 1.5em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		div {
 			margin: 1em;
 			padding: 1em;

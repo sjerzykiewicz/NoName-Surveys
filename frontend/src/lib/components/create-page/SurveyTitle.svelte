@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
-	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
+	import { M } from '$lib/stores/global';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
@@ -17,7 +17,7 @@
 	id="title"
 	contenteditable
 	bind:textContent={$title}
-	autofocus={innerWidth > $MOBILE_DEVICE_BREAKPOINT && $title.length === 0}
+	autofocus={innerWidth > $M && $title.length === 0}
 	role="textbox"
 	tabindex="0"
 	on:keydown={handleNewLine}
@@ -40,7 +40,7 @@
 		color: var(--text-dark-color);
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.title-input {
 			font-size: 1.25em;
 		}

@@ -10,7 +10,7 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import NameError from '$lib/components/groups-page/NameError.svelte';
-	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
+	import { M } from '$lib/stores/global';
 
 	export let groups: string[];
 	export let users: string[];
@@ -101,7 +101,7 @@
 			class="group-input"
 			contenteditable
 			bind:textContent={groupName}
-			autofocus={innerWidth > $MOBILE_DEVICE_BREAKPOINT}
+			autofocus={innerWidth > $M}
 			role="textbox"
 			tabindex="0"
 			on:keydown={handleNewLine}
@@ -164,7 +164,7 @@
 		transition: transform 0.2s;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.button-row {
 			font-size: 1em;
 		}

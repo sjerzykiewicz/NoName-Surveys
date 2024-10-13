@@ -34,6 +34,7 @@
 	import init, { linkable_ring_signature } from 'wasm';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import Modal from '$lib/components/Modal.svelte';
+	import { S } from '$lib/stores/global';
 
 	onMount(async () => {
 		await init();
@@ -270,8 +271,6 @@
 		isModalHidden = true;
 		goto('/', { replaceState: true, invalidateAll: true });
 	}
-
-	const TOOLTIP_BREAKPOINT = 615;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -306,7 +305,7 @@
 				<span class="load-label">Load your keys</span>
 				<div title="" class="tooltip">
 					<i class="material-symbols-rounded">info</i>
-					<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'top' : 'right'}"
+					<span class="tooltip-text {innerWidth <= $S ? 'top' : 'right'}"
 						>Please load the file which you have previously generated on this application. The file
 						contains your keys, necessary for cryptographic calculations which are needed for
 						validating your right to fill out this survey.<br /><br />Default filename:
@@ -426,13 +425,13 @@
 		font-variation-settings: 'wght' 700;
 	}
 
-	@media screen and (max-width: 1193px) {
+	@media screen and (max-width: 1440px) {
 		.tooltip {
 			--tooltip-width: 26.9em;
 		}
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.load-div {
 			font-size: 1em;
 		}
@@ -449,9 +448,13 @@
 			margin-right: 0em;
 			margin-bottom: 0.5em;
 		}
+
+		.tooltip {
+			--tooltip-width: 14em;
+		}
 	}
 
-	@media screen and (max-width: 615px) {
+	@media screen and (max-width: 425px) {
 		.tooltip {
 			--tooltip-width: 17em;
 		}

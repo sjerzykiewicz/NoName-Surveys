@@ -1,9 +1,9 @@
 <script lang="ts">
+	import { M } from '$lib/stores/global';
+
 	export let isModalHidden: boolean = true;
 
 	let innerWidth: number;
-
-	const TOOLTIP_BREAKPOINT = 608;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -14,7 +14,7 @@
 	</button>
 	<div class="tooltip">
 		<i class="material-symbols-rounded">info</i>
-		<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'bottom' : 'right'}">
+		<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
 			These keys allow you to participate in secure surveys. Once they are generated, it is your
 			responsibility to keep them safe. When submitting a secure survey, you will be asked to
 			provide these keys to your browser for digital signature.
@@ -24,7 +24,7 @@
 
 <style>
 	.tooltip {
-		--tooltip-width: 29em;
+		--tooltip-width: 25em;
 	}
 
 	.tooltip i {
@@ -49,25 +49,23 @@
 		margin-right: 0.5em;
 	}
 
-	@media screen and (max-width: 1480px) {
+	@media screen and (max-width: 1440px) {
 		.tooltip {
 			--tooltip-width: 17em;
 		}
 	}
 
-	@media screen and (max-width: 1016px) {
+	@media screen and (max-width: 1024px) {
 		.tooltip {
 			--tooltip-width: 9.5em;
 		}
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.download-key {
 			font-size: 1.25em;
 		}
-	}
 
-	@media screen and (max-width: 608px) {
 		.tooltip {
 			--tooltip-width: 18em;
 		}

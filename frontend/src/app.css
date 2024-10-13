@@ -1078,7 +1078,7 @@ button.popup {
 	opacity: 1;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
 	.title,
 	.info-row .tooltip {
 		font-size: 1.25em;

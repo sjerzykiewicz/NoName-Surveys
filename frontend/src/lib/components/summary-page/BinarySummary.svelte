@@ -53,7 +53,7 @@
 		margin-top: 0.5em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.choice-percentage {
 			margin-left: 0.5em;
 			margin-top: 0em;

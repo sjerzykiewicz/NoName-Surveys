@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { XL } from '$lib/stores/global';
 
 	export let users: string[];
 	export let code: string;
@@ -25,8 +26,6 @@
 			})
 			.catch(() => alert('Error taking away access'));
 	}
-
-	const TOOLTIP_BREAKPOINT = 1160;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -40,14 +39,10 @@
 			<td class="info-entry tooltip">
 				{#if user === $page.data.session?.user?.email}
 					<i class="material-symbols-rounded">verified</i>
-					<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'right' : 'left'}"
-						>Owner.</span
-					>
+					<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}">Owner.</span>
 				{:else}
 					<i class="material-symbols-rounded">share</i>
-					<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'right' : 'left'}"
-						>User with access.</span
-					>
+					<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}">User with access.</span>
 				{/if}
 			</td>
 			<td

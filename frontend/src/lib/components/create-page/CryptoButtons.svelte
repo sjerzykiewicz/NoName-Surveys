@@ -4,6 +4,7 @@
 	import { getRespondentTypeData } from '$lib/utils/getRespondentTypeData';
 	import { useCrypto } from '$lib/stores/create-page';
 	import CryptoError from './CryptoError.svelte';
+	import { S, M } from '$lib/stores/global';
 
 	export let users: string[];
 	export let groups: string[];
@@ -14,8 +15,6 @@
 	function toggleCrypto() {
 		$useCrypto = !$useCrypto;
 	}
-
-	const TOOLTIP_BREAKPOINT = 454;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -28,7 +27,9 @@
 	{#if !$useCrypto}
 		<div class="tooltip">
 			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= TOOLTIP_BREAKPOINT ? 'left' : 'right'}"
+			<span
+				class="tooltip-text
+				{innerWidth <= $M ? (innerWidth <= $S ? 'left' : 'bottom') : 'right'}"
 				>Use cryptography to allow only selected users to fill out the survey.</span
 			>
 		</div>
@@ -81,19 +82,20 @@
 		margin-right: 0.15em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.access-button {
 			font-size: 1em;
 		}
 
 		.tooltip {
+			--tooltip-width: 13em;
 			margin-top: 0.17em;
 		}
 	}
 
-	@media screen and (max-width: 544px) {
+	@media screen and (max-width: 425px) {
 		.tooltip {
-			--tooltip-width: 10em;
+			--tooltip-width: 6.5em;
 		}
 	}
 </style>

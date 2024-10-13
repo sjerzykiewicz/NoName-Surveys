@@ -89,7 +89,7 @@
 		font-size: 2em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		h1 {
 			font-size: 2em;
 		}

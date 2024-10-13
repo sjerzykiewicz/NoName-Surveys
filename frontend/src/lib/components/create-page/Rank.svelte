@@ -4,7 +4,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
-	import { MOBILE_DEVICE_BREAKPOINT } from '$lib/stores/global';
+	import { M } from '$lib/stores/global';
 
 	export let questionIndex: number;
 
@@ -13,7 +13,7 @@
 
 	async function addChoice() {
 		$questions[questionIndex].choices = [...$questions[questionIndex].choices, ''];
-		if (innerWidth > $MOBILE_DEVICE_BREAKPOINT) {
+		if (innerWidth > $M) {
 			await tick();
 			choiceInput.focus();
 		}

@@ -24,6 +24,7 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { previousQuestion } from '$lib/stores/create-page';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 
 	export let questionInput: HTMLDivElement;
 
@@ -64,6 +65,8 @@
 		const q = $questions[i].question;
 		if (q === null || q === undefined || q.length === 0) {
 			$questions[i].error = SurveyError.QuestionRequired;
+		} else if (q.length > $LIMIT_OF_CHARS) {
+			$questions[i].error = SurveyError.QuestionTooLong;
 		} else if (
 			$questions[i].component != Text &&
 			$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
@@ -78,6 +81,8 @@
 				default:
 					$questions[i].error = SurveyError.ChoicesRequired;
 			}
+		} else if ($questions[i].choices.some((c) => c.length > $LIMIT_OF_CHARS)) {
+			$questions[i].error = SurveyError.ChoicesTooLong;
 		} else if (
 			$questions[i].component === Slider &&
 			parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])

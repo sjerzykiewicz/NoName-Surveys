@@ -7,6 +7,7 @@
 	import Rank from '$lib/components/create-page/Rank.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
+	import Number from '$lib/components/create-page/Number.svelte';
 	import SinglePreview from '$lib/components/create-page/preview/SinglePreview.svelte';
 	import MultiPreview from '$lib/components/create-page/preview/MultiPreview.svelte';
 	import ScalePreview from '$lib/components/create-page/preview/ScalePreview.svelte';
@@ -15,6 +16,7 @@
 	import RankPreview from '$lib/components/create-page/preview/RankPreview.svelte';
 	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
+	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
 	import { questions } from '$lib/stores/create-page';
 	import { type ComponentType, onMount, tick } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -34,6 +36,7 @@
 		Multi,
 		Scale,
 		Binary,
+		Number,
 		Slider,
 		Rank,
 		List
@@ -55,6 +58,8 @@
 				return RankPreview;
 			case Binary:
 				return BinaryPreview;
+			case Number:
+				return NumberPreview;
 			default:
 				return TextPreview;
 		}
@@ -70,6 +75,7 @@
 		) {
 			switch ($questions[i].component) {
 				case Slider:
+				case Number:
 					$questions[i].error = QuestionError.SliderValuesRequired;
 					break;
 				case Binary:
@@ -79,7 +85,7 @@
 					$questions[i].error = QuestionError.ChoicesRequired;
 			}
 		} else if (
-			$questions[i].component === Slider &&
+			($questions[i].component === Slider || $questions[i].component === Number) &&
 			parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
 		) {
 			$questions[i].error = QuestionError.ImproperSliderValues;
@@ -101,7 +107,7 @@
 			return ['1', '2', '3', '4', '5'];
 		} else if (component === Binary) {
 			return ['Yes', 'No'];
-		} else if (component === Slider) {
+		} else if (component === Slider || component === Number) {
 			return ['0', '10'];
 		} else {
 			return [''];

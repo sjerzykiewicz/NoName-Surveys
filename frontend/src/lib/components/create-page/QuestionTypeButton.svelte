@@ -18,7 +18,7 @@
 <button
 	title={questionTypeData.title}
 	class:previous={questionTypeIndex === -1}
-	class:last={questionTypeIndex === 7}
+	class:last={questionTypeIndex === 8}
 	in:slide={{ axis: 'x', duration: 200, easing: cubicInOut }}
 	on:click={handleClick}
 	><i class="material-symbols-rounded">{questionTypeData.icon}</i>{questionTypeData.text}</button

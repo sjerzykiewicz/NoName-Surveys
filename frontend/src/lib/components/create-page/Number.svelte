@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
-	import { afterUpdate, beforeUpdate } from 'svelte';
+	import { beforeUpdate } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 
@@ -9,26 +9,12 @@
 	let innerWidth: number;
 	let placeholder: Array<string>;
 
-	let value: number = Math.round(
-		(parseFloat($questions[questionIndex].choices[0]) +
-			parseFloat($questions[questionIndex].choices[1])) /
-			2
-	);
-
 	beforeUpdate(() => {
 		if (innerWidth <= 767) {
 			placeholder = ['Enter min...', 'Enter max...'];
 		} else {
 			placeholder = ['Enter minimum value...', 'Enter maximum value...'];
 		}
-	});
-
-	afterUpdate(() => {
-		value = Math.round(
-			(parseFloat($questions[questionIndex].choices[0]) +
-				parseFloat($questions[questionIndex].choices[1])) /
-				2
-		);
 	});
 </script>
 
@@ -39,18 +25,6 @@
 	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
 	out:slide={{ duration: 200, easing: cubicInOut }}
 >
-	<div class="slider-area">
-		<input
-			class="range"
-			type="range"
-			step="1"
-			min={$questions[questionIndex].choices[0]}
-			max={$questions[questionIndex].choices[1]}
-			name={questionIndex.toString()}
-			disabled
-			bind:value
-		/>
-	</div>
 	<div class="limits">
 		<label>
 			Minimum

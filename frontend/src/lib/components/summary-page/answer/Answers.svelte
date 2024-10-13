@@ -8,6 +8,7 @@
 	import Slider from './Slider.svelte';
 	import Binary from './Binary.svelte';
 	import Rank from './Rank.svelte';
+	import Number from './Number.svelte';
 	import type { ComponentType } from 'svelte';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
@@ -20,6 +21,7 @@
 		multi: Multi,
 		scale: Scale,
 		binary: Binary,
+		number: Number,
 		slider: Slider,
 		rank: Rank,
 		list: List

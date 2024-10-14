@@ -37,14 +37,6 @@
 
 <style>
 	.limit-input {
-		color: var(--accent-color);
-		border: 1px solid var(--accent-color);
-		width: 15em;
-	}
-
-	@media screen and (max-width: 767px) {
-		.limit-input {
-			width: 10em;
-		}
+		width: 100%;
 	}
 </style>

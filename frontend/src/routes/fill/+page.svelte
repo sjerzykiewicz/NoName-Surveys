@@ -3,8 +3,13 @@
 	import type { PageServerData } from './$types';
 	import init from 'wasm';
 	import { onMount } from 'svelte';
+	import { title, questions, answers } from '$lib/stores/fill-page';
 
 	export let data: PageServerData;
+
+	$title = '';
+	$questions = [];
+	$answers = [];
 
 	onMount(async () => {
 		await init();

@@ -1090,7 +1090,6 @@ button.popup {
 	.details,
 	.text-area,
 	.dropdown,
-	.limit,
 	.arrows {
 		font-size: 1em;
 	}
@@ -1099,7 +1098,8 @@ button.popup {
 	table,
 	.tooltip-text,
 	.popup-text,
-	.select-list {
+	.select-list,
+	.limit {
 		font-size: 0.8em;
 	}
 

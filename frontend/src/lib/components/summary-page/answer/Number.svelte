@@ -22,13 +22,7 @@
 	.limit-input {
 		color: var(--accent-color);
 		border: 1px solid var(--accent-color);
-		width: 15em;
+		width: 100%;
 		cursor: default;
-	}
-
-	@media screen and (max-width: 767px) {
-		.limit-input {
-			width: 10em;
-		}
 	}
 </style>

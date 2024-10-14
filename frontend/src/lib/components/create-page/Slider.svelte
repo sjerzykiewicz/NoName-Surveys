@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
-	import { afterUpdate, beforeUpdate } from 'svelte';
+	import { afterUpdate } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 
 	export let questionIndex: number;
 
 	let innerWidth: number;
-	let placeholder: Array<string>;
+	let min: number = -999999999999;
+	let max: number = 999999999999;
 
 	let value: number = Math.round(
 		(parseFloat($questions[questionIndex].choices[0]) +
@@ -15,13 +16,15 @@
 			2
 	);
 
-	beforeUpdate(() => {
-		if (innerWidth <= 767) {
-			placeholder = ['Enter min...', 'Enter max...'];
-		} else {
-			placeholder = ['Enter minimum value...', 'Enter maximum value...'];
+	function handleChange(value: number, i: number) {
+		if (isNaN(value) || value === null || value === undefined) {
+			$questions[questionIndex].choices[i] = '';
+		} else if (value < min) {
+			$questions[questionIndex].choices[i] = min.toString();
+		} else if (value > max) {
+			$questions[questionIndex].choices[i] = max.toString();
 		}
-	});
+	}
 
 	afterUpdate(() => {
 		value = Math.round(
@@ -58,11 +61,14 @@
 				title="Enter minimum value"
 				class="limit-input"
 				type="number"
+				{min}
+				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={placeholder[0]}
+				placeholder={innerWidth <= 767 ? 'Enter min...' : 'Enter minimum value...'}
 				bind:value={$questions[questionIndex].choices[0]}
 				on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
+				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[0]), 0)}
 			/></label
 		>
 		<label>
@@ -71,11 +77,14 @@
 				title="Enter maximum value"
 				class="limit-input"
 				type="number"
+				{min}
+				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={placeholder[1]}
+				placeholder={innerWidth <= 767 ? 'Enter max...' : 'Enter maximum value...'}
 				bind:value={$questions[questionIndex].choices[1]}
 				on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
+				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[1]), 1)}
 			/></label
 		>
 	</div>

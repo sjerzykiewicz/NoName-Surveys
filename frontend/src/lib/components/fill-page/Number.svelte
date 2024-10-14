@@ -12,12 +12,14 @@
 	$answers[questionIndex].choices[0] = value.toString();
 
 	function handleChange() {
-		if (value < parseFloat($questions[questionIndex].choices[0])) {
-			value = parseFloat($questions[questionIndex].choices[0]);
-		} else if (value > parseFloat($questions[questionIndex].choices[1])) {
-			value = parseFloat($questions[questionIndex].choices[1]);
+		if (value !== null) {
+			if (value < parseFloat($questions[questionIndex].choices[0])) {
+				value = parseFloat($questions[questionIndex].choices[0]);
+			} else if (value > parseFloat($questions[questionIndex].choices[1])) {
+				value = parseFloat($questions[questionIndex].choices[1]);
+			}
+			$answers[questionIndex].choices[0] = value.toString();
 		}
-		$answers[questionIndex].choices[0] = value.toString();
 	}
 </script>
 
@@ -43,14 +45,6 @@
 
 <style>
 	.limit-input {
-		color: var(--accent-color);
-		border: 1px solid var(--accent-color);
-		width: 15em;
-	}
-
-	@media screen and (max-width: 767px) {
-		.limit-input {
-			width: 10em;
-		}
+		width: 100%;
 	}
 </style>

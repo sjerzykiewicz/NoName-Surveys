@@ -6,6 +6,11 @@
 	import { onMount } from 'svelte';
 	import noname_dark from '$lib/assets/noname_dark.png';
 	import noname_light from '$lib/assets/noname_light.png';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+
+	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	let open: boolean;
 	let innerWidth: number;
@@ -13,32 +18,32 @@
 
 	const navLinks = {
 		Fill: {
-			name: 'Fill Out',
+			name: 'nav_fill',
 			href: '/',
 			disabled: false
 		},
 		Create: {
-			name: 'Create',
+			name: 'nav_create',
 			href: '/create',
 			disabled: !$page.data.session
 		},
 		Drafts: {
-			name: 'Drafts',
+			name: 'nav_drafts',
 			href: '/drafts',
 			disabled: !$page.data.session
 		},
 		Surveys: {
-			name: 'Surveys',
+			name: 'nav_surveys',
 			href: '/surveys',
 			disabled: !$page.data.session
 		},
 		Groups: {
-			name: 'Groups',
+			name: 'nav_groups',
 			href: '/groups',
 			disabled: !$page.data.session
 		},
 		Account: {
-			name: 'Account',
+			name: 'nav_account',
 			href: '/account',
 			disabled: false
 		}
@@ -62,6 +67,8 @@
 			logo = noname_dark;
 			bulb = 'light_off';
 		}
+
+		$options.currentLang = localStorage.getItem('langPref') || 'en';
 	});
 
 	function toggleThemeMode() {
@@ -80,8 +87,13 @@
 		}
 	}
 
+	function changeLang(lang: string) {
+		$options.currentLang = lang;
+		localStorage.setItem('langPref', lang);
+	}
+
 	let scrollHeight: number;
-	$: showToggleThemeMode = scrollHeight == 0;
+	$: showToggleButtons = scrollHeight == 0;
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight bind:scrollY={scrollHeight} />
@@ -108,22 +120,40 @@
 					class="nav-link"
 					class:active={$page.url.pathname === data.href}
 					class:disabled={data.disabled}
-					on:click={hideNav}>{data.name}</a
+					on:click={hideNav}><Tx text={data.name}></Tx></a
 				>
 			{/each}
 		</nav>
 	</div>
 {/if}
 
-{#if showToggleThemeMode}
+{#if showToggleButtons}
 	<button
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={toggleThemeMode}
-		class="toggle-mode tooltip"
+		class="toggle-mode theme-btn tooltip"
 	>
 		<i class="material-symbols-rounded">{bulb}</i>
-		<span class="tooltip-text left">Toggle theme.</span>
+		<span class="tooltip-text left"><Tx text="nav_toggle_theme"></Tx></span>
 	</button>
+
+	{#if $options.currentLang === 'en'}
+		<button
+			transition:scale={{ duration: 200, easing: cubicInOut }}
+			on:click={() => changeLang('pl')}
+			class="toggle-mode lang-btn tooltip"
+		>
+			Polski
+		</button>
+	{:else}
+		<button
+			transition:scale={{ duration: 200, easing: cubicInOut }}
+			on:click={() => changeLang('en')}
+			class="toggle-mode lang-btn tooltip"
+		>
+			English
+		</button>
+	{/if}
 {/if}
 
 <style>
@@ -170,14 +200,22 @@
 	.toggle-mode {
 		position: fixed;
 		justify-content: center;
-		top: 0.25em;
-		right: 0.25em;
 		background-color: var(--primary-dark-color);
 		border: none;
 		font-size: 1.5em;
 		z-index: 1;
 		transition: 0.2s;
 		cursor: pointer;
+	}
+
+	.theme-btn {
+		top: 0.25em;
+		right: 0.25em;
+	}
+
+	.lang-btn {
+		top: 0.25em;
+		right: 2.25em;
 	}
 
 	.toggle-mode:hover {
@@ -235,8 +273,9 @@
 		background-color: var(--secondary-color);
 	}
 
-	@media screen and (max-width: 892px) {
-		.toggle-mode {
+	@media screen and (max-width: 1078px) {
+		.theme-btn,
+		.lang-btn {
 			top: 2.5em;
 		}
 	}
@@ -264,9 +303,15 @@
 			padding: 0.5em 0 0.5em 0;
 		}
 
-		.toggle-mode {
+		.theme-btn {
 			top: 0.6em;
 			right: 3em;
+			font-size: 1.75em;
+		}
+
+		.lang-btn {
+			top: 0.6em;
+			right: 5em;
 			font-size: 1.75em;
 		}
 	}

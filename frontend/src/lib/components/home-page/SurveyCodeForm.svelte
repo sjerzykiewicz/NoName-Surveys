@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
 	import Content from '$lib/components/Content.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let form: ActionData;
 
@@ -14,7 +15,7 @@
 	<h1>NoName Anonymous Surveys</h1>
 	<form method="POST" use:enhance>
 		<label title="Enter a survey code to fill it out" for="code-input"
-			>Enter a survey code to fill it out:
+			><Tx text="home_code_info"></Tx>
 			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				id="code-input"
@@ -26,13 +27,15 @@
 				autofocus={innerWidth > 767}
 			/>
 			<button title="Submit the code" class="save" type="submit">
-				<i class="material-symbols-rounded">done</i>Submit
+				<i class="material-symbols-rounded">done</i><Tx text="submit"></Tx>
 			</button>
 		</label>
 	</form>
 
 	{#if form?.error}
-		<p title="Error" class="error"><i class="material-symbols-rounded">error</i>{form.error}</p>
+		<p title="Error" class="error">
+			<i class="material-symbols-rounded"><Tx text="error"></Tx></i>{form.error}
+		</p>
 	{/if}
 </Content>
 

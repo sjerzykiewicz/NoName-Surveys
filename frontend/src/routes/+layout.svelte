@@ -2,13 +2,25 @@
 	import '../app.css';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import ScrollToTop from '$lib/components/ScrollToTop.svelte';
+
+	import Translate from 'sveltekit-translate/translate/Translate.svelte';
+	import type { TranslateOptions } from 'sveltekit-translate/translate/translateStore';
+
+	import { data } from '$lib/translations';
+
+	let opts: TranslateOptions = {
+		defaultLang: 'en',
+		currentLang: 'en'
+	};
 </script>
 
-<NavBar />
-<div class="box">
-	<slot />
-</div>
-<ScrollToTop />
+<Translate {opts} {data}>
+	<NavBar />
+	<div class="box">
+		<slot />
+	</div>
+	<ScrollToTop />
+</Translate>
 
 <style>
 	.box {

@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import noname_dark from '$lib/assets/noname_dark.png';
 	import noname_light from '$lib/assets/noname_light.png';
+
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';

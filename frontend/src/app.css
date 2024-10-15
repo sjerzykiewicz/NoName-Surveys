@@ -1070,6 +1070,10 @@ button.popup {
 	opacity: 1;
 }
 
+.tx-hide {
+	display: none;
+}
+
 @media screen and (max-width: 767px) {
 	.title,
 	.info-row .tooltip {

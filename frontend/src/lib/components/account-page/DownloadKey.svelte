@@ -2,6 +2,8 @@
 	import type { PageServerData } from '../../../routes/account/$types';
 	import init, { get_keypair } from 'wasm';
 	import { onMount } from 'svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { extractTranslatedText } from '$lib/translations';
 
 	export let data: PageServerData;
 
@@ -25,7 +27,8 @@
 	}
 
 	async function generateKeyPair() {
-		if (!confirm('Are you sure you want to generate new keys?')) {
+		let translatedString = extractTranslatedText(txElement);
+		if (!confirm(translatedString)) {
 			return;
 		}
 
@@ -47,22 +50,26 @@
 			}
 		});
 	}
+
+	let txElement: HTMLDivElement | null = null;
 </script>
 
 <svelte:window bind:innerWidth />
 
 <div class="download-key">
 	<button title="Generate new key pair" class="save" on:click={generateKeyPair}>
-		<i class="material-symbols-rounded">encrypted</i>Generate new key pair
+		<i class="material-symbols-rounded">encrypted</i><Tx text="account_new_key"></Tx>
 	</button>
 	<div class="tooltip">
 		<i class="material-symbols-rounded">info</i>
 		<span class="tooltip-text {innerWidth <= 633 ? 'bottom' : 'right'}">
-			These keys allow you to participate in secure surveys. Once they are generated, it is your
-			responsibility to keep them safe. When submitting a secure survey, you will be asked to
-			provide these keys to your browser for digital signature.
+			<Tx html="account_keys_info"></Tx>
 		</span>
 	</div>
+</div>
+
+<div bind:this={txElement} class="tx-hide">
+	<Tx text="account_new_key_alert" />
 </div>
 
 <style>

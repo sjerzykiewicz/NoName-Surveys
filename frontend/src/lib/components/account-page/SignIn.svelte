@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { signIn } from '@auth/sveltekit/client';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 </script>
 
-<h1>Sign in with:</h1>
+<h1><Tx text="account_sign_in"></Tx></h1>
 <div class="sign-buttons">
 	<button title="Google" class="sign-in" on:click={() => signIn('google')}
 		><i class="fa-brands fa-google"></i></button
@@ -14,22 +15,12 @@
 </div>
 <div title="Account information" class="info">
 	<div class="text">
-		Authorizing yourself will enable you to:
-		<ul>
-			<li>Create your own surveys,</li>
-			<li>Save survey drafts,</li>
-			<li>View your survey's results,</li>
-			<li>
-				Generate digital signature keys that allow you to participate in secure surveys without
-				needing to sign in each time.
-			</li>
-		</ul>
+		<Tx html="account_authorization_info"></Tx>
 	</div>
 </div>
 <div title="Account information" class="info">
 	<div class="text">
-		We do not recommend signing in if you only wish to fill out a survey. For secure surveys, if you
-		have already generated your digital signature keys, signing in is also not necessary.
+		<Tx text="account_info"></Tx>
 	</div>
 </div>
 

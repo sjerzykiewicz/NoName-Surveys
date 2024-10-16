@@ -1,10 +1,3 @@
-export function extractTranslatedText(txElement: HTMLDivElement | null): string {
-	if (txElement) {
-		return txElement.textContent || '';
-	}
-	return '';
-}
-
 export const data = {
 	en: {
 		submit: 'Submit',

@@ -2,8 +2,13 @@
 	import type { PageServerData } from '../../../routes/account/$types';
 	import init, { get_keypair } from 'wasm';
 	import { onMount } from 'svelte';
+
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
-	import { extractTranslatedText } from '$lib/translations';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data: PageServerData;
 
@@ -27,8 +32,7 @@
 	}
 
 	async function generateKeyPair() {
-		let translatedString = extractTranslatedText(txElement);
-		if (!confirm(translatedString)) {
+		if (!confirm($t('account_new_key_alert'))) {
 			return;
 		}
 
@@ -50,8 +54,6 @@
 			}
 		});
 	}
-
-	let txElement: HTMLDivElement | null = null;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -66,10 +68,6 @@
 			<Tx html="account_keys_info"></Tx>
 		</span>
 	</div>
-</div>
-
-<div bind:this={txElement} class="tx-hide">
-	<Tx text="account_new_key_alert" />
 </div>
 
 <style>

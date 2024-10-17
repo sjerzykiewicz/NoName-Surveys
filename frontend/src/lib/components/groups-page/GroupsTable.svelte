@@ -8,6 +8,7 @@
 	import NameTableError from '$lib/components/groups-page/NameTableError.svelte';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { limitInput } from '$lib/utils/limitInput';
+	import { M, S } from '$lib/stores/global';
 
 	export let groups: string[];
 
@@ -84,7 +85,7 @@
 		<div title="Groups" class="title empty">No groups yet!</div>
 		<div class="tooltip">
 			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 				When creating a secure survey, you can choose a group of possible respondents. To create a
 				group, click on the button below. All your created groups will be stored on this page.
 			</span>
@@ -115,7 +116,7 @@
 								class="table-input"
 								contenteditable
 								bind:textContent={newName}
-								autofocus={innerWidth > 767}
+								autofocus={innerWidth > $M}
 								role="textbox"
 								tabindex="0"
 								on:keydown={(e) => {

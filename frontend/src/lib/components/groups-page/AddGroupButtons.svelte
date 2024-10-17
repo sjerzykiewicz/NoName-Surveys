@@ -12,6 +12,7 @@
 	import NameError from '$lib/components/groups-page/NameError.svelte';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { limitInput } from '$lib/utils/limitInput';
+	import { M } from '$lib/stores/global';
 
 	export let groups: string[];
 	export let users: string[];
@@ -111,7 +112,7 @@
 				class="group-input"
 				contenteditable
 				bind:textContent={groupName}
-				autofocus={innerWidth > 767}
+				autofocus={innerWidth > $M}
 				role="textbox"
 				tabindex="0"
 				on:keydown={(e) => {
@@ -182,7 +183,7 @@
 		margin-bottom: -1.4em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.button-row {
 			font-size: 1em;
 		}

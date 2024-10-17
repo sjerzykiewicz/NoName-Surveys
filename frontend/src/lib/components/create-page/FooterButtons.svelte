@@ -2,12 +2,9 @@
 	import {
 		title,
 		questions,
-		previousQuestion,
 		useCrypto,
 		ringMembers,
 		selectedGroup,
-		isDraftModalHidden,
-		isDraftPopupVisible,
 		currentDraftId,
 		draft
 	} from '$lib/stores/create-page';
@@ -16,16 +13,13 @@
 	import Text from '$lib/components/create-page/Text.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
 	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
-	import { goto } from '$app/navigation';
 	import { SurveyError } from '$lib/entities/SurveyError';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
 	import { page } from '$app/stores';
 	import { error } from '@sveltejs/kit';
-	import { fade } from 'svelte/transition';
-	import { cubicInOut } from 'svelte/easing';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
-	import { delay } from '$lib/utils/delay';
+	import { popup } from '$lib/utils/popup';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
@@ -33,6 +27,9 @@
 
 	export let isPreview: boolean = false;
 	export let cryptoError: boolean = false;
+	export let isDraftModalHidden: boolean = true;
+	export let isSurveyModalHidden: boolean = true;
+	export let surveyCode: string;
 
 	function togglePreview() {
 		isPreview = !isPreview;
@@ -125,7 +122,7 @@
 		if (!(await checkCorrectness())) return;
 
 		if ($currentDraftId !== null) {
-			$isDraftModalHidden = false;
+			isDraftModalHidden = false;
 		} else {
 			const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
 			const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
@@ -143,9 +140,7 @@
 			} else {
 				$currentDraftId = await createResponse.json();
 				$draft = getDraft($title.title, $questions);
-				$isDraftPopupVisible = true;
-				await delay(2000);
-				$isDraftPopupVisible = false;
+				popup('draft-popup');
 			}
 		}
 	}
@@ -206,17 +201,10 @@
 			alert(body.detail);
 		} else {
 			const body = await response.json();
-			$title = { title: '', error: SurveyError.NoError };
-			$questions = [];
-			$previousQuestion = null;
-			$useCrypto = false;
-			$ringMembers = [];
-			$selectedGroup = [];
-			$currentDraftId = null;
-			$draft = getDraft('', []);
 			ring = [];
 			finalRing = [];
-			return await goto(`/${body.survey_code}/view`, { replaceState: true, invalidateAll: true });
+			surveyCode = body.survey_code;
+			isSurveyModalHidden = false;
 		}
 	}
 </script>
@@ -241,15 +229,11 @@
 <button
 	title="Save draft"
 	class="footer-button save popup"
-	disabled={$questions.length === 0 || isPreview || $isDraftPopupVisible}
+	disabled={$questions.length === 0 || isPreview}
 	on:click={saveDraft}
 >
 	<i class="material-symbols-rounded">save</i>Save Draft
-	{#if $isDraftPopupVisible}
-		<span class="popup-text top" transition:fade={{ duration: 200, easing: cubicInOut }}
-			>Saved!</span
-		>
-	{/if}
+	<span class="popup-text top" id="draft-popup">Saved!</span>
 </button>
 <button
 	title="Finish survey creation"

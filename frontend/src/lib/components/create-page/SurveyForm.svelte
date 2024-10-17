@@ -1,12 +1,5 @@
 <script lang="ts">
-	import {
-		questions,
-		title,
-		isDraftModalHidden,
-		isDraftPopupVisible,
-		currentDraftId,
-		draft
-	} from '$lib/stores/create-page';
+	import { questions, title, currentDraftId, draft } from '$lib/stores/create-page';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import QuestionError from './QuestionError.svelte';
@@ -17,20 +10,24 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import CryptoButtons from './CryptoButtons.svelte';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
-	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import Survey from '$lib/entities/surveys/Survey';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { error } from '@sveltejs/kit';
-	import { delay } from '$lib/utils/delay';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
+	import Modal from '$lib/components/Modal.svelte';
+	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
+	import { popup } from '$lib/utils/popup';
 
 	export let users: string[];
 	export let groups: string[];
 	export let isPreview: boolean;
 	export let cryptoError: boolean;
+	export let isDraftModalHidden: boolean = true;
+	export let isSurveyModalHidden: boolean = true;
+	export let surveyCode: string;
 
 	let questionInput: HTMLDivElement;
 
@@ -68,58 +65,32 @@
 		} else {
 			$currentDraftId = await createResponse.json();
 			$draft = getDraft($title.title, $questions);
-			$isDraftPopupVisible = true;
-			await delay(2000);
-			$isDraftPopupVisible = false;
+			popup('draft-popup');
 		}
 	}
-
-	onMount(() => {
-		function handleEscape(event: KeyboardEvent) {
-			if (!$isDraftModalHidden && event.key === 'Escape') {
-				$isDraftModalHidden = true;
-			}
-		}
-
-		document.body.addEventListener('keydown', handleEscape);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEscape);
-		};
-	});
 </script>
 
-<section class="overlay" class:hidden={$isDraftModalHidden}>
-	<div class="modal">
-		<div class="top">
-			<div class="caption">
-				<i class="material-symbols-rounded">help</i>Save Draft
-			</div>
-			<button title="Cancel" on:click={() => ($isDraftModalHidden = true)}>
-				<i class="material-symbols-rounded">close</i>
-			</button>
-		</div>
-		<div class="text">Do you wish to overwrite the draft or save a new draft?</div>
-		<div class="buttons">
-			<button
-				title="Overwrite draft"
-				class="save"
-				on:click={() => {
-					saveDraft(true);
-					$isDraftModalHidden = true;
-				}}>Overwrite Draft</button
-			>
-			<button
-				title="Save new draft"
-				class="save"
-				on:click={() => {
-					saveDraft(false);
-					$isDraftModalHidden = true;
-				}}>Save New Draft</button
-			>
-		</div>
-	</div>
-</section>
+<Modal icon="save" title="Saving Draft" bind:isHidden={isDraftModalHidden}>
+	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
+	<button
+		title="Overwrite draft"
+		class="save"
+		on:click={() => {
+			saveDraft(true);
+			isDraftModalHidden = true;
+		}}>Overwrite Draft</button
+	>
+	<button
+		title="Save new draft"
+		class="save"
+		on:click={() => {
+			saveDraft(false);
+			isDraftModalHidden = true;
+		}}>Save New Draft</button
+	>
+</Modal>
+
+<QrCodeModal bind:isHidden={isSurveyModalHidden} title="Survey Created Successfully" {surveyCode} />
 
 {#each $questions as question, questionIndex (question)}
 	<div
@@ -157,93 +128,6 @@
 {/if}
 
 <style>
-	.overlay {
-		display: flex;
-		justify-content: center;
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(0, 0, 0, 0.5);
-		backdrop-filter: blur(2px);
-		z-index: 2;
-		opacity: 1;
-		transition: opacity 0.2s;
-	}
-
-	.overlay.hidden {
-		visibility: hidden;
-		opacity: 0;
-	}
-
-	.modal {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		top: 10%;
-		width: 20em;
-		position: absolute;
-		background-color: var(--secondary-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		font-size: 1.25em;
-		color: var(--text-color);
-		z-index: 3;
-	}
-
-	.modal div {
-		display: flex;
-	}
-
-	.modal .top {
-		align-items: center;
-		justify-content: space-between;
-		background-color: var(--secondary-dark-color);
-		border-bottom: 1px solid var(--border-color);
-		border-top-left-radius: 5px;
-		border-top-right-radius: 5px;
-		padding: 0.5em;
-	}
-
-	.modal .top .caption {
-		align-items: center;
-		font-weight: bold;
-		font-size: 1.25em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		cursor: default;
-	}
-
-	.modal .top .caption i {
-		margin-right: 0.15em;
-	}
-
-	.modal .top button i {
-		font-variation-settings: 'wght' 700;
-	}
-
-	.modal .text {
-		justify-content: center;
-		padding: 1em;
-		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		cursor: default;
-	}
-
-	.modal .buttons {
-		flex-flow: row;
-		justify-content: space-around;
-		padding-bottom: 1em;
-	}
-
-	.modal .buttons button {
-		width: 8em;
-		justify-content: center;
-	}
-
 	.button-row {
 		display: flex;
 		flex-flow: row wrap;

@@ -28,6 +28,7 @@
 	import { page } from '$app/stores';
 	import type Question from '$lib/entities/questions/Question';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { S } from '$lib/stores/global';
 
 	export let drafts: {
 		id: number;
@@ -192,7 +193,7 @@
 		<div title="Drafts" class="title empty">No drafts yet!</div>
 		<div class="tooltip">
 			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 				When creating a survey, you can save it as a draft for later use. To create a survey, click
 				on the "Create" tab at the top of the page or the button below. All your saved drafts will
 				be stored on this page.
@@ -233,16 +234,16 @@
 		font-variation-settings: 'wght' 700;
 	}
 
-	#title-header {
-		width: 77%;
+	#date-header {
+		width: 24%;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		button {
 			font-size: 1em;
 		}
-		#title-header {
-			width: 62%;
+		#date-header {
+			width: 39%;
 		}
 	}
 </style>

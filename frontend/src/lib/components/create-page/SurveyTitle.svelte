@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
+	import { M } from '$lib/stores/global';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { limitInput } from '$lib/utils/limitInput';
 	import { cubicInOut } from 'svelte/easing';
@@ -19,7 +20,7 @@
 		id="title"
 		contenteditable
 		bind:textContent={$title.title}
-		autofocus={innerWidth > 767}
+		autofocus={innerWidth > $M && $title.title.length === 0}
 		role="textbox"
 		tabindex="0"
 		on:keydown={(e) => {
@@ -56,7 +57,7 @@
 		font-size: 0.7em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.title-input {
 			font-size: 1.25em;
 		}

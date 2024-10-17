@@ -113,7 +113,7 @@
 		transition: transform 0.2s;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.button-row {
 			font-size: 1em;
 		}

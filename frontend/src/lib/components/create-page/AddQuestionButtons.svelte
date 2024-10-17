@@ -25,6 +25,7 @@
 	import { previousQuestion } from '$lib/stores/create-page';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { M } from '$lib/stores/global';
 
 	export let questionInput: HTMLDivElement;
 
@@ -136,7 +137,7 @@
 		$previousQuestion = component;
 		isPanelVisible = false;
 
-		if (innerWidth > 767) {
+		if (innerWidth > $M) {
 			await tick();
 			questionInput.focus();
 		}
@@ -266,7 +267,7 @@
 		transition: transform 0.2s;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.button-group {
 			font-size: 1em;
 		}

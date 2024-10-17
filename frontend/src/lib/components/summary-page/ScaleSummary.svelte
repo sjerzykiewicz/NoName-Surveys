@@ -35,7 +35,7 @@
 		margin-top: 0.5em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.choice-area {
 			width: 100%;
 			margin-left: 0em;

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
+	import { M } from '$lib/stores/global';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 
@@ -38,7 +39,7 @@
 				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={innerWidth <= 767 ? 'Enter min...' : 'Enter minimum value...'}
+				placeholder={innerWidth <= $M ? 'Enter min...' : 'Enter minimum value...'}
 				bind:value={$questions[questionIndex].choices[0]}
 				on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[0]), 0)}
@@ -54,7 +55,7 @@
 				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={innerWidth <= 767 ? 'Enter max...' : 'Enter maximum value...'}
+				placeholder={innerWidth <= $M ? 'Enter max...' : 'Enter maximum value...'}
 				bind:value={$questions[questionIndex].choices[1]}
 				on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[1]), 1)}
@@ -70,7 +71,7 @@
 		align-items: center;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.limit-input {
 			width: 6em;
 		}

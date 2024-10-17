@@ -62,7 +62,7 @@
 		font-size: 0.56em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.char-count {
 			left: 65%;
 			font-size: 0.5em;

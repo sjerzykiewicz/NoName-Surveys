@@ -35,6 +35,8 @@
 	import { onMount, tick } from 'svelte';
 	import init, { linkable_ring_signature } from 'wasm';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import Modal from '$lib/components/Modal.svelte';
+	import { S } from '$lib/stores/global';
 
 	onMount(async () => {
 		await init();
@@ -46,6 +48,7 @@
 	export let code: string;
 
 	let innerWidth: number;
+	let isModalHidden: boolean = true;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -149,7 +152,7 @@
 						$questions[i].required,
 						$questions[i].question,
 						$questions[i].choices[0],
-						$answers[i].choices[0]
+						$answers[i].choices[0].trim()
 					);
 					break;
 				case 'slider':
@@ -184,7 +187,7 @@
 				if ($answers[i].choices.length === 0) {
 					unansweredRequired.push(i);
 				} else if (
-					$answers[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+					$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0)
 				) {
 					unansweredRequired.push(i);
 				}
@@ -228,7 +231,7 @@
 			const body = await response.json();
 			alert(body.detail);
 		} else {
-			return await goto('/fill/success', { replaceState: true, invalidateAll: true });
+			isModalHidden = false;
 		}
 	}
 
@@ -265,7 +268,7 @@
 		};
 	}
 
-	async function submitSurvey() {
+	function submitSurvey() {
 		if (uses_crypto) {
 			processCrypto();
 		} else processForm(undefined);
@@ -277,9 +280,21 @@
 		filename =
 			document.querySelector<HTMLInputElement>('#keys-file')?.files?.[0]?.name ?? 'No file chosen';
 	}
+
+	function hideModal() {
+		isModalHidden = true;
+		goto('/', { replaceState: true, invalidateAll: true });
+	}
 </script>
 
 <svelte:window bind:innerWidth />
+
+<Modal icon="check_circle" title="Survey Answered" bind:isHidden={isModalHidden} hide={hideModal}>
+	<span slot="content">Your answer has been submitted successfully.</span>
+	<button title="Ok" class="save" on:click={hideModal}
+		><i class="material-symbols-rounded">done</i>OK</button
+	>
+</Modal>
 
 <Header>
 	<div title="Survey title" class="title" in:slide={{ duration: 200, easing: cubicInOut }}>
@@ -304,7 +319,7 @@
 				<span class="load-label">Load your keys</span>
 				<div title="" class="tooltip">
 					<i class="material-symbols-rounded">info</i>
-					<span class="tooltip-text {innerWidth <= 615 ? 'top' : 'right'}"
+					<span class="tooltip-text {innerWidth <= $S ? 'top' : 'right'}"
 						>Please load the file which you have previously generated on this application. The file
 						contains your keys, necessary for cryptographic calculations which are needed for
 						validating your right to fill out this survey.<br /><br />Default filename:
@@ -424,19 +439,19 @@
 		font-variation-settings: 'wght' 700;
 	}
 
-	@media screen and (max-width: 1193px) {
+	@media screen and (max-width: 1440px) {
 		.tooltip {
 			--tooltip-width: 26.9em;
 		}
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.load-div {
 			font-size: 1em;
 		}
 
 		.save {
-			font-size: 1.5em;
+			font-size: 1.25em;
 		}
 
 		.file-input {
@@ -447,9 +462,13 @@
 			margin-right: 0em;
 			margin-bottom: 0.5em;
 		}
+
+		.tooltip {
+			--tooltip-width: 14em;
+		}
 	}
 
-	@media screen and (max-width: 615px) {
+	@media screen and (max-width: 425px) {
 		.tooltip {
 			--tooltip-width: 17em;
 		}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import { QuestionError } from '$lib/entities/QuestionError';
+	import { SurveyError } from '$lib/entities/SurveyError';
 	import type { BinaryQuestion } from '$lib/entities/questions/Binary';
 	import type { ListQuestion } from '$lib/entities/questions/List';
 	import type { MultiQuestion } from '$lib/entities/questions/Multi';
@@ -31,6 +31,7 @@
 	import { page } from '$app/stores';
 	import type Question from '$lib/entities/questions/Question';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { S } from '$lib/stores/global';
 
 	export let drafts: {
 		id: number;
@@ -47,7 +48,7 @@
 			}
 		})
 			.then(() => {
-				$title = '';
+				$title.title = '';
 				$questions = [];
 				drafts.splice(i, 1);
 				invalidateAll();
@@ -66,7 +67,7 @@
 			.then(async (response) => {
 				const body = await response.json();
 				$currentDraftId = drafts[i].id;
-				$title = drafts[i].title;
+				$title.title = drafts[i].title;
 				$questions = [];
 				body.survey_structure.questions.forEach((q: Question) => {
 					switch (q.question_type) {
@@ -79,7 +80,7 @@
 									required: q.required,
 									question: q.question,
 									choices: (q as SingleQuestion).choices,
-									error: QuestionError.NoError
+									error: SurveyError.NoError
 								}
 							];
 							break;
@@ -92,7 +93,7 @@
 									required: q.required,
 									question: q.question,
 									choices: (q as MultiQuestion).choices,
-									error: QuestionError.NoError
+									error: SurveyError.NoError
 								}
 							];
 							break;
@@ -105,7 +106,7 @@
 									required: q.required,
 									question: q.question,
 									choices: (q as ListQuestion).choices,
-									error: QuestionError.NoError
+									error: SurveyError.NoError
 								}
 							];
 							break;
@@ -118,7 +119,7 @@
 									required: q.required,
 									question: q.question,
 									choices: (q as RankQuestion).choices,
-									error: QuestionError.NoError
+									error: SurveyError.NoError
 								}
 							];
 							break;
@@ -131,7 +132,7 @@
 									required: q.required,
 									question: q.question,
 									choices: (q as BinaryQuestion).choices,
-									error: QuestionError.NoError
+									error: SurveyError.NoError
 								}
 							];
 							break;
@@ -144,7 +145,7 @@
 									required: q.required,
 									question: q.question,
 									choices: ['1', '2', '3', '4', '5'],
-									error: QuestionError.NoError
+									error: SurveyError.NoError
 								}
 							];
 							break;
@@ -160,7 +161,7 @@
 										(q as SliderQuestion).min_value.toString(),
 										(q as SliderQuestion).max_value.toString()
 									],
-									error: QuestionError.NoError
+									error: SurveyError.NoError
 								}
 							];
 							break;
@@ -176,7 +177,7 @@
 										(q as NumberQuestion).min_value.toString(),
 										(q as NumberQuestion).max_value.toString()
 									],
-									error: QuestionError.NoError
+									error: SurveyError.NoError
 								}
 							];
 							break;
@@ -189,13 +190,13 @@
 									required: q.required,
 									question: q.question,
 									choices: [(q as TextQuestion).details],
-									error: QuestionError.NoError
+									error: SurveyError.NoError
 								}
 							];
 							break;
 					}
 				});
-				$draft = getDraft($title, $questions);
+				$draft = getDraft($title.title, $questions);
 				goto('/create');
 			})
 			.catch(() => alert('Error loading draft'));
@@ -211,7 +212,7 @@
 		<div title="Drafts" class="title empty">No drafts yet!</div>
 		<div class="tooltip">
 			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 				When creating a survey, you can save it as a draft for later use. To create a survey, click
 				on the "Create" tab at the top of the page or the button below. All your saved drafts will
 				be stored on this page.
@@ -252,16 +253,16 @@
 		font-variation-settings: 'wght' 700;
 	}
 
-	#title-header {
-		width: 77%;
+	#date-header {
+		width: 24%;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		button {
 			font-size: 1em;
 		}
-		#title-header {
-			width: 62%;
+		#date-header {
+			width: 39%;
 		}
 	}
 </style>

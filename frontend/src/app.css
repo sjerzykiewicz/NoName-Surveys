@@ -500,7 +500,7 @@ button:disabled {
 .choice-input.binary {
 	margin: 0.5em 0em 0em 0em;
 	max-width: 15em;
-	overflow-wrap: break-word;
+	overflow-wrap: anywhere;
 }
 
 .binary .icon {
@@ -623,6 +623,50 @@ div[contenteditable] * {
 	padding: 0 !important;
 	cursor: inherit !important;
 	white-space: inherit !important;
+}
+
+.input-container {
+	flex: 1;
+	overflow: hidden;
+	padding: 0.2em;
+	margin: -0.2em;
+}
+
+.question-area .input-container,
+.choice-area .input-container {
+	margin-bottom: -1.4em;
+}
+
+.input-container div[contenteditable]:focus + .char-count {
+	visibility: visible;
+}
+
+.input-container.max .char-count {
+	color: var(--error-color);
+	border-color: var(--error-color);
+	visibility: visible;
+}
+
+.char-count {
+	position: relative;
+	bottom: 12px;
+	font-weight: 700;
+	color: var(--text-color);
+	background-color: var(--secondary-dark-color);
+	border-radius: 5px;
+	border: 1px solid white;
+	padding: 0.1em 0.2em;
+	cursor: default;
+	visibility: hidden;
+	z-index: 1;
+}
+
+.question-area .char-count,
+.choice-area .char-count,
+.group-input + .char-count,
+.table-input + .char-count {
+	left: 80%;
+	font-size: 0.56em;
 }
 
 /* other */
@@ -1101,6 +1145,14 @@ button.popup {
 	.popup-text,
 	.select-list {
 		font-size: 0.8em;
+	}
+
+	.question-area .char-count,
+	.choice-area .char-count,
+	.group-input + .char-count,
+	.table-input + .char-count {
+		left: 65%;
+		font-size: 0.5em;
 	}
 
 	.choice-area.binary {

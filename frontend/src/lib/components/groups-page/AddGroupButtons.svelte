@@ -10,6 +10,8 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import NameError from '$lib/components/groups-page/NameError.svelte';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { limitInput } from '$lib/utils/limitInput';
 
 	export let groups: string[];
 	export let users: string[];
@@ -31,6 +33,8 @@
 		const n = name;
 		if (n === null || n === undefined || n.length === 0) {
 			nameError = GroupError.NameRequired;
+		} else if (n.length > $LIMIT_OF_CHARS) {
+			nameError = GroupError.NameTooLong;
 		} else if (groups.some((g) => g === n)) {
 			nameError = GroupError.NameNonUnique;
 		} else if (n.match(/^[\p{L}\p{N} -]+$/u) === null) {
@@ -96,24 +100,33 @@
 		<i class="material-symbols-rounded">add</i>Group
 	</button>
 	{#if isPanelVisible}
-		<!-- svelte-ignore a11y-autofocus -->
 		<div
-			title="Enter a group name"
-			class="group-input"
-			contenteditable
-			bind:textContent={groupName}
-			autofocus={innerWidth > 767}
-			role="textbox"
-			tabindex="0"
-			on:keydown={handleNewLine}
+			class="input-container"
+			class:max={groupName.length > $LIMIT_OF_CHARS}
 			transition:slide={{ duration: 200, easing: cubicInOut }}
 		>
-			{groupName}
+			<!-- svelte-ignore a11y-autofocus -->
+			<div
+				title="Enter a group name"
+				class="group-input"
+				contenteditable
+				bind:textContent={groupName}
+				autofocus={innerWidth > 767}
+				role="textbox"
+				tabindex="0"
+				on:keydown={(e) => {
+					handleNewLine(e);
+					limitInput(e, groupName, $LIMIT_OF_CHARS);
+				}}
+			>
+				{groupName}
+			</div>
+			<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
 		</div>
 	{/if}
 </div>
 {#if isPanelVisible}
-	<NameError name={groupName} error={nameError} {groups} />
+	<NameError name={groupName.trim()} error={nameError} {groups} />
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div title="Select group members" class="select-list">
 			<MultiSelect
@@ -125,7 +138,7 @@
 		<button
 			title="Save the group"
 			class="save"
-			on:click={() => createGroup(groupName, groupMembers)}
+			on:click={() => createGroup(groupName.trim(), groupMembers)}
 		>
 			<i class="material-symbols-rounded">done</i>Create
 		</button>
@@ -163,6 +176,10 @@
 		font-variation-settings: 'wght' 700;
 		transform: rotate(0deg);
 		transition: transform 0.2s;
+	}
+
+	.input-container {
+		margin-bottom: -1.4em;
 	}
 
 	@media screen and (max-width: 767px) {

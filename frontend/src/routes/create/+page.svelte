@@ -10,6 +10,8 @@
 	import type { PageServerData } from './$types';
 	import { beforeNavigate } from '$app/navigation';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { trimQuestions } from '$lib/utils/trimQuestions';
+	import { SurveyError } from '$lib/entities/SurveyError';
 	import {
 		title,
 		questions,
@@ -21,13 +23,12 @@
 		draft
 	} from '$lib/stores/create-page';
 
-	export let titleError: boolean;
 	export let cryptoError: boolean;
 	export let isPreview: boolean;
 	export let data: PageServerData;
 
 	beforeNavigate((event) => {
-		if (getDraft($title, $questions) !== $draft) {
+		if (getDraft($title.title.trim(), trimQuestions($questions)) !== $draft) {
 			if (
 				!confirm(
 					'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.'
@@ -38,7 +39,7 @@
 			}
 		}
 
-		$title = '';
+		$title = { title: '', error: SurveyError.NoError };
 		$questions = [];
 		$previousQuestion = null;
 		$useCrypto = false;
@@ -54,12 +55,12 @@
 		<SurveyTitlePreview />
 	{:else}
 		<SurveyTitle />
-		<TitleError {titleError} />
+		<TitleError />
 	{/if}
 </Header>
 <Content>
 	<SurveyForm {cryptoError} {isPreview} groups={data.group_list} users={data.user_list} />
 </Content>
 <Footer>
-	<FooterButtons bind:titleError bind:cryptoError bind:isPreview />
+	<FooterButtons bind:cryptoError bind:isPreview />
 </Footer>

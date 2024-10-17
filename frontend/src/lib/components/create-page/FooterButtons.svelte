@@ -13,7 +13,7 @@
 	import Text from '$lib/components/create-page/Text.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
 	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
-	import { QuestionError } from '$lib/entities/QuestionError';
+	import { SurveyError } from '$lib/entities/SurveyError';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
 	import { page } from '$app/stores';
@@ -22,9 +22,10 @@
 	import { popup } from '$lib/utils/popup';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { trimQuestions } from '$lib/utils/trimQuestions';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 
 	export let isPreview: boolean = false;
-	export let titleError: boolean = false;
 	export let cryptoError: boolean = false;
 	export let isDraftModalHidden: boolean = true;
 	export let isSurveyModalHidden: boolean = true;
@@ -35,10 +36,13 @@
 	}
 
 	async function checkCorrectness() {
-		titleError = false;
-		const t = $title;
+		const t = $title.title;
 		if (t === null || t === undefined || t.length === 0) {
-			titleError = true;
+			$title.error = SurveyError.TitleRequired;
+		} else if (t.length > $LIMIT_OF_CHARS) {
+			$title.error = SurveyError.TitleTooLong;
+		} else {
+			$title.error = SurveyError.NoError;
 		}
 
 		const numQuestions = $questions.length;
@@ -46,30 +50,34 @@
 		for (let i = 0; i < numQuestions; i++) {
 			const q = $questions[i].question;
 			if (q === null || q === undefined || q.length === 0) {
-				$questions[i].error = QuestionError.QuestionRequired;
+				$questions[i].error = SurveyError.QuestionRequired;
+			} else if (q.length > $LIMIT_OF_CHARS) {
+				$questions[i].error = SurveyError.QuestionTooLong;
 			} else if (
 				$questions[i].component != Text &&
 				$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
 			) {
 				switch ($questions[i].component) {
 					case Slider:
-						$questions[i].error = QuestionError.SliderValuesRequired;
+						$questions[i].error = SurveyError.SliderValuesRequired;
 						break;
 					case Binary:
-						$questions[i].error = QuestionError.BinaryChoicesRequired;
+						$questions[i].error = SurveyError.BinaryChoicesRequired;
 						break;
 					default:
-						$questions[i].error = QuestionError.ChoicesRequired;
+						$questions[i].error = SurveyError.ChoicesRequired;
 				}
+			} else if ($questions[i].choices.some((c) => c.length > $LIMIT_OF_CHARS)) {
+				$questions[i].error = SurveyError.ChoicesTooLong;
 			} else if (
 				$questions[i].component === Slider &&
 				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
 			) {
-				$questions[i].error = QuestionError.ImproperSliderValues;
+				$questions[i].error = SurveyError.ImproperSliderValues;
 			} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
-				$questions[i].error = QuestionError.DuplicateChoices;
+				$questions[i].error = SurveyError.DuplicateChoices;
 			} else {
-				$questions[i].error = QuestionError.NoError;
+				$questions[i].error = SurveyError.NoError;
 			}
 		}
 
@@ -84,16 +92,16 @@
 			cryptoError = true;
 		}
 
-		if (titleError) {
+		if ($title.error !== SurveyError.NoError) {
 			await tick();
 			scrollToElementById('header');
 			return false;
 		}
 
-		if (!$questions.every((q) => q.error === QuestionError.NoError)) {
+		if (!$questions.every((q) => q.error === SurveyError.NoError)) {
 			await tick();
 			scrollToElementById(
-				$questions.indexOf($questions.find((q) => q.error !== QuestionError.NoError)!).toString()
+				$questions.indexOf($questions.find((q) => q.error !== SurveyError.NoError)!).toString()
 			);
 			return false;
 		}
@@ -108,11 +116,15 @@
 	}
 
 	async function saveDraft() {
+		$title.title = $title.title.trim();
+		$questions = trimQuestions($questions);
+
 		if (!(await checkCorrectness())) return;
+
 		if ($currentDraftId !== null) {
 			isDraftModalHidden = false;
 		} else {
-			const parsedSurvey = new Survey($title, constructQuestionList($questions));
+			const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
 			const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
 			const createResponse = await fetch('/api/surveys/drafts/create', {
@@ -127,7 +139,7 @@
 				error(createResponse.status, { message: await createResponse.json() });
 			} else {
 				$currentDraftId = await createResponse.json();
-				$draft = getDraft($title, $questions);
+				$draft = getDraft($title.title, $questions);
 				popup('draft-popup');
 			}
 		}
@@ -154,9 +166,12 @@
 	}
 
 	async function createSurvey() {
+		$title.title = $title.title.trim();
+		$questions = trimQuestions($questions);
+
 		if (!(await checkCorrectness())) return;
 
-		const parsedSurvey = new Survey($title, constructQuestionList($questions));
+		const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
 		let finalRing: string[] = [];
 
 		if ($selectedGroup.length > 0) {
@@ -199,7 +214,15 @@
 		<i class="material-symbols-rounded">edit</i>Edit
 	</button>
 {:else}
-	<button title="Preview survey" class="footer-button" on:click={togglePreview}>
+	<button
+		title="Preview survey"
+		class="footer-button"
+		on:click={() => {
+			$title.title = $title.title.trim();
+			$questions = trimQuestions($questions);
+			togglePreview();
+		}}
+	>
 		<i class="material-symbols-rounded">search</i>Preview
 	</button>
 {/if}

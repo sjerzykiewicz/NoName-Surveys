@@ -148,7 +148,7 @@
 						$questions[i].required,
 						$questions[i].question,
 						$questions[i].choices[0],
-						$answers[i].choices[0]
+						$answers[i].choices[0].trim()
 					);
 					break;
 				case 'slider':
@@ -173,7 +173,7 @@
 				if ($answers[i].choices.length === 0) {
 					unansweredRequired[i] = i;
 				} else if (
-					$answers[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+					$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0)
 				) {
 					unansweredRequired[i] = i;
 				}

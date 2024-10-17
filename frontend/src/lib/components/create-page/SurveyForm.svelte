@@ -16,6 +16,7 @@
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { error } from '@sveltejs/kit';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { trimQuestions } from '$lib/utils/trimQuestions';
 	import Modal from '$lib/components/Modal.svelte';
 	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
 	import { popup } from '$lib/utils/popup';
@@ -31,7 +32,10 @@
 	let questionInput: HTMLDivElement;
 
 	async function saveDraft(overwrite: boolean) {
-		const parsedSurvey = new Survey($title, constructQuestionList($questions));
+		$title.title = $title.title.trim();
+		$questions = trimQuestions($questions);
+
+		const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
 		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
 		if (overwrite) {
@@ -60,7 +64,7 @@
 			error(createResponse.status, { message: await createResponse.json() });
 		} else {
 			$currentDraftId = await createResponse.json();
-			$draft = getDraft($title, $questions);
+			$draft = getDraft($title.title, $questions);
 			popup('draft-popup');
 		}
 	}

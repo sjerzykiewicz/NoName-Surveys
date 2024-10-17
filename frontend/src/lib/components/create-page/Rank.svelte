@@ -4,6 +4,8 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { limitInput } from '$lib/utils/limitInput';
 	import { M } from '$lib/stores/global';
 
 	export let questionIndex: number;
@@ -45,17 +47,23 @@
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div title="Choice no. {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
-			<div
-				title="Enter choice"
-				class="choice-input"
-				contenteditable
-				bind:textContent={choice}
-				bind:this={choiceInput}
-				role="textbox"
-				tabindex="0"
-				on:keydown={handleNewLine}
-			>
-				{choice}
+			<div class="input-container" class:max={choice.length > $LIMIT_OF_CHARS}>
+				<div
+					title="Enter choice"
+					class="choice-input"
+					contenteditable
+					bind:textContent={choice}
+					bind:this={choiceInput}
+					role="textbox"
+					tabindex="0"
+					on:keydown={(e) => {
+						handleNewLine(e);
+						limitInput(e, choice, $LIMIT_OF_CHARS);
+					}}
+				>
+					{choice}
+				</div>
+				<span class="char-count">{choice.length} / {$LIMIT_OF_CHARS}</span>
 			</div>
 			<button
 				title="Remove choice"

@@ -7,3 +7,4 @@ export const L: Readable<number> = readable(1024);
 export const XL: Readable<number> = readable(1440);
 
 export const LIMIT_OF_ACTIVE_SURVEYS: Readable<number> = readable(200);
+export const LIMIT_OF_CHARS: Readable<number> = readable(5000);

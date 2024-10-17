@@ -1202,13 +1202,11 @@ button.popup {
 		padding-right: 0em;
 	}
 
-	.select-list *:where(div.multiselect > ul.selected) {
-		max-height: 15.5em;
-	}
-}
-
-@media screen and (max-width: 631px) {
 	.info-row .tooltip {
 		--tooltip-width: 12em;
+	}
+
+	.select-list *:where(div.multiselect > ul.selected) {
+		max-height: 15.5em;
 	}
 }

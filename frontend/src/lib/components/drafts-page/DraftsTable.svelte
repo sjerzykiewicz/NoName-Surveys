@@ -8,6 +8,7 @@
 	import type { SingleQuestion } from '$lib/entities/questions/Single';
 	import type { SliderQuestion } from '$lib/entities/questions/Slider';
 	import type { TextQuestion } from '$lib/entities/questions/Text';
+	import type { NumberQuestion } from '$lib/entities/questions/Number';
 	import { title, questions, currentDraftId, draft } from '$lib/stores/create-page';
 	import Binary from '../create-page/Binary.svelte';
 	import List from '../create-page/List.svelte';
@@ -17,6 +18,7 @@
 	import Single from '../create-page/Single.svelte';
 	import Slider from '../create-page/Slider.svelte';
 	import Text from '../create-page/Text.svelte';
+	import Number from '../create-page/Number.svelte';
 	import SinglePreview from '../create-page/preview/SinglePreview.svelte';
 	import MultiPreview from '../create-page/preview/MultiPreview.svelte';
 	import ScalePreview from '../create-page/preview/ScalePreview.svelte';
@@ -25,6 +27,7 @@
 	import RankPreview from '../create-page/preview/RankPreview.svelte';
 	import BinaryPreview from '../create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '../create-page/preview/TextPreview.svelte';
+	import NumberPreview from '../create-page/preview/NumberPreview.svelte';
 	import { page } from '$app/stores';
 	import type Question from '$lib/entities/questions/Question';
 	import { getDraft } from '$lib/utils/getDraft';
@@ -157,6 +160,22 @@
 									choices: [
 										(q as SliderQuestion).min_value.toString(),
 										(q as SliderQuestion).max_value.toString()
+									],
+									error: SurveyError.NoError
+								}
+							];
+							break;
+						case 'number':
+							$questions = [
+								...$questions,
+								{
+									component: Number,
+									preview: NumberPreview,
+									required: q.required,
+									question: q.question,
+									choices: [
+										(q as NumberQuestion).min_value.toString(),
+										(q as NumberQuestion).max_value.toString()
 									],
 									error: SurveyError.NoError
 								}

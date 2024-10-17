@@ -10,6 +10,7 @@
 	} from '$lib/stores/create-page';
 	import Survey from '$lib/entities/surveys/Survey';
 	import Slider from '$lib/components/create-page/Slider.svelte';
+	import Number from '$lib/components/create-page/Number.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
 	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
@@ -59,6 +60,7 @@
 			) {
 				switch ($questions[i].component) {
 					case Slider:
+					case Number:
 						$questions[i].error = SurveyError.SliderValuesRequired;
 						break;
 					case Binary:
@@ -70,7 +72,7 @@
 			} else if ($questions[i].choices.some((c) => c.length > $LIMIT_OF_CHARS)) {
 				$questions[i].error = SurveyError.ChoicesTooLong;
 			} else if (
-				$questions[i].component === Slider &&
+				($questions[i].component === Slider || $questions[i].component === Number) &&
 				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
 			) {
 				$questions[i].error = SurveyError.ImproperSliderValues;

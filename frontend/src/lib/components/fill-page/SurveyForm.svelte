@@ -6,6 +6,7 @@
 	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
 	import { SingleQuestion, SingleQuestionAnswered } from '$lib/entities/questions/Single';
 	import { SliderQuestionAnswered, type SliderQuestion } from '$lib/entities/questions/Slider';
+	import { NumberQuestionAnswered } from '$lib/entities/questions/Number';
 	import type Survey from '$lib/entities/surveys/Survey';
 	import type Question from '$lib/entities/questions/Question';
 	import { MultiQuestionAnswered } from '$lib/entities/questions/Multi';
@@ -23,6 +24,7 @@
 	import Slider from './Slider.svelte';
 	import Binary from './Binary.svelte';
 	import Rank from './Rank.svelte';
+	import Number from './Number.svelte';
 	import type { ComponentType } from 'svelte';
 	import AnswerError from './AnswerError.svelte';
 	import { cubicInOut } from 'svelte/easing';
@@ -54,6 +56,7 @@
 		multi: Multi,
 		scale: Scale,
 		binary: Binary,
+		number: Number,
 		slider: Slider,
 		rank: Rank,
 		list: List
@@ -77,6 +80,7 @@
 				$questions[i].choices = ['1', '2', '3', '4', '5'];
 				break;
 			case 'slider':
+			case 'number':
 				$questions[i].choices[0] = (survey.questions[i] as SliderQuestion).min_value.toString();
 				$questions[i].choices[1] = (survey.questions[i] as SliderQuestion).max_value.toString();
 				break;
@@ -159,6 +163,16 @@
 						parseFloat($questions[i].choices[1]),
 						parseFloat($answers[i].choices[0])
 					);
+					break;
+				case 'number':
+					answerList[i] = new NumberQuestionAnswered(
+						$questions[i].required,
+						$questions[i].question,
+						parseFloat($questions[i].choices[0]),
+						parseFloat($questions[i].choices[1]),
+						parseFloat($answers[i].choices[0])
+					);
+					break;
 			}
 		}
 		return answerList;
@@ -171,11 +185,11 @@
 		for (let i = 0; i < numQuestions; i++) {
 			if ($questions[i].required) {
 				if ($answers[i].choices.length === 0) {
-					unansweredRequired[i] = i;
+					unansweredRequired.push(i);
 				} else if (
 					$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0)
 				) {
-					unansweredRequired[i] = i;
+					unansweredRequired.push(i);
 				}
 			}
 		}

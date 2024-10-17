@@ -14,6 +14,7 @@
 		min-width: calc(768px - 1.5em);
 		width: calc(50% - 1.5em);
 		background-color: var(--secondary-color);
+		z-index: 1;
 	}
 
 	@media screen and (max-width: 768px) {

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
 	import { M } from '$lib/stores/global';
-	import { afterUpdate } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 
@@ -10,12 +9,6 @@
 	let innerWidth: number;
 	let min: number = -999999999999;
 	let max: number = 999999999999;
-
-	let value: number = Math.round(
-		(parseFloat($questions[questionIndex].choices[0]) +
-			parseFloat($questions[questionIndex].choices[1])) /
-			2
-	);
 
 	function handleChange(value: number, i: number) {
 		if (isNaN(value) || value === null || value === undefined) {
@@ -26,14 +19,6 @@
 			$questions[questionIndex].choices[i] = max.toString();
 		}
 	}
-
-	afterUpdate(() => {
-		value = Math.round(
-			(parseFloat($questions[questionIndex].choices[0]) +
-				parseFloat($questions[questionIndex].choices[1])) /
-				2
-		);
-	});
 </script>
 
 <svelte:window bind:innerWidth />
@@ -43,18 +28,6 @@
 	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
 	out:slide={{ duration: 200, easing: cubicInOut }}
 >
-	<div class="slider-area">
-		<input
-			class="range"
-			type="range"
-			step="1"
-			min={$questions[questionIndex].choices[0]}
-			max={$questions[questionIndex].choices[1]}
-			name={questionIndex.toString()}
-			disabled
-			bind:value
-		/>
-	</div>
 	<div class="limits">
 		<label>
 			Minimum

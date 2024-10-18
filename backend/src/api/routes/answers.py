@@ -1,3 +1,5 @@
+import json
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
@@ -103,8 +105,22 @@ async def save_survey_answer(
                 survey.id, session
             )
         ]
+
+        # JSON generated as answer by frontend and JSON serialized by Pydantic are slightly different.
+        # We need to preprocess it, so the formats match exactly, otherwise the signature verification fails.
+        # This is the least painful approach I could come up with, but it's not pretty. Any better ideas are welcome.
+        answer_list = survey_answer.model_dump()["questions"]
+        field_ordering = ["required", "question", "question_type", "choices", "answer"]
+        for i in range(len(answer_list)):
+            answer = answer_list[i]
+            reordered = {k: answer[k] for k in field_ordering}
+            answer_list[i] = reordered
+        matched_format = json.dumps(
+            answer_list, ensure_ascii=False, separators=(",", ":")
+        )
+
         if not verify_lrs(
-            survey.survey_code,
+            matched_format,
             public_keys,
             [int(x) for x in survey_answer.signature],
         ):

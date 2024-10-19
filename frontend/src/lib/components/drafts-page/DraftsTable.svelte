@@ -225,7 +225,7 @@
 			<th title="Draft title" id="title-header">Draft Title</th>
 			<th title="Creation date" id="date-header" colspan="2">Date</th>
 		</tr>
-		{#each drafts as draft, draftIndex}
+		{#each drafts.toReversed() as draft, draftIndex}
 			<tr>
 				<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
 					>{draft.title}</td

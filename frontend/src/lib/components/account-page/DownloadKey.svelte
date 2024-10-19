@@ -37,7 +37,6 @@
 		align-items: center;
 		color: var(--text-color);
 		font-size: 1.5em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
 		width: fit-content;
 		margin-inline: auto;
 		padding-top: 1em;

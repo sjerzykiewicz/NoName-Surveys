@@ -4,7 +4,7 @@
 	import Content from '$lib/components/Content.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Back from '$lib/components/Back.svelte';
-	import UsersTable from '$lib/components/summary-page/access/UsersTable.svelte';
+	import AccessTable from '$lib/components/summary-page/access/AccessTable.svelte';
 	import AddUserButtons from '$lib/components/summary-page/access/AddUserButtons.svelte';
 	import { afterUpdate } from 'svelte';
 
@@ -24,7 +24,7 @@
 </Header>
 
 <Content>
-	<UsersTable users={data.usersWithAccess} code={data.code} />
+	<AccessTable users={data.usersWithAccess} code={data.code} />
 	<AddUserButtons users={usersWithoutAccess} code={data.code} />
 </Content>
 

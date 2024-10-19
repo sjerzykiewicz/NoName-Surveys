@@ -12,5 +12,5 @@
 </Header>
 
 <Content>
-	<DraftsTable drafts={data.drafts.toReversed()} />
+	<DraftsTable drafts={data.drafts} />
 </Content>

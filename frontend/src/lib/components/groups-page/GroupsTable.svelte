@@ -96,7 +96,7 @@
 		<tr>
 			<th title="Group title" id="title-header" colspan="3">Group Title</th>
 		</tr>
-		{#each groups as group, groupIndex}
+		{#each groups.toSorted() as group, groupIndex}
 			<tr>
 				{#if editedIndex === groupIndex}
 					<td

@@ -655,13 +655,12 @@ div[contenteditable] * {
 
 .char-count {
 	position: relative;
-	bottom: 12px;
-	font-weight: 700;
+	bottom: 13px;
+	font-weight: 500;
 	color: var(--text-color);
 	background-color: var(--secondary-dark-color);
 	border-radius: 5px;
-	border: 1px solid white;
-	padding: 0.1em 0.2em;
+	padding: 0.05em 0.25em;
 	cursor: default;
 	visibility: hidden;
 	z-index: 1;
@@ -758,6 +757,7 @@ input[type='radio']:checked {
 .crypto-row .tooltip i,
 .load-text .tooltip i {
 	color: var(--border-color);
+	text-shadow: 0px 4px 4px var(--shadow-color);
 }
 
 .info-row .tooltip .tooltip-text,
@@ -1164,6 +1164,7 @@ button.popup {
 	.table-input + .char-count {
 		left: 65%;
 		font-size: 0.5em;
+		bottom: 11px;
 	}
 
 	.choice-area.binary {

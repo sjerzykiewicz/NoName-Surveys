@@ -167,10 +167,6 @@
 {/if}
 
 <style>
-	.delete-group i {
-		margin-right: 0.15em;
-	}
-
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}

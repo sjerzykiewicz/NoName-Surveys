@@ -11,9 +11,10 @@
 
 	export let users: string[];
 	export let code: string;
+	export let selectedUsersToRemove: string[] = [];
 
 	let isPanelVisible: boolean = false;
-	let selectedUsers: string[] = [];
+	let selectedUsersToAdd: string[] = [];
 	let usersError: GroupError = GroupError.NoError;
 
 	function togglePanel() {
@@ -37,7 +38,7 @@
 		return true;
 	}
 
-	async function giveAccess(survey_code: string, user_emails_to_share_with: string[]) {
+	async function addUsers(survey_code: string, user_emails_to_share_with: string[]) {
 		if (!(await checkCorrectness(user_emails_to_share_with))) return;
 
 		const response = await fetch('/api/surveys/give-access', {
@@ -58,8 +59,35 @@
 			return;
 		}
 
-		selectedUsers = [];
+		selectedUsersToAdd = [];
 		isPanelVisible = false;
+		invalidateAll();
+	}
+
+	async function removeUsers() {
+		selectedUsersToRemove.forEach(async (user, i) => {
+			const response = await fetch('/api/surveys/take-away-access', {
+				method: 'POST',
+				body: JSON.stringify({
+					user_email: $page.data.session?.user?.email,
+					survey_code: code,
+					user_email_to_take_access_from: user
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!response.ok) {
+				const body = await response.json();
+				alert(body.detail);
+				return;
+			}
+
+			users.splice(i, 1);
+		});
+
+		selectedUsersToRemove = [];
 		invalidateAll();
 	}
 </script>
@@ -73,19 +101,35 @@
 	>
 		<i class="material-symbols-rounded">add</i>Users
 	</button>
-	{#if isPanelVisible}
-		<div class="users-panel" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<button
+		title="Take away access from selected users"
+		class="delete-group"
+		disabled={selectedUsersToRemove.length === 0}
+		on:click={removeUsers}
+	>
+		<i class="material-symbols-rounded">delete</i>Members
+	</button>
+</div>
+{#if isPanelVisible}
+	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<div class="users-panel">
 			<div title="Select users" class="select-list">
-				<MultiSelect bind:selected={selectedUsers} options={users} placeholder="Select users" />
+				<MultiSelect
+					bind:selected={selectedUsersToAdd}
+					options={users}
+					placeholder="Select users"
+				/>
 			</div>
-			<button title="Apply access" class="save" on:click={() => giveAccess(code, selectedUsers)}>
+			<button
+				title="Finish giving access"
+				class="save"
+				on:click={() => addUsers(code, selectedUsersToAdd)}
+			>
 				<i class="material-symbols-rounded">done</i>Apply
 			</button>
 		</div>
-	{/if}
-</div>
-{#if isPanelVisible}
-	<UsersError users={selectedUsers} error={usersError} />
+	</div>
+	<UsersError users={selectedUsersToAdd} error={usersError} />
 {/if}
 
 <style>

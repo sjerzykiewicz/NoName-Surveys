@@ -181,19 +181,6 @@
 		--tooltip-width: 13em;
 	}
 
-	.add-survey {
-		margin-right: 0.5em;
-	}
-
-	.add-survey i {
-		margin-right: 0.15em;
-		font-variation-settings: 'wght' 700;
-	}
-
-	.delete-survey i {
-		margin-right: 0.15em;
-	}
-
 	#group-header {
 		width: 8%;
 	}

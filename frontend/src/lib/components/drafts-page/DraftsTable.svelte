@@ -277,7 +277,7 @@
 	</button>
 	{#if drafts.length > 0}
 		<button
-			title="Delete selected surveys"
+			title="Delete selected drafts"
 			class="delete-draft"
 			disabled={selectedDraftsToRemove.length === 0}
 			on:click={deleteDrafts}
@@ -288,19 +288,6 @@
 </div>
 
 <style>
-	.add-draft {
-		margin-right: 0.5em;
-	}
-
-	.add-draft i {
-		margin-right: 0.15em;
-		font-variation-settings: 'wght' 700;
-	}
-
-	.delete-draft i {
-		margin-right: 0.15em;
-	}
-
 	#date-header {
 		width: 19%;
 	}

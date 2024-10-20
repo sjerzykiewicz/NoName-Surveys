@@ -193,10 +193,6 @@
 		margin: -0.2em;
 	}
 
-	.delete-group i {
-		margin-right: 0.15em;
-	}
-
 	.group-input {
 		margin: 0em;
 	}

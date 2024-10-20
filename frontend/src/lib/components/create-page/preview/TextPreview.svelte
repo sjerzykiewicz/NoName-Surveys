@@ -8,7 +8,7 @@
 
 	export let questionIndex: number;
 
-	$questions[questionIndex].choices[1] = '';
+	let text: string = '';
 </script>
 
 <div
@@ -19,15 +19,12 @@
 	<div title="Question details" class="details">
 		{$questions[questionIndex].choices[0]}
 	</div>
-	<div
-		class="input-container"
-		class:max={$questions[questionIndex].choices[1].length > $LIMIT_OF_CHARS}
-	>
+	<div class="input-container" class:max={text.length > $LIMIT_OF_CHARS}>
 		<div
 			title="Enter your answer"
 			class="text-area"
 			contenteditable
-			bind:textContent={$questions[questionIndex].choices[1]}
+			bind:textContent={text}
 			role="textbox"
 			tabindex="0"
 			on:keydown={(e) => {
@@ -35,10 +32,9 @@
 				limitInput(e, $questions[questionIndex].choices[0], $LIMIT_OF_CHARS);
 			}}
 		>
-			{$questions[questionIndex].choices[1]}
+			{text}
 		</div>
-		<span class="char-count">{$questions[questionIndex].choices[1].length} / {$LIMIT_OF_CHARS}</span
-		>
+		<span class="char-count">{text.length} / {$LIMIT_OF_CHARS}</span>
 	</div>
 </div>
 

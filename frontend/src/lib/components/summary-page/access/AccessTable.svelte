@@ -1,34 +1,19 @@
 <script lang="ts">
-	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { XL } from '$lib/stores/global';
 
 	export let users: string[];
-	export let code: string;
+	export let selectedUsersToRemove: string[] = [];
 
 	let innerWidth: number;
 
-	async function takeAwayAccess(user_email_to_take_access_from: string, i: number) {
-		const response = await fetch('/api/surveys/take-away-access', {
-			method: 'POST',
-			body: JSON.stringify({
-				user_email: $page.data.session?.user?.email,
-				survey_code: code,
-				user_email_to_take_access_from: user_email_to_take_access_from
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
+	$: usersWithoutOwner = users.filter((user) => user !== $page.data.session?.user?.email);
 
-		if (!response.ok) {
-			const body = await response.json();
-			alert(body.detail);
-			return;
-		}
+	$: allSelected =
+		selectedUsersToRemove.length === usersWithoutOwner.length && selectedUsersToRemove.length > 0;
 
-		users.splice(i, 1);
-		invalidateAll();
+	function toggleAll() {
+		selectedUsersToRemove = allSelected ? [] : [...usersWithoutOwner];
 	}
 </script>
 
@@ -36,10 +21,33 @@
 
 <table>
 	<tr>
-		<th title="Users with access" id="title-header" colspan="3">Users With Access</th>
+		<th title="Select all" class="checkbox-entry" class:disabled={usersWithoutOwner.length === 0}
+			><label
+				><input
+					type="checkbox"
+					disabled={usersWithoutOwner.length === 0}
+					on:change={toggleAll}
+					checked={allSelected}
+				/></label
+			></th
+		>
+		<th title="Users with access" id="title-header" colspan="2">Users With Access</th>
 	</tr>
-	{#each users.toSorted() as user, userIndex}
+	{#each users.toSorted() as user}
 		<tr>
+			<td
+				title="Select {user}"
+				class="checkbox-entry"
+				class:disabled={user === $page.data.session?.user?.email}
+				><label>
+					<input
+						type="checkbox"
+						disabled={user === $page.data.session?.user?.email}
+						bind:group={selectedUsersToRemove}
+						value={user}
+					/>
+				</label></td
+			>
 			<td class="info-entry tooltip">
 				{#if user === $page.data.session?.user?.email}
 					<i class="material-symbols-rounded">verified</i>
@@ -49,20 +57,7 @@
 					<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}">User with access.</span>
 				{/if}
 			</td>
-			<td
-				title={user}
-				class="title-entry"
-				colspan={user === $page.data.session?.user?.email ? 2 : 1}>{user}</td
-			>
-			{#if user !== $page.data.session?.user?.email}
-				<td
-					title="Take away access"
-					class="button-entry"
-					on:click={() => takeAwayAccess(user, userIndex)}
-				>
-					<i class="material-symbols-rounded">delete</i></td
-				>
-			{/if}
+			<td title={user} class="basic-entry">{user}</td>
 		</tr>
 	{/each}
 </table>
@@ -70,21 +65,5 @@
 <style>
 	.tooltip {
 		--tooltip-width: 9em;
-	}
-
-	.title-entry {
-		cursor: default;
-	}
-
-	tr:nth-child(2n + 1) td {
-		background-color: var(--primary-dark-color);
-	}
-
-	tr:nth-child(2n + 2) td {
-		background-color: var(--primary-color);
-	}
-
-	.button-entry:hover {
-		background-color: var(--secondary-color);
 	}
 </style>

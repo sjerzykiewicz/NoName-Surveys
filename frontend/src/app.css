@@ -225,7 +225,9 @@ button:active,
 	font-size: 1em;
 }
 
-.add-group {
+.add-group,
+.add-survey,
+.add-draft {
 	margin-right: 0.5em;
 	transition:
 		background-color 0.2s,
@@ -248,7 +250,9 @@ button:active,
 	transform: rotate(45deg);
 }
 
-.add-group i {
+.add-group i,
+.add-survey i,
+.add-draft i {
 	font-variation-settings: 'wght' 700;
 	transform: rotate(0deg);
 	transition: transform 0.2s;
@@ -268,7 +272,12 @@ button:active,
 .save i,
 .sign-out i,
 .file-button i,
-.add-group i {
+.add-group i,
+.delete-group i,
+.add-survey i,
+.delete-survey i,
+.add-draft i,
+.delete-draft i {
 	margin-right: 0.15em;
 }
 

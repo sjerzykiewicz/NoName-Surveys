@@ -83,7 +83,7 @@
 				isPanelVisible = false;
 				invalidateAll();
 			})
-			.catch(() => alert('Error deleting group'));
+			.catch(() => alert('Error creating group'));
 	}
 
 	let innerWidth: number;

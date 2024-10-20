@@ -933,26 +933,40 @@ tr:last-of-type th:last-of-type {
 	border-bottom-right-radius: 4px;
 }
 
+th label,
+td label {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+	cursor: pointer;
+}
+
 .title-entry,
 .code-entry,
-.button-entry {
+.button-entry,
+.checkbox-entry {
 	cursor: pointer;
 }
 
 .title-entry:hover,
 .code-entry:hover,
-.button-entry:hover {
+.button-entry:hover,
+.checkbox-entry:hover {
 	background-color: var(--secondary-color);
 }
 
 .title-entry:active,
 .code-entry:active,
-.button-entry:active {
+.button-entry:active,
+.checkbox-entry:active {
 	background-color: var(--border-color);
 }
 
 .date-entry,
-.info-entry {
+.info-entry,
+.basic-entry {
 	cursor: default;
 }
 
@@ -961,7 +975,7 @@ tr:last-of-type th:last-of-type {
 }
 
 .button-entry {
-	width: 0em;
+	width: 1px;
 	text-align: center;
 	padding-left: 0.5em;
 	padding-right: 0.5em;
@@ -973,8 +987,14 @@ tr:last-of-type th:last-of-type {
 	cursor: not-allowed;
 }
 
+.checkbox-entry {
+	height: 1px;
+	width: 1.6em;
+	padding: 0em;
+}
+
 .info-entry {
-	width: 0em;
+	width: 1px;
 }
 
 .button-entry i,

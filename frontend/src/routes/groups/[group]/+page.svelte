@@ -4,7 +4,7 @@
 	import Content from '$lib/components/Content.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Back from '$lib/components/Back.svelte';
-	import UsersTable from '$lib/components/UsersTable.svelte';
+	import MembersTable from '$lib/components/groups-page/group/MembersTable.svelte';
 
 	export let data: PageServerData;
 </script>
@@ -14,7 +14,7 @@
 </Header>
 
 <Content>
-	<UsersTable users={data.users} title="Group Members" />
+	<MembersTable users={data.users} group={data.group} />
 </Content>
 
 <Footer>

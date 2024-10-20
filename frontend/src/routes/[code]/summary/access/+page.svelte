@@ -5,10 +5,11 @@
 	import Footer from '$lib/components/Footer.svelte';
 	import Back from '$lib/components/Back.svelte';
 	import AccessTable from '$lib/components/summary-page/access/AccessTable.svelte';
-	import AddUserButtons from '$lib/components/summary-page/access/AddUserButtons.svelte';
+	import UserButtons from '$lib/components/summary-page/access/UserButtons.svelte';
 	import { afterUpdate } from 'svelte';
 
 	export let data: PageData;
+	export let selectedUsersToRemove: string[] = [];
 
 	let usersWithoutAccess: string[] = [];
 
@@ -24,8 +25,8 @@
 </Header>
 
 <Content>
-	<AccessTable users={data.usersWithAccess} code={data.code} />
-	<AddUserButtons users={usersWithoutAccess} code={data.code} />
+	<AccessTable users={data.usersWithAccess} bind:selectedUsersToRemove />
+	<UserButtons users={usersWithoutAccess} code={data.code} bind:selectedUsersToRemove />
 </Content>
 
 <Footer>

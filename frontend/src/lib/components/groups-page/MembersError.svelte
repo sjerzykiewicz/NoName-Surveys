@@ -5,7 +5,6 @@
 
 	export let members: string[];
 	export let error: GroupError;
-	export let margin: number = 0;
 
 	function errorMessage() {
 		return 'Please select group members.';
@@ -24,12 +23,7 @@
 	out:slide={{ duration: 200, easing: cubicInOut }}
 >
 	{#if checkMembersError()}
-		<p
-			title="Error"
-			class="error"
-			style="margin-left: {margin}em"
-			transition:slide={{ duration: 200, easing: cubicInOut }}
-		>
+		<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 			<i class="material-symbols-rounded">error</i>{errorMessage()}
 		</p>
 	{/if}

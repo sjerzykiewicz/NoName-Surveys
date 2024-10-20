@@ -110,6 +110,7 @@
 			}
 		});
 
+		selectedGroupsToRemove = [];
 		invalidateAll();
 	}
 
@@ -139,7 +140,7 @@
 	{/if}
 </div>
 {#if isPanelVisible}
-	<div transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<div class="buttons-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div class="button-row">
 			<div
 				class="input-container"
@@ -187,6 +188,11 @@
 {/if}
 
 <style>
+	.buttons-container {
+		padding: 0.2em;
+		margin: -0.2em;
+	}
+
 	.delete-group {
 		margin-right: 0.5em;
 	}
@@ -204,22 +210,6 @@
 		color: var(--text-dark-color);
 	}
 
-	.button-row {
-		display: flex;
-		flex-flow: row wrap;
-		align-items: flex-start;
-		justify-content: flex-start;
-		align-content: space-between;
-		font-size: 1.25em;
-		margin-top: 0.5em;
-	}
-
-	.select-list {
-		font-size: 0.8em;
-		margin-right: 0.625em;
-		margin-bottom: 0em;
-	}
-
 	.save i {
 		font-variation-settings: 'wght' 700;
 		transform: rotate(0deg);
@@ -228,11 +218,5 @@
 
 	.input-container {
 		margin-bottom: -1.4em;
-	}
-
-	@media screen and (max-width: 768px) {
-		.button-row {
-			font-size: 1em;
-		}
 	}
 </style>

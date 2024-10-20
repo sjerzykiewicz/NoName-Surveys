@@ -302,6 +302,16 @@ button:disabled {
 	cursor: not-allowed;
 }
 
+.button-row {
+	display: flex;
+	flex-flow: row wrap;
+	align-items: flex-start;
+	justify-content: flex-start;
+	align-content: space-between;
+	font-size: 1.25em;
+	margin-top: 0.5em;
+}
+
 /* questions */
 
 .index {
@@ -674,6 +684,18 @@ div[contenteditable] * {
 	font-size: 0.56em;
 }
 
+.users-panel {
+	display: flex;
+	flex: 1;
+	align-items: flex-start;
+}
+
+.select-list {
+	font-size: 0.8em;
+	margin-right: 0.625em;
+	margin-bottom: 0em;
+}
+
 /* other */
 
 .rank {
@@ -700,6 +722,11 @@ input[type='radio'] {
 input[type='checkbox']:checked,
 input[type='radio']:checked {
 	accent-color: var(--accent-color);
+}
+
+input[type='checkbox']:disabled,
+input[type='radio']:disabled {
+	cursor: not-allowed;
 }
 
 .error {
@@ -981,9 +1008,14 @@ td label {
 	padding-right: 0.5em;
 }
 
-.button-entry.disabled {
+.button-entry.disabled,
+.checkbox-entry.disabled {
 	background-color: var(--secondary-color);
 	color: var(--text-dark-color);
+	cursor: not-allowed;
+}
+
+.checkbox-entry.disabled label {
 	cursor: not-allowed;
 }
 
@@ -1162,7 +1194,8 @@ button.popup {
 	.details,
 	.text-area,
 	.dropdown,
-	.arrows {
+	.arrows,
+	.button-row {
 		font-size: 1em;
 	}
 

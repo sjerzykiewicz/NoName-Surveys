@@ -2,7 +2,8 @@
 	export let members: string[];
 	export let selectedMembersToRemove: string[] = [];
 
-	$: allSelected = selectedMembersToRemove.length === members.length;
+	$: allSelected =
+		selectedMembersToRemove.length === members.length && selectedMembersToRemove.length > 0;
 
 	function toggleAll() {
 		selectedMembersToRemove = allSelected ? [] : [...members];

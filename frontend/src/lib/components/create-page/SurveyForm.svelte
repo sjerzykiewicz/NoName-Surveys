@@ -132,10 +132,7 @@
 
 <style>
 	.button-row {
-		display: flex;
-		flex-flow: row wrap;
-		align-items: flex-start;
-		justify-content: flex-start;
-		align-content: space-between;
+		font-size: 1em;
+		margin-top: 0em;
 	}
 </style>

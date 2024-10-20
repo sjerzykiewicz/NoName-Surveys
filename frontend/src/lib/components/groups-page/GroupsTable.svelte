@@ -17,7 +17,8 @@
 	let newName: string = '';
 	let nameError: GroupError = GroupError.NoError;
 
-	$: allSelected = selectedGroupsToRemove.length === groups.length;
+	$: allSelected =
+		selectedGroupsToRemove.length === groups.length && selectedGroupsToRemove.length > 0;
 
 	function toggleAll() {
 		selectedGroupsToRemove = allSelected ? [] : [...groups];

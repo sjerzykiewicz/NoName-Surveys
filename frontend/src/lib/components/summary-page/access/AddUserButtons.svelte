@@ -89,12 +89,6 @@
 {/if}
 
 <style>
-	.users-panel {
-		display: flex;
-		flex: 1;
-		align-items: flex-start;
-	}
-
 	.button-row {
 		display: flex;
 		flex-flow: row wrap;
@@ -105,6 +99,12 @@
 		margin-top: 0.5em;
 	}
 
+	.users-panel {
+		display: flex;
+		flex: 1;
+		align-items: flex-start;
+	}
+
 	.select-list {
 		font-size: 0.8em;
 		margin-right: 0.625em;
@@ -113,8 +113,6 @@
 
 	.save i {
 		font-variation-settings: 'wght' 700;
-		transform: rotate(0deg);
-		transition: transform 0.2s;
 	}
 
 	@media screen and (max-width: 768px) {

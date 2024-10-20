@@ -70,6 +70,8 @@
 		font-size: 3em;
 		font-weight: bold;
 		cursor: default;
+		margin: 0;
+		padding: 0.25em 0 0.5em;
 	}
 
 	.sign-buttons {

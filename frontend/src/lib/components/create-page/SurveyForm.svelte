@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { questions, title, currentDraftId, draft } from '$lib/stores/create-page';
+	import { questions, title, currentDraftId, draftStructure } from '$lib/stores/create-page';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import QuestionError from './QuestionError.svelte';
@@ -14,7 +14,6 @@
 	import Survey from '$lib/entities/surveys/Survey';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
-	import { error } from '@sveltejs/kit';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
 	import Modal from '$lib/components/Modal.svelte';
@@ -48,7 +47,9 @@
 			});
 
 			if (!deleteResponse.ok) {
-				error(deleteResponse.status, { message: await deleteResponse.json() });
+				const body = await deleteResponse.json();
+				alert(body.detail);
+				return;
 			}
 		}
 
@@ -61,12 +62,14 @@
 		});
 
 		if (!createResponse.ok) {
-			error(createResponse.status, { message: await createResponse.json() });
-		} else {
-			$currentDraftId = await createResponse.json();
-			$draft = getDraft($title.title, $questions);
-			popup('draft-popup');
+			const body = await createResponse.json();
+			alert(body.detail);
+			return;
 		}
+
+		$currentDraftId = await createResponse.json();
+		$draftStructure = getDraft($title.title, $questions);
+		popup('draft-popup');
 	}
 </script>
 
@@ -129,10 +132,7 @@
 
 <style>
 	.button-row {
-		display: flex;
-		flex-flow: row wrap;
-		align-items: flex-start;
-		justify-content: flex-start;
-		align-content: space-between;
+		font-size: 1em;
+		margin-top: 0em;
 	}
 </style>

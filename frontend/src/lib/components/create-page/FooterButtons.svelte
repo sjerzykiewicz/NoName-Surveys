@@ -6,7 +6,7 @@
 		ringMembers,
 		selectedGroup,
 		currentDraftId,
-		draft
+		draftStructure
 	} from '$lib/stores/create-page';
 	import Survey from '$lib/entities/surveys/Survey';
 	import Slider from '$lib/components/create-page/Slider.svelte';
@@ -18,7 +18,6 @@
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
 	import { page } from '$app/stores';
-	import { error } from '@sveltejs/kit';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { popup } from '$lib/utils/popup';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
@@ -129,7 +128,7 @@
 			const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
 			const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
 
-			const createResponse = await fetch('/api/surveys/drafts/create', {
+			const response = await fetch('/api/surveys/drafts/create', {
 				method: 'POST',
 				body: JSON.stringify(draftInfo),
 				headers: {
@@ -137,13 +136,15 @@
 				}
 			});
 
-			if (!createResponse.ok) {
-				error(createResponse.status, { message: await createResponse.json() });
-			} else {
-				$currentDraftId = await createResponse.json();
-				$draft = getDraft($title.title, $questions);
-				popup('draft-popup');
+			if (!response.ok) {
+				const body = await response.json();
+				alert(body.detail);
+				return;
 			}
+
+			$currentDraftId = await response.json();
+			$draftStructure = getDraft($title.title, $questions);
+			popup('draft-popup');
 		}
 	}
 
@@ -161,10 +162,11 @@
 		if (!response.ok) {
 			const body = await response.json();
 			alert(body.detail);
-		} else {
-			const body = await response.json();
-			ring = [...$ringMembers, ...body];
+			return;
 		}
+
+		const body = await response.json();
+		ring = [...$ringMembers, ...body];
 	}
 
 	async function createSurvey() {
@@ -201,13 +203,14 @@
 		if (!response.ok) {
 			const body = await response.json();
 			alert(body.detail);
-		} else {
-			const body = await response.json();
-			ring = [];
-			finalRing = [];
-			surveyCode = body.survey_code;
-			isSurveyModalHidden = false;
+			return;
 		}
+
+		const body = await response.json();
+		ring = [];
+		finalRing = [];
+		surveyCode = body.survey_code;
+		isSurveyModalHidden = false;
 	}
 </script>
 

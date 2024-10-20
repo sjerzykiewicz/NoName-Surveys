@@ -28,9 +28,3 @@
 		</p>
 	{/if}
 </div>
-
-<style>
-	.error {
-		margin-left: 6.6em;
-	}
-</style>

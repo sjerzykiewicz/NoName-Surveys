@@ -26,7 +26,7 @@ from src.db.models.survey_draft import SurveyDraftBase
 
 router = APIRouter()
 
-LIMIT_OF_ACTIVE_SURVEYS = 200
+LIMIT_OF_ACTIVE_SURVEYS = 50
 
 
 @router.post(

@@ -15,7 +15,7 @@
 			case GroupError.NameNonUnique:
 				return 'This group name already exists.';
 			case GroupError.NameInvalid:
-				return 'Group name can only contain letters, numbers, spaces, and hyphens.';
+				return 'Group name can only contain letters, numbers, spaces, slashes and hyphens.';
 		}
 	}
 
@@ -29,7 +29,7 @@
 			case GroupError.NameNonUnique:
 				return groups.some((g) => g === n);
 			case GroupError.NameInvalid:
-				return n.match(/^[\p{L}\p{N} -]+$/u) === null;
+				return n.match(/^[\p{L}\p{N} /-]+$/u) === null;
 		}
 	};
 </script>

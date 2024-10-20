@@ -66,7 +66,7 @@
 	async function createGroup(user_group_name: string, user_group_members: string[]) {
 		if (!(await checkCorrectness(user_group_name, user_group_members))) return;
 
-		fetch('/api/groups/create', {
+		const response = await fetch('/api/groups/create', {
 			method: 'POST',
 			body: JSON.stringify({
 				user_email: $page.data.session?.user?.email,
@@ -76,14 +76,18 @@
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
-			.then(() => {
-				groupName = '';
-				groupMembers = [];
-				isPanelVisible = false;
-				invalidateAll();
-			})
-			.catch(() => alert('Error creating group'));
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+			return;
+		}
+
+		groupName = '';
+		groupMembers = [];
+		isPanelVisible = false;
+		invalidateAll();
 	}
 
 	let innerWidth: number;

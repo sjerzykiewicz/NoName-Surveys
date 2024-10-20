@@ -17,8 +17,8 @@
 		group_size: number;
 	}[];
 
-	function deleteSurvey(i: number) {
-		fetch('/api/surveys/delete', {
+	async function deleteSurvey(i: number) {
+		const response = await fetch('/api/surveys/delete', {
 			method: 'POST',
 			body: JSON.stringify({
 				user_email: $page.data.session?.user?.email,
@@ -27,12 +27,16 @@
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
-			.then(() => {
-				survey_list.splice(i, 1);
-				invalidateAll();
-			})
-			.catch(() => alert('Error deleting survey'));
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+			return;
+		}
+
+		survey_list.splice(i, 1);
+		invalidateAll();
 	}
 </script>
 
@@ -59,7 +63,7 @@
 			<th title="Access code" id="code-header">Code</th>
 			<th title="Creation date" id="date-header" colspan="2">Date</th>
 		</tr>
-		{#each survey_list.toReversed() as entry, entryIndex}
+		{#each survey_list as entry, entryIndex}
 			<tr>
 				<td class="info-entry tooltip">
 					{#if entry.uses_cryptographic_module}

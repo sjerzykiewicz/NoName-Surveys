@@ -39,167 +39,175 @@
 		creation_date: string;
 	}[];
 
-	function deleteDraft(i: number) {
-		fetch('/api/surveys/drafts/delete', {
+	async function deleteDraft(i: number) {
+		const response = await fetch('/api/surveys/drafts/delete', {
 			method: 'POST',
 			body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: drafts[i].id }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
-			.then(() => {
-				$title.title = '';
-				$questions = [];
-				drafts.splice(i, 1);
-				invalidateAll();
-			})
-			.catch(() => alert('Error deleting draft'));
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+			return;
+		}
+
+		$title.title = '';
+		$questions = [];
+		drafts.splice(i, 1);
+		invalidateAll();
 	}
 
-	function loadDraft(i: number) {
-		fetch('/api/surveys/drafts/fetch', {
+	async function loadDraft(i: number) {
+		const response = await fetch('/api/surveys/drafts/fetch', {
 			method: 'POST',
 			body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: drafts[i].id }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
-			.then(async (response) => {
-				const body = await response.json();
-				$currentDraftId = drafts[i].id;
-				$title.title = drafts[i].title;
-				$questions = [];
-				body.survey_structure.questions.forEach((q: Question) => {
-					switch (q.question_type) {
-						case 'single':
-							$questions = [
-								...$questions,
-								{
-									component: Single,
-									preview: SinglePreview,
-									required: q.required,
-									question: q.question,
-									choices: (q as SingleQuestion).choices,
-									error: SurveyError.NoError
-								}
-							];
-							break;
-						case 'multi':
-							$questions = [
-								...$questions,
-								{
-									component: Multi,
-									preview: MultiPreview,
-									required: q.required,
-									question: q.question,
-									choices: (q as MultiQuestion).choices,
-									error: SurveyError.NoError
-								}
-							];
-							break;
-						case 'list':
-							$questions = [
-								...$questions,
-								{
-									component: List,
-									preview: ListPreview,
-									required: q.required,
-									question: q.question,
-									choices: (q as ListQuestion).choices,
-									error: SurveyError.NoError
-								}
-							];
-							break;
-						case 'rank':
-							$questions = [
-								...$questions,
-								{
-									component: Rank,
-									preview: RankPreview,
-									required: q.required,
-									question: q.question,
-									choices: (q as RankQuestion).choices,
-									error: SurveyError.NoError
-								}
-							];
-							break;
-						case 'binary':
-							$questions = [
-								...$questions,
-								{
-									component: Binary,
-									preview: BinaryPreview,
-									required: q.required,
-									question: q.question,
-									choices: (q as BinaryQuestion).choices,
-									error: SurveyError.NoError
-								}
-							];
-							break;
-						case 'scale':
-							$questions = [
-								...$questions,
-								{
-									component: Scale,
-									preview: ScalePreview,
-									required: q.required,
-									question: q.question,
-									choices: ['1', '2', '3', '4', '5'],
-									error: SurveyError.NoError
-								}
-							];
-							break;
-						case 'slider':
-							$questions = [
-								...$questions,
-								{
-									component: Slider,
-									preview: SliderPreview,
-									required: q.required,
-									question: q.question,
-									choices: [
-										(q as SliderQuestion).min_value.toString(),
-										(q as SliderQuestion).max_value.toString()
-									],
-									error: SurveyError.NoError
-								}
-							];
-							break;
-						case 'number':
-							$questions = [
-								...$questions,
-								{
-									component: Number,
-									preview: NumberPreview,
-									required: q.required,
-									question: q.question,
-									choices: [
-										(q as NumberQuestion).min_value.toString(),
-										(q as NumberQuestion).max_value.toString()
-									],
-									error: SurveyError.NoError
-								}
-							];
-							break;
-						case 'text':
-							$questions = [
-								...$questions,
-								{
-									component: Text,
-									preview: TextPreview,
-									required: q.required,
-									question: q.question,
-									choices: [(q as TextQuestion).details],
-									error: SurveyError.NoError
-								}
-							];
-							break;
-					}
-				});
-				$draft = getDraft($title.title, $questions);
-				goto('/create');
-			})
-			.catch(() => alert('Error loading draft'));
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+			return;
+		}
+
+		const body = await response.json();
+		$currentDraftId = drafts[i].id;
+		$title.title = drafts[i].title;
+		$questions = [];
+		body.survey_structure.questions.forEach((q: Question) => {
+			switch (q.question_type) {
+				case 'single':
+					$questions = [
+						...$questions,
+						{
+							component: Single,
+							preview: SinglePreview,
+							required: q.required,
+							question: q.question,
+							choices: (q as SingleQuestion).choices,
+							error: SurveyError.NoError
+						}
+					];
+					break;
+				case 'multi':
+					$questions = [
+						...$questions,
+						{
+							component: Multi,
+							preview: MultiPreview,
+							required: q.required,
+							question: q.question,
+							choices: (q as MultiQuestion).choices,
+							error: SurveyError.NoError
+						}
+					];
+					break;
+				case 'list':
+					$questions = [
+						...$questions,
+						{
+							component: List,
+							preview: ListPreview,
+							required: q.required,
+							question: q.question,
+							choices: (q as ListQuestion).choices,
+							error: SurveyError.NoError
+						}
+					];
+					break;
+				case 'rank':
+					$questions = [
+						...$questions,
+						{
+							component: Rank,
+							preview: RankPreview,
+							required: q.required,
+							question: q.question,
+							choices: (q as RankQuestion).choices,
+							error: SurveyError.NoError
+						}
+					];
+					break;
+				case 'binary':
+					$questions = [
+						...$questions,
+						{
+							component: Binary,
+							preview: BinaryPreview,
+							required: q.required,
+							question: q.question,
+							choices: (q as BinaryQuestion).choices,
+							error: SurveyError.NoError
+						}
+					];
+					break;
+				case 'scale':
+					$questions = [
+						...$questions,
+						{
+							component: Scale,
+							preview: ScalePreview,
+							required: q.required,
+							question: q.question,
+							choices: ['1', '2', '3', '4', '5'],
+							error: SurveyError.NoError
+						}
+					];
+					break;
+				case 'slider':
+					$questions = [
+						...$questions,
+						{
+							component: Slider,
+							preview: SliderPreview,
+							required: q.required,
+							question: q.question,
+							choices: [
+								(q as SliderQuestion).min_value.toString(),
+								(q as SliderQuestion).max_value.toString()
+							],
+							error: SurveyError.NoError
+						}
+					];
+					break;
+				case 'number':
+					$questions = [
+						...$questions,
+						{
+							component: Number,
+							preview: NumberPreview,
+							required: q.required,
+							question: q.question,
+							choices: [
+								(q as NumberQuestion).min_value.toString(),
+								(q as NumberQuestion).max_value.toString()
+							],
+							error: SurveyError.NoError
+						}
+					];
+					break;
+				case 'text':
+					$questions = [
+						...$questions,
+						{
+							component: Text,
+							preview: TextPreview,
+							required: q.required,
+							question: q.question,
+							choices: [(q as TextQuestion).details],
+							error: SurveyError.NoError
+						}
+					];
+					break;
+			}
+		});
+		$draft = getDraft($title.title, $questions);
+		goto('/create');
 	}
 
 	let innerWidth: number;
@@ -225,7 +233,7 @@
 			<th title="Draft title" id="title-header">Draft Title</th>
 			<th title="Creation date" id="date-header" colspan="2">Date</th>
 		</tr>
-		{#each drafts.toReversed() as draft, draftIndex}
+		{#each drafts as draft, draftIndex}
 			<tr>
 				<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
 					>{draft.title}</td

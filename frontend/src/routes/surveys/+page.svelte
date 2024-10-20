@@ -37,7 +37,7 @@
 			Please delete some surveys to create new ones.
 		</p>
 	{/if}
-	<SurveysTable survey_list={data.survey_list} />
+	<SurveysTable survey_list={data.survey_list.toReversed()} />
 </Content>
 
 <style>

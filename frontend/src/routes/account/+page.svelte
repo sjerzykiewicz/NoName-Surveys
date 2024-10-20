@@ -33,7 +33,7 @@
 		const keyPair = get_keypair();
 		const publicKey = keyPair.get_public_key();
 		const privateKey = keyPair.get_private_key();
-		fetch('/api/users/update-public-key', {
+		const response = await fetch('/api/users/update-public-key', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -42,11 +42,15 @@
 				email: $page.data.session?.user?.email,
 				public_key: publicKey
 			})
-		}).then((res) => {
-			if (res.ok) {
-				download('noname-keys.txt', publicKey + '\n' + privateKey);
-			}
 		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+			return;
+		}
+
+		download('noname-keys.txt', publicKey + '\n' + privateKey);
 	}
 
 	let innerWidth: number;

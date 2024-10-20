@@ -8,8 +8,8 @@
 
 	let innerWidth: number;
 
-	function takeAwayAccess(user_email_to_take_access_from: string, i: number) {
-		fetch('/api/surveys/take-away-access', {
+	async function takeAwayAccess(user_email_to_take_access_from: string, i: number) {
+		const response = await fetch('/api/surveys/take-away-access', {
 			method: 'POST',
 			body: JSON.stringify({
 				user_email: $page.data.session?.user?.email,
@@ -19,12 +19,16 @@
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
-			.then(() => {
-				users.splice(i, 1);
-				invalidateAll();
-			})
-			.catch(() => alert('Error taking away access'));
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+			return;
+		}
+
+		users.splice(i, 1);
+		invalidateAll();
 	}
 </script>
 

@@ -40,7 +40,7 @@
 	async function giveAccess(survey_code: string, user_emails_to_share_with: string[]) {
 		if (!(await checkCorrectness(user_emails_to_share_with))) return;
 
-		fetch('/api/surveys/give-access', {
+		const response = await fetch('/api/surveys/give-access', {
 			method: 'POST',
 			body: JSON.stringify({
 				user_email: $page.data.session?.user?.email,
@@ -50,13 +50,17 @@
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
-			.then(() => {
-				selectedUsers = [];
-				isPanelVisible = false;
-				invalidateAll();
-			})
-			.catch(() => alert('Error giving access'));
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+			return;
+		}
+
+		selectedUsers = [];
+		isPanelVisible = false;
+		invalidateAll();
 	}
 </script>
 

@@ -14,7 +14,6 @@
 	import Survey from '$lib/entities/surveys/Survey';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
-	import { error } from '@sveltejs/kit';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
 	import Modal from '$lib/components/Modal.svelte';
@@ -48,7 +47,9 @@
 			});
 
 			if (!deleteResponse.ok) {
-				error(deleteResponse.status, { message: await deleteResponse.json() });
+				const body = await deleteResponse.json();
+				alert(body.detail);
+				return;
 			}
 		}
 
@@ -61,12 +62,14 @@
 		});
 
 		if (!createResponse.ok) {
-			error(createResponse.status, { message: await createResponse.json() });
-		} else {
-			$currentDraftId = await createResponse.json();
-			$draft = getDraft($title.title, $questions);
-			popup('draft-popup');
+			const body = await createResponse.json();
+			alert(body.detail);
+			return;
 		}
+
+		$currentDraftId = await createResponse.json();
+		$draft = getDraft($title.title, $questions);
+		popup('draft-popup');
 	}
 </script>
 

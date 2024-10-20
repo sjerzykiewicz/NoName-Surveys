@@ -38,25 +38,29 @@
 		return true;
 	}
 
-	function deleteGroup(name: string, i: number) {
-		fetch('/api/groups/delete', {
+	async function deleteGroup(name: string, i: number) {
+		const response = await fetch('/api/groups/delete', {
 			method: 'POST',
 			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
-			.then(() => {
-				groups.splice(i, 1);
-				invalidateAll();
-			})
-			.catch(() => alert('Error deleting group'));
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+			return;
+		}
+
+		groups.splice(i, 1);
+		invalidateAll();
 	}
 
 	async function renameGroup(name: string, new_name: string) {
 		if (!(await checkCorrectness(new_name))) return;
 
-		fetch('/api/groups/rename', {
+		const response = await fetch('/api/groups/rename', {
 			method: 'POST',
 			body: JSON.stringify({
 				user_email: $page.data.session?.user?.email,
@@ -66,13 +70,17 @@
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
-			.then(() => {
-				editedIndex = -1;
-				newName = '';
-				invalidateAll();
-			})
-			.catch(() => alert('Error renaming group'));
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+			return;
+		}
+
+		editedIndex = -1;
+		newName = '';
+		invalidateAll();
 	}
 
 	let innerWidth: number;

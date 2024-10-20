@@ -12,7 +12,7 @@
 
 <table>
 	<tr>
-		<th title="Select all" class="checkbox-entry"
+		<th title="Select all" class="checkbox-entry" class:disabled={members.length === 0}
 			><label
 				><input
 					type="checkbox"

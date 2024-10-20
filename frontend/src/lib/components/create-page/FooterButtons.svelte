@@ -6,7 +6,7 @@
 		ringMembers,
 		selectedGroup,
 		currentDraftId,
-		draft
+		draftStructure
 	} from '$lib/stores/create-page';
 	import Survey from '$lib/entities/surveys/Survey';
 	import Slider from '$lib/components/create-page/Slider.svelte';
@@ -143,7 +143,7 @@
 			}
 
 			$currentDraftId = await response.json();
-			$draft = getDraft($title.title, $questions);
+			$draftStructure = getDraft($title.title, $questions);
 			popup('draft-popup');
 		}
 	}

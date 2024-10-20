@@ -9,7 +9,7 @@
 	import type { SliderQuestion } from '$lib/entities/questions/Slider';
 	import type { TextQuestion } from '$lib/entities/questions/Text';
 	import type { NumberQuestion } from '$lib/entities/questions/Number';
-	import { title, questions, currentDraftId, draft } from '$lib/stores/create-page';
+	import { title, questions, currentDraftId, draftStructure } from '$lib/stores/create-page';
 	import Binary from '../create-page/Binary.svelte';
 	import List from '../create-page/List.svelte';
 	import Multi from '../create-page/Multi.svelte';
@@ -39,31 +39,44 @@
 		creation_date: string;
 	}[];
 
-	async function deleteDraft(i: number) {
-		const response = await fetch('/api/surveys/drafts/delete', {
-			method: 'POST',
-			body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: drafts[i].id }),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
+	let selectedDraftsToRemove: typeof drafts = [];
 
-		if (!response.ok) {
-			const body = await response.json();
-			alert(body.detail);
-			return;
-		}
+	$: allSelected =
+		selectedDraftsToRemove.length === drafts.length && selectedDraftsToRemove.length > 0;
+
+	function toggleAll() {
+		selectedDraftsToRemove = allSelected ? [] : [...drafts];
+	}
+
+	async function deleteDrafts() {
+		selectedDraftsToRemove.forEach(async (draft, i) => {
+			const response = await fetch('/api/surveys/drafts/delete', {
+				method: 'POST',
+				body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: draft.id }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!response.ok) {
+				const body = await response.json();
+				alert(body.detail);
+				return;
+			}
+
+			drafts.splice(i, 1);
+		});
 
 		$title.title = '';
 		$questions = [];
-		drafts.splice(i, 1);
+		selectedDraftsToRemove = [];
 		invalidateAll();
 	}
 
-	async function loadDraft(i: number) {
+	async function loadDraft(draft: { id: number; title: string }) {
 		const response = await fetch('/api/surveys/drafts/fetch', {
 			method: 'POST',
-			body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: drafts[i].id }),
+			body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: draft.id }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -76,8 +89,8 @@
 		}
 
 		const body = await response.json();
-		$currentDraftId = drafts[i].id;
-		$title.title = drafts[i].title;
+		$currentDraftId = draft.id;
+		$title.title = draft.title;
 		$questions = [];
 		body.survey_structure.questions.forEach((q: Question) => {
 			switch (q.question_type) {
@@ -206,7 +219,7 @@
 					break;
 			}
 		});
-		$draft = getDraft($title.title, $questions);
+		$draftStructure = getDraft($title.title, $questions);
 		goto('/create');
 	}
 
@@ -230,47 +243,71 @@
 {:else}
 	<table>
 		<tr>
+			<th title="Select all" class="checkbox-entry" class:disabled={drafts.length === 0}
+				><label
+					><input
+						type="checkbox"
+						disabled={drafts.length === 0}
+						on:change={toggleAll}
+						checked={allSelected}
+					/></label
+				></th
+			>
 			<th title="Draft title" id="title-header">Draft Title</th>
-			<th title="Creation date" id="date-header" colspan="2">Date</th>
+			<th title="Creation date" id="date-header">Creation Date</th>
 		</tr>
-		{#each drafts as draft, draftIndex}
+		{#each drafts as draft}
 			<tr>
-				<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draftIndex)}
+				<td title="Select {draft.title}" class="checkbox-entry"
+					><label>
+						<input type="checkbox" bind:group={selectedDraftsToRemove} value={draft} />
+					</label></td
+				>
+				<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draft)}
 					>{draft.title}</td
 				>
 				<td title="Creation date" class="date-entry">{draft.creation_date}</td>
-				<td title="Delete the draft" class="button-entry" on:click={() => deleteDraft(draftIndex)}>
-					<i class="material-symbols-rounded">delete</i></td
-				>
 			</tr>
 		{/each}
 	</table>
 {/if}
-<button title="Create a draft" on:click={() => goto('/create')}>
-	<i class="material-symbols-rounded">add</i>Draft
-</button>
+<div class="button-row">
+	<button title="Create a draft" class="add-draft" on:click={() => goto('/create')}>
+		<i class="material-symbols-rounded">add</i>Draft
+	</button>
+	{#if drafts.length > 0}
+		<button
+			title="Delete selected surveys"
+			class="delete-draft"
+			disabled={selectedDraftsToRemove.length === 0}
+			on:click={deleteDrafts}
+		>
+			<i class="material-symbols-rounded">delete</i>Drafts
+		</button>
+	{/if}
+</div>
 
 <style>
-	button {
-		font-size: 1.25em;
-		margin-top: 0.5em;
+	.add-draft {
+		margin-right: 0.5em;
 	}
 
-	button i {
+	.add-draft i {
 		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
 	}
 
+	.delete-draft i {
+		margin-right: 0.15em;
+	}
+
 	#date-header {
-		width: 24%;
+		width: 19%;
 	}
 
 	@media screen and (max-width: 768px) {
-		button {
-			font-size: 1em;
-		}
 		#date-header {
-			width: 39%;
+			width: 33%;
 		}
 	}
 </style>

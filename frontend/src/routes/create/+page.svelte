@@ -20,7 +20,7 @@
 		ringMembers,
 		selectedGroup,
 		currentDraftId,
-		draft
+		draftStructure
 	} from '$lib/stores/create-page';
 
 	export let cryptoError: boolean;
@@ -31,7 +31,7 @@
 	export let surveyCode: string;
 
 	beforeNavigate((event) => {
-		if (getDraft($title.title.trim(), trimQuestions($questions)) !== $draft) {
+		if (getDraft($title.title.trim(), trimQuestions($questions)) !== $draftStructure) {
 			if (
 				!confirm(
 					'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.'
@@ -49,7 +49,7 @@
 		$ringMembers = [];
 		$selectedGroup = [];
 		$currentDraftId = null;
-		$draft = getDraft('', []);
+		$draftStructure = getDraft('', []);
 	});
 </script>
 

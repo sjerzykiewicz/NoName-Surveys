@@ -28,7 +28,7 @@
 	}
 
 	async function deleteSurveys() {
-		selectedSurveysToRemove.forEach(async (survey) => {
+		selectedSurveysToRemove.forEach(async (survey, i) => {
 			const response = await fetch('/api/surveys/delete', {
 				method: 'POST',
 				body: JSON.stringify({
@@ -46,7 +46,7 @@
 				return;
 			}
 
-			survey_list.splice(survey_list.indexOf(survey), 1);
+			survey_list.splice(i, 1);
 		});
 
 		selectedSurveysToRemove = [];

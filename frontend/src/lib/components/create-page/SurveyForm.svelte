@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { questions, title, currentDraftId, draft } from '$lib/stores/create-page';
+	import { questions, title, currentDraftId, draftStructure } from '$lib/stores/create-page';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import QuestionError from './QuestionError.svelte';
@@ -68,7 +68,7 @@
 		}
 
 		$currentDraftId = await createResponse.json();
-		$draft = getDraft($title.title, $questions);
+		$draftStructure = getDraft($title.title, $questions);
 		popup('draft-popup');
 	}
 </script>

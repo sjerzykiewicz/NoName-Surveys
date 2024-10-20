@@ -16,6 +16,8 @@
 
 	export let groups: string[];
 	export let users: string[];
+	export let editedIndex: number = -1;
+	export let selectedGroupsToRemove: string[] = [];
 
 	let isPanelVisible: boolean = false;
 	let groupName: string = '';
@@ -87,6 +89,27 @@
 		groupName = '';
 		groupMembers = [];
 		isPanelVisible = false;
+		editedIndex = -1;
+		invalidateAll();
+	}
+
+	async function deleteGroups() {
+		selectedGroupsToRemove.forEach(async (group) => {
+			const response = await fetch('/api/groups/delete', {
+				method: 'POST',
+				body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: group }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!response.ok) {
+				const body = await response.json();
+				alert(body.detail);
+				return;
+			}
+		});
+
 		invalidateAll();
 	}
 
@@ -104,54 +127,74 @@
 	>
 		<i class="material-symbols-rounded">add</i>Group
 	</button>
-	{#if isPanelVisible}
-		<div
-			class="input-container"
-			class:max={groupName.length > $LIMIT_OF_CHARS}
-			transition:slide={{ duration: 200, easing: cubicInOut }}
+	{#if groups.length > 0}
+		<button
+			title="Delete selected groups"
+			class="delete-group"
+			disabled={selectedGroupsToRemove.length === 0}
+			on:click={deleteGroups}
 		>
-			<!-- svelte-ignore a11y-autofocus -->
-			<div
-				title="Enter a group name"
-				class="group-input"
-				contenteditable
-				bind:textContent={groupName}
-				autofocus={innerWidth > $M}
-				role="textbox"
-				tabindex="0"
-				on:keydown={(e) => {
-					handleNewLine(e);
-					limitInput(e, groupName, $LIMIT_OF_CHARS);
-				}}
-			>
-				{groupName}
-			</div>
-			<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
-		</div>
+			<i class="material-symbols-rounded">delete</i>Groups
+		</button>
 	{/if}
 </div>
 {#if isPanelVisible}
-	<NameError name={groupName.trim()} error={nameError} {groups} />
-	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div title="Select group members" class="select-list">
-			<MultiSelect
-				bind:selected={groupMembers}
-				options={users}
-				placeholder="Select group members"
-			/>
+	<div transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<div class="button-row">
+			<div
+				class="input-container"
+				class:max={groupName.length > $LIMIT_OF_CHARS}
+				transition:slide={{ duration: 200, easing: cubicInOut }}
+			>
+				<!-- svelte-ignore a11y-autofocus -->
+				<div
+					title="Enter a group name"
+					class="group-input"
+					contenteditable
+					bind:textContent={groupName}
+					autofocus={innerWidth > $M}
+					role="textbox"
+					tabindex="0"
+					on:keydown={(e) => {
+						handleNewLine(e);
+						limitInput(e, groupName, $LIMIT_OF_CHARS);
+					}}
+				>
+					{groupName}
+				</div>
+				<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
+			</div>
 		</div>
-		<button
-			title="Save the group"
-			class="save"
-			on:click={() => createGroup(groupName.trim(), groupMembers)}
-		>
-			<i class="material-symbols-rounded">done</i>Create
-		</button>
+		<NameError name={groupName.trim()} error={nameError} {groups} />
+		<div class="button-row">
+			<div title="Select group members" class="select-list">
+				<MultiSelect
+					bind:selected={groupMembers}
+					options={users}
+					placeholder="Select group members"
+				/>
+			</div>
+			<button
+				title="Save the group"
+				class="save"
+				on:click={() => createGroup(groupName.trim(), groupMembers)}
+			>
+				<i class="material-symbols-rounded">done</i>Create
+			</button>
+		</div>
+		<MembersError members={groupMembers} error={membersError} />
 	</div>
-	<MembersError members={groupMembers} error={membersError} />
 {/if}
 
 <style>
+	.delete-group {
+		margin-right: 0.5em;
+	}
+
+	.delete-group i {
+		margin-right: 0.15em;
+	}
+
 	.group-input {
 		margin: 0em;
 	}

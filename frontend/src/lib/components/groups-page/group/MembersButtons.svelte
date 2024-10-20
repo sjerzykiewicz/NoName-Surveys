@@ -137,13 +137,23 @@
 	>
 		<i class="material-symbols-rounded">add</i>Members
 	</button>
+	<button
+		title="Remove selected group members"
+		class="delete-group"
+		disabled={selectedMembersToRemove.length === 0}
+		on:click={removeMembers}
+	>
+		<i class="material-symbols-rounded">delete</i>Members
+	</button>
+</div>
+<div class="button-row">
 	{#if isPanelVisible}
 		<div class="users-panel" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<div title="Select members" class="select-list">
+			<div title="Select group members" class="select-list">
 				<MultiSelect
 					bind:selected={selectedMembersToAdd}
 					options={notMembers}
-					placeholder="Select members"
+					placeholder="Select group members"
 				/>
 			</div>
 			<button title="Finish adding group members" class="save" on:click={addMembers}>
@@ -153,19 +163,18 @@
 	{/if}
 </div>
 {#if isPanelVisible}
-	<MembersError members={selectedMembersToAdd} error={membersError} margin={8.5} />
+	<MembersError members={selectedMembersToAdd} error={membersError} />
 {/if}
-<div class="button-row">
-	<button
-		title="Remove selected group members"
-		disabled={selectedMembersToRemove.length === 0}
-		on:click={removeMembers}
-	>
-		<i class="material-symbols-rounded">delete</i>Members
-	</button>
-</div>
 
 <style>
+	.delete-group {
+		margin-right: 0.5em;
+	}
+
+	.delete-group i {
+		margin-right: 0.15em;
+	}
+
 	.button-row {
 		display: flex;
 		flex-flow: row wrap;
@@ -186,10 +195,6 @@
 		font-size: 0.8em;
 		margin-right: 0.625em;
 		margin-bottom: 0em;
-	}
-
-	button i {
-		margin-right: 0.15em;
 	}
 
 	.save i {

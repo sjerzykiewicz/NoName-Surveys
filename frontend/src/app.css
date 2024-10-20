@@ -843,7 +843,7 @@ select:disabled {
 .select-list {
 	flex: 1;
 	box-shadow: 0px 4px 4px var(--shadow-color);
-	margin-bottom: 0.63em;
+	margin-bottom: 0.625em;
 }
 
 .info {
@@ -989,7 +989,7 @@ td label {
 
 .checkbox-entry {
 	height: 1px;
-	width: 1.6em;
+	width: 2em;
 	padding: 0em;
 }
 

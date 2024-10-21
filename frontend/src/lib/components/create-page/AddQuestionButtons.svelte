@@ -7,6 +7,7 @@
 	import Rank from '$lib/components/create-page/Rank.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
+	import Number from '$lib/components/create-page/Number.svelte';
 	import SinglePreview from '$lib/components/create-page/preview/SinglePreview.svelte';
 	import MultiPreview from '$lib/components/create-page/preview/MultiPreview.svelte';
 	import ScalePreview from '$lib/components/create-page/preview/ScalePreview.svelte';
@@ -15,15 +16,18 @@
 	import RankPreview from '$lib/components/create-page/preview/RankPreview.svelte';
 	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
+	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
 	import { questions } from '$lib/stores/create-page';
 	import { type ComponentType, onMount, tick } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import QuestionTypeButton from './QuestionTypeButton.svelte';
-	import { QuestionError } from '$lib/entities/QuestionError';
+	import { SurveyError } from '$lib/entities/SurveyError';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { previousQuestion } from '$lib/stores/create-page';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { M } from '$lib/stores/global';
 
 	export let questionInput: HTMLDivElement;
 
@@ -34,6 +38,7 @@
 		Multi,
 		Scale,
 		Binary,
+		Number,
 		Slider,
 		Rank,
 		List
@@ -55,6 +60,8 @@
 				return RankPreview;
 			case Binary:
 				return BinaryPreview;
+			case Number:
+				return NumberPreview;
 			default:
 				return TextPreview;
 		}
@@ -63,30 +70,35 @@
 	function checkError(i: number) {
 		const q = $questions[i].question;
 		if (q === null || q === undefined || q.length === 0) {
-			$questions[i].error = QuestionError.QuestionRequired;
+			$questions[i].error = SurveyError.QuestionRequired;
+		} else if (q.length > $LIMIT_OF_CHARS) {
+			$questions[i].error = SurveyError.QuestionTooLong;
 		} else if (
 			$questions[i].component != Text &&
 			$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
 		) {
 			switch ($questions[i].component) {
 				case Slider:
-					$questions[i].error = QuestionError.SliderValuesRequired;
+				case Number:
+					$questions[i].error = SurveyError.SliderValuesRequired;
 					break;
 				case Binary:
-					$questions[i].error = QuestionError.BinaryChoicesRequired;
+					$questions[i].error = SurveyError.BinaryChoicesRequired;
 					break;
 				default:
-					$questions[i].error = QuestionError.ChoicesRequired;
+					$questions[i].error = SurveyError.ChoicesRequired;
 			}
+		} else if ($questions[i].choices.some((c) => c.length > $LIMIT_OF_CHARS)) {
+			$questions[i].error = SurveyError.ChoicesTooLong;
 		} else if (
-			$questions[i].component === Slider &&
+			($questions[i].component === Slider || $questions[i].component === Number) &&
 			parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
 		) {
-			$questions[i].error = QuestionError.ImproperSliderValues;
+			$questions[i].error = SurveyError.ImproperSliderValues;
 		} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
-			$questions[i].error = QuestionError.DuplicateChoices;
+			$questions[i].error = SurveyError.DuplicateChoices;
 		} else {
-			$questions[i].error = QuestionError.NoError;
+			$questions[i].error = SurveyError.NoError;
 		}
 	}
 
@@ -101,7 +113,7 @@
 			return ['1', '2', '3', '4', '5'];
 		} else if (component === Binary) {
 			return ['Yes', 'No'];
-		} else if (component === Slider) {
+		} else if (component === Slider || component === Number) {
 			return ['0', '10'];
 		} else {
 			return [''];
@@ -124,14 +136,14 @@
 				required: false,
 				question: '',
 				choices: choices,
-				error: QuestionError.NoError
+				error: SurveyError.NoError
 			}
 		];
 
 		$previousQuestion = component;
 		isPanelVisible = false;
 
-		if (innerWidth > 767) {
+		if (innerWidth > $M) {
 			await tick();
 			questionInput.focus();
 		}
@@ -261,7 +273,7 @@
 		transition: transform 0.2s;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.button-group {
 			font-size: 1em;
 		}

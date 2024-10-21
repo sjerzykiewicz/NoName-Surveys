@@ -48,9 +48,7 @@
 
 <style>
 	.limit-input {
-		color: var(--accent-color);
-		border: 1px solid var(--accent-color);
-		width: 15em;
+		width: 100%;
 	}
 
 	.range {
@@ -86,11 +84,5 @@
 
 	.range::-moz-range-thumb:active {
 		cursor: grabbing;
-	}
-
-	@media screen and (max-width: 767px) {
-		.limit-input {
-			width: 10em;
-		}
 	}
 </style>

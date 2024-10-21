@@ -6,6 +6,9 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
 	import NameTableError from '$lib/components/groups-page/NameTableError.svelte';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { limitInput } from '$lib/utils/limitInput';
+	import { M, S } from '$lib/stores/global';
 
 	export let groups: string[];
 
@@ -18,8 +21,12 @@
 		const n = name;
 		if (n === null || n === undefined || n.length === 0) {
 			nameError = GroupError.NameRequired;
+		} else if (n.length > $LIMIT_OF_CHARS) {
+			nameError = GroupError.NameTooLong;
 		} else if (groups.some((g) => g === n)) {
 			nameError = GroupError.NameNonUnique;
+		} else if (n.match(/^[\p{L}\p{N} -]+$/u) === null) {
+			nameError = GroupError.NameInvalid;
 		}
 
 		if (nameError !== GroupError.NoError) {
@@ -78,7 +85,7 @@
 		<div title="Groups" class="title empty">No groups yet!</div>
 		<div class="tooltip">
 			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
+			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 				When creating a secure survey, you can choose a group of possible respondents. To create a
 				group, click on the button below. All your created groups will be stored on this page.
 			</span>
@@ -102,25 +109,31 @@
 						}}><i class="material-symbols-rounded">edit_off</i></td
 					>
 					<td>
-						<!-- svelte-ignore a11y-autofocus -->
-						<div
-							title="Enter a new group name"
-							class="table-input"
-							contenteditable
-							bind:textContent={newName}
-							autofocus={innerWidth > 767}
-							role="textbox"
-							tabindex="0"
-							on:keydown={handleNewLine}
-						>
-							{newName}
+						<div class="input-container" class:max={newName.length > $LIMIT_OF_CHARS}>
+							<!-- svelte-ignore a11y-autofocus -->
+							<div
+								title="Enter a new group name"
+								class="table-input"
+								contenteditable
+								bind:textContent={newName}
+								autofocus={innerWidth > $M}
+								role="textbox"
+								tabindex="0"
+								on:keydown={(e) => {
+									handleNewLine(e);
+									limitInput(e, newName, $LIMIT_OF_CHARS);
+								}}
+							>
+								{newName}
+							</div>
+							<span class="char-count">{newName.length} / {$LIMIT_OF_CHARS}</span>
 						</div>
-						<NameTableError name={newName} error={nameError} {groups} />
+						<NameTableError name={newName.trim()} error={nameError} {groups} />
 					</td>
 					<td
 						title="Save the new group name"
 						class="button-entry save-entry"
-						on:click={() => renameGroup(group, newName)}
+						on:click={() => renameGroup(group, newName.trim())}
 					>
 						<i class="material-symbols-rounded">save</i></td
 					>
@@ -133,8 +146,10 @@
 							nameError = GroupError.NoError;
 						}}><i class="material-symbols-rounded">edit</i></td
 					>
-					<td title="Open the group" class="title-entry" on:click={() => goto('/groups/' + group)}
-						>{group}</td
+					<td
+						title="Open the group"
+						class="title-entry"
+						on:click={() => goto('/groups/' + encodeURI(group))}>{group}</td
 					>
 					<td
 						title="Delete the group"
@@ -169,5 +184,9 @@
 
 	.save-entry:active {
 		background-color: var(--border-color);
+	}
+
+	.input-container {
+		margin-bottom: -1.35em;
 	}
 </style>

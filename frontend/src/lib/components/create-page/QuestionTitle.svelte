@@ -3,6 +3,8 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { limitInput } from '$lib/utils/limitInput';
 
 	export let questionIndex: number;
 	export let questionTypeData: { title: string; icon: string; text: string };
@@ -66,16 +68,25 @@
 		</button>
 	</div>
 	<div
-		title="Enter question"
-		class="question-input"
-		contenteditable
-		bind:textContent={$questions[questionIndex].question}
-		bind:this={questionInput}
-		role="textbox"
-		tabindex="0"
-		on:keydown={handleNewLine}
+		class="input-container"
+		class:max={$questions[questionIndex].question.length > $LIMIT_OF_CHARS}
 	>
-		{$questions[questionIndex].question}
+		<div
+			title="Enter question"
+			class="question-input"
+			contenteditable
+			bind:textContent={$questions[questionIndex].question}
+			bind:this={questionInput}
+			role="textbox"
+			tabindex="0"
+			on:keydown={(e) => {
+				handleNewLine(e);
+				limitInput(e, $questions[questionIndex].question, $LIMIT_OF_CHARS);
+			}}
+		>
+			{$questions[questionIndex].question}
+		</div>
+		<span class="char-count">{$questions[questionIndex].question.length} / {$LIMIT_OF_CHARS}</span>
 	</div>
 	<button
 		class="required-button tooltip"
@@ -126,5 +137,21 @@
 
 	.remove-question i {
 		font-variation-settings: 'wght' 700;
+	}
+
+	.input-container {
+		margin-bottom: -1.4em;
+	}
+
+	.char-count {
+		left: 80%;
+		font-size: 0.56em;
+	}
+
+	@media screen and (max-width: 768px) {
+		.char-count {
+			left: 65%;
+			font-size: 0.5em;
+		}
 	}
 </style>

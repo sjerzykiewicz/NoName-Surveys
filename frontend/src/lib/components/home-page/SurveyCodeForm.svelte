@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
 	import Content from '$lib/components/Content.svelte';
+	import { M } from '$lib/stores/global';
 
 	export let form: ActionData;
 
@@ -23,7 +24,7 @@
 				required
 				maxlength="6"
 				autocomplete="off"
-				autofocus={innerWidth > 767}
+				autofocus={innerWidth > $M}
 			/>
 			<button title="Submit the code" class="save" type="submit">
 				<i class="material-symbols-rounded">done</i>Submit
@@ -91,7 +92,7 @@
 		font-variation-settings: 'wght' 700;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		input,
 		.error {
 			font-size: 1em;

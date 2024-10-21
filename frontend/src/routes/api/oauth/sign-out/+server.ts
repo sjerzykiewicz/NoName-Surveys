@@ -1,6 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { getOAuthInstance } from '$lib/oauth1';
 import { error, redirect } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
 
 export const POST: RequestHandler = async ({ cookies }) => {
 	const session = cookies.get('user_session');
@@ -12,7 +13,7 @@ export const POST: RequestHandler = async ({ cookies }) => {
 	const oauth = getOAuthInstance();
 
 	const requestData = {
-		url: 'https://usosapps.amu.edu.pl/services/oauth/revoke_token?oauth_token=' + oauth_token,
+		url: env.AUTH_USOS_BASE_URL + 'services/oauth/revoke_token?oauth_token=' + oauth_token,
 		method: 'POST'
 	};
 

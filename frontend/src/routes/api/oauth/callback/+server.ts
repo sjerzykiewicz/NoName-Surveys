@@ -9,14 +9,14 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 	const oauth_token_secret = cookies.get('oauth_token_secret');
 
 	if (!oauth_token || !oauth_verifier || !oauth_token_secret) {
-		console.log('Missing oauth_token or oauth_verifier or oauth_token_secret');
+		console.error('Missing oauth_token or oauth_verifier or oauth_token_secret');
 		throw error(400, 'Missing oauth_token or oauth_verifier or oauth_token_secret');
 	}
 
 	const oauth = getOAuthInstance();
 
 	const requestData = {
-		url: 'https://usosapps.amu.edu.pl/services/oauth/access_token',
+		url: env.AUTH_USOS_BASE_URL + 'services/oauth/access_token',
 		method: 'POST',
 		data: { oauth_verifier }
 	};
@@ -41,7 +41,7 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		const responseData = Object.fromEntries(params.entries());
 
 		const requestDataUser = {
-			url: 'https://usosapps.amu.edu.pl/services/users/user?fields=email',
+			url: env.AUTH_USOS_BASE_URL + 'services/users/user?fields=email',
 			method: 'GET'
 		};
 

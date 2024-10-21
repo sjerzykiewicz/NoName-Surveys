@@ -7,7 +7,7 @@ export const POST: RequestHandler = async () => {
 	const oauth = getOAuthInstance();
 
 	const requestData = {
-		url: 'https://usosapps.amu.edu.pl/services/oauth/request_token?scopes=email',
+		url: env.AUTH_USOS_BASE_URL + 'services/oauth/request_token?scopes=email',
 		method: 'POST',
 		data: {
 			oauth_callback: env.ORIGIN + '/api/oauth/callback'

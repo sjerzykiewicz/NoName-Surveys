@@ -9,6 +9,7 @@
 					'Content-Type': 'application/json'
 				}
 			});
+			location.reload();
 		} catch (error) {
 			console.error('OAuth sign-out failed:', error);
 		}

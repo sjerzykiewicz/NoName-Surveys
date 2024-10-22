@@ -1,6 +1,4 @@
 <script lang="ts">
-	// import { signOut } from '@auth/sveltekit/client';
-
 	async function signOut() {
 		try {
 			await fetch('/api/oauth/sign-out', {
@@ -17,9 +15,6 @@
 </script>
 
 <div class="sign-buttons">
-	<!-- <button title="Sign out" class="sign-out" on:click={() => signOut()}
-		><i class="material-symbols-rounded">logout</i>Sign Out</button
-	> -->
 	<button title="Sign out" class="sign-out" on:click={signOut}
 		><i class="material-symbols-rounded">logout</i>Sign Out</button
 	>

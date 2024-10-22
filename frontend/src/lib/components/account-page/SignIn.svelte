@@ -1,5 +1,5 @@
 <script lang="ts">
-	// import { signIn } from '@auth/sveltekit/client';
+	import logo from '$lib/assets/uam_color_neg.svg';
 
 	async function startOAuth() {
 		try {
@@ -26,23 +26,12 @@
 	}
 </script>
 
-<h1>Authorize yourself with WMI USOS:</h1>
+<h1>Authorize yourself by UAM USOS:</h1>
 <div class="sign-buttons">
 	<button title="USOS" class="sign-in" on:click={startOAuth}
-		><img src="/wmi.png" alt="wmi_logo" class="wmi-logo" /></button
+		><img src={logo} alt="wmi_logo" class="wmi-logo" /></button
 	>
 </div>
-<!-- INFO: Uncomment the following code if you want to use OAuth2 for signing in -->
-<!-- <h1>Sign in with:</h1>
-<div class="sign-buttons">
-	<button title="Google" class="sign-in" on:click={() => signIn('google')}
-		><i class="fa-brands fa-google"></i></button
-	>
-	<button title="GitHub" class="sign-in" on:click={() => signIn('github')}
-		><i class="fa-brands fa-github"></i></button
-	>
-	<button title="X" class="sign-in" disabled><i class="fa-brands fa-x-twitter"></i></button>
-</div> -->
 <div title="Account information" class="info">
 	<div class="text">
 		Authorizing yourself will enable you to:
@@ -125,7 +114,7 @@
 	}
 
 	.wmi-logo {
-		height: 2em;
+		height: 3em;
 	}
 
 	@media screen and (max-width: 768px) {

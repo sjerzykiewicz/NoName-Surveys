@@ -1,6 +1,6 @@
 import Crypto.Hash.SHA3_384 as SHA384
 import Crypto.Hash.SHAKE256 as SHAKE256
-import gmpy2
+from gmpy2 import add, f_mod, mpz, mul, powmod
 
 # cyclic group parameters
 # from RFC 5114
@@ -72,17 +72,17 @@ G_HEX = "".join(
 )
 
 
-p = gmpy2.mpz(P_HEX, 16)
-q = gmpy2.mpz(Q_HEX, 16)
-r = gmpy2.mpz(R_HEX, 16)
-g = gmpy2.mpz(G_HEX, 16)
+p = mpz(P_HEX, 16)
+q = mpz(Q_HEX, 16)
+r = mpz(R_HEX, 16)
+g = mpz(G_HEX, 16)
 
 
 # h1 : {0,1}* -> Zq/Z
 # hash to {0,1}^k, reduce mod q
 def h1(x: str):
     encoded = x.encode("utf-8")
-    return gmpy2.f_mod(gmpy2.mpz(SHA384.new(encoded).hexdigest(), 16), q)
+    return f_mod(mpz(SHA384.new(encoded).hexdigest(), 16), q)
 
 
 # h2 : {0,1}* -> <g>
@@ -91,19 +91,19 @@ def h2(x: str):
     # hash to {0,1}^2716
     shake = SHAKE256.new()
     shake.update(encoded)
-    hashed = gmpy2.mpz(shake.read(2176).hex(), 16)
+    hashed = mpz(shake.read(2176).hex(), 16)
 
     # reduce mod (p-1) -> element of Z(p-1)/Z
-    hashed = gmpy2.f_mod(hashed, (p - 1))
+    hashed = f_mod(hashed, (p - 1))
 
     # add 1 -> element of Z*p
-    hashed = gmpy2.add(hashed, 1)
+    hashed = add(hashed, 1)
 
     # i^r is an element of <g>
-    return gmpy2.powmod(hashed, r, p)
+    return powmod(hashed, r, p)
 
 
-def verify_lrs(message: str, keys: list[gmpy2.mpz], signature: list[gmpy2.mpz]) -> bool:
+def verify_lrs(message: str, keys: list[mpz], signature: list[mpz]) -> bool:
     concatenated_keys: str = "".join([k.digits() for k in keys])
 
     h = h2(concatenated_keys)
@@ -115,21 +115,21 @@ def verify_lrs(message: str, keys: list[gmpy2.mpz], signature: list[gmpy2.mpz]) 
     s = signature[1]
     c = signature[2:]
 
-    prod_y_c = gmpy2.mpz(1)
-    sum_c = gmpy2.mpz(0)
+    prod_y_c = mpz(1)
+    sum_c = mpz(0)
 
     for i in range(n):
-        prod_y_c = gmpy2.mul(prod_y_c, gmpy2.powmod(int(keys[i]), c[i], p))
-        sum_c = gmpy2.f_mod(gmpy2.add(sum_c, c[i]), q)
+        prod_y_c = mul(prod_y_c, powmod(int(keys[i]), c[i], p))
+        sum_c = f_mod(add(sum_c, c[i]), q)
 
-    g_to_s = gmpy2.powmod(g, s, p)
-    h_to_s = gmpy2.powmod(h, s, p)
+    g_to_s = powmod(g, s, p)
+    h_to_s = powmod(h, s, p)
 
     for_hashing = (
         concatenated_keys
         + y0.digits()
         + message
-        + (gmpy2.f_mod(gmpy2.mul(g_to_s, prod_y_c), p)).digits()
-        + (gmpy2.f_mod(gmpy2.mul(h_to_s, gmpy2.powmod(y0, sum_c, p)), p)).digits()
+        + (f_mod(mul(g_to_s, prod_y_c), p)).digits()
+        + (f_mod(mul(h_to_s, powmod(y0, sum_c, p)), p)).digits()
     )
     return sum_c == h1(for_hashing)

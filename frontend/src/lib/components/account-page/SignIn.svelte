@@ -26,10 +26,10 @@
 	}
 </script>
 
-<h1>Authorize yourself by UAM USOS:</h1>
+<h1>Authorize yourself by AMU USOS:</h1>
 <div class="sign-buttons">
 	<button title="USOS" class="sign-in" on:click={startOAuth}
-		><img src={logo} alt="wmi_logo" class="wmi-logo" /></button
+		><img src={logo} alt="amu_logo" class="amu-logo" /></button
 	>
 </div>
 <div title="Account information" class="info">
@@ -113,7 +113,7 @@
 		font-size: 1.25em;
 	}
 
-	.wmi-logo {
+	.amu-logo {
 		height: 3em;
 	}
 

@@ -55,7 +55,9 @@ import { signIn } from '@auth/sveltekit/client';
 ```ts
 // src/lib/components/account-page/SignOut.svelte
 import { signOut } from '@auth/sveltekit/client';
+<div class="sign-buttons">
 	<button title="Sign out" class="sign-out" on:click={() => signOut()}
 		><i class="material-symbols-rounded">logout</i>Sign Out</button
 	>
+</div>
 ```

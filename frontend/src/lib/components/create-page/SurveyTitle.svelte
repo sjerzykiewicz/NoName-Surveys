@@ -55,6 +55,7 @@
 	.char-count {
 		left: 88%;
 		font-size: 0.7em;
+		bottom: 10px;
 	}
 
 	@media screen and (max-width: 768px) {

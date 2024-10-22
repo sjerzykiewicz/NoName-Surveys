@@ -11,10 +11,18 @@
 	import { M, S } from '$lib/stores/global';
 
 	export let groups: string[];
+	export let selectedGroupsToRemove: string[] = [];
+	export let editedIndex: number = -1;
 
-	let editedIndex: number = -1;
 	let newName: string = '';
 	let nameError: GroupError = GroupError.NoError;
+
+	$: allSelected =
+		selectedGroupsToRemove.length === groups.length && selectedGroupsToRemove.length > 0;
+
+	function toggleAll() {
+		selectedGroupsToRemove = allSelected ? [] : [...groups];
+	}
 
 	async function checkCorrectness(name: string) {
 		nameError = GroupError.NoError;
@@ -25,7 +33,7 @@
 			nameError = GroupError.NameTooLong;
 		} else if (groups.some((g) => g === n)) {
 			nameError = GroupError.NameNonUnique;
-		} else if (n.match(/^[\p{L}\p{N} -]+$/u) === null) {
+		} else if (n.match(/^[\p{L}\p{N} /-]+$/u) === null) {
 			nameError = GroupError.NameInvalid;
 		}
 
@@ -38,25 +46,10 @@
 		return true;
 	}
 
-	function deleteGroup(name: string, i: number) {
-		fetch('/api/groups/delete', {
-			method: 'POST',
-			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-			.then(() => {
-				groups.splice(i, 1);
-				invalidateAll();
-			})
-			.catch(() => alert('Error deleting group'));
-	}
-
 	async function renameGroup(name: string, new_name: string) {
 		if (!(await checkCorrectness(new_name))) return;
 
-		fetch('/api/groups/rename', {
+		const response = await fetch('/api/groups/rename', {
 			method: 'POST',
 			body: JSON.stringify({
 				user_email: $page.data.session?.user?.email,
@@ -66,13 +59,17 @@
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		})
-			.then(() => {
-				editedIndex = -1;
-				newName = '';
-				invalidateAll();
-			})
-			.catch(() => alert('Error renaming group'));
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			alert(body.detail);
+			return;
+		}
+
+		editedIndex = -1;
+		newName = '';
+		invalidateAll();
 	}
 
 	let innerWidth: number;
@@ -94,10 +91,25 @@
 {:else}
 	<table>
 		<tr>
+			<th title="Select all" class="checkbox-entry" class:disabled={groups.length === 0}
+				><label
+					><input
+						type="checkbox"
+						disabled={groups.length === 0}
+						on:change={toggleAll}
+						checked={allSelected}
+					/></label
+				></th
+			>
 			<th title="Group title" id="title-header" colspan="3">Group Title</th>
 		</tr>
-		{#each groups as group, groupIndex}
+		{#each groups.toSorted() as group, groupIndex}
 			<tr>
+				<td title="Select {group}" class="checkbox-entry"
+					><label>
+						<input type="checkbox" bind:group={selectedGroupsToRemove} value={group} />
+					</label></td
+				>
 				{#if editedIndex === groupIndex}
 					<td
 						title="Stop renaming the group"
@@ -143,20 +155,15 @@
 						class="button-entry"
 						on:click={() => {
 							editedIndex = groupIndex;
+							newName = '';
 							nameError = GroupError.NoError;
 						}}><i class="material-symbols-rounded">edit</i></td
 					>
 					<td
 						title="Open the group"
 						class="title-entry"
+						colspan="2"
 						on:click={() => goto('/groups/' + encodeURI(group))}>{group}</td
-					>
-					<td
-						title="Delete the group"
-						class="button-entry"
-						on:click={() => deleteGroup(group, groupIndex)}
-					>
-						<i class="material-symbols-rounded">delete</i></td
 					>
 				{/if}
 			</tr>

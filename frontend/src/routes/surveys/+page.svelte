@@ -3,7 +3,7 @@
 	import Header from '$lib/components/Header.svelte';
 	import Content from '$lib/components/Content.svelte';
 	import SurveysTable from '$lib/components/surveys-page/SurveysTable.svelte';
-	import { LIMIT_OF_ACTIVE_SURVEYS } from '$lib/stores/global';
+	import { LIMIT_OF_SURVEYS } from '$lib/stores/global';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { afterUpdate } from 'svelte';
@@ -20,14 +20,14 @@
 <Header>
 	<div class="title">
 		Your surveys
-		<span title="Number of surveys" class:max={numSurveys >= $LIMIT_OF_ACTIVE_SURVEYS}
-			>[ {numSurveys} / {$LIMIT_OF_ACTIVE_SURVEYS} ]</span
+		<span title="Number of surveys" class:max={numSurveys >= $LIMIT_OF_SURVEYS}
+			>[ {numSurveys} / {$LIMIT_OF_SURVEYS} ]</span
 		>
 	</div>
 </Header>
 
 <Content>
-	{#if numSurveys >= $LIMIT_OF_ACTIVE_SURVEYS}
+	{#if numSurveys >= $LIMIT_OF_SURVEYS}
 		<p
 			title="Survey limit reached"
 			class="error"
@@ -37,7 +37,7 @@
 			Please delete some surveys to create new ones.
 		</p>
 	{/if}
-	<SurveysTable survey_list={data.survey_list} />
+	<SurveysTable survey_list={data.survey_list.toReversed()} />
 </Content>
 
 <style>

@@ -230,9 +230,10 @@
 		if (!response.ok) {
 			const body = await response.json();
 			alert(body.detail);
-		} else {
-			isModalHidden = false;
+			return;
 		}
+
+		isModalHidden = false;
 	}
 
 	function getKeys(text: string): KeyPair {

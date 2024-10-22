@@ -6,7 +6,7 @@
 	import Back from '$lib/components/Back.svelte';
 	import type { LayoutServerData } from './$types';
 	import AnswersTable from '$lib/components/summary-page/AnswersTable.svelte';
-	import RespondentList from '$lib/components/summary-page/RespondentList.svelte';
+	import RespondentsTable from '$lib/components/summary-page/RespondentsTable.svelte';
 	import { goto } from '$app/navigation';
 
 	export let data: LayoutServerData;
@@ -30,7 +30,7 @@
 		<AnswersTable {numbers} />
 	{/if}
 	{#if data.survey.uses_cryptographic_module}
-		<RespondentList respondents={data.respondents} />
+		<RespondentsTable respondents={data.respondents} />
 	{/if}
 </Content>
 

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from gmpy2 import mpz
 from sqlmodel import Session
 
 import src.db.crud.answer as answer_crud
@@ -98,7 +99,7 @@ async def save_survey_answer(
             )
 
         public_keys = [
-            ring_member.public_key
+            mpz(ring_member.public_key)
             for ring_member in ring_member_crud.get_ring_members_for_survey(
                 survey.id, session
             )
@@ -106,7 +107,7 @@ async def save_survey_answer(
         if not verify_lrs(
             survey.survey_code,
             public_keys,
-            [int(x) for x in survey_answer.signature],
+            [mpz(x) for x in survey_answer.signature],
         ):
             raise HTTPException(
                 status_code=400,

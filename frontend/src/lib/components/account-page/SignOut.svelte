@@ -1,9 +1,21 @@
 <script lang="ts">
-	import { signOut } from '@auth/sveltekit/client';
+	async function signOut() {
+		try {
+			await fetch('/api/oauth/sign-out', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			location.reload();
+		} catch (error) {
+			console.error('OAuth sign-out failed:', error);
+		}
+	}
 </script>
 
 <div class="sign-buttons">
-	<button title="Sign out" class="sign-out" on:click={() => signOut()}
+	<button title="Sign out" class="sign-out" on:click={signOut}
 		><i class="material-symbols-rounded">logout</i>Sign Out</button
 	>
 </div>

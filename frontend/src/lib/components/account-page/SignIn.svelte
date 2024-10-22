@@ -1,16 +1,36 @@
 <script lang="ts">
-	import { signIn } from '@auth/sveltekit/client';
+	import logo from '$lib/assets/uam_color_neg.svg';
+
+	async function startOAuth() {
+		try {
+			const response = await fetch('/api/oauth/request-token', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			const data = await response.json();
+
+			const expires = new Date(Date.now() + 3 * 60 * 1000).toUTCString();
+			document.cookie = `oauth_token_secret=${data.oauth_token_secret}; path=/; secure; expires=${expires}`;
+
+			if (data.oauth_token) {
+				window.location.href = `/auth/redirect?oauth_token=${data.oauth_token}`;
+			} else {
+				console.error('Failed to get OAuth token');
+			}
+		} catch (error) {
+			console.error('OAuth request failed:', error);
+		}
+	}
 </script>
 
-<h1>Sign in with:</h1>
+<h1>Authorize yourself by AMU USOS:</h1>
 <div class="sign-buttons">
-	<button title="Google" class="sign-in" on:click={() => signIn('google')}
-		><i class="fa-brands fa-google"></i></button
+	<button title="USOS" class="sign-in" on:click={startOAuth}
+		><img src={logo} alt="amu_logo" class="amu-logo" /></button
 	>
-	<button title="GitHub" class="sign-in" on:click={() => signIn('github')}
-		><i class="fa-brands fa-github"></i></button
-	>
-	<button title="X" class="sign-in" disabled><i class="fa-brands fa-x-twitter"></i></button>
 </div>
 <div title="Account information" class="info">
 	<div class="text">
@@ -87,6 +107,14 @@
 
 	.sign-in {
 		font-size: 2em;
+	}
+
+	.info {
+		font-size: 1.25em;
+	}
+
+	.amu-logo {
+		height: 3em;
 	}
 
 	@media screen and (max-width: 768px) {

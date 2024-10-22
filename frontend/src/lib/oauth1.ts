@@ -1,9 +1,7 @@
-// src/lib/oauth1.ts
 import OAuth from 'oauth-1.0a';
 import CryptoJS from 'crypto-js';
 import { env } from '$env/dynamic/private';
 
-// Initialize OAuth 1.0a
 export const getOAuthInstance = () => {
 	return new OAuth({
 		consumer: {

@@ -13,6 +13,8 @@
 	--accent-dark-color: #005cc8;
 	--error-color: #ff3333;
 	--error-dark-color: #990000;
+	--amu-color: #002d69;
+	--amu-dark-color: #00214d;
 
 	--tooltip-width: 12em;
 }
@@ -31,6 +33,8 @@
 	--accent-dark-color: #005cc8;
 	--error-color: #ff3333;
 	--error-dark-color: #990000;
+	--amu-color: #002d69;
+	--amu-dark-color: #00214d;
 }
 
 @font-face {
@@ -40,6 +44,7 @@
 
 @font-face {
 	font-family: Material Symbols Rounded;
+	font-display: block;
 	src: url('lib/fonts/MaterialSymbolsRounded-VariableFont_FILL,GRAD,opsz,wght.ttf');
 }
 
@@ -160,6 +165,44 @@ body {
 .select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:active,
 .select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb:active {
 	background-color: var(--border-color);
+}
+
+/* sign in AMU button */
+
+.sign-in {
+	justify-content: center;
+	width: 4em;
+	height: 4em;
+	font-size: 2em;
+	padding: 0em;
+	background-color: var(--amu-color);
+	transition: background-color 0.2s;
+}
+
+.sign-in:hover {
+	background-color: var(--amu-dark-color);
+}
+
+:root[data-color-scheme='light'] .sign-in {
+	background-color: var(--primary-color);
+}
+
+:root[data-color-scheme='light'] .sign-in:hover {
+	background-color: var(--secondary-color);
+}
+
+.sign-in:active,
+:root[data-color-scheme='light'] .sign-in:active {
+	background-color: var(--border-color);
+}
+
+.amu-logo {
+	height: 3em;
+	filter: invert(99%) sepia(0%) saturate(0%) hue-rotate(268deg) brightness(108%) contrast(100%);
+}
+
+:root[data-color-scheme='light'] .amu-logo {
+	filter: invert(15%) sepia(38%) saturate(3554%) hue-rotate(196deg) brightness(95%) contrast(108%);
 }
 
 /* buttons */

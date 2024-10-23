@@ -3,6 +3,8 @@
 	import type { ActionData } from '../../../routes/$types';
 	import Content from '$lib/components/Content.svelte';
 	import { M } from '$lib/stores/global';
+	import { slide } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
 
 	export let form: ActionData;
 
@@ -26,15 +28,16 @@
 				autocomplete="off"
 				autofocus={innerWidth > $M}
 			/>
+			{#if form?.error}
+				<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+					<i class="material-symbols-rounded">error</i>{form.error}
+				</p>
+			{/if}
 			<button title="Submit the code" class="save" type="submit">
 				<i class="material-symbols-rounded">done</i>Submit
 			</button>
 		</label>
 	</form>
-
-	{#if form?.error}
-		<p title="Error" class="error"><i class="material-symbols-rounded">error</i>{form.error}</p>
-	{/if}
 </Content>
 
 <style>
@@ -73,19 +76,22 @@
 		box-shadow: 0px 4px 4px var(--shadow-color);
 		color: var(--text-color);
 		font-weight: bold;
-		font-size: 1.25em;
+		font-size: 1.5em;
 		width: 4.25em;
 		margin-top: 0.5em;
 		margin-left: auto;
 		margin-right: auto;
 	}
 
-	.save {
-		margin: 0.75em auto 0em auto;
-	}
-
 	.error {
 		justify-content: center;
+		font-size: 0.5em;
+		margin-bottom: -1.2em;
+	}
+
+	.save {
+		font-size: 1.25em;
+		margin: 0.75em auto 0em auto;
 	}
 
 	.save i {
@@ -93,9 +99,16 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		input,
-		.error {
+		h1 {
+			font-size: 2.5em;
+		}
+
+		input {
 			font-size: 1em;
+		}
+
+		.error {
+			font-size: 0.5em;
 		}
 
 		form {

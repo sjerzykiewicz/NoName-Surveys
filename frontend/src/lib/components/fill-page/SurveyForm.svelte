@@ -383,6 +383,11 @@
 		cursor: default;
 	}
 
+	.load-div label {
+		display: block;
+		width: fit-content;
+	}
+
 	.load-text,
 	.load-div label {
 		font-size: 1.2em;

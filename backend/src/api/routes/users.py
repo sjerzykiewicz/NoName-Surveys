@@ -2,7 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 import src.db.crud.user as user_crud
-from src.api.models.users.user import User, UserUpdatePublicKey  # noqa
+from src.api.models.users.user import (  # noqa
+    User,
+    UserFilterOthers,
+    UserUpdatePublicKey,
+)
 from src.db.base import get_session
 from src.db.models.user import UserBase, UserWithKey
 
@@ -83,3 +87,36 @@ async def update_user_public_key(
         session,
     )
     return {"message": "User's public key updated successfully"}
+
+
+@router.post(
+    "/filter-unregistered-users",
+    response_description="Returns a list of user emails that are not registered",
+    response_model=list[str],
+)
+async def filter_unregistered_users(
+    user_input: UserFilterOthers,
+    session: Session = Depends(get_session),
+):
+    matched_users = {
+        user.email for user in user_crud.get_users_by_emails(user_input.emails, session)
+    }
+    return [email for email in user_input.emails if email not in matched_users]
+
+
+@router.post(
+    "/filter-users-with-no-public-key",
+    response_description="Returns a list of user emails that have no public key",
+    response_model=list[str],
+)
+async def filter_users_with_no_public_keys(
+    user_input: UserFilterOthers,
+    session: Session = Depends(get_session),
+):
+    matched_users = {
+        user.email
+        for user in user_crud.get_users_with_public_keys_by_emails(
+            user_input.emails, session
+        )
+    }
+    return [email for email in user_input.emails if email not in matched_users]

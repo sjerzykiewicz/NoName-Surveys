@@ -143,7 +143,7 @@
 		disabled={selectedMembersToRemove.length === 0}
 		on:click={removeMembers}
 	>
-		<i class="material-symbols-rounded">delete</i>Members
+		<i class="material-symbols-rounded">delete</i>Delete
 	</button>
 </div>
 <div class="button-row">

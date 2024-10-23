@@ -171,7 +171,7 @@
 			disabled={selectedSurveysToRemove.length === 0}
 			on:click={deleteSurveys}
 		>
-			<i class="material-symbols-rounded">delete</i>Surveys
+			<i class="material-symbols-rounded">delete</i>Delete
 		</button>
 	{/if}
 </div>

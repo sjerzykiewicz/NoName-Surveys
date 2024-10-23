@@ -13,3 +13,10 @@
 		maxSelect={1}
 	/>
 </div>
+
+<style>
+	.select-list {
+		font-size: 1em;
+		margin-right: 0em;
+	}
+</style>

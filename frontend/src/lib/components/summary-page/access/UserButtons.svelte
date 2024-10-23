@@ -107,7 +107,7 @@
 		disabled={selectedUsersToRemove.length === 0}
 		on:click={removeUsers}
 	>
-		<i class="material-symbols-rounded">delete</i>Members
+		<i class="material-symbols-rounded">delete</i>Delete
 	</button>
 </div>
 {#if isPanelVisible}

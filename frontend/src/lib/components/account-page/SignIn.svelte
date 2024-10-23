@@ -1,5 +1,5 @@
 <script lang="ts">
-	import logo from '$lib/assets/uam_color_neg.svg';
+	import amu from '$lib/assets/amu.png';
 
 	async function startOAuth() {
 		try {
@@ -26,10 +26,10 @@
 	}
 </script>
 
-<h1>Authorize yourself by AMU USOS:</h1>
+<h1>Authorize yourself with AMU USOS:</h1>
 <div class="sign-buttons">
-	<button title="USOS" class="sign-in" on:click={startOAuth}
-		><img src={logo} alt="amu_logo" class="amu-logo" /></button
+	<button title="AMU USOS" class="sign-in" on:click={startOAuth}
+		><img src={amu} alt="AMU logo" class="amu-logo" /></button
 	>
 </div>
 <div title="Account information" class="info">
@@ -102,21 +102,8 @@
 		margin-bottom: 2em;
 	}
 
-	.sign-in {
-		margin-left: 0.5em;
-		margin-right: 0.5em;
-	}
-
-	.sign-in {
-		font-size: 2em;
-	}
-
 	.info {
 		font-size: 1.25em;
-	}
-
-	.amu-logo {
-		height: 3em;
 	}
 
 	@media screen and (max-width: 768px) {

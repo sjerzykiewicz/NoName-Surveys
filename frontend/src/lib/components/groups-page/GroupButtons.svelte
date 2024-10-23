@@ -135,7 +135,7 @@
 			disabled={selectedGroupsToRemove.length === 0}
 			on:click={deleteGroups}
 		>
-			<i class="material-symbols-rounded">delete</i>Groups
+			<i class="material-symbols-rounded">delete</i>Delete
 		</button>
 	{/if}
 </div>

@@ -282,7 +282,7 @@
 			disabled={selectedDraftsToRemove.length === 0}
 			on:click={deleteDrafts}
 		>
-			<i class="material-symbols-rounded">delete</i>Drafts
+			<i class="material-symbols-rounded">delete</i>Delete
 		</button>
 	{/if}
 </div>

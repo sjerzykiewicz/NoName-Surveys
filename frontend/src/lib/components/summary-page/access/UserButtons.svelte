@@ -8,6 +8,7 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
 	import UsersError from './UsersError.svelte';
+	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 
 	export let users: string[];
 	export let code: string;
@@ -55,7 +56,8 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			alert(body.detail);
+			$errorModalContent = body.detail;
+			$isErrorModalHidden = false;
 			return;
 		}
 
@@ -80,7 +82,8 @@
 
 			if (!response.ok) {
 				const body = await response.json();
-				alert(body.detail);
+				$errorModalContent = body.detail;
+				$isErrorModalHidden = false;
 				return;
 			}
 

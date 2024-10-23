@@ -5,6 +5,8 @@
 	export let icon: string;
 	export let title: string;
 	export let width: number = 20;
+	export let textColor: string = 'var(--text-color)';
+	export let borderColor: string = 'var(--border-color)';
 	export let hide: () => void = () => (isHidden = true);
 
 	onMount(() => {
@@ -23,8 +25,12 @@
 </script>
 
 <section class="overlay" class:hidden={isHidden}>
-	<div class="modal" class:hidden={isHidden} style="width: {width}em">
-		<div class="top">
+	<div
+		class="modal"
+		class:hidden={isHidden}
+		style="width: {width}em;color: {textColor};border-color: {borderColor};"
+	>
+		<div class="top" style="border-bottom-color: {borderColor};">
 			<div class="caption">
 				<i class="material-symbols-rounded">{icon}</i>{title}
 			</div>
@@ -71,11 +77,11 @@
 		top: 10%;
 		position: absolute;
 		background-color: var(--secondary-color);
-		border: 1px solid var(--border-color);
+		border-width: 1px;
+		border-style: solid;
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color);
 		font-size: 1.2em;
-		color: var(--text-color);
 		z-index: 10;
 		opacity: 1;
 		transform: scale(100%);
@@ -96,7 +102,8 @@
 		align-items: center;
 		justify-content: space-between;
 		background-color: var(--secondary-dark-color);
-		border-bottom: 1px solid var(--border-color);
+		border-bottom-width: 1px;
+		border-bottom-style: solid;
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
 		padding: 0.5em;
@@ -123,6 +130,7 @@
 		justify-content: center;
 		align-items: center;
 		padding: 1em;
+		color: var(--text-color);
 		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color);
 		cursor: default;

@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 	import { copy } from '$lib/utils/copy';
 	import { popup } from '$lib/utils/popup';
-	import { M } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 
 	export let isHidden: boolean = true;
 	export let title: string;
@@ -14,6 +14,9 @@
 	async function handleCopy(str: string, id: string) {
 		if (copy(str)) {
 			popup(id);
+		} else {
+			$errorModalContent = 'Could not copy due to an insecure connection.';
+			$isErrorModalHidden = false;
 		}
 	}
 

@@ -1,4 +1,4 @@
-import { readable, type Readable } from 'svelte/store';
+import { readable, type Readable, writable, type Writable } from 'svelte/store';
 
 export const XS: Readable<number> = readable(320);
 export const S: Readable<number> = readable(425);
@@ -10,3 +10,6 @@ export const LIMIT_OF_SURVEYS: Readable<number> = readable(50);
 export const LIMIT_OF_DRAFTS: Readable<number> = readable(50);
 export const LIMIT_OF_GROUPS: Readable<number> = readable(50);
 export const LIMIT_OF_CHARS: Readable<number> = readable(5000);
+
+export const isErrorModalHidden: Writable<boolean> = writable(true);
+export const errorModalContent: Writable<string> = writable('');

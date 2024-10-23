@@ -23,7 +23,7 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
-	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
 
 	export let isPreview: boolean = false;
 	export let cryptoError: boolean = false;
@@ -138,7 +138,8 @@
 
 			if (!response.ok) {
 				const body = await response.json();
-				alert(body.detail);
+				$errorModalContent = body.detail;
+				$isErrorModalHidden = false;
 				return;
 			}
 
@@ -161,7 +162,8 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			alert(body.detail);
+			$errorModalContent = body.detail;
+			$isErrorModalHidden = false;
 			return;
 		}
 
@@ -202,7 +204,8 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			alert(body.detail);
+			$errorModalContent = body.detail;
+			$isErrorModalHidden = false;
 			return;
 		}
 

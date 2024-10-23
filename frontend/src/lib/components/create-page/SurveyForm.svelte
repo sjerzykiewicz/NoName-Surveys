@@ -19,6 +19,7 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
 	import { popup } from '$lib/utils/popup';
+	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 
 	export let users: string[];
 	export let groups: string[];
@@ -48,7 +49,8 @@
 
 			if (!deleteResponse.ok) {
 				const body = await deleteResponse.json();
-				alert(body.detail);
+				$errorModalContent = body.detail;
+				$isErrorModalHidden = false;
 				return;
 			}
 		}
@@ -63,7 +65,8 @@
 
 		if (!createResponse.ok) {
 			const body = await createResponse.json();
-			alert(body.detail);
+			$errorModalContent = body.detail;
+			$isErrorModalHidden = false;
 			return;
 		}
 

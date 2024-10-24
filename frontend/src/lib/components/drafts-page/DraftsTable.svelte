@@ -49,8 +49,8 @@
 		selectedDraftsToRemove = allSelected ? [] : [...drafts];
 	}
 
-	function formatDate(isoString: string) {
-		return new Date(isoString);
+	function formatDate(isoString: string): string {
+		return new Date(isoString).toLocaleString();
 	}
 
 	async function deleteDrafts() {

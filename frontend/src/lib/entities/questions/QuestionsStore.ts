@@ -1,5 +1,5 @@
 import type { ComponentType } from 'svelte';
-import { QuestionError } from '$lib/entities/QuestionError';
+import { SurveyError } from '$lib/entities/SurveyError';
 
 export default class QuestionsStore {
 	component: ComponentType;
@@ -7,14 +7,14 @@ export default class QuestionsStore {
 	required: boolean;
 	question: string;
 	choices: Array<string>;
-	error: QuestionError;
+	error: SurveyError;
 	constructor(
 		component: ComponentType,
 		preview: ComponentType,
 		required: boolean,
 		question: string,
 		choices: Array<string>,
-		error: QuestionError
+		error: SurveyError
 	) {
 		this.component = component;
 		this.preview = preview;

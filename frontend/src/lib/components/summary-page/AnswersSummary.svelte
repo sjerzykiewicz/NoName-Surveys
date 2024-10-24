@@ -8,6 +8,7 @@
 	import SliderSummary from '$lib/components/summary-page/SliderSummary.svelte';
 	import BinarySummary from '$lib/components/summary-page/BinarySummary.svelte';
 	import RankSummary from '$lib/components/summary-page/RankSummary.svelte';
+	import NumberSummary from '$lib/components/summary-page/NumberSummary.svelte';
 	import type { ComponentType } from 'svelte';
 	import type { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
 	import type { TextQuestionAnswered } from '$lib/entities/questions/Text';
@@ -18,6 +19,7 @@
 	import type { SliderQuestionAnswered } from '$lib/entities/questions/Slider';
 	import type { RankQuestionAnswered } from '$lib/entities/questions/Rank';
 	import type { ListQuestionAnswered } from '$lib/entities/questions/List';
+	import type { NumberQuestionAnswered } from '$lib/entities/questions/Number';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	export let surveyAnswers;
@@ -28,6 +30,7 @@
 		multi: MultiSummary,
 		scale: ScaleSummary,
 		binary: BinarySummary,
+		number: NumberSummary,
 		slider: SliderSummary,
 		rank: RankSummary,
 		list: ListSummary
@@ -74,6 +77,11 @@
 				case 'binary':
 					answer = (question as BinaryQuestionAnswered).answer;
 					choices = (question as BinaryQuestionAnswered).choices;
+					break;
+				case 'number':
+					answer = (question as NumberQuestionAnswered).answer;
+					min_value = (question as NumberQuestionAnswered).min_value;
+					max_value = (question as NumberQuestionAnswered).max_value;
 					break;
 				case 'slider':
 					answer = (question as SliderQuestionAnswered).answer;

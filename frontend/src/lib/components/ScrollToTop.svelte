@@ -58,7 +58,7 @@
 		background-color: var(--border-color);
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.tooltip .tooltip-text {
 			font-size: 0.6em;
 		}

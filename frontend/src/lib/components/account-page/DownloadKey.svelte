@@ -1,70 +1,26 @@
 <script lang="ts">
-	import type { PageServerData } from '../../../routes/account/$types';
-	import init, { get_keypair } from 'wasm';
-	import { onMount } from 'svelte';
+	import { M } from '$lib/stores/global';
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
-	import Tx from 'sveltekit-translate/translate/tx.svelte';
-
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let data: PageServerData;
+	export let isModalHidden: boolean = true;
 
 	let innerWidth: number;
-
-	onMount(async () => {
-		await init();
-	});
-
-	function download(filename: string, text: string) {
-		var element = document.createElement('a');
-		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-		element.setAttribute('download', filename);
-
-		element.style.display = 'none';
-		document.body.appendChild(element);
-
-		element.click();
-
-		document.body.removeChild(element);
-	}
-
-	async function generateKeyPair() {
-		if (!confirm($t('account_new_key_alert'))) {
-			return;
-		}
-
-		const keyPair = get_keypair();
-		const publicKey = keyPair.get_public_key();
-		const privateKey = keyPair.get_private_key();
-		fetch('/api/users/update-public-key', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				email: data.session?.user?.email,
-				public_key: publicKey
-			})
-		}).then((res) => {
-			if (res.ok) {
-				download('noname-keys.txt', publicKey + '\n' + privateKey);
-			}
-		});
-	}
 </script>
 
 <svelte:window bind:innerWidth />
 
 <div class="download-key">
-	<button title="Generate new key pair" class="save" on:click={generateKeyPair}>
+	<button title={$t('account_new_key')} class="save" on:click={() => (isModalHidden = false)}>
 		<i class="material-symbols-rounded">encrypted</i><Tx text="account_new_key"></Tx>
 	</button>
 	<div class="tooltip">
 		<i class="material-symbols-rounded">info</i>
-		<span class="tooltip-text {innerWidth <= 633 ? 'bottom' : 'right'}">
+		<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
 			<Tx html="account_keys_info"></Tx>
 		</span>
 	</div>
@@ -72,7 +28,7 @@
 
 <style>
 	.tooltip {
-		--tooltip-width: 29em;
+		--tooltip-width: 25em;
 	}
 
 	.tooltip i {
@@ -85,7 +41,6 @@
 		align-items: center;
 		color: var(--text-color);
 		font-size: 1.5em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
 		width: fit-content;
 		margin-inline: auto;
 		padding-top: 1em;
@@ -97,39 +52,37 @@
 		margin-right: 0.5em;
 	}
 
-	@media screen and (max-width: 1512px) {
+	@media screen and (max-width: 1440px) {
 		.tooltip {
 			--tooltip-width: 17em;
 		}
 	}
 
-	@media screen and (max-width: 1048px) {
+	@media screen and (max-width: 1024px) {
 		.tooltip {
 			--tooltip-width: 9.5em;
 		}
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.download-key {
 			font-size: 1.25em;
 		}
-	}
 
-	@media screen and (max-width: 633px) {
 		.tooltip {
-			--tooltip-width: 19em;
+			--tooltip-width: 18em;
 		}
 
 		.tooltip .tooltip-text.bottom {
 			left: unset;
 			right: -25%;
 			margin-left: 0em;
-			margin-right: -0.75em;
+			margin-right: -1.15em;
 		}
 
 		.tooltip .tooltip-text.bottom::after {
-			left: 92%;
-			margin-left: -0.75em;
+			left: 91.5%;
+			margin-left: -1.15em;
 		}
 	}
 </style>

@@ -3,10 +3,12 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { limitInput } from '$lib/utils/limitInput';
 
 	export let questionIndex: number;
 
-	$questions[questionIndex].choices[1] = '';
+	let text: string = '';
 </script>
 
 <div
@@ -17,16 +19,22 @@
 	<div title="Question details" class="details">
 		{$questions[questionIndex].choices[0]}
 	</div>
-	<div
-		title="Enter your answer"
-		class="text-area"
-		contenteditable
-		bind:textContent={$questions[questionIndex].choices[1]}
-		role="textbox"
-		tabindex="0"
-		on:keydown={handleNewLine}
-	>
-		{$questions[questionIndex].choices[1]}
+	<div class="input-container" class:max={text.length > $LIMIT_OF_CHARS}>
+		<div
+			title="Enter your answer"
+			class="text-area"
+			contenteditable
+			bind:textContent={text}
+			role="textbox"
+			tabindex="0"
+			on:keydown={(e) => {
+				handleNewLine(e);
+				limitInput(e, $questions[questionIndex].choices[0], $LIMIT_OF_CHARS);
+			}}
+		>
+			{text}
+		</div>
+		<span class="char-count">{text.length} / {$LIMIT_OF_CHARS}</span>
 	</div>
 </div>
 

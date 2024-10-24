@@ -1,9 +1,13 @@
-export enum QuestionError {
+export enum SurveyError {
+	TitleRequired,
+	TitleTooLong,
 	QuestionRequired,
+	QuestionTooLong,
 	ChoicesRequired,
 	BinaryChoicesRequired,
 	SliderValuesRequired,
-	DuplicateChoices,
+	ChoicesTooLong,
 	ImproperSliderValues,
+	DuplicateChoices,
 	NoError
 }

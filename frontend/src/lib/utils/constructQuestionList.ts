@@ -7,6 +7,7 @@ import { ListQuestion } from '$lib/entities/questions/List';
 import { RankQuestion } from '$lib/entities/questions/Rank';
 import { TextQuestion } from '$lib/entities/questions/Text';
 import { BinaryQuestion } from '$lib/entities/questions/Binary';
+import { NumberQuestion } from '$lib/entities/questions/Number';
 import Single from '$lib/components/create-page/Single.svelte';
 import Multi from '$lib/components/create-page/Multi.svelte';
 import Scale from '$lib/components/create-page/Scale.svelte';
@@ -15,6 +16,7 @@ import List from '$lib/components/create-page/List.svelte';
 import Rank from '$lib/components/create-page/Rank.svelte';
 import Binary from '$lib/components/create-page/Binary.svelte';
 import Text from '$lib/components/create-page/Text.svelte';
+import Number from '$lib/components/create-page/Number.svelte';
 import QuestionsStore from '$lib/entities/questions/QuestionsStore';
 
 export function constructQuestionList(questions: Array<QuestionsStore>): Array<Question> {
@@ -41,6 +43,17 @@ export function constructQuestionList(questions: Array<QuestionsStore>): Array<Q
 					)
 				];
 				break;
+			case Number:
+				questionList = [
+					...questionList,
+					new NumberQuestion(
+						q.required,
+						q.question,
+						parseFloat(q.choices[0]),
+						parseFloat(q.choices[1])
+					)
+				];
+				break;
 			case List:
 				questionList = [...questionList, new ListQuestion(q.required, q.question, q.choices)];
 				break;
@@ -55,6 +68,5 @@ export function constructQuestionList(questions: Array<QuestionsStore>): Array<Q
 				break;
 		}
 	});
-
 	return questionList;
 }

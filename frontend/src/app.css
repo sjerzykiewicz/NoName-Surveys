@@ -13,6 +13,8 @@
 	--accent-dark-color: #005cc8;
 	--error-color: #ff3333;
 	--error-dark-color: #990000;
+	--amu-color: #002d69;
+	--amu-dark-color: #00214d;
 
 	--tooltip-width: 12em;
 }
@@ -31,6 +33,8 @@
 	--accent-dark-color: #005cc8;
 	--error-color: #ff3333;
 	--error-dark-color: #990000;
+	--amu-color: #002d69;
+	--amu-dark-color: #00214d;
 }
 
 @font-face {
@@ -40,6 +44,7 @@
 
 @font-face {
 	font-family: Material Symbols Rounded;
+	font-display: block;
 	src: url('lib/fonts/MaterialSymbolsRounded-VariableFont_FILL,GRAD,opsz,wght.ttf');
 }
 
@@ -162,6 +167,44 @@ body {
 	background-color: var(--border-color);
 }
 
+/* sign in AMU button */
+
+.sign-in {
+	justify-content: center;
+	width: 4em;
+	height: 4em;
+	font-size: 2em;
+	padding: 0em;
+	background-color: var(--amu-color);
+	transition: background-color 0.2s;
+}
+
+.sign-in:hover {
+	background-color: var(--amu-dark-color);
+}
+
+:root[data-color-scheme='light'] .sign-in {
+	background-color: var(--primary-color);
+}
+
+:root[data-color-scheme='light'] .sign-in:hover {
+	background-color: var(--secondary-color);
+}
+
+.sign-in:active,
+:root[data-color-scheme='light'] .sign-in:active {
+	background-color: var(--border-color);
+}
+
+.amu-logo {
+	height: 3em;
+	filter: invert(99%) sepia(0%) saturate(0%) hue-rotate(268deg) brightness(108%) contrast(100%);
+}
+
+:root[data-color-scheme='light'] .amu-logo {
+	filter: invert(15%) sepia(38%) saturate(3554%) hue-rotate(196deg) brightness(95%) contrast(108%);
+}
+
 /* buttons */
 
 button {
@@ -191,21 +234,28 @@ button:hover,
 	background-color: var(--secondary-color);
 }
 
-.save,
-.back {
+.save {
 	background-color: var(--accent-color);
 	color: var(--text-color-2);
 }
 
-.save:hover,
-.back:hover {
+.save:hover {
 	background-color: var(--accent-dark-color);
+}
+
+.not {
+	background-color: var(--error-color);
+	color: var(--text-color-2);
+}
+
+.not:hover {
+	background-color: var(--error-dark-color);
 }
 
 button:active,
 .footer-button:active,
 .save:active,
-.back:active {
+.not:active {
 	background-color: var(--border-color);
 }
 
@@ -218,7 +268,9 @@ button:active,
 	font-size: 1em;
 }
 
-.add-group {
+.add-group,
+.add-survey,
+.add-draft {
 	margin-right: 0.5em;
 	transition:
 		background-color 0.2s,
@@ -241,7 +293,9 @@ button:active,
 	transform: rotate(45deg);
 }
 
-.add-group i {
+.add-group i,
+.add-survey i,
+.add-draft i {
 	font-variation-settings: 'wght' 700;
 	transform: rotate(0deg);
 	transition: transform 0.2s;
@@ -259,10 +313,14 @@ button:active,
 .footer-button i,
 .error i,
 .save i,
-.back i,
 .sign-out i,
 .file-button i,
-.add-group i {
+.add-group i,
+.delete-group i,
+.add-survey i,
+.delete-survey i,
+.add-draft i,
+.delete-draft i {
 	margin-right: 0.15em;
 }
 
@@ -294,6 +352,16 @@ button:disabled {
 	background-color: var(--secondary-color);
 	color: var(--text-dark-color);
 	cursor: not-allowed;
+}
+
+.button-row {
+	display: flex;
+	flex-flow: row wrap;
+	align-items: flex-start;
+	justify-content: flex-start;
+	align-content: space-between;
+	font-size: 1.25em;
+	margin-top: 0.5em;
 }
 
 /* questions */
@@ -500,7 +568,7 @@ button:disabled {
 .choice-input.binary {
 	margin: 0.5em 0em 0em 0em;
 	max-width: 15em;
-	overflow-wrap: break-word;
+	overflow-wrap: anywhere;
 }
 
 .binary .icon {
@@ -625,6 +693,61 @@ div[contenteditable] * {
 	white-space: inherit !important;
 }
 
+.input-container {
+	flex: 1;
+	overflow: hidden;
+	padding: 0.2em;
+	margin: -0.2em;
+}
+
+.question-area .input-container,
+.choice-area .input-container {
+	margin-bottom: -1.4em;
+}
+
+.input-container div[contenteditable]:focus + .char-count {
+	visibility: visible;
+}
+
+.input-container.max .char-count {
+	color: var(--error-color);
+	border-color: var(--error-color);
+	visibility: visible;
+}
+
+.char-count {
+	position: relative;
+	bottom: 13px;
+	font-weight: 500;
+	color: var(--text-color);
+	background-color: var(--secondary-dark-color);
+	border-radius: 5px;
+	padding: 0.05em 0.25em;
+	cursor: default;
+	visibility: hidden;
+	z-index: 1;
+}
+
+.question-area .char-count,
+.choice-area .char-count,
+.group-input + .char-count,
+.table-input + .char-count {
+	left: 80%;
+	font-size: 0.56em;
+}
+
+.users-panel {
+	display: flex;
+	flex: 1;
+	align-items: flex-start;
+}
+
+.select-list {
+	font-size: 0.8em;
+	margin-right: 0.625em;
+	margin-bottom: 0em;
+}
+
 /* other */
 
 .rank {
@@ -651,6 +774,11 @@ input[type='radio'] {
 input[type='checkbox']:checked,
 input[type='radio']:checked {
 	accent-color: var(--accent-color);
+}
+
+input[type='checkbox']:disabled,
+input[type='radio']:disabled {
+	cursor: not-allowed;
 }
 
 .error {
@@ -708,6 +836,7 @@ input[type='radio']:checked {
 .crypto-row .tooltip i,
 .load-text .tooltip i {
 	color: var(--border-color);
+	text-shadow: 0px 4px 4px var(--shadow-color);
 }
 
 .info-row .tooltip .tooltip-text,
@@ -793,7 +922,7 @@ select:disabled {
 .select-list {
 	flex: 1;
 	box-shadow: 0px 4px 4px var(--shadow-color);
-	margin-bottom: 0.63em;
+	margin-bottom: 0.625em;
 }
 
 .info {
@@ -801,16 +930,13 @@ select:disabled {
 	flex-flow: row;
 	align-items: center;
 	justify-content: center;
-	margin: 1em 1em 0em 1em;
+	padding: 1.25em 0.5em 0em;
+	border-top: 1px solid var(--border-color);
 	text-shadow: 0px 4px 4px var(--shadow-color);
 	cursor: default;
 	overflow-wrap: break-word;
 	color: var(--text-color);
-}
-
-.info i {
-	font-size: 1.5em;
-	margin-right: 0.5em;
+	font-size: 1.25em;
 }
 
 .text {
@@ -826,7 +952,7 @@ table {
 	border-spacing: 0;
 	border-radius: 5px;
 	box-shadow: 0px 4px 4px var(--shadow-color);
-	font-size: 1.25em;
+	font-size: 1.15em;
 	color: var(--text-color);
 }
 
@@ -886,47 +1012,73 @@ tr:last-of-type th:last-of-type {
 	border-bottom-right-radius: 4px;
 }
 
+th label,
+td label {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+	cursor: pointer;
+}
+
 .title-entry,
 .code-entry,
-.button-entry {
+.button-entry,
+.checkbox-entry {
 	cursor: pointer;
 }
 
 .title-entry:hover,
 .code-entry:hover,
-.group-size-entry:hover,
-.button-entry:hover {
+.button-entry:hover,
+.checkbox-entry:hover {
 	background-color: var(--secondary-color);
 }
 
 .title-entry:active,
 .code-entry:active,
-.group-size-entry:active,
-.button-entry:active {
+.button-entry:active,
+.checkbox-entry:active {
 	background-color: var(--border-color);
 }
 
 .date-entry,
-.info-entry {
+.info-entry,
+.basic-entry {
 	cursor: default;
 }
 
+.date-entry {
+	font-size: 0.75em;
+}
+
 .button-entry {
-	width: 0em;
+	width: 1px;
 	text-align: center;
 	padding-left: 0.5em;
 	padding-right: 0.5em;
 }
 
-.button-entry.disabled {
+.button-entry.disabled,
+.checkbox-entry.disabled {
 	background-color: var(--secondary-color);
 	color: var(--text-dark-color);
 	cursor: not-allowed;
 }
 
+.checkbox-entry.disabled label {
+	cursor: not-allowed;
+}
+
+.checkbox-entry {
+	height: 1px;
+	width: 2em;
+	padding: 0em;
+}
+
 .info-entry {
-	width: 0em;
-	text-align: center;
+	width: 1px;
 }
 
 .button-entry i,
@@ -1065,12 +1217,16 @@ button.popup {
 
 .popup .popup-text,
 .popup .popup-text::after {
-	cursor: default;
 	visibility: visible;
+	opacity: 0;
+}
+
+.popup .popup-text.visible,
+.popup .popup-text.visible::after {
 	opacity: 1;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 768px) {
 	.title,
 	.info-row .tooltip {
 		font-size: 1.25em;
@@ -1090,17 +1246,30 @@ button.popup {
 	.details,
 	.text-area,
 	.dropdown,
-	.limit,
-	.arrows {
+	.arrows,
+	.button-row {
 		font-size: 1em;
 	}
 
 	.error,
-	table,
 	.tooltip-text,
 	.popup-text,
-	.select-list {
+	.select-list,
+	.limit {
 		font-size: 0.8em;
+	}
+
+	table {
+		font-size: 0.75em;
+	}
+
+	.question-area .char-count,
+	.choice-area .char-count,
+	.group-input + .char-count,
+	.table-input + .char-count {
+		left: 65%;
+		font-size: 0.5em;
+		bottom: 11px;
 	}
 
 	.choice-area.binary {
@@ -1134,22 +1303,16 @@ button.popup {
 	}
 
 	.info {
-		flex-flow: column;
-		margin-right: 0em;
+		font-size: 0.9em;
+		padding-left: 0em;
+		padding-right: 0em;
 	}
 
-	.info i {
-		margin-right: 0em;
-		margin-bottom: 0.5em;
+	.info-row .tooltip {
+		--tooltip-width: 12em;
 	}
 
 	.select-list *:where(div.multiselect > ul.selected) {
 		max-height: 15.5em;
-	}
-}
-
-@media screen and (max-width: 631px) {
-	.info-row .tooltip {
-		--tooltip-width: 12em;
 	}
 }

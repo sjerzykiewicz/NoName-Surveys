@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { QuestionError } from '$lib/entities/QuestionError';
+	import { SurveyError } from '$lib/entities/SurveyError';
 	import { questions } from '$lib/stores/create-page';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 
@@ -9,29 +10,41 @@
 	function errorMessage(i: number) {
 		const error = $questions[i].error;
 		switch (error) {
-			case QuestionError.BinaryChoicesRequired:
-				return 'Please enter both choices for question no. ' + (i + 1) + '.';
-			case QuestionError.SliderValuesRequired:
-				return 'Please enter both values for question no. ' + (i + 1) + '.';
-			case QuestionError.DuplicateChoices:
-				return 'Please remove duplicate choices from question no. ' + (i + 1) + '.';
-			case QuestionError.ImproperSliderValues:
-				return 'Maximum value must be greater than minimum value in question no. ' + (i + 1) + '.';
-			default:
+			case SurveyError.ChoicesRequired:
 				return 'Please enter all choices for question no. ' + (i + 1) + '.';
+			case SurveyError.BinaryChoicesRequired:
+				return 'Please enter both choices for question no. ' + (i + 1) + '.';
+			case SurveyError.SliderValuesRequired:
+				return 'Please enter both values for question no. ' + (i + 1) + '.';
+			case SurveyError.ChoicesTooLong:
+				return (
+					'Choices must be ' +
+					$LIMIT_OF_CHARS +
+					' or less characters long in question no. ' +
+					(i + 1) +
+					'.'
+				);
+			case SurveyError.DuplicateChoices:
+				return 'Please remove duplicate choices from question no. ' + (i + 1) + '.';
+			case SurveyError.ImproperSliderValues:
+				return 'Maximum value must be greater than minimum value in question no. ' + (i + 1) + '.';
 		}
 	}
 
 	$: checkChoicesError = (i: number) => {
 		const error = $questions[i].error;
 		switch (error) {
-			case QuestionError.ChoicesRequired:
-			case QuestionError.BinaryChoicesRequired:
-			case QuestionError.SliderValuesRequired:
-				return $questions[i].choices.some((c) => c === null || c === undefined || c.length === 0);
-			case QuestionError.DuplicateChoices:
+			case SurveyError.ChoicesRequired:
+			case SurveyError.BinaryChoicesRequired:
+			case SurveyError.SliderValuesRequired:
+				return $questions[i].choices.some(
+					(c) => c === null || c === undefined || c.trim().length === 0
+				);
+			case SurveyError.ChoicesTooLong:
+				return $questions[i].choices.some((c) => c.length > $LIMIT_OF_CHARS);
+			case SurveyError.DuplicateChoices:
 				return new Set($questions[i].choices).size !== $questions[i].choices.length;
-			case QuestionError.ImproperSliderValues:
+			case SurveyError.ImproperSliderValues:
 				return parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1]);
 		}
 	};

@@ -9,7 +9,7 @@
 
 <MultiSelect
 	bind:selected
-	{options}
+	options={options.toSorted()}
 	{placeholder}
 	{maxSelect}
 	--sms-max-width="100%"

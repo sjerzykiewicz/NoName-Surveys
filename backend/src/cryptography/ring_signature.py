@@ -1,4 +1,6 @@
-import Crypto.Hash.SHA384 as SHA384
+import Crypto.Hash.SHA3_384 as SHA384
+import Crypto.Hash.SHAKE256 as SHAKE256
+from gmpy2 import add, f_mod, mpz, mul, powmod
 
 # cyclic group parameters
 # from RFC 5114
@@ -29,6 +31,25 @@ Q_HEX = "".join(
     ("8CF83642A709A097B447997640129DA2", "99B1A47D1EB3750BA308B0FE64F5FBD3")
 )
 
+R_HEX = "".join(
+    (
+        "F65B7EA7706034A28A29B9436AF161BB",
+        "F3632483671C60AEE9B1A6A496FFF904",
+        "FCB09731B6C6E16B551CEC2C063910B0",
+        "4E40795D4BEB474DB762E28CC923AE40",
+        "FDBAF05BF7501D0314C3CBE4BAD7329D",
+        "D473BDF441E7B8B387B402CD0BE7DC53",
+        "4FA6D3C039BDAD133F59DC899FD570A6",
+        "67C453D08150A35CF5E845087BD9ACFA",
+        "8333343375E8EE52965A84C699C59DFE",
+        "F852EFB96023BEF0FFB2F99C53AC2D94",
+        "CD2969764698B8DDE401DA6AA6BDB3B0",
+        "3B5506D287090F8E852C05EC0BDB3C0C",
+        "4FBEC1A4AB9FE141E8A7C9EADB17D335",
+        "921B673615A7FC0C92384946B9AB6452",
+    )
+)
+
 G_HEX = "".join(
     (
         "3FB32C9B73134D0B2E77506660EDBD48",
@@ -51,28 +72,39 @@ G_HEX = "".join(
 )
 
 
-p = int(P_HEX, 16)
-q = int(Q_HEX, 16)
-g = int(G_HEX, 16)
+p = mpz(P_HEX, 16)
+q = mpz(Q_HEX, 16)
+r = mpz(R_HEX, 16)
+g = mpz(G_HEX, 16)
 
 
-# h1 : {0,1}* -> Zq
-# k = 384 >= log2(q) + 128
+# h1 : {0,1}* -> Zq/Z
 # hash to {0,1}^k, reduce mod q
-# TODO - first version, might change in future
 def h1(x: str):
     encoded = x.encode("utf-8")
-    return int(SHA384.new(encoded).hexdigest(), 16) % q
+    return f_mod(mpz(SHA384.new(encoded).hexdigest(), 16), q)
 
 
 # h2 : {0,1}* -> <g>
-# TODO - this is a naive version and will be replaced by a different hash
 def h2(x: str):
-    return pow(g, h1(x), p)
+    encoded = x.encode("utf-8")
+    # hash to {0,1}^2716
+    shake = SHAKE256.new()
+    shake.update(encoded)
+    hashed = mpz(shake.read(2176).hex(), 16)
+
+    # reduce mod (p-1) -> element of Z(p-1)/Z
+    hashed = f_mod(hashed, (p - 1))
+
+    # add 1 -> element of Z*p
+    hashed = add(hashed, 1)
+
+    # i^r is an element of <g>
+    return powmod(hashed, r, p)
 
 
-def verify_lrs(message: str, keys: list[int], signature: list[int]) -> bool:
-    concatenated_keys: str = "".join([str(k) for k in keys])
+def verify_lrs(message: str, keys: list[mpz], signature: list[mpz]) -> bool:
+    concatenated_keys: str = "".join([k.digits() for k in keys])
 
     h = h2(concatenated_keys)
 
@@ -83,21 +115,21 @@ def verify_lrs(message: str, keys: list[int], signature: list[int]) -> bool:
     s = signature[1]
     c = signature[2:]
 
-    prod_y_c = 1
+    prod_y_c = mpz(1)
+    sum_c = mpz(0)
 
     for i in range(n):
-        prod_y_c *= pow(int(keys[i]), c[i], p)
+        prod_y_c = mul(prod_y_c, powmod(int(keys[i]), c[i], p))
+        sum_c = f_mod(add(sum_c, c[i]), q)
 
-    sum_c = sum(c) % q
-
-    g_to_s = pow(g, s, p)
-    h_to_s = pow(h, s, p)
+    g_to_s = powmod(g, s, p)
+    h_to_s = powmod(h, s, p)
 
     for_hashing = (
         concatenated_keys
-        + str(y0)
+        + y0.digits()
         + message
-        + str((g_to_s * prod_y_c) % p)
-        + str((h_to_s * pow(y0, sum_c, p)) % p)
+        + (f_mod(mul(g_to_s, prod_y_c), p)).digits()
+        + (f_mod(mul(h_to_s, powmod(y0, sum_c, p)), p)).digits()
     )
     return sum_c == h1(for_hashing)

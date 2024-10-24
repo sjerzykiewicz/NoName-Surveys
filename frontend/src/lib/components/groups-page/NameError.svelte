@@ -2,6 +2,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { GroupError } from '$lib/entities/GroupError';
+	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 
 	export let name: string;
 	export let error: GroupError;
@@ -11,10 +12,12 @@
 		switch (error) {
 			case GroupError.NameRequired:
 				return 'Please enter group name.';
+			case GroupError.NameTooLong:
+				return 'Group name must be ' + $LIMIT_OF_CHARS + ' or less characters long.';
 			case GroupError.NameNonUnique:
 				return 'This group name already exists.';
 			case GroupError.NameInvalid:
-				return 'Group name can only contain letters, numbers, spaces, and hyphens.';
+				return 'Group name can only contain letters, numbers, spaces, slashes and hyphens.';
 		}
 	}
 
@@ -23,10 +26,12 @@
 		switch (error) {
 			case GroupError.NameRequired:
 				return n === null || n === undefined || n.length === 0;
+			case GroupError.NameTooLong:
+				return n.length > $LIMIT_OF_CHARS;
 			case GroupError.NameNonUnique:
 				return groups.some((g) => g === n);
 			case GroupError.NameInvalid:
-				return n.match(/^[\p{L}\p{N} -]+$/u) === null;
+				return n.match(/^[\p{L}\p{N} /-]+$/u) === null;
 		}
 	};
 </script>
@@ -41,9 +46,3 @@
 		</p>
 	{/if}
 </div>
-
-<style>
-	.error {
-		margin-left: 6.6em;
-	}
-</style>

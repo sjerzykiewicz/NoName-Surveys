@@ -54,7 +54,7 @@
 		cursor: default;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.arrows {
 			font-size: 1.2em;
 		}

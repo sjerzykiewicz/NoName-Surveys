@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import noname_dark from '$lib/assets/noname_dark.png';
 	import noname_light from '$lib/assets/noname_light.png';
+	import { M } from '$lib/stores/global';
 
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -15,7 +16,6 @@
 
 	let open: boolean;
 	let innerWidth: number;
-	let innerHeight: number;
 
 	const navLinks = {
 		Fill: {
@@ -97,9 +97,9 @@
 	$: showToggleButtons = scrollHeight == 0;
 </script>
 
-<svelte:window bind:innerWidth bind:innerHeight bind:scrollY={scrollHeight} />
+<svelte:window bind:innerWidth bind:scrollY={scrollHeight} />
 
-{#if innerWidth <= 767}
+{#if innerWidth <= $M}
 	<div class="nav-burger">
 		<a href="/" title="Fill Out" class="nav-burger-logo"
 			><img src={logo} alt="NoName logo" width="48" height="48" /></a
@@ -110,7 +110,7 @@
 	</div>
 {/if}
 
-{#if open || innerWidth > 767}
+{#if open || innerWidth > $M}
 	<div class="bar">
 		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
 			{#each Object.entries(navLinks) as [id, data]}
@@ -142,7 +142,7 @@
 		<button
 			transition:scale={{ duration: 200, easing: cubicInOut }}
 			on:click={() => changeLang('pl')}
-			class="toggle-mode lang-btn tooltip"
+			class="toggle-mode lang-btn zindex-0"
 		>
 			Polski
 		</button>
@@ -150,7 +150,7 @@
 		<button
 			transition:scale={{ duration: 200, easing: cubicInOut }}
 			on:click={() => changeLang('en')}
-			class="toggle-mode lang-btn tooltip"
+			class="toggle-mode lang-btn zindex-0"
 		>
 			English
 		</button>
@@ -158,13 +158,19 @@
 {/if}
 
 <style>
+	.zindex-0 {
+		z-index: 0;
+	}
+
 	.tooltip {
 		--tooltip-width: 7em;
+		z-index: 1;
 	}
 
 	.tooltip .tooltip-text {
 		font-size: 0.8em;
 		background-color: var(--primary-dark-color);
+		z-index: 2;
 	}
 
 	.tooltip .tooltip-text::after {
@@ -175,7 +181,7 @@
 		display: flex;
 		flex-flow: row;
 		margin: auto;
-		min-width: 767px;
+		min-width: 768px;
 		width: 50%;
 		justify-content: space-around;
 		background-color: var(--secondary-dark-color);
@@ -281,7 +287,7 @@
 		}
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.tooltip .tooltip-text {
 			font-size: 0.6em;
 		}

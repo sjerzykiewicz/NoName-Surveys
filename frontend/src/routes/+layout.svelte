@@ -2,7 +2,7 @@
 	import '../app.css';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import ScrollToTop from '$lib/components/ScrollToTop.svelte';
-
+	import ErrorModal from '$lib/components/ErrorModal.svelte';
 	import Translate from 'sveltekit-translate/translate/Translate.svelte';
 	import type { TranslateOptions } from 'sveltekit-translate/translate/translateStore';
 
@@ -15,6 +15,8 @@
 </script>
 
 <Translate {opts} {data}>
+	<ErrorModal />
+
 	<NavBar />
 	<div class="box">
 		<slot />

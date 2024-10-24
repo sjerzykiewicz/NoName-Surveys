@@ -2,7 +2,8 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
 	import { page } from '$app/stores';
-	import { S, XL } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, S, XL } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let survey_list: {
 		title: string;
@@ -27,6 +28,10 @@
 		selectedSurveysToRemove = allSelected ? [] : [...ownedSurveys];
 	}
 
+	function formatDate(isoString: string): string {
+		return new Date(isoString).toLocaleString();
+	}
+
 	async function deleteSurveys() {
 		selectedSurveysToRemove.forEach(async (survey, i) => {
 			const response = await fetch('/api/surveys/delete', {
@@ -42,7 +47,8 @@
 
 			if (!response.ok) {
 				const body = await response.json();
-				alert(body.detail);
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
 				return;
 			}
 
@@ -155,7 +161,7 @@
 				>
 					{survey.survey_code}
 				</td>
-				<td title="Creation date" class="date-entry">{survey.creation_date}</td>
+				<td title="Creation date" class="date-entry">{formatDate(survey.creation_date)}</td>
 			</tr>
 		{/each}
 	</table>

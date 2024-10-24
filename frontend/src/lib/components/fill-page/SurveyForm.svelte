@@ -36,7 +36,8 @@
 	import init, { linkable_ring_signature } from 'wasm';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import Modal from '$lib/components/Modal.svelte';
-	import { S } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	onMount(async () => {
 		await init();
@@ -212,7 +213,8 @@
 			try {
 				signature = linkable_ring_signature(code, keys, privateKey, index);
 			} catch (e) {
-				alert(e);
+				$errorModalContent = e as string;
+				$isErrorModalHidden = false;
 				return;
 			}
 		}
@@ -229,7 +231,8 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			alert(body.detail);
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
 			return;
 		}
 
@@ -253,7 +256,8 @@
 		try {
 			keysReader.readAsText(keysFile!);
 		} catch {
-			alert('No key file has been provided.');
+			$errorModalContent = 'No key file has been provided.';
+			$isErrorModalHidden = false;
 			return;
 		}
 		let keyPair: KeyPair | undefined;
@@ -262,7 +266,8 @@
 			const text = fileData as string;
 			keyPair = getKeys(text);
 			if (!keys.includes(keyPair.publicKey)) {
-				alert('Your public key is not on the list');
+				$errorModalContent = 'Your public key is not on the list.';
+				$isErrorModalHidden = false;
 				return;
 			}
 			processForm(keyPair);
@@ -377,6 +382,11 @@
 
 	.load-label {
 		cursor: default;
+	}
+
+	.load-div label {
+		display: block;
+		width: fit-content;
 	}
 
 	.load-text,

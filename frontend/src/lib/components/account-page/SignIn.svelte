@@ -31,7 +31,7 @@
 <h1><Tx text="account_sign_in"></Tx></h1>
 <div class="sign-buttons">
 	<button title="AMU USOS" class="sign-in" on:click={startOAuth}
-		><img src={amu} alt="AMU logo" class="amu-logo" /></button
+		><img src={amu} alt="AMU logo" class="amu-logo" />Sign In</button
 	>
 </div>
 <div title="Account information" class="info">
@@ -45,9 +45,10 @@
 	</div>
 </div>
 
+<!-- TODO: Make it better!-->
 <!-- Placeholder to ensure ul/li CSS styles are used -->
 {#if false}
-	<ul>
+	<ul class="icon accent">
 		<li></li>
 	</ul>
 {/if}
@@ -55,7 +56,7 @@
 <style>
 	ul {
 		list-style-type: none;
-		margin-top: 0.5em;
+		margin-top: 0.25em;
 		padding-left: 1.5em;
 	}
 
@@ -64,7 +65,11 @@
 		flex-flow: row nowrap;
 		justify-content: flex-start;
 		align-items: flex-start;
-		padding-top: 0.5em;
+		padding-top: 0.75em;
+	}
+
+	.icon {
+		margin-right: 0.5em;
 	}
 
 	h1 {
@@ -87,7 +92,26 @@
 	}
 
 	.info {
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+		justify-content: center;
+		padding: 1.25em 0.5em 0em;
+		border-top: 1px solid var(--border-color);
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: default;
+		overflow-wrap: break-word;
+		color: var(--text-color);
 		font-size: 1.25em;
+	}
+
+	.text {
+		text-align: justify;
+	}
+
+	.accent {
+		color: var(--accent-color);
+		font-weight: 700;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -97,6 +121,12 @@
 
 		ul {
 			padding-left: 0.5em;
+		}
+
+		.info {
+			font-size: 1em;
+			padding-left: 0em;
+			padding-right: 0em;
 		}
 	}
 </style>

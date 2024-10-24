@@ -8,9 +8,11 @@
 	import noname_light from '$lib/assets/noname_light.png';
 	import { M } from '$lib/stores/global';
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
-	import Tx from 'sveltekit-translate/translate/tx.svelte';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -19,32 +21,32 @@
 
 	const navLinks = {
 		Fill: {
-			name: 'nav_fill',
+			name: $t('nav_fill'),
 			href: '/',
 			disabled: false
 		},
 		Create: {
-			name: 'nav_create',
+			name: $t('nav_create'),
 			href: '/create',
 			disabled: !$page.data.session
 		},
 		Drafts: {
-			name: 'nav_drafts',
+			name: $t('nav_drafts'),
 			href: '/drafts',
 			disabled: !$page.data.session
 		},
 		Surveys: {
-			name: 'nav_surveys',
+			name: $t('nav_surveys'),
 			href: '/surveys',
 			disabled: !$page.data.session
 		},
 		Groups: {
-			name: 'nav_groups',
+			name: $t('nav_groups'),
 			href: '/groups',
 			disabled: !$page.data.session
 		},
 		Account: {
-			name: 'nav_account',
+			name: $t('nav_account'),
 			href: '/account',
 			disabled: false
 		}
@@ -114,15 +116,21 @@
 	<div class="bar">
 		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
 			{#each Object.entries(navLinks) as [id, data]}
-				<a
-					{id}
-					href={data.disabled ? '' : data.href}
+				<div
 					title={data.disabled ? 'Sign in to access ' + data.name : data.name}
+					{id}
 					class="nav-link"
+					class:tooltip={innerWidth > $M && data.disabled}
 					class:active={$page.url.pathname === data.href}
 					class:disabled={data.disabled}
-					on:click={hideNav}><Tx text={data.name}></Tx></a
 				>
+					<a href={data.disabled ? '' : data.href} on:click={hideNav}>{data.name}</a>
+					{#if innerWidth > $M && data.disabled}
+						<span class="tooltip-text bottom">
+							Sign in to access {data.name}.
+						</span>
+					{/if}
+				</div>
 			{/each}
 		</nav>
 	</div>
@@ -158,22 +166,32 @@
 {/if}
 
 <style>
-	.zindex-0 {
-		z-index: 0;
+	.bar .tooltip {
+		--tooltip-width: 12.5em;
 	}
 
-	.tooltip {
+	.bar .tooltip .tooltip-text {
+		font-size: 0.8em;
+		font-weight: normal;
+		background-color: var(--primary-dark-color);
+	}
+
+	.bar .tooltip .tooltip-text.bottom::after {
+		border-color: transparent transparent var(--primary-dark-color) transparent;
+	}
+
+	.toggle-mode.tooltip {
 		--tooltip-width: 7em;
 		z-index: 1;
 	}
 
-	.tooltip .tooltip-text {
+	.toggle-mode.tooltip .tooltip-text {
 		font-size: 0.8em;
 		background-color: var(--primary-dark-color);
 		z-index: 2;
 	}
 
-	.tooltip .tooltip-text::after {
+	.toggle-mode.tooltip .tooltip-text.left::after {
 		border-color: transparent transparent transparent var(--primary-dark-color);
 	}
 
@@ -248,14 +266,24 @@
 	}
 
 	.nav-link {
-		padding: 0.5em 0 0.5em 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		text-align: center;
 		color: var(--text-color);
 		font-weight: bold;
 		font-size: 1.5em;
 		border-right: 1px solid var(--border-color);
 		width: 100%;
+		cursor: pointer;
+	}
+
+	.nav-link a {
+		padding: 0.5em 0em;
+		width: 100%;
+		color: inherit;
 		text-decoration: none;
+		cursor: inherit;
 	}
 
 	.nav-link:hover {
@@ -307,7 +335,6 @@
 			border-top: 1px solid var(--border-color);
 			border-right: none;
 			border-bottom: none;
-			padding: 0.5em 0 0.5em 0;
 		}
 
 		.theme-btn {

@@ -35,7 +35,7 @@
 		justify-content: center;
 		padding-top: 1.5em;
 		padding-bottom: 1.5em;
-		font-size: 1.5em;
+		font-size: 1.75em;
 	}
 
 	@media screen and (max-width: 768px) {

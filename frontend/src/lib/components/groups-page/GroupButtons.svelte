@@ -10,9 +10,10 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import NameError from '$lib/components/groups-page/NameError.svelte';
-	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { limitInput } from '$lib/utils/limitInput';
 	import { M } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let groups: string[];
 	export let users: string[];
@@ -82,7 +83,8 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			alert(body.detail);
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
 			return;
 		}
 
@@ -105,7 +107,8 @@
 
 			if (!response.ok) {
 				const body = await response.json();
-				alert(body.detail);
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
 				return;
 			}
 		});

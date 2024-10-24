@@ -68,7 +68,7 @@ Authorizing yourself will enable you to:
 		<div>
 			Generate <span class="accent">digital signature keys</span> that allow you to participate
 			in
-			<span class="accent">secure surveys</span> without needing to sign in each time.
+			<span class="accent">secure surveys</span> without the need to sign in each time.
 		</div>
 	</li>
 </ul>

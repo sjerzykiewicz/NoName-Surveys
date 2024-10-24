@@ -122,6 +122,12 @@ body {
 	overflow-y: auto;
 }
 
+.select-list *:where(div.multiselect.disabled) {
+	--sms-text-color: var(--text-dark-color) !important;
+	color: var(--text-dark-color) !important;
+	cursor: not-allowed !important;
+}
+
 :root::-webkit-scrollbar,
 .select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar,
 .select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar {

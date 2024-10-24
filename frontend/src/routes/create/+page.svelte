@@ -23,12 +23,10 @@
 		draftStructure
 	} from '$lib/stores/create-page';
 
-	export let cryptoError: boolean;
 	export let isPreview: boolean;
 	export let data: PageServerData;
 	export let isDraftModalHidden: boolean = true;
-	export let isSurveyModalHidden: boolean = true;
-	export let surveyCode: string;
+	export let isRespondentModalHidden: boolean = true;
 
 	beforeNavigate((event) => {
 		if (getDraft($title.title.trim(), trimQuestions($questions)) !== $draftStructure) {
@@ -63,21 +61,13 @@
 </Header>
 <Content>
 	<SurveyForm
-		{cryptoError}
 		{isPreview}
 		groups={data.group_list}
 		users={data.user_list}
-		{surveyCode}
 		bind:isDraftModalHidden
-		bind:isSurveyModalHidden
+		bind:isRespondentModalHidden
 	/>
 </Content>
 <Footer>
-	<FooterButtons
-		bind:cryptoError
-		bind:isPreview
-		bind:isDraftModalHidden
-		bind:isSurveyModalHidden
-		bind:surveyCode
-	/>
+	<FooterButtons bind:isPreview bind:isDraftModalHidden bind:isRespondentModalHidden />
 </Footer>

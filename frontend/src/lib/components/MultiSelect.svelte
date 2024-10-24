@@ -5,6 +5,7 @@
 	export let options: string[];
 	export let placeholder: string = '';
 	export let maxSelect: number | null = null;
+	export let disabled: boolean = false;
 </script>
 
 <MultiSelect
@@ -12,6 +13,7 @@
 	options={options.toSorted()}
 	{placeholder}
 	{maxSelect}
+	{disabled}
 	--sms-max-width="100%"
 	--sms-min-height="2.2em"
 	--sms-border="1px solid var(--border-color)"
@@ -30,4 +32,5 @@
 	--sms-options-shadow="0px 4px 4px var(--shadow-color)"
 	--sms-remove-btn-hover-color="var(--error-color)"
 	--sms-remove-btn-hover-bg="var(--secondary-color)"
+	--sms-disabled-bg="var(--secondary-color)"
 />

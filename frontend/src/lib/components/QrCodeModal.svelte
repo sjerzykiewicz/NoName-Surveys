@@ -30,15 +30,13 @@
 	<div slot="content" class="content">
 		<span class="survey-code">{surveyCode}</span>
 		<a href="/fill?code={surveyCode}" title="Fill out the survey" class="qr-code">
-			{#if !isHidden}
-				<QrCode
-					code={surveyCode}
-					codeSize={innerWidth > $M && innerHeight > $M ? 360 : 260}
-					codeMargin={3}
-					image={noname_black}
-					imageMargin={6}
-				/>
-			{/if}
+			<QrCode
+				code={surveyCode}
+				codeSize={innerWidth > $M && innerHeight > $M ? 360 : 260}
+				codeMargin={3}
+				image={noname_black}
+				imageMargin={6}
+			/>
 		</a>
 	</div>
 	<button

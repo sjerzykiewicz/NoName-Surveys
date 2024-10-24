@@ -37,6 +37,7 @@
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import Modal from '$lib/components/Modal.svelte';
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	onMount(async () => {
 		await init();
@@ -230,7 +231,7 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			$errorModalContent = body.detail;
+			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
 		}

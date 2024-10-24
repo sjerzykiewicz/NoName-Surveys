@@ -9,6 +9,7 @@
 	import init, { get_keypair } from 'wasm';
 	import { onMount } from 'svelte';
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let isModalHidden: boolean = true;
 
@@ -46,7 +47,7 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			$errorModalContent = body.detail;
+			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
 		}

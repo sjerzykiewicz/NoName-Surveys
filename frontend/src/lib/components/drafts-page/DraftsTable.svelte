@@ -32,6 +32,7 @@
 	import type Question from '$lib/entities/questions/Question';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let drafts: {
 		id: number;
@@ -60,7 +61,7 @@
 
 			if (!response.ok) {
 				const body = await response.json();
-				$errorModalContent = body.detail;
+				$errorModalContent = getErrorMessage(body.detail);
 				$isErrorModalHidden = false;
 				return;
 			}
@@ -85,7 +86,7 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			$errorModalContent = body.detail;
+			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
 		}

@@ -31,6 +31,7 @@
 	import SelectGroup from './SelectGroup.svelte';
 	import SelectUsers from './SelectUsers.svelte';
 	import CryptoError from './CryptoError.svelte';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let users: string[];
 	export let groups: string[];
@@ -79,7 +80,7 @@
 
 			if (!deleteResponse.ok) {
 				const body = await deleteResponse.json();
-				$errorModalContent = body.detail;
+				$errorModalContent = getErrorMessage(body.detail);
 				$isErrorModalHidden = false;
 				return;
 			}
@@ -95,7 +96,7 @@
 
 		if (!createResponse.ok) {
 			const body = await createResponse.json();
-			$errorModalContent = body.detail;
+			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
 		}
@@ -116,7 +117,7 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			$errorModalContent = body.detail;
+			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
 		}
@@ -157,7 +158,7 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			$errorModalContent = body.detail;
+			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
 		}

@@ -15,6 +15,7 @@
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
 	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let isPreview: boolean = false;
 	export let isDraftModalHidden: boolean = true;
@@ -110,7 +111,7 @@
 
 			if (!response.ok) {
 				const body = await response.json();
-				$errorModalContent = body.detail;
+				$errorModalContent = getErrorMessage(body.detail);
 				$isErrorModalHidden = false;
 				return;
 			}

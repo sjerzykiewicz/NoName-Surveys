@@ -3,6 +3,7 @@
 	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
 	import { page } from '$app/stores';
 	import { errorModalContent, isErrorModalHidden, S, XL } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let survey_list: {
 		title: string;
@@ -42,7 +43,7 @@
 
 			if (!response.ok) {
 				const body = await response.json();
-				$errorModalContent = body.detail;
+				$errorModalContent = getErrorMessage(body.detail);
 				$isErrorModalHidden = false;
 				return;
 			}

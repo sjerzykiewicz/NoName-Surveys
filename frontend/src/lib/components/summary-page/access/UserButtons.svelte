@@ -9,6 +9,7 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import UsersError from './UsersError.svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let users: string[];
 	export let code: string;
@@ -56,7 +57,7 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			$errorModalContent = body.detail;
+			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
 		}
@@ -82,7 +83,7 @@
 
 			if (!response.ok) {
 				const body = await response.json();
-				$errorModalContent = body.detail;
+				$errorModalContent = getErrorMessage(body.detail);
 				$isErrorModalHidden = false;
 				return;
 			}

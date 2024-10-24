@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
 	import Content from '$lib/components/Content.svelte';
-	import { M } from '$lib/stores/global';
+	import { S, M } from '$lib/stores/global';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 
@@ -17,12 +17,24 @@
 	<h1>NoName Anonymous Surveys</h1>
 	<form method="POST" use:enhance>
 		<label title="Enter a survey code to fill it out" for="code-input"
-			>Enter a survey code to fill it out:
+			><div class="code-text">
+				<span>Enter a survey code to fill it out</span>
+				<div title="" class="tooltip">
+					<i class="material-symbols-rounded">info</i>
+					<span
+						class="tooltip-text {innerWidth <= $M ? (innerWidth <= $S ? 'top' : 'left') : 'bottom'}"
+					>
+						Enter the code provided to you by the survey creator. Your answers are completely
+						anonymous.
+					</span>
+				</div>
+			</div>
 			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				id="code-input"
 				name="survey-code"
 				type="text"
+				placeholder="XXXXXX"
 				required
 				maxlength="6"
 				autocomplete="off"
@@ -98,6 +110,27 @@
 		font-variation-settings: 'wght' 700;
 	}
 
+	.code-text {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.code-text .tooltip i {
+		font-size: 1.25em;
+	}
+
+	.tooltip {
+		margin-left: 0.25em;
+		font-size: 0.8em;
+	}
+
+	.tooltip .tooltip-text {
+		font-size: 0.7em;
+		font-weight: normal;
+	}
+
 	@media screen and (max-width: 768px) {
 		h1 {
 			font-size: 2.5em;
@@ -105,6 +138,17 @@
 
 		.error {
 			font-size: 0.5em;
+		}
+	}
+
+	@media screen and (max-width: 425px) {
+		.tooltip {
+			margin-left: 0em;
+			margin-top: 0.5em;
+		}
+
+		.code-text {
+			flex-flow: column;
 		}
 	}
 </style>

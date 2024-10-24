@@ -26,10 +26,10 @@
 	}
 </script>
 
-<h1>Authorize yourself with AMU USOS:</h1>
+<h1>Authorize yourself with AMU USOS</h1>
 <div class="sign-buttons">
 	<button title="AMU USOS" class="sign-in" on:click={startOAuth}
-		><img src={amu} alt="AMU logo" class="amu-logo" /></button
+		><img src={amu} alt="AMU logo" class="amu-logo" />Sign In</button
 	>
 </div>
 <div title="Account information" class="info">

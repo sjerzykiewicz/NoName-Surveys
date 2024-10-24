@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { M } from '$lib/stores/global';
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let isModalHidden: boolean = true;
 
 	let innerWidth: number;
@@ -9,15 +15,13 @@
 <svelte:window bind:innerWidth />
 
 <div class="download-key">
-	<button title="Generate new keys" class="save" on:click={() => (isModalHidden = false)}>
-		<i class="material-symbols-rounded">encrypted</i>Generate New Keys
+	<button title={$t('account_new_key')} class="save" on:click={() => (isModalHidden = false)}>
+		<i class="material-symbols-rounded">encrypted</i><Tx text="account_new_key"></Tx>
 	</button>
 	<div class="tooltip">
 		<i class="material-symbols-rounded">info</i>
 		<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
-			These keys allow you to participate in secure surveys. Once they are generated, it is your
-			responsibility to keep them safe. When submitting a secure survey, you will be asked to
-			provide these keys to your browser for digital signature.
+			<Tx html="account_keys_info"></Tx>
 		</span>
 	</div>
 </div>

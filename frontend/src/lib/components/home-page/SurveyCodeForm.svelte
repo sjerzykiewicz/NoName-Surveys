@@ -5,6 +5,12 @@
 	import { S, M } from '$lib/stores/global';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let form: ActionData;
 
@@ -16,16 +22,15 @@
 <Content>
 	<h1>NoName Anonymous Surveys</h1>
 	<form method="POST" use:enhance>
-		<label title="Enter a survey code to fill it out" for="code-input"
+		<label title={$t('home_code_info')} for="code-input"
 			><div class="code-text">
-				<span>Enter a survey code to fill it out</span>
+				<span><Tx text="home_code_info"></Tx></span>
 				<div title="" class="tooltip">
 					<i class="material-symbols-rounded">info</i>
 					<span
 						class="tooltip-text {innerWidth <= $M ? (innerWidth <= $S ? 'top' : 'left') : 'bottom'}"
 					>
-						Enter the code provided to you by the survey creator. Your answers are completely
-						anonymous.
+						<Tx text="home_code_info_2"></Tx>
 					</span>
 				</div>
 			</div>
@@ -45,8 +50,8 @@
 					<i class="material-symbols-rounded">error</i>{form.error}
 				</p>
 			{/if}
-			<button title="Submit the code" class="save" type="submit">
-				<i class="material-symbols-rounded">done</i>Submit
+			<button title={$t('home_submit')} class="save" type="submit">
+				<i class="material-symbols-rounded">done</i><Tx text="submit"></Tx>
 			</button>
 		</label>
 	</form>

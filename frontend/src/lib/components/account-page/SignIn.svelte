@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+
 	import amu from '$lib/assets/amu.png';
 
 	async function startOAuth() {
@@ -26,66 +28,30 @@
 	}
 </script>
 
-<h1>Authorize yourself with AMU USOS</h1>
+<h1><Tx text="account_sign_in"></Tx></h1>
 <div class="sign-buttons">
 	<button title="AMU USOS" class="sign-in" on:click={startOAuth}
-		><img src={amu} alt="AMU logo" class="amu-logo" />Sign In</button
+		><img src={amu} alt="AMU logo" class="amu-logo" /><Tx text="sign_in"></Tx></button
 	>
 </div>
 <div title="Account information" class="info">
 	<div class="text">
-		Authorizing yourself will enable you to:
-		<ul>
-			<li>
-				<div class="icon"><i class="material-symbols-rounded">article</i></div>
-				<div>
-					Create both
-					<span class="accent">public</span>
-					and <span class="accent">secure</span> surveys,
-				</div>
-			</li>
-			<li>
-				<div class="icon"><i class="material-symbols-rounded">save</i></div>
-				<div>
-					Save surveys as
-					<span class="accent">drafts</span> for later editing,
-				</div>
-			</li>
-			<li>
-				<div class="icon"><i class="material-symbols-rounded">bar_chart</i></div>
-				<div>
-					View <span class="accent">responses</span>
-					and <span class="accent">summaries</span> of your surveys,
-				</div>
-			</li>
-			<li>
-				<div class="icon"><i class="material-symbols-rounded">share</i></div>
-				<div><span class="accent">Share</span> surveys' results with others,</div>
-			</li>
-			<li>
-				<div class="icon"><i class="material-symbols-rounded">group</i></div>
-				<div>
-					Create and manage
-					<span class="accent">user groups</span>,
-				</div>
-			</li>
-			<li>
-				<div class="icon"><i class="material-symbols-rounded">encrypted</i></div>
-				<div>
-					Generate <span class="accent">digital signature keys</span> that allow you to participate
-					in
-					<span class="accent">secure surveys</span> without the need to sign in each time.
-				</div>
-			</li>
-		</ul>
+		<Tx html="account_authorization_info"></Tx>
 	</div>
 </div>
 <div title="Account information" class="info">
 	<div class="text">
-		We do not recommend signing in if you only wish to fill out a survey. For secure surveys, if you
-		have already generated your digital signature keys, signing in is also not necessary.
+		<Tx text="account_info"></Tx>
 	</div>
 </div>
+
+<!-- TODO: Make it better!-->
+<!-- Placeholder to ensure ul/li CSS styles are used -->
+{#if false}
+	<ul class="icon accent">
+		<li></li>
+	</ul>
+{/if}
 
 <style>
 	ul {

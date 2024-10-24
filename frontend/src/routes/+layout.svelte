@@ -3,15 +3,26 @@
 	import NavBar from '$lib/components/NavBar.svelte';
 	import ScrollToTop from '$lib/components/ScrollToTop.svelte';
 	import ErrorModal from '$lib/components/ErrorModal.svelte';
+	import Translate from 'sveltekit-translate/translate/Translate.svelte';
+	import type { TranslateOptions } from 'sveltekit-translate/translate/translateStore';
+
+	import { data } from '$lib/translations';
+
+	let opts: TranslateOptions = {
+		defaultLang: 'en',
+		currentLang: 'en'
+	};
 </script>
 
-<ErrorModal />
+<Translate {opts} {data}>
+	<ErrorModal />
 
-<NavBar />
-<div class="box">
-	<slot />
-</div>
-<ScrollToTop />
+	<NavBar />
+	<div class="box">
+		<slot />
+	</div>
+	<ScrollToTop />
+</Translate>
 
 <style>
 	.box {

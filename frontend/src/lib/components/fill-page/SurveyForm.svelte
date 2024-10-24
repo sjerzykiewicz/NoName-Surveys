@@ -211,7 +211,7 @@
 			const index = keys.indexOf(publicKey);
 
 			try {
-				signature = linkable_ring_signature(code, keys, privateKey, index);
+				signature = linkable_ring_signature(JSON.stringify(answerList), keys, privateKey, index);
 			} catch (e) {
 				$errorModalContent = e as string;
 				$isErrorModalHidden = false;

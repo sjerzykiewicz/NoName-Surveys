@@ -24,7 +24,7 @@ class SurveyDraftCreate(BaseModel):
 class SurveyDraftHeadersOutput(BaseModel):
     id: int
     title: str
-    creation_date: str
+    creation_date: datetime
 
     class Config:
         extra = "forbid"

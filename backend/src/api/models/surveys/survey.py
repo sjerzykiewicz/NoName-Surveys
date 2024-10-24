@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from typing import Optional, Union
 
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
@@ -50,7 +51,7 @@ class SurveyStructure(BaseModel):
 class SurveyHeadersOutput(BaseModel):
     title: str
     survey_code: str
-    creation_date: str
+    creation_date: datetime
     uses_cryptographic_module: bool
     is_owned_by_user: bool
     group_size: int

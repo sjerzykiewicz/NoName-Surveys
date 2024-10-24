@@ -18,6 +18,17 @@ class User(BaseModel):
         extra = "forbid"
 
 
+class UserFilterOthers(BaseModel):
+    emails: list[str]
+
+    @field_validator("emails")
+    def validate_users(cls, v, info: ValidationInfo) -> list[str]:
+        for email in v:
+            if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
+                raise ValueError("invalid email format")
+        return v
+
+
 class UserUpdatePublicKey(User):
     public_key: str
 

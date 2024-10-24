@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 import pytz
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlmodel import Field, SQLModel
 
 tz = pytz.timezone("Europe/Warsaw")
@@ -17,7 +18,13 @@ class SurveyBase(SQLModel):
 class Survey(SurveyBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     is_deleted: bool = Field(default=False)
-    deadline: str = Field(default="")
-    creation_date: str = Field(
-        default_factory=lambda: datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
+    start_date: Optional[datetime] = Field(
+        sa_column=Field(TIMESTAMP(timezone=True), nullable=True), default=None
+    )
+    deadline_date: Optional[datetime] = Field(
+        sa_column=Field(TIMESTAMP(timezone=True), nullable=True), default=None
+    )
+    creation_date: datetime = Field(
+        sa_column=Field(TIMESTAMP(timezone=True)),
+        default_factory=lambda: datetime.now(tz),
     )

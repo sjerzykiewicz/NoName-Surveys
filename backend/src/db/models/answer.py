@@ -1,11 +1,12 @@
 from typing import Optional
 
-from sqlmodel import Field, SQLModel
+from sqlalchemy.dialects.postgresql import TEXT
+from sqlmodel import Column, Field, SQLModel
 
 
 class AnswerBase(SQLModel):
     survey_id: int = Field(foreign_key="survey.id")
-    answer: str
+    answer: str = Field(sa_column=Column(TEXT))
     y0: str = Field(default="")
 
 

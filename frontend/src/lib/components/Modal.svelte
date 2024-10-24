@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { cubicInOut } from 'svelte/easing';
+	import { fade, scale } from 'svelte/transition';
 
 	export let isHidden: boolean = true;
 	export let icon: string;
@@ -9,6 +11,8 @@
 	export let borderColor: string = 'var(--border-color)';
 	export let hide: () => void = () => (isHidden = true);
 
+	let isClickable: boolean = false;
+
 	onMount(() => {
 		function handleEscape(event: KeyboardEvent) {
 			if (!isHidden && event.key === 'Escape') {
@@ -16,36 +20,48 @@
 			}
 		}
 
+		function handleClick(event: MouseEvent) {
+			if (isClickable && !isHidden && !(event.target as HTMLElement).closest('.modal')) {
+				hide();
+			}
+		}
+
 		document.body.addEventListener('keydown', handleEscape);
+		document.body.addEventListener('click', handleClick);
 
 		return () => {
 			document.body.removeEventListener('keydown', handleEscape);
+			document.body.removeEventListener('click', handleClick);
 		};
 	});
 </script>
 
-<section class="overlay" class:hidden={isHidden}>
-	<div
-		class="modal"
-		class:hidden={isHidden}
-		style="width: {width}em;color: {textColor};border-color: {borderColor};"
-	>
-		<div class="top" style="border-bottom-color: {borderColor};">
-			<div class="caption">
-				<i class="material-symbols-rounded">{icon}</i>{title}
+{#if !isHidden}
+	<section class="overlay" transition:fade={{ duration: 200, easing: cubicInOut }}>
+		<div
+			class="modal"
+			style="width: {width}em;color: {textColor};border-color: {borderColor};"
+			transition:scale={{ duration: 200, easing: cubicInOut }}
+			on:introend={() => (isClickable = true)}
+			on:outroend={() => (isClickable = false)}
+		>
+			<div class="top" style="border-bottom-color: {borderColor};">
+				<div class="caption">
+					<i class="material-symbols-rounded">{icon}</i>{title}
+				</div>
+				<button title="Cancel" class="cancel" on:click={hide}>
+					<i class="material-symbols-rounded">close</i>
+				</button>
 			</div>
-			<button title="Cancel" class="cancel" on:click={hide}>
-				<i class="material-symbols-rounded">close</i>
-			</button>
+			<div class="content">
+				<slot name="content" />
+			</div>
+			<div class="buttons">
+				<slot />
+			</div>
 		</div>
-		<div class="content">
-			<slot name="content" />
-		</div>
-		<div class="buttons">
-			<slot />
-		</div>
-	</div>
-</section>
+	</section>
+{/if}
 
 <style>
 	.overlay {
@@ -61,13 +77,6 @@
 		background: rgba(0, 0, 0, 0.5);
 		backdrop-filter: blur(2px);
 		z-index: 9;
-		opacity: 1;
-		transition: 0.2s;
-	}
-
-	.overlay.hidden {
-		visibility: hidden;
-		opacity: 0;
 	}
 
 	.modal {
@@ -83,15 +92,6 @@
 		box-shadow: 0px 4px 4px var(--shadow-color);
 		font-size: 1.2em;
 		z-index: 10;
-		opacity: 1;
-		transform: scale(100%);
-		transition: 0.2s;
-	}
-
-	.modal.hidden {
-		visibility: hidden;
-		opacity: 0;
-		transform: scale(0%);
 	}
 
 	.modal div {

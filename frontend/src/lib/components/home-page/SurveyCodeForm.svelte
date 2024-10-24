@@ -103,16 +103,8 @@
 			font-size: 2.5em;
 		}
 
-		input {
-			font-size: 1em;
-		}
-
 		.error {
 			font-size: 0.5em;
-		}
-
-		form {
-			font-size: 1.5em;
 		}
 	}
 </style>

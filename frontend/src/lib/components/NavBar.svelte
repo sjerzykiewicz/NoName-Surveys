@@ -101,15 +101,21 @@
 	<div class="bar">
 		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
 			{#each Object.entries(navLinks) as [id, data]}
-				<a
-					{id}
-					href={data.disabled ? '' : data.href}
+				<div
 					title={data.disabled ? 'Sign in to access ' + data.name : data.name}
+					{id}
 					class="nav-link"
+					class:tooltip={innerWidth > $M && data.disabled}
 					class:active={$page.url.pathname === data.href}
 					class:disabled={data.disabled}
-					on:click={hideNav}>{data.name}</a
 				>
+					<a href={data.disabled ? '' : data.href} on:click={hideNav}>{data.name}</a>
+					{#if innerWidth > $M && data.disabled}
+						<span class="tooltip-text bottom">
+							Sign in to access {data.name}.
+						</span>
+					{/if}
+				</div>
 			{/each}
 		</nav>
 	</div>
@@ -127,16 +133,30 @@
 {/if}
 
 <style>
-	.tooltip {
+	.bar .tooltip {
+		--tooltip-width: 12.5em;
+	}
+
+	.bar .tooltip .tooltip-text {
+		font-size: 0.8em;
+		font-weight: normal;
+		background-color: var(--primary-dark-color);
+	}
+
+	.bar .tooltip .tooltip-text.bottom::after {
+		border-color: transparent transparent var(--primary-dark-color) transparent;
+	}
+
+	.toggle-mode.tooltip {
 		--tooltip-width: 7em;
 	}
 
-	.tooltip .tooltip-text {
+	.toggle-mode.tooltip .tooltip-text {
 		font-size: 0.8em;
 		background-color: var(--primary-dark-color);
 	}
 
-	.tooltip .tooltip-text::after {
+	.toggle-mode.tooltip .tooltip-text.left::after {
 		border-color: transparent transparent transparent var(--primary-dark-color);
 	}
 
@@ -203,14 +223,24 @@
 	}
 
 	.nav-link {
-		padding: 0.5em 0 0.5em 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		text-align: center;
 		color: var(--text-color);
 		font-weight: bold;
 		font-size: 1.5em;
 		border-right: 1px solid var(--border-color);
 		width: 100%;
+		cursor: pointer;
+	}
+
+	.nav-link a {
+		padding: 0.5em 0em;
+		width: 100%;
+		color: inherit;
 		text-decoration: none;
+		cursor: inherit;
 	}
 
 	.nav-link:hover {
@@ -261,7 +291,6 @@
 			border-top: 1px solid var(--border-color);
 			border-right: none;
 			border-bottom: none;
-			padding: 0.5em 0 0.5em 0;
 		}
 
 		.toggle-mode {

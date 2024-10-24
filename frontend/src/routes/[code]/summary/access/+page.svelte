@@ -7,9 +7,12 @@
 	import AccessTable from '$lib/components/summary-page/access/AccessTable.svelte';
 	import UserButtons from '$lib/components/summary-page/access/UserButtons.svelte';
 	import { afterUpdate } from 'svelte';
+	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
+	import QrCodeButton from '$lib/components/summary-page/QrCodeButton.svelte';
 
 	export let data: PageData;
 	export let selectedUsersToRemove: string[] = [];
+	export let isModalHidden: boolean = true;
 
 	let usersWithoutAccess: string[] = [];
 
@@ -19,6 +22,8 @@
 		);
 	});
 </script>
+
+<QrCodeModal bind:isHidden={isModalHidden} title="Access Code" surveyCode={data.code} />
 
 <Header>
 	<div title="Survey title" class="title">{data.survey.survey_structure.title}</div>
@@ -30,5 +35,6 @@
 </Content>
 
 <Footer>
+	<QrCodeButton bind:isModalHidden />
 	<Back />
 </Footer>

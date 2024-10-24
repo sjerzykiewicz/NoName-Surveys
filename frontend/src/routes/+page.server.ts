@@ -15,7 +15,7 @@ export const actions: Actions = {
 		if (!/^[0-9]{6}$/.test(code.toString())) {
 			return fail(422, {
 				description: code,
-				error: 'Code must be 6 characters long and contain only digits.'
+				error: 'Code must be 6 digits long.'
 			});
 		}
 

@@ -8,7 +8,8 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import init, { get_keypair } from 'wasm';
 	import { onMount } from 'svelte';
-	import { M } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let isModalHidden: boolean = true;
 
@@ -46,7 +47,8 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			alert(body.detail);
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
 			return;
 		}
 

@@ -26,10 +26,10 @@
 	}
 </script>
 
-<h1>Authorize yourself with AMU USOS:</h1>
+<h1>Authorize yourself with AMU USOS</h1>
 <div class="sign-buttons">
 	<button title="AMU USOS" class="sign-in" on:click={startOAuth}
-		><img src={amu} alt="AMU logo" class="amu-logo" /></button
+		><img src={amu} alt="AMU logo" class="amu-logo" />Sign In</button
 	>
 </div>
 <div title="Account information" class="info">
@@ -37,26 +37,45 @@
 		Authorizing yourself will enable you to:
 		<ul>
 			<li>
-				<i class="material-symbols-rounded">chevron_right</i>Create both public and secure surveys,
+				<div class="icon"><i class="material-symbols-rounded">article</i></div>
+				<div>
+					Create both
+					<span class="accent">public</span>
+					and <span class="accent">secure</span> surveys,
+				</div>
 			</li>
 			<li>
-				<i class="material-symbols-rounded">chevron_right</i>Save surveys as drafts for later
-				editing,
+				<div class="icon"><i class="material-symbols-rounded">save</i></div>
+				<div>
+					Save surveys as
+					<span class="accent">drafts</span> for later editing,
+				</div>
 			</li>
 			<li>
-				<i class="material-symbols-rounded">chevron_right</i>View responses and summaries of your
-				surveys,
+				<div class="icon"><i class="material-symbols-rounded">bar_chart</i></div>
+				<div>
+					View <span class="accent">responses</span>
+					and <span class="accent">summaries</span> of your surveys,
+				</div>
 			</li>
 			<li>
-				<i class="material-symbols-rounded">chevron_right</i>Share surveys' results with others,
+				<div class="icon"><i class="material-symbols-rounded">share</i></div>
+				<div><span class="accent">Share</span> surveys' results with others,</div>
 			</li>
 			<li>
-				<i class="material-symbols-rounded">chevron_right</i>Create and manage user groups,
+				<div class="icon"><i class="material-symbols-rounded">group</i></div>
+				<div>
+					Create and manage
+					<span class="accent">user groups</span>,
+				</div>
 			</li>
 			<li>
-				<i class="material-symbols-rounded">chevron_right</i>
-				Generate digital signature keys that allow you to participate in secure surveys without needing
-				to sign in each time.
+				<div class="icon"><i class="material-symbols-rounded">encrypted</i></div>
+				<div>
+					Generate <span class="accent">digital signature keys</span> that allow you to participate
+					in
+					<span class="accent">secure surveys</span> without needing to sign in each time.
+				</div>
 			</li>
 		</ul>
 	</div>
@@ -71,7 +90,7 @@
 <style>
 	ul {
 		list-style-type: none;
-		margin-top: 0.5em;
+		margin-top: 0.25em;
 		padding-left: 1.5em;
 	}
 
@@ -80,7 +99,11 @@
 		flex-flow: row nowrap;
 		justify-content: flex-start;
 		align-items: flex-start;
-		padding-top: 0.5em;
+		padding-top: 0.75em;
+	}
+
+	.icon {
+		margin-right: 0.5em;
 	}
 
 	h1 {
@@ -103,7 +126,26 @@
 	}
 
 	.info {
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+		justify-content: center;
+		padding: 1.25em 0.5em 0em;
+		border-top: 1px solid var(--border-color);
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		cursor: default;
+		overflow-wrap: break-word;
+		color: var(--text-color);
 		font-size: 1.25em;
+	}
+
+	.text {
+		text-align: justify;
+	}
+
+	.accent {
+		color: var(--accent-color);
+		font-weight: 700;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -113,6 +155,12 @@
 
 		ul {
 			padding-left: 0.5em;
+		}
+
+		.info {
+			font-size: 1em;
+			padding-left: 0em;
+			padding-right: 0em;
 		}
 	}
 </style>

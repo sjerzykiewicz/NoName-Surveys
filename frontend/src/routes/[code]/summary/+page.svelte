@@ -4,12 +4,15 @@
 	import AnswersSummary from '$lib/components/summary-page/AnswersSummary.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 	import Back from '$lib/components/Back.svelte';
-	import type { LayoutServerData } from './$types';
 	import AnswersTable from '$lib/components/summary-page/AnswersTable.svelte';
 	import RespondentsTable from '$lib/components/summary-page/RespondentsTable.svelte';
-	import { goto } from '$app/navigation';
+	import ShareButton from '$lib/components/summary-page/ShareButton.svelte';
+	import type { LayoutServerData } from './$types';
+	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
+	import QrCodeButton from '$lib/components/summary-page/QrCodeButton.svelte';
 
 	export let data: LayoutServerData;
+	export let isModalHidden: boolean = true;
 
 	let numbers: Array<number> = [];
 
@@ -17,6 +20,8 @@
 		numbers.push(i);
 	}
 </script>
+
+<QrCodeModal bind:isHidden={isModalHidden} title="Access Code" surveyCode={data.code} />
 
 <Header>
 	<div title="Survey title" class="title">{data.survey.survey_structure.title}</div>
@@ -36,13 +41,8 @@
 
 <Footer>
 	{#if data.answers.length > 0 && data.answers[0].is_owned_by_user}
-		<button
-			title="Manage access to this summary"
-			class="footer-button"
-			on:click={() => goto('/' + data.code + '/summary/access')}
-		>
-			<i class="material-symbols-rounded">passkey</i>Access
-		</button>
+		<ShareButton code={data.code} />
 	{/if}
+	<QrCodeButton bind:isModalHidden />
 	<Back />
 </Footer>

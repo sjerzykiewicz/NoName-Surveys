@@ -90,21 +90,6 @@ async def update_user_public_key(
 
 
 @router.post(
-    "/filter-unregistered-users",
-    response_description="Returns a list of user emails that are not registered",
-    response_model=list[str],
-)
-async def filter_unregistered_users(
-    user_input: UserFilterOthers,
-    session: Session = Depends(get_session),
-):
-    matched_users = {
-        user.email for user in user_crud.get_users_by_emails(user_input.emails, session)
-    }
-    return [email for email in user_input.emails if email not in matched_users]
-
-
-@router.post(
     "/filter-users-with-no-public-key",
     response_description="Returns a list of user emails that have no public key",
     response_model=list[str],

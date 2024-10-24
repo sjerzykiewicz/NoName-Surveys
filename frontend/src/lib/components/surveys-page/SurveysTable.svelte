@@ -27,6 +27,10 @@
 		selectedSurveysToRemove = allSelected ? [] : [...ownedSurveys];
 	}
 
+	function formatDate(isoString: string) {
+		return new Date(isoString);
+	}
+
 	async function deleteSurveys() {
 		selectedSurveysToRemove.forEach(async (survey, i) => {
 			const response = await fetch('/api/surveys/delete', {
@@ -155,7 +159,7 @@
 				>
 					{survey.survey_code}
 				</td>
-				<td title="Creation date" class="date-entry">{survey.creation_date}</td>
+				<td title="Creation date" class="date-entry">{formatDate(survey.creation_date)}</td>
 			</tr>
 		{/each}
 	</table>

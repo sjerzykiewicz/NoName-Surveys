@@ -48,6 +48,10 @@
 		selectedDraftsToRemove = allSelected ? [] : [...drafts];
 	}
 
+	function formatDate(isoString: string) {
+		return new Date(isoString);
+	}
+
 	async function deleteDrafts() {
 		selectedDraftsToRemove.forEach(async (draft, i) => {
 			const response = await fetch('/api/surveys/drafts/delete', {
@@ -266,7 +270,7 @@
 				<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draft)}
 					>{draft.title}</td
 				>
-				<td title="Creation date" class="date-entry">{draft.creation_date}</td>
+				<td title="Creation date" class="date-entry">{formatDate(draft.creation_date)}</td>
 			</tr>
 		{/each}
 	</table>

@@ -34,7 +34,7 @@
 				id="code-input"
 				name="survey-code"
 				type="text"
-				placeholder="XXXXXX"
+				placeholder="______"
 				required
 				maxlength="6"
 				autocomplete="off"

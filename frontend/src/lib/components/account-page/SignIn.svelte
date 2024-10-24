@@ -45,7 +45,7 @@
 	</div>
 </div>
 
-<!-- Placeholder to ensure ul/li CSS styles are applied correctly -->
+<!-- Placeholder to ensure ul/li CSS styles are used -->
 {#if false}
 	<ul>
 		<li></li>

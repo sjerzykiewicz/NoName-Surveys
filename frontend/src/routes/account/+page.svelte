@@ -90,7 +90,7 @@
 	</Modal>
 
 	<Header>
-		<div title="Your account" class="title">
+		<div title={$t('account_your')} class="title">
 			<Tx text="welcome"></Tx>, {$page.data.session.user?.email}
 		</div>
 	</Header>

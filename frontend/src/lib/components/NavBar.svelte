@@ -21,32 +21,32 @@
 
 	const navLinks = {
 		Fill: {
-			name: $t('nav_fill'),
+			name: 'nav_fill',
 			href: '/',
 			disabled: false
 		},
 		Create: {
-			name: $t('nav_create'),
+			name: 'nav_create',
 			href: '/create',
 			disabled: !$page.data.session
 		},
 		Drafts: {
-			name: $t('nav_drafts'),
+			name: 'nav_drafts',
 			href: '/drafts',
 			disabled: !$page.data.session
 		},
 		Surveys: {
-			name: $t('nav_surveys'),
+			name: 'nav_surveys',
 			href: '/surveys',
 			disabled: !$page.data.session
 		},
 		Groups: {
-			name: $t('nav_groups'),
+			name: 'nav_groups',
 			href: '/groups',
 			disabled: !$page.data.session
 		},
 		Account: {
-			name: $t('nav_account'),
+			name: 'nav_account',
 			href: '/account',
 			disabled: false
 		}
@@ -117,17 +117,18 @@
 		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
 			{#each Object.entries(navLinks) as [id, data]}
 				<div
-					title={data.disabled ? 'Sign in to access ' + data.name : data.name}
+					title={data.disabled ? $t('nav_sign_in_info') + $t(data.name) : $t(data.name)}
 					{id}
 					class="nav-link"
 					class:tooltip={innerWidth > $M && data.disabled}
 					class:active={$page.url.pathname === data.href}
 					class:disabled={data.disabled}
 				>
-					<a href={data.disabled ? '' : data.href} on:click={hideNav}>{data.name}</a>
+					<a href={data.disabled ? '' : data.href} on:click={hideNav}>{$t(data.name)}</a>
 					{#if innerWidth > $M && data.disabled}
 						<span class="tooltip-text bottom">
-							Sign in to access {data.name}.
+							<Tx text="nav_sign_in_info"></Tx>
+							<Tx text={data.name}></Tx>
 						</span>
 					{/if}
 				</div>
@@ -145,24 +146,23 @@
 		<i class="material-symbols-rounded">{bulb}</i>
 		<span class="tooltip-text left"><Tx text="nav_toggle_theme"></Tx></span>
 	</button>
-
-	{#if $options.currentLang === 'en'}
-		<button
-			transition:scale={{ duration: 200, easing: cubicInOut }}
-			on:click={() => changeLang('pl')}
-			class="toggle-mode lang-btn zindex-0"
-		>
-			Polski
-		</button>
-	{:else}
-		<button
-			transition:scale={{ duration: 200, easing: cubicInOut }}
-			on:click={() => changeLang('en')}
-			class="toggle-mode lang-btn zindex-0"
-		>
-			English
-		</button>
-	{/if}
+{/if}
+{#if showToggleButtons && $options.currentLang === 'en'}
+	<button
+		transition:scale={{ duration: 200, easing: cubicInOut }}
+		on:click={() => changeLang('pl')}
+		class="toggle-mode lang-btn zindex-0"
+	>
+		Polski
+	</button>
+{:else if showToggleButtons && $options.currentLang === 'pl'}
+	<button
+		transition:scale={{ duration: 200, easing: cubicInOut }}
+		on:click={() => changeLang('en')}
+		class="toggle-mode lang-btn zindex-0"
+	>
+		English
+	</button>
 {/if}
 
 <style>

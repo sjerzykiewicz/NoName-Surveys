@@ -50,7 +50,7 @@
 					<i class="material-symbols-rounded">error</i>{form.error}
 				</p>
 			{/if}
-			<button title="Submit the code" class="save" type="submit">
+			<button title={$t('home_submit')} class="save" type="submit">
 				<i class="material-symbols-rounded">done</i><Tx text="submit"></Tx>
 			</button>
 		</label>

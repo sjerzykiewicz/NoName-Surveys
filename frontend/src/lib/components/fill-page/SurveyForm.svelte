@@ -324,6 +324,14 @@
 </Header>
 
 <Content>
+	{#if keys.length === 1 || keys.length === 2}
+		<p title="Survey not secure" class="error">
+			<i class="material-symbols-rounded">error</i>This survey is not secure.
+			{keys.length === 1
+				? ' You are the only person who can respond to this survey.'
+				: ' There are only two people who can respond to this survey. The other person could be the creator of this survey.'}
+		</p>
+	{/if}
 	{#each $questions as question, questionIndex (question)}
 		<div class="question" in:slide={{ duration: 200, easing: cubicInOut }}>
 			<QuestionTitle
@@ -463,6 +471,10 @@
 
 	.save i {
 		font-variation-settings: 'wght' 700;
+	}
+
+	.error {
+		margin: 0em 0em 0.5em 0em;
 	}
 
 	@media screen and (max-width: 1440px) {

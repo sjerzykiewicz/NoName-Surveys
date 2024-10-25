@@ -5,6 +5,7 @@
 	import { S, M } from '$lib/stores/global';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import { page } from '$app/stores';
 
 	export let form: ActionData;
 
@@ -50,6 +51,15 @@
 			</button>
 		</label>
 	</form>
+	{#if $page.data.session}
+		<p class="home-info">
+			If you want to create your own survey, go to <a href="/create" title="Create">Create</a>.
+		</p>
+	{:else}
+		<p class="home-info">
+			If you want to create your own survey, go to <a href="/account" title="Account">Account</a>.
+		</p>
+	{/if}
 </Content>
 
 <style>
@@ -129,6 +139,18 @@
 	.tooltip .tooltip-text {
 		font-size: 0.7em;
 		font-weight: normal;
+	}
+
+	.home-info {
+		text-align: center;
+		text-shadow: 0px 4px 4px var(--shadow-color);
+		font-size: 1.2em;
+		color: var(--text-color);
+		cursor: default;
+	}
+
+	.home-info a {
+		font-weight: 700;
 	}
 
 	@media screen and (max-width: 768px) {

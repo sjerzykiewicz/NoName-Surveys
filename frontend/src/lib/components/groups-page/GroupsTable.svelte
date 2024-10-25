@@ -100,7 +100,7 @@
 	icon="edit"
 	title="Rename Group"
 	bind:isHidden={isModalHidden}
-	width={innerWidth > $M ? 36 : 20}
+	width={innerWidth <= $M ? 20 : 36}
 >
 	<div slot="content" class="modal-content">
 		<span>Renaming {selectedGroup}.</span>

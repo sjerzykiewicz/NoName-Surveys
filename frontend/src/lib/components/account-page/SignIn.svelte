@@ -28,7 +28,7 @@
 
 <h1>Authorize yourself with AMU USOS</h1>
 <div class="sign-buttons">
-	<button title="AMU USOS" class="sign-in" on:click={startOAuth}
+	<button title="Sign in" class="sign-in" on:click={startOAuth}
 		><img src={amu} alt="AMU logo" class="amu-logo" />Sign In</button
 	>
 </div>

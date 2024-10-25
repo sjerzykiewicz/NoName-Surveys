@@ -139,10 +139,10 @@ export const validateUser = (user_email: string) => {
 	});
 };
 
-export const updatePublicKey = (user_email: string, public_key: string) => {
+export const updatePublicKey = (user_email: string, public_key: string, fingerprint: string) => {
 	return fetch(`${host}/users/update-public-key`, {
 		method: 'POST',
-		body: JSON.stringify({ user_email, public_key }),
+		body: JSON.stringify({ user_email, public_key, fingerprint }),
 		headers: {
 			'Content-Type': 'application/json'
 		}

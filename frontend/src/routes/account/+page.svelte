@@ -31,28 +31,36 @@
 	}
 
 	async function generateKeyPair() {
-		const keyPair = get_keypair();
-		const publicKey = keyPair.get_public_key();
-		const privateKey = keyPair.get_private_key();
-		const response = await fetch('/api/users/update-public-key', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				email: $page.data.session?.user?.email,
-				public_key: publicKey
-			})
-		});
+		try {
+			const keyPair = get_keypair();
+			const publicKey = keyPair.get_public_key();
+			const privateKey = keyPair.get_private_key();
+			const fingerprint = keyPair.get_fingerprint();
+			const response = await fetch('/api/users/update-public-key', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					email: $page.data.session?.user?.email,
+					public_key: publicKey,
+					fingerprint: fingerprint
+				})
+			});
 
-		if (!response.ok) {
-			const body = await response.json();
-			$errorModalContent = getErrorMessage(body.detail);
+			if (!response.ok) {
+				const body = await response.json();
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
+				return;
+			}
+
+			download('noname-keys.txt', publicKey + '\n' + privateKey);
+		} catch (e) {
+			$errorModalContent = e as string;
 			$isErrorModalHidden = false;
 			return;
 		}
-
-		download('noname-keys.txt', publicKey + '\n' + privateKey);
 	}
 
 	let innerWidth: number;

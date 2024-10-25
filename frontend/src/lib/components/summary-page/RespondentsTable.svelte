@@ -11,7 +11,7 @@
 	</tr>
 	{#each respondents.toSorted() as respondent}
 		<tr>
-			<td title={respondent} class="title-entry">{respondent}</td>
+			<td title={respondent} class="basic-entry">{respondent}</td>
 		</tr>
 	{/each}
 </table>
@@ -20,17 +20,5 @@
 	.title.respondent-list {
 		margin-top: 1em;
 		margin-bottom: 0.1em;
-	}
-
-	.title-entry {
-		cursor: default;
-	}
-
-	tr:nth-child(2n + 1) td {
-		background-color: var(--primary-dark-color);
-	}
-
-	tr:nth-child(2n + 2) td {
-		background-color: var(--primary-color);
 	}
 </style>

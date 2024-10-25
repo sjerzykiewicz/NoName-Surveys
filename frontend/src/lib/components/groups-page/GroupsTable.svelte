@@ -1,22 +1,23 @@
 <script lang="ts">
 	import { invalidateAll, goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
-	import NameTableError from '$lib/components/groups-page/NameTableError.svelte';
 	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { limitInput } from '$lib/utils/limitInput';
 	import { M, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import Modal from '$lib/components/Modal.svelte';
+	import NameError from './NameError.svelte';
 
 	export let groups: string[];
 	export let selectedGroupsToRemove: string[] = [];
-	export let editedIndex: number = -1;
 
+	let selectedGroup: string = '';
 	let newName: string = '';
 	let nameError: GroupError = GroupError.NoError;
+	let isModalHidden: boolean = true;
 
 	$: allSelected =
 		selectedGroupsToRemove.length === groups.length && selectedGroupsToRemove.length > 0;
@@ -40,7 +41,7 @@
 
 		if (nameError !== GroupError.NoError) {
 			await tick();
-			scrollToElement('.table-input');
+			scrollToElement('.group-input');
 			return false;
 		}
 
@@ -69,15 +70,67 @@
 			return;
 		}
 
-		editedIndex = -1;
+		isModalHidden = true;
+		selectedGroup = '';
 		newName = '';
 		invalidateAll();
 	}
+
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				renameGroup(selectedGroup, newName.trim());
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
 
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
+
+<Modal
+	icon="edit"
+	title="Rename Group"
+	bind:isHidden={isModalHidden}
+	width={innerWidth > $M ? 36 : 20}
+>
+	<div slot="content" class="modal-content">
+		<span>Renaming {selectedGroup}.</span>
+		<div class="input-container" class:max={newName.length > $LIMIT_OF_CHARS}>
+			<!-- svelte-ignore a11y-autofocus -->
+			<div
+				title="Enter a new group name"
+				class="group-input"
+				contenteditable
+				bind:textContent={newName}
+				autofocus={innerWidth > $M}
+				role="textbox"
+				tabindex="0"
+				on:keydown={(e) => {
+					limitInput(e, newName, $LIMIT_OF_CHARS);
+				}}
+			>
+				{newName}
+			</div>
+			<span class="char-count">{newName.length} / {$LIMIT_OF_CHARS}</span>
+		</div>
+		<NameError name={newName.trim()} error={nameError} {groups} fontSize={0.8} />
+	</div>
+	<button
+		title="Save the new group name"
+		class="save"
+		on:click={() => renameGroup(selectedGroup, newName.trim())}
+		><i class="material-symbols-rounded">done</i>Apply</button
+	>
+</Modal>
 
 {#if groups.length === 0}
 	<div class="info-row">
@@ -103,99 +156,64 @@
 					/></label
 				></th
 			>
-			<th title="Group title" id="title-header" colspan="3">Group Title</th>
+			<th title="Button column" id="button-header"><i class="material-symbols-rounded">edit</i></th>
+			<th title="Group title" id="title-header" colspan="2">Group Title</th>
 		</tr>
-		{#each groups.toSorted() as group, groupIndex}
+		{#each groups.toSorted() as group}
 			<tr>
 				<td title="Select {group}" class="checkbox-entry"
 					><label>
 						<input type="checkbox" bind:group={selectedGroupsToRemove} value={group} />
 					</label></td
 				>
-				{#if editedIndex === groupIndex}
-					<td
-						title="Stop renaming the group"
-						class="button-entry"
+				<td title="Rename the group" class="button-entry">
+					<button
 						on:click={() => {
-							editedIndex = -1;
+							selectedGroup = group;
 							newName = '';
 							nameError = GroupError.NoError;
-						}}><i class="material-symbols-rounded">edit_off</i></td
-					>
-					<td>
-						<div class="input-container" class:max={newName.length > $LIMIT_OF_CHARS}>
-							<!-- svelte-ignore a11y-autofocus -->
-							<div
-								title="Enter a new group name"
-								class="table-input"
-								contenteditable
-								bind:textContent={newName}
-								autofocus={innerWidth > $M}
-								role="textbox"
-								tabindex="0"
-								on:keydown={(e) => {
-									handleNewLine(e);
-									limitInput(e, newName, $LIMIT_OF_CHARS);
-								}}
-							>
-								{newName}
-							</div>
-							<span class="char-count">{newName.length} / {$LIMIT_OF_CHARS}</span>
-						</div>
-						<NameTableError name={newName.trim()} error={nameError} {groups} />
-					</td>
-					<td
-						title="Save the new group name"
-						class="button-entry save-entry"
-						on:click={() => renameGroup(group, newName.trim())}
-					>
-						<i class="material-symbols-rounded">save</i></td
-					>
-				{:else}
-					<td
-						title="Rename the group"
-						class="button-entry"
-						on:click={() => {
-							editedIndex = groupIndex;
-							newName = '';
-							nameError = GroupError.NoError;
-						}}><i class="material-symbols-rounded">edit</i></td
-					>
-					<td
-						title="Open the group"
-						class="title-entry"
-						colspan="2"
-						on:click={() => goto('/groups/' + encodeURI(group))}>{group}</td
-					>
-				{/if}
+							isModalHidden = false;
+						}}><i class="material-symbols-rounded">edit</i></button
+					></td
+				>
+				<td title="Open the group" class="title-entry" colspan="2"
+					><button on:click={() => goto('/groups/' + encodeURI(group))}>{group}</button></td
+				>
 			</tr>
 		{/each}
 	</table>
 {/if}
 
 <style>
-	.table-input {
+	.group-input {
 		margin: 0em;
+		margin-top: 1em;
 		overflow-wrap: anywhere;
+		text-align: left;
 	}
 
-	.table-input[contenteditable]:empty::before {
+	.group-input[contenteditable]:empty::before {
 		content: 'Enter group name...';
 		color: var(--text-dark-color);
-	}
-	.save-entry {
-		background-color: var(--accent-color);
-	}
-
-	.save-entry:hover {
-		background-color: var(--accent-dark-color);
-	}
-
-	.save-entry:active {
-		background-color: var(--border-color);
 	}
 
 	.input-container {
 		margin-bottom: -1.35em;
+	}
+
+	.char-count {
+		left: 35%;
+	}
+
+	.modal-content {
+		width: 100%;
+	}
+
+	.modal-content span {
+		overflow-wrap: break-word;
+	}
+
+	.save i {
+		font-variation-settings: 'wght' 700;
 	}
 </style>

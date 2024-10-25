@@ -270,8 +270,8 @@
 						<input type="checkbox" bind:group={selectedDraftsToRemove} value={draft} />
 					</label></td
 				>
-				<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draft)}
-					>{draft.title}</td
+				<td title="Open the draft" class="title-entry"
+					><button on:click={() => loadDraft(draft)}>{draft.title}</button></td
 				>
 				<td title="Creation date" class="date-entry">{formatDate(draft.creation_date)}</td>
 			</tr>

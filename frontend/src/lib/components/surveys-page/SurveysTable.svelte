@@ -88,7 +88,9 @@
 					/></label
 				></th
 			>
-			<th title="Survey information" id="info-header" colspan="2">Info</th>
+			<th title="Survey information" id="info-header" colspan="2"
+				><i class="material-symbols-rounded">info</i></th
+			>
 			<th title="Survey title" id="title-header">Survey Title</th>
 			<th title="Group size" id="group-header">Group Size</th>
 			<th title="Access code" id="code-header">Access Code</th>
@@ -135,31 +137,27 @@
 						>
 					{/if}
 				</td>
-				<td
-					title="View the summary"
-					class="title-entry"
-					on:click={() => goto('/' + survey.survey_code + '/summary')}>{survey.title}</td
+				<td title="View the summary" class="title-entry"
+					><button on:click={() => goto('/' + survey.survey_code + '/summary')}
+						>{survey.title}</button
+					></td
 				>
 				{#if survey.uses_cryptographic_module}
-					<td
-						title="View the respondents"
-						class="code-entry"
-						on:click={() => goto('/' + survey.survey_code + '/summary#survey-respondents')}
-					>
-						{survey.group_size}
+					<td title="View the respondents" class="code-entry"
+						><button on:click={() => goto('/' + survey.survey_code + '/summary#survey-respondents')}
+							>{survey.group_size}</button
+						>
 					</td>
 				{:else}
 					<td title="Not Available" class="info-entry">N/A</td>
 				{/if}
-				<td
-					title="View QR code"
-					class="code-entry"
-					on:click={() => {
-						selectedCode = survey.survey_code;
-						isModalHidden = false;
-					}}
-				>
-					{survey.survey_code}
+				<td title="View QR code" class="code-entry"
+					><button
+						on:click={() => {
+							selectedCode = survey.survey_code;
+							isModalHidden = false;
+						}}>{survey.survey_code}</button
+					>
 				</td>
 				<td title="Creation date" class="date-entry">{formatDate(survey.creation_date)}</td>
 			</tr>

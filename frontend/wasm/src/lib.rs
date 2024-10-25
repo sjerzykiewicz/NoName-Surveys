@@ -6,7 +6,7 @@ use num_bigint::{BigUint, RandBigInt};
 use num_traits::{One, Zero};
 use sha3::{
     digest::{ExtendableOutput, Update, XofReader},
-    Digest, Sha3_384, Shake256,
+    Digest, Sha3_256, Sha3_384, Shake256,
 };
 use wasm_bindgen::prelude::*;
 
@@ -83,6 +83,7 @@ const G_HEX: &[u8; 512] = b"3FB32C9B73134D0B2E77506660EDBD48\
 pub struct KeyPair {
     private_key: String,
     public_key: String,
+    fingerprint: String,
 }
 
 #[wasm_bindgen]
@@ -93,6 +94,10 @@ impl KeyPair {
 
     pub fn get_private_key(&self) -> String {
         self.private_key.clone()
+    }
+
+    pub fn get_fingerprint(&self) -> String {
+        self.fingerprint.clone()
     }
 }
 
@@ -106,9 +111,15 @@ pub fn get_keypair() -> KeyPair {
     let priv_key = rng.gen_biguint_below(&order);
     let pub_key = generator.modpow(&priv_key, &prime);
 
+    let mut hasher = Sha3_256::new();
+    Digest::update(&mut hasher, pub_key.to_string().as_bytes());
+    let h = hasher.finalize();
+    let print = format!("{:x}", h);
+
     KeyPair {
         private_key: priv_key.to_string(),
         public_key: pub_key.to_string(),
+        fingerprint: print,
     }
 }
 

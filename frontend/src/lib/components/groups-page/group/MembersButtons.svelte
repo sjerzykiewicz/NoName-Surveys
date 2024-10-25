@@ -10,6 +10,7 @@
 	import { tick } from 'svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import DeleteModal from '$lib/components/DeleteModal.svelte';
 
 	export let members: string[];
 	export let notMembers: string[];
@@ -19,6 +20,7 @@
 	let isPanelVisible: boolean = false;
 	let selectedMembersToAdd: string[] = [];
 	let membersError: GroupError = GroupError.NoError;
+	let isModalHidden: boolean = true;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -129,10 +131,18 @@
 			return;
 		}
 
+		members = newMembers;
+		isModalHidden = true;
 		selectedMembersToRemove = [];
 		invalidateAll();
 	}
 </script>
+
+<DeleteModal
+	title="Removing Group Members"
+	bind:isHidden={isModalHidden}
+	deleteEntries={removeMembers}
+/>
 
 <div class="button-row">
 	<button
@@ -147,7 +157,7 @@
 		title="Remove selected group members"
 		class="delete-group"
 		disabled={selectedMembersToRemove.length === 0}
-		on:click={removeMembers}
+		on:click={() => (isModalHidden = false)}
 	>
 		<i class="material-symbols-rounded">delete</i>Delete
 	</button>

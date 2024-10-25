@@ -1,6 +1,22 @@
 <script lang="ts">
 	import Modal from '$lib/components/Modal.svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!$isErrorModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				$isErrorModalHidden = true;
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
 </script>
 
 <Modal

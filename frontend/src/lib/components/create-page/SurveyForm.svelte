@@ -32,6 +32,7 @@
 	import SelectUsers from './SelectUsers.svelte';
 	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { onMount } from 'svelte';
 
 	export let users: string[];
 	export let groups: string[];
@@ -176,6 +177,21 @@
 	let innerWidth: number;
 
 	$: isCryptoDisabled = !$useCrypto;
+
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isRespondentModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				createSurvey();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
 </script>
 
 <svelte:window bind:innerWidth />

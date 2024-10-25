@@ -10,6 +10,7 @@
 	import UsersError from './UsersError.svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import DeleteModal from '$lib/components/DeleteModal.svelte';
 
 	export let users: string[];
 	export let code: string;
@@ -18,6 +19,7 @@
 	let isPanelVisible: boolean = false;
 	let selectedUsersToAdd: string[] = [];
 	let usersError: GroupError = GroupError.NoError;
+	let isModalHidden: boolean = true;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -91,10 +93,13 @@
 			users.splice(i, 1);
 		});
 
+		isModalHidden = true;
 		selectedUsersToRemove = [];
 		invalidateAll();
 	}
 </script>
+
+<DeleteModal title="Removing Access" bind:isHidden={isModalHidden} deleteEntries={removeUsers} />
 
 <div class="button-row">
 	<button
@@ -109,7 +114,7 @@
 		title="Take away access from selected users"
 		class="delete-group"
 		disabled={selectedUsersToRemove.length === 0}
-		on:click={removeUsers}
+		on:click={() => (isModalHidden = false)}
 	>
 		<i class="material-symbols-rounded">delete</i>Delete
 	</button>

@@ -55,6 +55,22 @@
 		download('noname-keys.txt', publicKey + '\n' + privateKey);
 	}
 
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				isModalHidden = true;
+				generateKeyPair();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
+
 	let innerWidth: number;
 </script>
 
@@ -65,7 +81,7 @@
 		icon="encrypted"
 		title="Generating Keys"
 		bind:isHidden={isModalHidden}
-		width={innerWidth <= $M ? 18 : 22}
+		width={innerWidth > $M ? 22 : 18}
 	>
 		<span slot="content"
 			>Are you sure you want to generate new keys? Doing so will take away your ability to answer
@@ -104,7 +120,6 @@
 
 <style>
 	button i {
-		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
 	}
 </style>

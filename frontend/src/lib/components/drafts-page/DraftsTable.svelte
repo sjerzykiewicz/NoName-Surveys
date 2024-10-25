@@ -33,6 +33,7 @@
 	import { getDraft } from '$lib/utils/getDraft';
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import DeleteModal from '$lib/components/DeleteModal.svelte';
 
 	export let drafts: {
 		id: number;
@@ -41,6 +42,7 @@
 	}[];
 
 	let selectedDraftsToRemove: typeof drafts = [];
+	let isModalHidden: boolean = true;
 
 	$: allSelected =
 		selectedDraftsToRemove.length === drafts.length && selectedDraftsToRemove.length > 0;
@@ -73,6 +75,7 @@
 			drafts.splice(i, 1);
 		});
 
+		isModalHidden = true;
 		$title.title = '';
 		$questions = [];
 		selectedDraftsToRemove = [];
@@ -235,6 +238,8 @@
 
 <svelte:window bind:innerWidth />
 
+<DeleteModal title="Deleting Drafts" bind:isHidden={isModalHidden} deleteEntries={deleteDrafts} />
+
 {#if drafts.length === 0}
 	<div class="info-row">
 		<div title="Drafts" class="title empty">No drafts yet!</div>
@@ -287,7 +292,7 @@
 			title="Delete selected drafts"
 			class="delete-draft"
 			disabled={selectedDraftsToRemove.length === 0}
-			on:click={deleteDrafts}
+			on:click={() => (isModalHidden = false)}
 		>
 			<i class="material-symbols-rounded">delete</i>Delete
 		</button>

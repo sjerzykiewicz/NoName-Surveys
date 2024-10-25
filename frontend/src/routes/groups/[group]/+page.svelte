@@ -23,9 +23,9 @@
 </Header>
 
 <Content>
-	<MembersTable members={data.users} bind:selectedMembersToRemove />
+	<MembersTable bind:members={data.users} bind:selectedMembersToRemove />
 	<MembersButtons
-		members={data.users}
+		bind:members={data.users}
 		{notMembers}
 		group={data.group}
 		bind:selectedMembersToRemove

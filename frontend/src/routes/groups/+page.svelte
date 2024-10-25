@@ -10,7 +10,6 @@
 	import { cubicInOut } from 'svelte/easing';
 
 	export let data: LayoutServerData;
-	export let editedIndex: number = -1;
 	export let selectedGroupsToRemove: string[] = [];
 
 	let numGroups: number = data.group_list.length;
@@ -40,13 +39,8 @@
 			Please delete some groups to create new ones.
 		</p>
 	{/if}
-	<GroupsTable groups={data.group_list} bind:editedIndex bind:selectedGroupsToRemove />
-	<GroupButtons
-		groups={data.group_list}
-		users={data.user_list}
-		bind:editedIndex
-		bind:selectedGroupsToRemove
-	/>
+	<GroupsTable bind:groups={data.group_list} bind:selectedGroupsToRemove />
+	<GroupButtons bind:groups={data.group_list} users={data.user_list} bind:selectedGroupsToRemove />
 </Content>
 
 <style>

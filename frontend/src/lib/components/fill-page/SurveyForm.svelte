@@ -291,6 +291,21 @@
 		isModalHidden = true;
 		goto('/', { replaceState: true, invalidateAll: true });
 	}
+
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				hideModal();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
 </script>
 
 <svelte:window bind:innerWidth />

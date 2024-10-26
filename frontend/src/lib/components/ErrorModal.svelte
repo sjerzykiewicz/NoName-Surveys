@@ -24,6 +24,7 @@
 	title="Error"
 	textColor="var(--error-color)"
 	borderColor="var(--error-color)"
+	zIndex={12}
 	bind:isHidden={$isErrorModalHidden}
 >
 	<div slot="content" class="content">{$errorModalContent}</div>

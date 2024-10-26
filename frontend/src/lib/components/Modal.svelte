@@ -9,6 +9,7 @@
 	export let width: number = 20;
 	export let textColor: string = 'var(--text-color)';
 	export let borderColor: string = 'var(--border-color)';
+	export let zIndex: number = 10;
 	export let hide: () => void = () => (isHidden = true);
 
 	let isClickable: boolean = false;
@@ -37,10 +38,14 @@
 </script>
 
 {#if !isHidden}
-	<section class="overlay" transition:fade={{ duration: 200, easing: cubicInOut }}>
+	<section
+		class="overlay"
+		style="z-index: {zIndex - 1};"
+		transition:fade={{ duration: 200, easing: cubicInOut }}
+	>
 		<div
 			class="modal"
-			style="width: {width}em;color: {textColor};border-color: {borderColor};"
+			style="width: {width}em;color: {textColor};border-color: {borderColor};z-index: {zIndex};"
 			transition:scale={{ duration: 200, easing: cubicInOut }}
 			on:introend={() => (isClickable = true)}
 			on:outroend={() => (isClickable = false)}
@@ -76,7 +81,6 @@
 		height: 100%;
 		background: rgba(0, 0, 0, 0.5);
 		backdrop-filter: blur(2px);
-		z-index: 9;
 	}
 
 	.modal {
@@ -91,7 +95,6 @@
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color);
 		font-size: 1.2em;
-		z-index: 10;
 	}
 
 	.modal div {

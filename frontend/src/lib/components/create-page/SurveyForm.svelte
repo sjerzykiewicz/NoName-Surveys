@@ -40,7 +40,7 @@
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
 
-	let cryptoError: boolean;
+	let cryptoError: boolean = false;
 	let questionInput: HTMLDivElement;
 	let isSurveyModalHidden: boolean = true;
 	let surveyCode: string;

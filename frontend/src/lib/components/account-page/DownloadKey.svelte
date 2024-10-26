@@ -36,7 +36,7 @@
 		flex-direction: row;
 		align-items: center;
 		color: var(--text-color);
-		font-size: 1.5em;
+		font-size: 1.75em;
 		width: fit-content;
 		margin-inline: auto;
 		padding-top: 1em;
@@ -48,15 +48,19 @@
 		margin-right: 0.5em;
 	}
 
+	.download-key .tooltip .tooltip-text {
+		font-size: 0.7em;
+	}
+
 	@media screen and (max-width: 1440px) {
 		.tooltip {
-			--tooltip-width: 17em;
+			--tooltip-width: 15.5em;
 		}
 	}
 
 	@media screen and (max-width: 1024px) {
 		.tooltip {
-			--tooltip-width: 9.5em;
+			--tooltip-width: 9em;
 		}
 	}
 

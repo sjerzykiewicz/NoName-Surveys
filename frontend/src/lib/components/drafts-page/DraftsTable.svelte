@@ -31,7 +31,8 @@
 	import { page } from '$app/stores';
 	import type Question from '$lib/entities/questions/Question';
 	import { getDraft } from '$lib/utils/getDraft';
-	import { S } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let drafts: {
 		id: number;
@@ -48,6 +49,10 @@
 		selectedDraftsToRemove = allSelected ? [] : [...drafts];
 	}
 
+	function formatDate(isoString: string): string {
+		return new Date(isoString).toLocaleString();
+	}
+
 	async function deleteDrafts() {
 		selectedDraftsToRemove.forEach(async (draft, i) => {
 			const response = await fetch('/api/surveys/drafts/delete', {
@@ -60,7 +65,8 @@
 
 			if (!response.ok) {
 				const body = await response.json();
-				alert(body.detail);
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
 				return;
 			}
 
@@ -84,7 +90,8 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			alert(body.detail);
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
 			return;
 		}
 
@@ -266,7 +273,7 @@
 				<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draft)}
 					>{draft.title}</td
 				>
-				<td title="Creation date" class="date-entry">{draft.creation_date}</td>
+				<td title="Creation date" class="date-entry">{formatDate(draft.creation_date)}</td>
 			</tr>
 		{/each}
 	</table>

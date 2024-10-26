@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { questions, title, currentDraftId, draftStructure } from '$lib/stores/create-page';
+	import {
+		questions,
+		title,
+		currentDraftId,
+		draftStructure,
+		useCrypto,
+		ringMembers,
+		selectedGroup
+	} from '$lib/stores/create-page';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import QuestionError from './QuestionError.svelte';
@@ -8,10 +16,10 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
-	import CryptoButtons from './CryptoButtons.svelte';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { page } from '$app/stores';
 	import Survey from '$lib/entities/surveys/Survey';
+	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { getDraft } from '$lib/utils/getDraft';
@@ -19,18 +27,42 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
 	import { popup } from '$lib/utils/popup';
+	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
+	import SelectGroup from './SelectGroup.svelte';
+	import SelectUsers from './SelectUsers.svelte';
+	import CryptoError from './CryptoError.svelte';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let users: string[];
 	export let groups: string[];
 	export let isPreview: boolean;
-	export let cryptoError: boolean;
 	export let isDraftModalHidden: boolean = true;
-	export let isSurveyModalHidden: boolean = true;
-	export let surveyCode: string;
+	export let isRespondentModalHidden: boolean = true;
 
+	let cryptoError: boolean;
 	let questionInput: HTMLDivElement;
+	let isSurveyModalHidden: boolean = true;
+	let surveyCode: string;
+	let ring: string[] = [];
+
+	function checkCorrectness() {
+		cryptoError = false;
+		const g = $selectedGroup;
+		const r = $ringMembers;
+		if (
+			$useCrypto &&
+			(g === null || g === undefined || g.length === 0) &&
+			(r === null || r === undefined || r.length === 0)
+		) {
+			cryptoError = true;
+			return false;
+		}
+		return true;
+	}
 
 	async function saveDraft(overwrite: boolean) {
+		isDraftModalHidden = true;
+
 		$title.title = $title.title.trim();
 		$questions = trimQuestions($questions);
 
@@ -48,7 +80,8 @@
 
 			if (!deleteResponse.ok) {
 				const body = await deleteResponse.json();
-				alert(body.detail);
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
 				return;
 			}
 		}
@@ -63,7 +96,8 @@
 
 		if (!createResponse.ok) {
 			const body = await createResponse.json();
-			alert(body.detail);
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
 			return;
 		}
 
@@ -71,25 +105,125 @@
 		$draftStructure = getDraft($title.title, $questions);
 		popup('draft-popup');
 	}
+
+	async function fetchGroup(name: string) {
+		const response = await fetch('/api/groups/fetch', {
+			method: 'POST',
+			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		const body = await response.json();
+		ring = [...$ringMembers, ...body];
+	}
+
+	async function createSurvey() {
+		if (!checkCorrectness()) return;
+
+		isRespondentModalHidden = true;
+
+		const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
+		let finalRing: string[] = [];
+
+		if ($selectedGroup.length > 0) {
+			await fetchGroup($selectedGroup[0]);
+			finalRing = [...new Set(ring)];
+		} else if ($ringMembers.length > 0) {
+			finalRing = [...$ringMembers];
+		}
+
+		const surveyInfo = new SurveyInfo(
+			$page.data.session!.user!.email!,
+			parsedSurvey,
+			$useCrypto,
+			finalRing
+		);
+
+		const response = await fetch('/api/surveys/create', {
+			method: 'POST',
+			body: JSON.stringify(surveyInfo),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		const body = await response.json();
+		ring = [];
+		finalRing = [];
+		$useCrypto = false;
+		$ringMembers = [];
+		$selectedGroup = [];
+		surveyCode = body.survey_code;
+		isSurveyModalHidden = false;
+	}
+
+	let innerWidth: number;
+
+	$: isCryptoDisabled = !$useCrypto;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <Modal icon="save" title="Saving Draft" bind:isHidden={isDraftModalHidden}>
 	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
-	<button
-		title="Overwrite draft"
-		class="save"
-		on:click={() => {
-			saveDraft(true);
-			isDraftModalHidden = true;
-		}}>Overwrite Draft</button
+	<button title="Overwrite draft" class="save" on:click={() => saveDraft(true)}
+		>Overwrite Draft</button
 	>
-	<button
-		title="Save new draft"
-		class="save"
-		on:click={() => {
-			saveDraft(false);
-			isDraftModalHidden = true;
-		}}>Save New Draft</button
+	<button title="Save new draft" class="save" on:click={() => saveDraft(false)}
+		>Save New Draft</button
+	>
+</Modal>
+
+<Modal
+	icon="group"
+	title="Define Respondent Group"
+	bind:isHidden={isRespondentModalHidden}
+	width={innerWidth > $M ? 26 : 20}
+>
+	<div slot="content">
+		<span>Do you wish to make the survey public or secure?</span>
+		<div class="crypto-buttons">
+			<button
+				title="Public"
+				class="access-button"
+				class:save={!$useCrypto}
+				on:click={() => ($useCrypto = false)}
+			>
+				<i class="material-symbols-rounded">public</i>Public
+			</button>
+			<button
+				title="Secure"
+				class="access-button"
+				class:save={$useCrypto}
+				on:click={() => ($useCrypto = true)}
+			>
+				<i class="material-symbols-rounded">encrypted</i>Secure
+			</button>
+		</div>
+		<div class="select-box">
+			<SelectGroup {groups} bind:disabled={isCryptoDisabled} />
+			<SelectUsers {users} bind:disabled={isCryptoDisabled} />
+			<CryptoError error={cryptoError} />
+		</div>
+	</div>
+	<button title="Define respondent group" class="save apply" on:click={createSurvey}
+		><i class="material-symbols-rounded">done</i>Apply</button
 	>
 </Modal>
 
@@ -126,7 +260,6 @@
 		out:slide={{ duration: 200, easing: cubicInOut }}
 	>
 		<AddQuestionButtons {questionInput} />
-		<CryptoButtons {users} {groups} {cryptoError} />
 	</div>
 {/if}
 
@@ -134,5 +267,32 @@
 	.button-row {
 		font-size: 1em;
 		margin-top: 0em;
+	}
+
+	.crypto-buttons {
+		display: flex;
+		flex-flow: row;
+		justify-content: space-around;
+		padding-top: 1em;
+		padding-bottom: 1em;
+	}
+
+	.access-button {
+		width: fit-content;
+		justify-content: center;
+		margin-right: 0.5em;
+		margin-bottom: 0.5em;
+	}
+
+	.access-button i {
+		margin-right: 0.15em;
+	}
+
+	.apply i {
+		font-variation-settings: 'wght' 700;
+	}
+
+	.select-box {
+		text-align: left;
 	}
 </style>

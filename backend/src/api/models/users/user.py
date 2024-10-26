@@ -31,6 +31,7 @@ class UserFilterOthers(BaseModel):
 
 class UserUpdatePublicKey(User):
     public_key: str
+    fingerprint: str
 
     @field_validator("public_key")
     def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
@@ -38,6 +39,14 @@ class UserUpdatePublicKey(User):
             raise ValueError("public key must be provided")
         if not re.match(r"^[1-9][0-9]*$", v):
             raise ValueError("invalid public key format")
+        return v
+
+    @field_validator("fingerprint")
+    def validate_fingerprint(cls, v, info: ValidationInfo) -> str:
+        if v is None or v == "":
+            raise ValueError("key fingerprint must be provided")
+        if not re.match(r"^[0-9a-f]*$", v):
+            raise ValueError("invalid fingerprint format")
         return v
 
     class Config:

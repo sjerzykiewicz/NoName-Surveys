@@ -2,7 +2,10 @@
 	import '../app.css';
 	import NavBar from '$lib/components/NavBar.svelte';
 	import ScrollToTop from '$lib/components/ScrollToTop.svelte';
+	import ErrorModal from '$lib/components/ErrorModal.svelte';
 </script>
+
+<ErrorModal />
 
 <NavBar />
 <div class="box">

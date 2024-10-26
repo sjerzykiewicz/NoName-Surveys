@@ -2,14 +2,15 @@ from datetime import datetime
 from typing import Optional
 
 import pytz
-from sqlmodel import Field, SQLModel
+from sqlalchemy.dialects.postgresql import TEXT
+from sqlmodel import Column, Field, SQLModel
 
 tz = pytz.timezone("Europe/Warsaw")
 
 
 class SurveyDraftBase(SQLModel):
     creator_id: int = Field(foreign_key="user.id", nullable=False)
-    survey_structure: str
+    survey_structure: str = Field(sa_column=Column(TEXT))
     is_deleted: bool
 
 

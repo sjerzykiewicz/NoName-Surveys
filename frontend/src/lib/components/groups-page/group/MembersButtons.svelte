@@ -8,6 +8,8 @@
 	import MembersError from '../MembersError.svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
+	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let members: string[];
 	export let notMembers: string[];
@@ -52,7 +54,8 @@
 
 		if (!deleteResponse.ok) {
 			const body = await deleteResponse.json();
-			alert(body.detail);
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
 			return;
 		}
 
@@ -72,7 +75,8 @@
 
 		if (!createResponse.ok) {
 			const body = await createResponse.json();
-			alert(body.detail);
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
 			return;
 		}
 
@@ -92,7 +96,8 @@
 
 		if (!deleteResponse.ok) {
 			const body = await deleteResponse.json();
-			alert(body.detail);
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
 			return;
 		}
 
@@ -119,7 +124,8 @@
 
 		if (!createResponse.ok) {
 			const body = await createResponse.json();
-			alert(body.detail);
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
 			return;
 		}
 

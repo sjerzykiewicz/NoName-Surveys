@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from pydantic import BaseModel, ValidationInfo, field_validator
 
@@ -24,7 +25,7 @@ class SurveyDraftCreate(BaseModel):
 class SurveyDraftHeadersOutput(BaseModel):
     id: int
     title: str
-    creation_date: str
+    creation_date: datetime
 
     class Config:
         extra = "forbid"

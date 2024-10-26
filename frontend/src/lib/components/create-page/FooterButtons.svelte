@@ -1,19 +1,10 @@
 <script lang="ts">
-	import {
-		title,
-		questions,
-		useCrypto,
-		ringMembers,
-		selectedGroup,
-		currentDraftId,
-		draftStructure
-	} from '$lib/stores/create-page';
+	import { title, questions, currentDraftId, draftStructure } from '$lib/stores/create-page';
 	import Survey from '$lib/entities/surveys/Survey';
 	import Slider from '$lib/components/create-page/Slider.svelte';
 	import Number from '$lib/components/create-page/Number.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import Binary from '$lib/components/create-page/Binary.svelte';
-	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import { SurveyError } from '$lib/entities/SurveyError';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
@@ -23,13 +14,12 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
-	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	export let isPreview: boolean = false;
-	export let cryptoError: boolean = false;
 	export let isDraftModalHidden: boolean = true;
-	export let isSurveyModalHidden: boolean = true;
-	export let surveyCode: string;
+	export let isRespondentModalHidden: boolean = true;
 
 	function togglePreview() {
 		isPreview = !isPreview;
@@ -82,17 +72,6 @@
 			}
 		}
 
-		cryptoError = false;
-		const g = $selectedGroup;
-		const r = $ringMembers;
-		if (
-			$useCrypto &&
-			(g === null || g === undefined || g.length === 0) &&
-			(r === null || r === undefined || r.length === 0)
-		) {
-			cryptoError = true;
-		}
-
 		if ($title.error !== SurveyError.NoError) {
 			await tick();
 			scrollToElementById('header');
@@ -104,12 +83,6 @@
 			scrollToElementById(
 				$questions.indexOf($questions.find((q) => q.error !== SurveyError.NoError)!).toString()
 			);
-			return false;
-		}
-
-		if (cryptoError) {
-			await tick();
-			scrollToElementById('crypto');
 			return false;
 		}
 
@@ -138,7 +111,8 @@
 
 			if (!response.ok) {
 				const body = await response.json();
-				alert(body.detail);
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
 				return;
 			}
 
@@ -148,69 +122,13 @@
 		}
 	}
 
-	let ring: string[] = [];
-
-	async function fetchGroup(name: string) {
-		const response = await fetch('/api/groups/fetch', {
-			method: 'POST',
-			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			const body = await response.json();
-			alert(body.detail);
-			return;
-		}
-
-		const body = await response.json();
-		ring = [...$ringMembers, ...body];
-	}
-
 	async function createSurvey() {
 		$title.title = $title.title.trim();
 		$questions = trimQuestions($questions);
 
 		if (!(await checkCorrectness())) return;
 
-		const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
-		let finalRing: string[] = [];
-
-		if ($selectedGroup.length > 0) {
-			await fetchGroup($selectedGroup[0]);
-			finalRing = [...new Set(ring)];
-		} else if ($ringMembers.length > 0) {
-			finalRing = [...$ringMembers];
-		}
-
-		const surveyInfo = new SurveyInfo(
-			$page.data.session!.user!.email!,
-			parsedSurvey,
-			$useCrypto,
-			finalRing
-		);
-
-		const response = await fetch('/api/surveys/create', {
-			method: 'POST',
-			body: JSON.stringify(surveyInfo),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			const body = await response.json();
-			alert(body.detail);
-			return;
-		}
-
-		const body = await response.json();
-		ring = [];
-		finalRing = [];
-		surveyCode = body.survey_code;
-		isSurveyModalHidden = false;
+		isRespondentModalHidden = false;
 	}
 </script>
 

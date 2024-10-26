@@ -24,6 +24,15 @@ def get_user_by_email(email: str, session: Session) -> User:
     return user
 
 
+def get_users_with_public_keys_by_emails(
+    emails: list[str], session: Session
+) -> list[User]:
+    users = session.exec(
+        select(User).filter(User.email.in_(emails), User.public_key != "")
+    ).all()
+    return [user for user in users]
+
+
 def all_users_exist(users_emails: list[str], session: Session) -> bool:
     users = session.exec(select(User).filter(User.email.in_(users_emails))).all()
     return len(users) == len(users_emails)

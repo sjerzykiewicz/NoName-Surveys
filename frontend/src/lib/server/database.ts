@@ -268,3 +268,13 @@ export const filterUnregisteredUsers = (emails: string[]) => {
 		}
 	});
 };
+
+export const filterUsersWithNoPublicKey = (emails: string[]) => {
+	return fetch(`${host}/users/filter-users-with-no-public-key`, {
+		method: 'POST',
+		body: JSON.stringify({ emails }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};

@@ -40,6 +40,7 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { FileError } from '$lib/entities/FileError';
 	import KeysError from './KeysError.svelte';
+	import { readFile } from '$lib/utils/readFile';
 
 	onMount(async () => {
 		await init();
@@ -218,7 +219,6 @@
 
 	function checkFileCorrectness() {
 		fileError = FileError.NoError;
-		fileElement = document.querySelector<HTMLInputElement>('#keys-file');
 
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
@@ -229,6 +229,40 @@
 		}
 
 		return true;
+	}
+
+	async function processCrypto() {
+		if (!checkFileCorrectness()) return;
+
+		const text = await readFile(fileElement).then(
+			(resolve) => {
+				return resolve;
+			},
+			(reject) => {
+				$errorModalContent = reject as string;
+				$isErrorModalHidden = false;
+				return '';
+			}
+		);
+
+		let keyPair: KeyPair = getKeys(text);
+
+		if (!keys.includes(keyPair.publicKey)) {
+			$errorModalContent = 'Your public key is not on the list.';
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		processForm(keyPair);
+	}
+
+	function getKeys(text: string): KeyPair {
+		const words = text.split('\n');
+
+		let publicKey = words[0];
+		let privateKey = words[1];
+
+		return new KeyPair(privateKey, publicKey);
 	}
 
 	async function processForm(keyPair: KeyPair | undefined) {
@@ -269,42 +303,6 @@
 
 		isKeysModalHidden = true;
 		isSuccessModalHidden = false;
-	}
-
-	function getKeys(text: string): KeyPair {
-		const words = text.split('\n');
-
-		let publicKey = words[0];
-		let privateKey = words[1];
-
-		return new KeyPair(privateKey, publicKey);
-	}
-
-	function processCrypto() {
-		if (!checkFileCorrectness()) return;
-
-		const keyInput = document.querySelector<HTMLInputElement>('#keys-file');
-		const keysReader = new FileReader();
-		const keysFile = keyInput?.files?.[0];
-		try {
-			keysReader.readAsText(keysFile!);
-		} catch {
-			$errorModalContent = 'No key file has been provided.';
-			$isErrorModalHidden = false;
-			return;
-		}
-		let keyPair: KeyPair | undefined;
-		keysReader.onload = (e) => {
-			const fileData = e.target?.result;
-			const text = fileData as string;
-			keyPair = getKeys(text);
-			if (!keys.includes(keyPair.publicKey)) {
-				$errorModalContent = 'Your public key is not on the list.';
-				$isErrorModalHidden = false;
-				return;
-			}
-			processForm(keyPair);
-		};
 	}
 
 	async function submitSurvey() {

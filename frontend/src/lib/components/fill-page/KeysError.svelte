@@ -20,7 +20,7 @@
 			case FileError.FileRequired:
 				return element?.files?.length === 0;
 			case FileError.FileInvalid:
-				return element?.files?.[0].name.split('.').pop() !== 'txt';
+				return element?.files?.[0]?.name.split('.').pop() !== 'txt';
 		}
 	};
 </script>
@@ -33,7 +33,6 @@
 
 <style>
 	.error {
-		margin: 0.5em 0em 0em 0em;
 		font-size: 0.8em;
 	}
 </style>

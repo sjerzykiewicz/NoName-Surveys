@@ -22,7 +22,7 @@
 <Header>
 	<div class="title">
 		Your groups
-		<span title="Number of surveys" class:max={numGroups >= $LIMIT_OF_GROUPS}
+		<span title="Number of groups" class:max={numGroups >= $LIMIT_OF_GROUPS}
 			>[ {numGroups} / {$LIMIT_OF_GROUPS} ]</span
 		>
 	</div>
@@ -31,7 +31,7 @@
 <Content>
 	{#if numGroups >= $LIMIT_OF_GROUPS}
 		<p
-			title="Survey limit reached"
+			title="Group limit reached"
 			class="error"
 			transition:slide={{ duration: 200, easing: cubicInOut }}
 		>

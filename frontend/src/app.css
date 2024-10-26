@@ -15,6 +15,8 @@
 	--error-dark-color: #990000;
 	--amu-color: #002d69;
 	--amu-dark-color: #00214d;
+	--warning-color: #ff9900;
+	--warning-dark-color: #cc7a00;
 
 	--tooltip-width: 12em;
 }
@@ -27,14 +29,7 @@
 	--shadow-color: #cacaca;
 	--border-color: #5a5a5a;
 	--text-color: #1a1a1a;
-	--text-color-2: #eaeaea;
 	--text-dark-color: #9a9a9a;
-	--accent-color: #0075ff;
-	--accent-dark-color: #005cc8;
-	--error-color: #ff3333;
-	--error-dark-color: #990000;
-	--amu-color: #002d69;
-	--amu-dark-color: #00214d;
 }
 
 @font-face {
@@ -320,6 +315,7 @@ button:active,
 .add-choice i,
 .footer-button i,
 .error i,
+.warning i,
 .save i,
 .not i,
 .sign-out i,
@@ -384,6 +380,70 @@ a:hover {
 
 a:active {
 	color: var(--border-color);
+}
+
+/* file input */
+
+.file-div {
+	color: var(--text-color);
+	text-shadow: 0px 4px 4px var(--shadow-color);
+	text-align: justify;
+	cursor: default;
+}
+
+.file-div label {
+	display: block;
+}
+
+input[type='file'] {
+	display: none;
+}
+
+.file-input {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	text-align: left;
+	margin-top: 0.5em;
+	background-color: var(--secondary-dark-color);
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	box-shadow: 0px 4px 4px var(--shadow-color);
+	padding: 0.5em;
+	font-size: 0.8em;
+	cursor: default;
+}
+
+.file-button {
+	display: flex;
+	align-items: center;
+	padding: 0.25em;
+	background-color: var(--primary-color);
+	border: 1px solid var(--border-color);
+	border-radius: 5px;
+	box-shadow: 0px 4px 4px var(--shadow-color);
+	text-shadow: none;
+	color: var(--text-color);
+	cursor: pointer;
+	transition: 0.2s;
+	margin-right: 0.5em;
+	min-width: 6.5em;
+}
+
+.file-button:hover {
+	background-color: var(--secondary-color);
+}
+
+.file-button:active {
+	background-color: var(--border-color);
+}
+
+.file-name {
+	overflow: hidden;
+	overflow-wrap: anywhere;
+	text-overflow: ellipsis;
+	height: 1.15em;
 }
 
 /* questions */
@@ -803,7 +863,8 @@ input[type='radio']:disabled {
 	cursor: not-allowed;
 }
 
-.error {
+.error,
+.warning {
 	display: flex;
 	align-items: center;
 	color: var(--error-color);
@@ -812,6 +873,10 @@ input[type='radio']:disabled {
 	text-shadow: 0px 4px 4px var(--shadow-color);
 	cursor: default;
 	margin: 0.5em 0em 0em 0em;
+}
+
+.warning {
+	color: var(--warning-color);
 }
 
 .title {
@@ -1293,6 +1358,7 @@ button.popup {
 	}
 
 	.error,
+	.warning,
 	.tooltip-text,
 	.popup-text,
 	.select-list,

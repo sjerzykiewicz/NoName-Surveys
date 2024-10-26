@@ -10,11 +10,20 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import NameError from '$lib/components/groups-page/NameError.svelte';
-	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		warningModalContent,
+		isWarningModalHidden,
+		LIMIT_OF_CHARS
+	} from '$lib/stores/global';
 	import { limitInput } from '$lib/utils/limitInput';
 	import { M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/DeleteModal.svelte';
+	import { FileError } from '$lib/entities/FileError';
+	import EmailsWarning from './EmailsWarning.svelte';
+	import { readFile } from '$lib/utils/readFile';
 
 	export let groups: string[];
 	export let users: string[];
@@ -65,6 +74,25 @@
 		}
 
 		return true;
+	}
+
+	async function filterUnregisteredUsers(emails: string[]): Promise<string[]> {
+		const response = await fetch('/api/users/filter-unregistered-users', {
+			method: 'POST',
+			body: JSON.stringify({ emails: emails }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return emails;
+		}
+
+		return await response.json();
 	}
 
 	async function createGroup(user_group_name: string, user_group_members: string[]) {
@@ -118,6 +146,60 @@
 		isModalHidden = true;
 		selectedGroupsToRemove = [];
 		invalidateAll();
+	}
+
+	let fileElement: HTMLInputElement | null = null;
+	let fileName: string = 'No file selected';
+	let fileWarning: FileError = FileError.NoError;
+
+	async function handleFileChange() {
+		fileElement = document.querySelector<HTMLInputElement>('#emails-file');
+		fileName = fileElement?.files?.[0]?.name ?? 'No file selected';
+
+		const emails = await processEmails();
+		const unregisteredEmails = await filterUnregisteredUsers(emails);
+
+		if (unregisteredEmails.length > 0 && $isErrorModalHidden) {
+			$warningModalContent = `Could not import ${unregisteredEmails.length} users, because they haven't registered yet.`;
+			$isWarningModalHidden = false;
+		}
+
+		const registeredEmails = emails.filter((e) => !unregisteredEmails.includes(e));
+		const newGroupMembers = [...groupMembers, ...registeredEmails];
+
+		groupMembers = [...new Set(newGroupMembers)];
+	}
+
+	function checkFileCorrectness() {
+		fileWarning = FileError.NoError;
+
+		if (fileElement?.files?.length === 0) {
+			fileWarning = FileError.FileRequired;
+			return false;
+		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'csv') {
+			fileWarning = FileError.FileInvalid;
+			return false;
+		}
+
+		return true;
+	}
+
+	async function processEmails() {
+		if (!checkFileCorrectness()) return [];
+
+		return await readFile(fileElement).then(
+			(resolve) => {
+				return resolve
+					.split(';')
+					.map((e) => e.trim())
+					.filter((e) => e.length > 0);
+			},
+			(reject) => {
+				$errorModalContent = reject as string;
+				$isErrorModalHidden = false;
+				return [];
+			}
+		);
 	}
 
 	let innerWidth: number;
@@ -186,16 +268,37 @@
 			<button
 				title="Save the group"
 				class="save"
-				on:click={() => createGroup(groupName.trim(), groupMembers)}
+				on:click={() => {
+					createGroup(groupName.trim(), groupMembers);
+				}}
 			>
 				<i class="material-symbols-rounded">done</i>Create
 			</button>
 		</div>
 		<MembersError members={groupMembers} error={membersError} />
+		<div class="button-row">
+			<div title="Import group members from a .csv file" class="file-div">
+				<span class="file-label">Or import group members from a .csv file.</span>
+				<label for="emails-file">
+					<div class="file-input">
+						<span class="file-button"
+							><i class="material-symbols-rounded">upload_file</i>Select File</span
+						>
+						<span class="file-name">{fileName}</span>
+					</div>
+					<input type="file" name="emails" id="emails-file" on:change={handleFileChange} />
+				</label>
+			</div>
+		</div>
+		<EmailsWarning warning={fileWarning} element={fileElement} />
 	</div>
 {/if}
 
 <style>
+	.select-list {
+		margin-bottom: 0em;
+	}
+
 	.buttons-container {
 		padding: 0.2em;
 		margin: -0.2em;
@@ -218,5 +321,13 @@
 
 	.input-container {
 		margin-bottom: -1.4em;
+	}
+
+	.file-label {
+		font-size: 0.8em;
+	}
+
+	.file-input {
+		margin-top: 0.625em;
 	}
 </style>

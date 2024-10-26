@@ -258,3 +258,13 @@ export const checkAccessToSurvey = (user_email: string, survey_code: string) => 
 		}
 	});
 };
+
+export const filterUnregisteredUsers = (emails: string[]) => {
+	return fetch(`${host}/users/filter-unregistered-users`, {
+		method: 'POST',
+		body: JSON.stringify({ emails }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};

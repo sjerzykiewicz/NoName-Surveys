@@ -207,7 +207,7 @@
 		return true;
 	}
 
-	let fileElement = document.querySelector<HTMLInputElement>('#keys-file');
+	let fileElement: HTMLInputElement | null = null;
 	let fileName: string = 'No file selected';
 	let fileError: FileError = FileError.NoError;
 
@@ -223,7 +223,7 @@
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
 			return false;
-		} else if (fileElement?.files?.[0].name.split('.').pop() !== 'txt') {
+		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'txt') {
 			fileError = FileError.FileInvalid;
 			return false;
 		}
@@ -351,8 +351,8 @@
 	bind:isHidden={isKeysModalHidden}
 	width={innerWidth <= $M ? 20 : 38}
 >
-	<div slot="content" title="Load your digital signature keys" class="load-div">
-		<span
+	<div slot="content" title="Load your digital signature keys" class="file-div">
+		<span class="file-label"
 			>Please load the file which you have previously generated on this application. The file
 			contains your keys, necessary for cryptographic calculations which are needed for validating
 			your right to fill out this survey.<br /><br />Default filename: "noname-keys.txt"</span
@@ -393,8 +393,8 @@
 
 <Content>
 	{#if keys.length === 1 || keys.length === 2}
-		<p title="Survey not secure" class="error">
-			<i class="material-symbols-rounded">error</i>This survey is not secure.
+		<p title="Survey not secure" class="warning">
+			<i class="material-symbols-rounded">warning</i>This survey is not secure.
 			{keys.length === 1
 				? ' You are the only person who can respond to this survey.'
 				: ' There are only two people who can respond to this survey. The other person could be the creator of this survey.'}
@@ -419,73 +419,15 @@
 </Footer>
 
 <style>
-	.load-div {
-		color: var(--text-color);
-		text-shadow: 0px 4px 4px var(--shadow-color);
+	.file-div {
 		width: 100%;
-		text-align: justify;
-	}
-
-	.load-div label {
-		display: block;
-	}
-
-	input[type='file'] {
-		display: none;
-	}
-
-	.file-input {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		align-items: center;
-		text-align: left;
-		margin-top: 0.5em;
-		background-color: var(--secondary-dark-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		padding: 0.5em;
-		font-size: 0.8em;
-		cursor: default;
-	}
-
-	.file-button {
-		display: flex;
-		align-items: center;
-		padding: 0.25em;
-		background-color: var(--primary-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		text-shadow: none;
-		color: var(--text-color);
-		cursor: pointer;
-		transition: 0.2s;
-		margin-right: 0.5em;
-		min-width: 6.5em;
-	}
-
-	.file-button:hover {
-		background-color: var(--secondary-color);
-	}
-
-	.file-button:active {
-		background-color: var(--border-color);
-	}
-
-	.file-name {
-		overflow: hidden;
-		overflow-wrap: anywhere;
-		text-overflow: ellipsis;
-		height: 1.15em;
 	}
 
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}
 
-	.error {
+	.warning {
 		margin: 0em 0em 0.5em 0em;
 	}
 

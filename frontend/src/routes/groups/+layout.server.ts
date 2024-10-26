@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 	}
 	const group_list = await groupsResponse.json();
 
-	const usersResponse = await db.getAllUsersWithKeys();
+	const usersResponse = await db.getAllUsers();
 	if (!usersResponse.ok) {
 		error(usersResponse.status, { message: await usersResponse.json() });
 	}

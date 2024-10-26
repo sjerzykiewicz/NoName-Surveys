@@ -1,4 +1,4 @@
-import type { RequestHandler } from '../../surveys/create/$types';
+import type { RequestHandler } from './$types';
 import * as db from '$lib/server/database';
 
 export const POST: RequestHandler = async ({ request }) => {

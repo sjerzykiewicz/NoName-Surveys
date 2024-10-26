@@ -20,7 +20,7 @@
 <Header>
 	<div class="title">
 		Your drafts
-		<span title="Number of surveys" class:max={numDrafts >= $LIMIT_OF_DRAFTS}
+		<span title="Number of drafts" class:max={numDrafts >= $LIMIT_OF_DRAFTS}
 			>[ {numDrafts} / {$LIMIT_OF_DRAFTS} ]</span
 		>
 	</div>
@@ -29,7 +29,7 @@
 <Content>
 	{#if numDrafts >= $LIMIT_OF_DRAFTS}
 		<p
-			title="Survey limit reached"
+			title="Draft limit reached"
 			class="error"
 			transition:slide={{ duration: 200, easing: cubicInOut }}
 		>

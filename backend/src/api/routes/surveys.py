@@ -120,7 +120,7 @@ async def get_respondents_by_code(
     if survey.uses_cryptographic_module:
         return [
             ring_member.user_email
-            for ring_member in ring_member_crud.get_ring_members_fur_suvey_paginated(
+            for ring_member in ring_member_crud.get_ring_members_for_survey_paginated(
                 survey.id, page * PAGE_SIZE, PAGE_SIZE, session
             )
         ]

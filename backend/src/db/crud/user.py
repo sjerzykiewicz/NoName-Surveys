@@ -24,6 +24,11 @@ def get_user_by_email(email: str, session: Session) -> User:
     return user
 
 
+def get_users_by_emails(emails: list[str], session: Session) -> list[User]:
+    users = session.exec(select(User).filter(User.email.in_(emails))).all()
+    return [user for user in users]
+
+
 def get_users_with_public_keys_by_emails(
     emails: list[str], session: Session
 ) -> list[User]:

@@ -36,11 +36,18 @@
 	import init, { linkable_ring_signature } from 'wasm';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import Modal from '$lib/components/Modal.svelte';
-	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		successModalContent,
+		isSuccessModalHidden,
+		M
+	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { FileError } from '$lib/entities/FileError';
 	import KeysError from './KeysError.svelte';
 	import { readFile } from '$lib/utils/readFile';
+	import SuccessModal from '../SuccessModal.svelte';
 
 	onMount(async () => {
 		await init();
@@ -52,7 +59,6 @@
 	export let code: string;
 
 	let innerWidth: number;
-	let isSuccessModalHidden: boolean = true;
 	let isKeysModalHidden: boolean = true;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
@@ -302,7 +308,8 @@
 		}
 
 		isKeysModalHidden = true;
-		isSuccessModalHidden = false;
+		$successModalContent = 'Your answer has been submitted successfully.';
+		$isSuccessModalHidden = false;
 	}
 
 	async function submitSurvey() {
@@ -312,36 +319,29 @@
 	}
 
 	function hideSuccessModal() {
-		isSuccessModalHidden = true;
+		$isSuccessModalHidden = true;
 		goto('/', { replaceState: true, invalidateAll: true });
 	}
 
 	onMount(() => {
-		function handleSuccessEnter(event: KeyboardEvent) {
-			if (!isSuccessModalHidden && event.key === 'Enter') {
-				event.preventDefault();
-				hideSuccessModal();
-			}
-		}
-
-		function handleKeysEnter(event: KeyboardEvent) {
+		function handleEnter(event: KeyboardEvent) {
 			if (!isKeysModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				processCrypto();
 			}
 		}
 
-		document.body.addEventListener('keydown', handleSuccessEnter);
-		document.body.addEventListener('keydown', handleKeysEnter);
+		document.body.addEventListener('keydown', handleEnter);
 
 		return () => {
-			document.body.removeEventListener('keydown', handleSuccessEnter);
-			document.body.removeEventListener('keydown', handleKeysEnter);
+			document.body.removeEventListener('keydown', handleEnter);
 		};
 	});
 </script>
 
 <svelte:window bind:innerWidth />
+
+<SuccessModal hide={hideSuccessModal} />
 
 <Modal
 	icon="encrypted"
@@ -368,18 +368,6 @@
 	</div>
 	<button title="Submit keys" class="save" on:click={processCrypto}
 		><i class="material-symbols-rounded">done</i>Submit</button
-	>
-</Modal>
-
-<Modal
-	icon="check_circle"
-	title="Survey Answered"
-	bind:isHidden={isSuccessModalHidden}
-	hide={hideSuccessModal}
->
-	<span slot="content">Your answer has been submitted successfully.</span>
-	<button title="Ok" class="save" on:click={hideSuccessModal}
-		><i class="material-symbols-rounded">done</i>OK</button
 	>
 </Modal>
 

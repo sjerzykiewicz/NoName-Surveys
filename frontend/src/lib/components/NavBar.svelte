@@ -99,10 +99,13 @@
 
 {#if open || innerWidth > $M}
 	<div class="bar">
+		<a href="/" title="Fill Out" class="nav-logo"
+			><img src={logo} alt="NoName logo" width="48" height="48" /></a
+		>
 		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
 			{#each Object.entries(navLinks) as [id, data]}
 				<div
-					title={data.disabled ? 'Sign in to access ' + data.name : data.name}
+					title={data.disabled ? '' : data.name}
 					{id}
 					class="nav-link"
 					class:tooltip={innerWidth > $M && data.disabled}
@@ -210,15 +213,26 @@
 
 	.nav-burger-logo {
 		display: flex;
-		color: var(--text-color);
 		text-decoration: none;
+		opacity: 1;
+		transition: 0.2s;
+		cursor: pointer;
+	}
+
+	.nav-logo {
+		position: absolute;
+		top: 0.25em;
+		left: 0.25em;
+		text-decoration: none;
+		opacity: 1;
 		transition: 0.2s;
 		cursor: pointer;
 	}
 
 	.nav-burger-logo:hover,
-	.nav-burger-logo:active {
-		background-color: transparent;
+	.nav-burger-logo:active,
+	.nav-logo:hover,
+	.nav-logo:active {
 		opacity: 0.7;
 	}
 
@@ -265,9 +279,14 @@
 		background-color: var(--secondary-color);
 	}
 
-	@media screen and (max-width: 892px) {
+	@media screen and (max-width: 880px) {
 		.toggle-mode {
 			top: 2.5em;
+		}
+
+		.nav-logo {
+			visibility: hidden;
+			opacity: 0 !important;
 		}
 	}
 

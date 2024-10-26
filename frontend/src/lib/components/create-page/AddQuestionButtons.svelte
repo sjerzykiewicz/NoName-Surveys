@@ -150,15 +150,23 @@
 	}
 
 	onMount(() => {
+		function handleEscape(event: KeyboardEvent) {
+			if (isPanelVisible && event.key === 'Escape') {
+				isPanelVisible = false;
+			}
+		}
+
 		function handleClick(event: MouseEvent) {
 			if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
 				isPanelVisible = false;
 			}
 		}
 
+		document.body.addEventListener('keydown', handleEscape);
 		document.body.addEventListener('click', handleClick);
 
 		return () => {
+			document.body.removeEventListener('keydown', handleEscape);
 			document.body.removeEventListener('click', handleClick);
 		};
 	});
@@ -216,7 +224,6 @@
 		width: fit-content;
 		font-size: 1.25em;
 		margin-right: 0.5em;
-		margin-bottom: 0.5em;
 	}
 
 	.add-buttons {

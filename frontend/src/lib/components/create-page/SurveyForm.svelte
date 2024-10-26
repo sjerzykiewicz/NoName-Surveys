@@ -27,11 +27,12 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
 	import { popup } from '$lib/utils/popup';
-	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, S, M } from '$lib/stores/global';
 	import SelectGroup from './SelectGroup.svelte';
 	import SelectUsers from './SelectUsers.svelte';
 	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { onMount } from 'svelte';
 
 	export let users: string[];
 	export let groups: string[];
@@ -39,7 +40,7 @@
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
 
-	let cryptoError: boolean;
+	let cryptoError: boolean = false;
 	let questionInput: HTMLDivElement;
 	let isSurveyModalHidden: boolean = true;
 	let surveyCode: string;
@@ -176,6 +177,21 @@
 	let innerWidth: number;
 
 	$: isCryptoDisabled = !$useCrypto;
+
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isRespondentModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				createSurvey();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
 </script>
 
 <svelte:window bind:innerWidth />
@@ -194,7 +210,7 @@
 	icon="group"
 	title="Define Respondent Group"
 	bind:isHidden={isRespondentModalHidden}
-	width={innerWidth > $M ? 26 : 20}
+	width={innerWidth <= $M ? 20 : 26}
 >
 	<div slot="content">
 		<span>Do you wish to make the survey public or secure?</span>
@@ -260,11 +276,29 @@
 		out:slide={{ duration: 200, easing: cubicInOut }}
 	>
 		<AddQuestionButtons {questionInput} />
+		<div class="tooltip create-info">
+			<i class="material-symbols-rounded">info</i>
+			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
+				>Before creating a secure survey, consider setting up a user group. User groups make it easy
+				to select the same set of respondents across multiple surveys. However, if you prefer, you
+				can proceed without using them.</span
+			>
+		</div>
 	</div>
 {/if}
 
 <style>
+	.tooltip {
+		--tooltip-width: 22em;
+		font-size: 1.5em;
+	}
+
+	.tooltip .tooltip-text {
+		font-size: 0.8em;
+	}
+
 	.button-row {
+		align-items: center;
 		font-size: 1em;
 		margin-top: 0em;
 	}
@@ -294,5 +328,12 @@
 
 	.select-box {
 		text-align: left;
+	}
+
+	@media screen and (max-width: 768px) {
+		.tooltip {
+			--tooltip-width: 10em;
+			font-size: 1.25em;
+		}
 	}
 </style>

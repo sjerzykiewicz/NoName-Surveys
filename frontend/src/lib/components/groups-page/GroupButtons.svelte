@@ -14,10 +14,10 @@
 	import { limitInput } from '$lib/utils/limitInput';
 	import { M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import DeleteModal from '$lib/components/DeleteModal.svelte';
 
 	export let groups: string[];
 	export let users: string[];
-	export let editedIndex: number = -1;
 	export let selectedGroupsToRemove: string[] = [];
 
 	let isPanelVisible: boolean = false;
@@ -25,6 +25,7 @@
 	let groupMembers: string[] = [];
 	let nameError: GroupError = GroupError.NoError;
 	let membersError: GroupError = GroupError.NoError;
+	let isModalHidden: boolean = true;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -91,7 +92,6 @@
 		groupName = '';
 		groupMembers = [];
 		isPanelVisible = false;
-		editedIndex = -1;
 		invalidateAll();
 	}
 
@@ -111,8 +111,11 @@
 				$isErrorModalHidden = false;
 				return;
 			}
+
+			groups = groups.filter((g) => g !== group);
 		});
 
+		isModalHidden = true;
 		selectedGroupsToRemove = [];
 		invalidateAll();
 	}
@@ -121,6 +124,8 @@
 </script>
 
 <svelte:window bind:innerWidth />
+
+<DeleteModal title="Deleting Groups" bind:isHidden={isModalHidden} deleteEntries={deleteGroups} />
 
 <div class="button-row">
 	<button
@@ -136,7 +141,7 @@
 			title="Delete selected groups"
 			class="delete-group"
 			disabled={selectedGroupsToRemove.length === 0}
-			on:click={deleteGroups}
+			on:click={() => (isModalHidden = false)}
 		>
 			<i class="material-symbols-rounded">delete</i>Delete
 		</button>

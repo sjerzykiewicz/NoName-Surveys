@@ -63,6 +63,22 @@
 		}
 	}
 
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				isModalHidden = true;
+				generateKeyPair();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
+
 	let innerWidth: number;
 </script>
 
@@ -112,7 +128,6 @@
 
 <style>
 	button i {
-		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
 	}
 </style>

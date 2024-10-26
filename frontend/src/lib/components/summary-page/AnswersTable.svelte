@@ -7,15 +7,24 @@
 
 <table>
 	<tr>
+		<th title="Number of answer" id="info-header"
+			><i class="material-symbols-rounded">numbers</i></th
+		>
 		<th title="Answers" id="title-header">Answers</th>
 	</tr>
 	{#each numbers as i}
 		<tr>
-			<td
-				title="View answer no. {i + 1}"
-				class="title-entry"
-				on:click={() => goto($page.url.pathname + '/' + i)}>{i + 1}. Answer</td
+			<td title="Answer no. {i + 1}" class="info-entry">{i + 1}.</td>
+			<td title="View answer no. {i + 1}" class="title-entry"
+				><button on:click={() => goto($page.url.pathname + '/' + i)}>Answer</button></td
 			>
 		</tr>
 	{/each}
 </table>
+
+<style>
+	.info-entry {
+		text-align: center;
+		font-weight: 700;
+	}
+</style>

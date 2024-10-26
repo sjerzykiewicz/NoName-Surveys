@@ -2,6 +2,7 @@
 	import { answers } from '$lib/stores/fill-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { questions } from '$lib/stores/fill-page';
 
 	export let unansweredRequired: Array<number>;
 	export let questionIndex: number;
@@ -24,7 +25,12 @@
 	out:slide={{ duration: 200, easing: cubicInOut }}
 >
 	{#if checkAnswerError(questionIndex)}
-		<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<p
+			title="Error"
+			class="error"
+			style={$questions[questionIndex].type === 'text' ? 'margin-top: -2.5em;' : ''}
+			transition:slide={{ duration: 200, easing: cubicInOut }}
+		>
 			<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
 		</p>
 	{/if}

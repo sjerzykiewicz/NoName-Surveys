@@ -4,6 +4,7 @@
 	import { page } from '$app/stores';
 	import { errorModalContent, isErrorModalHidden, S, XL } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import DeleteModal from '$lib/components/DeleteModal.svelte';
 
 	export let survey_list: {
 		title: string;
@@ -15,9 +16,10 @@
 	}[];
 
 	let innerWidth: number;
-	let isModalHidden: boolean = true;
 	let selectedCode: string;
 	let selectedSurveysToRemove: typeof survey_list = [];
+	let isQrCodeModalHidden: boolean = true;
+	let isDeleteModalHidden: boolean = true;
 
 	$: ownedSurveys = survey_list.filter((s) => s.is_owned_by_user);
 
@@ -55,6 +57,7 @@
 			survey_list.splice(i, 1);
 		});
 
+		isDeleteModalHidden = true;
 		selectedSurveysToRemove = [];
 		invalidateAll();
 	}
@@ -62,7 +65,13 @@
 
 <svelte:window bind:innerWidth />
 
-<QrCodeModal bind:isHidden={isModalHidden} title="Access Code" surveyCode={selectedCode} />
+<DeleteModal
+	title="Deleting Surveys"
+	bind:isHidden={isDeleteModalHidden}
+	deleteEntries={deleteSurveys}
+/>
+
+<QrCodeModal title="Access Code" bind:isHidden={isQrCodeModalHidden} surveyCode={selectedCode} />
 
 {#if survey_list.length === 0}
 	<div class="info-row">
@@ -135,31 +144,27 @@
 						>
 					{/if}
 				</td>
-				<td
-					title="View the summary"
-					class="title-entry"
-					on:click={() => goto('/' + survey.survey_code + '/summary')}>{survey.title}</td
+				<td title="View the summary" class="title-entry"
+					><button on:click={() => goto('/' + survey.survey_code + '/summary')}
+						>{survey.title}</button
+					></td
 				>
 				{#if survey.uses_cryptographic_module}
-					<td
-						title="View the respondents"
-						class="code-entry"
-						on:click={() => goto('/' + survey.survey_code + '/summary#survey-respondents')}
-					>
-						{survey.group_size}
+					<td title="View the respondents" class="code-entry"
+						><button on:click={() => goto('/' + survey.survey_code + '/summary#survey-respondents')}
+							>{survey.group_size}</button
+						>
 					</td>
 				{:else}
 					<td title="Not Available" class="info-entry">N/A</td>
 				{/if}
-				<td
-					title="View QR code"
-					class="code-entry"
-					on:click={() => {
-						selectedCode = survey.survey_code;
-						isModalHidden = false;
-					}}
-				>
-					{survey.survey_code}
+				<td title="View QR code" class="code-entry"
+					><button
+						on:click={() => {
+							selectedCode = survey.survey_code;
+							isQrCodeModalHidden = false;
+						}}>{survey.survey_code}</button
+					>
 				</td>
 				<td title="Creation date" class="date-entry">{formatDate(survey.creation_date)}</td>
 			</tr>
@@ -175,7 +180,7 @@
 			title="Delete selected surveys"
 			class="delete-survey"
 			disabled={selectedSurveysToRemove.length === 0}
-			on:click={deleteSurveys}
+			on:click={() => (isDeleteModalHidden = false)}
 		>
 			<i class="material-symbols-rounded">delete</i>Delete
 		</button>

@@ -13,7 +13,7 @@ def get_ring_members_for_survey(
     return [ring_member for ring_member in ring_members]
 
 
-def get_ring_members_fur_suvey_paginated(
+def get_ring_members_for_survey_paginated(
     survey_id: int, offset: int, limit: int, session: Session
 ) -> list[RingMemberBase]:
     statement = (

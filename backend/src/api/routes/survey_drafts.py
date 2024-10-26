@@ -16,12 +16,20 @@ from src.db.base import get_session
 router = APIRouter()
 
 
+PAGE_SIZE = 10
+
+
 @router.post(
-    "/all",
+    "/all/{page}",
     response_description="Get all Survey Drafts Headers of a user",
     response_model=list[SurveyDraftHeadersOutput],
 )
-async def get_survey_drafts(user_input: User, session: Session = Depends(get_session)):
+async def get_survey_drafts(
+    page: int, user_input: User, session: Session = Depends(get_session)
+):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     user = user_crud.get_user_by_email(user_input.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
@@ -33,7 +41,7 @@ async def get_survey_drafts(user_input: User, session: Session = Depends(get_ses
             creation_date=survey_draft.creation_date,
         )
         for survey_draft in survey_draft_crud.get_not_deleted_survey_drafts_for_user(
-            user.id, session
+            user.id, page * PAGE_SIZE, PAGE_SIZE, session
         )
     ]
 

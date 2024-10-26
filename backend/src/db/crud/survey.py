@@ -95,11 +95,16 @@ def take_away_survey_access(survey_id: int, user_id: int, session: Session) -> N
 
 
 def get_all_surveys_user_can_view(
-    user_id: int, session: Session
+    user_id: int, offset: int, limit: int, session: Session
 ) -> list[tuple[Survey, bool]]:
-    statement = select(AccessToViewResults).where(
-        (AccessToViewResults.user_id == user_id)
-        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    statement = (
+        select(AccessToViewResults)
+        .where(
+            (AccessToViewResults.user_id == user_id)
+            & (AccessToViewResults.is_deleted == False)  # noqa: E712
+        )
+        .offset(offset)
+        .limit(limit)
     )
     survey_accesses = [access for access in session.exec(statement).all()]
 
@@ -117,11 +122,16 @@ def get_all_surveys_user_can_view(
 
 
 def get_all_users_with_access_to_survey(
-    survey_id: int, session: Session
+    survey_id: int, offset: int, limit: int, session: Session
 ) -> list[AccessToViewResults]:
-    statement = select(AccessToViewResults).where(
-        (AccessToViewResults.survey_id == survey_id)
-        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    statement = (
+        select(AccessToViewResults)
+        .where(
+            (AccessToViewResults.survey_id == survey_id)
+            & (AccessToViewResults.is_deleted == False)  # noqa: E712
+        )
+        .offset(offset)
+        .limit(limit)
     )
     return [access for access in session.exec(statement).all()]
 

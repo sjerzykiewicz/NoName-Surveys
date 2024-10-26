@@ -16,15 +16,22 @@ from src.db.base import get_session
 router = APIRouter()
 
 
+PAGE_SIZE = 10
+
+
 @router.post(
-    "/all",
+    "/all/{page}",
     response_description="List of of all user groups of a given user",
     response_model=list[AllUserGroupsOutput],
 )
 async def get_user_groups(
+    page: int,
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+    
     user = user_crud.get_user_by_email(user_group_creator.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
@@ -41,7 +48,7 @@ async def get_user_groups(
                 session,
             ),
         )
-        for user_group in user_groups_crud.get_user_groups(user.id, session)
+        for user_group in user_groups_crud.get_user_groups(user.id, page * PAGE_SIZE, PAGE_SIZE, session)
     ]
 
 
@@ -51,15 +58,21 @@ async def get_user_groups(
     response_model=list[str],
 )
 async def get_user_groups_with_members_having_public_keys(
+    page: int,
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     user = user_crud.get_user_by_email(user_group_creator.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
     return [
         user_group.name
-        for user_group in user_groups_crud.get_user_groups(user.id, session)
+        for user_group in user_groups_crud.get_all_user_groups_of_user(
+            user.id, session
+        )
         if user_crud.all_users_have_public_keys(
             [
                 member.user_id
@@ -73,14 +86,18 @@ async def get_user_groups_with_members_having_public_keys(
 
 
 @router.post(
-    "/fetch",
+    "/fetch/{page}",
     response_description="List of user emails in a given user group",
     response_model=list[UserGroupMembersOutput],
 )
 async def get_user_group(
+    page: int,
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     user = user_crud.get_user_by_email(user_group_request.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
@@ -95,7 +112,7 @@ async def get_user_group(
 
     user_group_members = [
         member.user_id
-        for member in user_groups_crud.get_user_group_members(user_group.id, session)
+        for member in user_groups_crud.get_user_group_members(user_group.id, page * PAGE_SIZE, PAGE_SIZE, session)
     ]
     return [
         UserGroupMembersOutput(

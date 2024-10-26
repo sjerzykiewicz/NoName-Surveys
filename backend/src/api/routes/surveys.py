@@ -23,20 +23,29 @@ from src.db.base import get_session
 
 router = APIRouter()
 
+
 LIMIT_OF_ACTIVE_SURVEYS = 50
+PAGE_SIZE = 10
 
 
 @router.post(
-    "/all",
+    "/all/{page}",
     response_description="Get all survey headers of a user",
     response_model=list[SurveyHeadersOutput],
 )
-async def get_surveys_for_user(user: User, session: Session = Depends(get_session)):
+async def get_surveys_for_user(
+    page: int, user: User, session: Session = Depends(get_session)
+):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     user = user_crud.get_user_by_email(user.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
 
-    user_surveys = survey_crud.get_all_surveys_user_can_view(user.id, session)
+    user_surveys = survey_crud.get_all_surveys_user_can_view(
+        user.id, page * PAGE_SIZE, PAGE_SIZE, session
+    )
     return [
         SurveyHeadersOutput(
             title=survey_draft_crud.get_survey_draft_by_id(
@@ -92,14 +101,18 @@ async def get_survey_by_code(
 
 
 @router.post(
-    "/respondents",
+    "/respondents/{page}",
     response_description="Get emails of respondents",
     response_model=list[str],
 )
 async def get_respondents_by_code(
+    page: int,
     respondents_fetch: SurveyInfoFetchInput,
     session: Session = Depends(get_session),
 ):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     survey = survey_crud.get_survey_by_code(respondents_fetch.survey_code, session)
     if survey is None:
         raise HTTPException(status_code=404, detail="Survey does not exist")
@@ -107,8 +120,8 @@ async def get_respondents_by_code(
     if survey.uses_cryptographic_module:
         return [
             ring_member.user_email
-            for ring_member in ring_member_crud.get_ring_members_for_survey(
-                survey.id, session
+            for ring_member in ring_member_crud.get_ring_members_fur_suvey_paginated(
+                survey.id, page * PAGE_SIZE, PAGE_SIZE, session
             )
         ]
     else:
@@ -275,14 +288,18 @@ async def take_away_access_to_surveys(
 
 
 @router.post(
-    "/get-all-with-access",
+    "/get-all-with-access/{page}",
     response_description="Check who has access to results of a given survey",
     response_model=list[str],
 )
 async def check_access_to_surveys(
+    page: int,
     check_survey_access_input: SurveyUserActions,
     session: Session = Depends(get_session),
 ):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     owner = user_crud.get_user_by_email(check_survey_access_input.user_email, session)
     if owner is None:
         raise HTTPException(status_code=400, detail="User not found")
@@ -301,6 +318,6 @@ async def check_access_to_surveys(
     return [
         user_crud.get_user_by_id(access.user_id, session).email
         for access in survey_crud.get_all_users_with_access_to_survey(
-            survey.id, session
+            survey.id, page * PAGE_SIZE, PAGE_SIZE, session
         )
     ]

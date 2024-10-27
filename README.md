@@ -28,9 +28,12 @@ you have to set up the needed environment variables (.env files in the frontend/
   AUTH_GOOGLE_SECRET = "<google_client_secret>" # used for oauth2.0 authentication
   AUTH_GITHUB_ID = "<github_client_id>" # used for oauth2.0 authentication
   AUTH_GITHUB_SECRET = "<github_client_secret>" # used for oauth2.0 authentication
-  AUTH_SECRET = "<random_string>" # used for auth.js token generation
+  AUTH_USOS_ID="<usos_consumer_key>" # used for usos oauth1.0a authentication
+  AUTH_USOS_SECRET="<usos_consumer_secret>" # used for usos oauth1.0a authentication
+  AUTH_USOS_BASE_URL="<usosapi_base_url>" # used for usos oauth1.0a authentication
   BACKEND_HOST = "http://backend:8000" # change it if docker is not used
   ORIGIN = "http://localhost:3000" # change it if docker is not used
+  AUTH_SECRET = "<random_string>" # used for auth.js token generation
   ```
 - backend:
   ```sh

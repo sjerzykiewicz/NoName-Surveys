@@ -4,6 +4,7 @@ from sqlmodel import Session
 import src.db.crud.user as user_crud
 import src.db.crud.user_groups as user_groups_crud
 from src.api.models.user_groups.user_groups import (  # noqa
+    AllUserGroupsOutput,
     UserGroupAction,
     UserGroupCreate,
     UserGroupCreator,
@@ -18,8 +19,8 @@ router = APIRouter()
 
 @router.post(
     "/all",
-    response_description="List of names of all user groups of a given user",
-    response_model=list[str],
+    response_description="List of of all user groups of a given user",
+    response_model=list[AllUserGroupsOutput],
 )
 async def get_user_groups(
     user_group_creator: UserGroupCreator,
@@ -29,8 +30,46 @@ async def get_user_groups(
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
     return [
+        AllUserGroupsOutput(
+            user_group_name=user_group.name,
+            all_members_have_public_keys=user_crud.all_users_have_public_keys(
+                [
+                    member.user_id
+                    for member in user_groups_crud.get_user_group_members(
+                        user_group.id, session
+                    )
+                ],
+                session,
+            ),
+        )
+        for user_group in user_groups_crud.get_user_groups(user.id, session)
+    ]
+
+
+@router.post(
+    "/all-with-public-keys",
+    response_description="List of names of all user groups of a given user which members all have public keys",
+    response_model=list[str],
+)
+async def get_user_groups_with_members_having_public_keys(
+    user_group_creator: UserGroupCreator,
+    session: Session = Depends(get_session),
+):
+    user = user_crud.get_user_by_email(user_group_creator.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not registered")
+    return [
         user_group.name
         for user_group in user_groups_crud.get_user_groups(user.id, session)
+        if user_crud.all_users_have_public_keys(
+            [
+                member.user_id
+                for member in user_groups_crud.get_user_group_members(
+                    user_group.id, session
+                )
+            ],
+            session,
+        )
     ]
 
 

@@ -68,3 +68,11 @@ class UserGroupNameUpdate(UserGroupAction):
 
     class Config:
         extra = "forbid"
+
+
+class AllUserGroupsOutput(BaseModel):
+    user_group_name: str
+    all_members_have_public_keys: bool
+
+    class Config:
+        extra = "forbid"

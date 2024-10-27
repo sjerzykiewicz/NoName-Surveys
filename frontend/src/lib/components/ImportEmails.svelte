@@ -51,15 +51,15 @@
 			? 'filter-users-with-no-public-key'
 			: 'filter-unregistered-users';
 		const invalidEmails: string[] = await filterUsers(endpoint, emails);
-		const invalidEmailsSet = new Set(invalidEmails);
+		const invalidEmailsSet: Set<string> = new Set(invalidEmails);
 
 		if (invalidEmailsSet.size > 0 && $isErrorModalHidden) {
 			$warningModalContent = `Could not import ${invalidEmailsSet.size} users, because they haven't ${checkKeys ? 'generated keys' : 'registered'} yet.`;
 			$isWarningModalHidden = false;
 		}
 
-		const validEmails = emails.filter((e) => !invalidEmailsSet.has(e));
-		const newUsers = [...users, ...validEmails];
+		const validEmails: string[] = emails.filter((e) => !invalidEmailsSet.has(e));
+		const newUsers: string[] = [...users, ...validEmails];
 
 		users = [...new Set(newUsers)];
 	}

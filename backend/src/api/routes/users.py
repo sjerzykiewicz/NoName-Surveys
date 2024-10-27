@@ -80,12 +80,12 @@ async def update_user_public_key(
     if user_crud.get_user_by_email(update_user_public_key.user_email, session) is None:
         raise HTTPException(status_code=400, detail="User not registered")
 
-    # if not verify(
-    #     update_user_public_key.public_key, update_user_public_key.fingerprint
-    # ):
-    #     raise HTTPException(
-    #         status_code=400, detail="Invalid fingerprint. Please try again"
-    #     )
+    if not verify(
+        update_user_public_key.public_key, update_user_public_key.fingerprint
+    ):
+        raise HTTPException(
+            status_code=400, detail="Invalid fingerprint. Please try again"
+        )
 
     user_crud.update_user_public_key(
         UserWithKey(

@@ -88,6 +88,13 @@ def delete_user_group(user_group_id: int, session: Session) -> UserGroup:
 
 
 def get_user_group_members(
+    user_group_id: int, session: Session
+) -> list[UserGroupMember]:
+    statement = select(UserGroupMember).where(UserGroupMember.group_id == user_group_id)
+    return [user for user in session.exec(statement).all()]
+
+
+def get_user_group_members_paginated(
     user_group_id: int, offset: int, limit: int, session: Session
 ) -> list[UserGroupMember]:
     statement = (

@@ -33,6 +33,7 @@ export const POST: RequestHandler = async ({ cookies }) => {
 		}
 
 		cookies.delete('user_session', { path: '/' });
+		cookies.delete('oauth_token_secret', { path: '/' });
 
 		throw redirect(302, '/account');
 	} catch (err) {

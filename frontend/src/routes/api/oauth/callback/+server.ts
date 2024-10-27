@@ -2,6 +2,7 @@ import { type RequestHandler, error, redirect } from '@sveltejs/kit';
 import { getOAuthInstance } from '$lib/oauth1';
 import { env } from '$env/dynamic/private';
 import * as db from '$lib/server/database';
+import { _getUserInfo } from '../user/+server';
 
 export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 	const oauth_token = url.searchParams.get('oauth_token');
@@ -40,26 +41,7 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		const params = new URLSearchParams(responseText);
 		const responseData = Object.fromEntries(params.entries());
 
-		const requestDataUser = {
-			url: env.AUTH_USOS_BASE_URL + 'services/users/user?fields=email',
-			method: 'GET'
-		};
-
-		const oauthDataUser = oauth.authorize(requestDataUser, {
-			key: responseData.oauth_token,
-			secret: responseData.oauth_token_secret
-		});
-
-		const responseUser = await fetch(requestDataUser.url, {
-			method: 'GET',
-			headers: oauth.toHeader(oauthDataUser)
-		});
-
-		if (!responseUser.ok) {
-			throw error(responseUser.status, 'Failed to fetch user');
-		}
-
-		const userData = await responseUser.json();
+		const userData = await _getUserInfo(responseData.oauth_token, responseData.oauth_token_secret);
 
 		if (userData.email) {
 			const isUserRegistered = await (await db.validateUser(userData.email!)).json();
@@ -69,16 +51,18 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		}
 
 		locals.user = {
-			email: userData.email,
+			email: userData.email
+		};
+
+		const tokens = {
 			oauth_token: responseData.oauth_token,
 			oauth_token_secret: responseData.oauth_token_secret
 		};
 
-		cookies.set('user_session', JSON.stringify(locals.user), {
+		cookies.set('user_session', JSON.stringify(tokens), {
 			path: '/',
 			httpOnly: true,
-			secure: true,
-			maxAge: 60 * 60 * 2 // 2 hours
+			secure: true
 		});
 
 		throw redirect(303, env.ORIGIN + '/account');

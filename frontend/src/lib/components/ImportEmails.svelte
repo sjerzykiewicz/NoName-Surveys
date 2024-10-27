@@ -46,21 +46,19 @@
 		fileElement = document.querySelector<HTMLInputElement>('#emails-file');
 		fileName = fileElement?.files?.[0]?.name ?? 'No file selected';
 
-		const emails = await processEmails();
-		let invalidEmails: string[] = [];
+		const emails: string[] = await processEmails();
+		const endpoint: string = checkKeys
+			? 'filter-users-with-no-public-key'
+			: 'filter-unregistered-users';
+		const invalidEmails: string[] = await filterUsers(endpoint, emails);
+		const invalidEmailsSet = new Set(invalidEmails);
 
-		if (checkKeys) {
-			invalidEmails = await filterUsers('filter-users-with-no-public-key', emails);
-		} else {
-			invalidEmails = await filterUsers('filter-unregistered-users', emails);
-		}
-
-		if (invalidEmails.length > 0 && $isErrorModalHidden) {
-			$warningModalContent = `Could not import ${invalidEmails.length} users, because they haven't ${checkKeys ? 'generated keys' : 'registered'} yet.`;
+		if (invalidEmailsSet.size > 0 && $isErrorModalHidden) {
+			$warningModalContent = `Could not import ${invalidEmailsSet.size} users, because they haven't ${checkKeys ? 'generated keys' : 'registered'} yet.`;
 			$isWarningModalHidden = false;
 		}
 
-		const validEmails = emails.filter((e) => !invalidEmails.includes(e));
+		const validEmails = emails.filter((e) => !invalidEmailsSet.has(e));
 		const newUsers = [...users, ...validEmails];
 
 		users = [...new Set(newUsers)];

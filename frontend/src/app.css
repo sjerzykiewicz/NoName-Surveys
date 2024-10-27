@@ -1304,3 +1304,26 @@ button.popup {
 		max-height: 15.5em;
 	}
 }
+
+.accent {
+	color: var(--accent-color);
+	font-weight: 700;
+}
+
+.account-ul {
+	list-style-type: none;
+	margin-top: 0.25em;
+	padding-left: 1.5em;
+}
+
+.account-li {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding-top: 0.75em;
+}
+
+.account-icon {
+	margin-right: 0.5em;
+}

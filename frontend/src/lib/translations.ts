@@ -26,45 +26,46 @@ export const data = {
 		home_submit: 'Submit the code',
 
 		account_your: 'Your account',
+		account_info_title: 'Account information',
 		account_sign_in: 'Authorize yourself with AMU USOS:',
 		account_authorization_info: `
 Authorizing yourself will enable you to:
-<ul>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">article</i></div>
+<ul class="account-ul">
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">article</i></div>
 		<div>
 			Create both
 			<span class="accent">public</span>
 			and <span class="accent">secure</span> surveys,
 		</div>
 	</li>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">save</i></div>
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">save</i></div>
 		<div>
 			Save surveys as
 			<span class="accent">drafts</span> for later editing,
 		</div>
 	</li>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">bar_chart</i></div>
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">bar_chart</i></div>
 		<div>
 			View <span class="accent">responses</span>
 			and <span class="accent">summaries</span> of your surveys,
 		</div>
 	</li>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">share</i></div>
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">share</i></div>
 		<div><span class="accent">Share</span> surveys' results with others,</div>
 	</li>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">group</i></div>
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">group</i></div>
 		<div>
 			Create and manage
 			<span class="accent">user groups</span>,
 		</div>
 	</li>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">encrypted</i></div>
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">encrypted</i></div>
 		<div>
 			Generate <span class="accent">digital signature keys</span> that allow you to participate
 			in
@@ -111,40 +112,41 @@ Authorizing yourself will enable you to:
 		home_submit: 'Wyślij kod',
 
 		account_your: 'Twoje konto',
+		account_info_title: 'Informacje o koncie',
 		account_sign_in: 'Zautoryzuj się za pomocą USOS UAM:',
 		account_authorization_info: `
 Zautoryzowanie się pozwoli Ci na:
-<ul>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">article</i></div>
+<ul class="account-ul">
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">article</i></div>
 		<div>
 			Tworzenie zarówno <span class="accent">publicznych</span>, jak i <span class="accent">bezpiecznych</span> ankiet,
 		</div>
 	</li>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">save</i></div>
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">save</i></div>
 		<div>
 			Zapisywanie ankiet jako <span class="accent">szkice</span> do późniejszej edycji,
 		</div>
 	</li>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">bar_chart</i></div>
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">bar_chart</i></div>
 		<div>
 			Podgląd <span class="accent">odpowiedzi</span> i <span class="accent">podsumowań</span> swoich ankiet,
 		</div>
 	</li>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">share</i></div>
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">share</i></div>
 		<div>Dzielenie się wynikami ankiet z innymi,</div>
 	</li>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">group</i></div>
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">group</i></div>
 		<div>
 			Tworzenie i zarządzanie <span class="accent">grupami użytkowników</span>,
 		</div>
 	</li>
-	<li>
-		<div class="icon"><i class="material-symbols-rounded">encrypted</i></div>
+	<li class="account-li">
+		<div class="account-icon"><i class="material-symbols-rounded">encrypted</i></div>
 		<div>
 			Generowanie <span class="accent">kluczy podpisu cyfrowego</span>, które pozwalają na uczestniczenie
 			w <span class="accent">bezpiecznych ankietach</span> bez konieczności logowania się za każdym razem.

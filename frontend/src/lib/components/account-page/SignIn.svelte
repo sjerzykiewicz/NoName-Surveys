@@ -1,5 +1,9 @@
 <script lang="ts">
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	import amu from '$lib/assets/amu.png';
 
@@ -34,12 +38,12 @@
 		><img src={amu} alt="AMU logo" class="amu-logo" /><Tx text="sign_in"></Tx></button
 	>
 </div>
-<div title="Account information" class="info">
+<div title={$t('account_info_title')} class="info">
 	<div class="text">
 		<Tx html="account_authorization_info"></Tx>
 	</div>
 </div>
-<div title="Account information" class="info">
+<div title={$t('account_info_title')} class="info">
 	<div class="text">
 		<Tx text="account_info"></Tx>
 	</div>

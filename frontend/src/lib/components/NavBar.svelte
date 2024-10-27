@@ -166,6 +166,10 @@
 {/if}
 
 <style>
+	.zindex-0 {
+		z-index: 0;
+	}
+
 	.bar .tooltip {
 		--tooltip-width: 12.5em;
 	}

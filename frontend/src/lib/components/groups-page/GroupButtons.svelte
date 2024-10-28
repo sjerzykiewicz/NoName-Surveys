@@ -15,6 +15,7 @@
 	import { M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/DeleteModal.svelte';
+	import ImportEmails from '../ImportEmails.svelte';
 
 	export let groups: string[];
 	export let users: string[];
@@ -186,12 +187,22 @@
 			<button
 				title="Save the group"
 				class="save"
-				on:click={() => createGroup(groupName.trim(), groupMembers)}
+				on:click={() => {
+					createGroup(groupName.trim(), groupMembers);
+				}}
 			>
 				<i class="material-symbols-rounded">done</i>Create
 			</button>
 		</div>
 		<MembersError members={groupMembers} error={membersError} />
+		<ImportEmails
+			bind:users={groupMembers}
+			title="Import group members from a .csv file"
+			label="Or import group members from a .csv file."
+			id="emails-file"
+			checkKeys={false}
+			size={1.25}
+		/>
 	</div>
 {/if}
 

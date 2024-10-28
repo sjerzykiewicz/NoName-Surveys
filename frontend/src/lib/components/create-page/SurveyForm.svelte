@@ -33,6 +33,7 @@
 	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { onMount } from 'svelte';
+	import ImportEmails from '../ImportEmails.svelte';
 
 	export let users: string[];
 	export let groups: string[];
@@ -234,8 +235,18 @@
 		</div>
 		<div class="select-box">
 			<SelectGroup {groups} bind:disabled={isCryptoDisabled} />
+			<div id="or" class:disabled={isCryptoDisabled}>Or</div>
 			<SelectUsers {users} bind:disabled={isCryptoDisabled} />
 			<CryptoError error={cryptoError} />
+			<ImportEmails
+				bind:users={$ringMembers}
+				title="Import users from a .csv file"
+				label="Or import users from a .csv file."
+				id="emails-file"
+				checkKeys={true}
+				width="100%"
+				bind:disabled={isCryptoDisabled}
+			/>
 		</div>
 	</div>
 	<button title="Define respondent group" class="save apply" on:click={createSurvey}
@@ -328,6 +339,22 @@
 
 	.select-box {
 		text-align: left;
+	}
+
+	#or {
+		display: flex;
+		flex-flow: row;
+		align-items: flex-start;
+		justify-content: flex-start;
+		margin-bottom: 0.5em;
+		font-size: 0.8em;
+		color: var(--text-color);
+		cursor: default;
+	}
+
+	#or.disabled {
+		color: var(--text-dark-color) !important;
+		cursor: not-allowed !important;
 	}
 
 	@media screen and (max-width: 768px) {

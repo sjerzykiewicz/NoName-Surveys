@@ -13,3 +13,9 @@ export const LIMIT_OF_CHARS: Readable<number> = readable(5000);
 
 export const isErrorModalHidden: Writable<boolean> = writable(true);
 export const errorModalContent: Writable<string> = writable('');
+
+export const isWarningModalHidden: Writable<boolean> = writable(true);
+export const warningModalContent: Writable<string> = writable('');
+
+export const isSuccessModalHidden: Writable<boolean> = writable(true);
+export const successModalContent: Writable<string> = writable('');

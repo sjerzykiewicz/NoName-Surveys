@@ -17,7 +17,10 @@
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 
-	export let groups: string[];
+	export let groups: {
+		user_group_name: string;
+		all_members_have_public_keys: true;
+	}[];
 	export let users: string[];
 	export let selectedGroupsToRemove: string[] = [];
 
@@ -27,6 +30,8 @@
 	let nameError: GroupError = GroupError.NoError;
 	let membersError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
+
+	$: groupNames = groups.map((g) => g.user_group_name);
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -41,7 +46,7 @@
 			nameError = GroupError.NameRequired;
 		} else if (n.length > $LIMIT_OF_CHARS) {
 			nameError = GroupError.NameTooLong;
-		} else if (groups.some((g) => g === n)) {
+		} else if (groupNames.some((g) => g === n)) {
 			nameError = GroupError.NameNonUnique;
 		} else if (n.match(/^[\p{L}\p{N} /-]+$/u) === null) {
 			nameError = GroupError.NameInvalid;
@@ -113,7 +118,7 @@
 				return;
 			}
 
-			groups = groups.filter((g) => g !== group);
+			groups = groups.filter((g) => g.user_group_name !== group);
 		});
 
 		isModalHidden = true;
@@ -175,7 +180,7 @@
 				<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
 			</div>
 		</div>
-		<NameError name={groupName.trim()} error={nameError} {groups} />
+		<NameError name={groupName.trim()} error={nameError} groups={groupNames} />
 		<div class="button-row">
 			<div title="Select group members" class="select-list">
 				<MultiSelect

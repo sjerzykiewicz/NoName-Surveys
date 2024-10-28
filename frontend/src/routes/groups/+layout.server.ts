@@ -1,5 +1,5 @@
 import type { PageServerLoad } from '../$types';
-import * as db from '$lib/server/database';
+import { getUserGroups, getUsers } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent }) => {
@@ -8,13 +8,13 @@ export const load: PageServerLoad = async ({ parent }) => {
 		redirect(303, `/account`);
 	}
 
-	const groupsResponse = await db.getAllUserGroups(session.user!.email!);
+	const groupsResponse = await getUserGroups(session.user!.email!);
 	if (!groupsResponse.ok) {
 		error(groupsResponse.status, { message: await groupsResponse.json() });
 	}
 	const group_list = await groupsResponse.json();
 
-	const usersResponse = await db.getAllUsers();
+	const usersResponse = await getUsers();
 	if (!usersResponse.ok) {
 		error(usersResponse.status, { message: await usersResponse.json() });
 	}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Modal from '$lib/components/Modal.svelte';
+	import Modal from '$lib/components/global/Modal.svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { onMount } from 'svelte';
 

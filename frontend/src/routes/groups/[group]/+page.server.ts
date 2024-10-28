@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import * as db from '$lib/server/database';
+import { getUserGroup } from '$lib/server/database';
 import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params, parent }) => {
@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 
 	const group = params.group;
 
-	const response = await db.getUserGroup(session.user!.email!, group);
+	const response = await getUserGroup(session.user!.email!, group);
 	if (!response.ok) {
 		error(response.status, { message: await response.json() });
 	}

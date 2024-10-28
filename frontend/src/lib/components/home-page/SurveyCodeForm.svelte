@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
-	import Content from '$lib/components/Content.svelte';
+	import Content from '$lib/components/global/Content.svelte';
 	import { S, M } from '$lib/stores/global';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';

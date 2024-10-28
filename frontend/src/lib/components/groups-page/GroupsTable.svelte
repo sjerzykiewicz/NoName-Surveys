@@ -8,7 +8,7 @@
 	import { limitInput } from '$lib/utils/limitInput';
 	import { M, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import Modal from '$lib/components/Modal.svelte';
+	import Modal from '$lib/components/global/Modal.svelte';
 	import NameError from './NameError.svelte';
 
 	export let groups: string[];

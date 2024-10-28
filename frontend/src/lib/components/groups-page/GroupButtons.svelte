@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import MultiSelect from '$lib/components/MultiSelect.svelte';
+	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
@@ -14,8 +14,8 @@
 	import { limitInput } from '$lib/utils/limitInput';
 	import { M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import DeleteModal from '$lib/components/DeleteModal.svelte';
-	import ImportEmails from '../ImportEmails.svelte';
+	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
+	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 
 	export let groups: string[];
 	export let users: string[];

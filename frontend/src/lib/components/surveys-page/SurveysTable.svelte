@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
+	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import { page } from '$app/stores';
 	import { errorModalContent, isErrorModalHidden, S, XL } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import DeleteModal from '$lib/components/DeleteModal.svelte';
+	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 
 	export let survey_list: {
 		title: string;

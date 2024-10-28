@@ -1,6 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import * as db from '$lib/server/database';
+import { getSurvey } from '$lib/server/database';
 
 export const actions: Actions = {
 	default: async ({ request }) => {
@@ -19,7 +19,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const response = await db.getSurveyByCode(code.toString());
+		const response = await getSurvey(code.toString());
 		if (!response.ok) {
 			return fail(404, { error: 'Survey not found.' });
 		}

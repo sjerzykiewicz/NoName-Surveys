@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { title, questions, answers } from '$lib/stores/fill-page';
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
+	import Footer from '$lib/components/global/Footer.svelte';
 	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
 	import { SingleQuestion, SingleQuestionAnswered } from '$lib/entities/questions/Single';
 	import { SliderQuestionAnswered, type SliderQuestion } from '$lib/entities/questions/Slider';
@@ -35,7 +35,7 @@
 	import { onMount, tick } from 'svelte';
 	import init, { linkable_ring_signature } from 'wasm';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
-	import Modal from '$lib/components/Modal.svelte';
+	import Modal from '$lib/components/global/Modal.svelte';
 	import {
 		errorModalContent,
 		isErrorModalHidden,
@@ -47,7 +47,7 @@
 	import { FileError } from '$lib/entities/FileError';
 	import KeysError from './KeysError.svelte';
 	import { readFile } from '$lib/utils/readFile';
-	import SuccessModal from '../SuccessModal.svelte';
+	import SuccessModal from '$lib/components/global/SuccessModal.svelte';
 
 	onMount(async () => {
 		await init();

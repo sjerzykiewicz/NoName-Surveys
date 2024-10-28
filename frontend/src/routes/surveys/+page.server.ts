@@ -1,5 +1,5 @@
 import type { PageServerLoad } from '../$types';
-import * as db from '$lib/server/database';
+import { getSurveys } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent }) => {
@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 		redirect(303, `/account`);
 	}
 
-	const response = await db.getSurveysOfUser(session.user!.email!);
+	const response = await getSurveys(session.user!.email!);
 	if (!response.ok) {
 		error(response.status, { message: await response.json() });
 	}

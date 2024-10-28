@@ -1,4 +1,4 @@
-import * as db from '$lib/server/database';
+import { getSurveyDrafts } from '$lib/server/database';
 import type { PageServerLoad } from '../$types';
 import { error, redirect } from '@sveltejs/kit';
 
@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 		redirect(303, `/account`);
 	}
 
-	const response = await db.getDraftsOfUser(session.user!.email!);
+	const response = await getSurveyDrafts(session.user!.email!);
 	if (!response.ok) {
 		error(response.status, { message: await response.json() });
 	}

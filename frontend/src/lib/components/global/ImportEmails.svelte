@@ -1,5 +1,5 @@
 <script lang="ts">
-	import EmailsWarning from '$lib/components/EmailsWarning.svelte';
+	import EmailsWarning from '$lib/components/global/EmailsWarning.svelte';
 	import { FileError } from '$lib/entities/FileError';
 	import { readFile } from '$lib/utils/readFile';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Modal from '$lib/components/Modal.svelte';
-	import QrCode from '$lib/components/QrCode.svelte';
+	import Modal from '$lib/components/global/Modal.svelte';
+	import QrCode from '$lib/components/global/QrCode.svelte';
 	import noname_black from '$lib/assets/noname_black.png';
 	import { page } from '$app/stores';
 	import { copy } from '$lib/utils/copy';

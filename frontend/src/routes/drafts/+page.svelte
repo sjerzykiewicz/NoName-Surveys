@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
 	import DraftsTable from '$lib/components/drafts-page/DraftsTable.svelte';
 	import { afterUpdate } from 'svelte';
 	import { LIMIT_OF_DRAFTS } from '$lib/stores/global';

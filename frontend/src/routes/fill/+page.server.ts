@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import * as db from '$lib/server/database';
+import { getSurvey } from '$lib/server/database';
 import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent, url }) => {
@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ parent, url }) => {
 		error(404);
 	}
 
-	const response = await db.getSurveyByCode(survey_code);
+	const response = await getSurvey(survey_code);
 	if (!response.ok) {
 		error(response.status, { message: await response.json() });
 	}

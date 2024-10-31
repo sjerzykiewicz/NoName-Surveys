@@ -8,6 +8,7 @@ from src.api.models.user_groups.user_groups import (  # noqa
     UserGroupAction,
     UserGroupCreate,
     UserGroupCreator,
+    UserGroupMembersOutput,
     UserGroupNameUpdate,
 )
 from src.db.base import get_session
@@ -76,7 +77,7 @@ async def get_user_groups_with_members_having_public_keys(
 @router.post(
     "/fetch",
     response_description="List of user emails in a given user group",
-    response_model=list[str],
+    response_model=list[UserGroupMembersOutput],
 )
 async def get_user_group(
     user_group_request: UserGroupAction,
@@ -94,10 +95,15 @@ async def get_user_group(
             status_code=400, detail="User group not found for the given user"
         )
 
-    user_group_members = user_groups_crud.get_user_group_members(user_group.id, session)
+    user_group_members = [
+        member.user_id
+        for member in user_groups_crud.get_user_group_members(user_group.id, session)
+    ]
     return [
-        user_crud.get_user_by_id(user_group_member.user_id, session).email
-        for user_group_member in user_group_members
+        UserGroupMembersOutput(
+            email=member.email, has_public_key=member.public_key != ""
+        )
+        for member in user_crud.get_users_by_id(user_group_members, session)
     ]
 
 

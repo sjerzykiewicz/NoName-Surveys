@@ -76,3 +76,11 @@ class AllUserGroupsOutput(BaseModel):
 
     class Config:
         extra = "forbid"
+
+
+class UserGroupMembersOutput(BaseModel):
+    email: str
+    has_public_key: bool
+
+    class Config:
+        extra = "forbid"

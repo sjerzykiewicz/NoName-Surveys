@@ -12,9 +12,11 @@
 	export let selectedMembersToRemove: string[] = [];
 
 	let notMembers: string[] = [];
+	let membersEmails: string[] = [];
 
 	afterUpdate(() => {
-		notMembers = data.user_list.filter((user: string) => !data.users.includes(user));
+		membersEmails = data.users.map((user) => user.email);
+		notMembers = data.user_list.filter((user) => !membersEmails.includes(user));
 	});
 </script>
 

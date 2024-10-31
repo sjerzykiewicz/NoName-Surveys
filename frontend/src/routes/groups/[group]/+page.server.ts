@@ -14,6 +14,7 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 	if (!response.ok) {
 		error(response.status, { message: await response.json() });
 	}
-	const users = await response.json();
+	const users: { email: string; has_public_key: boolean }[] = await response.json();
+
 	return { group, users };
 };

@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 	if (!usersResponse.ok) {
 		error(usersResponse.status, { message: await usersResponse.json() });
 	}
-	const user_list = await usersResponse.json();
+	const user_list: string[] = await usersResponse.json();
 
 	return { session, group_list, user_list };
 };

@@ -1,37 +1,19 @@
 <script lang="ts">
-	import { errorModalContent, isErrorModalHidden, XL } from '$lib/stores/global';
-	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { XL } from '$lib/stores/global';
 
-	export let members: string[];
+	export let members: {
+		email: string;
+		has_public_key: boolean;
+	}[];
 	export let selectedMembersToRemove: string[] = [];
 
+	$: memberEmails = members.map((m) => m.email);
+
 	$: allSelected =
-		selectedMembersToRemove.length === members.length && selectedMembersToRemove.length > 0;
+		selectedMembersToRemove.length === memberEmails.length && selectedMembersToRemove.length > 0;
 
 	function toggleAll() {
-		selectedMembersToRemove = allSelected ? [] : [...members];
-	}
-
-	async function hasPublicKey(member: string): Promise<boolean> {
-		console.log(member);
-		const response = await fetch('/api/users/has-public-key', {
-			method: 'POST',
-			body: JSON.stringify({
-				user_email: member
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			const body = await response.json();
-			$errorModalContent = getErrorMessage(body.detail);
-			$isErrorModalHidden = false;
-			return false;
-		}
-
-		return await response.json();
+		selectedMembersToRemove = allSelected ? [] : [...memberEmails];
 	}
 
 	let innerWidth: number;
@@ -56,39 +38,27 @@
 		>
 		<th title="Group members" id="title-header">Group Members</th>
 	</tr>
-	{#each members.toSorted() as member}
+	{#each members.toSorted((a, b) => a.email.localeCompare(b.email)) as member}
 		<tr>
-			<td title="Select {member}" class="checkbox-entry"
+			<td title="Select {member.email}" class="checkbox-entry"
 				><label>
-					<input type="checkbox" bind:group={selectedMembersToRemove} value={member} />
+					<input type="checkbox" bind:group={selectedMembersToRemove} value={member.email} />
 				</label></td
 			>
 			<td class="info-entry tooltip">
-				{#await hasPublicKey(member)}
-					<i class="material-symbols-rounded">sync</i>
+				{#if member.has_public_key}
+					<i class="material-symbols-rounded">key</i>
 					<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-						>Checking if user has generated his keys.</span
+						>This user has already generated his keys.</span
 					>
-				{:then hasKey}
-					{#if hasKey}
-						<i class="material-symbols-rounded">key</i>
-						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>This user has already generated his keys.</span
-						>
-					{:else}
-						<i class="material-symbols-rounded">key_off</i>
-						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>This user has not generated his keys yet.</span
-						>
-					{/if}
-				{:catch}
-					<i class="material-symbols-rounded">error</i>
+				{:else}
+					<i class="material-symbols-rounded">key_off</i>
 					<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-						>Could not check if user has generated his keys.</span
+						>This user has not generated his keys yet.</span
 					>
-				{/await}
+				{/if}
 			</td>
-			<td title={member} class="basic-entry">{member}</td>
+			<td title={member.email} class="basic-entry">{member.email}</td>
 		</tr>
 	{/each}
 </table>

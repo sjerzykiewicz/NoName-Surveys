@@ -34,7 +34,7 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		});
 
 		if (!response.ok) {
-			throw new Error('Failed to fetch access token');
+			throw error(response.status, `Failed to fetch access token: ${response.statusText}`);
 		}
 
 		const responseText = await response.text();
@@ -62,7 +62,8 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		cookies.set('user_session', JSON.stringify(tokens), {
 			path: '/',
 			httpOnly: true,
-			secure: true
+			secure: true,
+			maxAge: 60 * 60 * 2 // 2 hours
 		});
 
 		throw redirect(303, env.ORIGIN + '/account');

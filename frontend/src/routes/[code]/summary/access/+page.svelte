@@ -17,7 +17,8 @@
 	let usersWithoutAccess: string[] = [];
 
 	afterUpdate(() => {
-		usersWithoutAccess = data.allUsers.filter((user) => !data.usersWithAccess.includes(user));
+		const usersWithAccessSet = new Set(data.usersWithAccess);
+		usersWithoutAccess = data.allUsers.filter((user) => !usersWithAccessSet.has(user));
 	});
 </script>
 

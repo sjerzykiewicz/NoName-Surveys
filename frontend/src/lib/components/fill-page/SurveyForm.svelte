@@ -189,25 +189,26 @@
 		return answerList;
 	}
 
-	let unansweredRequired: Array<number> = [];
+	let unansweredRequired: Set<number> = new Set();
 
 	async function checkAnswerCorrectness() {
-		unansweredRequired = [];
+		unansweredRequired = new Set();
 		for (let i = 0; i < numQuestions; i++) {
 			if ($questions[i].required) {
 				if ($answers[i].choices.length === 0) {
-					unansweredRequired.push(i);
+					unansweredRequired.add(i);
 				} else if (
 					$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0)
 				) {
-					unansweredRequired.push(i);
+					unansweredRequired.add(i);
 				}
 			}
 		}
 
-		if (unansweredRequired.length > 0) {
+		if (unansweredRequired.size > 0) {
 			await tick();
-			scrollToElementById(unansweredRequired[0].toString());
+			const [first] = unansweredRequired;
+			scrollToElementById(first.toString());
 			return false;
 		}
 

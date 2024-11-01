@@ -113,7 +113,8 @@
 			return;
 		}
 
-		const newMembers = memberEmails.filter((m) => !selectedMembersToRemove.includes(m));
+		const selectedMembersToRemoveSet = new Set(selectedMembersToRemove);
+		const newMembers = memberEmails.filter((m) => !selectedMembersToRemoveSet.has(m));
 
 		const createResponse = await fetch('/api/groups/create', {
 			method: 'POST',
@@ -185,6 +186,10 @@
 {/if}
 
 <style>
+	.select-list {
+		margin-bottom: 0em;
+	}
+
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}

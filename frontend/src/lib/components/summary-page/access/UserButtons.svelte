@@ -142,6 +142,10 @@
 {/if}
 
 <style>
+	.select-list {
+		margin-bottom: 0em;
+	}
+
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}

@@ -50,8 +50,7 @@
 		const endpoint: string = checkKeys
 			? 'filter-users-with-no-public-key'
 			: 'filter-unregistered-users';
-		const invalidEmails: string[] = await filterUsers(endpoint, emails);
-		const invalidEmailsSet: Set<string> = new Set(invalidEmails);
+		const invalidEmailsSet = new Set(await filterUsers(endpoint, emails));
 
 		if (invalidEmailsSet.size > 0 && $isErrorModalHidden) {
 			$warningModalContent = `Could not import ${invalidEmailsSet.size} users, because they haven't ${checkKeys ? 'generated keys' : 'registered'} yet.`;

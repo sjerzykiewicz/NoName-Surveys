@@ -8,24 +8,31 @@
 	import type { PageData } from './$types';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import QrCodeButton from '$lib/components/summary-page/QrCodeButton.svelte';
+	import { page } from '$app/stores';
 
 	export let data: PageData;
 	export let isModalHidden: boolean = true;
+
+	let id = $page.params.id;
 </script>
 
-<QrCodeModal bind:isHidden={isModalHidden} title="Access Code" surveyCode={data.code} />
+<QrCodeModal
+	bind:isHidden={isModalHidden}
+	title="Access Code"
+	surveyCode={data.survey.survey_code}
+/>
 
 <Header>
-	<div class="title">{data.answers[data.id].title}</div>
+	<div class="title">{data.answers[id].title}</div>
 </Header>
 
 <Content>
-	<Answers answer={data.answers[data.id]} id={data.id} />
+	<Answers answer={data.answers[id]} {id} />
 </Content>
 
 <Footer>
-	{#if data.answers[data.id].is_owned_by_user}
-		<ShareButton code={data.code} />
+	{#if data.answers[id].is_owned_by_user}
+		<ShareButton code={data.survey.survey_code} />
 	{/if}
 	<QrCodeButton bind:isModalHidden />
 	<Back />

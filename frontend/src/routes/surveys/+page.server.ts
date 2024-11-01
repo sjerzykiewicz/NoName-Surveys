@@ -12,6 +12,14 @@ export const load: PageServerLoad = async ({ parent }) => {
 	if (!response.ok) {
 		error(response.status, { message: await response.json() });
 	}
-	const survey_list = await response.json();
-	return { session, survey_list };
+	const survey_list: {
+		title: string;
+		survey_code: string;
+		creation_date: string;
+		uses_cryptographic_module: boolean;
+		is_owned_by_user: boolean;
+		group_size: number;
+	}[] = await response.json();
+
+	return { survey_list };
 };

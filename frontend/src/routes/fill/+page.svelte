@@ -17,8 +17,8 @@
 </script>
 
 <SurveyForm
-	survey={data.survey_structure}
-	uses_crypto={data.uses_cryptographic_module}
-	keys={data.public_keys}
-	code={data.survey_code}
+	survey={data.survey.survey_structure}
+	uses_crypto={data.survey.uses_cryptographic_module}
+	keys={data.survey.public_keys}
+	code={data.survey.survey_code}
 />

@@ -21,7 +21,11 @@
 	}
 </script>
 
-<QrCodeModal bind:isHidden={isModalHidden} title="Access Code" surveyCode={data.code} />
+<QrCodeModal
+	bind:isHidden={isModalHidden}
+	title="Access Code"
+	surveyCode={data.survey.survey_code}
+/>
 
 <Header>
 	<div title="Survey title" class="title">{data.survey.survey_structure.title}</div>
@@ -41,7 +45,7 @@
 
 <Footer>
 	{#if data.answers.length > 0 && data.answers[0].is_owned_by_user}
-		<ShareButton code={data.code} />
+		<ShareButton code={data.survey.survey_code} />
 	{/if}
 	<QrCodeButton bind:isModalHidden />
 	<Back />

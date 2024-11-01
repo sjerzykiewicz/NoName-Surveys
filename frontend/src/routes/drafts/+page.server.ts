@@ -12,6 +12,11 @@ export const load: PageServerLoad = async ({ parent }) => {
 	if (!response.ok) {
 		error(response.status, { message: await response.json() });
 	}
-	const data = await response.json();
-	return { drafts: data };
+	const drafts: {
+		id: number;
+		title: string;
+		creation_date: string;
+	}[] = await response.json();
+
+	return { drafts };
 };

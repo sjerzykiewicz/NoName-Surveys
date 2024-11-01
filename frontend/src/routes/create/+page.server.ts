@@ -12,13 +12,13 @@ export const load: PageServerLoad = async ({ parent }) => {
 	if (!groupsResponse.ok) {
 		error(groupsResponse.status, { message: await groupsResponse.json() });
 	}
-	const group_list = await groupsResponse.json();
+	const group_list: string[] = await groupsResponse.json();
 
 	const usersResponse = await getUsersWithKeys();
 	if (!usersResponse.ok) {
 		error(usersResponse.status, { message: await usersResponse.json() });
 	}
-	const user_list = await usersResponse.json();
+	const user_list: string[] = await usersResponse.json();
 
-	return { session, group_list, user_list };
+	return { group_list, user_list };
 };

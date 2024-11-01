@@ -1,5 +1,5 @@
 import type DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
-import type { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
+import type SurveyAnswer from '$lib/entities/surveys/SurveyAnswer';
 import type SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
 import { env } from '$env/dynamic/private';
 

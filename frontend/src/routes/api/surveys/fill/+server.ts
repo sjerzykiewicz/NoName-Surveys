@@ -1,4 +1,4 @@
-import type { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
+import type SurveyAnswer from '$lib/entities/surveys/SurveyAnswer';
 import { type RequestHandler } from '@sveltejs/kit';
 import { saveSurveyAnswer } from '$lib/server/database';
 

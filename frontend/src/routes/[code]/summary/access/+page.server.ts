@@ -18,8 +18,8 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 		error(usersResponse.status, { message: await usersResponse.json() });
 	}
 
-	const usersWithAccess = await accessResponse.json();
-	const allUsers = await usersResponse.json();
+	const usersWithAccess: string[] = await accessResponse.json();
+	const allUsers: string[] = await usersResponse.json();
 
 	return { usersWithAccess, allUsers };
 };

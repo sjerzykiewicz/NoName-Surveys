@@ -12,7 +12,10 @@ export const load: PageServerLoad = async ({ parent }) => {
 	if (!groupsResponse.ok) {
 		error(groupsResponse.status, { message: await groupsResponse.json() });
 	}
-	const group_list = await groupsResponse.json();
+	const group_list: {
+		user_group_name: string;
+		all_members_have_public_keys: true;
+	}[] = await groupsResponse.json();
 
 	const usersResponse = await getUsers();
 	if (!usersResponse.ok) {

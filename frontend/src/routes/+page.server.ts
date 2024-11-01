@@ -6,12 +6,14 @@ export const actions: Actions = {
 	default: async ({ request }) => {
 		const data = await request.formData();
 		const code = data.get('survey-code');
+
 		if (code === null || code === '') {
 			return fail(422, {
 				description: code,
 				error: 'Please enter code.'
 			});
 		}
+
 		if (!/^[0-9]{6}$/.test(code.toString())) {
 			return fail(422, {
 				description: code,

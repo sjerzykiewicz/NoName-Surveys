@@ -17,13 +17,15 @@
 	let usersWithoutAccess: string[] = [];
 
 	afterUpdate(() => {
-		usersWithoutAccess = data.allUsers.filter(
-			(user: string) => !data.usersWithAccess.includes(user)
-		);
+		usersWithoutAccess = data.allUsers.filter((user) => !data.usersWithAccess.includes(user));
 	});
 </script>
 
-<QrCodeModal bind:isHidden={isModalHidden} title="Access Code" surveyCode={data.code} />
+<QrCodeModal
+	bind:isHidden={isModalHidden}
+	title="Access Code"
+	surveyCode={data.survey.survey_code}
+/>
 
 <Header>
 	<div title="Survey title" class="title">{data.survey.survey_structure.title}</div>
@@ -31,7 +33,11 @@
 
 <Content>
 	<AccessTable users={data.usersWithAccess} bind:selectedUsersToRemove />
-	<UserButtons users={usersWithoutAccess} code={data.code} bind:selectedUsersToRemove />
+	<UserButtons
+		users={usersWithoutAccess}
+		code={data.survey.survey_code}
+		bind:selectedUsersToRemove
+	/>
 </Content>
 
 <Footer>

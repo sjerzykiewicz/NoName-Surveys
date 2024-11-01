@@ -14,7 +14,7 @@
 	import { RankQuestionAnswered } from '$lib/entities/questions/Rank';
 	import { ListQuestionAnswered } from '$lib/entities/questions/List';
 	import { ScaleQuestionAnswered } from '$lib/entities/questions/Scale';
-	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
+	import SurveyAnswer from '$lib/entities/surveys/SurveyAnswer';
 	import QuestionTitle from './QuestionTitle.svelte';
 	import Single from './Single.svelte';
 	import Text from './Text.svelte';

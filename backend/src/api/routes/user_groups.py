@@ -110,9 +110,12 @@ async def get_user_group(
             status_code=400, detail="User group not found for the given user"
         )
 
-    user_group_members = [member.user_id for member in user_groups_crud.get_user_group_members_paginated(
-        user_group.id, page * PAGE_SIZE, PAGE_SIZE, session
-    )]
+    user_group_members = [
+        member.user_id
+        for member in user_groups_crud.get_user_group_members_paginated(
+            user_group.id, page * PAGE_SIZE, PAGE_SIZE, session
+        )
+    ]
     return [
         UserGroupMembersOutput(
             email=member.email, has_public_key=member.public_key != ""

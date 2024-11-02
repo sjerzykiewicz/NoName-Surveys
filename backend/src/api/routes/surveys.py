@@ -63,7 +63,6 @@ async def get_surveys_for_user(
     ]
 
 
-# TODO: SPRAWDŹ CZY TO DZIAŁA JAK SIĘ NIE DESERIALIZUJE BEZ SENSU
 @router.post(
     "/fetch",
     response_description="Fetch a survey to fill it out",

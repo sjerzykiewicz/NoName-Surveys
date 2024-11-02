@@ -19,7 +19,7 @@
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { page } from '$app/stores';
 	import Survey from '$lib/entities/surveys/Survey';
-	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
+	import SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { getDraft } from '$lib/utils/getDraft';
@@ -68,8 +68,12 @@
 		$title.title = $title.title.trim();
 		$questions = trimQuestions($questions);
 
-		const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
-		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
+		const parsedSurvey = new Survey(constructQuestionList($questions));
+		const draftInfo = new DraftCreateInfo(
+			$page.data.session!.user!.email!,
+			$title.title,
+			parsedSurvey
+		);
 
 		if (overwrite) {
 			const deleteResponse = await fetch('/api/surveys/drafts/delete', {
@@ -133,7 +137,7 @@
 
 		isRespondentModalHidden = true;
 
-		const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
+		const parsedSurvey = new Survey(constructQuestionList($questions));
 		let finalRing: string[] = [];
 
 		if ($selectedGroup.length > 0) {
@@ -143,8 +147,9 @@
 			finalRing = [...$ringMembers];
 		}
 
-		const surveyInfo = new SurveyInfo(
+		const surveyInfo = new SurveyCreateInfo(
 			$page.data.session!.user!.email!,
+			$title.title,
 			parsedSurvey,
 			$useCrypto,
 			finalRing

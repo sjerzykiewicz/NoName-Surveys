@@ -20,9 +20,6 @@ from src.api.models.surveys.survey import (
 )
 from src.api.models.users.user import User
 from src.db.base import get_session
-from src.db.models.ring_member import RingMemberBase
-from src.db.models.survey import SurveyBase
-from src.db.models.survey_draft import SurveyDraftBase
 
 router = APIRouter()
 
@@ -42,10 +39,8 @@ async def get_surveys_for_user(user: User, session: Session = Depends(get_sessio
     user_surveys = survey_crud.get_all_surveys_user_can_view(user.id, session)
     return [
         SurveyHeadersOutput(
-            title=SurveyStructure.model_validate_json(
-                survey_draft_crud.get_survey_draft_by_id(
-                    survey.survey_structure_id, session
-                ).survey_structure
+            title=survey_draft_crud.get_survey_draft_by_id(
+                survey.survey_structure_id, session
             ).title,
             survey_code=survey.survey_code,
             creation_date=survey.creation_date,
@@ -59,6 +54,7 @@ async def get_surveys_for_user(user: User, session: Session = Depends(get_sessio
     ]
 
 
+# TODO: SPRAWDŹ CZY TO DZIAŁA JAK SIĘ NIE DESERIALIZUJE BEZ SENSU
 @router.post(
     "/fetch",
     response_description="Fetch a survey to fill it out",
@@ -72,11 +68,13 @@ async def get_survey_by_code(
     if survey is None:
         raise HTTPException(status_code=404, detail="Survey does not exist")
 
+    survey_draft = survey_draft_crud.get_survey_draft_by_id(
+        survey.survey_structure_id, session
+    )
     return SurveyStructureFetchOutput(
+        title=survey_draft.title,
         survey_structure=SurveyStructure.model_validate_json(
-            survey_draft_crud.get_survey_draft_by_id(
-                survey.survey_structure_id, session
-            ).survey_structure
+            survey_draft.survey_structure
         ),
         survey_code=survey.survey_code,
         uses_cryptographic_module=survey.uses_cryptographic_module,
@@ -179,11 +177,10 @@ async def create_survey(
         raise HTTPException(status_code=400, detail=str(e))
 
     survey_draft = survey_draft_crud.create_survey_draft(
-        SurveyDraftBase(
-            creator_id=user.id,
-            survey_structure=survey_create.survey_structure.model_dump_json(),
-            is_deleted=True,
-        ),
+        user.id,
+        survey_create.title,
+        survey_create.survey_structure.model_dump_json(),
+        True,
         session,
     )
 
@@ -191,26 +188,16 @@ async def create_survey(
     while survey_crud.survey_code_taken(survey_code, session):
         survey_code = "".join(str(randbelow(10)) for _ in range(6))
     survey = survey_crud.create_survey(
-        SurveyBase(
-            creator_id=user.id,
-            uses_cryptographic_module=survey_create.uses_cryptographic_module,
-            survey_structure_id=survey_draft.id,
-            survey_code=survey_code,
-        ),
+        user.id,
+        survey_create.uses_cryptographic_module,
+        survey_draft.id,
+        survey_code,
         session,
     )
-
     if survey_create.uses_cryptographic_module:
         for email in survey_create.ring_members:
             public_key = user_crud.get_user_by_email(email, session).public_key
-            ring_member_crud.add_ring_member(
-                RingMemberBase(
-                    survey_id=survey.id,
-                    user_email=email,
-                    public_key=public_key,
-                ),
-                session,
-            )
+            ring_member_crud.add_ring_member(survey.id, email, public_key, session)
 
     survey_crud.give_survey_access(survey.id, user.id, session)
     return SurveyStructureCreateOutput(survey_code=survey.survey_code)

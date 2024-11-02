@@ -35,7 +35,11 @@ def update_user_group_name(
     return user_group
 
 
-def create_user_group(user_group: UserGroupBase, session: Session) -> UserGroup:
+def create_user_group(creator_id: int, name: str, session: Session) -> UserGroup:
+    user_group = UserGroupBase(
+        creator_id=creator_id,
+        name=name,
+    )
     user_group = UserGroup.model_validate(user_group)
     session.add(user_group)
     session.commit()
@@ -43,9 +47,11 @@ def create_user_group(user_group: UserGroupBase, session: Session) -> UserGroup:
     return user_group
 
 
-def add_user_to_group(
-    user_group_member: UserGroupMemberBase, session: Session
-) -> UserGroupMember:
+def add_user_to_group(group_id: int, user_id: int, session: Session) -> UserGroupMember:
+    user_group_member = UserGroupMemberBase(
+        group_id=group_id,
+        user_id=user_id,
+    )
     user_group_member = UserGroupMember.model_validate(user_group_member)
     session.add(user_group_member)
     session.commit()

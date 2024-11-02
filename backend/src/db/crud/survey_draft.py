@@ -41,8 +41,18 @@ def delete_survey_draft_by_id(survey_draft_id: int, session: Session) -> SurveyD
 
 
 def create_survey_draft(
-    survey_draft_create: SurveyDraftBase, session: Session
+    creator_id: int,
+    title: str,
+    survey_structure: str,
+    is_deleted: bool,
+    session: Session,
 ) -> SurveyDraft:
+    survey_draft_create = SurveyDraftBase(
+        creator_id=creator_id,
+        title=title,
+        survey_structure=survey_structure,
+        is_deleted=is_deleted,
+    )
     survey_draft_create = SurveyDraft.model_validate(survey_draft_create)
     session.add(survey_draft_create)
     session.commit()

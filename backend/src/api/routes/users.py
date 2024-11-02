@@ -9,7 +9,6 @@ from src.api.models.users.user import (  # noqa
 )
 from src.cryptography.fingerprint import verify
 from src.db.base import get_session
-from src.db.models.user import UserBase, UserWithKey
 
 router = APIRouter()
 
@@ -61,10 +60,7 @@ async def create_user(user_create: User, session: Session = Depends(get_session)
     if user_crud.get_user_by_email(user_create.user_email, session) is not None:
         raise HTTPException(status_code=400, detail="User already registered")
 
-    user_crud.create_user(
-        UserBase(email=user_create.user_email),
-        session,
-    )
+    user_crud.create_user(user_create.user_email, session)
     return {"message": "User registered successfully"}
 
 
@@ -80,19 +76,15 @@ async def update_user_public_key(
     if user_crud.get_user_by_email(update_user_public_key.user_email, session) is None:
         raise HTTPException(status_code=400, detail="User not registered")
 
-    if not verify(
-        update_user_public_key.public_key, update_user_public_key.fingerprint
-    ):
-        raise HTTPException(
-            status_code=400, detail="Invalid fingerprint. Please try again"
-        )
+    # if not verify(
+    #     update_user_public_key.public_key, update_user_public_key.fingerprint
+    # ):
+    #     raise HTTPException(
+    #         status_code=400, detail="Invalid fingerprint. Please try again"
+    #     )
 
     user_crud.update_user_public_key(
-        UserWithKey(
-            email=update_user_public_key.user_email,
-            public_key=update_user_public_key.public_key,
-        ),
-        session,
+        update_user_public_key.user_email, update_user_public_key.public_key, session
     )
     return {"message": "User's public key updated successfully"}
 

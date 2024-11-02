@@ -8,6 +8,7 @@ from src.api.models.surveys.survey import SurveyStructure
 
 class SurveyDraftCreate(BaseModel):
     user_email: str
+    title: str
     survey_structure: SurveyStructure
 
     @field_validator("user_email")
@@ -16,6 +17,12 @@ class SurveyDraftCreate(BaseModel):
             raise ValueError("email must be provided")
         if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
             raise ValueError("invalid email format")
+        return v
+
+    @field_validator("title")
+    def validate_survey_title(cls, v, info: ValidationInfo) -> str:
+        if v is None or v == "":
+            raise ValueError("survey title must be provided")
         return v
 
     class Config:
@@ -48,6 +55,7 @@ class SurveyDraftUserActions(BaseModel):
 
 
 class SurveyDraftFetchOutput(BaseModel):
+    title: str
     survey_structure: SurveyStructure
 
     class Config:

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MultiSelect from '$lib/components/MultiSelect.svelte';
+	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
 	import { selectedGroup } from '$lib/stores/create-page';
 
 	export let groups: string[];

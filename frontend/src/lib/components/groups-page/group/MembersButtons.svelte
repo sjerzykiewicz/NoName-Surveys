@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
-	import MultiSelect from '$lib/components/MultiSelect.svelte';
+	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { GroupError } from '$lib/entities/GroupError';
@@ -10,9 +10,12 @@
 	import { tick } from 'svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import DeleteModal from '$lib/components/DeleteModal.svelte';
+	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 
-	export let members: string[];
+	export let members: {
+		email: string;
+		has_public_key: boolean;
+	}[];
 	export let notMembers: string[];
 	export let selectedMembersToRemove: string[] = [];
 	export let group: string;
@@ -21,6 +24,8 @@
 	let selectedMembersToAdd: string[] = [];
 	let membersError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
+
+	$: memberEmails = members.map((m) => m.email);
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -61,7 +66,7 @@
 			return;
 		}
 
-		const newMembers = members.concat(selectedMembersToAdd);
+		const newMembers = memberEmails.concat(selectedMembersToAdd);
 
 		const createResponse = await fetch('/api/groups/create', {
 			method: 'POST',
@@ -108,9 +113,8 @@
 			return;
 		}
 
-		const newMembers = members.filter(
-			(member: string) => !selectedMembersToRemove.includes(member)
-		);
+		const selectedMembersToRemoveSet = new Set(selectedMembersToRemove);
+		const newMembers = memberEmails.filter((m) => !selectedMembersToRemoveSet.has(m));
 
 		const createResponse = await fetch('/api/groups/create', {
 			method: 'POST',
@@ -131,7 +135,6 @@
 			return;
 		}
 
-		members = newMembers;
 		isModalHidden = true;
 		selectedMembersToRemove = [];
 		invalidateAll();
@@ -183,6 +186,10 @@
 {/if}
 
 <style>
+	.select-list {
+		margin-bottom: 0em;
+	}
+
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}

@@ -33,7 +33,7 @@
 	import { getDraft } from '$lib/utils/getDraft';
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import DeleteModal from '$lib/components/DeleteModal.svelte';
+	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 
 	export let drafts: {
 		id: number;

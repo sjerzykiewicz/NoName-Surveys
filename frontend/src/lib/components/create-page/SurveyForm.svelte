@@ -24,8 +24,8 @@
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
-	import Modal from '$lib/components/Modal.svelte';
-	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
+	import Modal from '$lib/components/global/Modal.svelte';
+	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import { popup } from '$lib/utils/popup';
 	import { errorModalContent, isErrorModalHidden, S, M } from '$lib/stores/global';
 	import SelectGroup from './SelectGroup.svelte';
@@ -33,7 +33,7 @@
 	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { onMount } from 'svelte';
-	import ImportEmails from '../ImportEmails.svelte';
+	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 
 	export let users: string[];
 	export let groups: string[];

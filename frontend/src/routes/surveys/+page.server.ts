@@ -1,5 +1,5 @@
 import type { PageServerLoad } from '../$types';
-import * as db from '$lib/server/database';
+import { getSurveys } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent }) => {
@@ -8,10 +8,18 @@ export const load: PageServerLoad = async ({ parent }) => {
 		redirect(303, `/account`);
 	}
 
-	const response = await db.getSurveysOfUser(session.user!.email!);
+	const response = await getSurveys(session.user!.email!);
 	if (!response.ok) {
 		error(response.status, { message: await response.json() });
 	}
-	const survey_list = await response.json();
-	return { session, survey_list };
+	const survey_list: {
+		title: string;
+		survey_code: string;
+		creation_date: string;
+		uses_cryptographic_module: boolean;
+		is_owned_by_user: boolean;
+		group_size: number;
+	}[] = await response.json();
+
+	return { survey_list };
 };

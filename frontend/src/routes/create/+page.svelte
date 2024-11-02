@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
+	import Footer from '$lib/components/global/Footer.svelte';
 	import SurveyTitle from '$lib/components/create-page/SurveyTitle.svelte';
 	import SurveyTitlePreview from '$lib/components/create-page/preview/SurveyTitlePreview.svelte';
 	import TitleError from '$lib/components/create-page/TitleError.svelte';

@@ -15,6 +15,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		error(response.status, { message: await response.json() });
 	}
 	const survey: {
+		title: string;
 		survey_structure: Survey;
 		survey_code: string;
 		uses_cryptographic_module: boolean;

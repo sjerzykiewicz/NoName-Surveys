@@ -53,10 +53,11 @@
 		await init();
 	});
 
+	export let survey_title: string;
 	export let survey: Survey;
+	export let code: string;
 	export let uses_crypto: boolean;
 	export let keys: Array<string>;
-	export let code: string;
 
 	let innerWidth: number;
 	let isKeysModalHidden: boolean = true;
@@ -73,7 +74,7 @@
 		list: List
 	};
 
-	$title = survey.title;
+	$title = survey_title;
 
 	for (let i in survey.questions) {
 		$questions[i] = {

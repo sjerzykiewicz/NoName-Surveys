@@ -13,7 +13,7 @@
 	export let data: PageData;
 	export let isModalHidden: boolean = true;
 
-	let id = $page.params.id;
+	let id: number = parseFloat($page.params.id);
 </script>
 
 <QrCodeModal
@@ -23,7 +23,7 @@
 />
 
 <Header>
-	<div class="title">{data.answers[id].title}</div>
+	<div class="title">{data.survey.title}</div>
 </Header>
 
 <Content>

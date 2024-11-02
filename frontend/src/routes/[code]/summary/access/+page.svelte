@@ -29,7 +29,7 @@
 />
 
 <Header>
-	<div title="Survey title" class="title">{data.survey.survey_structure.title}</div>
+	<div title="Survey title" class="title">{data.survey.title}</div>
 </Header>
 
 <Content>

@@ -24,17 +24,17 @@
 		},
 		Drafts: {
 			name: 'Drafts',
-			href: '/drafts',
+			href: '/drafts/0',
 			disabled: !$page.data.session
 		},
 		Surveys: {
 			name: 'Surveys',
-			href: '/surveys',
+			href: '/surveys/0',
 			disabled: !$page.data.session
 		},
 		Groups: {
 			name: 'Groups',
-			href: '/groups',
+			href: '/groups/0',
 			disabled: !$page.data.session
 		},
 		Account: {

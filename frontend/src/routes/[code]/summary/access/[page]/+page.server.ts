@@ -2,13 +2,13 @@ import type { PageServerLoad } from './$types';
 import { checkAccessToSurvey, getUsers } from '$lib/server/database';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ params, parent }) => {
+export const load: PageServerLoad = async ({ parent, params }) => {
 	const { session } = await parent();
-	if (!session) {
-		error(401, 'You must be logged in to access this page.');
-	}
 
-	const accessResponse = await checkAccessToSurvey(session.user!.email!, params.code);
+	const code = params.code;
+	const page = parseInt(params.page);
+
+	const accessResponse = await checkAccessToSurvey(session!.user!.email!, code, page);
 	if (!accessResponse.ok) {
 		error(accessResponse.status, { message: await accessResponse.json() });
 	}

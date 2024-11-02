@@ -14,7 +14,7 @@
 		{#each data.answers as answer, i}
 			{#if answer}
 				<a
-					href="{$page.url.pathname}/{i}"
+					href="{$page.url.pathname}/answers/{i}"
 					title="Click to get all answers"
 					class="text-area display"
 				>

@@ -132,15 +132,21 @@
 	});
 </script>
 
-<div title="Number of answers" class="title answers">Number of answers: {surveyAnswers.length}</div>
-{#each groupedAnswers as question, questionIndex}
-	<div class="question">
-		<QuestionTitle
-			question={question.question}
-			{questionIndex}
-			questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
-			required={question.required}
-		/>
-		<svelte:component this={componentTypeMap[question.question_type]} data={question} />
+{#if surveyAnswers.length === 0}
+	<div title="Number of answers" class="title empty">No answers yet!</div>
+{:else}
+	<div title="Number of answers" class="title answers">
+		Number of answers: {surveyAnswers.length}
 	</div>
-{/each}
+	{#each groupedAnswers as question, questionIndex}
+		<div class="question">
+			<QuestionTitle
+				question={question.question}
+				{questionIndex}
+				questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
+				required={question.required}
+			/>
+			<svelte:component this={componentTypeMap[question.question_type]} data={question} />
+		</div>
+	{/each}
+{/if}

@@ -1,14 +1,16 @@
-import type { PageServerLoad } from '../$types';
+import type { LayoutServerLoad } from './$types';
 import { getUserGroups, getUsers } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ parent }) => {
+export const load: LayoutServerLoad = async ({ parent, params }) => {
 	const { session } = await parent();
 	if (!session) {
 		redirect(303, `/account`);
 	}
 
-	const groupsResponse = await getUserGroups(session.user!.email!);
+	const page = parseInt(params.page);
+
+	const groupsResponse = await getUserGroups(session.user!.email!, page);
 	if (!groupsResponse.ok) {
 		error(groupsResponse.status, { message: await groupsResponse.json() });
 	}

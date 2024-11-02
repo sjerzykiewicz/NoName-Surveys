@@ -7,7 +7,7 @@
 <button
 	title="Share survey results"
 	class="footer-button"
-	on:click={() => goto('/' + code + '/summary/access')}
+	on:click={() => goto('/' + code + '/summary/access/0')}
 >
 	<i class="material-symbols-rounded">share</i>Share
 </button>

@@ -11,8 +11,9 @@
 	import Number from './Number.svelte';
 	import type { ComponentType } from 'svelte';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import type SurveySummary from '$lib/entities/surveys/SurveySummary';
 
-	export let answer;
+	export let answer: SurveySummary;
 	export let id: number;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
@@ -28,17 +29,21 @@
 	};
 </script>
 
-<div title="Answer no. {id + 1}" class="title answers">
-	{id + 1}. Answer
-</div>
-{#each answer.questions as question, questionIndex}
-	<div class="question">
-		<QuestionTitle
-			question={question.question}
-			{questionIndex}
-			questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
-			required={question.required}
-		/>
-		<svelte:component this={componentTypeMap[question.question_type]} data={question} />
+{#if !answer}
+	<div title="Answer no. {id + 1}" class="title empty">No {id + 1}. answer yet!</div>
+{:else}
+	<div title="Answer no. {id + 1}" class="title answers">
+		{id + 1}. Answer
 	</div>
-{/each}
+	{#each answer.questions as question, questionIndex}
+		<div class="question">
+			<QuestionTitle
+				question={question.question}
+				{questionIndex}
+				questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
+				required={question.required}
+			/>
+			<svelte:component this={componentTypeMap[question.question_type]} data={question} />
+		</div>
+	{/each}
+{/if}

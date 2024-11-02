@@ -12,7 +12,6 @@ from src.api.models.surveys.survey_draft import (
 )
 from src.api.models.users.user import User
 from src.db.base import get_session
-from src.db.models.survey_draft import SurveyDraftBase
 
 router = APIRouter()
 
@@ -30,9 +29,7 @@ async def get_survey_drafts(user_input: User, session: Session = Depends(get_ses
     return [
         SurveyDraftHeadersOutput(
             id=survey_draft.id,
-            title=SurveyStructure.model_validate_json(
-                survey_draft.survey_structure
-            ).title,
+            title=survey_draft.title,
             creation_date=survey_draft.creation_date,
         )
         for survey_draft in survey_draft_crud.get_not_deleted_survey_drafts_for_user(
@@ -67,9 +64,10 @@ async def get_survey_draft(
         )
 
     return SurveyDraftFetchOutput(
+        title=survey_draft.title,
         survey_structure=SurveyStructure.model_validate_json(
             survey_draft.survey_structure
-        )
+        ),
     )
 
 
@@ -122,11 +120,10 @@ async def create_survey_draft(
         raise HTTPException(status_code=400, detail=str(e))
 
     created_survey_draft = survey_draft_crud.create_survey_draft(
-        SurveyDraftBase(
-            creator_id=user.id,
-            survey_structure=survey_draft_create.survey_structure.model_dump_json(),
-            is_deleted=False,
-        ),
+        user.id,
+        survey_draft_create.title,
+        survey_draft_create.survey_structure.model_dump_json(),
+        False,
         session,
     )
 

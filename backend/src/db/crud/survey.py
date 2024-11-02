@@ -43,7 +43,19 @@ def survey_code_taken(survey_code: str, session: Session) -> bool:
     return session.exec(statement).first() is not None
 
 
-def create_survey(survey_create: SurveyBase, session: Session) -> Survey:
+def create_survey(
+    creator_id: int,
+    uses_cryptographic_module: bool,
+    survey_structure_id: int,
+    survey_code: str,
+    session: Session,
+) -> Survey:
+    survey_create = Survey(
+        creator_id=creator_id,
+        uses_cryptographic_module=uses_cryptographic_module,
+        survey_structure_id=survey_structure_id,
+        survey_code=survey_code,
+    )
     survey_create = Survey.model_validate(survey_create)
     session.add(survey_create)
     session.commit()

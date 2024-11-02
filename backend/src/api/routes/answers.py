@@ -15,7 +15,6 @@ from src.api.models.surveys.answer import (
 from src.api.models.surveys.survey import SurveyStructure
 from src.cryptography.ring_signature import verify_lrs
 from src.db.base import get_session
-from src.db.models.answer import Answer
 
 router = APIRouter()
 
@@ -45,10 +44,7 @@ async def get_survey_answers_by_code(
     survey_draft = survey_draft_crud.get_survey_draft_by_id(
         survey.survey_structure_id, session
     )
-    survey_structure = SurveyStructure.model_validate_json(
-        survey_draft.survey_structure
-    )
-    survey_title = survey_structure.title
+    survey_title = survey_draft.title
 
     answers = answer_crud.get_answers_by_survey_id(survey.id, session)
     answer_structures = [
@@ -134,12 +130,7 @@ async def save_survey_answer(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    # save answer
-    answer = Answer(
-        survey_id=survey.id,
-        answer=survey_answer.model_dump_json(),
-        y0=survey_answer.signature[0] if survey_answer.signature else "",
-    )
-    answer_crud.save_answer(answer, session)
+    y0 = survey_answer.signature[0] if survey_answer.signature else ""
+    answer_crud.save_answer(survey.id, survey_answer.model_dump_json(), y0, session)
 
     return {"message": "Answer saved successfully"}

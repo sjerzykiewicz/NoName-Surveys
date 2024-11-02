@@ -20,7 +20,9 @@ def get_ring_member_count_for_survey(survey_id: int, session: Session) -> int:
     return session.exec(statement).one()
 
 
-def add_ring_member(ring_member: RingMemberBase, session: Session) -> None:
+def add_ring_member(
+    survey_id: int, user_email: str, public_key: str, session: Session
+) -> None:
     ring_member = RingMember.model_validate(ring_member)
     session.add(ring_member)
     session.commit()

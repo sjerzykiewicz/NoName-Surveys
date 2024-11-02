@@ -18,7 +18,12 @@ def signature_already_present_for_user(
     return session.exec(statement).first() is not None
 
 
-def save_answer(answer: AnswerBase, session: Session) -> None:
+def save_answer(survey_id: int, answer: str, y0: str, session: Session) -> None:
+    answer = Answer(
+        survey_id=survey_id,
+        answer=answer,
+        y0=y0,
+    )
     answer = Answer.model_validate(answer)
     session.add(answer)
     session.commit()

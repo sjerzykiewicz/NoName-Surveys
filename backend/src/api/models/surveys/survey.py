@@ -16,7 +16,6 @@ from src.api.models.questions.text_question import TextQuestion
 
 
 class SurveyStructure(BaseModel):
-    title: str
     questions: list[
         Union[
             BinaryQuestion,
@@ -34,15 +33,22 @@ class SurveyStructure(BaseModel):
         description="Questions list must have at least 1 element",
     )
 
+    def validate(self):
+        for question in self.questions:
+            question.validate_for_draft()
+
+    class Config:
+        extra = "forbid"
+
+
+class SurveyBase(BaseModel):
+    title: str
+
     @field_validator("title")
     def validate_survey_title(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             raise ValueError("survey title must be provided")
         return v
-
-    def validate(self):
-        for question in self.questions:
-            question.validate_for_draft()
 
     class Config:
         extra = "forbid"
@@ -73,6 +79,7 @@ class SurveyInfoFetchInput(BaseModel):
 
 
 class SurveyStructureFetchOutput(BaseModel):
+    title: str
     survey_structure: SurveyStructure
     survey_code: str
     uses_cryptographic_module: bool
@@ -82,7 +89,7 @@ class SurveyStructureFetchOutput(BaseModel):
         extra = "forbid"
 
 
-class SurveyStructureCreateInput(BaseModel):
+class SurveyStructureCreateInput(SurveyBase):
     user_email: str
     survey_structure: SurveyStructure
     uses_cryptographic_module: bool

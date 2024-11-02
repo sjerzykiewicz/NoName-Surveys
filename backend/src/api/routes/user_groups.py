@@ -12,8 +12,6 @@ from src.api.models.user_groups.user_groups import (  # noqa
     UserGroupNameUpdate,
 )
 from src.db.base import get_session
-from src.db.models.user_group import UserGroupBase
-from src.db.models.user_group_member import UserGroupMemberBase
 
 router = APIRouter()
 
@@ -133,18 +131,12 @@ async def create_user_group(
         )
 
     user_group = user_groups_crud.create_user_group(
-        UserGroupBase(
-            creator_id=user.id,
-            name=user_group_creation_request.user_group_name,
-        ),
-        session,
+        user.id, user_group_creation_request.user_group_name, session
     )
     for user_group_member in user_group_creation_request.user_group_members:
         user_groups_crud.add_user_to_group(
-            UserGroupMemberBase(
-                group_id=user_group.id,
-                user_id=user_crud.get_user_by_email(user_group_member, session).id,
-            ),
+            user_group.id,
+            user_crud.get_user_by_email(user_group_member, session).id,
             session,
         )
 

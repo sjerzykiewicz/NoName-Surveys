@@ -43,7 +43,11 @@
 	{#if data.survey.uses_cryptographic_module}
 		<RespondentsButton />
 	{/if}
-	<AnswersButton />
-	<QrCodeButton bind:isModalHidden />
-	<Back />
+	<div class="footer-button-group">
+		<AnswersButton />
+		<div class="footer-button-group">
+			<QrCodeButton bind:isModalHidden />
+			<Back />
+		</div>
+	</div>
 </Footer>

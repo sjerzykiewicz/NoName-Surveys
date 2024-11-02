@@ -15,31 +15,37 @@
 		Fill: {
 			name: 'Fill Out',
 			href: '/',
+			page: '',
 			disabled: false
 		},
 		Create: {
 			name: 'Create',
 			href: '/create',
+			page: '',
 			disabled: !$page.data.session
 		},
 		Drafts: {
 			name: 'Drafts',
-			href: '/drafts/0',
+			href: '/drafts',
+			page: '/0',
 			disabled: !$page.data.session
 		},
 		Surveys: {
 			name: 'Surveys',
-			href: '/surveys/0',
+			href: '/surveys',
+			page: '/0',
 			disabled: !$page.data.session
 		},
 		Groups: {
 			name: 'Groups',
-			href: '/groups/0',
+			href: '/groups',
+			page: '/0',
 			disabled: !$page.data.session
 		},
 		Account: {
 			name: 'Account',
 			href: '/account',
+			page: '',
 			disabled: false
 		}
 	};
@@ -109,10 +115,11 @@
 					{id}
 					class="nav-link"
 					class:tooltip={innerWidth > $M && data.disabled}
-					class:active={$page.url.pathname === data.href}
 					class:disabled={data.disabled}
+					class:active={$page.route.id === data.href ||
+						$page.route.id === data.href + '/[' + data.name.toLowerCase() + 'Page]'}
 				>
-					<a href={data.disabled ? '' : data.href} on:click={hideNav}>{data.name}</a>
+					<a href={data.disabled ? '' : data.href + data.page} on:click={hideNav}>{data.name}</a>
 					{#if innerWidth > $M && data.disabled}
 						<span class="tooltip-text bottom">
 							Sign in to access {data.name}.

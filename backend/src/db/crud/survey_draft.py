@@ -5,11 +5,16 @@ from src.db.models.survey_draft import SurveyDraft, SurveyDraftBase
 
 
 def get_not_deleted_survey_drafts_for_user(
-    user_id: int, session: Session
+    user_id: int, offset: int, limit: int, session: Session
 ) -> list[SurveyDraft]:
-    statement = select(SurveyDraft).where(
-        (SurveyDraft.creator_id == user_id)
-        & (SurveyDraft.is_deleted == False)  # noqa: E712
+    statement = (
+        select(SurveyDraft)
+        .where(
+            (SurveyDraft.creator_id == user_id)
+            & (SurveyDraft.is_deleted == False)  # noqa: E712
+        )
+        .offset(offset)
+        .limit(limit)
     )
     drafts = session.exec(statement).all()
     return [draft for draft in drafts]

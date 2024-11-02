@@ -68,7 +68,7 @@ async def get_user_groups_with_members_having_public_keys(
         raise HTTPException(status_code=400, detail="User not registered")
     return [
         user_group.name
-        for user_group in user_groups_crud.get_all_user_groups(user.id, session)
+        for user_group in user_groups_crud.get_all_user_groups_of_user(user.id, session)
         if user_crud.all_users_have_public_keys(
             [
                 member.user_id

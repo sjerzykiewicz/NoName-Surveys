@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 		redirect(303, `/account`);
 	}
 
-	const page = parseInt(params.page);
+	const page = parseInt(params.draftsPage);
 
 	const response = await getSurveyDrafts(session.user!.email!, page);
 	if (!response.ok) {

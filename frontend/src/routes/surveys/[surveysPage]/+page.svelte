@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageServerData } from './$types';
+	import type { LayoutServerData } from './$types';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import SurveysTable from '$lib/components/surveys-page/SurveysTable.svelte';
@@ -8,7 +8,7 @@
 	import { slide } from 'svelte/transition';
 	import { afterUpdate } from 'svelte';
 
-	export let data: PageServerData;
+	export let data: LayoutServerData;
 
 	let numSurveys: number = data.survey_list.length;
 

@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 	}
 
 	const group = params.group;
-	const page = parseInt(params.page);
+	const page = parseInt(params.groupPage);
 
 	const response = await getUserGroup(session.user!.email!, group, page);
 	if (!response.ok) {

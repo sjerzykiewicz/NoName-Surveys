@@ -145,13 +145,15 @@
 					{/if}
 				</td>
 				<td title="View the summary" class="title-entry"
-					><button on:click={() => goto('/' + survey.survey_code + '/summary')}
+					><button on:click={() => goto($page.url.pathname + '/' + survey.survey_code)}
 						>{survey.title}</button
 					></td
 				>
 				{#if survey.uses_cryptographic_module}
 					<td title="View the respondents" class="code-entry"
-						><button on:click={() => goto('/' + survey.survey_code + '/summary#survey-respondents')}
+						><button
+							on:click={() =>
+								goto($page.url.pathname + '/' + survey.survey_code + '/respondents/0')}
 							>{survey.group_size}</button
 						>
 					</td>

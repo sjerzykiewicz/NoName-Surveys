@@ -109,7 +109,7 @@
 		}
 
 		if (selectedMembersToRemove.length === members.length) {
-			goto('/groups', { replaceState: true, invalidateAll: true });
+			goto('/groups/' + $page.params.groupsPage, { replaceState: true, invalidateAll: true });
 			return;
 		}
 

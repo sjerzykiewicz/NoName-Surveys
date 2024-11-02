@@ -29,21 +29,17 @@
 	};
 </script>
 
-{#if !answer}
-	<div title="Answer no. {id + 1}" class="title empty">No {id + 1}. answer yet!</div>
-{:else}
-	<div title="Answer no. {id + 1}" class="title answers">
-		{id + 1}. Answer
+<div title="Answer no. {id + 1}" class="title answers">
+	{id + 1}. Answer
+</div>
+{#each answer.questions as question, questionIndex}
+	<div class="question">
+		<QuestionTitle
+			question={question.question}
+			{questionIndex}
+			questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
+			required={question.required}
+		/>
+		<svelte:component this={componentTypeMap[question.question_type]} data={question} />
 	</div>
-	{#each answer.questions as question, questionIndex}
-		<div class="question">
-			<QuestionTitle
-				question={question.question}
-				{questionIndex}
-				questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
-				required={question.required}
-			/>
-			<svelte:component this={componentTypeMap[question.question_type]} data={question} />
-		</div>
-	{/each}
-{/if}
+{/each}

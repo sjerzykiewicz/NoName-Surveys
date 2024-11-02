@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
-	export let code: string;
+	import { page } from '$app/stores';
 </script>
 
 <button
 	title="View possible respondents"
 	class="footer-button"
-	on:click={() => goto('/' + code + '/summary/respondents/0')}
+	class:save={$page.url.pathname.includes('respondents')}
+	on:click={() =>
+		goto('/surveys/' + $page.params.surveysPage + '/' + $page.params.code + '/respondents/0')}
 >
 	<i class="material-symbols-rounded">group</i>Respondents
 </button>

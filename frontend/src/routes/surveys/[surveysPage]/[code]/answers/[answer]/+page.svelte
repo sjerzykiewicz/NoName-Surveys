@@ -1,18 +1,21 @@
 <script lang="ts">
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
-	import AnswersSummary from '$lib/components/summary-page/AnswersSummary.svelte';
+	import Answers from '$lib/components/summary-page/answer/Answers.svelte';
 	import Footer from '$lib/components/global/Footer.svelte';
 	import Back from '$lib/components/global/Back.svelte';
 	import ShareButton from '$lib/components/summary-page/buttons/ShareButton.svelte';
-	import type { LayoutServerData } from './$types';
+	import type { PageData } from './$types';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import QrCodeButton from '$lib/components/summary-page/buttons/QrCodeButton.svelte';
-	import RespondentsButton from '$lib/components/summary-page/buttons/RespondentsButton.svelte';
+	import { page } from '$app/stores';
 	import AnswersButton from '$lib/components/summary-page/buttons/AnswersButton.svelte';
+	import RespondentsButton from '$lib/components/summary-page/buttons/RespondentsButton.svelte';
 
-	export let data: LayoutServerData;
+	export let data: PageData;
 	export let isModalHidden: boolean = true;
+
+	let id: number = parseInt($page.params.answer);
 </script>
 
 <QrCodeModal
@@ -22,23 +25,26 @@
 />
 
 <Header>
-	<div title="Survey title" class="title">{data.survey.title}</div>
+	<div class="title">{data.survey.title}</div>
 </Header>
 
 <Content>
-	<AnswersSummary surveyAnswers={data.answers} />
+	{#if !data.answers[id]}
+		<div title="Answer no. {id + 1}" class="title empty">No {id + 1}. answer yet!</div>
+	{:else}
+		<Answers answer={data.answers[id]} {id} />
+	{/if}
 </Content>
 
 <Footer>
-	{#if data.answers.length > 0 && data.answers[0].is_owned_by_user}
-		<ShareButton code={data.survey.survey_code} />
+	<!-- TODO: improve this -->
+	{#if data.survey_list[data.survey_index].is_owned_by_user}
+		<ShareButton />
 	{/if}
 	{#if data.survey.uses_cryptographic_module}
-		<RespondentsButton code={data.survey.survey_code} />
+		<RespondentsButton />
 	{/if}
-	{#if data.answers.length > 0}
-		<AnswersButton code={data.survey.survey_code} />
-	{/if}
+	<AnswersButton />
 	<QrCodeButton bind:isModalHidden />
 	<Back />
 </Footer>

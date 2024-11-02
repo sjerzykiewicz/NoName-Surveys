@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 	const { session } = await parent();
 
 	const code = params.code;
-	const page = parseInt(params.page);
+	const page = parseInt(params.accessPage);
 
 	const accessResponse = await checkAccessToSurvey(session!.user!.email!, code, page);
 	if (!accessResponse.ok) {

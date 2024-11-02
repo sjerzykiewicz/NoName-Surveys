@@ -4,7 +4,7 @@ import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const code = params.code;
-	const page = parseInt(params.page);
+	const page = parseInt(params.respondentsPage);
 
 	const response = await getSurveyRespondents(code, page);
 	if (!response.ok) {

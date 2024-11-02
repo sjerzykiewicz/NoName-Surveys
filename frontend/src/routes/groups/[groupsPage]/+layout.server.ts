@@ -8,7 +8,7 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 		redirect(303, `/account`);
 	}
 
-	const page = parseInt(params.page);
+	const page = parseInt(params.groupsPage);
 
 	const groupsResponse = await getUserGroups(session.user!.email!, page);
 	if (!groupsResponse.ok) {

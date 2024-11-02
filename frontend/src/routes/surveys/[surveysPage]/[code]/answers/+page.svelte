@@ -9,6 +9,7 @@
 	import AnswersTable from '$lib/components/summary-page/answer/AnswersTable.svelte';
 	import ShareButton from '$lib/components/summary-page/buttons/ShareButton.svelte';
 	import RespondentsButton from '$lib/components/summary-page/buttons/RespondentsButton.svelte';
+	import AnswersButton from '$lib/components/summary-page/buttons/AnswersButton.svelte';
 
 	export let data: PageData;
 	export let isModalHidden: boolean = true;
@@ -36,12 +37,13 @@
 
 <Footer>
 	<!-- TODO: improve this -->
-	{#if data.answers.length > 0 && data.answers[0].is_owned_by_user}
-		<ShareButton code={data.survey.survey_code} />
+	{#if data.survey_list[data.survey_index].is_owned_by_user}
+		<ShareButton />
 	{/if}
 	{#if data.survey.uses_cryptographic_module}
-		<RespondentsButton code={data.survey.survey_code} />
+		<RespondentsButton />
 	{/if}
+	<AnswersButton />
 	<QrCodeButton bind:isModalHidden />
 	<Back />
 </Footer>

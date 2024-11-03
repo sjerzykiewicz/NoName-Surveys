@@ -13,7 +13,7 @@
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
 	export let answer;
-	export let id: string;
+	export let id: number;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -28,8 +28,8 @@
 	};
 </script>
 
-<div title="Answer no. {parseFloat(id) + 1}" class="title answers">
-	{parseFloat(id) + 1}. Answer
+<div title="Answer no. {id + 1}" class="title answers">
+	{id + 1}. Answer
 </div>
 {#each answer.questions as question, questionIndex}
 	<div class="question">

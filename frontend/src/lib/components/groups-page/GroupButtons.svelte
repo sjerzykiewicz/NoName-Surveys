@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
-	import MultiSelect from '$lib/components/MultiSelect.svelte';
+	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
@@ -13,9 +13,13 @@
 	import { limitInput } from '$lib/utils/limitInput';
 	import { M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import DeleteModal from '$lib/components/DeleteModal.svelte';
+	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
+	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 
-	export let groups: string[];
+	export let groups: {
+		user_group_name: string;
+		all_members_have_public_keys: true;
+	}[];
 	export let users: string[];
 	export let selectedGroupsToRemove: string[] = [];
 
@@ -25,6 +29,8 @@
 	let nameError: GroupError = GroupError.NoError;
 	let membersError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
+
+	$: groupNames = groups.map((g) => g.user_group_name);
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -39,7 +45,7 @@
 			nameError = GroupError.NameRequired;
 		} else if (n.length > $LIMIT_OF_CHARS) {
 			nameError = GroupError.NameTooLong;
-		} else if (groups.some((g) => g === n)) {
+		} else if (groupNames.some((g) => g === n)) {
 			nameError = GroupError.NameNonUnique;
 		} else if (n.match(/^[\p{L}\p{N} /-]+$/u) === null) {
 			nameError = GroupError.NameInvalid;
@@ -110,7 +116,7 @@
 				return;
 			}
 
-			groups = groups.filter((g) => g !== group);
+			groups = groups.filter((g) => g.user_group_name !== group);
 		});
 
 		isModalHidden = true;
@@ -172,7 +178,7 @@
 				<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
 			</div>
 		</div>
-		<NameError name={groupName.trim()} error={nameError} {groups} />
+		<NameError name={groupName.trim()} error={nameError} groups={groupNames} />
 		<div class="button-row">
 			<div title="Select group members" class="select-list">
 				<MultiSelect
@@ -184,12 +190,22 @@
 			<button
 				title="Save the group"
 				class="save"
-				on:click={() => createGroup(groupName.trim(), groupMembers)}
+				on:click={() => {
+					createGroup(groupName.trim(), groupMembers);
+				}}
 			>
 				<i class="material-symbols-rounded">done</i>Create
 			</button>
 		</div>
 		<MembersError members={groupMembers} error={membersError} />
+		<ImportEmails
+			bind:users={groupMembers}
+			title="Import group members from a .csv file"
+			label="Or import group members from a .csv file."
+			id="emails-file"
+			checkKeys={false}
+			size={1.25}
+		/>
 	</div>
 {/if}
 

@@ -1,7 +1,7 @@
 import { type RequestHandler, error, redirect } from '@sveltejs/kit';
 import { getOAuthInstance } from '$lib/oauth1';
 import { env } from '$env/dynamic/private';
-import * as db from '$lib/server/database';
+import { validateUser, createUser } from '$lib/server/database';
 import { _getUserInfo } from '../user/+server';
 
 export const GET: RequestHandler = async ({ url, cookies, locals }) => {
@@ -44,9 +44,9 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		const userData = await _getUserInfo(responseData.oauth_token, responseData.oauth_token_secret);
 
 		if (userData.email) {
-			const isUserRegistered = await (await db.validateUser(userData.email!)).json();
+			const isUserRegistered = await (await validateUser(userData.email!)).json();
 			if (!isUserRegistered) {
-				await db.registerUser(userData.email!);
+				await createUser(userData.email!);
 			}
 		}
 

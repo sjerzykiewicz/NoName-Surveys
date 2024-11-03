@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MultiSelect from '$lib/components/MultiSelect.svelte';
+	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
 	import { ringMembers } from '$lib/stores/create-page';
 
 	export let users: string[];

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { LayoutServerData } from './$types';
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
 	import GroupsTable from '$lib/components/groups-page/GroupsTable.svelte';
 	import GroupButtons from '$lib/components/groups-page/GroupButtons.svelte';
 	import { afterUpdate } from 'svelte';
@@ -22,7 +22,7 @@
 <Header>
 	<div class="title">
 		Your groups
-		<span title="Number of surveys" class:max={numGroups >= $LIMIT_OF_GROUPS}
+		<span title="Number of groups" class:max={numGroups >= $LIMIT_OF_GROUPS}
 			>[ {numGroups} / {$LIMIT_OF_GROUPS} ]</span
 		>
 	</div>
@@ -31,7 +31,7 @@
 <Content>
 	{#if numGroups >= $LIMIT_OF_GROUPS}
 		<p
-			title="Survey limit reached"
+			title="Group limit reached"
 			class="error"
 			transition:slide={{ duration: 200, easing: cubicInOut }}
 		>

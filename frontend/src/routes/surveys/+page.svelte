@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
 	import SurveysTable from '$lib/components/surveys-page/SurveysTable.svelte';
 	import { LIMIT_OF_SURVEYS } from '$lib/stores/global';
 	import { cubicInOut } from 'svelte/easing';

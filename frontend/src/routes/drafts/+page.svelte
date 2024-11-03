@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
 	import DraftsTable from '$lib/components/drafts-page/DraftsTable.svelte';
 	import { afterUpdate } from 'svelte';
 	import { LIMIT_OF_DRAFTS } from '$lib/stores/global';
@@ -20,7 +20,7 @@
 <Header>
 	<div class="title">
 		Your drafts
-		<span title="Number of surveys" class:max={numDrafts >= $LIMIT_OF_DRAFTS}
+		<span title="Number of drafts" class:max={numDrafts >= $LIMIT_OF_DRAFTS}
 			>[ {numDrafts} / {$LIMIT_OF_DRAFTS} ]</span
 		>
 	</div>
@@ -29,7 +29,7 @@
 <Content>
 	{#if numDrafts >= $LIMIT_OF_DRAFTS}
 		<p
-			title="Survey limit reached"
+			title="Draft limit reached"
 			class="error"
 			transition:slide={{ duration: 200, easing: cubicInOut }}
 		>

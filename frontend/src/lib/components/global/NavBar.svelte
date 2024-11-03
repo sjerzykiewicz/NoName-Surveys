@@ -88,7 +88,7 @@
 
 {#if innerWidth <= $M}
 	<div class="nav-burger">
-		<a href="/" title="Fill Out" class="nav-burger-logo"
+		<a href="/" title="NoName" class="nav-burger-logo"
 			><img src={logo} alt="NoName logo" width="48" height="48" /></a
 		>
 		<div title={open ? 'Close menu' : 'Open menu'}>
@@ -99,7 +99,7 @@
 
 {#if open || innerWidth > $M}
 	<div class="bar">
-		<a href="/" title="Fill Out" class="nav-logo"
+		<a href="/" title="NoName" class="nav-logo"
 			><img src={logo} alt="NoName logo" width="48" height="48" /></a
 		>
 		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>

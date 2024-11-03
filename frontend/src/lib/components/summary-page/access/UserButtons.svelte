@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
-	import MultiSelect from '$lib/components/MultiSelect.svelte';
+	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { tick } from 'svelte';
@@ -9,7 +9,7 @@
 	import UsersError from './UsersError.svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import DeleteModal from '$lib/components/DeleteModal.svelte';
+	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 
 	export let users: string[];
 	export let code: string;
@@ -139,6 +139,10 @@
 {/if}
 
 <style>
+	.select-list {
+		margin-bottom: 0em;
+	}
+
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}

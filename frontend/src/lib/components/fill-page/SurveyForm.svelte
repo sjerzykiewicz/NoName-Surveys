@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { title, questions, answers } from '$lib/stores/fill-page';
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
+	import Footer from '$lib/components/global/Footer.svelte';
 	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
 	import { SingleQuestion, SingleQuestionAnswered } from '$lib/entities/questions/Single';
 	import { SliderQuestionAnswered, type SliderQuestion } from '$lib/entities/questions/Slider';
@@ -14,7 +14,7 @@
 	import { RankQuestionAnswered } from '$lib/entities/questions/Rank';
 	import { ListQuestionAnswered } from '$lib/entities/questions/List';
 	import { ScaleQuestionAnswered } from '$lib/entities/questions/Scale';
-	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
+	import SurveyAnswer from '$lib/entities/surveys/SurveyAnswer';
 	import QuestionTitle from './QuestionTitle.svelte';
 	import Single from './Single.svelte';
 	import Text from './Text.svelte';
@@ -35,23 +35,31 @@
 	import { onMount, tick } from 'svelte';
 	import init, { linkable_ring_signature } from 'wasm';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
-	import Modal from '$lib/components/Modal.svelte';
-	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
+	import Modal from '$lib/components/global/Modal.svelte';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		successModalContent,
+		isSuccessModalHidden,
+		M
+	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { FileError } from '$lib/entities/FileError';
 	import KeysError from './KeysError.svelte';
+	import { readFile } from '$lib/utils/readFile';
+	import SuccessModal from '$lib/components/global/SuccessModal.svelte';
 
 	onMount(async () => {
 		await init();
 	});
 
+	export let survey_title: string;
 	export let survey: Survey;
+	export let code: string;
 	export let uses_crypto: boolean;
 	export let keys: Array<string>;
-	export let code: string;
 
 	let innerWidth: number;
-	let isSuccessModalHidden: boolean = true;
 	let isKeysModalHidden: boolean = true;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
@@ -66,7 +74,7 @@
 		list: List
 	};
 
-	$title = survey.title;
+	$title = survey_title;
 
 	for (let i in survey.questions) {
 		$questions[i] = {
@@ -182,32 +190,33 @@
 		return answerList;
 	}
 
-	let unansweredRequired: Array<number> = [];
+	let unansweredRequired: Set<number> = new Set();
 
 	async function checkAnswerCorrectness() {
-		unansweredRequired = [];
+		unansweredRequired = new Set();
 		for (let i = 0; i < numQuestions; i++) {
 			if ($questions[i].required) {
 				if ($answers[i].choices.length === 0) {
-					unansweredRequired.push(i);
+					unansweredRequired.add(i);
 				} else if (
 					$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0)
 				) {
-					unansweredRequired.push(i);
+					unansweredRequired.add(i);
 				}
 			}
 		}
 
-		if (unansweredRequired.length > 0) {
+		if (unansweredRequired.size > 0) {
 			await tick();
-			scrollToElementById(unansweredRequired[0].toString());
+			const [first] = unansweredRequired;
+			scrollToElementById(first.toString());
 			return false;
 		}
 
 		return true;
 	}
 
-	let fileElement = document.querySelector<HTMLInputElement>('#keys-file');
+	let fileElement: HTMLInputElement | null = null;
 	let fileName: string = 'No file selected';
 	let fileError: FileError = FileError.NoError;
 
@@ -218,17 +227,50 @@
 
 	function checkFileCorrectness() {
 		fileError = FileError.NoError;
-		fileElement = document.querySelector<HTMLInputElement>('#keys-file');
 
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
 			return false;
-		} else if (fileElement?.files?.[0].name.split('.').pop() !== 'txt') {
+		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'txt') {
 			fileError = FileError.FileInvalid;
 			return false;
 		}
 
 		return true;
+	}
+
+	async function processCrypto() {
+		if (!checkFileCorrectness()) return;
+
+		const text = await readFile(fileElement).then(
+			(resolve) => {
+				return resolve;
+			},
+			(reject) => {
+				$errorModalContent = reject as string;
+				$isErrorModalHidden = false;
+				return '';
+			}
+		);
+
+		let keyPair: KeyPair = getKeys(text);
+
+		if (!keys.includes(keyPair.publicKey)) {
+			$errorModalContent = 'Your public key is not on the list.';
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		processForm(keyPair);
+	}
+
+	function getKeys(text: string): KeyPair {
+		const words = text.split('\n');
+
+		let publicKey = words[0];
+		let privateKey = words[1];
+
+		return new KeyPair(privateKey, publicKey);
 	}
 
 	async function processForm(keyPair: KeyPair | undefined) {
@@ -268,43 +310,8 @@
 		}
 
 		isKeysModalHidden = true;
-		isSuccessModalHidden = false;
-	}
-
-	function getKeys(text: string): KeyPair {
-		const words = text.split('\n');
-
-		let publicKey = words[0];
-		let privateKey = words[1];
-
-		return new KeyPair(privateKey, publicKey);
-	}
-
-	function processCrypto() {
-		if (!checkFileCorrectness()) return;
-
-		const keyInput = document.querySelector<HTMLInputElement>('#keys-file');
-		const keysReader = new FileReader();
-		const keysFile = keyInput?.files?.[0];
-		try {
-			keysReader.readAsText(keysFile!);
-		} catch {
-			$errorModalContent = 'No key file has been provided.';
-			$isErrorModalHidden = false;
-			return;
-		}
-		let keyPair: KeyPair | undefined;
-		keysReader.onload = (e) => {
-			const fileData = e.target?.result;
-			const text = fileData as string;
-			keyPair = getKeys(text);
-			if (!keys.includes(keyPair.publicKey)) {
-				$errorModalContent = 'Your public key is not on the list.';
-				$isErrorModalHidden = false;
-				return;
-			}
-			processForm(keyPair);
-		};
+		$successModalContent = 'Your answer has been submitted successfully.';
+		$isSuccessModalHidden = false;
 	}
 
 	async function submitSurvey() {
@@ -314,36 +321,29 @@
 	}
 
 	function hideSuccessModal() {
-		isSuccessModalHidden = true;
+		$isSuccessModalHidden = true;
 		goto('/', { replaceState: true, invalidateAll: true });
 	}
 
 	onMount(() => {
-		function handleSuccessEnter(event: KeyboardEvent) {
-			if (!isSuccessModalHidden && event.key === 'Enter') {
-				event.preventDefault();
-				hideSuccessModal();
-			}
-		}
-
-		function handleKeysEnter(event: KeyboardEvent) {
+		function handleEnter(event: KeyboardEvent) {
 			if (!isKeysModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				processCrypto();
 			}
 		}
 
-		document.body.addEventListener('keydown', handleSuccessEnter);
-		document.body.addEventListener('keydown', handleKeysEnter);
+		document.body.addEventListener('keydown', handleEnter);
 
 		return () => {
-			document.body.removeEventListener('keydown', handleSuccessEnter);
-			document.body.removeEventListener('keydown', handleKeysEnter);
+			document.body.removeEventListener('keydown', handleEnter);
 		};
 	});
 </script>
 
 <svelte:window bind:innerWidth />
+
+<SuccessModal hide={hideSuccessModal} />
 
 <Modal
 	icon="encrypted"
@@ -351,8 +351,8 @@
 	bind:isHidden={isKeysModalHidden}
 	width={innerWidth <= $M ? 20 : 38}
 >
-	<div slot="content" title="Load your digital signature keys" class="load-div">
-		<span
+	<div slot="content" title="Load your digital signature keys" class="file-div">
+		<span class="file-label"
 			>Please load the file which you have previously generated on this application. The file
 			contains your keys, necessary for cryptographic calculations which are needed for validating
 			your right to fill out this survey.<br /><br />Default filename: "noname-keys.txt"</span
@@ -373,18 +373,6 @@
 	>
 </Modal>
 
-<Modal
-	icon="check_circle"
-	title="Survey Answered"
-	bind:isHidden={isSuccessModalHidden}
-	hide={hideSuccessModal}
->
-	<span slot="content">Your answer has been submitted successfully.</span>
-	<button title="Ok" class="save" on:click={hideSuccessModal}
-		><i class="material-symbols-rounded">done</i>OK</button
-	>
-</Modal>
-
 <Header>
 	<div title="Survey title" class="title" in:slide={{ duration: 200, easing: cubicInOut }}>
 		{$title}
@@ -393,8 +381,8 @@
 
 <Content>
 	{#if keys.length === 1 || keys.length === 2}
-		<p title="Survey not secure" class="error">
-			<i class="material-symbols-rounded">error</i>This survey is not secure.
+		<p title="Survey not secure" class="warning">
+			<i class="material-symbols-rounded">warning</i>This survey is not secure.
 			{keys.length === 1
 				? ' You are the only person who can respond to this survey.'
 				: ' There are only two people who can respond to this survey. The other person could be the creator of this survey.'}
@@ -419,73 +407,15 @@
 </Footer>
 
 <style>
-	.load-div {
-		color: var(--text-color);
-		text-shadow: 0px 4px 4px var(--shadow-color);
+	.file-div {
 		width: 100%;
-		text-align: justify;
-	}
-
-	.load-div label {
-		display: block;
-	}
-
-	input[type='file'] {
-		display: none;
-	}
-
-	.file-input {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		align-items: center;
-		text-align: left;
-		margin-top: 0.5em;
-		background-color: var(--secondary-dark-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		padding: 0.5em;
-		font-size: 0.8em;
-		cursor: default;
-	}
-
-	.file-button {
-		display: flex;
-		align-items: center;
-		padding: 0.25em;
-		background-color: var(--primary-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		text-shadow: none;
-		color: var(--text-color);
-		cursor: pointer;
-		transition: 0.2s;
-		margin-right: 0.5em;
-		min-width: 6.5em;
-	}
-
-	.file-button:hover {
-		background-color: var(--secondary-color);
-	}
-
-	.file-button:active {
-		background-color: var(--border-color);
-	}
-
-	.file-name {
-		overflow: hidden;
-		overflow-wrap: anywhere;
-		text-overflow: ellipsis;
-		height: 1.15em;
 	}
 
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}
 
-	.error {
+	.warning {
 		margin: 0em 0em 0.5em 0em;
 	}
 

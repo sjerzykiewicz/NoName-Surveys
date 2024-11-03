@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
 	import SignIn from '$lib/components/account-page/SignIn.svelte';
 	import SignOut from '$lib/components/account-page/SignOut.svelte';
 	import DownloadKey from '$lib/components/account-page/DownloadKey.svelte';
-	import Modal from '$lib/components/Modal.svelte';
+	import Modal from '$lib/components/global/Modal.svelte';
 	import init, { get_keypair } from 'wasm';
 	import { onMount } from 'svelte';
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
@@ -18,7 +18,7 @@
 	});
 
 	function download(filename: string, text: string) {
-		var element = document.createElement('a');
+		const element = document.createElement('a');
 		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
 		element.setAttribute('download', filename);
 

@@ -98,8 +98,12 @@
 		if ($currentDraftId !== null) {
 			isDraftModalHidden = false;
 		} else {
-			const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
-			const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
+			const parsedSurvey = new Survey(constructQuestionList($questions));
+			const draftInfo = new DraftCreateInfo(
+				$page.data.session!.user!.email!,
+				$title.title,
+				parsedSurvey
+			);
 
 			const response = await fetch('/api/surveys/drafts/create', {
 				method: 'POST',

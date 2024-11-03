@@ -20,32 +20,36 @@ from src.api.models.surveys.survey import (
 )
 from src.api.models.users.user import User
 from src.db.base import get_session
-from src.db.models.ring_member import RingMemberBase
-from src.db.models.survey import SurveyBase
-from src.db.models.survey_draft import SurveyDraftBase
 
 router = APIRouter()
 
+
 LIMIT_OF_ACTIVE_SURVEYS = 50
+PAGE_SIZE = 10
 
 
 @router.post(
-    "/all",
+    "/all/{page}",
     response_description="Get all survey headers of a user",
     response_model=list[SurveyHeadersOutput],
 )
-async def get_surveys_for_user(user: User, session: Session = Depends(get_session)):
+async def get_surveys_for_user(
+    page: int, user: User, session: Session = Depends(get_session)
+):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     user = user_crud.get_user_by_email(user.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
 
-    user_surveys = survey_crud.get_all_surveys_user_can_view(user.id, session)
+    user_surveys = survey_crud.get_all_surveys_user_can_view(
+        user.id, page * PAGE_SIZE, PAGE_SIZE, session
+    )
     return [
         SurveyHeadersOutput(
-            title=SurveyStructure.model_validate_json(
-                survey_draft_crud.get_survey_draft_by_id(
-                    survey.survey_structure_id, session
-                ).survey_structure
+            title=survey_draft_crud.get_survey_draft_by_id(
+                survey.survey_structure_id, session
             ).title,
             survey_code=survey.survey_code,
             creation_date=survey.creation_date,
@@ -72,11 +76,13 @@ async def get_survey_by_code(
     if survey is None:
         raise HTTPException(status_code=404, detail="Survey does not exist")
 
+    survey_draft = survey_draft_crud.get_survey_draft_by_id(
+        survey.survey_structure_id, session
+    )
     return SurveyStructureFetchOutput(
+        title=survey_draft.title,
         survey_structure=SurveyStructure.model_validate_json(
-            survey_draft_crud.get_survey_draft_by_id(
-                survey.survey_structure_id, session
-            ).survey_structure
+            survey_draft.survey_structure
         ),
         survey_code=survey.survey_code,
         uses_cryptographic_module=survey.uses_cryptographic_module,
@@ -94,14 +100,18 @@ async def get_survey_by_code(
 
 
 @router.post(
-    "/respondents",
+    "/respondents/{page}",
     response_description="Get emails of respondents",
     response_model=list[str],
 )
 async def get_respondents_by_code(
+    page: int,
     respondents_fetch: SurveyInfoFetchInput,
     session: Session = Depends(get_session),
 ):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     survey = survey_crud.get_survey_by_code(respondents_fetch.survey_code, session)
     if survey is None:
         raise HTTPException(status_code=404, detail="Survey does not exist")
@@ -109,8 +119,8 @@ async def get_respondents_by_code(
     if survey.uses_cryptographic_module:
         return [
             ring_member.user_email
-            for ring_member in ring_member_crud.get_ring_members_for_survey(
-                survey.id, session
+            for ring_member in ring_member_crud.get_ring_members_for_survey_paginated(
+                survey.id, page * PAGE_SIZE, PAGE_SIZE, session
             )
         ]
     else:
@@ -179,11 +189,10 @@ async def create_survey(
         raise HTTPException(status_code=400, detail=str(e))
 
     survey_draft = survey_draft_crud.create_survey_draft(
-        SurveyDraftBase(
-            creator_id=user.id,
-            survey_structure=survey_create.survey_structure.model_dump_json(),
-            is_deleted=True,
-        ),
+        user.id,
+        survey_create.title,
+        survey_create.survey_structure.model_dump_json(),
+        True,
         session,
     )
 
@@ -191,26 +200,16 @@ async def create_survey(
     while survey_crud.survey_code_taken(survey_code, session):
         survey_code = "".join(str(randbelow(10)) for _ in range(6))
     survey = survey_crud.create_survey(
-        SurveyBase(
-            creator_id=user.id,
-            uses_cryptographic_module=survey_create.uses_cryptographic_module,
-            survey_structure_id=survey_draft.id,
-            survey_code=survey_code,
-        ),
+        user.id,
+        survey_create.uses_cryptographic_module,
+        survey_draft.id,
+        survey_code,
         session,
     )
-
     if survey_create.uses_cryptographic_module:
         for email in survey_create.ring_members:
             public_key = user_crud.get_user_by_email(email, session).public_key
-            ring_member_crud.add_ring_member(
-                RingMemberBase(
-                    survey_id=survey.id,
-                    user_email=email,
-                    public_key=public_key,
-                ),
-                session,
-            )
+            ring_member_crud.add_ring_member(survey.id, email, public_key, session)
 
     survey_crud.give_survey_access(survey.id, user.id, session)
     return SurveyStructureCreateOutput(survey_code=survey.survey_code)
@@ -288,14 +287,18 @@ async def take_away_access_to_surveys(
 
 
 @router.post(
-    "/get-all-with-access",
+    "/get-all-with-access/{page}",
     response_description="Check who has access to results of a given survey",
     response_model=list[str],
 )
 async def check_access_to_surveys(
+    page: int,
     check_survey_access_input: SurveyUserActions,
     session: Session = Depends(get_session),
 ):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     owner = user_crud.get_user_by_email(check_survey_access_input.user_email, session)
     if owner is None:
         raise HTTPException(status_code=400, detail="User not found")
@@ -314,6 +317,6 @@ async def check_access_to_surveys(
     return [
         user_crud.get_user_by_id(access.user_id, session).email
         for access in survey_crud.get_all_users_with_access_to_survey(
-            survey.id, session
+            survey.id, page * PAGE_SIZE, PAGE_SIZE, session
         )
     ]

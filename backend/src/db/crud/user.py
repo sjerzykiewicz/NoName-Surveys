@@ -14,6 +14,11 @@ def get_all_users_with_public_keys(session: Session) -> list[User]:
     return [user for user in users]
 
 
+def get_users_by_id(user_id: list[int], session: Session) -> User:
+    users = session.exec(select(User).filter(User.id.in_(user_id))).all()
+    return [user for user in users]
+
+
 def get_user_by_id(user_id: int, session: Session) -> User:
     user = session.exec(select(User).filter(User.id == user_id)).first()
     return user
@@ -61,7 +66,8 @@ def all_users_have_public_keys(user_ids: list[int], session: Session) -> bool:
     return len(users) == len(user_ids)
 
 
-def create_user(user_create: UserBase, session: Session) -> User:
+def create_user(email: str, session: Session) -> User:
+    user_create = UserBase(email=email)
     user = User.model_validate(user_create)
     session.add(user)
     session.commit()
@@ -69,7 +75,8 @@ def create_user(user_create: UserBase, session: Session) -> User:
     return user
 
 
-def update_user_public_key(user_update_key: UserWithKey, session: Session) -> User:
+def update_user_public_key(email: str, public_key: str, session: Session) -> User:
+    user_update_key = UserWithKey(email=email, public_key=public_key)
     user = session.exec(
         select(User).filter(User.email == user_update_key.email)
     ).first()

@@ -19,13 +19,13 @@
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { page } from '$app/stores';
 	import Survey from '$lib/entities/surveys/Survey';
-	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
+	import SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
-	import Modal from '$lib/components/Modal.svelte';
-	import QrCodeModal from '$lib/components/QrCodeModal.svelte';
+	import Modal from '$lib/components/global/Modal.svelte';
+	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import { popup } from '$lib/utils/popup';
 	import { errorModalContent, isErrorModalHidden, S, M } from '$lib/stores/global';
 	import SelectGroup from './SelectGroup.svelte';
@@ -33,6 +33,7 @@
 	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { onMount } from 'svelte';
+	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 
 	export let users: string[];
 	export let groups: string[];
@@ -67,8 +68,12 @@
 		$title.title = $title.title.trim();
 		$questions = trimQuestions($questions);
 
-		const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
-		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
+		const parsedSurvey = new Survey(constructQuestionList($questions));
+		const draftInfo = new DraftCreateInfo(
+			$page.data.session!.user!.email!,
+			$title.title,
+			parsedSurvey
+		);
 
 		if (overwrite) {
 			const deleteResponse = await fetch('/api/surveys/drafts/delete', {
@@ -132,7 +137,7 @@
 
 		isRespondentModalHidden = true;
 
-		const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
+		const parsedSurvey = new Survey(constructQuestionList($questions));
 		let finalRing: string[] = [];
 
 		if ($selectedGroup.length > 0) {
@@ -142,8 +147,9 @@
 			finalRing = [...$ringMembers];
 		}
 
-		const surveyInfo = new SurveyInfo(
+		const surveyInfo = new SurveyCreateInfo(
 			$page.data.session!.user!.email!,
+			$title.title,
 			parsedSurvey,
 			$useCrypto,
 			finalRing
@@ -234,8 +240,18 @@
 		</div>
 		<div class="select-box">
 			<SelectGroup {groups} bind:disabled={isCryptoDisabled} />
+			<div id="or" class:disabled={isCryptoDisabled}>Or</div>
 			<SelectUsers {users} bind:disabled={isCryptoDisabled} />
 			<CryptoError error={cryptoError} />
+			<ImportEmails
+				bind:users={$ringMembers}
+				title="Import users from a .csv file"
+				label="Or import users from a .csv file."
+				id="emails-file"
+				checkKeys={true}
+				width="100%"
+				bind:disabled={isCryptoDisabled}
+			/>
 		</div>
 	</div>
 	<button title="Define respondent group" class="save apply" on:click={createSurvey}
@@ -328,6 +344,22 @@
 
 	.select-box {
 		text-align: left;
+	}
+
+	#or {
+		display: flex;
+		flex-flow: row;
+		align-items: flex-start;
+		justify-content: flex-start;
+		margin-bottom: 0.5em;
+		font-size: 0.8em;
+		color: var(--text-color);
+		cursor: default;
+	}
+
+	#or.disabled {
+		color: var(--text-dark-color) !important;
+		cursor: not-allowed !important;
 	}
 
 	@media screen and (max-width: 768px) {

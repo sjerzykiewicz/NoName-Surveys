@@ -8,24 +8,30 @@ from src.api.models.user_groups.user_groups import (  # noqa
     UserGroupAction,
     UserGroupCreate,
     UserGroupCreator,
+    UserGroupMembersOutput,
     UserGroupNameUpdate,
 )
 from src.db.base import get_session
-from src.db.models.user_group import UserGroupBase
-from src.db.models.user_group_member import UserGroupMemberBase
 
 router = APIRouter()
 
 
+PAGE_SIZE = 10
+
+
 @router.post(
-    "/all",
+    "/all/{page}",
     response_description="List of of all user groups of a given user",
     response_model=list[AllUserGroupsOutput],
 )
 async def get_user_groups(
+    page: int,
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     user = user_crud.get_user_by_email(user_group_creator.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
@@ -42,7 +48,9 @@ async def get_user_groups(
                 session,
             ),
         )
-        for user_group in user_groups_crud.get_user_groups(user.id, session)
+        for user_group in user_groups_crud.get_user_groups(
+            user.id, page * PAGE_SIZE, PAGE_SIZE, session
+        )
     ]
 
 
@@ -52,15 +60,19 @@ async def get_user_groups(
     response_model=list[str],
 )
 async def get_user_groups_with_members_having_public_keys(
+    page: int,
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     user = user_crud.get_user_by_email(user_group_creator.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
     return [
         user_group.name
-        for user_group in user_groups_crud.get_user_groups(user.id, session)
+        for user_group in user_groups_crud.get_all_user_groups(user.id, session)
         if user_crud.all_users_have_public_keys(
             [
                 member.user_id
@@ -70,18 +82,22 @@ async def get_user_groups_with_members_having_public_keys(
             ],
             session,
         )
-    ]
+    ][page * PAGE_SIZE : (page + 1) * PAGE_SIZE]
 
 
 @router.post(
-    "/fetch",
+    "/fetch/{page}",
     response_description="List of user emails in a given user group",
-    response_model=list[str],
+    response_model=list[UserGroupMembersOutput],
 )
 async def get_user_group(
+    page: int,
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
+    if page < 0:
+        raise HTTPException(status_code=400, detail="Invalid page number")
+
     user = user_crud.get_user_by_email(user_group_request.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
@@ -94,10 +110,17 @@ async def get_user_group(
             status_code=400, detail="User group not found for the given user"
         )
 
-    user_group_members = user_groups_crud.get_user_group_members(user_group.id, session)
+    user_group_members = [
+        member.user_id
+        for member in user_groups_crud.get_user_group_members_paginated(
+            user_group.id, page * PAGE_SIZE, PAGE_SIZE, session
+        )
+    ]
     return [
-        user_crud.get_user_by_id(user_group_member.user_id, session).email
-        for user_group_member in user_group_members
+        UserGroupMembersOutput(
+            email=member.email, has_public_key=member.public_key != ""
+        )
+        for member in user_crud.get_users_by_id(user_group_members, session)
     ]
 
 
@@ -127,18 +150,12 @@ async def create_user_group(
         )
 
     user_group = user_groups_crud.create_user_group(
-        UserGroupBase(
-            creator_id=user.id,
-            name=user_group_creation_request.user_group_name,
-        ),
-        session,
+        user.id, user_group_creation_request.user_group_name, session
     )
     for user_group_member in user_group_creation_request.user_group_members:
         user_groups_crud.add_user_to_group(
-            UserGroupMemberBase(
-                group_id=user_group.id,
-                user_id=user_crud.get_user_by_email(user_group_member, session).id,
-            ),
+            user_group.id,
+            user_crud.get_user_by_email(user_group_member, session).id,
             session,
         )
 

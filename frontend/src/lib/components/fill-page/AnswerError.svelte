@@ -4,7 +4,7 @@
 	import { slide } from 'svelte/transition';
 	import { questions } from '$lib/stores/fill-page';
 
-	export let unansweredRequired: Array<number>;
+	export let unansweredRequired: Set<number>;
 	export let questionIndex: number;
 
 	function errorMessage(i: number) {
@@ -13,7 +13,7 @@
 
 	$: checkAnswerError = (i: number) => {
 		return (
-			unansweredRequired.includes(questionIndex) &&
+			unansweredRequired.has(questionIndex) &&
 			($answers[i].choices.length === 0 ||
 				$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0))
 		);

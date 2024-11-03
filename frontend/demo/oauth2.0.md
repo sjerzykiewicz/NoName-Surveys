@@ -6,7 +6,7 @@ import { SvelteKitAuth } from '@auth/sveltekit';
 import Google from '@auth/sveltekit/providers/google';
 import GitHub from '@auth/sveltekit/providers/github';
 import { env } from '$env/dynamic/private';
-import * as db from '$lib/server/database';
+import { validateUser, createUser } from '$lib/server/database';
 
 export const { handle } = SvelteKitAuth({
 	providers: [Google, GitHub],
@@ -20,9 +20,9 @@ export const { handle } = SvelteKitAuth({
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				const isUserRegistered = await (await db.validateUser(user.email!)).json();
+				const isUserRegistered = await (await validateUser(user.email!)).json();
 				if (!isUserRegistered) {
-					await db.registerUser(user.email!);
+					await createUser(user.email!);
 				}
 			}
 			return token;

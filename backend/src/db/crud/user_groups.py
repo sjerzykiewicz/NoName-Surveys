@@ -1,8 +1,17 @@
+from sqlalchemy import func
 from sqlmodel import select
 
 from src.db.base import Session
 from src.db.models.user_group import UserGroup, UserGroupBase
 from src.db.models.user_group_member import UserGroupMember, UserGroupMemberBase
+
+
+def get_count_of_user_groups_of_user(user_id: int, session: Session) -> int:
+    statement = select(func.count(UserGroup.id)).where(
+        (UserGroup.creator_id == user_id)
+        & (UserGroup.is_deleted == False)  # noqa: E712
+    )
+    return session.exec(statement).one()
 
 
 def get_all_user_groups_of_user(user_id: int, session: Session) -> list[UserGroup]:
@@ -80,6 +89,13 @@ def delete_user_group(user_group_id: int, session: Session) -> UserGroup:
     user_group.is_deleted = True
     session.commit()
     return user_group
+
+
+def get_user_group_members_count(user_group_id: int, session: Session) -> int:
+    statement = select(func.count(UserGroupMember.id)).where(
+        UserGroupMember.group_id == user_group_id
+    )
+    return session.exec(statement).one()
 
 
 def get_user_group_members(

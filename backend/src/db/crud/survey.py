@@ -1,8 +1,16 @@
+from sqlalchemy import func
 from sqlmodel import select
 
 from src.db.base import Session
 from src.db.models.access_to_view_results import AccessToViewResults
-from src.db.models.survey import Survey, SurveyBase
+from src.db.models.survey import Survey
+
+
+def get_count_of_not_deleted_surveys_for_user(user_id: int, session: Session) -> int:
+    statement = select(func.count(Survey.id)).where(
+        (Survey.creator_id == user_id) & (Survey.is_deleted == False)  # noqa: E712
+    )
+    return session.exec(statement).one()
 
 
 def get_survey_by_code(survey_code: str, session: Session) -> Survey:
@@ -119,6 +127,14 @@ def get_all_surveys_user_can_view(
     ]
 
     return [(survey, survey.creator_id == user_id) for survey in surveys if survey]
+
+
+def get_all_users_with_access_to_survey_count(survey_id: int, session: Session) -> int:
+    statement = select(func.count(AccessToViewResults.id)).where(
+        (AccessToViewResults.survey_id == survey_id)
+        & (AccessToViewResults.is_deleted == False)
+    )  # noqa: E712
+    return session.exec(statement).one()
 
 
 def get_all_users_with_access_to_survey(

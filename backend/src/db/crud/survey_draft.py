@@ -1,7 +1,18 @@
+from sqlalchemy import func
 from sqlmodel import select
 
 from src.db.base import Session
 from src.db.models.survey_draft import SurveyDraft, SurveyDraftBase
+
+
+def get_count_of_not_deleted_survey_drafts_for_user(
+    user_id: int, session: Session
+) -> int:
+    statement = select(func.count(SurveyDraft.id)).where(
+        (SurveyDraft.creator_id == user_id)
+        & (SurveyDraft.is_deleted == False)  # noqa: E712
+    )
+    return session.exec(statement).one()
 
 
 def get_not_deleted_survey_drafts_for_user(

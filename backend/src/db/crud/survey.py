@@ -2,7 +2,7 @@ from sqlmodel import select
 
 from src.db.base import Session
 from src.db.models.access_to_view_results import AccessToViewResults
-from src.db.models.survey import Survey, SurveyBase
+from src.db.models.survey import Survey
 
 
 def get_survey_by_code(survey_code: str, session: Session) -> Survey:

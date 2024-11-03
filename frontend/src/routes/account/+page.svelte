@@ -55,7 +55,7 @@
 				return;
 			}
 
-			download('noname-keys.txt', publicKey + '\n' + privateKey);
+			download('noname-keys.txt', publicKey + '----------' + privateKey);
 		} catch (e) {
 			$errorModalContent = e as string;
 			$isErrorModalHidden = false;

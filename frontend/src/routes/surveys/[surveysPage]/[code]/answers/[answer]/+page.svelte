@@ -11,6 +11,7 @@
 	import { page } from '$app/stores';
 	import AnswersButton from '$lib/components/summary-page/buttons/AnswersButton.svelte';
 	import RespondentsButton from '$lib/components/summary-page/buttons/RespondentsButton.svelte';
+	import SummaryButton from '$lib/components/summary-page/buttons/SummaryButton.svelte';
 
 	export let data: PageData;
 	export let isModalHidden: boolean = true;
@@ -45,7 +46,10 @@
 		<RespondentsButton />
 	{/if}
 	<div class="footer-button-group">
-		<AnswersButton />
+		<div class="footer-button-group">
+			<AnswersButton />
+			<SummaryButton />
+		</div>
 		<div class="footer-button-group">
 			<QrCodeButton bind:isModalHidden />
 			<Back />

@@ -12,6 +12,7 @@
 	import AnswersButton from '$lib/components/summary-page/buttons/AnswersButton.svelte';
 	import RespondentsButton from '$lib/components/summary-page/buttons/RespondentsButton.svelte';
 	import ShareButton from '$lib/components/summary-page/buttons/ShareButton.svelte';
+	import SummaryButton from '$lib/components/summary-page/buttons/SummaryButton.svelte';
 
 	export let data: PageData;
 	export let selectedUsersToRemove: string[] = [];
@@ -57,7 +58,10 @@
 		<RespondentsButton />
 	{/if}
 	<div class="footer-button-group">
-		<AnswersButton />
+		<div class="footer-button-group">
+			<AnswersButton />
+			<SummaryButton />
+		</div>
 		<div class="footer-button-group">
 			<QrCodeButton bind:isModalHidden />
 			<Back />

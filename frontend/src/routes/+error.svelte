@@ -1,10 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 
-	let errorMessage: string = '';
-	if (typeof $page.error!.message === 'string') errorMessage = $page.error!.message;
-	// @ts-expect-error message is not necessarily a string
-	else errorMessage = $page.error!.message.detail;
+	$: errorMessage =
+		typeof $page.error!.message === 'string'
+			? $page.error!.message
+			: // @ts-expect-error message is not necessarily a string
+				typeof $page.error!.message.detail === 'string'
+				? // @ts-expect-error message is not necessarily a string
+					$page.error!.message.detail
+				: 'Unknown error';
 </script>
 
 {#if $page.error}

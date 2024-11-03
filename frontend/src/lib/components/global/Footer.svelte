@@ -7,8 +7,9 @@
 		padding: 0.75em;
 		border-top: 1px solid var(--border-color);
 		display: flex;
-		flex-flow: row;
+		flex-flow: row wrap;
 		justify-content: flex-end;
+		gap: 0.625em;
 		position: fixed;
 		bottom: 0;
 		min-width: calc(768px - 1.5em);

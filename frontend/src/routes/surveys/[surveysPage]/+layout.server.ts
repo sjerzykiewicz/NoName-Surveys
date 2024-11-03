@@ -1,14 +1,16 @@
-import type { PageServerLoad } from '../$types';
+import type { LayoutServerLoad } from './$types';
 import { getSurveys } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ parent }) => {
+export const load: LayoutServerLoad = async ({ parent, params }) => {
 	const { session } = await parent();
 	if (!session) {
 		redirect(303, `/account`);
 	}
 
-	const response = await getSurveys(session.user!.email!);
+	const page = parseInt(params.surveysPage);
+
+	const response = await getSurveys(session.user!.email!, page);
 	if (!response.ok) {
 		error(response.status, { message: await response.json() });
 	}

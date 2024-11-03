@@ -50,12 +50,10 @@ async def get_survey_answers_by_code(
     answer_structures = [
         SurveyAnswerBase.model_validate_json(answer.answer) for answer in answers
     ]
-    is_owned_by_user = user.id == survey.creator_id
     return [
         SurveyAnswersFetchOutput(
             title=survey_title,
             questions=answer.questions,
-            is_owned_by_user=is_owned_by_user,
         )
         for answer in answer_structures
     ]

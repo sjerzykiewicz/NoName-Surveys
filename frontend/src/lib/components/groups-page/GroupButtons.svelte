@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
 	import MultiSelect from '$lib/components/MultiSelect.svelte';
 	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
@@ -73,7 +72,6 @@
 		const response = await fetch('/api/groups/create', {
 			method: 'POST',
 			body: JSON.stringify({
-				user_email: $page.data.session?.user?.email,
 				user_group_name: user_group_name,
 				user_group_members: user_group_members
 			}),
@@ -99,7 +97,7 @@
 		selectedGroupsToRemove.forEach(async (group) => {
 			const response = await fetch('/api/groups/delete', {
 				method: 'POST',
-				body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: group }),
+				body: JSON.stringify({ name: group }),
 				headers: {
 					'Content-Type': 'application/json'
 				}

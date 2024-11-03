@@ -42,7 +42,6 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					email: $page.data.session?.user?.email,
 					public_key: publicKey,
 					fingerprint: fingerprint
 				})

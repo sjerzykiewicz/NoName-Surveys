@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
 	import MultiSelect from '$lib/components/MultiSelect.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
@@ -48,7 +47,7 @@
 
 		const deleteResponse = await fetch('/api/groups/delete', {
 			method: 'POST',
-			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: group }),
+			body: JSON.stringify({ name: group }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -66,7 +65,6 @@
 		const createResponse = await fetch('/api/groups/create', {
 			method: 'POST',
 			body: JSON.stringify({
-				user_email: $page.data.session?.user?.email,
 				user_group_name: group,
 				user_group_members: newMembers
 			}),
@@ -90,7 +88,7 @@
 	async function removeMembers() {
 		const deleteResponse = await fetch('/api/groups/delete', {
 			method: 'POST',
-			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: group }),
+			body: JSON.stringify({ name: group }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -115,7 +113,6 @@
 		const createResponse = await fetch('/api/groups/create', {
 			method: 'POST',
 			body: JSON.stringify({
-				user_email: $page.data.session?.user?.email,
 				user_group_name: group,
 				user_group_members: newMembers
 			}),

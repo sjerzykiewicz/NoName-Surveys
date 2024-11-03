@@ -28,7 +28,6 @@
 	import BinaryPreview from '../create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '../create-page/preview/TextPreview.svelte';
 	import NumberPreview from '../create-page/preview/NumberPreview.svelte';
-	import { page } from '$app/stores';
 	import type Question from '$lib/entities/questions/Question';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
@@ -59,7 +58,7 @@
 		selectedDraftsToRemove.forEach(async (draft, i) => {
 			const response = await fetch('/api/surveys/drafts/delete', {
 				method: 'POST',
-				body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: draft.id }),
+				body: JSON.stringify({ id: draft.id }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -85,7 +84,7 @@
 	async function loadDraft(draft: { id: number; title: string }) {
 		const response = await fetch('/api/surveys/drafts/fetch', {
 			method: 'POST',
-			body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: draft.id }),
+			body: JSON.stringify({ id: draft.id }),
 			headers: {
 				'Content-Type': 'application/json'
 			}

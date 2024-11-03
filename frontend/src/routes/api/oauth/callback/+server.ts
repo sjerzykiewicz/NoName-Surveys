@@ -5,6 +5,10 @@ import { validateUser, createUser } from '$lib/server/database';
 import { _getUserInfo } from '../user/+server';
 
 export const GET: RequestHandler = async ({ url, cookies, locals }) => {
+	const err = url.searchParams.get('error');
+	if (err) {
+		throw redirect(303, env.ORIGIN + '/account');
+	}
 	const oauth_token = url.searchParams.get('oauth_token');
 	const oauth_verifier = url.searchParams.get('oauth_verifier');
 	const oauth_token_secret = cookies.get('oauth_token_secret');

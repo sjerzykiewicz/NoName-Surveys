@@ -7,7 +7,9 @@ export async function getEmail(sessionCookie: string) {
 			sessionCookieJson.oauth_token,
 			sessionCookieJson.oauth_token_secret
 		);
-		return userData.email;
+		if (userData.email) {
+			return userData.email;
+		}
 	}
 
 	return '';

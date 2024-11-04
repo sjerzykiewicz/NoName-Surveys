@@ -153,33 +153,29 @@
 		<i class="material-symbols-rounded">search</i>Preview
 	</button>
 {/if}
-<button
-	title="Save draft"
-	class="footer-button save popup"
-	disabled={$questions.length === 0 || isPreview}
-	on:click={saveDraft}
->
-	<i class="material-symbols-rounded">save</i>Save Draft
-	<span class="popup-text top" id="draft-popup">Saved!</span>
-</button>
-<button
-	title="Finish survey creation"
-	class="footer-button save done"
-	disabled={$questions.length === 0 || isPreview}
-	on:click={createSurvey}
->
-	<i class="material-symbols-rounded">done</i>Create
-</button>
+<div class="footer-button-group">
+	<button
+		title="Save draft"
+		class="footer-button save popup"
+		disabled={$questions.length === 0 || isPreview}
+		on:click={saveDraft}
+	>
+		<i class="material-symbols-rounded">save</i>Save Draft
+		<span class="popup-text top" id="draft-popup">Saved!</span>
+	</button>
+	<button
+		title="Finish survey creation"
+		class="footer-button save done"
+		disabled={$questions.length === 0 || isPreview}
+		on:click={createSurvey}
+	>
+		<i class="material-symbols-rounded">done</i>Create
+	</button>
+</div>
 
 <style>
 	.popup {
 		--tooltip-width: 4em;
-	}
-
-	.footer-button:disabled {
-		color: var(--text-dark-color);
-		background-color: var(--secondary-color);
-		cursor: not-allowed;
 	}
 
 	.done i {

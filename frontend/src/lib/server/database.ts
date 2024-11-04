@@ -33,8 +33,8 @@ export const saveSurveyAnswer = (answer: SurveyAnswer) => {
 
 // survey drafts
 
-export const getSurveyDrafts = (user_email: string) => {
-	return fetch(`${host}/survey-drafts/all`, {
+export const getSurveyDrafts = (user_email: string, page: number) => {
+	return fetch(`${host}/survey-drafts/all/${page}`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
@@ -75,8 +75,8 @@ export const createSurveyDraft = (info: DraftCreateInfo) => {
 
 // surveys
 
-export const getSurveys = (user_email: string) => {
-	return fetch(`${host}/surveys/all`, {
+export const getSurveys = (user_email: string, page: number) => {
+	return fetch(`${host}/surveys/all/${page}`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
@@ -95,8 +95,8 @@ export const getSurvey = (survey_code: string) => {
 	});
 };
 
-export const getSurveyRespondents = (survey_code: string) => {
-	return fetch(`${host}/surveys/respondents`, {
+export const getSurveyRespondents = (survey_code: string, page: number) => {
+	return fetch(`${host}/surveys/respondents/${page}`, {
 		method: 'POST',
 		body: JSON.stringify({ survey_code }),
 		headers: {
@@ -153,8 +153,8 @@ export const takeAwayAccessToSurvey = (
 	});
 };
 
-export const checkAccessToSurvey = (user_email: string, survey_code: string) => {
-	return fetch(`${host}/surveys/get-all-with-access`, {
+export const checkAccessToSurvey = (user_email: string, survey_code: string, page: number) => {
+	return fetch(`${host}/surveys/get-all-with-access/${page}`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_code }),
 		headers: {
@@ -165,8 +165,8 @@ export const checkAccessToSurvey = (user_email: string, survey_code: string) => 
 
 // user groups
 
-export const getUserGroups = (user_email: string) => {
-	return fetch(`${host}/user-groups/all`, {
+export const getUserGroups = (user_email: string, page: number) => {
+	return fetch(`${host}/user-groups/all/${page}`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
@@ -185,8 +185,8 @@ export const getUserGroupsWithKeys = (user_email: string) => {
 	});
 };
 
-export const getUserGroup = (user_email: string, name: string) => {
-	return fetch(`${host}/user-groups/fetch`, {
+export const getUserGroup = (user_email: string, name: string, page: number) => {
+	return fetch(`${host}/user-groups/fetch/${page}`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email, name }),
 		headers: {

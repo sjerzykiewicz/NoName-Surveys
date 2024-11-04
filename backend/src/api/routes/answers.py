@@ -93,7 +93,7 @@ async def save_survey_answer(
             )
 
         public_keys = [
-            mpz(ring_member.public_key)
+            ring_member.public_key
             for ring_member in ring_member_crud.get_ring_members_for_survey(
                 survey.id, session
             )

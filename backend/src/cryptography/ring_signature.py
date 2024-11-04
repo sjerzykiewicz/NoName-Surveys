@@ -1,6 +1,7 @@
 import Crypto.Hash.SHA3_384 as SHA384
 import Crypto.Hash.SHAKE256 as SHAKE256
 from gmpy2 import add, f_mod, mpz, mul, powmod
+from pem import PublicKey
 
 # cyclic group parameters
 # from RFC 5114
@@ -104,8 +105,8 @@ def h2(x: str):
 
 
 def verify_lrs(message: str, keys: list[mpz], signature: list[mpz]) -> bool:
-    concatenated_keys: str = "".join([k.digits() for k in keys])
-
+    decoded_keys = [mpz(int(PublicKey(k).decoded_payload)) for k in keys]
+    concatenated_keys: str = "".join([k.digits() for k in decoded_keys])
     h = h2(concatenated_keys)
 
     y0 = signature[0]
@@ -119,7 +120,7 @@ def verify_lrs(message: str, keys: list[mpz], signature: list[mpz]) -> bool:
     sum_c = mpz(0)
 
     for i in range(n):
-        prod_y_c = mul(prod_y_c, powmod(int(keys[i]), c[i], p))
+        prod_y_c = mul(prod_y_c, powmod(decoded_keys[i], c[i], p))
         sum_c = f_mod(add(sum_c, c[i]), q)
 
     g_to_s = powmod(g, s, p)

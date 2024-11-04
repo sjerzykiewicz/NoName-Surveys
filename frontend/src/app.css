@@ -229,10 +229,6 @@ button {
 	text-decoration: none;
 }
 
-.footer-button:not(:first-of-type) {
-	margin-left: 0.5em;
-}
-
 button:hover,
 .footer-button:hover {
 	background-color: var(--secondary-color);
@@ -354,7 +350,8 @@ button:active,
 	padding: 0em 0.25em 0em 0.25em;
 }
 
-button:disabled {
+button:disabled,
+.footer-button:disabled {
 	background-color: var(--secondary-color);
 	color: var(--text-dark-color);
 	cursor: not-allowed;
@@ -368,6 +365,13 @@ button:disabled {
 	align-content: space-between;
 	font-size: 1.25em;
 	margin-top: 0.5em;
+}
+
+.footer-button-group {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-end;
+	gap: 0.625em;
 }
 
 a:link,

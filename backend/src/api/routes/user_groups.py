@@ -76,19 +76,15 @@ async def get_user_groups(
     response_model=list[str],
 )
 async def get_user_groups_with_members_having_public_keys(
-    page: int,
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
-    if page < 0:
-        raise HTTPException(status_code=400, detail="Invalid page number")
-
     user = user_crud.get_user_by_email(user_group_creator.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
     return [
         user_group.name
-        for user_group in user_groups_crud.get_all_user_groups(user.id, session)
+        for user_group in user_groups_crud.get_all_user_groups_of_user(user.id, session)
         if user_crud.all_users_have_public_keys(
             [
                 member.user_id
@@ -98,7 +94,7 @@ async def get_user_groups_with_members_having_public_keys(
             ],
             session,
         )
-    ][page * PAGE_SIZE : (page + 1) * PAGE_SIZE]
+    ]
 
 
 @router.post(

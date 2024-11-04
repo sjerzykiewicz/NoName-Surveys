@@ -1,10 +1,10 @@
 import type { LayoutServerLoad } from './$types';
-import { getSurvey, getSurveyAnswers, getSurveyRespondents } from '$lib/server/database';
+import { getSurvey, getSurveyAnswers } from '$lib/server/database';
 import { error } from '@sveltejs/kit';
 import Survey from '$lib/entities/surveys/Survey';
 import SurveySummary from '$lib/entities/surveys/SurveySummary';
 
-export const load: LayoutServerLoad = async ({ params, parent }) => {
+export const load: LayoutServerLoad = async ({ parent, params }) => {
 	const { session } = await parent();
 	if (!session) {
 		error(401, 'You must be logged in to access this page.');
@@ -22,11 +22,6 @@ export const load: LayoutServerLoad = async ({ params, parent }) => {
 		error(answersResponse.status, { message: await answersResponse.json() });
 	}
 
-	const respondentsResponse = await getSurveyRespondents(code);
-	if (!respondentsResponse.ok) {
-		error(respondentsResponse.status, { message: await respondentsResponse.json() });
-	}
-
 	const survey: {
 		title: string;
 		survey_structure: Survey;
@@ -35,7 +30,10 @@ export const load: LayoutServerLoad = async ({ params, parent }) => {
 		public_keys: string[];
 	} = await surveyResponse.json();
 	const answers: Array<SurveySummary> = await answersResponse.json();
-	const respondents: string[] = await respondentsResponse.json();
 
-	return { survey, answers, respondents };
+	// TODO: improve this
+	const { survey_list } = await parent();
+	const survey_index = survey_list.findIndex((s) => s.survey_code === survey.survey_code);
+
+	return { survey, answers, survey_index };
 };

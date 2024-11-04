@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
-	export let code: string;
+	import { page } from '$app/stores';
 </script>
 
 <button
 	title="Share survey results"
 	class="footer-button"
-	on:click={() => goto('/' + code + '/summary/access')}
+	class:save={$page.url.pathname.includes('access')}
+	on:click={() =>
+		goto('/surveys/' + $page.params.surveysPage + '/' + $page.params.code + '/access/0')}
 >
 	<i class="material-symbols-rounded">share</i>Share
 </button>

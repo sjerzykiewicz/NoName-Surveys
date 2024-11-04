@@ -1,9 +1,7 @@
-/*
-    First attempt at LRS implementation. This implementation is not confirmed to be secure and is only for testing and demonstration purposes.
-*/
-
+use getrandom::Error;
 use num_bigint::{BigUint, RandBigInt};
 use num_traits::{One, Zero};
+use pem::{encode, parse, Pem};
 use sha3::{
     digest::{ExtendableOutput, Update, XofReader},
     Digest, Sha3_256, Sha3_384, Shake256,
@@ -111,14 +109,17 @@ pub fn get_keypair() -> KeyPair {
     let priv_key = rng.gen_biguint_below(&order);
     let pub_key = generator.modpow(&priv_key, &prime);
 
+    let private_pem = encode(&Pem::new("PRIVATE KEY", priv_key.to_string().as_bytes()));
+    let public_pem = encode(&Pem::new("PUBLIC KEY", pub_key.to_string().as_bytes()));
+
     let mut hasher = Sha3_256::new();
-    Digest::update(&mut hasher, pub_key.to_string().as_bytes());
+    Digest::update(&mut hasher, public_pem.to_string().as_bytes());
     let h = hasher.finalize();
     let print = format!("{:x}", h);
 
     KeyPair {
-        private_key: priv_key.to_string(),
-        public_key: pub_key.to_string(),
+        private_key: private_pem,
+        public_key: public_pem,
         fingerprint: print,
     }
 }
@@ -171,9 +172,33 @@ pub fn linkable_ring_signature(
     let q: BigUint = BigUint::parse_bytes(Q_HEX, 16).unwrap();
     let g: BigUint = BigUint::parse_bytes(G_HEX, 16).unwrap();
 
+    let pub_keys: Vec<Pem> = match pub_keys.iter().map(|k| parse(k)).collect() {
+        Ok(pk) => pk,
+        Err(_) => return Err(JsValue::from_str("Could not convert public key pem")),
+    };
+
+    let pub_keys: Vec<String> = match pub_keys
+        .iter()
+        .map(|k| String::from_utf8(k.contents().to_vec()))
+        .collect()
+    {
+        Ok(pk) => pk,
+        Err(_) => return Err(JsValue::from_str("Could not convert pem data to string")),
+    };
+
     let y: Vec<BigUint> = match pub_keys.iter().map(|k| k.parse::<BigUint>()).collect() {
         Ok(y) => y,
         Err(_) => return Err(JsValue::from_str("Invalid public key format")),
+    };
+
+    let priv_key = match parse(priv_key) {
+        Ok(k) => k,
+        Err(_) => return Err(JsValue::from_str("Could not convert private key pem")),
+    };
+
+    let priv_key = match String::from_utf8(priv_key.contents().to_vec()) {
+        Ok(k) => k,
+        Err(_) => return Err(JsValue::from_str("Could not convert pem data to string")),
     };
 
     let pk: BigUint = match priv_key.parse::<BigUint>() {

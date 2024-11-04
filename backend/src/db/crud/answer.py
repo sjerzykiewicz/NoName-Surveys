@@ -1,7 +1,7 @@
 from sqlmodel import select
 
 from src.db.base import Session
-from src.db.models.answer import Answer, AnswerBase
+from src.db.models.answer import Answer
 
 
 def get_answers_by_survey_id(survey_id: int, session: Session) -> Answer:

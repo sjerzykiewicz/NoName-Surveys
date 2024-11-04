@@ -11,8 +11,9 @@
 	import Number from './Number.svelte';
 	import type { ComponentType } from 'svelte';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import type SurveySummary from '$lib/entities/surveys/SurveySummary';
 
-	export let answer;
+	export let answer: SurveySummary;
 	export let id: number;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {

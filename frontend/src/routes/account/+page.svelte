@@ -42,7 +42,6 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					email: $page.data.session?.user?.email,
 					public_key: publicKey,
 					fingerprint: fingerprint
 				})
@@ -55,7 +54,7 @@
 				return;
 			}
 
-			download('noname-keys.txt', publicKey + '\n' + privateKey);
+			download('noname-keys.txt', publicKey + '----------' + privateKey);
 		} catch (e) {
 			$errorModalContent = e as string;
 			$isErrorModalHidden = false;

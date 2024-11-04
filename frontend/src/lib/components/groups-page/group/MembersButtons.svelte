@@ -10,6 +10,7 @@
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
+	import { page } from '$app/stores';
 
 	export let members: {
 		email: string;

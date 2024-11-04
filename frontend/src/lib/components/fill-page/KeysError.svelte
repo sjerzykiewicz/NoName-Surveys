@@ -11,7 +11,7 @@
 			case FileError.FileRequired:
 				return 'Please select a file.';
 			case FileError.FileInvalid:
-				return 'Please select a .txt file.';
+				return 'Please select a .pem file.';
 		}
 	}
 

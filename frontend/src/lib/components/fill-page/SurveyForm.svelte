@@ -231,7 +231,7 @@
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
 			return false;
-		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'txt') {
+		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'pem') {
 			fileError = FileError.FileInvalid;
 			return false;
 		}
@@ -265,9 +265,9 @@
 	}
 
 	function getKeys(text: string): KeyPair {
-		const words = text.split('----------');
+		const words = text.split('\n\n');
 
-		let publicKey = words[0];
+		let publicKey = words[0] + '\n';
 		let privateKey = words[1];
 
 		return new KeyPair(privateKey, publicKey);
@@ -355,7 +355,7 @@
 		<span class="file-label"
 			>Please load the file which you have previously generated on this application. The file
 			contains your keys, necessary for cryptographic calculations which are needed for validating
-			your right to fill out this survey.<br /><br />Default filename: "noname-keys.txt"</span
+			your right to fill out this survey.<br /><br />Default filename: "noname-keys.pem"</span
 		>
 		<label for="keys-file">
 			<div class="file-input">

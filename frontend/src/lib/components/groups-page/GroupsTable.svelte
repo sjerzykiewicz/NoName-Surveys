@@ -9,6 +9,7 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import Modal from '$lib/components/global/Modal.svelte';
 	import NameError from './NameError.svelte';
+	import { page } from '$app/stores';
 
 	export let groups: {
 		user_group_name: string;

@@ -136,3 +136,20 @@ async def create_survey_draft(
     )
 
     return created_survey_draft.id
+
+
+@router.post(
+    "/count",
+    response_description="Number of survey drafts of a user",
+    response_model=int,
+)
+async def count_survey_drafts(
+    user_input: User, session: Session = Depends(get_session)
+):
+    user = user_crud.get_user_by_email(user_input.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    return survey_draft_crud.get_count_of_not_deleted_survey_drafts_for_user(
+        user.id, session
+    )

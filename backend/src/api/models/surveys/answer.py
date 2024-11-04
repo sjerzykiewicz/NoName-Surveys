@@ -99,7 +99,6 @@ class SurveyAnswersFetchOutput(BaseModel):
         min_length=1,
         description="Questions list must have at least 1 element",
     )
-    is_owned_by_user: bool
 
     class Config:
         extra = "forbid"

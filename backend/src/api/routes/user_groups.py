@@ -20,6 +20,22 @@ PAGE_SIZE = 10
 
 
 @router.post(
+    "/count",
+    response_description="Number of all user groups of a given user",
+    response_model=int,
+)
+async def get_user_groups(
+    user_group_creator: UserGroupCreator,
+    session: Session = Depends(get_session),
+):
+    user = user_crud.get_user_by_email(user_group_creator.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not registered")
+
+    return user_groups_crud.get_count_of_user_groups_of_user(user.id, session)
+
+
+@router.post(
     "/all/{page}",
     response_description="List of of all user groups of a given user",
     response_model=list[AllUserGroupsOutput],
@@ -79,6 +95,36 @@ async def get_user_groups_with_members_having_public_keys(
             session,
         )
     ]
+
+
+@router.post(
+    "/group_members_count",
+    response_description="Number of members in a given user group",
+    response_model=int,
+)
+async def get_user_group(
+    user_group_request: UserGroupAction,
+    session: Session = Depends(get_session),
+):
+    user = user_crud.get_user_by_email(user_group_request.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not registered")
+
+    user_group = user_groups_crud.get_user_group_by_name(
+        user.id, user_group_request.name, session
+    )
+    if user_group is None:
+        raise HTTPException(
+            status_code=400, detail="User group not found for the given user"
+        )
+
+    if user_group.creator_id != user.id:
+        raise HTTPException(
+            status_code=400,
+            detail="User does not have access to this User Group",
+        )
+
+    return user_groups_crud.get_user_group_members_count(user_group.id, session)
 
 
 @router.post(

@@ -29,6 +29,17 @@ PAGE_SIZE = 10
 
 
 @router.post(
+    "/count", response_description="Number of surveys of a user", response_model=int
+)
+async def count_surveys(user_input: User, session: Session = Depends(get_session)):
+    user = user_crud.get_user_by_email(user_input.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    return survey_crud.get_count_of_not_deleted_surveys_for_user(user.id, session)
+
+
+@router.post(
     "/all/{page}",
     response_description="Get all survey headers of a user",
     response_model=list[SurveyHeadersOutput],
@@ -96,6 +107,25 @@ async def get_survey_by_code(
             if survey.uses_cryptographic_module
             else []
         ),
+    )
+
+
+@router.post(
+    "/respondents-count",
+    response_description="Number of possible respondents for a surveys",
+    response_model=int,
+)
+async def count_survey_respondents(
+    respondents_fetch: SurveyInfoFetchInput, session: Session = Depends(get_session)
+):
+    survey = survey_crud.get_survey_by_code(respondents_fetch.survey_code, session)
+    if survey is None:
+        raise HTTPException(status_code=404, detail="Survey does not exist")
+
+    return (
+        ring_member_crud.get_ring_member_count_for_survey(survey.id, session)
+        if survey.uses_cryptographic_module
+        else 0
     )
 
 
@@ -284,6 +314,30 @@ async def take_away_access_to_surveys(
     survey_crud.take_away_survey_access(survey.id, user.id, session)
 
     return {"message": "Survey access taken away successfully"}
+
+
+@router.post(
+    "/all-with-access-count",
+    response_description="Number of users who can view results of a survey",
+    response_model=int,
+)
+async def count_survey_respondents(
+    user_input: SurveyUserActions, session: Session = Depends(get_session)
+):
+    owner = user_crud.get_user_by_email(user_input.user_email, session)
+    if owner is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    survey = survey_crud.get_survey_by_code(user_input.survey_code, session)
+    if survey is None:
+        raise HTTPException(status_code=404, detail="Survey does not exist")
+
+    if survey.creator_id != owner.id:
+        raise HTTPException(
+            status_code=403, detail="User does not have access to this survey"
+        )
+
+    return survey_crud.get_all_users_with_access_to_survey_count(survey.id, session)
 
 
 @router.post(

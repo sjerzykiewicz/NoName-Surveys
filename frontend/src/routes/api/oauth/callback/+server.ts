@@ -2,8 +2,13 @@ import { type RequestHandler, error, redirect } from '@sveltejs/kit';
 import { getOAuthInstance } from '$lib/oauth1';
 import { env } from '$env/dynamic/private';
 import { validateUser, createUser } from '$lib/server/database';
+import { _getUserInfo } from '../user/+server';
 
 export const GET: RequestHandler = async ({ url, cookies, locals }) => {
+	const err = url.searchParams.get('error');
+	if (err) {
+		throw redirect(303, env.ORIGIN + '/account');
+	}
 	const oauth_token = url.searchParams.get('oauth_token');
 	const oauth_verifier = url.searchParams.get('oauth_verifier');
 	const oauth_token_secret = cookies.get('oauth_token_secret');
@@ -33,33 +38,14 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		});
 
 		if (!response.ok) {
-			throw new Error('Failed to fetch access token');
+			throw error(response.status, `Failed to fetch access token: ${response.statusText}`);
 		}
 
 		const responseText = await response.text();
 		const params = new URLSearchParams(responseText);
 		const responseData = Object.fromEntries(params.entries());
 
-		const requestDataUser = {
-			url: env.AUTH_USOS_BASE_URL + 'services/users/user?fields=email',
-			method: 'GET'
-		};
-
-		const oauthDataUser = oauth.authorize(requestDataUser, {
-			key: responseData.oauth_token,
-			secret: responseData.oauth_token_secret
-		});
-
-		const responseUser = await fetch(requestDataUser.url, {
-			method: 'GET',
-			headers: oauth.toHeader(oauthDataUser)
-		});
-
-		if (!responseUser.ok) {
-			throw error(responseUser.status, 'Failed to fetch user');
-		}
-
-		const userData = await responseUser.json();
+		const userData = await _getUserInfo(responseData.oauth_token, responseData.oauth_token_secret);
 
 		if (userData.email) {
 			const isUserRegistered = await (await validateUser(userData.email!)).json();
@@ -69,12 +55,15 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		}
 
 		locals.user = {
-			email: userData.email,
+			email: userData.email
+		};
+
+		const tokens = {
 			oauth_token: responseData.oauth_token,
 			oauth_token_secret: responseData.oauth_token_secret
 		};
 
-		cookies.set('user_session', JSON.stringify(locals.user), {
+		cookies.set('user_session', JSON.stringify(tokens), {
 			path: '/',
 			httpOnly: true,
 			secure: true,

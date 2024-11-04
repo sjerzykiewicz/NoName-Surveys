@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
-	import { page } from '$app/stores';
 	import { errorModalContent, isErrorModalHidden, S, XL } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
@@ -39,7 +38,6 @@
 			const response = await fetch('/api/surveys/delete', {
 				method: 'POST',
 				body: JSON.stringify({
-					user_email: $page.data.session?.user?.email,
 					survey_code: survey.survey_code
 				}),
 				headers: {

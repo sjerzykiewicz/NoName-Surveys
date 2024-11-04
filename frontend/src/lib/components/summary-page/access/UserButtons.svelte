@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
 	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
@@ -48,7 +47,6 @@
 		const response = await fetch('/api/surveys/give-access', {
 			method: 'POST',
 			body: JSON.stringify({
-				user_email: $page.data.session?.user?.email,
 				survey_code: survey_code,
 				user_emails_to_share_with: user_emails_to_share_with
 			}),
@@ -74,7 +72,6 @@
 			const response = await fetch('/api/surveys/take-away-access', {
 				method: 'POST',
 				body: JSON.stringify({
-					user_email: $page.data.session?.user?.email,
 					survey_code: code,
 					user_email_to_take_access_from: user
 				}),

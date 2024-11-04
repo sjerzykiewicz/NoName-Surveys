@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { invalidateAll, goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import { onMount, tick } from 'svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
@@ -59,7 +58,6 @@
 		const response = await fetch('/api/groups/rename', {
 			method: 'POST',
 			body: JSON.stringify({
-				user_email: $page.data.session?.user?.email,
 				name: name,
 				new_name: new_name
 			}),

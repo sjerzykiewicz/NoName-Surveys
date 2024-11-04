@@ -78,7 +78,7 @@
 		if (overwrite) {
 			const deleteResponse = await fetch('/api/surveys/drafts/delete', {
 				method: 'POST',
-				body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: $currentDraftId }),
+				body: JSON.stringify({ id: $currentDraftId }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -115,7 +115,7 @@
 	async function fetchGroup(name: string) {
 		const response = await fetch('/api/groups/fetch', {
 			method: 'POST',
-			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
+			body: JSON.stringify({ name: name }),
 			headers: {
 				'Content-Type': 'application/json'
 			}

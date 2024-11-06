@@ -18,16 +18,11 @@
 	};
 </script>
 
-<div
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
-	{#if checkMembersError()}
-		<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<i class="material-symbols-rounded">error</i>{errorMessage()}
-		</p>
-	{/if}
-</div>
+{#if checkMembersError()}
+	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<i class="material-symbols-rounded">error</i>{errorMessage()}
+	</p>
+{/if}
 
 <style>
 	.error {

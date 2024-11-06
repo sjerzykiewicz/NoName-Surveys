@@ -98,10 +98,11 @@
 		groupName = '';
 		groupMembers = [];
 		isPanelVisible = false;
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	async function deleteGroups() {
+		// TODO: fix and improve this
 		selectedGroupsToRemove.forEach(async (group) => {
 			const response = await fetch('/api/groups/delete', {
 				method: 'POST',
@@ -120,10 +121,11 @@
 
 			groups = groups.filter((g) => g.user_group_name !== group);
 		});
+		// TODO: go to previous page if there are no groups left on the current page
 
 		isModalHidden = true;
 		selectedGroupsToRemove = [];
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	let innerWidth: number;

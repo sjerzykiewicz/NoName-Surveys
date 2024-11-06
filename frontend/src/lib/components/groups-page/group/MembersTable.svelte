@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { S, XL } from '$lib/stores/global';
+	import { XL } from '$lib/stores/global';
 
 	export let members: {
 		email: string;

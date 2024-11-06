@@ -88,7 +88,7 @@
 
 		selectedMembersToAdd = [];
 		isPanelVisible = false;
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	async function removeMembers() {
@@ -111,6 +111,8 @@
 			goto('/groups/' + $page.params.groupsPage, { replaceState: true, invalidateAll: true });
 			return;
 		}
+
+		// TODO: go to previous page if there are no users left on the current page
 
 		const selectedMembersToRemoveSet = new Set(selectedMembersToRemove);
 		const newMembers = memberEmails.filter((m) => !selectedMembersToRemoveSet.has(m));
@@ -135,7 +137,7 @@
 
 		isModalHidden = true;
 		selectedMembersToRemove = [];
-		invalidateAll();
+		await invalidateAll();
 	}
 </script>
 
@@ -155,14 +157,16 @@
 		>
 			<i class="material-symbols-rounded">add</i>Members
 		</button>
-		<button
-			title="Remove selected group members"
-			class="delete-group"
-			disabled={selectedMembersToRemove.length === 0}
-			on:click={() => (isModalHidden = false)}
-		>
-			<i class="material-symbols-rounded">delete</i>Delete
-		</button>
+		{#if members.length > 0}
+			<button
+				title="Remove selected group members"
+				class="delete-group"
+				disabled={selectedMembersToRemove.length === 0}
+				on:click={() => (isModalHidden = false)}
+			>
+				<i class="material-symbols-rounded">delete</i>Delete
+			</button>
+		{/if}
 	</div>
 	<!-- TODO: <PageButtons /> -->
 </div>

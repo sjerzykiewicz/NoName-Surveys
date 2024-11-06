@@ -77,7 +77,7 @@
 		isModalHidden = true;
 		selectedGroup = '';
 		newName = '';
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	onMount(() => {

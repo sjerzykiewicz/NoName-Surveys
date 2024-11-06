@@ -41,7 +41,9 @@
 				><i class="material-symbols-rounded">chevron_left</i></button
 			>
 		</div>
-		<form on:submit|preventDefault={() => changePage($page.url.pathname, parseInt(pageInput.value) - 1)}>
+		<form
+			on:submit|preventDefault={() => changePage($page.url.pathname, parseInt(pageInput.value) - 1)}
+		>
 			<label title="Current page" class="page-number">
 				<input
 					id="page-input"

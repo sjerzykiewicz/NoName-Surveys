@@ -81,7 +81,7 @@ export const countSurveyDrafts = (user_email: string) => {
 			'Content-Type': 'application/json'
 		}
 	});
-}
+};
 
 // surveys
 
@@ -93,7 +93,7 @@ export const countSurveys = (user_email: string) => {
 			'Content-Type': 'application/json'
 		}
 	});
-}
+};
 
 export const getSurveys = (user_email: string, page: number) => {
 	return fetch(`${host}/surveys/all/${page}`, {
@@ -193,7 +193,7 @@ export const countUserGroups = (user_email: string) => {
 			'Content-Type': 'application/json'
 		}
 	});
-}
+};
 
 export const getUserGroups = (user_email: string, page: number) => {
 	return fetch(`${host}/user-groups/all/${page}`, {

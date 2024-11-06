@@ -64,11 +64,12 @@
 
 		selectedUsersToAdd = [];
 		isPanelVisible = false;
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	async function removeUsers() {
-		selectedUsersToRemove.forEach(async (user, i) => {
+		// TODO: fix and improve this
+		selectedUsersToRemove.forEach(async (user) => {
 			const response = await fetch('/api/surveys/take-away-access', {
 				method: 'POST',
 				body: JSON.stringify({
@@ -87,12 +88,13 @@
 				return;
 			}
 
-			users.splice(i, 1);
+			users = users.filter((u) => u !== user);
 		});
+		// TODO: go to previous page if there are no users left on the current page
 
 		isModalHidden = true;
 		selectedUsersToRemove = [];
-		invalidateAll();
+		await invalidateAll();
 	}
 </script>
 

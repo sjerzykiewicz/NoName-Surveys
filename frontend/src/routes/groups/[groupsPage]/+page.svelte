@@ -23,7 +23,12 @@
 <Content>
 	<LimitWarning num={data.numGroups} limit={$LIMIT_OF_GROUPS} items="Groups" />
 	<GroupsTable bind:groups={data.group_list} bind:selectedGroupsToRemove />
-	<GroupsButtons bind:groups={data.group_list} users={data.user_list} numGroups={data.numGroups} bind:selectedGroupsToRemove />
+	<GroupsButtons
+		bind:groups={data.group_list}
+		users={data.user_list}
+		numGroups={data.numGroups}
+		bind:selectedGroupsToRemove
+	/>
 </Content>
 
 <style>

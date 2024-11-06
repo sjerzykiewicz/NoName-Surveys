@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { cubicInOut } from 'svelte/easing';
-    import { slide } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
+	import { slide } from 'svelte/transition';
 
-    export let num: number;
-    export let limit: number;
-    export let items: string;
+	export let num: number;
+	export let limit: number;
+	export let items: string;
 </script>
 
 {#if num >= limit}
@@ -19,7 +19,7 @@
 {/if}
 
 <style>
-    .warning {
+	.warning {
 		margin: 0em 0em 0.75em;
 	}
 </style>

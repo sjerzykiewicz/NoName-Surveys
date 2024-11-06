@@ -1,27 +1,31 @@
 <script lang="ts">
+	import { goto, invalidateAll } from '$app/navigation';
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
-	import { questions, title } from '$lib/stores/create-page';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import { goto, invalidateAll } from '$app/navigation';
 
-	export let drafts: {
-		id: number;
+	export let survey_list: {
 		title: string;
+		survey_code: string;
 		creation_date: string;
+		uses_cryptographic_module: boolean;
+		is_owned_by_user: boolean;
+		group_size: number;
 	}[];
-	export let numDrafts: number;
-	export let selectedDraftsToRemove: typeof drafts = [];
+	export let numSurveys: number;
+	export let selectedSurveysToRemove: typeof survey_list = [];
 
 	let isModalHidden: boolean = true;
 
-	async function deleteDrafts() {
+	async function deleteSurveys() {
 		// TODO: fix and improve this
-		selectedDraftsToRemove.forEach(async (draft) => {
-			const response = await fetch('/api/surveys/drafts/delete', {
+		selectedSurveysToRemove.forEach(async (survey) => {
+			const response = await fetch('/api/surveys/delete', {
 				method: 'POST',
-				body: JSON.stringify({ id: draft.id }),
+				body: JSON.stringify({
+					survey_code: survey.survey_code
+				}),
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -34,37 +38,34 @@
 				return;
 			}
 
-			drafts = drafts.filter((d) => d.id !== draft.id);
+			survey_list = survey_list.filter((s) => s.survey_code !== survey.survey_code);
 		});
-		// TODO: go to previous page if there are no drafts left on the current page
 
 		isModalHidden = true;
-		$title.title = '';
-		$questions = [];
-		selectedDraftsToRemove = [];
+		selectedSurveysToRemove = [];
 		await invalidateAll();
 	}
 </script>
 
-<DeleteModal title="Deleting Drafts" bind:isHidden={isModalHidden} deleteEntries={deleteDrafts} />
+<DeleteModal title="Deleting Surveys" bind:isHidden={isModalHidden} deleteEntries={deleteSurveys} />
 
 <div class="button-row">
 	<div class="button-sub-row">
-		<button title="Create a draft" class="add-draft" on:click={() => goto('/create')}>
-			<i class="material-symbols-rounded">add</i>Draft
+		<button title="Create a survey" class="add-survey" on:click={() => goto('/create')}>
+			<i class="material-symbols-rounded">add</i>Survey
 		</button>
-		{#if drafts.length > 0}
+		{#if survey_list.length > 0}
 			<button
-				title="Delete selected drafts"
-				class="delete-draft"
-				disabled={selectedDraftsToRemove.length === 0}
+				title="Delete selected surveys"
+				class="delete-survey"
+				disabled={selectedSurveysToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
 				<i class="material-symbols-rounded">delete</i>Delete
 			</button>
 		{/if}
 	</div>
-	<PageButtons numEntries={numDrafts} />
+	<PageButtons numEntries={numSurveys} />
 </div>
 
 <style>

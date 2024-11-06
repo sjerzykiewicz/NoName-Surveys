@@ -4,11 +4,11 @@
 	$: errorMessage =
 		typeof $page.error!.message === 'string'
 			? $page.error!.message
-			: // @ts-expect-error message is not necessarily a string
-				typeof $page.error!.message.detail === 'string'
-				? // @ts-expect-error message is not necessarily a string
-					$page.error!.message.detail
-				: 'Something went wrong';
+			: typeof $page.error!.message === 'undefined'
+				? 'Unknown error' // @ts-expect-error message is not necessarily a string
+				: typeof $page.error!.message.detail === 'string' // @ts-expect-error message is not necessarily a string
+					? $page.error!.message.detail
+					: 'Unknown error';
 </script>
 
 {#if $page.error}

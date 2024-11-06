@@ -36,28 +36,28 @@ spec:
             - name: SETTINGS_db_user
               valueFrom:
                 secretKeyRef:
-                  key: backend
-                  name: SETTINGS_db_user
+                  name: backend
+                  key: SETTINGS_db_user
             - name: SETTINGS_db_password
               valueFrom:
                 secretKeyRef:
-                  key: backend
-                  name: SETTINGS_db_password
+                  name: backend
+                  key: SETTINGS_db_password
             - name: SETTINGS_db_host
               valueFrom:
                 secretKeyRef:
-                  key: backend
-                  name: SETTINGS_db_host
+                  name: backend
+                  key: SETTINGS_db_host
             - name: SETTINGS_db_port
               valueFrom:
                 secretKeyRef:
-                  key: backend
-                  name: SETTINGS_db_port
+                  name: backend
+                  key: SETTINGS_db_port
             - name: SETTINGS_db_name
               valueFrom:
                 secretKeyRef:
-                  key: backend
-                  name: SETTINGS_db_name
+                  name: backend
+                  key: SETTINGS_db_name
           resources: {}
       restartPolicy: Always
 status: {}

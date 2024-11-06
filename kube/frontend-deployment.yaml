@@ -36,18 +36,18 @@ spec:
             - name: AUTH_USOS_ID
               valueFrom:
                 secretKeyRef:
-                  key: frontend
-                  name: AUTH_USOS_ID
+                  name: frontend
+                  key: AUTH_USOS_ID
             - name: AUTH_USOS_SECRET
               valueFrom:
                 secretKeyRef:
-                  key: frontend
-                  name: AUTH_USOS_SECRET
+                  name: frontend
+                  key: AUTH_USOS_SECRET
             - name: AUTH_USOS_BASE_URL
               valueFrom:
                 secretKeyRef:
-                  key: frontend
-                  name: AUTH_USOS_BASE_URL
+                  name: frontend
+                  key: AUTH_USOS_BASE_URL
           resources: {}
       restartPolicy: Always
 status: {}

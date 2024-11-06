@@ -321,7 +321,7 @@ async def take_away_access_to_surveys(
     response_description="Number of users who can view results of a survey",
     response_model=int,
 )
-async def count_survey_respondents(
+async def get_count_of_users_with_access(
     user_input: SurveyUserActions, session: Session = Depends(get_session)
 ):
     owner = user_crud.get_user_by_email(user_input.user_email, session)

@@ -18,11 +18,7 @@
 	}
 </script>
 
-<div
-	class="choice-area display"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
->
+<div class="choice-area display" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div title="Answer no. {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>

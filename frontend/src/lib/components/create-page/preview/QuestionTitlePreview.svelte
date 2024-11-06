@@ -10,8 +10,7 @@
 <div
 	class="question-label"
 	id={questionIndex.toString()}
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
+	transition:slide={{ duration: 200, easing: cubicInOut }}
 >
 	<div title="Question no. {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
 	<div title={questionTypeData.title} class="type">
@@ -24,11 +23,7 @@
 		</div>
 	{/if}
 </div>
-<div
-	class="question-area display"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="question-area display" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="question-title">
 		{$questions[questionIndex].question}
 	</div>

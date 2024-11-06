@@ -118,22 +118,16 @@
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div class="users-panel">
-			<div title="Select users" class="select-list">
-				<MultiSelect
-					bind:selected={selectedUsersToAdd}
-					options={users}
-					placeholder="Select users"
-				/>
-			</div>
-			<button
-				title="Finish giving access"
-				class="save"
-				on:click={() => addUsers(code, selectedUsersToAdd)}
-			>
-				<i class="material-symbols-rounded">done</i>Apply
-			</button>
+		<div title="Select users" class="select-list">
+			<MultiSelect bind:selected={selectedUsersToAdd} options={users} placeholder="Select users" />
 		</div>
+		<button
+			title="Finish giving access"
+			class="save"
+			on:click={() => addUsers(code, selectedUsersToAdd)}
+		>
+			<i class="material-symbols-rounded">done</i>Apply
+		</button>
 	</div>
 	<UsersError users={selectedUsersToAdd} error={usersError} />
 {/if}

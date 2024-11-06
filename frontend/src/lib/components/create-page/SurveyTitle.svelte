@@ -27,8 +27,7 @@
 			handleNewLine(e);
 			limitInput(e, $title.title, $LIMIT_OF_CHARS);
 		}}
-		in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-		out:slide={{ duration: 200, easing: cubicInOut }}
+		transition:slide={{ duration: 200, easing: cubicInOut }}
 	>
 		{$title.title}
 	</div>

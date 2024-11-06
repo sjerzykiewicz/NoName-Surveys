@@ -8,11 +8,7 @@
 	let checked: number;
 </script>
 
-<div
-	class="choice-area display binary"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
->
+<div class="choice-area display binary" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<label title="Select your answer" class="choice binary" class:selected={checked === 0}
 		><div class="icon">
 			<input

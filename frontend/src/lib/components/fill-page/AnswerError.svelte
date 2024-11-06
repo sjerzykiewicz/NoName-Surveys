@@ -20,21 +20,16 @@
 	};
 </script>
 
-<div
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
-	{#if checkAnswerError(questionIndex)}
-		<p
-			title="Error"
-			class="error"
-			style={$questions[questionIndex].type === 'text' ? 'margin-top: -2.5em;' : ''}
-			transition:slide={{ duration: 200, easing: cubicInOut }}
-		>
-			<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
-		</p>
-	{/if}
-</div>
+{#if checkAnswerError(questionIndex)}
+	<p
+		title="Error"
+		class="error"
+		style={$questions[questionIndex].type === 'text' ? 'margin-top: -2.5em;' : ''}
+		transition:slide={{ duration: 200, easing: cubicInOut }}
+	>
+		<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
+	</p>
+{/if}
 
 <style>
 	.error {

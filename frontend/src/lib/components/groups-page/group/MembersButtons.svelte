@@ -163,23 +163,19 @@
 		<i class="material-symbols-rounded">delete</i>Delete
 	</button>
 </div>
-<div class="button-row">
-	{#if isPanelVisible}
-		<div class="users-panel" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<div title="Select group members" class="select-list">
-				<MultiSelect
-					bind:selected={selectedMembersToAdd}
-					options={notMembers}
-					placeholder="Select group members"
-				/>
-			</div>
-			<button title="Finish adding group members" class="save" on:click={addMembers}>
-				<i class="material-symbols-rounded">done</i>Apply
-			</button>
-		</div>
-	{/if}
-</div>
 {#if isPanelVisible}
+	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<div title="Select group members" class="select-list">
+			<MultiSelect
+				bind:selected={selectedMembersToAdd}
+				options={notMembers}
+				placeholder="Select group members"
+			/>
+		</div>
+		<button title="Finish adding group members" class="save" on:click={addMembers}>
+			<i class="material-symbols-rounded">done</i>Apply
+		</button>
+	</div>
 	<MembersError members={selectedMembersToAdd} error={membersError} />
 {/if}
 

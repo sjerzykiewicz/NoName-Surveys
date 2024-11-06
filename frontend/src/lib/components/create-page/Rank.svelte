@@ -39,11 +39,7 @@
 
 <svelte:window bind:innerWidth />
 
-<div
-	class="choice-area"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div title="Choice no. {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>

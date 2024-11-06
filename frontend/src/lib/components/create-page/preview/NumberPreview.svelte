@@ -12,11 +12,7 @@
 	);
 </script>
 
-<div
-	class="choice-area display slider"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
->
+<div class="choice-area display slider" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="choice slider">
 		<input
 			title="Selected value"

@@ -11,11 +11,7 @@
 	let text: string = '';
 </script>
 
-<div
-	class="choice-area display"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
->
+<div class="choice-area display" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div title="Question details" class="details">
 		{$questions[questionIndex].choices[0]}
 	</div>

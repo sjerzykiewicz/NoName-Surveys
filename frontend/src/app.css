@@ -264,6 +264,10 @@ button:active,
 	margin-left: 2.25em;
 }
 
+.add-choice i {
+	font-variation-settings: 'wght' 700;
+}
+
 .remove-choice {
 	font-size: 1em;
 }
@@ -333,7 +337,6 @@ button:active,
 }
 
 .arrows i {
-	font-variation-settings: 'wght' 700;
 	line-height: 0.7em;
 	overflow: hidden;
 }

@@ -33,7 +33,7 @@
 					disabled={choiceIndex === 0}
 					on:click={() => moveChoiceUp(choiceIndex)}
 				>
-					<i class="material-symbols-rounded">arrow_drop_up</i>
+					<i class="material-symbols-rounded">keyboard_arrow_up</i>
 				</button>
 				<button
 					title="Move answer down"
@@ -41,7 +41,7 @@
 					disabled={choiceIndex === $questions[questionIndex].choices.length - 1}
 					on:click={() => moveChoiceDown(choiceIndex)}
 				>
-					<i class="material-symbols-rounded">arrow_drop_down</i>
+					<i class="material-symbols-rounded">keyboard_arrow_down</i>
 				</button>
 			</div>
 			<div class="choice-input display">

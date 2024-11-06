@@ -56,7 +56,7 @@
 			disabled={questionIndex === 0}
 			on:click={moveQuestionUp}
 		>
-			<i class="material-symbols-rounded">arrow_drop_up</i>
+			<i class="material-symbols-rounded">keyboard_arrow_up</i>
 		</button>
 		<button
 			title="Move question down"
@@ -64,7 +64,7 @@
 			disabled={questionIndex === $questions.length - 1}
 			on:click={moveQuestionDown}
 		>
-			<i class="material-symbols-rounded">arrow_drop_down</i>
+			<i class="material-symbols-rounded">keyboard_arrow_down</i>
 		</button>
 	</div>
 	<div
@@ -99,7 +99,7 @@
 		>
 	</button>
 	<button title="Remove question" class="remove-question" on:click={removeQuestion}>
-		<i class="material-symbols-rounded">close</i>
+		<i class="material-symbols-rounded">delete</i>
 	</button>
 </div>
 
@@ -133,10 +133,6 @@
 
 	.required-button.checked:active {
 		background-color: var(--border-color);
-	}
-
-	.remove-question i {
-		font-variation-settings: 'wght' 700;
 	}
 
 	.input-container {

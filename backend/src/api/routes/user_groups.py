@@ -98,7 +98,7 @@ async def get_user_groups_with_members_having_public_keys(
 
 
 @router.post(
-    "/group_members_count",
+    "/group-members-count",
     response_description="Number of members in a given user group",
     response_model=int,
 )

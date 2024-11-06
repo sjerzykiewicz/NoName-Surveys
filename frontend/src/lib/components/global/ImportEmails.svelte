@@ -16,7 +16,8 @@
 	export let id: string;
 	export let checkKeys: boolean;
 	export let disabled: boolean = false;
-	export let size: number = 1;
+	export let buttonSize: number = 1;
+	export let warningSize: number = 1;
 	export let width: string = 'unset';
 
 	let fileElement: HTMLInputElement | null = null;
@@ -96,7 +97,7 @@
 	}
 </script>
 
-<div class="button-row" style="font-size: {size}em;">
+<div class="button-row" style="font-size: {buttonSize}em;">
 	<div {title} class="file-div" class:disabled style="width: {width};">
 		<span class="file-label">{label}</span>
 		<label for={id}>
@@ -110,7 +111,7 @@
 		</label>
 	</div>
 </div>
-<EmailsWarning warning={fileWarning} element={fileElement} size={0.8} {disabled} />
+<EmailsWarning warning={fileWarning} element={fileElement} size={warningSize} {disabled} />
 
 <style>
 	.button-row {

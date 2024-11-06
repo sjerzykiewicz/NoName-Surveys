@@ -31,7 +31,6 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 	} = await surveyResponse.json();
 	const answers: Array<SurveySummary> = await answersResponse.json();
 
-	// TODO: improve this
 	const { survey_list } = await parent();
 	const survey_index = survey_list.findIndex((s) => s.survey_code === survey.survey_code);
 

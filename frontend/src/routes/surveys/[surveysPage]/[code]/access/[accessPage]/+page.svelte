@@ -3,16 +3,11 @@
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import Footer from '$lib/components/global/Footer.svelte';
-	import Back from '$lib/components/global/Back.svelte';
 	import AccessTable from '$lib/components/summary-page/access/AccessTable.svelte';
 	import UserButtons from '$lib/components/summary-page/access/UserButtons.svelte';
 	import { afterUpdate } from 'svelte';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
-	import QrCodeButton from '$lib/components/summary-page/buttons/QrCodeButton.svelte';
-	import AnswersButton from '$lib/components/summary-page/buttons/AnswersButton.svelte';
-	import RespondentsButton from '$lib/components/summary-page/buttons/RespondentsButton.svelte';
-	import ShareButton from '$lib/components/summary-page/buttons/ShareButton.svelte';
-	import SummaryButton from '$lib/components/summary-page/buttons/SummaryButton.svelte';
+	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
 
 	export let data: PageData;
 	export let selectedUsersToRemove: string[] = [];
@@ -50,21 +45,9 @@
 </Content>
 
 <Footer>
-	<!-- TODO: improve this -->
-	{#if data.survey_list[data.survey_index].is_owned_by_user}
-		<ShareButton />
-	{/if}
-	{#if data.survey.uses_cryptographic_module}
-		<RespondentsButton />
-	{/if}
-	<div class="footer-button-group">
-		<div class="footer-button-group">
-			<AnswersButton />
-			<SummaryButton />
-		</div>
-		<div class="footer-button-group">
-			<QrCodeButton bind:isModalHidden />
-			<Back />
-		</div>
-	</div>
+	<FooterButtons
+		isOwnedByUser={data.survey_list[data.survey_index].is_owned_by_user}
+		usesCryptographicModule={data.survey.uses_cryptographic_module}
+		bind:isModalHidden
+	/>
 </Footer>

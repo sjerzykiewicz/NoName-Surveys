@@ -8,7 +8,7 @@
 				typeof $page.error!.message.detail === 'string'
 				? // @ts-expect-error message is not necessarily a string
 					$page.error!.message.detail
-				: 'Unknown error';
+				: 'Something went wrong';
 </script>
 
 {#if $page.error}

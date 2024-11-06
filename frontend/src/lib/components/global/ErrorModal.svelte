@@ -3,11 +3,13 @@
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { onMount } from 'svelte';
 
+	export let hide: () => void = () => ($isErrorModalHidden = true);
+
 	onMount(() => {
 		function handleEnter(event: KeyboardEvent) {
 			if (!$isErrorModalHidden && event.key === 'Enter') {
 				event.preventDefault();
-				$isErrorModalHidden = true;
+				hide();
 			}
 		}
 
@@ -26,9 +28,16 @@
 	borderColor="var(--error-color)"
 	zIndex={12}
 	bind:isHidden={$isErrorModalHidden}
+	{hide}
 >
 	<div slot="content" class="content">{$errorModalContent}</div>
-	<button title="Ok" class="save" on:click={() => ($isErrorModalHidden = true)}
+	<button title="Ok" class="save" on:click={hide}
 		><i class="material-symbols-rounded">done</i>OK</button
 	>
 </Modal>
+
+<style>
+	.save i {
+		font-variation-settings: 'wght' 700;
+	}
+</style>

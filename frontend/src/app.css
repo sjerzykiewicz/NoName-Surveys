@@ -360,7 +360,7 @@ button:disabled,
 .button-row {
 	display: flex;
 	flex-flow: row;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
 	font-size: 1.25em;
 	margin-top: 0.5em;

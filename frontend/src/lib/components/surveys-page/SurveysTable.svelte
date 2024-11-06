@@ -5,6 +5,7 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import { page } from '$app/stores';
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
 
 	export let survey_list: {
 		title: string;
@@ -14,6 +15,7 @@
 		is_owned_by_user: boolean;
 		group_size: number;
 	}[];
+	export let numSurveys: number;
 
 	let innerWidth: number;
 	let selectedCode: string;
@@ -173,19 +175,22 @@
 	</table>
 {/if}
 <div class="button-row">
-	<button title="Create a survey" class="add-survey" on:click={() => goto('/create')}>
-		<i class="material-symbols-rounded">add</i>Survey
-	</button>
-	{#if survey_list.length > 0}
-		<button
-			title="Delete selected surveys"
-			class="delete-survey"
-			disabled={selectedSurveysToRemove.length === 0}
-			on:click={() => (isDeleteModalHidden = false)}
-		>
-			<i class="material-symbols-rounded">delete</i>Delete
+	<div class="button-sub-row">
+		<button title="Create a survey" class="add-survey" on:click={() => goto('/create')}>
+			<i class="material-symbols-rounded">add</i>Survey
 		</button>
-	{/if}
+		{#if survey_list.length > 0}
+			<button
+				title="Delete selected surveys"
+				class="delete-survey"
+				disabled={selectedSurveysToRemove.length === 0}
+				on:click={() => (isDeleteModalHidden = false)}
+			>
+				<i class="material-symbols-rounded">delete</i>Delete
+			</button>
+		{/if}
+	</div>
+	<PageButtons numEntries={numSurveys} />
 </div>
 
 <style>
@@ -216,6 +221,10 @@
 
 		#date-header {
 			width: 21%;
+		}
+
+		.button-row {
+			font-size: 0.8em;
 		}
 	}
 </style>

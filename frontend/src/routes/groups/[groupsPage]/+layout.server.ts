@@ -1,5 +1,5 @@
 import type { LayoutServerLoad } from './$types';
-import { getUserGroups, getUsers } from '$lib/server/database';
+import { getUserGroups, getUsers, countUserGroups } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
 
 export const load: LayoutServerLoad = async ({ parent, params }) => {
@@ -25,5 +25,11 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 	}
 	const user_list: string[] = await usersResponse.json();
 
-	return { session, group_list, user_list };
+	const countResponse = await countUserGroups(session.user!.email!);
+	if (!countResponse.ok) {
+		error(countResponse.status, { message: await countResponse.json() });
+	}
+	const numGroups: number = await countResponse.json();
+
+	return { session, group_list, user_list, numGroups };
 };

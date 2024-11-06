@@ -28,3 +28,9 @@
 		</p>
 	{/if}
 </div>
+
+<style>
+	.error {
+		margin: 0em;
+	}
+</style>

@@ -85,7 +85,7 @@
 	}
 
 	input {
-		cursor: default;
+		cursor: default !important;
 	}
 
 	.yes[contenteditable]:empty::before {

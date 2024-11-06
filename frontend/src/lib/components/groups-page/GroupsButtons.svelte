@@ -15,12 +15,14 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
 
 	export let groups: {
 		user_group_name: string;
 		all_members_have_public_keys: true;
 	}[];
 	export let users: string[];
+	export let numGroups: number;
 	export let selectedGroupsToRemove: string[] = [];
 
 	let isPanelVisible: boolean = false;
@@ -132,24 +134,27 @@
 <DeleteModal title="Deleting Groups" bind:isHidden={isModalHidden} deleteEntries={deleteGroups} />
 
 <div class="button-row">
-	<button
-		title={isPanelVisible ? 'Stop creating a group' : 'Create a group'}
-		class="add-group"
-		class:clicked={isPanelVisible}
-		on:click={togglePanel}
-	>
-		<i class="material-symbols-rounded">add</i>Group
-	</button>
-	{#if groups.length > 0}
+	<div class="button-sub-row">
 		<button
-			title="Delete selected groups"
-			class="delete-group"
-			disabled={selectedGroupsToRemove.length === 0}
-			on:click={() => (isModalHidden = false)}
+			title={isPanelVisible ? 'Stop creating a group' : 'Create a group'}
+			class="add-group"
+			class:clicked={isPanelVisible}
+			on:click={togglePanel}
 		>
-			<i class="material-symbols-rounded">delete</i>Delete
+			<i class="material-symbols-rounded">add</i>Group
 		</button>
-	{/if}
+		{#if groups.length > 0}
+			<button
+				title="Delete selected groups"
+				class="delete-group"
+				disabled={selectedGroupsToRemove.length === 0}
+				on:click={() => (isModalHidden = false)}
+			>
+				<i class="material-symbols-rounded">delete</i>Delete
+			</button>
+		{/if}
+	</div>
+	<PageButtons numEntries={numGroups} />
 </div>
 {#if isPanelVisible}
 	<div class="buttons-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
@@ -204,7 +209,7 @@
 			label="Or import group members from a .csv file."
 			id="emails-file"
 			checkKeys={false}
-			size={1.25}
+			buttonSize={1.25}
 		/>
 	</div>
 {/if}
@@ -232,5 +237,11 @@
 
 	.input-container {
 		margin-bottom: -1.4em;
+	}
+
+	@media screen and (max-width: 768px) {
+		.button-row {
+			font-size: 0.8em;
+		}
 	}
 </style>

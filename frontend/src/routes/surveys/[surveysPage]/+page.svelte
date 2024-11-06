@@ -3,41 +3,24 @@
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import SurveysTable from '$lib/components/surveys-page/SurveysTable.svelte';
+	import LimitWarning from '$lib/components/global/LimitWarning.svelte';
 	import { LIMIT_OF_SURVEYS } from '$lib/stores/global';
-	import { cubicInOut } from 'svelte/easing';
-	import { slide } from 'svelte/transition';
-	import { afterUpdate } from 'svelte';
 
 	export let data: LayoutServerData;
-
-	let numSurveys: number = data.survey_list.length;
-
-	afterUpdate(() => {
-		numSurveys = data.survey_list.length;
-	});
 </script>
 
 <Header>
 	<div class="title">
 		Your surveys
-		<span title="Number of surveys" class:max={numSurveys >= $LIMIT_OF_SURVEYS}
-			>[ {numSurveys} / {$LIMIT_OF_SURVEYS} ]</span
+		<span title="Number of surveys" class:max={data.numSurveys >= $LIMIT_OF_SURVEYS}
+			>[ {data.numSurveys} / {$LIMIT_OF_SURVEYS} ]</span
 		>
 	</div>
 </Header>
 
 <Content>
-	{#if numSurveys >= $LIMIT_OF_SURVEYS}
-		<p
-			title="Survey limit reached"
-			class="error"
-			transition:slide={{ duration: 200, easing: cubicInOut }}
-		>
-			<i class="material-symbols-rounded">error</i>You have reached the maximum number of surveys.
-			Please delete some surveys to create new ones.
-		</p>
-	{/if}
-	<SurveysTable survey_list={data.survey_list.toReversed()} />
+	<LimitWarning num={data.numSurveys} limit={$LIMIT_OF_SURVEYS} items="Surveys" />
+	<SurveysTable survey_list={data.survey_list.toReversed()} numSurveys={data.numSurveys} />
 </Content>
 
 <style>
@@ -48,10 +31,6 @@
 	}
 
 	.title span.max {
-		color: var(--error-color);
-	}
-
-	.error {
-		margin: 0em 0em 0.75em;
+		color: var(--warning-color);
 	}
 </style>

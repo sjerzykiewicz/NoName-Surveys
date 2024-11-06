@@ -3,44 +3,27 @@
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import GroupsTable from '$lib/components/groups-page/GroupsTable.svelte';
-	import GroupButtons from '$lib/components/groups-page/GroupButtons.svelte';
-	import { afterUpdate } from 'svelte';
+	import GroupsButtons from '$lib/components/groups-page/GroupsButtons.svelte';
+	import LimitWarning from '$lib/components/global/LimitWarning.svelte';
 	import { LIMIT_OF_GROUPS } from '$lib/stores/global';
-	import { slide } from 'svelte/transition';
-	import { cubicInOut } from 'svelte/easing';
 
 	export let data: LayoutServerData;
 	export let selectedGroupsToRemove: string[] = [];
-
-	let numGroups: number = data.group_list.length;
-
-	afterUpdate(() => {
-		numGroups = data.group_list.length;
-	});
 </script>
 
 <Header>
 	<div class="title">
 		Your groups
-		<span title="Number of groups" class:max={numGroups >= $LIMIT_OF_GROUPS}
-			>[ {numGroups} / {$LIMIT_OF_GROUPS} ]</span
+		<span title="Number of groups" class:max={data.numGroups >= $LIMIT_OF_GROUPS}
+			>[ {data.numGroups} / {$LIMIT_OF_GROUPS} ]</span
 		>
 	</div>
 </Header>
 
 <Content>
-	{#if numGroups >= $LIMIT_OF_GROUPS}
-		<p
-			title="Group limit reached"
-			class="error"
-			transition:slide={{ duration: 200, easing: cubicInOut }}
-		>
-			<i class="material-symbols-rounded">error</i>You have reached the maximum number of groups.
-			Please delete some groups to create new ones.
-		</p>
-	{/if}
+	<LimitWarning num={data.numGroups} limit={$LIMIT_OF_GROUPS} items="Groups" />
 	<GroupsTable bind:groups={data.group_list} bind:selectedGroupsToRemove />
-	<GroupButtons bind:groups={data.group_list} users={data.user_list} bind:selectedGroupsToRemove />
+	<GroupsButtons bind:groups={data.group_list} users={data.user_list} numGroups={data.numGroups} bind:selectedGroupsToRemove />
 </Content>
 
 <style>
@@ -51,10 +34,6 @@
 	}
 
 	.title span.max {
-		color: var(--error-color);
-	}
-
-	.error {
-		margin: 0em 0em 0.75em;
+		color: var(--warning-color);
 	}
 </style>

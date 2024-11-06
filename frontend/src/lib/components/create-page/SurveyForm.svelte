@@ -185,30 +185,44 @@
 	$: isCryptoDisabled = !$useCrypto;
 
 	onMount(() => {
-		function handleEnter(event: KeyboardEvent) {
+		function handleEnterRespondent(event: KeyboardEvent) {
 			if (!isRespondentModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				createSurvey();
 			}
 		}
 
-		document.body.addEventListener('keydown', handleEnter);
+		function handleEnterDraft(event: KeyboardEvent) {
+			if (!isDraftModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				saveDraft(false);
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnterRespondent);
+		document.body.addEventListener('keydown', handleEnterDraft);
 
 		return () => {
-			document.body.removeEventListener('keydown', handleEnter);
+			document.body.removeEventListener('keydown', handleEnterRespondent);
+			document.body.removeEventListener('keydown', handleEnterDraft);
 		};
 	});
 </script>
 
 <svelte:window bind:innerWidth />
 
-<Modal icon="save" title="Saving Draft" bind:isHidden={isDraftModalHidden}>
+<Modal
+	icon="save"
+	title="Saving Draft"
+	bind:isHidden={isDraftModalHidden}
+	width={innerWidth <= $M ? 20 : 22}
+>
 	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
 	<button title="Overwrite draft" class="save" on:click={() => saveDraft(true)}
-		>Overwrite Draft</button
+		><i class="material-symbols-rounded">save_as</i>Overwrite Draft</button
 	>
 	<button title="Save new draft" class="save" on:click={() => saveDraft(false)}
-		>Save New Draft</button
+		><i class="material-symbols-rounded">save</i>Save New Draft</button
 	>
 </Modal>
 
@@ -249,6 +263,7 @@
 				label="Or import users from a .csv file."
 				id="emails-file"
 				checkKeys={true}
+				warningSize={0.8}
 				width="100%"
 				bind:disabled={isCryptoDisabled}
 			/>
@@ -291,14 +306,16 @@
 		in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
 		out:slide={{ duration: 200, easing: cubicInOut }}
 	>
-		<AddQuestionButtons {questionInput} />
-		<div class="tooltip create-info">
-			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
-				>Before creating a secure survey, consider setting up a user group. User groups make it easy
-				to select the same set of respondents across multiple surveys. However, if you prefer, you
-				can proceed without using them.</span
-			>
+		<div class="button-sub-row">
+			<AddQuestionButtons {questionInput} />
+			<div class="tooltip create-info">
+				<i class="material-symbols-rounded">info</i>
+				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
+					>Before creating a secure survey, consider setting up a user group. User groups make it
+					easy to select the same set of respondents across multiple surveys. However, if you
+					prefer, you can proceed without using them.</span
+				>
+			</div>
 		</div>
 	</div>
 {/if}

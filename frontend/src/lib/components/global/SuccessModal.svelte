@@ -35,3 +35,9 @@
 		><i class="material-symbols-rounded">done</i>OK</button
 	>
 </Modal>
+
+<style>
+	.save i {
+		font-variation-settings: 'wght' 700;
+	}
+</style>

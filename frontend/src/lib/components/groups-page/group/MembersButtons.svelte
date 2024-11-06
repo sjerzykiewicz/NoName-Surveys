@@ -4,7 +4,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { GroupError } from '$lib/entities/GroupError';
-	import MembersError from '../MembersError.svelte';
+	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
@@ -146,22 +146,25 @@
 />
 
 <div class="button-row">
-	<button
-		title={isPanelVisible ? 'Stop adding group members' : 'Add group members'}
-		class="add-group"
-		class:clicked={isPanelVisible}
-		on:click={togglePanel}
-	>
-		<i class="material-symbols-rounded">add</i>Members
-	</button>
-	<button
-		title="Remove selected group members"
-		class="delete-group"
-		disabled={selectedMembersToRemove.length === 0}
-		on:click={() => (isModalHidden = false)}
-	>
-		<i class="material-symbols-rounded">delete</i>Delete
-	</button>
+	<div class="button-sub-row">
+		<button
+			title={isPanelVisible ? 'Stop adding group members' : 'Add group members'}
+			class="add-group"
+			class:clicked={isPanelVisible}
+			on:click={togglePanel}
+		>
+			<i class="material-symbols-rounded">add</i>Members
+		</button>
+		<button
+			title="Remove selected group members"
+			class="delete-group"
+			disabled={selectedMembersToRemove.length === 0}
+			on:click={() => (isModalHidden = false)}
+		>
+			<i class="material-symbols-rounded">delete</i>Delete
+		</button>
+	</div>
+	<!-- TODO: <PageButtons /> -->
 </div>
 <div class="button-row">
 	{#if isPanelVisible}
@@ -184,10 +187,6 @@
 {/if}
 
 <style>
-	.select-list {
-		margin-bottom: 0em;
-	}
-
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}

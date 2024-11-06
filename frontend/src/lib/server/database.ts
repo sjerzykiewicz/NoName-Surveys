@@ -73,7 +73,27 @@ export const createSurveyDraft = (info: DraftCreateInfo) => {
 	});
 };
 
+export const countSurveyDrafts = (user_email: string) => {
+	return fetch(`${host}/survey-drafts/count`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+}
+
 // surveys
+
+export const countSurveys = (user_email: string) => {
+	return fetch(`${host}/surveys/count`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+}
 
 export const getSurveys = (user_email: string, page: number) => {
 	return fetch(`${host}/surveys/all/${page}`, {
@@ -164,6 +184,16 @@ export const checkAccessToSurvey = (user_email: string, survey_code: string, pag
 };
 
 // user groups
+
+export const countUserGroups = (user_email: string) => {
+	return fetch(`${host}/user-groups/count`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+}
 
 export const getUserGroups = (user_email: string, page: number) => {
 	return fetch(`${host}/user-groups/all/${page}`, {

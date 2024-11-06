@@ -99,22 +99,25 @@
 <DeleteModal title="Removing Access" bind:isHidden={isModalHidden} deleteEntries={removeUsers} />
 
 <div class="button-row">
-	<button
-		title={isPanelVisible ? 'Stop giving access' : 'Give access'}
-		class="add-group"
-		class:clicked={isPanelVisible}
-		on:click={togglePanel}
-	>
-		<i class="material-symbols-rounded">add</i>Users
-	</button>
-	<button
-		title="Take away access from selected users"
-		class="delete-group"
-		disabled={selectedUsersToRemove.length === 0}
-		on:click={() => (isModalHidden = false)}
-	>
-		<i class="material-symbols-rounded">delete</i>Delete
-	</button>
+	<div class="button-sub-row">
+		<button
+			title={isPanelVisible ? 'Stop giving access' : 'Give access'}
+			class="add-group"
+			class:clicked={isPanelVisible}
+			on:click={togglePanel}
+		>
+			<i class="material-symbols-rounded">add</i>Users
+		</button>
+		<button
+			title="Take away access from selected users"
+			class="delete-group"
+			disabled={selectedUsersToRemove.length === 0}
+			on:click={() => (isModalHidden = false)}
+		>
+			<i class="material-symbols-rounded">delete</i>Delete
+		</button>
+	</div>
+	<!-- TODO: <PageButtons /> -->
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>

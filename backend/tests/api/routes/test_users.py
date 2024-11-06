@@ -4,6 +4,7 @@ import Crypto.Hash.SHA3_256 as SHA256
 
 TEST_VALID_USER_EMAIL_1 = "user1@st.amu.edu.pl"
 TEST_VALID_USER_EMAIL_2 = "user2@st.amu.edu.pl"
+TEST_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\n3\n-----END PUBLIC KEY-----"
 
 
 def create_user(client: TestClient, email: str):
@@ -15,15 +16,15 @@ def create_user(client: TestClient, email: str):
     )
 
 
-def create_user_with_public_key(client: TestClient, email: str, public_key: str):
+def create_user_with_public_key(client: TestClient, email: str):
     create_user(client, email)
 
     return client.post(
         "/users/update-public-key",
         json={
             "user_email": email,
-            "public_key": public_key,
-            "fingerprint": SHA256.new(public_key.encode()).hexdigest()
+            "public_key": TEST_PUBLIC_KEY,
+            "fingerprint": SHA256.new(TEST_PUBLIC_KEY.encode()).hexdigest()
         },
     )
 
@@ -67,7 +68,7 @@ def test_get_users(client: TestClient):
 
 def test_get_users_with_keys(client: TestClient):
     # given
-    create_user_with_public_key(client, TEST_VALID_USER_EMAIL_1, "12345")
+    create_user_with_public_key(client, TEST_VALID_USER_EMAIL_1)
     create_user(client, TEST_VALID_USER_EMAIL_2)
 
     # when
@@ -84,7 +85,7 @@ def test_get_users_with_keys(client: TestClient):
 
 def test_check_if_user_has_public_key_happy_path(client: TestClient):
     # given
-    create_user_with_public_key(client, TEST_VALID_USER_EMAIL_1, "12345")
+    create_user_with_public_key(client, TEST_VALID_USER_EMAIL_1)
 
     # when
     response = client.post(
@@ -129,7 +130,7 @@ def test_check_if_user_has_public_key_when_user_has_no_public_key(client: TestCl
 
 def test_update_public_key_happy_path(client: TestClient):
     # given & when
-    response = create_user_with_public_key(client, TEST_VALID_USER_EMAIL_1, "12345")
+    response = create_user_with_public_key(client, TEST_VALID_USER_EMAIL_1)
 
     # then
     assert response.status_code == 200
@@ -141,8 +142,8 @@ def test_update_public_key_when_user_not_registered(client: TestClient):
         "/users/update-public-key",
         json={
             "user_email": TEST_VALID_USER_EMAIL_1,
-            "public_key": "12345",
-            "fingerprint": SHA256.new("12345".encode()).hexdigest()
+            "public_key": TEST_PUBLIC_KEY,
+            "fingerprint": "12345"
         },
     )
 
@@ -159,7 +160,7 @@ def test_update_public_key_with_invalid_fingerprint(client: TestClient):
         "/users/update-public-key",
         json={
             "user_email": TEST_VALID_USER_EMAIL_1,
-            "public_key": "12345",
+            "public_key": TEST_PUBLIC_KEY,
             "fingerprint": "12345"
         },
     )
@@ -188,7 +189,7 @@ def test_filter_unregistered_users(client: TestClient):
 
 def test_filter_users_with_no_public_keys(client: TestClient):
     # given
-    create_user_with_public_key(client, TEST_VALID_USER_EMAIL_1, "12345")
+    create_user_with_public_key(client, TEST_VALID_USER_EMAIL_1)
 
     # when
     response = client.post(

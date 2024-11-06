@@ -33,6 +33,7 @@
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
+	import PageButtons from '../global/PageButtons.svelte';
 
 	export let drafts: {
 		id: number;
@@ -283,19 +284,22 @@
 	</table>
 {/if}
 <div class="button-row">
-	<button title="Create a draft" class="add-draft" on:click={() => goto('/create')}>
-		<i class="material-symbols-rounded">add</i>Draft
-	</button>
-	{#if drafts.length > 0}
-		<button
-			title="Delete selected drafts"
-			class="delete-draft"
-			disabled={selectedDraftsToRemove.length === 0}
-			on:click={() => (isModalHidden = false)}
-		>
-			<i class="material-symbols-rounded">delete</i>Delete
+	<div class="button-sub-row">
+		<button title="Create a draft" class="add-draft" on:click={() => goto('/create')}>
+			<i class="material-symbols-rounded">add</i>Draft
 		</button>
-	{/if}
+		{#if drafts.length > 0}
+			<button
+				title="Delete selected drafts"
+				class="delete-draft"
+				disabled={selectedDraftsToRemove.length === 0}
+				on:click={() => (isModalHidden = false)}
+			>
+				<i class="material-symbols-rounded">delete</i>Delete
+			</button>
+		{/if}
+	</div>
+	<PageButtons />
 </div>
 
 <style>

@@ -359,12 +359,18 @@ button:disabled,
 
 .button-row {
 	display: flex;
-	flex-flow: row wrap;
-	align-items: flex-start;
-	justify-content: flex-start;
-	align-content: space-between;
+	flex-flow: row;
+	align-items: center;
+	justify-content: space-between;
 	font-size: 1.25em;
 	margin-top: 0.5em;
+}
+
+.button-sub-row {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: flex-start;
 }
 
 .footer-button-group {

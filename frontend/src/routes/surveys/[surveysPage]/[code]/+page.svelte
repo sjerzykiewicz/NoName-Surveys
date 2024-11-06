@@ -3,11 +3,10 @@
 	import Content from '$lib/components/global/Content.svelte';
 	import AnswersSummary from '$lib/components/summary-page/AnswersSummary.svelte';
 	import Footer from '$lib/components/global/Footer.svelte';
-	import type { LayoutData } from './$types';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
 
-	export let data: LayoutData;
+	export let data;
 	export let isModalHidden: boolean = true;
 </script>
 

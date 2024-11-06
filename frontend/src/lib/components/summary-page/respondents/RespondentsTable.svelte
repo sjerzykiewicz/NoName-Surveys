@@ -1,5 +1,8 @@
 <script lang="ts">
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
+
 	export let respondents;
+	export let numRespondents;
 </script>
 
 {#if respondents.length === 0}
@@ -16,4 +19,4 @@
 		{/each}
 	</table>
 {/if}
-<!-- TODO: <PageButtons /> -->
+<PageButtons numEntries={numRespondents} />

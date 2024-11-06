@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import Footer from '$lib/components/global/Footer.svelte';
@@ -7,7 +6,7 @@
 	import RespondentsTable from '$lib/components/summary-page/respondents/RespondentsTable.svelte';
 	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
 
-	export let data: PageData;
+	export let data;
 	export let isModalHidden: boolean = true;
 </script>
 
@@ -22,7 +21,7 @@
 </Header>
 
 <Content>
-	<RespondentsTable respondents={data.respondents} />
+	<RespondentsTable respondents={data.respondents} numRespondents={data.numRespondents} />
 </Content>
 
 <Footer>

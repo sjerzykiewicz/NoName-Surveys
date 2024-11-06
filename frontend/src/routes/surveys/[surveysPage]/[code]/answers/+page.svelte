@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import Footer from '$lib/components/global/Footer.svelte';
@@ -7,7 +6,7 @@
 	import AnswersTable from '$lib/components/summary-page/answer/AnswersTable.svelte';
 	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
 
-	export let data: PageData;
+	export let data;
 	export let isModalHidden: boolean = true;
 
 	let numbers: Array<number> = [];

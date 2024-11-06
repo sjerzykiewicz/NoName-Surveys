@@ -3,12 +3,11 @@
 	import Content from '$lib/components/global/Content.svelte';
 	import Answers from '$lib/components/summary-page/answer/Answers.svelte';
 	import Footer from '$lib/components/global/Footer.svelte';
-	import type { PageData } from './$types';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import { page } from '$app/stores';
 	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
 
-	export let data: PageData;
+	export let data;
 	export let isModalHidden: boolean = true;
 
 	let id: number = parseInt($page.params.answer);

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { LayoutServerData } from './$types';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import SurveysTable from '$lib/components/surveys-page/SurveysTable.svelte';
@@ -7,7 +6,7 @@
 	import SurveysButtons from '$lib/components/surveys-page/SurveysButtons.svelte';
 	import { LIMIT_OF_SURVEYS } from '$lib/stores/global';
 
-	export let data: LayoutServerData;
+	export let data;
 	export let selectedSurveysToRemove: typeof data.survey_list = [];
 </script>
 

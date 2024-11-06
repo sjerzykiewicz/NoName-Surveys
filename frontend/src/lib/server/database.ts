@@ -115,6 +115,16 @@ export const getSurvey = (survey_code: string) => {
 	});
 };
 
+export const countSurveyRespondents = (survey_code: string) => {
+	return fetch(`${host}/surveys/respondents-count`, {
+		method: 'POST',
+		body: JSON.stringify({ survey_code }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
 export const getSurveyRespondents = (survey_code: string, page: number) => {
 	return fetch(`${host}/surveys/respondents/${page}`, {
 		method: 'POST',
@@ -173,6 +183,16 @@ export const takeAwayAccessToSurvey = (
 	});
 };
 
+export const countUsersWithAccess = (user_email: string, survey_code: string) => {
+	return fetch(`${host}/surveys/all-with-access-count`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, survey_code }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
 export const checkAccessToSurvey = (user_email: string, survey_code: string, page: number) => {
 	return fetch(`${host}/surveys/get-all-with-access/${page}`, {
 		method: 'POST',
@@ -209,6 +229,16 @@ export const getUserGroupsWithKeys = (user_email: string) => {
 	return fetch(`${host}/user-groups/all-with-public-keys`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const countUserGroupMembers = (user_email: string, name: string) => {
+	return fetch(`${host}/user-groups/group-members-count`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, name }),
 		headers: {
 			'Content-Type': 'application/json'
 		}

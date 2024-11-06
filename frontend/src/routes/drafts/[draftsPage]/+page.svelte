@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageServerData } from './$types';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import DraftsTable from '$lib/components/drafts-page/DraftsTable.svelte';
@@ -7,7 +6,7 @@
 	import LimitWarning from '$lib/components/global/LimitWarning.svelte';
 	import { LIMIT_OF_DRAFTS } from '$lib/stores/global';
 
-	export let data: PageServerData;
+	export let data;
 	export let selectedDraftsToRemove: typeof data.drafts = [];
 </script>
 

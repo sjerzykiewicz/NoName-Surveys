@@ -11,6 +11,7 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import { page } from '$app/stores';
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
 
 	export let members: {
 		email: string;
@@ -19,6 +20,7 @@
 	export let notMembers: string[];
 	export let selectedMembersToRemove: string[] = [];
 	export let group: string;
+	export let numMembers: number;
 
 	let isPanelVisible: boolean = false;
 	let selectedMembersToAdd: string[] = [];
@@ -168,7 +170,7 @@
 			</button>
 		{/if}
 	</div>
-	<!-- TODO: <PageButtons /> -->
+	<PageButtons numEntries={numMembers} />
 </div>
 <div class="button-row">
 	{#if isPanelVisible}

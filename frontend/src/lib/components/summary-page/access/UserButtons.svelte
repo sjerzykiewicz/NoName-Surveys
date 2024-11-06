@@ -10,9 +10,11 @@
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
 
 	export let users: string[];
 	export let code: string;
+	export let numUsers: number;
 	export let selectedUsersToRemove: string[] = [];
 
 	let isPanelVisible: boolean = false;
@@ -119,7 +121,7 @@
 			<i class="material-symbols-rounded">delete</i>Delete
 		</button>
 	</div>
-	<!-- TODO: <PageButtons /> -->
+	<PageButtons numEntries={numUsers} />
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>

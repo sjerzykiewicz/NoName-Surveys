@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageData } from './$types';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import Footer from '$lib/components/global/Footer.svelte';
@@ -8,7 +7,7 @@
 	import MembersButtons from '$lib/components/groups-page/group/MembersButtons.svelte';
 	import { afterUpdate } from 'svelte';
 
-	export let data: PageData;
+	export let data;
 	export let selectedMembersToRemove: string[] = [];
 
 	let notMembers: string[] = [];
@@ -29,6 +28,7 @@
 		bind:members={data.users}
 		{notMembers}
 		group={data.group}
+		numMembers={data.numMembers}
 		bind:selectedMembersToRemove
 	/>
 </Content>

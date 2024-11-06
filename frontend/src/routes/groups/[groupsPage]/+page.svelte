@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { LayoutServerData } from './$types';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import GroupsTable from '$lib/components/groups-page/GroupsTable.svelte';
@@ -7,7 +6,7 @@
 	import LimitWarning from '$lib/components/global/LimitWarning.svelte';
 	import { LIMIT_OF_GROUPS } from '$lib/stores/global';
 
-	export let data: LayoutServerData;
+	export let data;
 	export let selectedGroupsToRemove: string[] = [];
 </script>
 

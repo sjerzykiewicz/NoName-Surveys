@@ -16,12 +16,6 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 	if (!surveyResponse.ok) {
 		error(surveyResponse.status, { message: await surveyResponse.json() });
 	}
-
-	const answersResponse = await getSurveyAnswers(session.user!.email!, code);
-	if (!answersResponse.ok) {
-		error(answersResponse.status, { message: await answersResponse.json() });
-	}
-
 	const survey: {
 		title: string;
 		survey_structure: Survey;
@@ -29,6 +23,11 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 		uses_cryptographic_module: boolean;
 		public_keys: string[];
 	} = await surveyResponse.json();
+
+	const answersResponse = await getSurveyAnswers(session.user!.email!, code);
+	if (!answersResponse.ok) {
+		error(answersResponse.status, { message: await answersResponse.json() });
+	}
 	const answers: Array<SurveySummary> = await answersResponse.json();
 
 	const { survey_list } = await parent();

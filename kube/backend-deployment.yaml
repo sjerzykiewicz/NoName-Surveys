@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.24.0 (4a2a0458)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: backend
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: backend
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.24.0 (4a2a0458)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: backend
+    spec:
+      containers:
+        - image: sjerzykiewicz/noname-surveys-backend:dev
+          name: backend
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SETTINGS_db_type
+              value: "postgresql"
+            - name: SETTINGS_db_dialect
+              value: ""
+            - name: SETTINGS_db_user
+              valueFrom:
+                secretKeyRef:
+                  key: backend
+                  name: SETTINGS_db_user
+            - name: SETTINGS_db_password
+              valueFrom:
+                secretKeyRef:
+                  key: backend
+                  name: SETTINGS_db_password
+            - name: SETTINGS_db_host
+              valueFrom:
+                secretKeyRef:
+                  key: backend
+                  name: SETTINGS_db_host
+            - name: SETTINGS_db_port
+              valueFrom:
+                secretKeyRef:
+                  key: backend
+                  name: SETTINGS_db_port
+            - name: SETTINGS_db_name
+              valueFrom:
+                secretKeyRef:
+                  key: backend
+                  name: SETTINGS_db_name
+          resources: {}
+      restartPolicy: Always
+status: {}

@@ -33,7 +33,7 @@
 >
 	{#if checkTitleError()}
 		<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<i class="material-symbols-rounded">error</i>{errorMessage()}
+			<i class="symbol">error</i>{errorMessage()}
 		</p>
 	{/if}
 </div>

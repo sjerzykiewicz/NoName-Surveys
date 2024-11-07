@@ -7,8 +7,8 @@
 	export let icon: string;
 	export let title: string;
 	export let width: number = 20;
-	export let textColor: string = 'var(--text-color)';
-	export let borderColor: string = 'var(--border-color)';
+	export let textColor: string = 'var(--text-color-1)';
+	export let borderColor: string = 'var(--border-color-1)';
 	export let zIndex: number = 10;
 	export let hide: () => void = () => (isHidden = true);
 
@@ -52,10 +52,10 @@
 		>
 			<div class="top" style="border-bottom-color: {borderColor};">
 				<div class="caption">
-					<i class="material-symbols-rounded">{icon}</i>{title}
+					<i class="symbol">{icon}</i>{title}
 				</div>
 				<button title="Cancel" class="cancel" on:click={hide}>
-					<i class="material-symbols-rounded">close</i>
+					<i class="symbol">close</i>
 				</button>
 			</div>
 			<div class="content">
@@ -89,12 +89,15 @@
 		justify-content: center;
 		top: 10%;
 		position: absolute;
-		background-color: var(--secondary-color);
+		background-color: var(--secondary-color-1);
 		border-width: 1px;
 		border-style: solid;
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
+		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		font-size: 1.2em;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.modal div {
@@ -104,7 +107,7 @@
 	.top {
 		align-items: center;
 		justify-content: space-between;
-		background-color: var(--secondary-dark-color);
+		background-color: var(--secondary-color-2);
 		border-bottom-width: 1px;
 		border-bottom-style: solid;
 		border-top-left-radius: 5px;
@@ -114,9 +117,9 @@
 
 	.caption {
 		align-items: center;
-		font-weight: bold;
+		font-weight: 700 !important;
 		font-size: 1.2em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
 	}
 
@@ -133,9 +136,9 @@
 		justify-content: center;
 		align-items: center;
 		padding: 1em;
-		color: var(--text-color);
+		color: var(--text-color-1);
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
 	}
 

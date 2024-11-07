@@ -138,7 +138,7 @@
 		class:clicked={isPanelVisible}
 		on:click={togglePanel}
 	>
-		<i class="material-symbols-rounded">add</i>Group
+		<i class="symbol">add</i>Group
 	</button>
 	{#if groups.length > 0}
 		<button
@@ -147,7 +147,7 @@
 			disabled={selectedGroupsToRemove.length === 0}
 			on:click={() => (isModalHidden = false)}
 		>
-			<i class="material-symbols-rounded">delete</i>Delete
+			<i class="symbol">delete</i>Delete
 		</button>
 	{/if}
 </div>
@@ -194,7 +194,7 @@
 					createGroup(groupName.trim(), groupMembers);
 				}}
 			>
-				<i class="material-symbols-rounded">done</i>Create
+				<i class="symbol">done</i>Create
 			</button>
 		</div>
 		<MembersError members={groupMembers} error={membersError} />
@@ -221,7 +221,7 @@
 
 	.group-input[contenteditable]:empty::before {
 		content: 'Enter group name...';
-		color: var(--text-dark-color);
+		color: var(--text-color-3);
 	}
 
 	.save i {

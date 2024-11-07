@@ -16,12 +16,15 @@
 <style>
 	.choice-input,
 	.choice-input:hover {
-		background-color: var(--primary-dark-color);
+		background-color: var(--primary-color-2);
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.choice-input.selected {
-		background-color: var(--secondary-dark-color);
+		background-color: var(--secondary-color-2);
 	}
 
 	input[type='radio'] {

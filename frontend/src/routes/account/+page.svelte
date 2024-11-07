@@ -102,10 +102,10 @@
 				generateKeyPair();
 			}}
 		>
-			<i class="material-symbols-rounded">done</i>Generate
+			<i class="symbol">done</i>Generate
 		</button>
 		<button title="Cancel" class="not" on:click={() => (isModalHidden = true)}>
-			<i class="material-symbols-rounded">close</i>Cancel
+			<i class="symbol">close</i>Cancel
 		</button>
 	</Modal>
 

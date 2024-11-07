@@ -31,9 +31,12 @@
 
 <style>
 	.limit-input {
-		color: var(--accent-color);
-		border: 1px solid var(--accent-color);
+		color: var(--accent-color-1);
+		border: 1px solid var(--accent-color-1);
 		width: 100%;
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 </style>

@@ -37,7 +37,7 @@
 		Authorizing yourself will enable you to:
 		<ul>
 			<li>
-				<div class="icon"><i class="material-symbols-rounded">article</i></div>
+				<div class="icon"><i class="symbol">article</i></div>
 				<div>
 					Create both
 					<span class="accent">public</span>
@@ -45,32 +45,32 @@
 				</div>
 			</li>
 			<li>
-				<div class="icon"><i class="material-symbols-rounded">save</i></div>
+				<div class="icon"><i class="symbol">save</i></div>
 				<div>
 					Save surveys as
 					<span class="accent">drafts</span> for later editing,
 				</div>
 			</li>
 			<li>
-				<div class="icon"><i class="material-symbols-rounded">bar_chart</i></div>
+				<div class="icon"><i class="symbol">bar_chart</i></div>
 				<div>
 					View <span class="accent">responses</span>
 					and <span class="accent">summaries</span> of your surveys,
 				</div>
 			</li>
 			<li>
-				<div class="icon"><i class="material-symbols-rounded">share</i></div>
+				<div class="icon"><i class="symbol">share</i></div>
 				<div><span class="accent">Share</span> surveys' results with others,</div>
 			</li>
 			<li>
-				<div class="icon"><i class="material-symbols-rounded">group</i></div>
+				<div class="icon"><i class="symbol">group</i></div>
 				<div>
 					Create and manage
 					<span class="accent">user groups</span>,
 				</div>
 			</li>
 			<li>
-				<div class="icon"><i class="material-symbols-rounded">encrypted</i></div>
+				<div class="icon"><i class="symbol">encrypted</i></div>
 				<div>
 					Generate <span class="accent">digital signature keys</span> that allow you to participate
 					in
@@ -108,13 +108,16 @@
 
 	h1 {
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		color: var(--text-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		color: var(--text-color-1);
 		font-size: 3em;
-		font-weight: bold;
+		font-weight: 700 !important;
 		cursor: default;
 		margin: 0;
 		padding: 0.25em 0 0.5em;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.sign-buttons {
@@ -131,12 +134,15 @@
 		align-items: center;
 		justify-content: center;
 		padding: 1.25em 0.5em 0em;
-		border-top: 1px solid var(--border-color);
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		border-top: 1px solid var(--border-color-1);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
 		overflow-wrap: break-word;
-		color: var(--text-color);
+		color: var(--text-color-1);
 		font-size: 1.25em;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.text {
@@ -144,8 +150,8 @@
 	}
 
 	.accent {
-		color: var(--accent-color);
-		font-weight: 700;
+		color: var(--accent-color-1);
+		font-weight: 700 !important;
 	}
 
 	@media screen and (max-width: 768px) {

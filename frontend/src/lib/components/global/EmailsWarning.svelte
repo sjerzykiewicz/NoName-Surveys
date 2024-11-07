@@ -34,6 +34,6 @@
 		style="font-size: {size}em;"
 		transition:slide={{ duration: 200, easing: cubicInOut }}
 	>
-		<i class="material-symbols-rounded">warning</i>{warningMessage()}
+		<i class="symbol">warning</i>{warningMessage()}
 	</p>
 {/if}

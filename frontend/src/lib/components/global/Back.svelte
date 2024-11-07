@@ -3,5 +3,5 @@
 	class="footer-button"
 	on:click={() => {
 		history.back();
-	}}><i class="material-symbols-rounded">undo</i>Back</button
+	}}><i class="symbol">undo</i>Back</button
 >

@@ -31,7 +31,7 @@
 				/></label
 			></th
 		>
-		<th title="User type" id="info-header"><i class="material-symbols-rounded">person</i></th>
+		<th title="User type" id="info-header"><i class="symbol">person</i></th>
 		<th title="Users with access" id="title-header">Users With Access</th>
 	</tr>
 	{#each users.toSorted() as user}
@@ -51,10 +51,10 @@
 			>
 			<td class="info-entry tooltip">
 				{#if user === $page.data.session?.user?.email}
-					<i class="material-symbols-rounded">verified</i>
+					<i class="symbol">verified</i>
 					<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}">Owner.</span>
 				{:else}
-					<i class="material-symbols-rounded">share</i>
+					<i class="symbol">share</i>
 					<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}">User with access.</span>
 				{/if}
 			</td>

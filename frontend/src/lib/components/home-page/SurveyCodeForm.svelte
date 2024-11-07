@@ -21,7 +21,7 @@
 			><div class="code-text">
 				<span>Enter a survey code to fill it out</span>
 				<div title="" class="tooltip">
-					<i class="material-symbols-rounded">info</i>
+					<i class="symbol">info</i>
 					<span
 						class="tooltip-text {innerWidth <= $M ? (innerWidth <= $S ? 'top' : 'left') : 'bottom'}"
 					>
@@ -43,11 +43,11 @@
 			/>
 			{#if form?.error}
 				<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-					<i class="material-symbols-rounded">error</i>{form.error}
+					<i class="symbol">error</i>{form.error}
 				</p>
 			{/if}
 			<button title="Submit the code" class="save" type="submit">
-				<i class="material-symbols-rounded">done</i>Submit
+				<i class="symbol">done</i>Submit
 			</button>
 		</label>
 	</form>
@@ -64,15 +64,18 @@
 
 <style>
 	h1 {
-		color: var(--text-color);
+		color: var(--text-color-1);
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		margin: 0em;
 		padding: 0.25em 0em 0.5em;
 		font-size: 3em;
-		font-weight: bold;
+		font-weight: 700 !important;
 		cursor: default;
-		border-bottom: 1px solid var(--border-color);
+		border-bottom: 1px solid var(--border-color-1);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	label {
@@ -82,27 +85,33 @@
 
 	form {
 		text-align: center;
-		color: var(--text-color);
-		font-weight: bold;
+		color: var(--text-color-1);
+		font-weight: 700 !important;
 		font-size: 2em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		padding-top: 0.75em;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	input {
 		text-align: center;
 		padding: 0.25em;
-		background-color: var(--secondary-dark-color);
-		border: 1px solid var(--border-color);
+		background-color: var(--secondary-color-2);
+		border: 1px solid var(--border-color-1);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		color: var(--text-color);
-		font-weight: bold;
+		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		color: var(--text-color-1);
+		font-weight: 700 !important;
 		font-size: 1.5em;
 		width: 4.25em;
 		margin-top: 0.5em;
 		margin-left: auto;
 		margin-right: auto;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.error {
@@ -138,19 +147,22 @@
 
 	.tooltip .tooltip-text {
 		font-size: 0.7em;
-		font-weight: normal;
+		font-weight: 400 !important;
 	}
 
 	.home-info {
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		font-size: 1.2em;
-		color: var(--text-color);
+		color: var(--text-color-1);
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.home-info a {
-		font-weight: 700;
+		font-weight: 700 !important;
 	}
 
 	@media screen and (max-width: 768px) {

@@ -8,11 +8,11 @@
 <div class="question-label" id={questionIndex.toString()}>
 	<div title="Question no. {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
 	<div title={questionTypeData.title} class="type">
-		<i class="material-symbols-rounded">{questionTypeData.icon}</i>{questionTypeData.text}
+		<i class="symbol">{questionTypeData.icon}</i>{questionTypeData.text}
 	</div>
 	{#if required}
 		<div class="tooltip">
-			<i class="material-symbols-rounded">asterisk</i>
+			<i class="symbol">asterisk</i>
 			<span class="tooltip-text right">Required.</span>
 		</div>
 	{/if}

@@ -84,7 +84,7 @@ jobs:
   deploy:
     needs: dockerize
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main')
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

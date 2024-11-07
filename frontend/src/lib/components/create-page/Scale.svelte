@@ -6,11 +6,7 @@
 	export let questionIndex: number;
 </script>
 
-<div
-	class="choice-area scale"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="choice-area scale" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice}
 		<div title={choice} class="choice scale">
 			<input type="radio" disabled name={questionIndex.toString()} />

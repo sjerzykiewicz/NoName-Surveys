@@ -286,11 +286,7 @@
 	</div>
 {/each}
 {#if !isPreview}
-	<div
-		class="button-row"
-		in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-		out:slide={{ duration: 200, easing: cubicInOut }}
-	>
+	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<AddQuestionButtons {questionInput} />
 		<div class="tooltip create-info">
 			<i class="symbol">info</i>

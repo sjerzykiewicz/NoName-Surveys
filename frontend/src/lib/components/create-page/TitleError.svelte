@@ -27,10 +27,7 @@
 	};
 </script>
 
-<div
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#if checkTitleError()}
 		<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 			<i class="symbol">error</i>{errorMessage()}

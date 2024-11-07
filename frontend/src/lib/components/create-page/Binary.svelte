@@ -9,11 +9,7 @@
 	export let questionIndex: number;
 </script>
 
-<div
-	class="choice-area binary"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="choice-area binary" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<label class="choice binary">
 		<div class="icon">
 			<input type="radio" disabled name={questionIndex.toString()} />

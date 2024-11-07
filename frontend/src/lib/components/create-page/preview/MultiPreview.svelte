@@ -11,11 +11,7 @@
 	}
 </script>
 
-<div
-	class="choice-area display"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
->
+<div class="choice-area display" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<label title="Select your answer" class="choice">
 			<div class="checkbox">

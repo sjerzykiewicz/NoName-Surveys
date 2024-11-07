@@ -36,19 +36,14 @@
 <div
 	class="question-label"
 	id={questionIndex.toString()}
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
+	transition:slide={{ duration: 200, easing: cubicInOut }}
 >
 	<div title="Question no. {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
 	<div title={questionTypeData.title} class="type">
 		<i class="symbol">{questionTypeData.icon}</i>{questionTypeData.text}
 	</div>
 </div>
-<div
-	class="question-area"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="question-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="arrows">
 		<button
 			title="Move question up"

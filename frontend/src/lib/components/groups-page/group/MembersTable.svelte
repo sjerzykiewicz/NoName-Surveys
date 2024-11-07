@@ -33,9 +33,7 @@
 				/></label
 			></th
 		>
-		<th title="Keys information" id="info-header"
-			><i class="material-symbols-rounded">encrypted</i></th
-		>
+		<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
 		<th title="Group members" id="title-header">Group Members</th>
 	</tr>
 	{#each members.toSorted((a, b) => a.email.localeCompare(b.email)) as member}
@@ -47,12 +45,12 @@
 			>
 			<td class="info-entry tooltip">
 				{#if member.has_public_key}
-					<i class="material-symbols-rounded">key</i>
+					<i class="symbol">key</i>
 					<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
 						>This user has already generated his keys.</span
 					>
 				{:else}
-					<i class="material-symbols-rounded">key_off</i>
+					<i class="symbol">key_off</i>
 					<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
 						>This user has not generated his keys yet.</span
 					>

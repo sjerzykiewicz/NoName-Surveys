@@ -13,7 +13,7 @@
 	<label class="choice binary">
 		<div class="icon">
 			<input type="radio" disabled name={questionIndex.toString()} />
-			<i class="material-symbols-rounded">thumb_up</i>
+			<i class="symbol">thumb_up</i>
 		</div>
 		<div
 			class="input-container"
@@ -42,7 +42,7 @@
 	<label class="choice binary">
 		<div class="icon">
 			<input type="radio" disabled name={questionIndex.toString()} />
-			<i class="material-symbols-rounded">thumb_down</i>
+			<i class="symbol">thumb_down</i>
 		</div>
 		<div
 			class="input-container"
@@ -81,7 +81,7 @@
 	}
 
 	input {
-		cursor: default;
+		cursor: default !important;
 	}
 
 	.yes[contenteditable]:empty::before {
@@ -94,8 +94,11 @@
 
 	i {
 		font-size: 1em;
-		color: var(--border-color);
+		color: var(--border-color-1);
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.input-container {

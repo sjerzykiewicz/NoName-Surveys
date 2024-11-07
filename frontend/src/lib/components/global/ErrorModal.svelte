@@ -22,13 +22,13 @@
 <Modal
 	icon="error"
 	title="Error"
-	textColor="var(--error-color)"
-	borderColor="var(--error-color)"
+	textColor="var(--error-color-1)"
+	borderColor="var(--error-color-1)"
 	zIndex={12}
 	bind:isHidden={$isErrorModalHidden}
 >
 	<div slot="content" class="content">{$errorModalContent}</div>
 	<button title="Ok" class="save" on:click={() => ($isErrorModalHidden = true)}
-		><i class="material-symbols-rounded">done</i>OK</button
+		><i class="symbol">done</i>OK</button
 	>
 </Modal>

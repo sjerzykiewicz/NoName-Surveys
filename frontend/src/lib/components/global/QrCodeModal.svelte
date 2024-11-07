@@ -43,14 +43,14 @@
 		title="Copy the link"
 		class="save popup"
 		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
-		><i class="material-symbols-rounded">content_copy</i>Copy Link
+		><i class="symbol">content_copy</i>Copy Link
 		<span class="popup-text top" id="link-popup">Copied!</span></button
 	>
 	<button
 		title="Copy the code"
 		class="save popup"
 		on:click={() => handleCopy(surveyCode, 'code-popup')}
-		><i class="material-symbols-rounded">content_copy</i>Copy Code
+		><i class="symbol">content_copy</i>Copy Code
 		<span class="popup-text top" id="code-popup">Copied!</span></button
 	>
 </Modal>
@@ -72,7 +72,7 @@
 		width: 7em;
 		padding-bottom: 0.25em;
 		font-size: 4em;
-		font-weight: 700;
+		font-weight: 700 !important;
 		cursor: text;
 	}
 

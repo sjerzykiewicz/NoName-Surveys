@@ -28,13 +28,16 @@
 	}
 
 	.choice-input {
-		background-color: var(--secondary-color);
-		color: var(--text-dark-color);
+		background-color: var(--secondary-color-1);
+		color: var(--text-color-3);
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.choice-input:hover {
-		background-color: var(--secondary-color);
+		background-color: var(--secondary-color-1);
 	}
 
 	input[type='radio'] {

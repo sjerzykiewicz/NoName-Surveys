@@ -359,9 +359,7 @@
 		>
 		<label for="keys-file">
 			<div class="file-input">
-				<span class="file-button"
-					><i class="material-symbols-rounded">upload_file</i>Select File</span
-				>
+				<span class="file-button"><i class="symbol">upload_file</i>Select File</span>
 				<span class="file-name">{fileName}</span>
 			</div>
 			<input type="file" name="keys" id="keys-file" on:change={handleFileChange} />
@@ -369,7 +367,7 @@
 		<KeysError error={fileError} element={fileElement} />
 	</div>
 	<button title="Submit keys" class="save" on:click={processCrypto}
-		><i class="material-symbols-rounded">done</i>Submit</button
+		><i class="symbol">done</i>Submit</button
 	>
 </Modal>
 
@@ -382,7 +380,7 @@
 <Content>
 	{#if keys.length === 1 || keys.length === 2}
 		<p title="Survey not secure" class="warning">
-			<i class="material-symbols-rounded">warning</i>This survey is not secure.
+			<i class="symbol">warning</i>This survey is not secure.
 			{keys.length === 1
 				? ' You are the only person who can respond to this survey.'
 				: ' There are only two people who can respond to this survey. The other person could be the creator of this survey.'}
@@ -402,7 +400,7 @@
 
 <Footer>
 	<button title="Submit survey" class="footer-button save" on:click={submitSurvey}>
-		<i class="material-symbols-rounded">done</i>Submit
+		<i class="symbol">done</i>Submit
 	</button>
 </Footer>
 

@@ -40,7 +40,7 @@
 >
 	<div title="Question no. {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
 	<div title={questionTypeData.title} class="type">
-		<i class="material-symbols-rounded">{questionTypeData.icon}</i>{questionTypeData.text}
+		<i class="symbol">{questionTypeData.icon}</i>{questionTypeData.text}
 	</div>
 </div>
 <div class="question-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
@@ -51,7 +51,7 @@
 			disabled={questionIndex === 0}
 			on:click={moveQuestionUp}
 		>
-			<i class="material-symbols-rounded">arrow_drop_up</i>
+			<i class="symbol">arrow_drop_up</i>
 		</button>
 		<button
 			title="Move question down"
@@ -59,7 +59,7 @@
 			disabled={questionIndex === $questions.length - 1}
 			on:click={moveQuestionDown}
 		>
-			<i class="material-symbols-rounded">arrow_drop_down</i>
+			<i class="symbol">arrow_drop_down</i>
 		</button>
 	</div>
 	<div
@@ -88,13 +88,13 @@
 		class:checked={$questions[questionIndex].required}
 		on:click={toggleRequirement}
 	>
-		<i class="material-symbols-rounded">asterisk</i>
+		<i class="symbol">asterisk</i>
 		<span class="tooltip-text top"
 			>{$questions[questionIndex].required ? 'Required.' : 'Not required.'}</span
 		>
 	</button>
 	<button title="Remove question" class="remove-question" on:click={removeQuestion}>
-		<i class="material-symbols-rounded">close</i>
+		<i class="symbol">close</i>
 	</button>
 </div>
 
@@ -105,12 +105,15 @@
 
 	.question-input[contenteditable]:empty::before {
 		content: 'Enter question...';
-		color: var(--text-dark-color);
+		color: var(--text-color-3);
 	}
 
 	.required-button {
 		margin-right: 0.5em;
 		cursor: pointer;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.required-button .tooltip-text {
@@ -118,16 +121,16 @@
 	}
 
 	.required-button.checked {
-		background-color: var(--accent-color);
+		background-color: var(--accent-color-1);
 		color: var(--text-color-2);
 	}
 
 	.required-button.checked:hover {
-		background-color: var(--accent-dark-color);
+		background-color: var(--accent-color-2);
 	}
 
 	.required-button.checked:active {
-		background-color: var(--border-color);
+		background-color: var(--border-color-1);
 	}
 
 	.remove-question i {

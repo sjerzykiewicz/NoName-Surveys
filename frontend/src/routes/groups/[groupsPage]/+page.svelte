@@ -35,8 +35,8 @@
 			class="error"
 			transition:slide={{ duration: 200, easing: cubicInOut }}
 		>
-			<i class="material-symbols-rounded">error</i>You have reached the maximum number of groups.
-			Please delete some groups to create new ones.
+			<i class="symbol">error</i>You have reached the maximum number of groups. Please delete some
+			groups to create new ones.
 		</p>
 	{/if}
 	<GroupsTable bind:groups={data.group_list} bind:selectedGroupsToRemove />
@@ -51,7 +51,10 @@
 	}
 
 	.title span.max {
-		color: var(--error-color);
+		color: var(--error-color-1);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.error {

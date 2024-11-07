@@ -39,10 +39,10 @@
 			deleteEntries();
 		}}
 	>
-		<i class="material-symbols-rounded">delete</i>Delete
+		<i class="symbol">delete</i>Delete
 	</button>
 	<button title="Cancel" class="not" on:click={() => (isHidden = true)}>
-		<i class="material-symbols-rounded">close</i>Cancel
+		<i class="symbol">close</i>Cancel
 	</button>
 </Modal>
 

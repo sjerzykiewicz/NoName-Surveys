@@ -132,7 +132,7 @@
 		title="Save the new group name"
 		class="save"
 		on:click={() => renameGroup(selectedGroup, newName.trim())}
-		><i class="material-symbols-rounded">done</i>Apply</button
+		><i class="symbol">done</i>Apply</button
 	>
 </Modal>
 
@@ -140,7 +140,7 @@
 	<div class="info-row">
 		<div title="Groups" class="title empty">No groups yet!</div>
 		<div class="tooltip">
-			<i class="material-symbols-rounded">info</i>
+			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 				When creating a secure survey, you can choose a group of possible respondents. To create a
 				group, click on the button below. All your created groups will be stored on this page.
@@ -160,9 +160,7 @@
 					/></label
 				></th
 			>
-			<th title="Keys information" id="info-header"
-				><i class="material-symbols-rounded">encrypted</i></th
-			>
+			<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
 			<th title="Group title" id="title-header" colspan="2">Group Title</th>
 		</tr>
 		{#each groups.toSorted((a, b) => a.user_group_name.localeCompare(b.user_group_name)) as group}
@@ -178,13 +176,13 @@
 				>
 				<td class="info-entry tooltip">
 					{#if group.all_members_have_public_keys}
-						<i class="material-symbols-rounded">key</i>
+						<i class="symbol">key</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
 							>Everyone in this group have generated their keys. You can use this group in secure
 							surveys.</span
 						>
 					{:else}
-						<i class="material-symbols-rounded">key_off</i>
+						<i class="symbol">key_off</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
 							>Not everyone in this group have generated their keys. You cannot use this group in
 							secure surveys.</span
@@ -205,7 +203,7 @@
 							newName = '';
 							nameError = GroupError.NoError;
 							isModalHidden = false;
-						}}><i class="material-symbols-rounded">edit</i></button
+						}}><i class="symbol">edit</i></button
 					></td
 				>
 			</tr>
@@ -227,7 +225,7 @@
 
 	.group-input[contenteditable]:empty::before {
 		content: 'Enter group name...';
-		color: var(--text-dark-color);
+		color: var(--text-color-3);
 	}
 
 	.input-container {

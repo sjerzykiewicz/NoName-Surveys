@@ -152,7 +152,7 @@
 		class:clicked={isPanelVisible}
 		on:click={togglePanel}
 	>
-		<i class="material-symbols-rounded">add</i>Members
+		<i class="symbol">add</i>Members
 	</button>
 	<button
 		title="Remove selected group members"
@@ -160,7 +160,7 @@
 		disabled={selectedMembersToRemove.length === 0}
 		on:click={() => (isModalHidden = false)}
 	>
-		<i class="material-symbols-rounded">delete</i>Delete
+		<i class="symbol">delete</i>Delete
 	</button>
 </div>
 {#if isPanelVisible}
@@ -173,7 +173,7 @@
 			/>
 		</div>
 		<button title="Finish adding group members" class="save" on:click={addMembers}>
-			<i class="material-symbols-rounded">done</i>Apply
+			<i class="symbol">done</i>Apply
 		</button>
 	</div>
 	<MembersError members={selectedMembersToAdd} error={membersError} />

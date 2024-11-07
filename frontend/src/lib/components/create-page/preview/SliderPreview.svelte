@@ -48,30 +48,30 @@
 	}
 
 	.range {
-		background: var(--text-color);
+		background: var(--text-color-1);
 		cursor: pointer;
 	}
 
 	.range:hover {
-		background: var(--border-color);
+		background: var(--border-color-1);
 	}
 
 	.range::-webkit-slider-thumb {
-		background: var(--accent-color);
+		background: var(--accent-color-1);
 		cursor: grab;
 	}
 
 	.range::-moz-range-thumb {
-		background: var(--accent-color);
+		background: var(--accent-color-1);
 		cursor: grab;
 	}
 
 	.range::-webkit-slider-thumb:hover {
-		background: var(--accent-dark-color);
+		background: var(--accent-color-2);
 	}
 
 	.range::-moz-range-thumb:hover {
-		background: var(--accent-dark-color);
+		background: var(--accent-color-2);
 	}
 
 	.range::-webkit-slider-thumb:active {

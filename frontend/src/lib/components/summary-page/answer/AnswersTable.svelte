@@ -10,9 +10,7 @@
 {:else}
 	<table>
 		<tr>
-			<th title="Number of answer" id="info-header"
-				><i class="material-symbols-rounded">numbers</i></th
-			>
+			<th title="Number of answer" id="info-header"><i class="symbol">numbers</i></th>
 			<th title="Answers" id="title-header">Answers</th>
 		</tr>
 		{#each numbers as i}
@@ -29,6 +27,6 @@
 <style>
 	.info-entry {
 		text-align: center;
-		font-weight: 700;
+		font-weight: 700 !important;
 	}
 </style>

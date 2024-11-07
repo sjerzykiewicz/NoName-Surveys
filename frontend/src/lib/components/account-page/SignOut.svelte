@@ -16,7 +16,7 @@
 
 <div class="sign-buttons">
 	<button title="Sign out" class="sign-out" on:click={signOut}
-		><i class="material-symbols-rounded">logout</i>Sign Out</button
+		><i class="symbol">logout</i>Sign Out</button
 	>
 </div>
 

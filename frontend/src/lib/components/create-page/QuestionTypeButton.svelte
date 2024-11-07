@@ -21,7 +21,7 @@
 	class:last={questionTypeIndex === 8}
 	in:slide={{ axis: 'x', duration: 200, easing: cubicInOut }}
 	on:click={handleClick}
-	><i class="material-symbols-rounded">{questionTypeData.icon}</i>{questionTypeData.text}</button
+	><i class="symbol">{questionTypeData.icon}</i>{questionTypeData.text}</button
 >
 
 <style>
@@ -30,21 +30,21 @@
 		width: 6.25em;
 		border: 0px;
 		border-radius: 0px;
-		border-left: 1px solid var(--border-color);
-		border-right: 1px solid var(--border-color);
+		border-left: 1px solid var(--border-color-1);
+		border-right: 1px solid var(--border-color-1);
 		box-shadow: none;
 	}
 
 	.last {
 		border-radius: 0px 0px 5px 5px;
-		border-bottom: 1px solid var(--border-color);
+		border-bottom: 1px solid var(--border-color-1);
 	}
 
 	.previous {
 		border-radius: 0px 5px 5px 0px;
 		border-left: 0px;
-		border-top: 1px solid var(--border-color);
-		border-bottom: 1px solid var(--border-color);
+		border-top: 1px solid var(--border-color-1);
+		border-bottom: 1px solid var(--border-color-1);
 		width: auto;
 	}
 

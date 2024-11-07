@@ -13,9 +13,12 @@
 
 <style>
 	.text-area {
-		border: 1px solid var(--accent-color);
-		background-color: var(--secondary-dark-color);
-		color: var(--accent-color);
+		border: 1px solid var(--accent-color-1);
+		background-color: var(--secondary-color-2);
+		color: var(--accent-color-1);
 		min-height: 1.15em;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 </style>

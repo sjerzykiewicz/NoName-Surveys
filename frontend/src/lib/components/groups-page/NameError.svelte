@@ -44,6 +44,6 @@
 		style="font-size: {fontSize}em;"
 		transition:slide={{ duration: 200, easing: cubicInOut }}
 	>
-		<i class="material-symbols-rounded">error</i>{errorMessage(error)}
+		<i class="symbol">error</i>{errorMessage(error)}
 	</p>
 {/if}

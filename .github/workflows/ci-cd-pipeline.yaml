@@ -109,8 +109,8 @@ jobs:
       - name: Deploy to Minikube via kubectl
         run: |
           ssh -p 443 -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_ADDRESS }} <<EOF
-            kubectl set image deployment/frontend frontend=noname-surveys-backend:${{ env.BACKEND_TAG }} --namespace=default
-            kubectl set image deployment/backend backend=noname-surveys-backend:${{ env.BACKEND_TAG }} --namespace=default
+            kubectl set image deployment/frontend frontend=${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-frontend:${{ env.FRONTEND_TAG }} --namespace=default
+            kubectl set image deployment/backend backend=${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-backend:${{ env.BACKEND_TAG }} --namespace=default
             kubectl rollout restart deployment/frontend
             kubectl rollout restart deployment/backend
           EOF

@@ -75,7 +75,7 @@
 
 * {
 	font-family: 'Jura';
-	font-weight: 500;
+	font-weight: inherit;
 }
 
 html,
@@ -97,6 +97,7 @@ body {
 	background-attachment: fixed;
 	margin: 0px;
 	overflow-x: hidden;
+	font-weight: 500;
 	transition:
 		0.2s,
 		outline 0s;

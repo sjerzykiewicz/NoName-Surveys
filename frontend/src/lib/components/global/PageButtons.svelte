@@ -73,9 +73,9 @@
 		display: flex;
 		justify-content: center;
 		align-items: stretch;
-		box-shadow: 0px 4px 4px var(--shadow-color);
+		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		border-radius: 5px;
-		border: 1px solid var(--border-color);
+		border: 1px solid var(--border-color-1);
 		overflow: hidden;
 	}
 
@@ -94,20 +94,20 @@
 	}
 
 	.prev-buttons button {
-		border-right: 1px solid var(--border-color);
+		border-right: 1px solid var(--border-color-1);
 	}
 
 	.next-buttons button {
-		border-left: 1px solid var(--border-color);
+		border-left: 1px solid var(--border-color-1);
 	}
 
 	.page-number {
 		display: flex;
 		padding: 0.25em;
-		background-color: var(--secondary-dark-color);
-		color: var(--text-color);
+		background-color: var(--secondary-color-2);
+		color: var(--text-color-1);
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		font-weight: 700;
 		cursor: text;
 	}
@@ -117,11 +117,11 @@
 		margin: 0em;
 		border: none;
 		width: 1.5em;
-		background-color: var(--secondary-dark-color);
-		color: var(--text-color);
+		background-color: var(--secondary-color-2);
+		color: var(--text-color-1);
 		font-size: 1em;
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		font-weight: 700;
 	}
 

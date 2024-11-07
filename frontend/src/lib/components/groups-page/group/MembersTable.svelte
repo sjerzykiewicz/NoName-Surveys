@@ -36,9 +36,7 @@
 					/></label
 				></th
 			>
-			<th title="Keys information" id="info-header"
-				><i class="symbol">encrypted</i></th
-			>
+			<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
 			<th title="Group members" id="title-header">Group Members</th>
 		</tr>
 		{#each members.toSorted((a, b) => a.email.localeCompare(b.email)) as member}

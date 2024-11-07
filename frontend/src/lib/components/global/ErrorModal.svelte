@@ -31,9 +31,7 @@
 	{hide}
 >
 	<div slot="content" class="content">{$errorModalContent}</div>
-	<button title="Ok" class="save" on:click={hide}
-		><i class="symbol">done</i>OK</button
-	>
+	<button title="Ok" class="save" on:click={hide}><i class="symbol">done</i>OK</button>
 </Modal>
 
 <style>

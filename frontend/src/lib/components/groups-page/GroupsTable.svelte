@@ -212,7 +212,7 @@
 {/if}
 
 <style>
-	.tooltip {
+	.info-entry.tooltip {
 		--tooltip-width: 16em;
 	}
 

@@ -37,7 +37,7 @@
 >
 	{#if checkQuestionError(questionIndex)}
 		<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
+			<i class="symbol">error</i>{errorMessage(questionIndex)}
 		</p>
 	{/if}
 </div>

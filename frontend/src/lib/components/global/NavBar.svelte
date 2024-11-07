@@ -7,6 +7,7 @@
 	import noname_dark from '$lib/assets/noname_dark.png';
 	import noname_light from '$lib/assets/noname_light.png';
 	import { M } from '$lib/stores/global';
+	import NavLinks from './NavLinks.svelte';
 
 	let open: boolean;
 	let innerWidth: number;
@@ -98,35 +99,26 @@
 			><img src={logo} alt="NoName logo" width="48" height="48" /></a
 		>
 		<div title={open ? 'Close menu' : 'Open menu'}>
-			<Hamburger bind:open --color="var(--text-color)" />
+			<Hamburger bind:open --color="var(--text-color-1)" />
 		</div>
 	</div>
-{/if}
-
-{#if open || innerWidth > $M}
+	{#if open}
+		<div class="bar">
+			<a href="/" title="NoName" class="nav-logo"
+				><img src={logo} alt="NoName logo" width="48" height="48" /></a
+			>
+			<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
+				<NavLinks {navLinks} {hideNav} />
+			</nav>
+		</div>
+	{/if}
+{:else}
 	<div class="bar">
 		<a href="/" title="NoName" class="nav-logo"
 			><img src={logo} alt="NoName logo" width="48" height="48" /></a
 		>
-		<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
-			{#each Object.entries(navLinks) as [id, data]}
-				<div
-					title={data.disabled ? '' : data.name}
-					{id}
-					class="nav-link"
-					class:tooltip={innerWidth > $M && data.disabled}
-					class:disabled={data.disabled}
-					class:active={$page.route.id === data.href ||
-						$page.route.id === data.href + '/[' + data.name.toLowerCase() + 'Page]'}
-				>
-					<a href={data.disabled ? '' : data.href + data.page} on:click={hideNav}>{data.name}</a>
-					{#if innerWidth > $M && data.disabled}
-						<span class="tooltip-text bottom">
-							Sign in to access {data.name}.
-						</span>
-					{/if}
-				</div>
-			{/each}
+		<nav>
+			<NavLinks {navLinks} {hideNav} />
 		</nav>
 	</div>
 {/if}
@@ -137,37 +129,23 @@
 		on:click={toggleThemeMode}
 		class="toggle-mode tooltip"
 	>
-		<i class="material-symbols-rounded">{bulb}</i>
+		<i class="symbol">{bulb}</i>
 		<span class="tooltip-text left">Toggle theme.</span>
 	</button>
 {/if}
 
 <style>
-	.bar .tooltip {
-		--tooltip-width: 12.5em;
-	}
-
-	.bar .tooltip .tooltip-text {
-		font-size: 0.8em;
-		font-weight: normal;
-		background-color: var(--primary-dark-color);
-	}
-
-	.bar .tooltip .tooltip-text.bottom::after {
-		border-color: transparent transparent var(--primary-dark-color) transparent;
-	}
-
 	.toggle-mode.tooltip {
 		--tooltip-width: 7em;
 	}
 
 	.toggle-mode.tooltip .tooltip-text {
 		font-size: 0.8em;
-		background-color: var(--primary-dark-color);
+		background-color: var(--primary-color-2);
 	}
 
 	.toggle-mode.tooltip .tooltip-text.left::after {
-		border-color: transparent transparent transparent var(--primary-dark-color);
+		border-color: transparent transparent transparent var(--primary-color-2);
 	}
 
 	nav {
@@ -177,14 +155,20 @@
 		min-width: 768px;
 		width: 50%;
 		justify-content: space-around;
-		background-color: var(--secondary-dark-color);
-		border-left: 1px solid var(--border-color);
+		background-color: var(--secondary-color-2);
+		border-left: 1px solid var(--border-color-1);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.bar {
-		background-color: var(--secondary-dark-color);
-		border-bottom: 1px solid var(--border-color);
-		box-shadow: 0px 4px 4px var(--shadow-color);
+		background-color: var(--secondary-color-2);
+		border-bottom: 1px solid var(--border-color-1);
+		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.nav-burger {
@@ -193,8 +177,11 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.75em;
-		color: var(--text-color);
-		background-color: var(--secondary-dark-color);
+		color: var(--text-color-1);
+		background-color: var(--secondary-color-2);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.toggle-mode {
@@ -202,12 +189,14 @@
 		justify-content: center;
 		top: 0.25em;
 		right: 0.25em;
-		background-color: var(--primary-dark-color);
+		background-color: var(--primary-color-2);
 		border: none;
 		font-size: 1.5em;
 		z-index: 1;
-		transition: 0.2s;
 		cursor: pointer;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.toggle-mode:hover {
@@ -215,14 +204,16 @@
 	}
 
 	.toggle-mode:active {
-		background-color: var(--border-color);
+		background-color: var(--border-color-1);
 	}
 
 	.nav-burger-logo {
 		display: flex;
 		text-decoration: none;
 		opacity: 1;
-		transition: 0.2s;
+		transition:
+			0.2s,
+			outline 0s;
 		cursor: pointer;
 	}
 
@@ -232,7 +223,9 @@
 		left: 0.25em;
 		text-decoration: none;
 		opacity: 1;
-		transition: 0.2s;
+		transition:
+			0.2s,
+			outline 0s;
 		cursor: pointer;
 	}
 
@@ -241,49 +234,6 @@
 	.nav-logo:hover,
 	.nav-logo:active {
 		opacity: 0.7;
-	}
-
-	.nav-link {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		text-align: center;
-		color: var(--text-color);
-		font-weight: bold;
-		font-size: 1.5em;
-		border-right: 1px solid var(--border-color);
-		width: 100%;
-		cursor: pointer;
-	}
-
-	.nav-link a {
-		padding: 0.5em 0em;
-		width: 100%;
-		color: inherit;
-		text-decoration: none;
-		cursor: inherit;
-	}
-
-	.nav-link:hover {
-		background-color: var(--primary-dark-color);
-	}
-
-	.nav-link:active {
-		background-color: var(--border-color);
-	}
-
-	.nav-link.active,
-	.nav-link.active:hover {
-		background-color: var(--accent-color);
-		color: var(--text-color-2);
-	}
-
-	.nav-link.disabled,
-	.nav-link.disabled:hover,
-	.nav-link.disabled:active {
-		cursor: not-allowed;
-		color: var(--text-dark-color);
-		background-color: var(--secondary-color);
 	}
 
 	@media screen and (max-width: 880px) {
@@ -310,12 +260,6 @@
 		}
 
 		.bar {
-			border-bottom: none;
-		}
-
-		.nav-link {
-			border-top: 1px solid var(--border-color);
-			border-right: none;
 			border-bottom: none;
 		}
 

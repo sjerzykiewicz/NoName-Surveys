@@ -10,5 +10,5 @@
 	on:click={() =>
 		goto('/surveys/' + $page.params.surveysPage + '/' + $page.params.code + '/respondents/0')}
 >
-	<i class="material-symbols-rounded">group</i>Respondents
+	<i class="symbol">group</i>Respondents
 </button>

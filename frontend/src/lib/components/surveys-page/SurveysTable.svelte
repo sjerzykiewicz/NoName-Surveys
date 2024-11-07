@@ -76,7 +76,7 @@
 	<div class="info-row">
 		<div title="Surveys" class="title empty">No surveys yet!</div>
 		<div class="tooltip">
-			<i class="material-symbols-rounded">info</i>
+			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 				To create a survey, click on the "Create" tab at the top of the page or the button below.
 				All your created surveys will be stored on this page.
@@ -119,12 +119,12 @@
 				>
 				<td class="info-entry tooltip">
 					{#if survey.uses_cryptographic_module}
-						<i class="material-symbols-rounded">encrypted</i>
+						<i class="symbol">encrypted</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
 							>This survey has an established group of possible respondents.</span
 						>
 					{:else}
-						<i class="material-symbols-rounded">public</i>
+						<i class="symbol">public</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
 							>Everyone can submit an answer to this survey.</span
 						>
@@ -132,12 +132,12 @@
 				</td>
 				<td class="info-entry tooltip access">
 					{#if survey.is_owned_by_user}
-						<i class="material-symbols-rounded">verified</i>
+						<i class="symbol">verified</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
 							>You are the owner of this survey.</span
 						>
 					{:else}
-						<i class="material-symbols-rounded">share</i>
+						<i class="symbol">share</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
 							>Results of this survey have been shared with you.</span
 						>
@@ -174,7 +174,7 @@
 {/if}
 <div class="button-row">
 	<button title="Create a survey" class="add-survey" on:click={() => goto('/create')}>
-		<i class="material-symbols-rounded">add</i>Survey
+		<i class="symbol">add</i>Survey
 	</button>
 	{#if survey_list.length > 0}
 		<button
@@ -183,7 +183,7 @@
 			disabled={selectedSurveysToRemove.length === 0}
 			on:click={() => (isDeleteModalHidden = false)}
 		>
-			<i class="material-symbols-rounded">delete</i>Delete
+			<i class="symbol">delete</i>Delete
 		</button>
 	{/if}
 </div>

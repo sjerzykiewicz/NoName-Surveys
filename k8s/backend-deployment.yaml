@@ -25,6 +25,7 @@ spec:
     spec:
       containers:
         - image: sjerzykiewicz/noname-surveys-backend:dev
+          imagePullPolicy: Always
           name: backend
           ports:
             - containerPort: 8000

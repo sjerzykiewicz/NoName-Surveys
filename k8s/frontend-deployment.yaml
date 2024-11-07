@@ -25,6 +25,7 @@ spec:
     spec:
       containers:
         - image: sjerzykiewicz/noname-surveys-frontend:dev
+          imagePullPolicy: Always
           name: frontend
           ports:
             - containerPort: 3000

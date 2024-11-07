@@ -24,7 +24,6 @@
 		text-align: center;
 		color: var(--text-color-1);
 		font-size: 1em;
-		font-weight: 700 !important;
 		padding: 2em;
 		margin: 2em;
 		background-color: var(--secondary-color-2);
@@ -36,6 +35,10 @@
 		transition:
 			0.2s,
 			outline 0s;
+	}
+
+	div * {
+		font-weight: 700 !important;
 	}
 
 	span {

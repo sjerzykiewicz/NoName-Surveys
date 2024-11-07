@@ -1,7 +1,9 @@
-<button
-	title="Go back"
-	class="footer-button"
-	on:click={() => {
+<script lang="ts">
+	export let goBack: () => void = () => {
 		history.back();
-	}}><i class="material-symbols-rounded">undo</i>Back</button
+	};
+</script>
+
+<button title="Go back" class="footer-button" on:click={goBack}
+	><i class="material-symbols-rounded">undo</i>Back</button
 >

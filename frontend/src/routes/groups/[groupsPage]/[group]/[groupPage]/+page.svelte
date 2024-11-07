@@ -6,6 +6,8 @@
 	import MembersTable from '$lib/components/groups-page/group/MembersTable.svelte';
 	import MembersButtons from '$lib/components/groups-page/group/MembersButtons.svelte';
 	import { afterUpdate } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	export let data;
 	export let selectedMembersToRemove: string[] = [];
@@ -34,5 +36,5 @@
 </Content>
 
 <Footer>
-	<Back />
+	<Back goBack={() => goto('/groups/' + $page.params.groupsPage)} />
 </Footer>

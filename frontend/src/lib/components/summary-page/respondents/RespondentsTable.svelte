@@ -18,5 +18,13 @@
 			</tr>
 		{/each}
 	</table>
+	<div class="button-row">
+		<PageButtons numEntries={numRespondents} />
+	</div>
 {/if}
-<PageButtons numEntries={numRespondents} />
+
+<style>
+	.button-row {
+		justify-content: flex-end;
+	}
+</style>

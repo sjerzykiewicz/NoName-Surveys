@@ -5,6 +5,8 @@
 	import Footer from '$lib/components/global/Footer.svelte';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	export let data;
 	export let isModalHidden: boolean = true;
@@ -28,6 +30,7 @@
 	<FooterButtons
 		isOwnedByUser={data.survey_list[data.survey_index].is_owned_by_user}
 		usesCryptographicModule={data.survey.uses_cryptographic_module}
+		goBack={() => goto('/surveys/' + $page.params.surveysPage)}
 		bind:isModalHidden
 	/>
 </Footer>

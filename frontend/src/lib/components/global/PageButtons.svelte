@@ -7,9 +7,7 @@
 
 	let pageInput: HTMLInputElement;
 
-	$: currentPage = parseInt(
-		$page.url.pathname.substring($page.url.pathname.lastIndexOf('/') + 1, $page.url.pathname.length)
-	);
+	$: currentPage = parseInt($page.url.pathname.substring($page.url.pathname.lastIndexOf('/') + 1));
 	$: minPage = 0;
 	$: maxPage = Math.ceil(numEntries / $ENTRIES_PER_PAGE) - 1;
 

@@ -9,6 +9,9 @@
 	export let isOwnedByUser: boolean;
 	export let usesCryptographicModule: boolean;
 	export let isModalHidden: boolean = true;
+	export let goBack: () => void = () => {
+		history.back();
+	};
 </script>
 
 {#if isOwnedByUser}
@@ -24,6 +27,6 @@
 	</div>
 	<div class="footer-button-group">
 		<QrCodeButton bind:isModalHidden />
-		<Back />
+		<Back {goBack} />
 	</div>
 </div>

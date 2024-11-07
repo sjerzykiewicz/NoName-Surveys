@@ -18,7 +18,7 @@
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
 	>
-		<i class="material-symbols-rounded">north</i>
+		<i class="symbol">north</i>
 		<span class="tooltip-text right">Scroll to the top.</span>
 	</button>
 {/if}
@@ -30,11 +30,11 @@
 
 	.tooltip .tooltip-text {
 		font-size: 0.8em;
-		background-color: var(--primary-dark-color);
+		background-color: var(--primary-color-2);
 	}
 
 	.tooltip .tooltip-text::after {
-		border-color: transparent var(--primary-dark-color) transparent transparent;
+		border-color: transparent var(--primary-color-2) transparent transparent;
 	}
 
 	.scroll-to-top {
@@ -42,11 +42,13 @@
 		justify-content: center;
 		bottom: 0.25em;
 		left: 0.25em;
-		background-color: var(--primary-dark-color);
+		background-color: var(--primary-color-2);
 		border: none;
 		font-size: 1.5em;
 		z-index: 1;
-		transition: 0.2s;
+		transition:
+			0.2s,
+			outline 0s;
 		cursor: pointer;
 	}
 
@@ -55,7 +57,7 @@
 	}
 
 	.scroll-to-top:active {
-		background-color: var(--border-color);
+		background-color: var(--border-color-1);
 	}
 
 	@media screen and (max-width: 768px) {
@@ -72,6 +74,12 @@
 	@media screen and (max-width: 355px) {
 		.scroll-to-top.create-page {
 			bottom: 2.5em;
+		}
+	}
+
+	@media screen and (max-width: 322px) {
+		.scroll-to-top.create-page {
+			bottom: 0.25em;
 		}
 	}
 </style>

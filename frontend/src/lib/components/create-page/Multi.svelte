@@ -39,11 +39,7 @@
 
 <svelte:window bind:innerWidth />
 
-<div
-	class="choice-area"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
 			<div class="checkbox">
@@ -73,12 +69,12 @@
 				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
-				<i class="material-symbols-rounded">delete</i>
+				<i class="symbol">delete</i>
 			</button>
 		</div>
 	{/each}
 	<button title="Add choice" class="add-choice" on:click={addChoice}>
-		<i class="material-symbols-rounded">add</i>Choice
+		<i class="symbol">add</i>Choice
 	</button>
 </div>
 

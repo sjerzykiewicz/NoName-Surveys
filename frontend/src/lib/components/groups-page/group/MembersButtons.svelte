@@ -157,7 +157,7 @@
 			class:clicked={isPanelVisible}
 			on:click={togglePanel}
 		>
-			<i class="material-symbols-rounded">add</i>Members
+			<i class="symbol">add</i>Members
 		</button>
 		{#if members.length > 0}
 			<button
@@ -166,29 +166,25 @@
 				disabled={selectedMembersToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="material-symbols-rounded">delete</i>Delete
+				<i class="symbol">delete</i>Delete
 			</button>
 		{/if}
 	</div>
 	<PageButtons numEntries={numMembers} />
 </div>
-<div class="button-row">
-	{#if isPanelVisible}
-		<div class="users-panel" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<div title="Select group members" class="select-list">
-				<MultiSelect
-					bind:selected={selectedMembersToAdd}
-					options={notMembers}
-					placeholder="Select group members"
-				/>
-			</div>
-			<button title="Finish adding group members" class="save" on:click={addMembers}>
-				<i class="material-symbols-rounded">done</i>Apply
-			</button>
-		</div>
-	{/if}
-</div>
 {#if isPanelVisible}
+	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<div title="Select group members" class="select-list">
+			<MultiSelect
+				bind:selected={selectedMembersToAdd}
+				options={notMembers}
+				placeholder="Select group members"
+			/>
+		</div>
+		<button title="Finish adding group members" class="save" on:click={addMembers}>
+			<i class="symbol">done</i>Apply
+		</button>
+	</div>
 	<MembersError members={selectedMembersToAdd} error={membersError} />
 {/if}
 

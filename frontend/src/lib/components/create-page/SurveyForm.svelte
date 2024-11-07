@@ -219,10 +219,10 @@
 >
 	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
 	<button title="Overwrite draft" class="save" on:click={() => saveDraft(true)}
-		><i class="material-symbols-rounded">save_as</i>Overwrite Draft</button
+		><i class="symbol">save_as</i>Overwrite Draft</button
 	>
 	<button title="Save new draft" class="save" on:click={() => saveDraft(false)}
-		><i class="material-symbols-rounded">save</i>Save New Draft</button
+		><i class="symbol">save</i>Save New Draft</button
 	>
 </Modal>
 
@@ -241,7 +241,7 @@
 				class:save={!$useCrypto}
 				on:click={() => ($useCrypto = false)}
 			>
-				<i class="material-symbols-rounded">public</i>Public
+				<i class="symbol">public</i>Public
 			</button>
 			<button
 				title="Secure"
@@ -249,7 +249,7 @@
 				class:save={$useCrypto}
 				on:click={() => ($useCrypto = true)}
 			>
-				<i class="material-symbols-rounded">encrypted</i>Secure
+				<i class="symbol">encrypted</i>Secure
 			</button>
 		</div>
 		<div class="select-box">
@@ -270,7 +270,7 @@
 		</div>
 	</div>
 	<button title="Define respondent group" class="save apply" on:click={createSurvey}
-		><i class="material-symbols-rounded">done</i>Apply</button
+		><i class="symbol">done</i>Apply</button
 	>
 </Modal>
 
@@ -301,15 +301,11 @@
 	</div>
 {/each}
 {#if !isPreview}
-	<div
-		class="button-row"
-		in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-		out:slide={{ duration: 200, easing: cubicInOut }}
-	>
+	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div class="button-sub-row">
 			<AddQuestionButtons {questionInput} />
 			<div class="tooltip create-info">
-				<i class="material-symbols-rounded">info</i>
+				<i class="symbol">info</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
 					>Before creating a secure survey, consider setting up a user group. User groups make it
 					easy to select the same set of respondents across multiple surveys. However, if you
@@ -370,12 +366,15 @@
 		justify-content: flex-start;
 		margin-bottom: 0.5em;
 		font-size: 0.8em;
-		color: var(--text-color);
+		color: var(--text-color-1);
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	#or.disabled {
-		color: var(--text-dark-color) !important;
+		color: var(--text-color-3) !important;
 		cursor: not-allowed !important;
 	}
 

@@ -110,7 +110,7 @@
 			class:clicked={isPanelVisible}
 			on:click={togglePanel}
 		>
-			<i class="material-symbols-rounded">add</i>Users
+			<i class="symbol">add</i>Users
 		</button>
 		<button
 			title="Take away access from selected users"
@@ -118,29 +118,23 @@
 			disabled={selectedUsersToRemove.length === 0}
 			on:click={() => (isModalHidden = false)}
 		>
-			<i class="material-symbols-rounded">delete</i>Delete
+			<i class="symbol">delete</i>Delete
 		</button>
 	</div>
 	<PageButtons numEntries={numUsers} />
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div class="users-panel">
-			<div title="Select users" class="select-list">
-				<MultiSelect
-					bind:selected={selectedUsersToAdd}
-					options={users}
-					placeholder="Select users"
-				/>
-			</div>
-			<button
-				title="Finish giving access"
-				class="save"
-				on:click={() => addUsers(code, selectedUsersToAdd)}
-			>
-				<i class="material-symbols-rounded">done</i>Apply
-			</button>
+		<div title="Select users" class="select-list">
+			<MultiSelect bind:selected={selectedUsersToAdd} options={users} placeholder="Select users" />
 		</div>
+		<button
+			title="Finish giving access"
+			class="save"
+			on:click={() => addUsers(code, selectedUsersToAdd)}
+		>
+			<i class="symbol">done</i>Apply
+		</button>
 	</div>
 	<UsersError users={selectedUsersToAdd} error={usersError} />
 {/if}

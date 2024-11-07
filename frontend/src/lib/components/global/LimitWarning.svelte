@@ -13,7 +13,7 @@
 		class="warning"
 		transition:slide={{ duration: 200, easing: cubicInOut }}
 	>
-		<i class="material-symbols-rounded">warning</i>You have reached the maximum number of {items.toLowerCase()}.
+		<i class="symbol">warning</i>You have reached the maximum number of {items.toLowerCase()}.
 		Please delete some {items.toLowerCase()} to create new ones.
 	</p>
 {/if}

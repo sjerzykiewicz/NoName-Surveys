@@ -102,9 +102,7 @@
 		<span class="file-label">{label}</span>
 		<label for={id}>
 			<div class="file-input">
-				<span class="file-button"
-					><i class="material-symbols-rounded">upload_file</i>Select File</span
-				>
+				<span class="file-button"><i class="symbol">upload_file</i>Select File</span>
 				<span class="file-name">{fileName}</span>
 			</div>
 			<input type="file" name={id} {id} {disabled} on:change={handleFileChange} />

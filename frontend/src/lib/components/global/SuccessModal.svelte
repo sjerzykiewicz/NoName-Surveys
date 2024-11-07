@@ -24,16 +24,14 @@
 <Modal
 	icon="check_circle"
 	title="Success"
-	textColor="var(--accent-color)"
-	borderColor="var(--accent-color)"
+	textColor="var(--accent-color-1)"
+	borderColor="var(--accent-color-1)"
 	zIndex={12}
 	bind:isHidden={$isSuccessModalHidden}
 	{hide}
 >
 	<div slot="content" class="content">{$successModalContent}</div>
-	<button title="Ok" class="save" on:click={hide}
-		><i class="material-symbols-rounded">done</i>OK</button
-	>
+	<button title="Ok" class="save" on:click={hide}><i class="symbol">done</i>OK</button>
 </Modal>
 
 <style>

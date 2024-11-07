@@ -37,6 +37,9 @@
 	}
 
 	.title span.max {
-		color: var(--warning-color);
+		color: var(--warning-color-1);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 </style>

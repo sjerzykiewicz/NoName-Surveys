@@ -33,10 +33,10 @@
 	<div class="page-buttons">
 		<div class="prev-buttons">
 			<button title="First page" disabled={currentPage === minPage} on:click={firstPage}
-				><i class="material-symbols-rounded">first_page</i></button
+				><i class="symbol">first_page</i></button
 			>
 			<button title="Previous page" disabled={currentPage <= minPage} on:click={previousPage}
-				><i class="material-symbols-rounded">chevron_left</i></button
+				><i class="symbol">chevron_left</i></button
 			>
 		</div>
 		<form
@@ -59,10 +59,10 @@
 		</form>
 		<div class="next-buttons">
 			<button title="Next page" disabled={currentPage >= maxPage} on:click={nextPage}
-				><i class="material-symbols-rounded">chevron_right</i></button
+				><i class="symbol">chevron_right</i></button
 			>
 			<button title="Last page" disabled={currentPage === maxPage} on:click={lastPage}
-				><i class="material-symbols-rounded">last_page</i></button
+				><i class="symbol">last_page</i></button
 			>
 		</div>
 	</div>

@@ -39,11 +39,7 @@
 
 <svelte:window bind:innerWidth />
 
-<div
-	class="choice-area"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div title="Choice no. {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
@@ -71,17 +67,20 @@
 				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
-				<i class="material-symbols-rounded">delete</i>
+				<i class="symbol">delete</i>
 			</button>
 		</div>
 	{/each}
 	<button title="Add choice" class="add-choice" on:click={addChoice}>
-		<i class="material-symbols-rounded">add</i>Choice
+		<i class="symbol">add</i>Choice
 	</button>
 </div>
 
 <style>
 	.rank {
-		color: var(--border-color);
+		color: var(--border-color-1);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 </style>

@@ -27,8 +27,7 @@
 			handleNewLine(e);
 			limitInput(e, $title.title, $LIMIT_OF_CHARS);
 		}}
-		in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-		out:slide={{ duration: 200, easing: cubicInOut }}
+		transition:slide={{ duration: 200, easing: cubicInOut }}
 	>
 		{$title.title}
 	</div>
@@ -38,14 +37,14 @@
 <style>
 	.title-input {
 		font-size: 1.5em;
-		font-weight: bold;
+		font-weight: 700 !important;
 		margin: 0em;
 		width: calc(100% - 0.5em);
 	}
 
 	.title-input[contenteditable]:empty::before {
 		content: 'Enter survey title...';
-		color: var(--text-dark-color);
+		color: var(--text-color-3);
 	}
 
 	.input-container {

@@ -23,11 +23,7 @@
 
 <svelte:window bind:innerWidth />
 
-<div
-	class="choice-area slider"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="choice-area slider" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="limits">
 		<label>
 			Minimum

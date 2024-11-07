@@ -138,7 +138,7 @@
 
 {#if isPreview}
 	<button title="Edit survey" class="footer-button" on:click={togglePreview}>
-		<i class="material-symbols-rounded">edit</i>Edit
+		<i class="symbol">edit</i>Edit
 	</button>
 {:else}
 	<button
@@ -150,7 +150,7 @@
 			togglePreview();
 		}}
 	>
-		<i class="material-symbols-rounded">search</i>Preview
+		<i class="symbol">search</i>Preview
 	</button>
 {/if}
 <div class="footer-button-group">
@@ -160,7 +160,7 @@
 		disabled={$questions.length === 0 || isPreview}
 		on:click={saveDraft}
 	>
-		<i class="material-symbols-rounded">save</i>Save Draft
+		<i class="symbol">save</i>Save Draft
 		<span class="popup-text top" id="draft-popup">Saved!</span>
 	</button>
 	<button
@@ -169,7 +169,7 @@
 		disabled={$questions.length === 0 || isPreview}
 		on:click={createSurvey}
 	>
-		<i class="material-symbols-rounded">done</i>Create
+		<i class="symbol">done</i>Create
 	</button>
 </div>
 

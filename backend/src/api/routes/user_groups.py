@@ -24,7 +24,7 @@ PAGE_SIZE = 10
     response_description="Number of all user groups of a given user",
     response_model=int,
 )
-async def get_user_groups(
+async def get_user_groups_count(
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
@@ -102,7 +102,7 @@ async def get_user_groups_with_members_having_public_keys(
     response_description="Number of members in a given user group",
     response_model=int,
 )
-async def get_user_group(
+async def get_user_group_members_count(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):

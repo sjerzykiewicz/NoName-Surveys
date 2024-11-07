@@ -9,11 +9,7 @@
 	export let questionIndex: number;
 </script>
 
-<div
-	class="choice-area"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="details">
 		<div
 			class="input-container"

@@ -5,5 +5,5 @@
 </script>
 
 <button title="Go back" class="footer-button" on:click={goBack}
-	><i class="material-symbols-rounded">undo</i>Back</button
+	><i class="symbol">undo</i>Back</button
 >

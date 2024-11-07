@@ -51,7 +51,7 @@
 <div class="button-row">
 	<div class="button-sub-row">
 		<button title="Create a draft" class="add-draft" on:click={() => goto('/create')}>
-			<i class="material-symbols-rounded">add</i>Draft
+			<i class="symbol">add</i>Draft
 		</button>
 		{#if drafts.length > 0}
 			<button
@@ -60,7 +60,7 @@
 				disabled={selectedDraftsToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="material-symbols-rounded">delete</i>Delete
+				<i class="symbol">delete</i>Delete
 			</button>
 		{/if}
 	</div>

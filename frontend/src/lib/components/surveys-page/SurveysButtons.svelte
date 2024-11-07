@@ -52,7 +52,7 @@
 <div class="button-row">
 	<div class="button-sub-row">
 		<button title="Create a survey" class="add-survey" on:click={() => goto('/create')}>
-			<i class="material-symbols-rounded">add</i>Survey
+			<i class="symbol">add</i>Survey
 		</button>
 		{#if survey_list.length > 0}
 			<button
@@ -61,7 +61,7 @@
 				disabled={selectedSurveysToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="material-symbols-rounded">delete</i>Delete
+				<i class="symbol">delete</i>Delete
 			</button>
 		{/if}
 	</div>

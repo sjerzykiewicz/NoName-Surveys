@@ -24,15 +24,15 @@
 <Modal
 	icon="warning"
 	title="Warning"
-	textColor="var(--warning-color)"
-	borderColor="var(--warning-color)"
+	textColor="var(--warning-color-1)"
+	borderColor="var(--warning-color-1)"
 	zIndex={12}
 	bind:isHidden={$isWarningModalHidden}
 	{hide}
 >
 	<div slot="content" class="content">{$warningModalContent}</div>
 	<button title="Ok" class="save" on:click={hide}
-		><i class="material-symbols-rounded">done</i>OK</button
+		><i class="symbol">done</i>OK</button
 	>
 </Modal>
 

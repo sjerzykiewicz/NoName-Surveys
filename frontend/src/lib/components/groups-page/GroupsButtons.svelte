@@ -179,9 +179,7 @@
 						handleNewLine(e);
 						limitInput(e, groupName, $LIMIT_OF_CHARS);
 					}}
-				>
-					{groupName}
-				</div>
+				></div>
 				<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
 			</div>
 		</div>

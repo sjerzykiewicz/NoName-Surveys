@@ -56,9 +56,7 @@
 						handleNewLine(e);
 						limitInput(e, choice, $LIMIT_OF_CHARS);
 					}}
-				>
-					{choice}
-				</div>
+				></div>
 				<span class="char-count">{choice.length} / {$LIMIT_OF_CHARS}</span>
 			</div>
 			<button

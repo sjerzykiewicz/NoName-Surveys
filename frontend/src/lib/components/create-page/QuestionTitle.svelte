@@ -29,7 +29,6 @@
 
 	function toggleRequirement() {
 		$questions[questionIndex].required = !$questions[questionIndex].required;
-		$questions = $questions;
 	}
 </script>
 
@@ -78,9 +77,7 @@
 				handleNewLine(e);
 				limitInput(e, $questions[questionIndex].question, $LIMIT_OF_CHARS);
 			}}
-		>
-			{$questions[questionIndex].question}
-		</div>
+		></div>
 		<span class="char-count">{$questions[questionIndex].question.length} / {$LIMIT_OF_CHARS}</span>
 	</div>
 	<button
@@ -94,7 +91,7 @@
 		>
 	</button>
 	<button title="Remove question" class="remove-question" on:click={removeQuestion}>
-		<i class="symbol">close</i>
+		<i class="symbol">delete</i>
 	</button>
 </div>
 

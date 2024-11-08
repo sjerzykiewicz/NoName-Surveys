@@ -17,7 +17,7 @@
 					$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
 				}}
 			/>
-			<i class="material-symbols-rounded">thumb_up</i>
+			<i class="symbol">thumb_up</i>
 		</div>
 		<div class="choice-input display binary">
 			{$questions[questionIndex].choices[0]}
@@ -35,7 +35,7 @@
 					$answers[questionIndex].choices[0] = $questions[questionIndex].choices[1];
 				}}
 			/>
-			<i class="material-symbols-rounded">thumb_down</i>
+			<i class="symbol">thumb_down</i>
 		</div>
 		<div class="choice-input display binary">
 			{$questions[questionIndex].choices[1]}
@@ -53,13 +53,16 @@
 	}
 
 	.selected i {
-		color: var(--accent-color);
+		color: var(--accent-color-1);
 		font-variation-settings:
 			'FILL' 1,
 			'GRAD' 200;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		i {
 			font-size: 1.25em;
 		}

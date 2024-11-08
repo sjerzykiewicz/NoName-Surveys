@@ -14,7 +14,7 @@
 		{#each data.answers as answer, i}
 			{#if answer}
 				<a
-					href="{$page.url.pathname}/{i}"
+					href="{$page.url.pathname}/answers/{i}"
 					title="Click to get all answers"
 					class="text-area display"
 				>
@@ -30,12 +30,12 @@
 		overflow-y: auto;
 		min-height: 1.15em;
 		max-height: 15em;
-		background-color: var(--secondary-dark-color);
+		background-color: var(--secondary-color-2);
 		margin-left: 2.25em;
 		padding: 0.5em;
 		border-radius: 5px;
-		border: 1px solid var(--border-color);
-		box-shadow: 0px 4px 4px var(--shadow-color);
+		border: 1px solid var(--border-color-1);
+		box-shadow: 0px 4px 4px var(--shadow-color-1);
 	}
 
 	.text-area {
@@ -46,10 +46,13 @@
 		cursor: pointer;
 		text-decoration: none;
 		min-height: 1.15em;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.text-area:hover {
-		background-color: var(--secondary-color);
+		background-color: var(--secondary-color-1);
 	}
 
 	.text-area:last-of-type {
@@ -61,22 +64,25 @@
 	}
 
 	.text-answers::-webkit-scrollbar-track {
-		background-color: var(--secondary-dark-color);
+		background-color: var(--secondary-color-2);
 		border-radius: 5px;
 	}
 
 	.text-answers::-webkit-scrollbar-thumb {
-		background-color: var(--primary-color);
+		background-color: var(--primary-color-1);
 		background-clip: padding-box;
 		border-radius: 5px;
-		border: 2px solid var(--secondary-dark-color);
+		border: 2px solid var(--secondary-color-2);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.text-answers::-webkit-scrollbar-thumb:hover {
-		background-color: var(--text-dark-color);
+		background-color: var(--text-color-3);
 	}
 
 	.text-answers::-webkit-scrollbar-thumb:active {
-		background-color: var(--border-color);
+		background-color: var(--border-color-1);
 	}
 </style>

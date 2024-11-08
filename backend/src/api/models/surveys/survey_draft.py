@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from pydantic import BaseModel, ValidationInfo, field_validator
 
@@ -7,6 +8,7 @@ from src.api.models.surveys.survey import SurveyStructure
 
 class SurveyDraftCreate(BaseModel):
     user_email: str
+    title: str
     survey_structure: SurveyStructure
 
     @field_validator("user_email")
@@ -17,6 +19,12 @@ class SurveyDraftCreate(BaseModel):
             raise ValueError("invalid email format")
         return v
 
+    @field_validator("title")
+    def validate_survey_title(cls, v, info: ValidationInfo) -> str:
+        if v is None or v == "":
+            raise ValueError("survey title must be provided")
+        return v
+
     class Config:
         extra = "forbid"
 
@@ -24,7 +32,7 @@ class SurveyDraftCreate(BaseModel):
 class SurveyDraftHeadersOutput(BaseModel):
     id: int
     title: str
-    creation_date: str
+    creation_date: datetime
 
     class Config:
         extra = "forbid"
@@ -47,6 +55,7 @@ class SurveyDraftUserActions(BaseModel):
 
 
 class SurveyDraftFetchOutput(BaseModel):
+    title: str
     survey_structure: SurveyStructure
 
     class Config:

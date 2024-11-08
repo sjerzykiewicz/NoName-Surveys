@@ -8,8 +8,8 @@
 	import SliderSummary from '$lib/components/summary-page/SliderSummary.svelte';
 	import BinarySummary from '$lib/components/summary-page/BinarySummary.svelte';
 	import RankSummary from '$lib/components/summary-page/RankSummary.svelte';
+	import NumberSummary from '$lib/components/summary-page/NumberSummary.svelte';
 	import type { ComponentType } from 'svelte';
-	import type { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
 	import type { TextQuestionAnswered } from '$lib/entities/questions/Text';
 	import type { SingleQuestionAnswered } from '$lib/entities/questions/Single';
 	import type { MultiQuestionAnswered } from '$lib/entities/questions/Multi';
@@ -18,9 +18,11 @@
 	import type { SliderQuestionAnswered } from '$lib/entities/questions/Slider';
 	import type { RankQuestionAnswered } from '$lib/entities/questions/Rank';
 	import type { ListQuestionAnswered } from '$lib/entities/questions/List';
+	import type { NumberQuestionAnswered } from '$lib/entities/questions/Number';
+	import SurveySummary from '$lib/entities/surveys/SurveySummary';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 
-	export let surveyAnswers;
+	export let surveyAnswers: Array<SurveySummary>;
 
 	const componentTypeMap: { [id: string]: ComponentType } = {
 		text: TextSummary,
@@ -28,6 +30,7 @@
 		multi: MultiSummary,
 		scale: ScaleSummary,
 		binary: BinarySummary,
+		number: NumberSummary,
 		slider: SliderSummary,
 		rank: RankSummary,
 		list: ListSummary
@@ -45,7 +48,7 @@
 		max_value: number;
 	}[] = [];
 
-	surveyAnswers.forEach((surveyAnswer: SurveyAnswer) => {
+	surveyAnswers.forEach((surveyAnswer) => {
 		surveyAnswer.questions.forEach((question, id: number) => {
 			let details = '';
 			let answer: string | number = '';
@@ -74,6 +77,11 @@
 				case 'binary':
 					answer = (question as BinaryQuestionAnswered).answer;
 					choices = (question as BinaryQuestionAnswered).choices;
+					break;
+				case 'number':
+					answer = (question as NumberQuestionAnswered).answer;
+					min_value = (question as NumberQuestionAnswered).min_value;
+					max_value = (question as NumberQuestionAnswered).max_value;
 					break;
 				case 'slider':
 					answer = (question as SliderQuestionAnswered).answer;
@@ -124,15 +132,21 @@
 	});
 </script>
 
-<div title="Number of answers" class="title answers">Number of answers: {surveyAnswers.length}</div>
-{#each groupedAnswers as question, questionIndex}
-	<div class="question">
-		<QuestionTitle
-			question={question.question}
-			{questionIndex}
-			questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
-			required={question.required}
-		/>
-		<svelte:component this={componentTypeMap[question.question_type]} data={question} />
+{#if surveyAnswers.length === 0}
+	<div title="Number of answers" class="title empty">No answers yet!</div>
+{:else}
+	<div title="Number of answers" class="title answers">
+		Number of answers: {surveyAnswers.length}
 	</div>
-{/each}
+	{#each groupedAnswers as question, questionIndex}
+		<div class="question">
+			<QuestionTitle
+				question={question.question}
+				{questionIndex}
+				questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
+				required={question.required}
+			/>
+			<svelte:component this={componentTypeMap[question.question_type]} data={question} />
+		</div>
+	{/each}
+{/if}

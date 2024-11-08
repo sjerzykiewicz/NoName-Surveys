@@ -12,12 +12,14 @@
 	$answers[questionIndex].choices[0] = value.toString();
 
 	function handleChange() {
-		if (value < parseFloat($questions[questionIndex].choices[0])) {
-			value = parseFloat($questions[questionIndex].choices[0]);
-		} else if (value > parseFloat($questions[questionIndex].choices[1])) {
-			value = parseFloat($questions[questionIndex].choices[1]);
+		if (value !== null) {
+			if (value < parseFloat($questions[questionIndex].choices[0])) {
+				value = parseFloat($questions[questionIndex].choices[0]);
+			} else if (value > parseFloat($questions[questionIndex].choices[1])) {
+				value = parseFloat($questions[questionIndex].choices[1]);
+			}
+			$answers[questionIndex].choices[0] = value.toString();
 		}
-		$answers[questionIndex].choices[0] = value.toString();
 	}
 </script>
 
@@ -55,36 +57,34 @@
 
 <style>
 	.limit-input {
-		color: var(--accent-color);
-		border: 1px solid var(--accent-color);
-		width: 15em;
+		width: 100%;
 	}
 
 	.range {
-		background: var(--text-color);
+		background: var(--text-color-1);
 		cursor: pointer;
 	}
 
 	.range:hover {
-		background: var(--border-color);
+		background: var(--border-color-1);
 	}
 
 	.range::-webkit-slider-thumb {
-		background: var(--accent-color);
+		background: var(--accent-color-1);
 		cursor: grab;
 	}
 
 	.range::-moz-range-thumb {
-		background: var(--accent-color);
+		background: var(--accent-color-1);
 		cursor: grab;
 	}
 
 	.range::-webkit-slider-thumb:hover {
-		background: var(--accent-dark-color);
+		background: var(--accent-color-2);
 	}
 
 	.range::-moz-range-thumb:hover {
-		background: var(--accent-dark-color);
+		background: var(--accent-color-2);
 	}
 
 	.range::-webkit-slider-thumb:active {
@@ -93,11 +93,5 @@
 
 	.range::-moz-range-thumb:active {
 		cursor: grabbing;
-	}
-
-	@media screen and (max-width: 767px) {
-		.limit-input {
-			width: 10em;
-		}
 	}
 </style>

@@ -3,7 +3,7 @@
 
 	export let questionIndex: number;
 
-	$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
+	$answers[questionIndex].choices[0] = '';
 </script>
 
 <div class="choice-area display">
@@ -12,6 +12,7 @@
 		name={questionIndex.toString()}
 		bind:value={$answers[questionIndex].choices[0]}
 	>
+		<option value="" disabled selected hidden>Select your answer</option>
 		{#each $questions[questionIndex].choices as choice}
 			<option value={choice}>
 				{choice}

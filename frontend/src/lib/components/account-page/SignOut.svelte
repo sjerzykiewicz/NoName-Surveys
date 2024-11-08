@@ -1,10 +1,22 @@
 <script lang="ts">
-	import { signOut } from '@auth/sveltekit/client';
+	async function signOut() {
+		try {
+			await fetch('/api/oauth/sign-out', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			location.reload();
+		} catch (error) {
+			console.error('OAuth sign-out failed:', error);
+		}
+	}
 </script>
 
 <div class="sign-buttons">
-	<button title="Sign out" class="sign-out" on:click={() => signOut()}
-		><i class="material-symbols-rounded">logout</i>Sign Out</button
+	<button title="Sign out" class="sign-out" on:click={signOut}
+		><i class="symbol">logout</i>Sign Out</button
 	>
 </div>
 
@@ -16,10 +28,10 @@
 		justify-content: center;
 		padding-top: 1.5em;
 		padding-bottom: 1.5em;
-		font-size: 1.5em;
+		font-size: 1.75em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.sign-buttons {
 			font-size: 1.25em;
 		}

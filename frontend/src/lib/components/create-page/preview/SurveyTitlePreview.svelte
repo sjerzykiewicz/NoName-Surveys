@@ -4,11 +4,6 @@
 	import { slide } from 'svelte/transition';
 </script>
 
-<div
-	title="Survey title"
-	class="title"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
->
-	{$title}
+<div title="Survey title" class="title" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	{$title.title}
 </div>

@@ -1,7 +1,9 @@
 import type { RequestHandler } from './$types';
-import * as db from '$lib/server/database';
+import { getUserGroups } from '$lib/server/database';
+import { getEmail } from '$lib/utils/getEmail';
 
-export const POST: RequestHandler = async ({ request }) => {
-	const { user_email } = await request.json();
-	return db.getAllUserGroups(user_email);
+export const POST: RequestHandler = async ({ cookies }) => {
+	const sessionCookie = cookies.get('user_session');
+	const user_email = await getEmail(sessionCookie ?? '');
+	return getUserGroups(user_email);
 };

@@ -26,6 +26,8 @@ class UserGroupCreate(UserGroupCreator):
     def validate_user_group_name(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             raise ValueError("name must be provided and not empty")
+        if not re.match(r"^[\w /-]+$", v, re.UNICODE):
+            raise ValueError("Invalid group name format")
         return v
 
     @field_validator("user_group_members")
@@ -48,6 +50,8 @@ class UserGroupAction(UserGroupCreator):
     def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             raise ValueError("name must be provided")
+        if not re.match(r"^[\w /-]+$", v, re.UNICODE):
+            raise ValueError("Invalid group name format")
         return v
 
 
@@ -58,7 +62,25 @@ class UserGroupNameUpdate(UserGroupAction):
     def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             raise ValueError("new name must be provided")
+        if not re.match(r"^[\w /-]+$", v, re.UNICODE):
+            raise ValueError("Invalid group name format")
         return v
+
+    class Config:
+        extra = "forbid"
+
+
+class AllUserGroupsOutput(BaseModel):
+    user_group_name: str
+    all_members_have_public_keys: bool
+
+    class Config:
+        extra = "forbid"
+
+
+class UserGroupMembersOutput(BaseModel):
+    email: str
+    has_public_key: bool
 
     class Config:
         extra = "forbid"

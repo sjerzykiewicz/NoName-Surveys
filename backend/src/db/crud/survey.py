@@ -1,8 +1,16 @@
+from sqlalchemy import func
 from sqlmodel import select
 
 from src.db.base import Session
 from src.db.models.access_to_view_results import AccessToViewResults
-from src.db.models.survey import Survey, SurveyBase
+from src.db.models.survey import Survey
+
+
+def get_count_of_not_deleted_surveys_for_user(user_id: int, session: Session) -> int:
+    statement = select(func.count(Survey.id)).where(
+        (Survey.creator_id == user_id) & (Survey.is_deleted == False)  # noqa: E712
+    )
+    return session.exec(statement).one()
 
 
 def get_survey_by_code(survey_code: str, session: Session) -> Survey:
@@ -29,6 +37,13 @@ def get_all_surveys_user_has_ownership_over(
     return [survey for survey in session.exec(statement).all()]
 
 
+def get_count_of_active_surveys_of_user(user_id: int, session: Session) -> int:
+    statement = select(Survey).where(
+        (Survey.creator_id == user_id) & (Survey.is_deleted == False)  # noqa: E712
+    )
+    return len(session.exec(statement).all())
+
+
 def survey_code_taken(survey_code: str, session: Session) -> bool:
     statement = select(Survey).where(
         (Survey.survey_code == survey_code) & (Survey.is_deleted == False)  # noqa: E712
@@ -36,7 +51,19 @@ def survey_code_taken(survey_code: str, session: Session) -> bool:
     return session.exec(statement).first() is not None
 
 
-def create_survey(survey_create: SurveyBase, session: Session) -> Survey:
+def create_survey(
+    creator_id: int,
+    uses_cryptographic_module: bool,
+    survey_structure_id: int,
+    survey_code: str,
+    session: Session,
+) -> Survey:
+    survey_create = Survey(
+        creator_id=creator_id,
+        uses_cryptographic_module=uses_cryptographic_module,
+        survey_structure_id=survey_structure_id,
+        survey_code=survey_code,
+    )
     survey_create = Survey.model_validate(survey_create)
     session.add(survey_create)
     session.commit()
@@ -76,11 +103,16 @@ def take_away_survey_access(survey_id: int, user_id: int, session: Session) -> N
 
 
 def get_all_surveys_user_can_view(
-    user_id: int, session: Session
+    user_id: int, offset: int, limit: int, session: Session
 ) -> list[tuple[Survey, bool]]:
-    statement = select(AccessToViewResults).where(
-        (AccessToViewResults.user_id == user_id)
-        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    statement = (
+        select(AccessToViewResults)
+        .where(
+            (AccessToViewResults.user_id == user_id)
+            & (AccessToViewResults.is_deleted == False)  # noqa: E712
+        )
+        .offset(offset)
+        .limit(limit)
     )
     survey_accesses = [access for access in session.exec(statement).all()]
 
@@ -97,12 +129,25 @@ def get_all_surveys_user_can_view(
     return [(survey, survey.creator_id == user_id) for survey in surveys if survey]
 
 
-def get_all_users_with_access_to_survey(
-    survey_id: int, session: Session
-) -> list[AccessToViewResults]:
-    statement = select(AccessToViewResults).where(
+def get_all_users_with_access_to_survey_count(survey_id: int, session: Session) -> int:
+    statement = select(func.count(AccessToViewResults.id)).where(
         (AccessToViewResults.survey_id == survey_id)
-        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+        & (AccessToViewResults.is_deleted == False)
+    )  # noqa: E712
+    return session.exec(statement).one()
+
+
+def get_all_users_with_access_to_survey(
+    survey_id: int, offset: int, limit: int, session: Session
+) -> list[AccessToViewResults]:
+    statement = (
+        select(AccessToViewResults)
+        .where(
+            (AccessToViewResults.survey_id == survey_id)
+            & (AccessToViewResults.is_deleted == False)  # noqa: E712
+        )
+        .offset(offset)
+        .limit(limit)
     )
     return [access for access in session.exec(statement).all()]
 

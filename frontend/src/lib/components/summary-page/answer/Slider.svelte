@@ -31,15 +31,12 @@
 
 <style>
 	.limit-input {
-		color: var(--accent-color);
-		border: 1px solid var(--accent-color);
-		width: 15em;
+		color: var(--accent-color-1);
+		border: 1px solid var(--accent-color-1);
+		width: 100%;
 		cursor: default;
-	}
-
-	@media screen and (max-width: 767px) {
-		.limit-input {
-			width: 10em;
-		}
+		transition:
+			0.2s,
+			outline 0s;
 	}
 </style>

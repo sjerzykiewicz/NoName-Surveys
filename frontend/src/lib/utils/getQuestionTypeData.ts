@@ -31,6 +31,10 @@ import TextCreate from '$lib/components/create-page/Text.svelte';
 import TextFill from '$lib/components/fill-page/Text.svelte';
 import TextAnswer from '$lib/components/summary-page/answer/Text.svelte';
 import TextSummary from '$lib/components/summary-page/TextSummary.svelte';
+import NumberCreate from '$lib/components/create-page/Number.svelte';
+import NumberFill from '$lib/components/fill-page/Number.svelte';
+import NumberAnswer from '$lib/components/summary-page/answer/Number.svelte';
+import NumberSummary from '$lib/components/summary-page/NumberSummary.svelte';
 
 export function getQuestionTypeData(questionType: ComponentType) {
 	switch (questionType) {
@@ -67,7 +71,7 @@ export function getQuestionTypeData(questionType: ComponentType) {
 		case RankFill:
 		case RankAnswer:
 		case RankSummary:
-			return { title: 'Ranking choice', icon: 'numbers', text: 'Rank' };
+			return { title: 'Ranking choice', icon: 'leaderboard', text: 'Rank' };
 		case BinaryCreate:
 		case BinaryFill:
 		case BinaryAnswer:
@@ -78,6 +82,11 @@ export function getQuestionTypeData(questionType: ComponentType) {
 		case TextAnswer:
 		case TextSummary:
 			return { title: 'Open question', icon: 'text_fields', text: 'Text' };
+		case NumberCreate:
+		case NumberFill:
+		case NumberAnswer:
+		case NumberSummary:
+			return { title: 'Numerical question', icon: 'numbers', text: 'Number' };
 		default:
 			return { title: '', icon: '', text: '' };
 	}

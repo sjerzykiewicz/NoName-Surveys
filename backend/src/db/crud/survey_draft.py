@@ -1,15 +1,31 @@
+from sqlalchemy import func
 from sqlmodel import select
 
 from src.db.base import Session
 from src.db.models.survey_draft import SurveyDraft, SurveyDraftBase
 
 
-def get_not_deleted_survey_drafts_for_user(
+def get_count_of_not_deleted_survey_drafts_for_user(
     user_id: int, session: Session
-) -> list[SurveyDraft]:
-    statement = select(SurveyDraft).where(
+) -> int:
+    statement = select(func.count(SurveyDraft.id)).where(
         (SurveyDraft.creator_id == user_id)
         & (SurveyDraft.is_deleted == False)  # noqa: E712
+    )
+    return session.exec(statement).one()
+
+
+def get_not_deleted_survey_drafts_for_user(
+    user_id: int, offset: int, limit: int, session: Session
+) -> list[SurveyDraft]:
+    statement = (
+        select(SurveyDraft)
+        .where(
+            (SurveyDraft.creator_id == user_id)
+            & (SurveyDraft.is_deleted == False)  # noqa: E712
+        )
+        .offset(offset)
+        .limit(limit)
     )
     drafts = session.exec(statement).all()
     return [draft for draft in drafts]
@@ -41,8 +57,18 @@ def delete_survey_draft_by_id(survey_draft_id: int, session: Session) -> SurveyD
 
 
 def create_survey_draft(
-    survey_draft_create: SurveyDraftBase, session: Session
+    creator_id: int,
+    title: str,
+    survey_structure: str,
+    is_deleted: bool,
+    session: Session,
 ) -> SurveyDraft:
+    survey_draft_create = SurveyDraftBase(
+        creator_id=creator_id,
+        title=title,
+        survey_structure=survey_structure,
+        is_deleted=is_deleted,
+    )
     survey_draft_create = SurveyDraft.model_validate(survey_draft_create)
     session.add(survey_draft_create)
     session.commit()

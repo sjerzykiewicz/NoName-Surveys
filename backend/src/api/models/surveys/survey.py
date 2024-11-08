@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 from typing import Optional, Union
 
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
@@ -6,6 +7,7 @@ from pydantic import BaseModel, Field, ValidationInfo, field_validator
 from src.api.models.questions.binary_question import BinaryQuestion
 from src.api.models.questions.list_question import ListQuestion
 from src.api.models.questions.multi_question import MultiQuestion
+from src.api.models.questions.number_question import NumberQuestion
 from src.api.models.questions.rank_question import RankQuestion
 from src.api.models.questions.scale_question import ScaleQuestion
 from src.api.models.questions.single_question import SingleQuestion
@@ -14,12 +16,12 @@ from src.api.models.questions.text_question import TextQuestion
 
 
 class SurveyStructure(BaseModel):
-    title: str
     questions: list[
         Union[
             BinaryQuestion,
             ListQuestion,
             MultiQuestion,
+            NumberQuestion,
             RankQuestion,
             ScaleQuestion,
             SingleQuestion,
@@ -31,12 +33,6 @@ class SurveyStructure(BaseModel):
         description="Questions list must have at least 1 element",
     )
 
-    @field_validator("title")
-    def validate_survey_title(cls, v, info: ValidationInfo) -> str:
-        if v is None or v == "":
-            raise ValueError("survey title must be provided")
-        return v
-
     def validate(self):
         for question in self.questions:
             question.validate_for_draft()
@@ -45,15 +41,29 @@ class SurveyStructure(BaseModel):
         extra = "forbid"
 
 
+class SurveyBase(BaseModel):
+    title: str
+
+    @field_validator("title")
+    def validate_survey_title(cls, v, info: ValidationInfo) -> str:
+        if v is None or v == "":
+            raise ValueError("survey title must be provided")
+        return v
+
+    class Config:
+        extra = "forbid"
+
+
 class SurveyHeadersOutput(BaseModel):
     title: str
     survey_code: str
-    creation_date: str
+    creation_date: datetime
     uses_cryptographic_module: bool
     is_owned_by_user: bool
+    group_size: int
 
 
-class SurveyStructureFetchInput(BaseModel):
+class SurveyInfoFetchInput(BaseModel):
     survey_code: str
 
     @field_validator("survey_code")
@@ -69,6 +79,7 @@ class SurveyStructureFetchInput(BaseModel):
 
 
 class SurveyStructureFetchOutput(BaseModel):
+    title: str
     survey_structure: SurveyStructure
     survey_code: str
     uses_cryptographic_module: bool
@@ -78,11 +89,19 @@ class SurveyStructureFetchOutput(BaseModel):
         extra = "forbid"
 
 
-class SurveyStructureCreateInput(BaseModel):
+class SurveyStructureCreateInput(SurveyBase):
     user_email: str
     survey_structure: SurveyStructure
     uses_cryptographic_module: bool
     ring_members: Optional[list[str]] = Field(default=[])
+
+    @field_validator("user_email")
+    def validate_user_email(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("email must be provided")
+        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
+            raise ValueError("invalid email format")
+        return v
 
     @field_validator("ring_members")
     def validate_emails(cls, v, info: ValidationInfo) -> str:

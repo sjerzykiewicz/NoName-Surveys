@@ -1,27 +1,81 @@
 <script lang="ts">
-	import { signIn } from '@auth/sveltekit/client';
+	import amu from '$lib/assets/amu.png';
+
+	async function startOAuth() {
+		try {
+			const response = await fetch('/api/oauth/request-token', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			const data = await response.json();
+
+			const expires = new Date(Date.now() + 3 * 60 * 1000).toUTCString();
+			document.cookie = `oauth_token_secret=${data.oauth_token_secret}; path=/; secure; expires=${expires}`;
+
+			if (data.oauth_token) {
+				window.location.href = `/auth/redirect?oauth_token=${data.oauth_token}`;
+			} else {
+				console.error('Failed to get OAuth token');
+			}
+		} catch (error) {
+			console.error('OAuth request failed:', error);
+		}
+	}
 </script>
 
-<h1>Sign in with:</h1>
+<h1>Authorize yourself with AMU USOS</h1>
 <div class="sign-buttons">
-	<button title="Google" class="sign-in" on:click={() => signIn('google')}
-		><i class="fa-brands fa-google"></i></button
-	>
-	<button title="Microsoft" class="sign-in" disabled><i class="fa-brands fa-microsoft"></i></button>
-	<button title="GitHub" class="sign-in" on:click={() => signIn('github')}
-		><i class="fa-brands fa-github"></i></button
+	<button title="Sign in" class="sign-in" on:click={startOAuth}
+		><img src={amu} alt="AMU logo" class="amu-logo" />Sign In</button
 	>
 </div>
 <div title="Account information" class="info">
 	<div class="text">
 		Authorizing yourself will enable you to:
 		<ul>
-			<li>Create your own surveys,</li>
-			<li>Save survey drafts,</li>
-			<li>View your survey's results,</li>
 			<li>
-				Generate digital signature keys that allow you to participate in secure surveys without
-				needing to sign in each time.
+				<div class="icon"><i class="symbol">article</i></div>
+				<div>
+					Create both
+					<span class="accent">public</span>
+					and <span class="accent">secure</span> surveys,
+				</div>
+			</li>
+			<li>
+				<div class="icon"><i class="symbol">save</i></div>
+				<div>
+					Save surveys as
+					<span class="accent">drafts</span> for later editing,
+				</div>
+			</li>
+			<li>
+				<div class="icon"><i class="symbol">bar_chart</i></div>
+				<div>
+					View <span class="accent">responses</span>
+					and <span class="accent">summaries</span> of your surveys,
+				</div>
+			</li>
+			<li>
+				<div class="icon"><i class="symbol">share</i></div>
+				<div><span class="accent">Share</span> surveys' results with others,</div>
+			</li>
+			<li>
+				<div class="icon"><i class="symbol">group</i></div>
+				<div>
+					Create and manage
+					<span class="accent">user groups</span>,
+				</div>
+			</li>
+			<li>
+				<div class="icon"><i class="symbol">encrypted</i></div>
+				<div>
+					Generate <span class="accent">digital signature keys</span> that allow you to participate
+					in
+					<span class="accent">secure surveys</span> without the need to sign in each time.
+				</div>
 			</li>
 		</ul>
 	</div>
@@ -34,13 +88,36 @@
 </div>
 
 <style>
+	ul {
+		list-style-type: none;
+		margin-top: 0.25em;
+		padding-left: 1.5em;
+	}
+
+	li {
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: flex-start;
+		align-items: flex-start;
+		padding-top: 0.75em;
+	}
+
+	.icon {
+		margin-right: 0.5em;
+	}
+
 	h1 {
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		color: var(--text-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		color: var(--text-color-1);
 		font-size: 3em;
-		font-weight: bold;
+		font-weight: 700 !important;
 		cursor: default;
+		margin: 0;
+		padding: 0.25em 0 0.5em;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.sign-buttons {
@@ -51,28 +128,45 @@
 		margin-bottom: 2em;
 	}
 
-	.sign-in {
-		margin-left: 0.5em;
-		margin-right: 0.5em;
-	}
-
-	.sign-in {
-		font-size: 2em;
-	}
-
 	.info {
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+		justify-content: center;
+		padding: 1.25em 0.5em 0em;
+		border-top: 1px solid var(--border-color-1);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		cursor: default;
+		overflow-wrap: break-word;
+		color: var(--text-color-1);
 		font-size: 1.25em;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
-	@media screen and (max-width: 767px) {
+	.text {
+		text-align: justify;
+	}
+
+	.accent {
+		color: var(--accent-color-1);
+		font-weight: 700 !important;
+	}
+
+	@media screen and (max-width: 768px) {
 		h1 {
 			font-size: 2em;
 		}
 
+		ul {
+			padding-left: 0.5em;
+		}
+
 		.info {
 			font-size: 1em;
-			margin-left: 0em;
-			margin-right: 0em;
+			padding-left: 0em;
+			padding-right: 0em;
 		}
 	}
 </style>

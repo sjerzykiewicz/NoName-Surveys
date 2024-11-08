@@ -22,8 +22,11 @@
 <style>
 	.choice-input,
 	.choice-input:hover {
-		background-color: var(--primary-dark-color);
+		background-color: var(--primary-color-2);
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	input[type='radio'] {
@@ -35,7 +38,7 @@
 		margin-top: 0.5em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.choice-area {
 			width: 100%;
 			margin-left: 0em;

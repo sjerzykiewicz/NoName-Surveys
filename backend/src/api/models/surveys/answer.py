@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field, ValidationInfo, field_validator
 from src.api.models.questions.binary_question import BinaryQuestion
 from src.api.models.questions.list_question import ListQuestion
 from src.api.models.questions.multi_question import MultiQuestion
+from src.api.models.questions.number_question import NumberQuestion
 from src.api.models.questions.rank_question import RankQuestion
 from src.api.models.questions.scale_question import ScaleQuestion
 from src.api.models.questions.single_question import SingleQuestion
@@ -20,6 +21,7 @@ class SurveyAnswerBase(BaseModel):
             BinaryQuestion,
             ListQuestion,
             MultiQuestion,
+            NumberQuestion,
             RankQuestion,
             ScaleQuestion,
             SingleQuestion,
@@ -40,6 +42,13 @@ class SurveyAnswerBase(BaseModel):
             raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
+    @field_validator("signature")
+    def validate_signature(cls, v, info: ValidationInfo) -> list[str]:
+        for signature in v:
+            if not re.match(r"^\d+$", signature):
+                raise ValueError("signature must be a string consisting of digits only")
+        return v
+
     def validate(self) -> None:
         for question in self.questions:
             question.validate_for_answer()
@@ -51,6 +60,14 @@ class SurveyAnswerBase(BaseModel):
 class SurveyAnswersFetchInput(BaseModel):
     user_email: str
     survey_code: str
+
+    @field_validator("user_email")
+    def validate_user_email(cls, v, info: ValidationInfo) -> str:
+        if v is None:
+            raise ValueError("email must be provided")
+        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
+            raise ValueError("invalid email format")
+        return v
 
     @field_validator("survey_code")
     def validate_survey_join_code(cls, v, info: ValidationInfo) -> str:
@@ -71,6 +88,7 @@ class SurveyAnswersFetchOutput(BaseModel):
             BinaryQuestion,
             ListQuestion,
             MultiQuestion,
+            NumberQuestion,
             RankQuestion,
             ScaleQuestion,
             SingleQuestion,
@@ -81,7 +99,6 @@ class SurveyAnswersFetchOutput(BaseModel):
         min_length=1,
         description="Questions list must have at least 1 element",
     )
-    is_owned_by_user: bool
 
     class Config:
         extra = "forbid"

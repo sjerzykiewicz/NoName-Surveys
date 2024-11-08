@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from gmpy2 import mpz
 from sqlmodel import Session
 
 import src.db.crud.answer as answer_crud
@@ -14,7 +15,6 @@ from src.api.models.surveys.answer import (
 from src.api.models.surveys.survey import SurveyStructure
 from src.cryptography.ring_signature import verify_lrs
 from src.db.base import get_session
-from src.db.models.answer import Answer
 
 router = APIRouter()
 
@@ -44,21 +44,16 @@ async def get_survey_answers_by_code(
     survey_draft = survey_draft_crud.get_survey_draft_by_id(
         survey.survey_structure_id, session
     )
-    survey_structure = SurveyStructure.model_validate_json(
-        survey_draft.survey_structure
-    )
-    survey_title = survey_structure.title
+    survey_title = survey_draft.title
 
     answers = answer_crud.get_answers_by_survey_id(survey.id, session)
     answer_structures = [
         SurveyAnswerBase.model_validate_json(answer.answer) for answer in answers
     ]
-    is_owned_by_user = user.id == survey.creator_id
     return [
         SurveyAnswersFetchOutput(
             title=survey_title,
             questions=answer.questions,
-            is_owned_by_user=is_owned_by_user,
         )
         for answer in answer_structures
     ]
@@ -90,7 +85,7 @@ async def save_survey_answer(
                 detail="Survey requires cryptographic signature",
             )
 
-        if answer_crud.user_already_answered_survey(
+        if answer_crud.signature_already_present_for_user(
             survey.id, survey_answer.signature[0], session
         ):
             raise HTTPException(
@@ -106,7 +101,7 @@ async def save_survey_answer(
         if not verify_lrs(
             survey.survey_code,
             public_keys,
-            [int(x) for x in survey_answer.signature],
+            [mpz(x) for x in survey_answer.signature],
         ):
             raise HTTPException(
                 status_code=400,
@@ -133,12 +128,7 @@ async def save_survey_answer(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    # save answer
-    answer = Answer(
-        survey_id=survey.id,
-        answer=survey_answer.model_dump_json(),
-        y0=survey_answer.signature[0] if survey_answer.signature else "",
-    )
-    answer_crud.save_answer(answer, session)
+    y0 = survey_answer.signature[0] if survey_answer.signature else ""
+    answer_crud.save_answer(survey.id, survey_answer.model_dump_json(), y0, session)
 
     return {"message": "Answer saved successfully"}

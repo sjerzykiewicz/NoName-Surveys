@@ -1,48 +1,81 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
-	import Content from '$lib/components/Content.svelte';
+	import Content from '$lib/components/global/Content.svelte';
+	import { S, M } from '$lib/stores/global';
+	import { slide } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
+	import { page } from '$app/stores';
 
 	export let form: ActionData;
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <Content>
 	<h1>NoName Anonymous Surveys</h1>
 	<form method="POST" use:enhance>
 		<label title="Enter a survey code to fill it out" for="code-input"
-			>Enter a survey code to fill it out:
+			><div class="code-text">
+				<span>Enter a survey code to fill it out</span>
+				<div title="" class="tooltip">
+					<i class="symbol">info</i>
+					<span
+						class="tooltip-text {innerWidth <= $M ? (innerWidth <= $S ? 'top' : 'left') : 'bottom'}"
+					>
+						Enter the code provided to you by the survey creator. Your answers are completely
+						anonymous.
+					</span>
+				</div>
+			</div>
 			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				id="code-input"
 				name="survey-code"
 				type="text"
+				placeholder="______"
 				required
 				maxlength="6"
 				autocomplete="off"
-				autofocus
+				autofocus={innerWidth > $M}
 			/>
+			{#if form?.error}
+				<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+					<i class="symbol">error</i>{form.error}
+				</p>
+			{/if}
 			<button title="Submit the code" class="save" type="submit">
-				<i class="material-symbols-rounded">done</i>Submit
+				<i class="symbol">done</i>Submit
 			</button>
 		</label>
 	</form>
-
-	{#if form?.error}
-		<p title="Error" class="error"><i class="material-symbols-rounded">error</i>{form.error}</p>
+	{#if $page.data.session}
+		<p class="home-info">
+			If you want to create your own survey, go to <a href="/create" title="Create">Create</a>.
+		</p>
+	{:else}
+		<p class="home-info">
+			If you want to create your own survey, go to <a href="/account" title="Account">Account</a>.
+		</p>
 	{/if}
 </Content>
 
 <style>
 	h1 {
-		color: var(--text-color);
+		color: var(--text-color-1);
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		margin: 0em;
 		padding: 0.25em 0em 0.5em;
 		font-size: 3em;
-		font-weight: bold;
+		font-weight: 700 !important;
 		cursor: default;
-		border-bottom: 1px solid var(--border-color);
+		border-bottom: 1px solid var(--border-color-1);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	label {
@@ -52,49 +85,104 @@
 
 	form {
 		text-align: center;
-		color: var(--text-color);
-		font-weight: bold;
+		color: var(--text-color-1);
+		font-weight: 700 !important;
 		font-size: 2em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		padding-top: 0.75em;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	input {
 		text-align: center;
 		padding: 0.25em;
-		background-color: var(--secondary-dark-color);
-		border: 1px solid var(--border-color);
+		background-color: var(--secondary-color-2);
+		border: 1px solid var(--border-color-1);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		color: var(--text-color);
-		font-weight: bold;
-		font-size: 1.25em;
+		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		color: var(--text-color-1);
+		font-weight: 700 !important;
+		font-size: 1.5em;
 		width: 4.25em;
 		margin-top: 0.5em;
 		margin-left: auto;
 		margin-right: auto;
-	}
-
-	.save {
-		margin: 0.75em auto 0em auto;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.error {
 		justify-content: center;
+		font-size: 0.5em;
+		margin-bottom: -1.2em;
+	}
+
+	.save {
+		font-size: 1.25em;
+		margin: 0.75em auto 0em auto;
 	}
 
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}
 
-	@media screen and (max-width: 767px) {
-		input,
-		.error {
-			font-size: 1em;
+	.code-text {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.code-text .tooltip i {
+		font-size: 1.25em;
+	}
+
+	.tooltip {
+		margin-left: 0.25em;
+		font-size: 0.8em;
+	}
+
+	.tooltip .tooltip-text {
+		font-size: 0.7em;
+		font-weight: 400 !important;
+	}
+
+	.home-info {
+		text-align: center;
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		font-size: 1.2em;
+		color: var(--text-color-1);
+		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
+	}
+
+	.home-info a {
+		font-weight: 700 !important;
+	}
+
+	@media screen and (max-width: 768px) {
+		h1 {
+			font-size: 2.5em;
 		}
 
-		form {
-			font-size: 1.5em;
+		.error {
+			font-size: 0.5em;
+		}
+	}
+
+	@media screen and (max-width: 425px) {
+		.tooltip {
+			margin-left: 0em;
+			margin-top: 0.5em;
+		}
+
+		.code-text {
+			flex-flow: column;
 		}
 	}
 </style>

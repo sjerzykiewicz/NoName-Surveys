@@ -16,6 +16,11 @@ def create_user(client: TestClient, email: str):
     )
 
 
+def create_users(client: TestClient, emails: list[str]):
+    for email in emails:
+        create_user(client, email)
+
+
 def create_user_with_public_key(client: TestClient, email: str):
     create_user(client, email)
 
@@ -27,6 +32,11 @@ def create_user_with_public_key(client: TestClient, email: str):
             "fingerprint": SHA256.new(TEST_PUBLIC_KEY.encode()).hexdigest()
         },
     )
+
+
+def create_users_with_public_keys(client: TestClient, emails: list[str]):
+    for email in emails:
+        create_user_with_public_key(client, email)
 
 
 def test_create_user_happy_path(client: TestClient):

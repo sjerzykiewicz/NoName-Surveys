@@ -29,7 +29,10 @@ class UserFilterOthers(BaseModel):
         return v
 
 
-key_pem_regex = r"-----BEGIN PUBLIC KEY-----(\n|\r|\r\n)([0-9a-zA-Z\+\/=]{64}(\n|\r|\r\n))*([0-9a-zA-Z\+\/=]{1,63}(\n|\r|\r\n))?-----END PUBLIC KEY-----"
+KEY_PEM_REGEX = (
+    r"-----BEGIN PUBLIC KEY-----(\n|\r|\r\n)([0-9a-zA-Z\+\/=]{64}(\n|\r|\r\n))*"
+    r"([0-9a-zA-Z\+\/=]{1,63}(\n|\r|\r\n))?-----END PUBLIC KEY-----"
+)
 
 
 class UserUpdatePublicKey(User):
@@ -40,7 +43,7 @@ class UserUpdatePublicKey(User):
     def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             raise ValueError("public key must be provided")
-        if not re.match(key_pem_regex, v):
+        if not re.match(KEY_PEM_REGEX, v):
             raise ValueError("invalid public key format")
         return v
 

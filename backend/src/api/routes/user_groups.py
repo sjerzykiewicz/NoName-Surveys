@@ -72,8 +72,10 @@ async def get_user_groups(
 
 @router.post(
     "/all-with-public-keys",
-    response_description="List of names of all user groups of a given user which "
-    "members all have public keys",
+    response_description=(
+        "List of names of all user groups of a given user which "
+        "members all have public keys"
+    ),
     response_model=list[str],
 )
 async def get_user_groups_with_members_having_public_keys(

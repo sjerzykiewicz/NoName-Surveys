@@ -34,12 +34,14 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { onMount } from 'svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
+	import WarningModal from '$lib/components/global/WarningModal.svelte';
 
 	export let users: string[];
 	export let groups: string[];
 	export let isPreview: boolean;
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
+	export let invalidEmails: string[] = [];
 
 	let cryptoError: boolean = false;
 	let questionInput: HTMLDivElement;
@@ -189,6 +191,7 @@
 			if (!isRespondentModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				createSurvey();
+				event.stopImmediatePropagation();
 			}
 		}
 
@@ -201,6 +204,12 @@
 </script>
 
 <svelte:window bind:innerWidth />
+
+<WarningModal
+	isExportButtonVisible={true}
+	emails={invalidEmails}
+	width={innerWidth <= $M ? 20 : 23}
+/>
 
 <Modal icon="save" title="Saving Draft" bind:isHidden={isDraftModalHidden}>
 	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
@@ -243,15 +252,19 @@
 			<div id="or" class:disabled={isCryptoDisabled}>Or</div>
 			<SelectUsers {users} bind:disabled={isCryptoDisabled} />
 			<CryptoError error={cryptoError} />
-			<ImportEmails
-				bind:users={$ringMembers}
-				title="Import users from a .csv file"
-				label="Or import users from a .csv file."
-				id="emails-file"
-				checkKeys={true}
-				width="100%"
-				bind:disabled={isCryptoDisabled}
-			/>
+			<div class="import">
+				<ImportEmails
+					bind:users={$ringMembers}
+					title="Import users from a .csv file"
+					label="Or import users from a .csv file."
+					id="emails-file"
+					checkKeys={true}
+					width="100%"
+					fontSize={innerWidth <= $M ? '0.8em' : '1em'}
+					bind:disabled={isCryptoDisabled}
+					bind:invalidEmails
+				/>
+			</div>
 		</div>
 	</div>
 	<button title="Define respondent group" class="save apply" on:click={createSurvey}
@@ -361,10 +374,18 @@
 		cursor: not-allowed !important;
 	}
 
+	.import {
+		font-size: 0.8em;
+	}
+
 	@media screen and (max-width: 768px) {
 		.tooltip {
 			--tooltip-width: 10em;
 			font-size: 1.25em;
+		}
+
+		.import {
+			font-size: 1em;
 		}
 	}
 </style>

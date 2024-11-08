@@ -15,6 +15,7 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
+	import WarningModal from '$lib/components/global/WarningModal.svelte';
 
 	export let groups: {
 		user_group_name: string;
@@ -22,6 +23,7 @@
 	}[];
 	export let users: string[];
 	export let selectedGroupsToRemove: string[] = [];
+	export let invalidEmails: string[] = [];
 
 	let isPanelVisible: boolean = false;
 	let groupName: string = '';
@@ -129,6 +131,12 @@
 
 <svelte:window bind:innerWidth />
 
+<WarningModal
+	isExportButtonVisible={true}
+	emails={invalidEmails}
+	width={innerWidth <= $M ? 20 : 22}
+/>
+
 <DeleteModal title="Deleting Groups" bind:isHidden={isModalHidden} deleteEntries={deleteGroups} />
 
 <div class="button-row">
@@ -178,7 +186,12 @@
 				<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
 			</div>
 		</div>
-		<NameError name={groupName.trim()} error={nameError} groups={groupNames} />
+		<NameError
+			name={groupName.trim()}
+			error={nameError}
+			groups={groupNames}
+			fontSize={innerWidth <= $M ? '0.8em' : '1em'}
+		/>
 		<div class="button-row">
 			<div title="Select group members" class="select-list">
 				<MultiSelect
@@ -204,7 +217,8 @@
 			label="Or import group members from a .csv file."
 			id="emails-file"
 			checkKeys={false}
-			size={1.25}
+			fontSize={innerWidth <= $M ? '0.8em' : '1em'}
+			bind:invalidEmails
 		/>
 	</div>
 {/if}

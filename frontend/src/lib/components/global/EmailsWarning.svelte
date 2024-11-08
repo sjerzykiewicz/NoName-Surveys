@@ -5,7 +5,7 @@
 
 	export let warning: FileError;
 	export let element: HTMLInputElement | null;
-	export let size: number = 1;
+	export let fontSize: string = '1em';
 	export let disabled: boolean = false;
 
 	function warningMessage() {
@@ -31,9 +31,15 @@
 	<p
 		title="Warning"
 		class="warning"
-		style="font-size: {size}em;"
+		style="--font-size: {fontSize}"
 		transition:slide={{ duration: 200, easing: cubicInOut }}
 	>
 		<i class="symbol">warning</i>{warningMessage()}
 	</p>
 {/if}
+
+<style>
+	.warning {
+		font-size: var(--font-size);
+	}
+</style>

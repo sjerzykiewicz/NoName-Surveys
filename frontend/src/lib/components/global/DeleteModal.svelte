@@ -14,6 +14,7 @@
 			if (!isHidden && event.key === 'Enter') {
 				event.preventDefault();
 				deleteEntries();
+				event.stopImmediatePropagation();
 			}
 		}
 

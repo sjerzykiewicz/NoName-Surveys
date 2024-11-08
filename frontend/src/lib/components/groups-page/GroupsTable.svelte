@@ -85,6 +85,7 @@
 			if (!isModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				renameGroup(selectedGroup, newName.trim());
+				event.stopImmediatePropagation();
 			}
 		}
 
@@ -126,7 +127,7 @@
 			</div>
 			<span class="char-count">{newName.length} / {$LIMIT_OF_CHARS}</span>
 		</div>
-		<NameError name={newName.trim()} error={nameError} groups={groupNames} fontSize={0.8} />
+		<NameError name={newName.trim()} error={nameError} groups={groupNames} fontSize="0.8em" />
 	</div>
 	<button
 		title="Save the new group name"
@@ -212,7 +213,7 @@
 {/if}
 
 <style>
-	.tooltip {
+	.info-entry.tooltip {
 		--tooltip-width: 16em;
 	}
 

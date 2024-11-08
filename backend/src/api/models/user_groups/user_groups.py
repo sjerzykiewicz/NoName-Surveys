@@ -55,6 +55,19 @@ class UserGroupAction(UserGroupCreator):
         return v
 
 
+class UserGroupMultipleActions(UserGroupCreator):
+    names: list[str]
+
+    @field_validator("names")
+    def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
+        if v is None or len(v) == 0:
+            raise ValueError("names must be provided")
+        for name in v:
+            if not re.match(r"^[\w /-]+$", name, re.UNICODE):
+                raise ValueError("Invalid group name format")
+        return v
+
+
 class UserGroupNameUpdate(UserGroupAction):
     new_name: str
 

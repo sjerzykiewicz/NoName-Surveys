@@ -8,6 +8,7 @@
 			if (!$isErrorModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				$isErrorModalHidden = true;
+				event.stopImmediatePropagation();
 			}
 		}
 
@@ -32,3 +33,9 @@
 		><i class="symbol">done</i>OK</button
 	>
 </Modal>
+
+<style>
+	.save i {
+		font-variation-settings: 'wght' 700;
+	}
+</style>

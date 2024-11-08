@@ -16,8 +16,9 @@
 	export let id: string;
 	export let checkKeys: boolean;
 	export let disabled: boolean = false;
-	export let size: number = 1;
 	export let width: string = 'unset';
+	export let fontSize: string = '1em';
+	export let invalidEmails: string[] = [];
 
 	let fileElement: HTMLInputElement | null = null;
 	let fileName: string = 'No file selected';
@@ -51,9 +52,10 @@
 			? 'filter-users-with-no-public-key'
 			: 'filter-unregistered-users';
 		const invalidEmailsSet = new Set(await filterUsers(endpoint, emails));
+		invalidEmails = Array.from(invalidEmailsSet);
 
 		if (invalidEmailsSet.size > 0 && $isErrorModalHidden) {
-			$warningModalContent = `Could not import ${invalidEmailsSet.size} users, because they haven't ${checkKeys ? 'generated keys' : 'registered'} yet.`;
+			$warningModalContent = `Could not import ${invalidEmailsSet.size} users, because they haven't ${checkKeys ? 'generated keys' : 'registered'} yet. You can export the list of invalid users if you want.`;
 			$isWarningModalHidden = false;
 		}
 
@@ -94,9 +96,13 @@
 			}
 		);
 	}
+
+	let innerWidth: number;
 </script>
 
-<div class="button-row" style="font-size: {size}em;">
+<svelte:window bind:innerWidth />
+
+<div class="button-row">
 	<div {title} class="file-div" class:disabled style="width: {width};">
 		<span class="file-label">{label}</span>
 		<label for={id}>
@@ -108,7 +114,7 @@
 		</label>
 	</div>
 </div>
-<EmailsWarning warning={fileWarning} element={fileElement} size={0.8} {disabled} />
+<EmailsWarning warning={fileWarning} element={fileElement} {fontSize} {disabled} />
 
 <style>
 	.button-row {

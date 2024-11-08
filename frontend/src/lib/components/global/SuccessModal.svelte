@@ -10,6 +10,7 @@
 			if (!$isSuccessModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				hide();
+				event.stopImmediatePropagation();
 			}
 		}
 
@@ -33,3 +34,9 @@
 	<div slot="content" class="content">{$successModalContent}</div>
 	<button title="Ok" class="save" on:click={hide}><i class="symbol">done</i>OK</button>
 </Modal>
+
+<style>
+	.save i {
+		font-variation-settings: 'wght' 700;
+	}
+</style>

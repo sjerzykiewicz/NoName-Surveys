@@ -16,7 +16,7 @@
 		<Input
 			bind:text={$questions[questionIndex].choices[0]}
 			label="Positive Choice"
-			title="Enter positive choice"
+			title="Enter a positive choice"
 			--label-top="18px"
 			--label-top-mobile="14px"
 		/>
@@ -29,7 +29,7 @@
 		<Input
 			bind:text={$questions[questionIndex].choices[1]}
 			label="Negative Choice"
-			title="Enter negative choice"
+			title="Enter a negative choice"
 			--label-top="18px"
 			--label-top-mobile="14px"
 		/>

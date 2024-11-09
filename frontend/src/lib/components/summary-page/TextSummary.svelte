@@ -4,7 +4,7 @@
 	export let data: { answers: string[]; details: string };
 </script>
 
-<div class="choice-area display">
+<div class="choice-area text display">
 	{#if data.details}
 		<div title="Question details" class="details">
 			{data.details}
@@ -29,9 +29,8 @@
 	.text-answers {
 		overflow-y: auto;
 		min-height: 1.15em;
-		max-height: 15em;
+		max-height: 16.5em;
 		background-color: var(--secondary-color-2);
-		margin-left: 2.25em;
 		padding: 0.5em;
 		border-radius: 5px;
 		border: 1px solid var(--border-color-1);
@@ -45,7 +44,6 @@
 		margin-bottom: 0.5em;
 		cursor: pointer;
 		text-decoration: none;
-		min-height: 1.15em;
 		transition:
 			0.2s,
 			outline 0s;
@@ -55,34 +53,11 @@
 		background-color: var(--secondary-color-1);
 	}
 
+	.text-input:active {
+		background-color: var(--border-color-1);
+	}
+
 	.text-input:last-of-type {
 		margin-bottom: 0em;
-	}
-
-	.text-answers::-webkit-scrollbar {
-		width: 0.8em;
-	}
-
-	.text-answers::-webkit-scrollbar-track {
-		background-color: var(--secondary-color-2);
-		border-radius: 5px;
-	}
-
-	.text-answers::-webkit-scrollbar-thumb {
-		background-color: var(--primary-color-1);
-		background-clip: padding-box;
-		border-radius: 5px;
-		border: 2px solid var(--secondary-color-2);
-		transition:
-			0.2s,
-			outline 0s;
-	}
-
-	.text-answers::-webkit-scrollbar-thumb:hover {
-		background-color: var(--text-color-3);
-	}
-
-	.text-answers::-webkit-scrollbar-thumb:active {
-		background-color: var(--border-color-1);
 	}
 </style>

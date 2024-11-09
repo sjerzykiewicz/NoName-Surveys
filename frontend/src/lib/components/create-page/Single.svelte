@@ -43,7 +43,7 @@
 			<div class="radio">
 				<input type="radio" disabled name={questionIndex.toString()} />
 			</div>
-			<Input bind:text={choice} label="Choice" title="Enter choice" bind:element={choiceInput} />
+			<Input bind:text={choice} label="Choice" title="Enter a choice" bind:element={choiceInput} />
 			<button
 				title="Remove choice"
 				class="remove-choice"

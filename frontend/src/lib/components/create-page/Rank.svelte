@@ -41,7 +41,7 @@
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div title="Choice no. {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
-			<Input bind:text={choice} label="Choice" title="Enter choice" bind:element={choiceInput} />
+			<Input bind:text={choice} label="Choice" title="Enter a choice" bind:element={choiceInput} />
 			<button
 				title="Remove choice"
 				class="remove-choice"

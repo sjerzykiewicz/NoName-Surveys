@@ -67,7 +67,7 @@
 	<Input
 		bind:text={$questions[questionIndex].question}
 		label="Question"
-		title="Enter question"
+		title="Enter a question"
 		bind:element={questionInput}
 	/>
 	<button

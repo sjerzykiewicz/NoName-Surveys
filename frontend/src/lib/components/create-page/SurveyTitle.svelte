@@ -20,21 +20,19 @@
 	<Input
 		bind:text={$title.title}
 		label="Survey Title"
-		title="Enter survey title"
+		title="Enter a survey title"
 		id="title"
 		bind:element={titleInput}
 		--margin-right="0em"
-		--containter-margin="-0.8em"
-		--count-left="calc(100% - 7em)"
+		--char-count-left="7em"
 	/>
 </div>
 
 <style>
 	.title-container {
 		font-size: 1.25em;
-		padding: 0.2em;
-		margin-left: -0.2em;
-		margin-right: -0.2em;
+		padding: 0.8em 0.2em;
+		margin: -0.8em -0.2em;
 	}
 
 	@media screen and (max-width: 768px) {

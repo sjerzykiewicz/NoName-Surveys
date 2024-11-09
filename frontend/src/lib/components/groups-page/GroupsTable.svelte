@@ -4,12 +4,12 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
 	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS, XL } from '$lib/stores/global';
-	import { limitInput } from '$lib/utils/limitInput';
 	import { M, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import Modal from '$lib/components/global/Modal.svelte';
 	import NameError from './NameError.svelte';
 	import { page } from '$app/stores';
+	import Input from '$lib/components/global/Input.svelte';
 
 	export let groups: {
 		user_group_name: string;
@@ -21,6 +21,7 @@
 	let newName: string = '';
 	let nameError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
+	let nameInput: HTMLDivElement;
 
 	$: groupNames = groups.map((g) => g.user_group_name);
 
@@ -105,28 +106,26 @@
 	icon="edit"
 	title="Rename Group"
 	bind:isHidden={isModalHidden}
+	bind:element={nameInput}
 	width={innerWidth <= $M ? 20 : 36}
 >
 	<div slot="content" class="modal-content">
-		<span>Renaming {selectedGroup}.</span>
-		<div class="input-container" class:max={newName.length > $LIMIT_OF_CHARS}>
-			<!-- svelte-ignore a11y-autofocus -->
-			<div
-				title="Enter a new group name"
-				class="group-input"
-				contenteditable
-				bind:textContent={newName}
-				autofocus={innerWidth > $M}
-				role="textbox"
-				tabindex="0"
-				on:keydown={(e) => {
-					limitInput(e, newName, $LIMIT_OF_CHARS);
-				}}
-			>
-				{newName}
-			</div>
-			<span class="char-count">{newName.length} / {$LIMIT_OF_CHARS}</span>
-		</div>
+		<div class="renaming">Renaming {selectedGroup}.</div>
+		<Input
+			bind:text={newName}
+			label="Group Name"
+			title="Enter a new group name"
+			bind:element={nameInput}
+			handleEnter={(e) => {
+				if (e.key === 'Enter') {
+					e.preventDefault();
+					renameGroup(selectedGroup, newName.trim());
+					e.stopImmediatePropagation();
+				}
+			}}
+			--margin-right="0em"
+			--char-count-left="6.5em"
+		/>
 		<NameError name={newName.trim()} error={nameError} groups={groupNames} fontSize="0.8em" />
 	</div>
 	<button
@@ -217,27 +216,13 @@
 		--tooltip-width: 16em;
 	}
 
-	.group-input {
-		margin: 0em;
-		margin-top: 1em;
-		overflow-wrap: anywhere;
-		text-align: left;
-	}
-
-	.input-container {
-		margin-bottom: -1.35em;
-	}
-
-	.char-count {
-		left: 35%;
-	}
-
 	.modal-content {
 		width: 100%;
 	}
 
-	.modal-content span {
+	.modal-content .renaming {
 		overflow-wrap: break-word;
+		margin-bottom: 0.5em;
 	}
 
 	.save i {

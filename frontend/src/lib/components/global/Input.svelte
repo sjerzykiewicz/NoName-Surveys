@@ -94,7 +94,9 @@
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		color: var(--text-color-1);
 		cursor: text;
-		overflow: hidden;
+		overflow-x: hidden;
+		overflow-y: auto;
+		max-height: 5.75em;
 		white-space: pre-wrap !important;
 		pointer-events: all;
 		transition:
@@ -103,28 +105,23 @@
 	}
 
 	.input-container {
-		flex: var(--container-flex, 1);
-		margin-top: var(--container-margin, -1.1em);
-		margin-bottom: var(--container-margin, -1.1em);
-
+		flex: 1;
 		width: 100%;
 		overflow: hidden;
 		padding: 0.2em;
-		margin-left: -0.2em;
-		margin-right: -0.2em;
+		margin: -1em -0.2em;
 		pointer-events: none;
 	}
 
 	.input-label,
 	.char-count {
-		font-size: var(--font-size, 0.6em);
-
 		position: relative;
 		color: var(--text-color-1);
 		background-color: var(--secondary-color-2);
 		border-radius: 5px;
 		padding: 0em 0.3em;
 		width: fit-content;
+		font-size: 0.6em;
 		text-align: center;
 		cursor: default;
 		z-index: 1;
@@ -134,16 +131,17 @@
 	}
 
 	.input-label {
-		left: var(--label-left, 0.5em);
+		left: 0.5em;
 		top: var(--label-top, 8px);
 	}
 
 	.char-count {
-		left: var(--count-left, calc(100% - 8em));
-		bottom: var(--count-bottom, 6px);
+		left: calc(100% - var(--char-count-left, 8em));
+		bottom: 6px;
+		visibility: hidden;
 	}
 
-	.input-container .input:focus + .char-count {
+	.input:focus + .char-count {
 		visibility: visible;
 	}
 
@@ -153,23 +151,13 @@
 		visibility: visible;
 	}
 
-	#title {
-		font-size: 1.2em;
-		font-weight: 700 !important;
-		width: calc(100% - 0.5em);
-	}
-
 	@media screen and (max-width: 768px) {
 		.input-label {
 			top: var(--label-top-mobile, 6px);
 		}
 
 		.char-count {
-			bottom: var(--count-bottom-mobile, 4px);
-		}
-
-		#title {
-			font-size: 1.25em;
+			bottom: 4px;
 		}
 	}
 </style>

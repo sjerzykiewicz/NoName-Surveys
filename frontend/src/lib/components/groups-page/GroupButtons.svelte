@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { tick } from 'svelte';
@@ -10,12 +9,12 @@
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import NameError from '$lib/components/groups-page/NameError.svelte';
 	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
-	import { limitInput } from '$lib/utils/limitInput';
 	import { M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 	import WarningModal from '$lib/components/global/WarningModal.svelte';
+	import Input from '$lib/components/global/Input.svelte';
 
 	export let groups: {
 		user_group_name: string;
@@ -31,6 +30,7 @@
 	let nameError: GroupError = GroupError.NoError;
 	let membersError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
+	let nameInput: HTMLDivElement;
 
 	$: groupNames = groups.map((g) => g.user_group_name);
 
@@ -160,31 +160,27 @@
 	{/if}
 </div>
 {#if isPanelVisible}
-	<div class="buttons-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<div
+		class="buttons-container"
+		transition:slide={{ duration: 200, easing: cubicInOut }}
+		on:introend={() => nameInput.focus()}
+	>
 		<div class="button-row">
-			<div
-				class="input-container"
-				class:max={groupName.length > $LIMIT_OF_CHARS}
-				transition:slide={{ duration: 200, easing: cubicInOut }}
-			>
-				<!-- svelte-ignore a11y-autofocus -->
-				<div
-					title="Enter a group name"
-					class="group-input"
-					contenteditable
-					bind:textContent={groupName}
-					autofocus={innerWidth > $M}
-					role="textbox"
-					tabindex="0"
-					on:keydown={(e) => {
-						handleNewLine(e);
-						limitInput(e, groupName, $LIMIT_OF_CHARS);
-					}}
-				>
-					{groupName}
-				</div>
-				<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
-			</div>
+			<Input
+				bind:text={groupName}
+				label="Group Name"
+				title="Enter a group name"
+				bind:element={nameInput}
+				handleEnter={(e) => {
+					if (e.key === 'Enter') {
+						e.preventDefault();
+						createGroup(groupName.trim(), groupMembers);
+						e.stopImmediatePropagation();
+					}
+				}}
+				--margin-right="0em"
+				--char-count-left="6.5em"
+			/>
 		</div>
 		<NameError
 			name={groupName.trim()}
@@ -229,17 +225,9 @@
 		margin: -0.2em;
 	}
 
-	.group-input {
-		margin: 0em;
-	}
-
 	.save i {
 		font-variation-settings: 'wght' 700;
 		transform: rotate(0deg);
 		transition: transform 0.2s;
-	}
-
-	.input-container {
-		margin-bottom: -1.4em;
 	}
 </style>

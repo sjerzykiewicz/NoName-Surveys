@@ -7,7 +7,7 @@
 	export let questionIndex: number;
 </script>
 
-<div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
+<div class="choice-area text" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="details">
 		<Input
 			bind:text={$questions[questionIndex].choices[0]}

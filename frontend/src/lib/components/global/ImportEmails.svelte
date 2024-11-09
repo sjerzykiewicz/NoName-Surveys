@@ -108,12 +108,11 @@
 		</label>
 	</div>
 </div>
-<EmailsWarning warning={fileWarning} element={fileElement} {disabled} --font-size-warning />
+<EmailsWarning warning={fileWarning} element={fileElement} {disabled} />
 
 <style>
 	.button-row {
 		margin-top: 0em;
-		font-size: var(--font-size-button, 1em);
 	}
 
 	.file-div {

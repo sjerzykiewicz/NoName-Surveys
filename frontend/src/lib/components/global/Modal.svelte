@@ -80,7 +80,7 @@
 		height: 100%;
 		background: rgba(0, 0, 0, 0.5);
 		backdrop-filter: blur(2px);
-		z-index: max(calc(var(--z-index) - 1), 9);
+		z-index: calc(var(--z-index, 10) - 1);
 	}
 
 	.modal {
@@ -98,7 +98,7 @@
 		color: var(--text-color, var(--text-color-1));
 		border-color: var(--border-color, var(--border-color-1));
 		width: var(--width, 20em);
-		z-index: max(var(--z-index), 10);
+		z-index: var(--z-index, 10);
 		transition:
 			0.2s,
 			outline 0s;

@@ -8,7 +8,7 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import NameError from '$lib/components/groups-page/NameError.svelte';
-	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS, M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
@@ -126,7 +126,11 @@
 		selectedGroupsToRemove = [];
 		await invalidateAll();
 	}
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <DeleteModal title="Deleting Groups" bind:isHidden={isModalHidden} deleteEntries={deleteGroups} />
 
@@ -174,9 +178,15 @@
 				}}
 				--margin-right="0em"
 				--char-count-left="6.5em"
+				--container-margin="-0.9em"
 			/>
 		</div>
-		<NameError name={groupName.trim()} error={nameError} groups={groupNames} />
+		<NameError
+			name={groupName.trim()}
+			error={nameError}
+			groups={groupNames}
+			--font-size={innerWidth <= $M ? '0.8em' : '1em'}
+		/>
 		<div class="button-row">
 			<div title="Select group members" class="select-list">
 				<MultiSelect
@@ -187,7 +197,7 @@
 			</div>
 			<button
 				title="Save the group"
-				class="save"
+				class="done"
 				on:click={() => {
 					createGroup(groupName.trim(), groupMembers);
 				}}
@@ -202,8 +212,6 @@
 			label="Or import group members from a .csv file."
 			id="emails-file"
 			checkKeys={false}
-			--font-size-button="1.25em"
-			--font-size-warning="0.8em"
 		/>
 	</div>
 {/if}
@@ -212,17 +220,5 @@
 	.buttons-container {
 		padding: 0.2em;
 		margin: -0.2em;
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
-		transform: rotate(0deg);
-		transition: transform 0.2s;
-	}
-
-	@media screen and (max-width: 768px) {
-		.button-row {
-			font-size: 0.8em;
-		}
 	}
 </style>

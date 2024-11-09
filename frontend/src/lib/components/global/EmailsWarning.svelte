@@ -31,9 +31,3 @@
 		<i class="symbol">warning</i>{warningMessage()}
 	</p>
 {/if}
-
-<style>
-	.warning {
-		font-size: var(--font-size-warning, 1em);
-	}
-</style>

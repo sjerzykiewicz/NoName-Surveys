@@ -45,7 +45,7 @@
 					<i class="symbol">error</i>{form.error}
 				</p>
 			{/if}
-			<button title="Submit the code" class="save" type="submit">
+			<button title="Submit the code" class="done" type="submit">
 				<i class="symbol">done</i>Submit
 			</button>
 		</label>
@@ -136,13 +136,9 @@
 		margin-bottom: -1.2em;
 	}
 
-	.save {
+	.done {
 		font-size: 1.25em;
 		margin: 0.75em auto 0em auto;
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
 	}
 
 	.tooltip {

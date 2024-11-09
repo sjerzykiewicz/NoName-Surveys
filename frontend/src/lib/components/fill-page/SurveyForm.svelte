@@ -404,7 +404,7 @@
 </Content>
 
 <Footer>
-	<button title="Submit survey" class="footer-button save" on:click={submitSurvey}>
+	<button title="Submit survey" class="footer-button done" on:click={submitSurvey}>
 		<i class="symbol">done</i>Submit
 	</button>
 </Footer>
@@ -414,16 +414,12 @@
 		width: 100%;
 	}
 
-	.save i {
-		font-variation-settings: 'wght' 700;
-	}
-
 	.warning {
 		margin: 0em 0em 0.5em 0em;
 	}
 
 	@media screen and (max-width: 768px) {
-		.footer-button.save {
+		.footer-button.done {
 			font-size: 1.25em;
 		}
 	}

@@ -218,7 +218,7 @@
 <WarningModal
 	isExportButtonVisible={true}
 	emails={invalidEmails}
-	--width={innerWidth <= $M ? '20em' : '23em'}
+	--width-warning={innerWidth <= $M ? '20em' : '23em'}
 />
 
 <Modal
@@ -275,7 +275,6 @@
 					id="emails-file"
 					checkKeys={true}
 					--width="100%"
-					--font-size-warning={innerWidth <= $M ? '0.8em' : '1em'}
 					bind:disabled={isCryptoDisabled}
 					bind:invalidEmails
 				/>

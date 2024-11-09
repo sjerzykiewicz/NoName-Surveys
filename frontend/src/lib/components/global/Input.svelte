@@ -109,7 +109,7 @@
 		width: 100%;
 		overflow: hidden;
 		padding: 0.2em;
-		margin: -1em -0.2em;
+		margin: var(--container-margin, -1em) -0.2em;
 		pointer-events: none;
 	}
 

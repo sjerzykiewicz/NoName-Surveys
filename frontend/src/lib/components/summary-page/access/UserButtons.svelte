@@ -130,7 +130,7 @@
 		</div>
 		<button
 			title="Finish giving access"
-			class="save"
+			class="done"
 			on:click={() => addUsers(code, selectedUsersToAdd)}
 		>
 			<i class="symbol">done</i>Apply
@@ -142,9 +142,5 @@
 <style>
 	.select-list {
 		margin-bottom: 0em;
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
 	}
 </style>

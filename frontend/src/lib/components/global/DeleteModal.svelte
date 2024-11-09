@@ -46,9 +46,3 @@
 		<i class="symbol">close</i>Cancel
 	</button>
 </Modal>
-
-<style>
-	.not i {
-		font-variation-settings: 'wght' 700;
-	}
-</style>

@@ -130,7 +130,7 @@
 	</div>
 	<button
 		title="Save the new group name"
-		class="save"
+		class="done"
 		on:click={() => renameGroup(selectedGroup, newName.trim())}
 		><i class="symbol">done</i>Apply</button
 	>
@@ -223,9 +223,5 @@
 	.modal-content .renaming {
 		overflow-wrap: break-word;
 		margin-bottom: 0.5em;
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
 	}
 </style>

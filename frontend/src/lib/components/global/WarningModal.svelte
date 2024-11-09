@@ -30,8 +30,8 @@
 	title="Warning"
 	--text-color="var(--warning-color-1)"
 	--border-color="var(--warning-color-1)"
-	--width
-	--z-index={12}
+	--width="var(--width-warning)"
+	--z-index="12"
 	bind:isHidden={$isWarningModalHidden}
 	{hide}
 >
@@ -44,7 +44,7 @@
 			><i class="symbol">file_save</i>Export</button
 		>
 	{/if}
-	<button title="Ok" class="save" on:click={() => ($isWarningModalHidden = true)}
+	<button title="Ok" class="done" on:click={() => ($isWarningModalHidden = true)}
 		><i class="symbol">done</i>OK</button
 	>
 </Modal>
@@ -52,9 +52,5 @@
 <style>
 	.export i {
 		margin-right: 0.15em;
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
 	}
 </style>

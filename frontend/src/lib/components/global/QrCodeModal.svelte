@@ -47,7 +47,7 @@
 	icon="qr_code_2"
 	{title}
 	bind:isHidden
-	--width={innerWidth > $M && innerHeight > $M ? 30 : 20}
+	--width={innerWidth > $M && innerHeight > $M ? '30em' : '20em'}
 >
 	<div slot="content" class="content">
 		<span class="survey-code">{surveyCode}</span>

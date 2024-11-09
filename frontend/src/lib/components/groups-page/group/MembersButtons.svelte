@@ -181,15 +181,9 @@
 				placeholder="Select group members"
 			/>
 		</div>
-		<button title="Finish adding group members" class="save" on:click={addMembers}>
+		<button title="Finish adding group members" class="done" on:click={addMembers}>
 			<i class="symbol">done</i>Apply
 		</button>
 	</div>
 	<MembersError members={selectedMembersToAdd} error={membersError} />
 {/if}
-
-<style>
-	.save i {
-		font-variation-settings: 'wght' 700;
-	}
-</style>

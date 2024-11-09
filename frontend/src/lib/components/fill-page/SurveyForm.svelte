@@ -330,6 +330,7 @@
 			if (!isKeysModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				processCrypto();
+				event.stopImmediatePropagation();
 			}
 		}
 

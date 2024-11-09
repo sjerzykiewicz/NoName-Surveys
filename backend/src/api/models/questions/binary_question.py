@@ -8,7 +8,9 @@ from src.api.models.questions.question_base import Question
 class BinaryQuestion(Question):
     question_type: Literal["binary"] = "binary"
     choices: list[str] = Field(
-        len=2, description="Binary question must have precisely 2 options"
+        min_length=2,
+        max_length=2,
+        description="Binary question must have precisely 2 options",
     )
     answer: Optional[str] = None
 
@@ -34,6 +36,3 @@ class BinaryQuestion(Question):
             or self.choices != answer.choices
         ):
             raise ValueError("Invalid answer!")
-
-    class Config:
-        extra = "forbid"

@@ -10,6 +10,7 @@
 			if (!$isSuccessModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				hide();
+				event.stopImmediatePropagation();
 			}
 		}
 

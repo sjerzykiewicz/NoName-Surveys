@@ -8,7 +8,7 @@ import src.db.crud.survey as survey_crud
 import src.db.crud.survey_draft as survey_draft_crud
 import src.db.crud.user as user_crud
 from src.api.models.surveys.survey import (
-    ShareSurveyResults,
+    ShareSurveyActions,
     SurveyHeadersOutput,
     SurveyInfoFetchInput,
     SurveyStructure,
@@ -16,7 +16,7 @@ from src.api.models.surveys.survey import (
     SurveyStructureCreateOutput,
     SurveyStructureFetchOutput,
     SurveyUserActions,
-    TakeAwaySurveyAccess,
+    SurveyUserDeleteAction,
 )
 from src.api.models.users.user import User
 from src.db.base import get_session
@@ -159,23 +159,21 @@ async def get_respondents_by_code(
 
 @router.post("/delete", response_description="Delete a survey", response_model=dict)
 async def delete_survey(
-    survey_delete: SurveyUserActions, session: Session = Depends(get_session)
+    survey_delete: SurveyUserDeleteAction, session: Session = Depends(get_session)
 ):
     user = user_crud.get_user_by_email(survey_delete.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
 
-    survey = survey_crud.get_survey_by_code(survey_delete.survey_code, session)
-    if survey is None:
-        raise HTTPException(status_code=404, detail="Survey does not exist")
+    deleted_surveys = survey_crud.delete_surveys(
+        user.id, survey_delete.survey_codes, session
+    )
 
-    if survey.creator_id != user.id:
+    if len(deleted_surveys) != len(survey_delete.survey_codes):
         raise HTTPException(
-            status_code=403,
-            detail="User does not have access to this survey",
+            status_code=404,
+            detail="Some survey do not exist or user does not have access to them",
         )
-
-    survey_crud.delete_survey_by_code(survey_delete.survey_code, session)
 
     return {"message": "survey deleted successfully"}
 
@@ -251,7 +249,7 @@ async def create_survey(
     response_model=dict,
 )
 async def give_access_to_surveys(
-    share_surveys_input: ShareSurveyResults, session: Session = Depends(get_session)
+    share_surveys_input: ShareSurveyActions, session: Session = Depends(get_session)
 ):
     owner = user_crud.get_user_by_email(share_surveys_input.user_email, session)
     if owner is None:
@@ -266,12 +264,10 @@ async def give_access_to_surveys(
             status_code=403, detail="User does not have access to this survey"
         )
 
-    if not user_crud.all_users_exist(
-        share_surveys_input.user_emails_to_share_with, session
-    ):
+    if not user_crud.all_users_exist(share_surveys_input.user_emails, session):
         raise HTTPException(status_code=400, detail="Not all users are registered")
 
-    for email in share_surveys_input.user_emails_to_share_with:
+    for email in share_surveys_input.user_emails:
         user = user_crud.get_user_by_email(email, session)
         survey_crud.give_survey_access(survey.id, user.id, session)
 
@@ -284,7 +280,7 @@ async def give_access_to_surveys(
     response_model=dict,
 )
 async def take_away_access_to_surveys(
-    take_away_access_input: TakeAwaySurveyAccess,
+    take_away_access_input: ShareSurveyActions,
     session: Session = Depends(get_session),
 ):
     owner = user_crud.get_user_by_email(take_away_access_input.user_email, session)
@@ -300,18 +296,20 @@ async def take_away_access_to_surveys(
             status_code=403, detail="User does not have access to this survey"
         )
 
-    user = user_crud.get_user_by_email(
-        take_away_access_input.user_email_to_take_access_from, session
-    )
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not found")
-
-    if user.id == survey.creator_id:
-        raise HTTPException(
-            status_code=400, detail="Cannot take away access from the survey creator"
+    users = [
+        user.id
+        for user in user_crud.get_users_by_emails(
+            take_away_access_input.user_emails, session
         )
+    ]
+    access_taken_from = survey_crud.take_away_survey_access(
+        owner.id, survey.id, users, session
+    )
 
-    survey_crud.take_away_survey_access(survey.id, user.id, session)
+    if len(access_taken_from) != len(users):
+        raise HTTPException(
+            status_code=404, detail="Some users did not have access taken away"
+        )
 
     return {"message": "Survey access taken away successfully"}
 

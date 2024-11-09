@@ -209,7 +209,7 @@
 			label="Or import group members from a .csv file."
 			id="emails-file"
 			checkKeys={false}
-			buttonSize={1.25}
+			buttonSize="1.25em"
 		/>
 	</div>
 {/if}

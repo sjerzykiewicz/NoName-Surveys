@@ -9,6 +9,7 @@ from src.api.models.user_groups.user_groups import (  # noqa
     UserGroupCreate,
     UserGroupCreator,
     UserGroupMembersOutput,
+    UserGroupMultipleActions,
     UserGroupNameUpdate,
 )
 from src.db.base import get_session
@@ -240,23 +241,22 @@ async def rename_user_group(
     return {"message": "user group updated successfully"}
 
 
-@router.post("/delete", response_description="Delete a user group", response_model=dict)
+@router.post("/delete", response_description="Delete user groups", response_model=dict)
 async def delete_user_group(
-    user_group_request: UserGroupAction,
+    user_group_request: UserGroupMultipleActions,
     session: Session = Depends(get_session),
 ):
     user = user_crud.get_user_by_email(user_group_request.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
 
-    user_group = user_groups_crud.get_user_group_by_name(
-        user.id, user_group_request.name, session
+    deleted_user_groups = user_groups_crud.delete_user_groups(
+        user.id, user_group_request.names, session
     )
-    if user_group is None:
-        raise HTTPException(
-            status_code=400, detail="User group not found for the given user"
-        )
 
-    user_groups_crud.delete_user_group(user_group.id, session)
+    if len(deleted_user_groups) != len(user_group_request.names):
+        raise HTTPException(
+            status_code=400, detail="Some user groups were not found for the given user"
+        )
 
     return {"message": "user group deleted successfully"}

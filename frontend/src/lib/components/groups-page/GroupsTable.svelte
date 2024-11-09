@@ -85,6 +85,7 @@
 			if (!isModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				renameGroup(selectedGroup, newName.trim());
+				event.stopImmediatePropagation();
 			}
 		}
 
@@ -104,7 +105,7 @@
 	icon="edit"
 	title="Rename Group"
 	bind:isHidden={isModalHidden}
-	--width={innerWidth <= $M ? 20 : 36}
+	--width={innerWidth <= $M ? '20em' : '36em'}
 >
 	<div slot="content" class="modal-content">
 		<span>Renaming {selectedGroup}.</span>

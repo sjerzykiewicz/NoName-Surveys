@@ -153,12 +153,14 @@
 		function handleEscape(event: KeyboardEvent) {
 			if (isPanelVisible && event.key === 'Escape') {
 				isPanelVisible = false;
+				event.stopImmediatePropagation();
 			}
 		}
 
 		function handleClick(event: MouseEvent) {
 			if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
 				isPanelVisible = false;
+				event.stopImmediatePropagation();
 			}
 		}
 

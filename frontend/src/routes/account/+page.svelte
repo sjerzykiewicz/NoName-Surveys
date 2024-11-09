@@ -10,25 +10,13 @@
 	import { onMount } from 'svelte';
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { downloadFile } from '$lib/utils/downloadFile';
 
 	export let isModalHidden: boolean = true;
 
 	onMount(async () => {
 		await init();
 	});
-
-	function download(filename: string, text: string) {
-		const element = document.createElement('a');
-		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-		element.setAttribute('download', filename);
-
-		element.style.display = 'none';
-		document.body.appendChild(element);
-
-		element.click();
-
-		document.body.removeChild(element);
-	}
 
 	async function generateKeyPair() {
 		try {
@@ -54,7 +42,7 @@
 				return;
 			}
 
-			download('noname-keys.pem', publicKey + '\n\n' + privateKey);
+			downloadFile('noname-keys.pem', publicKey + '\n\n' + privateKey);
 		} catch (e) {
 			$errorModalContent = e as string;
 			$isErrorModalHidden = false;
@@ -68,6 +56,7 @@
 				event.preventDefault();
 				isModalHidden = true;
 				generateKeyPair();
+				event.stopImmediatePropagation();
 			}
 		}
 
@@ -88,7 +77,7 @@
 		icon="encrypted"
 		title="Generating Keys"
 		bind:isHidden={isModalHidden}
-		--width={innerWidth <= $M ? 18 : 22}
+		--width={innerWidth <= $M ? '18em' : '22em'}
 	>
 		<span slot="content"
 			>Are you sure you want to generate new keys? Doing so will take away your ability to answer

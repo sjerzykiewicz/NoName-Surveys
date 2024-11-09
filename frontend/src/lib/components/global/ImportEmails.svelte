@@ -16,6 +16,7 @@
 	export let id: string;
 	export let checkKeys: boolean;
 	export let disabled: boolean = false;
+	export let invalidEmails: string[] = [];
 
 	let fileElement: HTMLInputElement | null = null;
 	let fileName: string = 'No file selected';
@@ -49,9 +50,10 @@
 			? 'filter-users-with-no-public-key'
 			: 'filter-unregistered-users';
 		const invalidEmailsSet = new Set(await filterUsers(endpoint, emails));
+		invalidEmails = Array.from(invalidEmailsSet);
 
 		if (invalidEmailsSet.size > 0 && $isErrorModalHidden) {
-			$warningModalContent = `Could not import ${invalidEmailsSet.size} users, because they haven't ${checkKeys ? 'generated keys' : 'registered'} yet.`;
+			$warningModalContent = `Could not import ${invalidEmailsSet.size} users, because they haven't ${checkKeys ? 'generated keys' : 'registered'} yet. You can export the list of invalid users if you want.`;
 			$isWarningModalHidden = false;
 		}
 

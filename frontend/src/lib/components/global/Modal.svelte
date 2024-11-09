@@ -14,12 +14,14 @@
 		function handleEscape(event: KeyboardEvent) {
 			if (!isHidden && event.key === 'Escape') {
 				hide();
+				event.stopImmediatePropagation();
 			}
 		}
 
 		function handleClick(event: MouseEvent) {
 			if (isClickable && !isHidden && !(event.target as HTMLElement).closest('.modal')) {
 				hide();
+				event.stopImmediatePropagation();
 			}
 		}
 

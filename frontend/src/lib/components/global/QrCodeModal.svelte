@@ -6,6 +6,7 @@
 	import { copy } from '$lib/utils/copy';
 	import { popup } from '$lib/utils/popup';
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
+	import { onMount } from 'svelte';
 
 	export let isHidden: boolean = true;
 	export let title: string;
@@ -19,6 +20,22 @@
 			$isErrorModalHidden = false;
 		}
 	}
+
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isHidden && event.key === 'Enter') {
+				event.preventDefault();
+				isHidden = true;
+				event.stopImmediatePropagation();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
 
 	let innerWidth: number;
 	let innerHeight: number;

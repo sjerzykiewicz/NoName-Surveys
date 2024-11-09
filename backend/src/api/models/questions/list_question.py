@@ -34,6 +34,3 @@ class ListQuestion(Question):
             or self.choices != answer.choices
         ):
             raise ValueError("Invalid answer!")
-
-    class Config:
-        extra = "forbid"

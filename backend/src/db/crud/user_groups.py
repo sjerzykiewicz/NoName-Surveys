@@ -82,13 +82,20 @@ def add_user_to_group(group_id: int, user_id: int, session: Session) -> UserGrou
     session.refresh(user_group_member)
 
 
-def delete_user_group(user_group_id: int, session: Session) -> UserGroup:
-    user_group = session.exec(
-        select(UserGroup).where(UserGroup.id == user_group_id)
-    ).first()
-    user_group.is_deleted = True
+def delete_user_groups(
+    user_id: int, names: list[str], session: Session
+) -> list[UserGroup]:
+    user_groups = session.exec(
+        select(UserGroup).where(
+            (UserGroup.creator_id == user_id)
+            & (UserGroup.name.in_(names))
+            & (UserGroup.is_deleted == False)  # noqa: E712
+        )
+    ).all()
+    for user_group in user_groups:
+        user_group.is_deleted = True
     session.commit()
-    return user_group
+    return user_groups
 
 
 def get_user_group_members_count(user_group_id: int, session: Session) -> int:

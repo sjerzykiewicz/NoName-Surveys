@@ -1,9 +1,11 @@
 import re
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from pydantic import ValidationInfo, field_validator
+
+from src.api.models.base import Base
 
 
-class User(BaseModel):
+class User(Base):
     user_email: str
 
     @field_validator("user_email")
@@ -14,11 +16,8 @@ class User(BaseModel):
             raise ValueError("invalid email format")
         return v
 
-    class Config:
-        extra = "forbid"
 
-
-class UserFilterOthers(BaseModel):
+class UserFilterOthers(Base):
     emails: list[str]
 
     @field_validator("emails")
@@ -51,6 +50,3 @@ class UserUpdatePublicKey(User):
         if not re.match(r"^[0-9a-f]*$", v):
             raise ValueError("invalid fingerprint format")
         return v
-
-    class Config:
-        extra = "forbid"

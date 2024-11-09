@@ -41,6 +41,3 @@ class SliderQuestion(Question):
             or self.max_value != answer.max_value
         ):
             raise ValueError("Invalid answer!")
-
-    class Config:
-        extra = "forbid"

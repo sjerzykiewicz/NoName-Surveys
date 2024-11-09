@@ -330,6 +330,7 @@
 			if (!isKeysModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				processCrypto();
+				event.stopImmediatePropagation();
 			}
 		}
 
@@ -349,7 +350,7 @@
 	icon="encrypted"
 	title="Load Your Keys"
 	bind:isHidden={isKeysModalHidden}
-	--width={innerWidth <= $M ? 20 : 38}
+	--width={innerWidth <= $M ? '20em' : '38em'}
 >
 	<div slot="content" title="Load your digital signature keys" class="file-div">
 		<span class="file-label"

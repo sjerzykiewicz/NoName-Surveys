@@ -3,10 +3,8 @@
 	import NavBar from '$lib/components/global/NavBar.svelte';
 	import ScrollToTop from '$lib/components/global/ScrollToTop.svelte';
 	import ErrorModal from '$lib/components/global/ErrorModal.svelte';
-	import WarningModal from '$lib/components/global/WarningModal.svelte';
 </script>
 
-<WarningModal />
 <ErrorModal />
 
 <NavBar />

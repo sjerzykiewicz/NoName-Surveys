@@ -242,7 +242,7 @@ async def rename_user_group(
 
 
 @router.post("/delete", response_description="Delete user groups", response_model=dict)
-async def delete_user_group(
+async def delete_user_groups(
     user_group_request: UserGroupMultipleActions,
     session: Session = Depends(get_session),
 ):

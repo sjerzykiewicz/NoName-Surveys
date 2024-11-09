@@ -38,13 +38,15 @@
 		title: string;
 		creation_date: string;
 	}[];
-	export let selectedDraftsToRemove: typeof drafts = [];
+	export let selectedDraftsToRemove: number[] = [];
+
+	$: draftIds = drafts.map((d) => d.id);
 
 	$: allSelected =
-		selectedDraftsToRemove.length === drafts.length && selectedDraftsToRemove.length > 0;
+		selectedDraftsToRemove.length === draftIds.length && selectedDraftsToRemove.length > 0;
 
 	function toggleAll() {
-		selectedDraftsToRemove = allSelected ? [] : [...drafts];
+		selectedDraftsToRemove = allSelected ? [] : [...draftIds];
 	}
 
 	function formatDate(isoString: string): string {
@@ -239,7 +241,7 @@
 			<tr>
 				<td title="Select {draft.title}" class="checkbox-entry"
 					><label>
-						<input type="checkbox" bind:group={selectedDraftsToRemove} value={draft} />
+						<input type="checkbox" bind:group={selectedDraftsToRemove} value={draft.id} />
 					</label></td
 				>
 				<td title="Open the draft" class="title-entry"

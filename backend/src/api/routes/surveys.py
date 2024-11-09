@@ -158,7 +158,7 @@ async def get_respondents_by_code(
 
 
 @router.post("/delete", response_description="Delete a survey", response_model=dict)
-async def delete_survey(
+async def delete_surveys(
     survey_delete: SurveyUserDeleteAction, session: Session = Depends(get_session)
 ):
     user = user_crud.get_user_by_email(survey_delete.user_email, session)

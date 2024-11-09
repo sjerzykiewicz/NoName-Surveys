@@ -230,7 +230,7 @@ def test_rename_user_group_new_group_name_already_exists(client: TestClient):
     assert response.status_code == 400
 
 
-def test_delete_user_group(client: TestClient):
+def test_delete_user_groups(client: TestClient):
     # given
     create_users(client, [TEST_VALID_USER_EMAIL_1, TEST_VALID_USER_EMAIL_2])
     create_user_group(client, TEST_VALID_USER_EMAIL_1, TEST_USER_GROUP_NAME_1, [TEST_VALID_USER_EMAIL_2])
@@ -245,7 +245,7 @@ def test_delete_user_group(client: TestClient):
     assert response.status_code == 200
 
 
-def test_delete_user_group_some_not_found(client: TestClient):
+def test_delete_user_groups_some_not_found(client: TestClient):
     # given
     create_users(client, [TEST_VALID_USER_EMAIL_1, TEST_VALID_USER_EMAIL_2])
     create_user_group(client, TEST_VALID_USER_EMAIL_1, TEST_USER_GROUP_NAME_1, [TEST_VALID_USER_EMAIL_2])

@@ -85,7 +85,7 @@ async def get_survey_draft(
     response_description="Delete a survey draft",
     response_model=dict,
 )
-async def delete_survey_draft(
+async def delete_survey_drafts(
     survey_draft_delete: SurveyDraftUserActionDelete,
     session: Session = Depends(get_session),
 ):

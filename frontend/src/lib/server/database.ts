@@ -53,10 +53,10 @@ export const getSurveyDraft = (user_email: string, id: number) => {
 	});
 };
 
-export const deleteSurveyDraft = (user_email: string, id: number) => {
+export const deleteSurveyDrafts = (user_email: string, ids: number[]) => {
 	return fetch(`${host}/survey-drafts/delete`, {
 		method: 'POST',
-		body: JSON.stringify({ user_email, id }),
+		body: JSON.stringify({ user_email, ids }),
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -135,10 +135,10 @@ export const getSurveyRespondents = (survey_code: string, page: number) => {
 	});
 };
 
-export const deleteSurvey = (user_email: string, survey_code: string) => {
+export const deleteSurveys = (user_email: string, survey_codes: string) => {
 	return fetch(`${host}/surveys/delete`, {
 		method: 'POST',
-		body: JSON.stringify({ user_email, survey_code }),
+		body: JSON.stringify({ user_email, survey_codes }),
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -158,11 +158,11 @@ export const createSurvey = (info: SurveyCreateInfo) => {
 export const giveAccessToSurvey = (
 	user_email: string,
 	survey_code: string,
-	user_emails_to_share_with: string[]
+	user_emails: string[]
 ) => {
 	return fetch(`${host}/surveys/give-access`, {
 		method: 'POST',
-		body: JSON.stringify({ user_email, survey_code, user_emails_to_share_with }),
+		body: JSON.stringify({ user_email, survey_code, user_emails }),
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -172,11 +172,11 @@ export const giveAccessToSurvey = (
 export const takeAwayAccessToSurvey = (
 	user_email: string,
 	survey_code: string,
-	user_email_to_take_access_from: string
+	user_emails: string
 ) => {
 	return fetch(`${host}/surveys/take-away-access`, {
 		method: 'POST',
-		body: JSON.stringify({ user_email, survey_code, user_email_to_take_access_from }),
+		body: JSON.stringify({ user_email, survey_code, user_emails }),
 		headers: {
 			'Content-Type': 'application/json'
 		}
@@ -279,10 +279,10 @@ export const renameUserGroup = (user_email: string, name: string, new_name: stri
 	});
 };
 
-export const deleteUserGroup = (user_email: string, name: string) => {
+export const deleteUserGroups = (user_email: string, names: string) => {
 	return fetch(`${host}/user-groups/delete`, {
 		method: 'POST',
-		body: JSON.stringify({ user_email, name }),
+		body: JSON.stringify({ user_email, names }),
 		headers: {
 			'Content-Type': 'application/json'
 		}

@@ -7,7 +7,7 @@
 	import { LIMIT_OF_SURVEYS } from '$lib/stores/global';
 
 	export let data;
-	export let selectedSurveysToRemove: typeof data.survey_list = [];
+	export let selectedSurveysToRemove: string[] = [];
 </script>
 
 <Header>
@@ -21,9 +21,9 @@
 
 <Content>
 	<LimitWarning num={data.numSurveys} limit={$LIMIT_OF_SURVEYS} items="Surveys" />
-	<SurveysTable survey_list={data.survey_list.toReversed()} bind:selectedSurveysToRemove />
+	<SurveysTable surveys={data.surveys.toReversed()} bind:selectedSurveysToRemove />
 	<SurveysButtons
-		survey_list={data.survey_list.toReversed()}
+		surveys={data.surveys.toReversed()}
 		numSurveys={data.numSurveys}
 		bind:selectedSurveysToRemove
 	/>

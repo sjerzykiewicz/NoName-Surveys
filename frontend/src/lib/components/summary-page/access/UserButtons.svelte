@@ -43,14 +43,14 @@
 		return true;
 	}
 
-	async function addUsers(survey_code: string, user_emails_to_share_with: string[]) {
-		if (!(await checkCorrectness(user_emails_to_share_with))) return;
+	async function addUsers(survey_code: string, user_emails: string[]) {
+		if (!(await checkCorrectness(user_emails))) return;
 
 		const response = await fetch('/api/surveys/give-access', {
 			method: 'POST',
 			body: JSON.stringify({
 				survey_code: survey_code,
-				user_emails_to_share_with: user_emails_to_share_with
+				user_emails: user_emails
 			}),
 			headers: {
 				'Content-Type': 'application/json'
@@ -70,28 +70,25 @@
 	}
 
 	async function removeUsers() {
-		// TODO: fix and improve this
-		selectedUsersToRemove.forEach(async (user) => {
-			const response = await fetch('/api/surveys/take-away-access', {
-				method: 'POST',
-				body: JSON.stringify({
-					survey_code: code,
-					user_email_to_take_access_from: user
-				}),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!response.ok) {
-				const body = await response.json();
-				$errorModalContent = getErrorMessage(body.detail);
-				$isErrorModalHidden = false;
-				return;
+		const response = await fetch('/api/surveys/take-away-access', {
+			method: 'POST',
+			body: JSON.stringify({
+				survey_code: code,
+				user_emails: selectedUsersToRemove
+			}),
+			headers: {
+				'Content-Type': 'application/json'
 			}
-
-			users = users.filter((u) => u !== user);
 		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		users = users.filter((u) => !new Set(selectedUsersToRemove).has(u));
 		// TODO: go to previous page if there are no users left on the current page
 
 		isModalHidden = true;

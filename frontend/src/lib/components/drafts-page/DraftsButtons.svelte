@@ -12,30 +12,27 @@
 		creation_date: string;
 	}[];
 	export let numDrafts: number;
-	export let selectedDraftsToRemove: typeof drafts = [];
+	export let selectedDraftsToRemove: number[] = [];
 
 	let isModalHidden: boolean = true;
 
 	async function deleteDrafts() {
-		// TODO: fix and improve this
-		selectedDraftsToRemove.forEach(async (draft) => {
-			const response = await fetch('/api/surveys/drafts/delete', {
-				method: 'POST',
-				body: JSON.stringify({ id: draft.id }),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!response.ok) {
-				const body = await response.json();
-				$errorModalContent = getErrorMessage(body.detail);
-				$isErrorModalHidden = false;
-				return;
+		const response = await fetch('/api/surveys/drafts/delete', {
+			method: 'POST',
+			body: JSON.stringify({ ids: selectedDraftsToRemove }),
+			headers: {
+				'Content-Type': 'application/json'
 			}
-
-			drafts = drafts.filter((d) => d.id !== draft.id);
 		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		drafts = drafts.filter((d) => !new Set(selectedDraftsToRemove).has(d.id));
 		// TODO: go to previous page if there are no drafts left on the current page
 
 		isModalHidden = true;

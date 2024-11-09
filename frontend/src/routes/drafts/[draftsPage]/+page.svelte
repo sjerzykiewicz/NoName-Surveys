@@ -7,7 +7,7 @@
 	import { LIMIT_OF_DRAFTS } from '$lib/stores/global';
 
 	export let data;
-	export let selectedDraftsToRemove: typeof data.drafts = [];
+	export let selectedDraftsToRemove: number[] = [];
 </script>
 
 <Header>

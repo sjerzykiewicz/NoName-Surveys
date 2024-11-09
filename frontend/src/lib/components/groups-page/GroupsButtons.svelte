@@ -101,25 +101,22 @@
 	}
 
 	async function deleteGroups() {
-		// TODO: fix and improve this
-		selectedGroupsToRemove.forEach(async (group) => {
-			const response = await fetch('/api/groups/delete', {
-				method: 'POST',
-				body: JSON.stringify({ name: group }),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!response.ok) {
-				const body = await response.json();
-				$errorModalContent = getErrorMessage(body.detail);
-				$isErrorModalHidden = false;
-				return;
+		const response = await fetch('/api/groups/delete', {
+			method: 'POST',
+			body: JSON.stringify({ names: selectedGroupsToRemove }),
+			headers: {
+				'Content-Type': 'application/json'
 			}
-
-			groups = groups.filter((g) => g.user_group_name !== group);
 		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		groups = groups.filter((g) => !new Set(selectedGroupsToRemove).has(g.user_group_name));
 		// TODO: go to previous page if there are no groups left on the current page
 
 		isModalHidden = true;

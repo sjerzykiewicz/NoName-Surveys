@@ -14,7 +14,7 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 	if (!surveysResponse.ok) {
 		error(surveysResponse.status, { message: await surveysResponse.json() });
 	}
-	const survey_list: {
+	const surveys: {
 		title: string;
 		survey_code: string;
 		creation_date: string;
@@ -29,5 +29,5 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 	}
 	const numSurveys: number = await countResponse.json();
 
-	return { survey_list, numSurveys };
+	return { surveys, numSurveys };
 };

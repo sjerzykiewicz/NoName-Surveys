@@ -5,7 +5,7 @@
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
-	export let survey_list: {
+	export let surveys: {
 		title: string;
 		survey_code: string;
 		creation_date: string;
@@ -14,32 +14,30 @@
 		group_size: number;
 	}[];
 	export let numSurveys: number;
-	export let selectedSurveysToRemove: typeof survey_list = [];
+	export let selectedSurveysToRemove: string[] = [];
 
 	let isModalHidden: boolean = true;
 
 	async function deleteSurveys() {
-		// TODO: fix and improve this
-		selectedSurveysToRemove.forEach(async (survey) => {
-			const response = await fetch('/api/surveys/delete', {
-				method: 'POST',
-				body: JSON.stringify({
-					survey_code: survey.survey_code
-				}),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!response.ok) {
-				const body = await response.json();
-				$errorModalContent = getErrorMessage(body.detail);
-				$isErrorModalHidden = false;
-				return;
+		const response = await fetch('/api/surveys/delete', {
+			method: 'POST',
+			body: JSON.stringify({
+				survey_codes: selectedSurveysToRemove
+			}),
+			headers: {
+				'Content-Type': 'application/json'
 			}
-
-			survey_list = survey_list.filter((s) => s.survey_code !== survey.survey_code);
 		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		surveys = surveys.filter((s) => !new Set(selectedSurveysToRemove).has(s.survey_code));
+		// TODO: go to previous page if there are no users left on the current page
 
 		isModalHidden = true;
 		selectedSurveysToRemove = [];
@@ -54,7 +52,7 @@
 		<button title="Create a survey" class="add-survey" on:click={() => goto('/create')}>
 			<i class="symbol">add</i>Survey
 		</button>
-		{#if survey_list.length > 0}
+		{#if surveys.length > 0}
 			<button
 				title="Delete selected surveys"
 				class="delete-survey"

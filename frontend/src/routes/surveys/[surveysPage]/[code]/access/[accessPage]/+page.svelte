@@ -48,7 +48,7 @@
 
 <Footer>
 	<FooterButtons
-		isOwnedByUser={data.survey_list[data.survey_index].is_owned_by_user}
+		isOwnedByUser={data.surveys[data.survey_index].is_owned_by_user}
 		usesCryptographicModule={data.survey.uses_cryptographic_module}
 		goBack={() => goto('/surveys/' + $page.params.surveysPage)}
 		bind:isModalHidden

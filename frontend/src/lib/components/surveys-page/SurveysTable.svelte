@@ -4,7 +4,7 @@
 	import { S, XL } from '$lib/stores/global';
 	import { page } from '$app/stores';
 
-	export let survey_list: {
+	export let surveys: {
 		title: string;
 		survey_code: string;
 		creation_date: string;
@@ -12,19 +12,19 @@
 		is_owned_by_user: boolean;
 		group_size: number;
 	}[];
-	export let selectedSurveysToRemove: typeof survey_list = [];
+	export let selectedSurveysToRemove: string[] = [];
 
 	let innerWidth: number;
 	let selectedCode: string;
 	let isModalHidden: boolean = true;
 
-	$: ownedSurveys = survey_list.filter((s) => s.is_owned_by_user);
+	$: ownedSurveyCodes = surveys.filter((s) => s.is_owned_by_user).map((s) => s.survey_code);
 
 	$: allSelected =
-		selectedSurveysToRemove.length === ownedSurveys.length && selectedSurveysToRemove.length > 0;
+		selectedSurveysToRemove.length === ownedSurveyCodes.length && selectedSurveysToRemove.length > 0;
 
 	function toggleAll() {
-		selectedSurveysToRemove = allSelected ? [] : [...ownedSurveys];
+		selectedSurveysToRemove = allSelected ? [] : [...ownedSurveyCodes];
 	}
 
 	function formatDate(isoString: string): string {
@@ -36,7 +36,7 @@
 
 <QrCodeModal title="Access Code" bind:isHidden={isModalHidden} surveyCode={selectedCode} />
 
-{#if survey_list.length === 0}
+{#if surveys.length === 0}
 	<div class="info-row">
 		<div title="Surveys" class="title empty">No surveys yet!</div>
 		<div class="tooltip">
@@ -50,11 +50,11 @@
 {:else}
 	<table>
 		<tr>
-			<th title="Select all" class="checkbox-entry" class:disabled={ownedSurveys.length === 0}
+			<th title="Select all" class="checkbox-entry" class:disabled={ownedSurveyCodes.length === 0}
 				><label
 					><input
 						type="checkbox"
-						disabled={ownedSurveys.length === 0}
+						disabled={ownedSurveyCodes.length === 0}
 						on:change={toggleAll}
 						checked={allSelected}
 					/></label
@@ -66,7 +66,7 @@
 			<th title="Access code" id="code-header">Access Code</th>
 			<th title="Creation date" id="date-header">Creation Date</th>
 		</tr>
-		{#each survey_list as survey}
+		{#each surveys as survey}
 			<tr>
 				<td
 					title="Select {survey.title}"
@@ -77,7 +77,7 @@
 							type="checkbox"
 							disabled={!survey.is_owned_by_user}
 							bind:group={selectedSurveysToRemove}
-							value={survey}
+							value={survey.survey_code}
 						/>
 					</label></td
 				>
@@ -147,24 +147,24 @@
 	}
 
 	#code-header {
-		width: 10%;
+		width: 11%;
 	}
 
 	#date-header {
-		width: 12%;
+		width: 11%;
 	}
 
 	@media screen and (max-width: 768px) {
 		#group-header {
-			width: 15%;
+			width: 14%;
 		}
 
 		#code-header {
-			width: 18%;
+			width: 19%;
 		}
 
 		#date-header {
-			width: 21%;
+			width: 19%;
 		}
 	}
 </style>

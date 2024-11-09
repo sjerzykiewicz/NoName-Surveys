@@ -177,7 +177,7 @@ class ShareSurveyActions(SurveyUserActions):
     @field_validator("user_emails")
     def validate_emails(cls, v, info: ValidationInfo) -> str:
         if v is None or len(v) == 0:
-            raise ValueError("emails  must be provided")
+            raise ValueError("emails must be provided")
         for email in v:
             if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
                 raise ValueError("invalid email format")

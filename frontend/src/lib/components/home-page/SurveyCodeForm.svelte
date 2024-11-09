@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
 	import Content from '$lib/components/global/Content.svelte';
-	import { S, M } from '$lib/stores/global';
+	import { M } from '$lib/stores/global';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import { page } from '$app/stores';
@@ -16,20 +16,19 @@
 
 <Content>
 	<h1>NoName Anonymous Surveys</h1>
+	<div class="code-text">
+		<span>Enter a survey code to fill it out</span>
+		<div title="" class="tooltip">
+			<i class="symbol">info</i>
+			<span
+				class="tooltip-text {innerWidth <= $M ? (innerWidth <= $M ? 'top' : 'left') : 'bottom'}"
+			>
+				Enter the code provided to you by the survey creator. Your answers are completely anonymous.
+			</span>
+		</div>
+	</div>
 	<form method="POST" use:enhance>
-		<label title="Enter a survey code to fill it out" for="code-input"
-			><div class="code-text">
-				<span>Enter a survey code to fill it out</span>
-				<div title="" class="tooltip">
-					<i class="symbol">info</i>
-					<span
-						class="tooltip-text {innerWidth <= $M ? (innerWidth <= $S ? 'top' : 'left') : 'bottom'}"
-					>
-						Enter the code provided to you by the survey creator. Your answers are completely
-						anonymous.
-					</span>
-				</div>
-			</div>
+		<label title="Enter a survey code to fill it out" for="code-input">
 			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				id="code-input"
@@ -51,15 +50,12 @@
 			</button>
 		</label>
 	</form>
-	{#if $page.data.session}
-		<p class="home-info">
-			If you want to create your own survey, go to <a href="/create" title="Create">Create</a>.
-		</p>
-	{:else}
-		<p class="home-info">
-			If you want to create your own survey, go to <a href="/account" title="Account">Account</a>.
-		</p>
-	{/if}
+	<p class="home-info">
+		If you want to create your own survey, go to
+		{#if $page.data.session}<a href="/create" title="Create"> Create</a>.
+		{:else}<a href="/account" title="Account"> Account</a>.
+		{/if}
+	</p>
 </Content>
 
 <style>
@@ -78,6 +74,27 @@
 			outline 0s;
 	}
 
+	.code-text {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		color: var(--text-color-1);
+		font-weight: 700 !important;
+		font-size: 2em;
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		padding-top: 0.75em;
+		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
+	}
+
+	.code-text .tooltip i {
+		font-size: 1.25em;
+	}
+
 	label {
 		display: flex;
 		flex-flow: column;
@@ -89,7 +106,6 @@
 		font-weight: 700 !important;
 		font-size: 2em;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		padding-top: 0.75em;
 		transition:
 			0.2s,
 			outline 0s;
@@ -129,17 +145,6 @@
 		font-variation-settings: 'wght' 700;
 	}
 
-	.code-text {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.code-text .tooltip i {
-		font-size: 1.25em;
-	}
-
 	.tooltip {
 		margin-left: 0.25em;
 		font-size: 0.8em;
@@ -173,9 +178,7 @@
 		.error {
 			font-size: 0.5em;
 		}
-	}
 
-	@media screen and (max-width: 425px) {
 		.tooltip {
 			margin-left: 0em;
 			margin-top: 0.5em;

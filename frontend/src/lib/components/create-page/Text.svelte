@@ -2,64 +2,24 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
-	import { LIMIT_OF_CHARS } from '$lib/stores/global';
-	import { limitInput } from '$lib/utils/limitInput';
+	import Input from '$lib/components/global/Input.svelte';
 
 	export let questionIndex: number;
 </script>
 
-<div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
+<div class="choice-area text" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="details">
-		<div
-			class="input-container"
-			class:max={$questions[questionIndex].choices[0].length > $LIMIT_OF_CHARS}
-		>
-			<div
-				title="Enter question details"
-				class="details-input"
-				contenteditable
-				bind:textContent={$questions[questionIndex].choices[0]}
-				role="textbox"
-				tabindex="0"
-				on:keydown={(e) => {
-					handleNewLine(e);
-					limitInput(e, $questions[questionIndex].choices[0], $LIMIT_OF_CHARS);
-				}}
-			></div>
-			<span class="char-count"
-				>{$questions[questionIndex].choices[0].length} / {$LIMIT_OF_CHARS}</span
-			>
-		</div>
+		<Input
+			bind:text={$questions[questionIndex].choices[0]}
+			label="Question Details"
+			title="Enter question details"
+			--margin-right="0em"
+		/>
 	</div>
 </div>
 
 <style>
 	.details {
 		display: flex;
-	}
-
-	.details-input {
-		margin-right: 0em;
-	}
-
-	.details-input[contenteditable]:empty::before {
-		content: 'Enter question details...';
-	}
-
-	.input-container {
-		margin-bottom: -1.4em;
-	}
-
-	.char-count {
-		left: 80%;
-		font-size: 0.56em;
-	}
-
-	@media screen and (max-width: 768px) {
-		.char-count {
-			left: 65%;
-			font-size: 0.5em;
-		}
 	}
 </style>

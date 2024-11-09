@@ -6,6 +6,7 @@
 	export let isHidden: boolean = true;
 	export let icon: string;
 	export let title: string;
+	export let element: HTMLDivElement | null = null;
 	export let hide: () => void = () => (isHidden = true);
 
 	let isClickable: boolean = false;
@@ -40,7 +41,12 @@
 		<div
 			class="modal"
 			transition:scale={{ duration: 200, easing: cubicInOut }}
-			on:introend={() => (isClickable = true)}
+			on:introend={() => {
+				isClickable = true;
+				if (element) {
+					element.focus();
+				}
+			}}
 			on:outroend={() => (isClickable = false)}
 		>
 			<div class="top">

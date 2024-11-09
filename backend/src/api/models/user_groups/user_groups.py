@@ -1,9 +1,11 @@
 import re
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from pydantic import ValidationInfo, field_validator
+
+from src.api.models.base import Base
 
 
-class UserGroupCreator(BaseModel):
+class UserGroupCreator(Base):
     user_email: str
 
     @field_validator("user_email")
@@ -13,9 +15,6 @@ class UserGroupCreator(BaseModel):
         if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
             raise ValueError("invalid email format")
         return v
-
-    class Config:
-        extra = "forbid"
 
 
 class UserGroupCreate(UserGroupCreator):
@@ -38,9 +37,6 @@ class UserGroupCreate(UserGroupCreator):
             if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
                 raise ValueError("invalid email format")
         return v
-
-    class Config:
-        extra = "forbid"
 
 
 class UserGroupAction(UserGroupCreator):
@@ -79,21 +75,12 @@ class UserGroupNameUpdate(UserGroupAction):
             raise ValueError("Invalid group name format")
         return v
 
-    class Config:
-        extra = "forbid"
 
-
-class AllUserGroupsOutput(BaseModel):
+class AllUserGroupsOutput(Base):
     user_group_name: str
     all_members_have_public_keys: bool
 
-    class Config:
-        extra = "forbid"
 
-
-class UserGroupMembersOutput(BaseModel):
+class UserGroupMembersOutput(Base):
     email: str
     has_public_key: bool
-
-    class Config:
-        extra = "forbid"

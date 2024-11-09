@@ -1,12 +1,13 @@
 import re
 from datetime import datetime
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from pydantic import ValidationInfo, field_validator
 
+from src.api.models.base import Base
 from src.api.models.surveys.survey import SurveyStructure
 
 
-class SurveyDraftAction(BaseModel):
+class SurveyDraftAction(Base):
     user_email: str
 
     @field_validator("user_email")
@@ -16,9 +17,6 @@ class SurveyDraftAction(BaseModel):
         if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
             raise ValueError("invalid email format")
         return v
-
-    class Config:
-        extra = "forbid"
 
 
 class SurveyDraftCreate(SurveyDraftAction):
@@ -31,24 +29,15 @@ class SurveyDraftCreate(SurveyDraftAction):
             raise ValueError("survey title must be provided")
         return v
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyDraftHeadersOutput(BaseModel):
+class SurveyDraftHeadersOutput(Base):
     id: int
     title: str
     creation_date: datetime
 
-    class Config:
-        extra = "forbid"
-
 
 class SurveyDraftUserActions(SurveyDraftAction):
     id: int
-
-    class Config:
-        extra = "forbid"
 
 
 class SurveyDraftUserActionDelete(SurveyDraftAction):
@@ -60,13 +49,7 @@ class SurveyDraftUserActionDelete(SurveyDraftAction):
             raise ValueError("ids must be provided and not empty")
         return v
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyDraftFetchOutput(BaseModel):
+class SurveyDraftFetchOutput(Base):
     title: str
     survey_structure: SurveyStructure
-
-    class Config:
-        extra = "forbid"

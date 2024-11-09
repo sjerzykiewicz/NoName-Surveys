@@ -1,15 +1,21 @@
 <script lang="ts">
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
-	import AnswersSummary from '$lib/components/summary-page/AnswersSummary.svelte';
 	import Footer from '$lib/components/global/Footer.svelte';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
+	import AnswersTable from '$lib/components/summary-page/answer/AnswersTable.svelte';
 	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	export let data;
 	export let isModalHidden: boolean = true;
+
+	let numbers: Array<number> = [];
+
+	for (let i = 0; i < data.answers.length; i++) {
+		numbers.push(i);
+	}
 </script>
 
 <QrCodeModal
@@ -23,7 +29,7 @@
 </Header>
 
 <Content>
-	<AnswersSummary surveyAnswers={data.answers} />
+	<AnswersTable {numbers} />
 </Content>
 
 <Footer>

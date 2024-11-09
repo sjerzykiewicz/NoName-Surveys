@@ -10,9 +10,11 @@
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
 
 	export let users: string[];
 	export let code: string;
+	export let numUsers: number;
 	export let selectedUsersToRemove: string[] = [];
 
 	let isPanelVisible: boolean = false;
@@ -64,11 +66,12 @@
 
 		selectedUsersToAdd = [];
 		isPanelVisible = false;
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	async function removeUsers() {
-		selectedUsersToRemove.forEach(async (user, i) => {
+		// TODO: fix and improve this
+		selectedUsersToRemove.forEach(async (user) => {
 			const response = await fetch('/api/surveys/take-away-access', {
 				method: 'POST',
 				body: JSON.stringify({
@@ -87,34 +90,38 @@
 				return;
 			}
 
-			users.splice(i, 1);
+			users = users.filter((u) => u !== user);
 		});
+		// TODO: go to previous page if there are no users left on the current page
 
 		isModalHidden = true;
 		selectedUsersToRemove = [];
-		invalidateAll();
+		await invalidateAll();
 	}
 </script>
 
 <DeleteModal title="Removing Access" bind:isHidden={isModalHidden} deleteEntries={removeUsers} />
 
 <div class="button-row">
-	<button
-		title={isPanelVisible ? 'Stop giving access' : 'Give access'}
-		class="add-group"
-		class:clicked={isPanelVisible}
-		on:click={togglePanel}
-	>
-		<i class="symbol">add</i>Users
-	</button>
-	<button
-		title="Take away access from selected users"
-		class="delete-group"
-		disabled={selectedUsersToRemove.length === 0}
-		on:click={() => (isModalHidden = false)}
-	>
-		<i class="symbol">delete</i>Delete
-	</button>
+	<div class="button-sub-row">
+		<button
+			title={isPanelVisible ? 'Stop giving access' : 'Give access'}
+			class="add-group"
+			class:clicked={isPanelVisible}
+			on:click={togglePanel}
+		>
+			<i class="symbol">add</i>Users
+		</button>
+		<button
+			title="Take away access from selected users"
+			class="delete-group"
+			disabled={selectedUsersToRemove.length === 0}
+			on:click={() => (isModalHidden = false)}
+		>
+			<i class="symbol">delete</i>Delete
+		</button>
+	</div>
+	<PageButtons numEntries={numUsers} />
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>

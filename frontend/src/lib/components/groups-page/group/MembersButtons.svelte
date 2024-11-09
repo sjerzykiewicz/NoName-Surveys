@@ -4,13 +4,14 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { GroupError } from '$lib/entities/GroupError';
-	import MembersError from '../MembersError.svelte';
+	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import { page } from '$app/stores';
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
 
 	export let members: {
 		email: string;
@@ -19,6 +20,7 @@
 	export let notMembers: string[];
 	export let selectedMembersToRemove: string[] = [];
 	export let group: string;
+	export let numMembers: number;
 
 	let isPanelVisible: boolean = false;
 	let selectedMembersToAdd: string[] = [];
@@ -88,7 +90,7 @@
 
 		selectedMembersToAdd = [];
 		isPanelVisible = false;
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	async function removeMembers() {
@@ -111,6 +113,8 @@
 			goto('/groups/' + $page.params.groupsPage, { replaceState: true, invalidateAll: true });
 			return;
 		}
+
+		// TODO: go to previous page if there are no users left on the current page
 
 		const selectedMembersToRemoveSet = new Set(selectedMembersToRemove);
 		const newMembers = memberEmails.filter((m) => !selectedMembersToRemoveSet.has(m));
@@ -135,7 +139,7 @@
 
 		isModalHidden = true;
 		selectedMembersToRemove = [];
-		invalidateAll();
+		await invalidateAll();
 	}
 </script>
 
@@ -146,22 +150,27 @@
 />
 
 <div class="button-row">
-	<button
-		title={isPanelVisible ? 'Stop adding group members' : 'Add group members'}
-		class="add-group"
-		class:clicked={isPanelVisible}
-		on:click={togglePanel}
-	>
-		<i class="symbol">add</i>Members
-	</button>
-	<button
-		title="Remove selected group members"
-		class="delete-group"
-		disabled={selectedMembersToRemove.length === 0}
-		on:click={() => (isModalHidden = false)}
-	>
-		<i class="symbol">delete</i>Delete
-	</button>
+	<div class="button-sub-row">
+		<button
+			title={isPanelVisible ? 'Stop adding group members' : 'Add group members'}
+			class="add-group"
+			class:clicked={isPanelVisible}
+			on:click={togglePanel}
+		>
+			<i class="symbol">add</i>Members
+		</button>
+		{#if members.length > 0}
+			<button
+				title="Remove selected group members"
+				class="delete-group"
+				disabled={selectedMembersToRemove.length === 0}
+				on:click={() => (isModalHidden = false)}
+			>
+				<i class="symbol">delete</i>Delete
+			</button>
+		{/if}
+	</div>
+	<PageButtons numEntries={numMembers} />
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
@@ -180,10 +189,6 @@
 {/if}
 
 <style>
-	.select-list {
-		margin-bottom: 0em;
-	}
-
 	.save i {
 		font-variation-settings: 'wght' 700;
 	}

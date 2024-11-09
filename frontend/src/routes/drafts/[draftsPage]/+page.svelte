@@ -1,43 +1,32 @@
 <script lang="ts">
-	import type { PageServerData } from './$types';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import DraftsTable from '$lib/components/drafts-page/DraftsTable.svelte';
-	import { afterUpdate } from 'svelte';
+	import DraftsButtons from '$lib/components/drafts-page/DraftsButtons.svelte';
+	import LimitWarning from '$lib/components/global/LimitWarning.svelte';
 	import { LIMIT_OF_DRAFTS } from '$lib/stores/global';
-	import { slide } from 'svelte/transition';
-	import { cubicInOut } from 'svelte/easing';
 
-	export let data: PageServerData;
-
-	let numDrafts: number = data.drafts.length;
-
-	afterUpdate(() => {
-		numDrafts = data.drafts.length;
-	});
+	export let data;
+	export let selectedDraftsToRemove: typeof data.drafts = [];
 </script>
 
 <Header>
 	<div class="title">
 		Your drafts
-		<span title="Number of drafts" class:max={numDrafts >= $LIMIT_OF_DRAFTS}
-			>[ {numDrafts} / {$LIMIT_OF_DRAFTS} ]</span
+		<span title="Number of drafts" class:max={data.numDrafts >= $LIMIT_OF_DRAFTS}
+			>[ {data.numDrafts} / {$LIMIT_OF_DRAFTS} ]</span
 		>
 	</div>
 </Header>
 
 <Content>
-	{#if numDrafts >= $LIMIT_OF_DRAFTS}
-		<p
-			title="Draft limit reached"
-			class="error"
-			transition:slide={{ duration: 200, easing: cubicInOut }}
-		>
-			<i class="symbol">error</i>You have reached the maximum number of drafts. Please delete some
-			drafts to create new ones.
-		</p>
-	{/if}
-	<DraftsTable drafts={data.drafts.toReversed()} />
+	<LimitWarning num={data.numDrafts} limit={$LIMIT_OF_DRAFTS} items="Drafts" />
+	<DraftsTable drafts={data.drafts.toReversed()} bind:selectedDraftsToRemove />
+	<DraftsButtons
+		drafts={data.drafts.toReversed()}
+		numDrafts={data.numDrafts}
+		bind:selectedDraftsToRemove
+	/>
 </Content>
 
 <style>
@@ -48,13 +37,9 @@
 	}
 
 	.title span.max {
-		color: var(--error-color-1);
+		color: var(--warning-color-1);
 		transition:
 			0.2s,
 			outline 0s;
-	}
-
-	.error {
-		margin: 0em 0em 0.75em;
 	}
 </style>

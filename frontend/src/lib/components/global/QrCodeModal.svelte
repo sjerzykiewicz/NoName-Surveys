@@ -60,7 +60,7 @@
 		title="Copy the link"
 		class="save popup"
 		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
-		><i class="symbol">content_copy</i>Copy Link
+		><i class="symbol">link</i>Copy Link
 		<span class="popup-text top" id="link-popup">Copied!</span></button
 	>
 	<button

@@ -1,15 +1,16 @@
 <script lang="ts">
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
-	import AnswersSummary from '$lib/components/summary-page/AnswersSummary.svelte';
+	import Answers from '$lib/components/summary-page/answer/Answers.svelte';
 	import Footer from '$lib/components/global/Footer.svelte';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
-	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
 
 	export let data;
 	export let isModalHidden: boolean = true;
+
+	let id: number = parseInt($page.params.answer);
 </script>
 
 <QrCodeModal
@@ -19,18 +20,21 @@
 />
 
 <Header>
-	<div title="Survey title" class="title">{data.survey.title}</div>
+	<div class="title">{data.survey.title}</div>
 </Header>
 
 <Content>
-	<AnswersSummary surveyAnswers={data.answers} />
+	{#if !data.answers[id]}
+		<div title="Answer no. {id + 1}" class="title empty">No {id + 1}. answer yet!</div>
+	{:else}
+		<Answers answer={data.answers[id]} {id} />
+	{/if}
 </Content>
 
 <Footer>
 	<FooterButtons
 		isOwnedByUser={data.survey_list[data.survey_index].is_owned_by_user}
 		usesCryptographicModule={data.survey.uses_cryptographic_module}
-		goBack={() => goto('/surveys/' + $page.params.surveysPage)}
 		bind:isModalHidden
 	/>
 </Footer>

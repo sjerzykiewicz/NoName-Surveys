@@ -28,9 +28,7 @@
 			limitInput(e, $title.title, $LIMIT_OF_CHARS);
 		}}
 		transition:slide={{ duration: 200, easing: cubicInOut }}
-	>
-		{$title.title}
-	</div>
+	></div>
 	<span class="char-count">{$title.title.length} / {$LIMIT_OF_CHARS}</span>
 </div>
 

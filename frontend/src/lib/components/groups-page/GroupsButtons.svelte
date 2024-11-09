@@ -15,15 +15,15 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
-	import WarningModal from '$lib/components/global/WarningModal.svelte';
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
 
 	export let groups: {
 		user_group_name: string;
 		all_members_have_public_keys: true;
 	}[];
 	export let users: string[];
+	export let numGroups: number;
 	export let selectedGroupsToRemove: string[] = [];
-	export let invalidEmails: string[] = [];
 
 	let isPanelVisible: boolean = false;
 	let groupName: string = '';
@@ -98,10 +98,11 @@
 		groupName = '';
 		groupMembers = [];
 		isPanelVisible = false;
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	async function deleteGroups() {
+		// TODO: fix and improve this
 		selectedGroupsToRemove.forEach(async (group) => {
 			const response = await fetch('/api/groups/delete', {
 				method: 'POST',
@@ -120,10 +121,11 @@
 
 			groups = groups.filter((g) => g.user_group_name !== group);
 		});
+		// TODO: go to previous page if there are no groups left on the current page
 
 		isModalHidden = true;
 		selectedGroupsToRemove = [];
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	let innerWidth: number;
@@ -131,33 +133,30 @@
 
 <svelte:window bind:innerWidth />
 
-<WarningModal
-	isExportButtonVisible={true}
-	emails={invalidEmails}
-	width={innerWidth <= $M ? 20 : 22}
-/>
-
 <DeleteModal title="Deleting Groups" bind:isHidden={isModalHidden} deleteEntries={deleteGroups} />
 
 <div class="button-row">
-	<button
-		title={isPanelVisible ? 'Stop creating a group' : 'Create a group'}
-		class="add-group"
-		class:clicked={isPanelVisible}
-		on:click={togglePanel}
-	>
-		<i class="symbol">add</i>Group
-	</button>
-	{#if groups.length > 0}
+	<div class="button-sub-row">
 		<button
-			title="Delete selected groups"
-			class="delete-group"
-			disabled={selectedGroupsToRemove.length === 0}
-			on:click={() => (isModalHidden = false)}
+			title={isPanelVisible ? 'Stop creating a group' : 'Create a group'}
+			class="add-group"
+			class:clicked={isPanelVisible}
+			on:click={togglePanel}
 		>
-			<i class="symbol">delete</i>Delete
+			<i class="symbol">add</i>Group
 		</button>
-	{/if}
+		{#if groups.length > 0}
+			<button
+				title="Delete selected groups"
+				class="delete-group"
+				disabled={selectedGroupsToRemove.length === 0}
+				on:click={() => (isModalHidden = false)}
+			>
+				<i class="symbol">delete</i>Delete
+			</button>
+		{/if}
+	</div>
+	<PageButtons numEntries={numGroups} />
 </div>
 {#if isPanelVisible}
 	<div class="buttons-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
@@ -180,18 +179,11 @@
 						handleNewLine(e);
 						limitInput(e, groupName, $LIMIT_OF_CHARS);
 					}}
-				>
-					{groupName}
-				</div>
+				></div>
 				<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
 			</div>
 		</div>
-		<NameError
-			name={groupName.trim()}
-			error={nameError}
-			groups={groupNames}
-			fontSize={innerWidth <= $M ? '0.8em' : '1em'}
-		/>
+		<NameError name={groupName.trim()} error={nameError} groups={groupNames} />
 		<div class="button-row">
 			<div title="Select group members" class="select-list">
 				<MultiSelect
@@ -217,8 +209,7 @@
 			label="Or import group members from a .csv file."
 			id="emails-file"
 			checkKeys={false}
-			fontSize={innerWidth <= $M ? '0.8em' : '1em'}
-			bind:invalidEmails
+			buttonSize="1.25em"
 		/>
 	</div>
 {/if}
@@ -246,5 +237,11 @@
 
 	.input-container {
 		margin-bottom: -1.4em;
+	}
+
+	@media screen and (max-width: 768px) {
+		.button-row {
+			font-size: 0.8em;
+		}
 	}
 </style>

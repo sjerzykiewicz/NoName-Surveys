@@ -29,7 +29,6 @@
 
 	function toggleRequirement() {
 		$questions[questionIndex].required = !$questions[questionIndex].required;
-		$questions = $questions;
 	}
 </script>
 
@@ -51,7 +50,7 @@
 			disabled={questionIndex === 0}
 			on:click={moveQuestionUp}
 		>
-			<i class="symbol">arrow_drop_up</i>
+			<i class="symbol">keyboard_arrow_up</i>
 		</button>
 		<button
 			title="Move question down"
@@ -59,7 +58,7 @@
 			disabled={questionIndex === $questions.length - 1}
 			on:click={moveQuestionDown}
 		>
-			<i class="symbol">arrow_drop_down</i>
+			<i class="symbol">keyboard_arrow_down</i>
 		</button>
 	</div>
 	<div
@@ -78,9 +77,7 @@
 				handleNewLine(e);
 				limitInput(e, $questions[questionIndex].question, $LIMIT_OF_CHARS);
 			}}
-		>
-			{$questions[questionIndex].question}
-		</div>
+		></div>
 		<span class="char-count">{$questions[questionIndex].question.length} / {$LIMIT_OF_CHARS}</span>
 	</div>
 	<button
@@ -94,7 +91,7 @@
 		>
 	</button>
 	<button title="Remove question" class="remove-question" on:click={removeQuestion}>
-		<i class="symbol">close</i>
+		<i class="symbol">delete</i>
 	</button>
 </div>
 
@@ -131,10 +128,6 @@
 
 	.required-button.checked:active {
 		background-color: var(--border-color-1);
-	}
-
-	.remove-question i {
-		font-variation-settings: 'wght' 700;
 	}
 
 	.input-container {

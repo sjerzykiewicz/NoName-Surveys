@@ -17,6 +17,7 @@
 	export let checkKeys: boolean;
 	export let disabled: boolean = false;
 	export let width: string = 'unset';
+	export let buttonSize: string = '1em';
 	export let fontSize: string = '1em';
 	export let invalidEmails: string[] = [];
 
@@ -96,13 +97,9 @@
 			}
 		);
 	}
-
-	let innerWidth: number;
 </script>
 
-<svelte:window bind:innerWidth />
-
-<div class="button-row">
+<div class="button-row" style="font-size: {buttonSize};">
 	<div {title} class="file-div" class:disabled style="width: {width};">
 		<span class="file-label">{label}</span>
 		<label for={id}>

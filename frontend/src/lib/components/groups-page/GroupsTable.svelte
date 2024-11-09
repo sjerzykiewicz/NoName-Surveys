@@ -77,7 +77,7 @@
 		isModalHidden = true;
 		selectedGroup = '';
 		newName = '';
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	onMount(() => {
@@ -122,9 +122,7 @@
 				on:keydown={(e) => {
 					limitInput(e, newName, $LIMIT_OF_CHARS);
 				}}
-			>
-				{newName}
-			</div>
+			></div>
 			<span class="char-count">{newName.length} / {$LIMIT_OF_CHARS}</span>
 		</div>
 		<NameError name={newName.trim()} error={nameError} groups={groupNames} fontSize="0.8em" />

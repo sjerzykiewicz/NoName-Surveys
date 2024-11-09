@@ -7,12 +7,13 @@
 	export let isExportButtonVisible: boolean = false;
 	export let emails: string[] = [];
 	export let width: number = 20;
+	export let hide: () => void = () => ($isWarningModalHidden = true);
 
 	onMount(() => {
 		function handleEnter(event: KeyboardEvent) {
 			if (!$isWarningModalHidden && event.key === 'Enter') {
 				event.preventDefault();
-				$isWarningModalHidden = true;
+				hide();
 				event.stopImmediatePropagation();
 			}
 		}
@@ -33,6 +34,7 @@
 	{width}
 	zIndex={12}
 	bind:isHidden={$isWarningModalHidden}
+	{hide}
 >
 	<div slot="content" class="content">{$warningModalContent}</div>
 	{#if isExportButtonVisible}

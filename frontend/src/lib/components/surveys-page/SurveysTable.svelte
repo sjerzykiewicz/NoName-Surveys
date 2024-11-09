@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
-	import { errorModalContent, isErrorModalHidden, S, XL } from '$lib/stores/global';
-	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
+	import { S, XL } from '$lib/stores/global';
 	import { page } from '$app/stores';
 
 	export let survey_list: {
@@ -14,12 +12,11 @@
 		is_owned_by_user: boolean;
 		group_size: number;
 	}[];
+	export let selectedSurveysToRemove: typeof survey_list = [];
 
 	let innerWidth: number;
 	let selectedCode: string;
-	let selectedSurveysToRemove: typeof survey_list = [];
-	let isQrCodeModalHidden: boolean = true;
-	let isDeleteModalHidden: boolean = true;
+	let isModalHidden: boolean = true;
 
 	$: ownedSurveys = survey_list.filter((s) => s.is_owned_by_user);
 
@@ -33,44 +30,11 @@
 	function formatDate(isoString: string): string {
 		return new Date(isoString).toLocaleString();
 	}
-
-	async function deleteSurveys() {
-		selectedSurveysToRemove.forEach(async (survey, i) => {
-			const response = await fetch('/api/surveys/delete', {
-				method: 'POST',
-				body: JSON.stringify({
-					survey_code: survey.survey_code
-				}),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!response.ok) {
-				const body = await response.json();
-				$errorModalContent = getErrorMessage(body.detail);
-				$isErrorModalHidden = false;
-				return;
-			}
-
-			survey_list.splice(i, 1);
-		});
-
-		isDeleteModalHidden = true;
-		selectedSurveysToRemove = [];
-		invalidateAll();
-	}
 </script>
 
 <svelte:window bind:innerWidth />
 
-<DeleteModal
-	title="Deleting Surveys"
-	bind:isHidden={isDeleteModalHidden}
-	deleteEntries={deleteSurveys}
-/>
-
-<QrCodeModal title="Access Code" bind:isHidden={isQrCodeModalHidden} surveyCode={selectedCode} />
+<QrCodeModal title="Access Code" bind:isHidden={isModalHidden} surveyCode={selectedCode} />
 
 {#if survey_list.length === 0}
 	<div class="info-row">
@@ -163,7 +127,7 @@
 					><button
 						on:click={() => {
 							selectedCode = survey.survey_code;
-							isQrCodeModalHidden = false;
+							isModalHidden = false;
 						}}>{survey.survey_code}</button
 					>
 				</td>
@@ -172,21 +136,6 @@
 		{/each}
 	</table>
 {/if}
-<div class="button-row">
-	<button title="Create a survey" class="add-survey" on:click={() => goto('/create')}>
-		<i class="symbol">add</i>Survey
-	</button>
-	{#if survey_list.length > 0}
-		<button
-			title="Delete selected surveys"
-			class="delete-survey"
-			disabled={selectedSurveysToRemove.length === 0}
-			on:click={() => (isDeleteModalHidden = false)}
-		>
-			<i class="symbol">delete</i>Delete
-		</button>
-	{/if}
-</div>
 
 <style>
 	.tooltip.access {

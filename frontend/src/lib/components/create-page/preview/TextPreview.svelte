@@ -27,9 +27,7 @@
 				handleNewLine(e);
 				limitInput(e, $questions[questionIndex].choices[0], $LIMIT_OF_CHARS);
 			}}
-		>
-			{text}
-		</div>
+		></div>
 		<span class="char-count">{text.length} / {$LIMIT_OF_CHARS}</span>
 	</div>
 </div>

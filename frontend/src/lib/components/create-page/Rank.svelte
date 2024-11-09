@@ -56,9 +56,7 @@
 						handleNewLine(e);
 						limitInput(e, choice, $LIMIT_OF_CHARS);
 					}}
-				>
-					{choice}
-				</div>
+				></div>
 				<span class="char-count">{choice.length} / {$LIMIT_OF_CHARS}</span>
 			</div>
 			<button
@@ -67,12 +65,12 @@
 				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
-				<i class="symbol">cancel</i>
+				<i class="symbol">delete</i>
 			</button>
 		</div>
 	{/each}
 	<button title="Add choice" class="add-choice" on:click={addChoice}>
-		<i class="symbol">add_circle</i>Choice
+		<i class="symbol">add</i>Choice
 	</button>
 </div>
 

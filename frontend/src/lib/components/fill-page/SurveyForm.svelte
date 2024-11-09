@@ -349,7 +349,7 @@
 	icon="encrypted"
 	title="Load Your Keys"
 	bind:isHidden={isKeysModalHidden}
-	width={innerWidth <= $M ? 20 : 38}
+	--width={innerWidth <= $M ? 20 : 38}
 >
 	<div slot="content" title="Load your digital signature keys" class="file-div">
 		<span class="file-label"
@@ -394,7 +394,11 @@
 			/>
 			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
 		</div>
-		<AnswerError {unansweredRequired} {questionIndex} />
+		<AnswerError
+			{unansweredRequired}
+			{questionIndex}
+			--margin-top={question.type === 'text' ? '-2.5em' : ''}
+		/>
 	{/each}
 </Content>
 

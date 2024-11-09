@@ -24,9 +24,9 @@
 <Modal
 	icon="error"
 	title="Error"
-	textColor="var(--error-color-1)"
-	borderColor="var(--error-color-1)"
-	zIndex={12}
+	--text-color="var(--error-color-1)"
+	--border-color="var(--error-color-1)"
+	--z-index="12"
 	bind:isHidden={$isErrorModalHidden}
 	{hide}
 >

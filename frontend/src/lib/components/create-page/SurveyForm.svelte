@@ -215,7 +215,7 @@
 	icon="save"
 	title="Saving Draft"
 	bind:isHidden={isDraftModalHidden}
-	width={innerWidth <= $M ? 20 : 22}
+	--width={innerWidth <= $M ? 20 : 22}
 >
 	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
 	<button title="Overwrite draft" class="save" on:click={() => saveDraft(true)}
@@ -230,7 +230,7 @@
 	icon="group"
 	title="Define Respondent Group"
 	bind:isHidden={isRespondentModalHidden}
-	width={innerWidth <= $M ? 20 : 26}
+	--width={innerWidth <= $M ? 20 : 26}
 >
 	<div slot="content">
 		<span>Do you wish to make the survey public or secure?</span>
@@ -263,8 +263,8 @@
 				label="Or import users from a .csv file."
 				id="emails-file"
 				checkKeys={true}
-				warningSize={0.8}
-				width="100%"
+				--font-size-warning="0.8em"
+				--width="100%"
 				bind:disabled={isCryptoDisabled}
 			/>
 		</div>

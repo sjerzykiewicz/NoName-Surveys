@@ -26,7 +26,12 @@
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-<Modal icon="qr_code_2" {title} bind:isHidden width={innerWidth > $M && innerHeight > $M ? 30 : 20}>
+<Modal
+	icon="qr_code_2"
+	{title}
+	bind:isHidden
+	--width={innerWidth > $M && innerHeight > $M ? 30 : 20}
+>
 	<div slot="content" class="content">
 		<span class="survey-code">{surveyCode}</span>
 		<a href="/fill?code={surveyCode}" title="Fill out the survey" class="qr-code">

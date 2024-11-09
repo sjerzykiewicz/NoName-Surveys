@@ -24,9 +24,9 @@
 <Modal
 	icon="check_circle"
 	title="Success"
-	textColor="var(--accent-color-1)"
-	borderColor="var(--accent-color-1)"
-	zIndex={12}
+	--text-color="var(--accent-color-1)"
+	--border-color="var(--accent-color-1)"
+	--z-index="12"
 	bind:isHidden={$isSuccessModalHidden}
 	{hide}
 >

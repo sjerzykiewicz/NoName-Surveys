@@ -24,9 +24,9 @@
 <Modal
 	icon="warning"
 	title="Warning"
-	textColor="var(--warning-color-1)"
-	borderColor="var(--warning-color-1)"
-	zIndex={12}
+	--text-color="var(--warning-color-1)"
+	--border-color="var(--warning-color-1)"
+	--z-index={12}
 	bind:isHidden={$isWarningModalHidden}
 	{hide}
 >

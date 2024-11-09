@@ -104,7 +104,7 @@
 	icon="edit"
 	title="Rename Group"
 	bind:isHidden={isModalHidden}
-	width={innerWidth <= $M ? 20 : 36}
+	--width={innerWidth <= $M ? 20 : 36}
 >
 	<div slot="content" class="modal-content">
 		<span>Renaming {selectedGroup}.</span>
@@ -124,7 +124,7 @@
 			></div>
 			<span class="char-count">{newName.length} / {$LIMIT_OF_CHARS}</span>
 		</div>
-		<NameError name={newName.trim()} error={nameError} groups={groupNames} fontSize={0.8} />
+		<NameError name={newName.trim()} error={nameError} groups={groupNames} --font-size="0.8em" />
 	</div>
 	<button
 		title="Save the new group name"

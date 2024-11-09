@@ -40,8 +40,8 @@
 		Binary,
 		Number,
 		Slider,
-		Rank,
-		List
+		List,
+		Rank
 	];
 
 	function getPreviewComponent(component: ComponentType) {

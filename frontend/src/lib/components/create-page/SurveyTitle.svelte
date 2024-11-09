@@ -1,70 +1,43 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
 	import { M } from '$lib/stores/global';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
-	import { limitInput } from '$lib/utils/limitInput';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { onMount } from 'svelte';
+	import Input from '$lib/components/global/Input.svelte';
 
+	let titleInput: HTMLDivElement;
 	let innerWidth: number;
+
+	onMount(() => {
+		if (innerWidth > $M && $title.title.length === 0) titleInput.focus();
+	});
 </script>
 
 <svelte:window bind:innerWidth />
 
-<div class="input-container" class:max={$title.title.length > $LIMIT_OF_CHARS}>
-	<!-- svelte-ignore a11y-autofocus -->
-	<div
-		title="Enter survey title"
-		class="title-input"
+<div class="title-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<Input
+		bind:text={$title.title}
+		label="Survey Title"
+		title="Enter a survey title"
 		id="title"
-		contenteditable
-		bind:textContent={$title.title}
-		autofocus={innerWidth > $M && $title.title.length === 0}
-		role="textbox"
-		tabindex="0"
-		on:keydown={(e) => {
-			handleNewLine(e);
-			limitInput(e, $title.title, $LIMIT_OF_CHARS);
-		}}
-		transition:slide={{ duration: 200, easing: cubicInOut }}
-	>
-		{$title.title}
-	</div>
-	<span class="char-count">{$title.title.length} / {$LIMIT_OF_CHARS}</span>
+		bind:element={titleInput}
+		--margin-right="0em"
+		--char-count-left="7em"
+	/>
 </div>
 
 <style>
-	.title-input {
-		font-size: 1.5em;
-		font-weight: 700 !important;
-		margin: 0em;
-		width: calc(100% - 0.5em);
-	}
-
-	.title-input[contenteditable]:empty::before {
-		content: 'Enter survey title...';
-		color: var(--text-color-3);
-	}
-
-	.input-container {
-		margin-bottom: -1.2em;
-	}
-
-	.char-count {
-		left: 88%;
-		font-size: 0.7em;
-		bottom: 10px;
+	.title-container {
+		font-size: 1.25em;
+		padding: 0.8em 0.2em;
+		margin: -0.8em -0.2em;
 	}
 
 	@media screen and (max-width: 768px) {
-		.title-input {
-			font-size: 1.25em;
-		}
-
-		.char-count {
-			left: 72%;
-			font-size: 0.6em;
+		.title-container {
+			font-size: 1em;
 		}
 	}
 </style>

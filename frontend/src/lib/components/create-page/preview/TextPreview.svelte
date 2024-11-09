@@ -1,45 +1,17 @@
 <script lang="ts">
+	import Input from '$lib/components/global/Input.svelte';
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
-	import { LIMIT_OF_CHARS } from '$lib/stores/global';
-	import { limitInput } from '$lib/utils/limitInput';
 
 	export let questionIndex: number;
 
 	let text: string = '';
 </script>
 
-<div class="choice-area display" transition:slide={{ duration: 200, easing: cubicInOut }}>
+<div class="choice-area text display" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div title="Question details" class="details">
 		{$questions[questionIndex].choices[0]}
 	</div>
-	<div class="input-container" class:max={text.length > $LIMIT_OF_CHARS}>
-		<div
-			title="Enter your answer"
-			class="text-area"
-			contenteditable
-			bind:textContent={text}
-			role="textbox"
-			tabindex="0"
-			on:keydown={(e) => {
-				handleNewLine(e);
-				limitInput(e, $questions[questionIndex].choices[0], $LIMIT_OF_CHARS);
-			}}
-		>
-			{text}
-		</div>
-		<span class="char-count">{text.length} / {$LIMIT_OF_CHARS}</span>
-	</div>
+	<Input bind:text label="Answer" title="Enter your answer" --margin-right="0em" />
 </div>
-
-<style>
-	.text-area {
-		margin-right: 0em;
-	}
-
-	.text-area[contenteditable]:empty::before {
-		content: 'Enter your answer...';
-	}
-</style>

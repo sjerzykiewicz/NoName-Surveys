@@ -16,7 +16,7 @@
 				<a
 					href="{$page.url.pathname}/answers/{i}"
 					title="Click to get all answers"
-					class="text-area display"
+					class="text-input display"
 				>
 					{answer}
 				</a>
@@ -38,7 +38,7 @@
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
 	}
 
-	.text-area {
+	.text-input {
 		display: block;
 		padding: 0.25em;
 		margin-left: 0em;
@@ -51,11 +51,11 @@
 			outline 0s;
 	}
 
-	.text-area:hover {
+	.text-input:hover {
 		background-color: var(--secondary-color-1);
 	}
 
-	.text-area:last-of-type {
+	.text-input:last-of-type {
 		margin-bottom: 0em;
 	}
 

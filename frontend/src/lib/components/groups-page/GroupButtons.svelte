@@ -233,11 +233,6 @@
 		margin: 0em;
 	}
 
-	.group-input[contenteditable]:empty::before {
-		content: 'Enter group name...';
-		color: var(--text-color-3);
-	}
-
 	.save i {
 		font-variation-settings: 'wght' 700;
 		transform: rotate(0deg);

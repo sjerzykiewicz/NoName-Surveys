@@ -18,7 +18,7 @@
 	<div class="input-container" class:max={text.length > $LIMIT_OF_CHARS}>
 		<div
 			title="Enter your answer"
-			class="text-area"
+			class="text-input"
 			contenteditable
 			bind:textContent={text}
 			role="textbox"
@@ -35,11 +35,7 @@
 </div>
 
 <style>
-	.text-area {
+	.text-input {
 		margin-right: 0em;
-	}
-
-	.text-area[contenteditable]:empty::before {
-		content: 'Enter your answer...';
 	}
 </style>

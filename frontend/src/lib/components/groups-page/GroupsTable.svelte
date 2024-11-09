@@ -224,11 +224,6 @@
 		text-align: left;
 	}
 
-	.group-input[contenteditable]:empty::before {
-		content: 'Enter group name...';
-		color: var(--text-color-3);
-	}
-
 	.input-container {
 		margin-bottom: -1.35em;
 	}

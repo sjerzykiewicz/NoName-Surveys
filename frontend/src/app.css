@@ -536,16 +536,11 @@ input[type='file'] {
 	margin-bottom: 0em;
 }
 
-.question-input {
-	font-size: 1em;
-	white-space: pre-wrap !important;
-}
-
 .question-label {
 	display: flex;
 	flex-flow: row;
 	align-items: center;
-	margin-bottom: 0.25em;
+	margin-bottom: 0.5em;
 	font-size: 1.25em;
 	color: var(--border-color-1);
 	cursor: default;
@@ -606,17 +601,16 @@ input[type='file'] {
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
 	cursor: default;
 	overflow-wrap: break-word;
-	white-space: pre-wrap !important;
 }
 
-.text-area {
+.text-input {
 	margin-left: 2.25em;
 	margin-right: 0em;
 	min-height: 6em;
 	white-space: pre-wrap !important;
 }
 
-.text-area.display {
+.text-input.display {
 	background-color: var(--primary-color-2);
 	padding: 0.25em;
 	border: 1px solid var(--text-color-3);
@@ -721,10 +715,11 @@ input[type='file'] {
 	cursor: default;
 }
 
-.choice-input.binary {
-	margin: 0.5em 0em 0em 0em;
-	max-width: 15em;
-	overflow-wrap: anywhere;
+.choice.binary .input {
+	margin: 0.5em 0em 0em 0em !important;
+	width: 12em !important;
+	max-width: 15em !important;
+	overflow-wrap: anywhere !important;
 }
 
 .binary .icon {
@@ -750,11 +745,6 @@ input[type='file'] {
 	flex-flow: row;
 	align-items: center;
 	margin-bottom: 0.5em;
-}
-
-.choice-input[contenteditable]:empty::before {
-	content: 'Enter choice...';
-	color: var(--text-color-3);
 }
 
 .choice-input.selected,
@@ -818,30 +808,6 @@ input[type='file'] {
 
 .limit-input::placeholder {
 	color: var(--text-color-3);
-	transition:
-		0.2s,
-		outline 0s;
-}
-
-div[contenteditable] {
-	flex: 1;
-	background-color: var(--secondary-color-2);
-	padding: 0.25em;
-	border: 1px solid var(--border-color-1);
-	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
-	color: var(--text-color-1);
-	cursor: text;
-	overflow: hidden;
-	margin-right: 0.5em;
-	white-space: pre-wrap !important;
-	transition:
-		0.2s,
-		outline 0s;
-}
-
-div[contenteditable]:empty::before {
-	color: var(--text-color-3);
 }
 
 /*	pasting text into div[contenteditable] carries over its style */
@@ -866,48 +832,29 @@ div[contenteditable] * {
 	transition: inherit !important;
 }
 
-.input-container {
-	flex: 1;
-	overflow: hidden;
-	padding: 0.2em;
-	margin: -0.2em;
+/*
+.text-input[contenteditable]:empty::before {
+	content: 'Enter your answer...';
 }
 
-.question-area .input-container,
+.group-input[contenteditable]:empty::before {
+	content: 'Enter group name...';
+}
+*/
+
 .choice-area .input-container {
 	margin-bottom: -1.4em;
 }
 
-.input-container div[contenteditable]:focus + .char-count {
-	visibility: visible;
-}
-
-.input-container.max .char-count {
-	color: var(--error-color-1);
-	border-color: var(--error-color-1);
-	visibility: visible;
-}
-
-.char-count {
-	position: relative;
-	bottom: 13px;
-	color: var(--text-color-1);
-	background-color: var(--secondary-color-2);
-	border-radius: 5px;
-	padding: 0.05em 0.25em;
-	cursor: default;
-	visibility: hidden;
-	z-index: 1;
-	transition:
-		color 0.2s,
-		background-color 0.2s;
-}
-
-.question-area .char-count,
 .choice-area .char-count,
-.group-input + .char-count,
-.table-input + .char-count {
+.group-input + .char-count {
 	left: 80%;
+	font-size: 0.56em;
+}
+
+.choice-area .input-label,
+.group-input + .input-label {
+	left: 20%;
 	font-size: 0.56em;
 }
 
@@ -1474,7 +1421,7 @@ button.popup {
 	.question-area,
 	.choice-area,
 	.details,
-	.text-area,
+	.text-input,
 	.dropdown,
 	.arrows,
 	.button-row {
@@ -1498,13 +1445,17 @@ button.popup {
 		font-size: 2.5em;
 	}
 
-	.question-area .char-count,
 	.choice-area .char-count,
-	.group-input + .char-count,
-	.table-input + .char-count {
+	.group-input + .char-count {
 		left: 65%;
 		font-size: 0.5em;
 		bottom: 11px;
+	}
+
+	.choice-area .input-label,
+	.group-input + .input-label {
+		left: 35%;
+		font-size: 0.5em;
 	}
 
 	.choice-area.binary {
@@ -1521,9 +1472,9 @@ button.popup {
 		margin-bottom: 0.5em;
 	}
 
-	.choice-input.binary {
-		max-width: none;
-		margin-top: 0em;
+	.choice.binary .input {
+		width: unset !important;
+		max-width: 100% !important;
 	}
 
 	.binary .icon {

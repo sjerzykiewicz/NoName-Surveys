@@ -4,7 +4,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { GroupError } from '$lib/entities/GroupError';
-	import MembersError from '../MembersError.svelte';
+	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';

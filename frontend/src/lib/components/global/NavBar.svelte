@@ -104,9 +104,6 @@
 	</div>
 	{#if open}
 		<div class="bar">
-			<a href="/" title="NoName" class="nav-logo"
-				><img src={logo} alt="NoName logo" width="48" height="48" /></a
-			>
 			<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
 				<NavLinks {navLinks} {hideNav} />
 			</nav>
@@ -267,6 +264,10 @@
 			top: 0.6em;
 			right: 3em;
 			font-size: 1.75em;
+		}
+
+		.toggle-mode.tooltip .tooltip-text {
+			font-size: 0.5em;
 		}
 	}
 </style>

@@ -80,8 +80,15 @@
 
 html,
 body {
-	display: contents;
 	height: 100%;
+	margin: 0;
+	padding: 0;
+	transition: 0.2s;
+}
+
+body {
+	overflow-x: hidden;
+	overflow-y: auto;
 	background: var(--secondary-color-1);
 	background: -moz-linear-gradient(
 		0deg,
@@ -95,11 +102,6 @@ body {
 	);
 	background: linear-gradient(0deg, var(--secondary-color-2) 0%, var(--secondary-color-1) 100%);
 	background-attachment: fixed;
-	margin: 0px;
-	overflow-x: hidden;
-	transition:
-		0.2s,
-		outline 0s;
 }
 
 .hamburger {
@@ -1429,6 +1431,10 @@ button.popup {
 }
 
 @media screen and (max-width: 768px) {
+	html {
+		background: var(--secondary-color-1);
+	}
+
 	.title,
 	.info-row .tooltip {
 		font-size: 1.25em;

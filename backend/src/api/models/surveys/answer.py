@@ -1,8 +1,9 @@
 import re
 from typing import Union
 
-from pydantic import BaseModel, Field, ValidationInfo, field_validator
+from pydantic import Field, ValidationInfo, field_validator
 
+from src.api.models.base import Base
 from src.api.models.questions.binary_question import BinaryQuestion
 from src.api.models.questions.list_question import ListQuestion
 from src.api.models.questions.multi_question import MultiQuestion
@@ -14,7 +15,7 @@ from src.api.models.questions.slider_question import SliderQuestion
 from src.api.models.questions.text_question import TextQuestion
 
 
-class SurveyAnswerBase(BaseModel):
+class SurveyAnswerBase(Base):
     survey_code: str
     questions: list[
         Union[
@@ -53,11 +54,8 @@ class SurveyAnswerBase(BaseModel):
         for question in self.questions:
             question.validate_for_answer()
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyAnswersFetchInput(BaseModel):
+class SurveyAnswersFetchInput(Base):
     user_email: str
     survey_code: str
 
@@ -77,11 +75,8 @@ class SurveyAnswersFetchInput(BaseModel):
             raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyAnswersFetchOutput(BaseModel):
+class SurveyAnswersFetchOutput(Base):
     title: str
     questions: list[
         Union[
@@ -99,6 +94,3 @@ class SurveyAnswersFetchOutput(BaseModel):
         min_length=1,
         description="Questions list must have at least 1 element",
     )
-
-    class Config:
-        extra = "forbid"

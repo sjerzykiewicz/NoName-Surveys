@@ -2,8 +2,9 @@ import re
 from datetime import datetime
 from typing import Optional, Union
 
-from pydantic import BaseModel, Field, ValidationInfo, field_validator
+from pydantic import Field, ValidationInfo, field_validator
 
+from src.api.models.base import Base
 from src.api.models.questions.binary_question import BinaryQuestion
 from src.api.models.questions.list_question import ListQuestion
 from src.api.models.questions.multi_question import MultiQuestion
@@ -15,7 +16,7 @@ from src.api.models.questions.slider_question import SliderQuestion
 from src.api.models.questions.text_question import TextQuestion
 
 
-class SurveyStructure(BaseModel):
+class SurveyStructure(Base):
     questions: list[
         Union[
             BinaryQuestion,
@@ -37,11 +38,8 @@ class SurveyStructure(BaseModel):
         for question in self.questions:
             question.validate_for_draft()
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyBase(BaseModel):
+class SurveyBase(Base):
     title: str
 
     @field_validator("title")
@@ -50,11 +48,8 @@ class SurveyBase(BaseModel):
             raise ValueError("survey title must be provided")
         return v
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyHeadersOutput(BaseModel):
+class SurveyHeadersOutput(Base):
     title: str
     survey_code: str
     creation_date: datetime
@@ -63,7 +58,7 @@ class SurveyHeadersOutput(BaseModel):
     group_size: int
 
 
-class SurveyInfoFetchInput(BaseModel):
+class SurveyInfoFetchInput(Base):
     survey_code: str
 
     @field_validator("survey_code")
@@ -74,19 +69,13 @@ class SurveyInfoFetchInput(BaseModel):
             raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyStructureFetchOutput(BaseModel):
+class SurveyStructureFetchOutput(Base):
     title: str
     survey_structure: SurveyStructure
     survey_code: str
     uses_cryptographic_module: bool
     public_keys: Optional[list[str]] = Field(default=[])
-
-    class Config:
-        extra = "forbid"
 
 
 class SurveyStructureCreateInput(SurveyBase):
@@ -114,18 +103,12 @@ class SurveyStructureCreateInput(SurveyBase):
                 raise ValueError("invalid email format")
         return v
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyStructureCreateOutput(BaseModel):
+class SurveyStructureCreateOutput(Base):
     survey_code: str
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyUserAction(BaseModel):
+class SurveyUserAction(Base):
     user_email: str
 
     @field_validator("user_email")
@@ -135,9 +118,6 @@ class SurveyUserAction(BaseModel):
         if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
             raise ValueError("invalid email format")
         return v
-
-    class Config:
-        extra = "forbid"
 
 
 class SurveyUserActions(SurveyUserAction):
@@ -150,9 +130,6 @@ class SurveyUserActions(SurveyUserAction):
         if not re.match(r"^\d{6}$", v):
             raise ValueError("survey code must be a string consisting of 6 digits")
         return v
-
-    class Config:
-        extra = "forbid"
 
 
 class SurveyUserDeleteAction(SurveyUserAction):
@@ -167,9 +144,6 @@ class SurveyUserDeleteAction(SurveyUserAction):
                 raise ValueError("survey code must be a string consisting of 6 digits")
         return v
 
-    class Config:
-        extra = "forbid"
-
 
 class ShareSurveyActions(SurveyUserActions):
     user_emails: list[str]
@@ -182,6 +156,3 @@ class ShareSurveyActions(SurveyUserActions):
             if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
                 raise ValueError("invalid email format")
         return v
-
-    class Config:
-        extra = "forbid"

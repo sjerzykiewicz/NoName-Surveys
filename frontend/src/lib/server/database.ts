@@ -135,7 +135,7 @@ export const getSurveyRespondents = (survey_code: string, page: number) => {
 	});
 };
 
-export const deleteSurveys = (user_email: string, survey_codes: string) => {
+export const deleteSurveys = (user_email: string, survey_codes: string[]) => {
 	return fetch(`${host}/surveys/delete`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_codes }),
@@ -172,7 +172,7 @@ export const giveAccessToSurvey = (
 export const takeAwayAccessToSurvey = (
 	user_email: string,
 	survey_code: string,
-	user_emails: string
+	user_emails: string[]
 ) => {
 	return fetch(`${host}/surveys/take-away-access`, {
 		method: 'POST',
@@ -279,7 +279,7 @@ export const renameUserGroup = (user_email: string, name: string, new_name: stri
 	});
 };
 
-export const deleteUserGroups = (user_email: string, names: string) => {
+export const deleteUserGroups = (user_email: string, names: string[]) => {
 	return fetch(`${host}/user-groups/delete`, {
 		method: 'POST',
 		body: JSON.stringify({ user_email, names }),

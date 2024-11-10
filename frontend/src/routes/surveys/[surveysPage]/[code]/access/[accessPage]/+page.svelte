@@ -4,7 +4,6 @@
 	import Footer from '$lib/components/global/Footer.svelte';
 	import AccessTable from '$lib/components/summary-page/access/AccessTable.svelte';
 	import UserButtons from '$lib/components/summary-page/access/UserButtons.svelte';
-	import { afterUpdate } from 'svelte';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
 	import { goto } from '$app/navigation';
@@ -14,12 +13,7 @@
 	export let selectedUsersToRemove: string[] = [];
 	export let isModalHidden: boolean = true;
 
-	let usersWithoutAccess: string[] = [];
-
-	afterUpdate(() => {
-		const usersWithAccessSet = new Set(data.usersWithAccess);
-		usersWithoutAccess = data.allUsers.filter((user) => !usersWithAccessSet.has(user));
-	});
+	$: usersWithoutAccess = data.allUsers.filter((user) => !new Set(data.usersWithAccess).has(user));
 </script>
 
 <QrCodeModal
@@ -33,17 +27,14 @@
 </Header>
 
 <Content>
-	{#if data.usersWithAccess.length === 0}
-		<div title="Users with access" class="title empty">No users with access to display!</div>
-	{:else}
-		<AccessTable users={data.usersWithAccess} bind:selectedUsersToRemove />
-		<UserButtons
-			users={usersWithoutAccess}
-			code={data.survey.survey_code}
-			numUsers={data.numUsers}
-			bind:selectedUsersToRemove
-		/>
-	{/if}
+	<AccessTable users={data.usersWithAccess} bind:selectedUsersToRemove />
+	<UserButtons
+		{usersWithoutAccess}
+		usersWithAccess={data.usersWithAccess}
+		code={data.survey.survey_code}
+		numUsers={data.numUsers}
+		bind:selectedUsersToRemove
+	/>
 </Content>
 
 <Footer>

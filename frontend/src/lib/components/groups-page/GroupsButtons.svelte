@@ -81,14 +81,16 @@
 		return true;
 	}
 
-	async function createGroup(user_group_name: string, user_group_members: string[]) {
-		if (!(await checkCorrectness(user_group_name, user_group_members))) return;
+	async function createGroup() {
+		const name = groupName.trim();
+
+		if (!(await checkCorrectness(name, groupMembers))) return;
 
 		const response = await fetch('/api/groups/create', {
 			method: 'POST',
 			body: JSON.stringify({
-				user_group_name: user_group_name,
-				user_group_members: user_group_members
+				user_group_name: name,
+				user_group_members: groupMembers
 			}),
 			headers: {
 				'Content-Type': 'application/json'
@@ -184,7 +186,7 @@
 				handleEnter={(e) => {
 					if (e.key === 'Enter') {
 						e.preventDefault();
-						createGroup(groupName.trim(), groupMembers);
+						createGroup();
 						e.stopImmediatePropagation();
 					}
 				}}
@@ -207,13 +209,7 @@
 					placeholder="Select group members"
 				/>
 			</div>
-			<button
-				title="Save the group"
-				class="done"
-				on:click={() => {
-					createGroup(groupName.trim(), groupMembers);
-				}}
-			>
+			<button title="Save the group" class="done" on:click={createGroup}>
 				<i class="symbol">done</i>Create
 			</button>
 		</div>

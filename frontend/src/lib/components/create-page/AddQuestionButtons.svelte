@@ -151,6 +151,15 @@
 		}
 	}
 
+	function deleteLastQuestion() {
+		$questions.splice($questions.length - 1, 1);
+		$questions = $questions;
+	}
+
+	function switchRequired() {
+		$questions[$questions.length - 1].required = !$questions[$questions.length - 1].required;
+	}
+
 	onMount(() => {
 		function handleEscape(event: KeyboardEvent) {
 			if (isPanelVisible && event.key === 'Escape') {
@@ -166,12 +175,59 @@
 			}
 		}
 
+		function handleHotkeys(event: KeyboardEvent) {
+			const keyname = event.key;
+			if (event.ctrlKey) {
+				switch (keyname) {
+					case '1':
+						addQuestion(Text);
+						break;
+					case '2':
+						addQuestion(Single);
+						break;
+					case '3':
+						addQuestion(Multi);
+						break;
+					case '4':
+						addQuestion(Scale);
+						break;
+					case '5':
+						addQuestion(Binary);
+						break;
+					case '6':
+						addQuestion(Number);
+						break;
+					case '7':
+						addQuestion(Slider);
+						break;
+					case '8':
+						addQuestion(List);
+						break;
+					case '9':
+						addQuestion(Rank);
+						break;
+					case '0':
+						if ($previousQuestion) addQuestion($previousQuestion);
+						break;
+					case 'Backspace':
+						deleteLastQuestion();
+						break;
+					case 'e':
+						switchRequired();
+						break;
+				}
+			}
+			event.stopImmediatePropagation();
+		}
+
 		document.body.addEventListener('keydown', handleEscape);
 		document.body.addEventListener('click', handleClick);
+		document.body.addEventListener('keydown', handleHotkeys);
 
 		return () => {
 			document.body.removeEventListener('keydown', handleEscape);
 			document.body.removeEventListener('click', handleClick);
+			document.body.removeEventListener('keydown', handleHotkeys);
 		};
 	});
 

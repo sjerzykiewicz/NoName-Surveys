@@ -28,7 +28,6 @@
 	}
 </script>
 
-<!-- TODO: maybe set to 10 -->
 {#if numEntries > 0}
 	<div class="page-buttons">
 		<div class="prev-buttons">

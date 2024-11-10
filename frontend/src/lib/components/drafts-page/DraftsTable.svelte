@@ -201,7 +201,7 @@
 			}
 		});
 		$draftStructure = getDraft($title.title, $questions);
-		goto('/create');
+		await goto('/create');
 	}
 
 	let innerWidth: number;

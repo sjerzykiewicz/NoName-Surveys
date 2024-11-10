@@ -7,11 +7,12 @@
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
-	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import { page } from '$app/stores';
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
+	import { changePage } from '$lib/utils/changePage';
 
 	export let members: {
 		email: string;
@@ -50,12 +51,13 @@
 		return true;
 	}
 
+	// TODO: fix this
 	async function addMembers() {
 		if (!(await checkCorrectness(selectedMembersToAdd))) return;
 
 		const deleteResponse = await fetch('/api/groups/delete', {
 			method: 'POST',
-			body: JSON.stringify({ name: group }),
+			body: JSON.stringify({ names: [group] }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -93,10 +95,11 @@
 		await invalidateAll();
 	}
 
+	// TODO: fix this
 	async function removeMembers() {
 		const deleteResponse = await fetch('/api/groups/delete', {
 			method: 'POST',
-			body: JSON.stringify({ name: group }),
+			body: JSON.stringify({ names: [group] }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -109,15 +112,15 @@
 			return;
 		}
 
-		if (selectedMembersToRemove.length === members.length) {
-			goto('/groups/' + $page.params.groupsPage, { replaceState: true, invalidateAll: true });
+		if (selectedMembersToRemove.length >= numMembers) {
+			await goto('/groups/' + $page.params.groupsPage, {
+				replaceState: true,
+				invalidateAll: true
+			});
 			return;
 		}
 
-		// TODO: go to previous page if there are no users left on the current page
-
-		const selectedMembersToRemoveSet = new Set(selectedMembersToRemove);
-		const newMembers = memberEmails.filter((m) => !selectedMembersToRemoveSet.has(m));
+		const newMembers = memberEmails.filter((m) => !new Set(selectedMembersToRemove).has(m));
 
 		const createResponse = await fetch('/api/groups/create', {
 			method: 'POST',
@@ -135,6 +138,16 @@
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
+		}
+
+		const currentPage = parseInt($page.params.groupPage);
+		const maxPage = Math.ceil(numMembers / $ENTRIES_PER_PAGE) - 1;
+		if (
+			selectedMembersToRemove.length >= members.length &&
+			currentPage >= maxPage &&
+			currentPage > 0
+		) {
+			await changePage($page.url.pathname, currentPage - 1);
 		}
 
 		isModalHidden = true;

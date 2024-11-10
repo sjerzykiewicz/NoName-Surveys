@@ -8,12 +8,20 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import NameError from '$lib/components/groups-page/NameError.svelte';
-	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS, M } from '$lib/stores/global';
+	import {
+		ENTRIES_PER_PAGE,
+		errorModalContent,
+		isErrorModalHidden,
+		LIMIT_OF_CHARS,
+		M
+	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
 	import Input from '$lib/components/global/Input.svelte';
+	import { page } from '$app/stores';
+	import { changePage } from '$lib/utils/changePage';
 
 	export let groups: {
 		user_group_name: string;
@@ -116,8 +124,15 @@
 			return;
 		}
 
-		groups = groups.filter((g) => !new Set(selectedGroupsToRemove).has(g.user_group_name));
-		// TODO: go to previous page if there are no groups left on the current page
+		const currentPage = parseInt($page.params.groupsPage);
+		const maxPage = Math.ceil(numGroups / $ENTRIES_PER_PAGE) - 1;
+		if (
+			selectedGroupsToRemove.length >= groups.length &&
+			currentPage >= maxPage &&
+			currentPage > 0
+		) {
+			await changePage($page.url.pathname, currentPage - 1);
+		}
 
 		isModalHidden = true;
 		selectedGroupsToRemove = [];

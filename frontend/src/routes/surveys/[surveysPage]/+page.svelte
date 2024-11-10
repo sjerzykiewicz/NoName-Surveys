@@ -21,9 +21,9 @@
 
 <Content>
 	<LimitWarning num={data.numSurveys} limit={$LIMIT_OF_SURVEYS} items="Surveys" />
-	<SurveysTable surveys={data.surveys.toReversed()} bind:selectedSurveysToRemove />
+	<SurveysTable surveys={data.surveys} bind:selectedSurveysToRemove />
 	<SurveysButtons
-		surveys={data.surveys.toReversed()}
+		surveys={data.surveys}
 		numSurveys={data.numSurveys}
 		bind:selectedSurveysToRemove
 	/>

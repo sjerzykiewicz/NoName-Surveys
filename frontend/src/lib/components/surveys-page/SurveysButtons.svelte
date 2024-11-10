@@ -2,8 +2,10 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
-	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { page } from '$app/stores';
+	import { changePage } from '$lib/utils/changePage';
 
 	export let surveys: {
 		title: string;
@@ -36,8 +38,15 @@
 			return;
 		}
 
-		surveys = surveys.filter((s) => !new Set(selectedSurveysToRemove).has(s.survey_code));
-		// TODO: go to previous page if there are no users left on the current page
+		const currentPage = parseInt($page.params.surveysPage);
+		const maxPage = Math.ceil(numSurveys / $ENTRIES_PER_PAGE) - 1;
+		if (
+			selectedSurveysToRemove.length >= surveys.length &&
+			currentPage >= maxPage &&
+			currentPage > 0
+		) {
+			await changePage($page.url.pathname, currentPage - 1);
+		}
 
 		isModalHidden = true;
 		selectedSurveysToRemove = [];

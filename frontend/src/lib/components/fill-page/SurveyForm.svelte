@@ -320,9 +320,9 @@
 		else processForm(undefined);
 	}
 
-	function hideSuccessModal() {
+	async function hideSuccessModal() {
 		$isSuccessModalHidden = true;
-		goto('/', { replaceState: true, invalidateAll: true });
+		await goto('/', { replaceState: true, invalidateAll: true });
 	}
 
 	onMount(() => {

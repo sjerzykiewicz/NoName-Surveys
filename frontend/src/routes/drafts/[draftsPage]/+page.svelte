@@ -21,12 +21,8 @@
 
 <Content>
 	<LimitWarning num={data.numDrafts} limit={$LIMIT_OF_DRAFTS} items="Drafts" />
-	<DraftsTable drafts={data.drafts.toReversed()} bind:selectedDraftsToRemove />
-	<DraftsButtons
-		drafts={data.drafts.toReversed()}
-		numDrafts={data.numDrafts}
-		bind:selectedDraftsToRemove
-	/>
+	<DraftsTable drafts={data.drafts} bind:selectedDraftsToRemove />
+	<DraftsButtons drafts={data.drafts} numDrafts={data.numDrafts} bind:selectedDraftsToRemove />
 </Content>
 
 <style>

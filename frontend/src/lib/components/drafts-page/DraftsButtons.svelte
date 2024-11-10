@@ -1,10 +1,12 @@
 <script lang="ts">
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
-	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { questions, title } from '$lib/stores/create-page';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { goto, invalidateAll } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { changePage } from '$lib/utils/changePage';
 
 	export let drafts: {
 		id: number;
@@ -32,8 +34,15 @@
 			return;
 		}
 
-		drafts = drafts.filter((d) => !new Set(selectedDraftsToRemove).has(d.id));
-		// TODO: go to previous page if there are no drafts left on the current page
+		const currentPage = parseInt($page.params.draftsPage);
+		const maxPage = Math.ceil(numDrafts / $ENTRIES_PER_PAGE) - 1;
+		if (
+			selectedDraftsToRemove.length >= drafts.length &&
+			currentPage >= maxPage &&
+			currentPage > 0
+		) {
+			await changePage($page.url.pathname, currentPage - 1);
+		}
 
 		isModalHidden = true;
 		$title.title = '';

@@ -7,10 +7,12 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
 	import UsersError from './UsersError.svelte';
-	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
+	import { page } from '$app/stores';
+	import { changePage } from '$lib/utils/changePage';
 
 	export let users: string[];
 	export let code: string;
@@ -88,8 +90,11 @@
 			return;
 		}
 
-		users = users.filter((u) => !new Set(selectedUsersToRemove).has(u));
-		// TODO: go to previous page if there are no users left on the current page
+		const currentPage = parseInt($page.params.accessPage);
+		const maxPage = Math.ceil(numUsers / $ENTRIES_PER_PAGE) - 1;
+		if (selectedUsersToRemove.length >= users.length && currentPage >= maxPage && currentPage > 0) {
+			await changePage($page.url.pathname, currentPage - 1);
+		}
 
 		isModalHidden = true;
 		selectedUsersToRemove = [];

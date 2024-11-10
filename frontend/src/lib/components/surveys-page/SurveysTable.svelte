@@ -21,7 +21,8 @@
 	$: ownedSurveyCodes = surveys.filter((s) => s.is_owned_by_user).map((s) => s.survey_code);
 
 	$: allSelected =
-		selectedSurveysToRemove.length === ownedSurveyCodes.length && selectedSurveysToRemove.length > 0;
+		selectedSurveysToRemove.length === ownedSurveyCodes.length &&
+		selectedSurveysToRemove.length > 0;
 
 	function toggleAll() {
 		selectedSurveysToRemove = allSelected ? [] : [...ownedSurveyCodes];

@@ -1,5 +1,8 @@
 <script lang="ts">
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
+
 	export let respondents;
+	export let numRespondents;
 </script>
 
 {#if respondents.length === 0}
@@ -15,4 +18,13 @@
 			</tr>
 		{/each}
 	</table>
+	<div class="button-row">
+		<PageButtons numEntries={numRespondents} />
+	</div>
 {/if}
+
+<style>
+	.button-row {
+		justify-content: flex-end;
+	}
+</style>

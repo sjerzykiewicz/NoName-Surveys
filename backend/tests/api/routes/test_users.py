@@ -16,6 +16,11 @@ def create_user(client: TestClient, email: str):
     )
 
 
+def create_users(client: TestClient, emails: list[str]):
+    for email in emails:
+        create_user(client, email)
+
+
 def create_user_with_public_key(client: TestClient, email: str):
     create_user(client, email)
 
@@ -24,9 +29,14 @@ def create_user_with_public_key(client: TestClient, email: str):
         json={
             "user_email": email,
             "public_key": TEST_PUBLIC_KEY,
-            "fingerprint": SHA256.new(TEST_PUBLIC_KEY.encode()).hexdigest()
+            "fingerprint": SHA256.new(TEST_PUBLIC_KEY.encode()).hexdigest(),
         },
     )
+
+
+def create_users_with_public_keys(client: TestClient, emails: list[str]):
+    for email in emails:
+        create_user_with_public_key(client, email)
 
 
 def test_create_user_happy_path(client: TestClient):
@@ -63,7 +73,6 @@ def test_get_users(client: TestClient):
     assert len(data) == 2
     assert TEST_VALID_USER_EMAIL_1 in data
     assert TEST_VALID_USER_EMAIL_2 in data
-
 
 
 def test_get_users_with_keys(client: TestClient):
@@ -143,7 +152,7 @@ def test_update_public_key_when_user_not_registered(client: TestClient):
         json={
             "user_email": TEST_VALID_USER_EMAIL_1,
             "public_key": TEST_PUBLIC_KEY,
-            "fingerprint": "12345"
+            "fingerprint": "12345",
         },
     )
 
@@ -161,7 +170,7 @@ def test_update_public_key_with_invalid_fingerprint(client: TestClient):
         json={
             "user_email": TEST_VALID_USER_EMAIL_1,
             "public_key": TEST_PUBLIC_KEY,
-            "fingerprint": "12345"
+            "fingerprint": "12345",
         },
     )
 

@@ -17,6 +17,7 @@
 			bind:text={$questions[questionIndex].choices[0]}
 			label="Positive Choice"
 			title="Enter a positive choice"
+			clearOnce={true}
 			--label-top="18px"
 			--label-top-mobile="14px"
 		/>
@@ -30,6 +31,7 @@
 			bind:text={$questions[questionIndex].choices[1]}
 			label="Negative Choice"
 			title="Enter a negative choice"
+			clearOnce={true}
 			--label-top="18px"
 			--label-top-mobile="14px"
 		/>

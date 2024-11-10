@@ -7,10 +7,12 @@
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
-	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import { page } from '$app/stores';
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
+	import { changePage } from '$lib/utils/changePage';
 
 	export let members: {
 		email: string;
@@ -19,6 +21,7 @@
 	export let notMembers: string[];
 	export let selectedMembersToRemove: string[] = [];
 	export let group: string;
+	export let numMembers: number;
 
 	let isPanelVisible: boolean = false;
 	let selectedMembersToAdd: string[] = [];
@@ -48,12 +51,13 @@
 		return true;
 	}
 
+	// TODO: fix this
 	async function addMembers() {
 		if (!(await checkCorrectness(selectedMembersToAdd))) return;
 
 		const deleteResponse = await fetch('/api/groups/delete', {
 			method: 'POST',
-			body: JSON.stringify({ name: group }),
+			body: JSON.stringify({ names: [group] }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -88,13 +92,14 @@
 
 		selectedMembersToAdd = [];
 		isPanelVisible = false;
-		invalidateAll();
+		await invalidateAll();
 	}
 
+	// TODO: fix this
 	async function removeMembers() {
 		const deleteResponse = await fetch('/api/groups/delete', {
 			method: 'POST',
-			body: JSON.stringify({ name: group }),
+			body: JSON.stringify({ names: [group] }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -107,13 +112,15 @@
 			return;
 		}
 
-		if (selectedMembersToRemove.length === members.length) {
-			goto('/groups/' + $page.params.groupsPage, { replaceState: true, invalidateAll: true });
+		if (selectedMembersToRemove.length >= numMembers) {
+			await goto('/groups/' + $page.params.groupsPage, {
+				replaceState: true,
+				invalidateAll: true
+			});
 			return;
 		}
 
-		const selectedMembersToRemoveSet = new Set(selectedMembersToRemove);
-		const newMembers = memberEmails.filter((m) => !selectedMembersToRemoveSet.has(m));
+		const newMembers = memberEmails.filter((m) => !new Set(selectedMembersToRemove).has(m));
 
 		const createResponse = await fetch('/api/groups/create', {
 			method: 'POST',
@@ -133,9 +140,19 @@
 			return;
 		}
 
+		const currentPage = parseInt($page.params.groupPage);
+		const maxPage = Math.ceil(numMembers / $ENTRIES_PER_PAGE) - 1;
+		if (
+			selectedMembersToRemove.length >= members.length &&
+			currentPage >= maxPage &&
+			currentPage > 0
+		) {
+			await changePage($page.url.pathname, currentPage - 1);
+		}
+
 		isModalHidden = true;
 		selectedMembersToRemove = [];
-		invalidateAll();
+		await invalidateAll();
 	}
 </script>
 
@@ -146,22 +163,27 @@
 />
 
 <div class="button-row">
-	<button
-		title={isPanelVisible ? 'Stop adding group members' : 'Add group members'}
-		class="add-group"
-		class:clicked={isPanelVisible}
-		on:click={togglePanel}
-	>
-		<i class="symbol">add</i>Members
-	</button>
-	<button
-		title="Remove selected group members"
-		class="delete-group"
-		disabled={selectedMembersToRemove.length === 0}
-		on:click={() => (isModalHidden = false)}
-	>
-		<i class="symbol">delete</i>Delete
-	</button>
+	<div class="button-sub-row">
+		<button
+			title={isPanelVisible ? 'Stop adding group members' : 'Add group members'}
+			class="add-group"
+			class:clicked={isPanelVisible}
+			on:click={togglePanel}
+		>
+			<i class="symbol">add</i>Members
+		</button>
+		{#if members.length > 0}
+			<button
+				title="Remove selected group members"
+				class="delete-group"
+				disabled={selectedMembersToRemove.length === 0}
+				on:click={() => (isModalHidden = false)}
+			>
+				<i class="symbol">delete</i>Delete
+			</button>
+		{/if}
+	</div>
+	<PageButtons numEntries={numMembers} />
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
@@ -172,19 +194,9 @@
 				placeholder="Select group members"
 			/>
 		</div>
-		<button title="Finish adding group members" class="save" on:click={addMembers}>
+		<button title="Finish adding group members" class="done" on:click={addMembers}>
 			<i class="symbol">done</i>Apply
 		</button>
 	</div>
 	<MembersError members={selectedMembersToAdd} error={membersError} />
 {/if}
-
-<style>
-	.select-list {
-		margin-bottom: 0em;
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
-	}
-</style>

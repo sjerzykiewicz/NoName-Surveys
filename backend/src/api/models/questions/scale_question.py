@@ -24,6 +24,3 @@ class ScaleQuestion(Question):
             or self.question != answer.question
         ):
             raise ValueError("Invalid answer!")
-
-    class Config:
-        extra = "forbid"

@@ -8,6 +8,7 @@ from src.api.models.surveys.survey_draft import (
     SurveyDraftCreate,
     SurveyDraftFetchOutput,
     SurveyDraftHeadersOutput,
+    SurveyDraftUserActionDelete,
     SurveyDraftUserActions,
 )
 from src.api.models.users.user import User
@@ -84,27 +85,23 @@ async def get_survey_draft(
     response_description="Delete a survey draft",
     response_model=dict,
 )
-async def delete_survey_draft(
-    survey_draft_delete: SurveyDraftUserActions,
+async def delete_survey_drafts(
+    survey_draft_delete: SurveyDraftUserActionDelete,
     session: Session = Depends(get_session),
 ):
     user = user_crud.get_user_by_email(survey_draft_delete.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
 
-    survey_draft = survey_draft_crud.get_not_deleted_survey_draft_by_id(
-        survey_draft_delete.id, session
+    deleted_survey_drafts = survey_draft_crud.delete_survey_drafts(
+        user.id, survey_draft_delete.ids, session
     )
-    if survey_draft is None:
-        raise HTTPException(status_code=404, detail="Survey Draft does not exist")
 
-    if survey_draft.creator_id != user.id:
+    if len(deleted_survey_drafts) != len(survey_draft_delete.ids):
         raise HTTPException(
-            status_code=403,
-            detail="User does not have access to this Survey Draft",
+            status_code=404,
+            detail="Some of the survey drafts do not exist or are already deleted",
         )
-
-    survey_draft_crud.delete_survey_draft_by_id(survey_draft_delete.id, session)
 
     return {"message": "Survey Draft deleted successfully"}
 

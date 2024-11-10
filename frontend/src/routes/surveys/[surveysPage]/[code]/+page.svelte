@@ -3,16 +3,12 @@
 	import Content from '$lib/components/global/Content.svelte';
 	import AnswersSummary from '$lib/components/summary-page/AnswersSummary.svelte';
 	import Footer from '$lib/components/global/Footer.svelte';
-	import Back from '$lib/components/global/Back.svelte';
-	import ShareButton from '$lib/components/summary-page/buttons/ShareButton.svelte';
-	import type { LayoutData } from './$types';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
-	import QrCodeButton from '$lib/components/summary-page/buttons/QrCodeButton.svelte';
-	import RespondentsButton from '$lib/components/summary-page/buttons/RespondentsButton.svelte';
-	import AnswersButton from '$lib/components/summary-page/buttons/AnswersButton.svelte';
-	import SummaryButton from '$lib/components/summary-page/buttons/SummaryButton.svelte';
+	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
-	export let data: LayoutData;
+	export let data;
 	export let isModalHidden: boolean = true;
 </script>
 
@@ -31,21 +27,10 @@
 </Content>
 
 <Footer>
-	<!-- TODO: improve this -->
-	{#if data.survey_list[data.survey_index].is_owned_by_user}
-		<ShareButton />
-	{/if}
-	{#if data.survey.uses_cryptographic_module}
-		<RespondentsButton />
-	{/if}
-	<div class="footer-button-group">
-		<div class="footer-button-group">
-			<AnswersButton />
-			<SummaryButton />
-		</div>
-		<div class="footer-button-group">
-			<QrCodeButton bind:isModalHidden />
-			<Back />
-		</div>
-	</div>
+	<FooterButtons
+		isOwnedByUser={data.surveys[data.survey_index].is_owned_by_user}
+		usesCryptographicModule={data.survey.uses_cryptographic_module}
+		goBack={() => goto('/surveys/' + $page.params.surveysPage)}
+		bind:isModalHidden
+	/>
 </Footer>

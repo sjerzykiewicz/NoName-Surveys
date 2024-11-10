@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { getUserGroup } from '$lib/server/database';
+import { getUserGroup, countUserGroupMembers } from '$lib/server/database';
 import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent, params }) => {
@@ -11,11 +11,17 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 	const group = params.group;
 	const page = parseInt(params.groupPage);
 
-	const response = await getUserGroup(session.user!.email!, group, page);
-	if (!response.ok) {
-		error(response.status, { message: await response.json() });
+	const usersResponse = await getUserGroup(session.user!.email!, group, page);
+	if (!usersResponse.ok) {
+		error(usersResponse.status, { message: await usersResponse.json() });
 	}
-	const users: { email: string; has_public_key: boolean }[] = await response.json();
+	const users: { email: string; has_public_key: boolean }[] = await usersResponse.json();
 
-	return { group, users };
+	const countResponse = await countUserGroupMembers(session.user!.email!, group);
+	if (!countResponse.ok) {
+		error(countResponse.status, { message: await countResponse.json() });
+	}
+	const numMembers = await countResponse.json();
+
+	return { group, users, numMembers };
 };

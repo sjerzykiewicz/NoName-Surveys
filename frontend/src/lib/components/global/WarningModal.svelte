@@ -6,13 +6,13 @@
 
 	export let isExportButtonVisible: boolean = false;
 	export let emails: string[] = [];
-	export let width: number = 20;
+	export let hide: () => void = () => ($isWarningModalHidden = true);
 
 	onMount(() => {
 		function handleEnter(event: KeyboardEvent) {
 			if (!$isWarningModalHidden && event.key === 'Enter') {
 				event.preventDefault();
-				$isWarningModalHidden = true;
+				hide();
 				event.stopImmediatePropagation();
 			}
 		}
@@ -28,11 +28,12 @@
 <Modal
 	icon="warning"
 	title="Warning"
-	textColor="var(--warning-color-1)"
-	borderColor="var(--warning-color-1)"
-	{width}
-	zIndex={12}
+	--text-color="var(--warning-color-1)"
+	--border-color="var(--warning-color-1)"
+	--width="var(--width-warning)"
+	--z-index="12"
 	bind:isHidden={$isWarningModalHidden}
+	{hide}
 >
 	<div slot="content" class="content">{$warningModalContent}</div>
 	{#if isExportButtonVisible}
@@ -43,7 +44,7 @@
 			><i class="symbol">file_save</i>Export</button
 		>
 	{/if}
-	<button title="Ok" class="save" on:click={() => ($isWarningModalHidden = true)}
+	<button title="Ok" class="done" on:click={() => ($isWarningModalHidden = true)}
 		><i class="symbol">done</i>OK</button
 	>
 </Modal>
@@ -51,9 +52,5 @@
 <style>
 	.export i {
 		margin-right: 0.15em;
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
 	}
 </style>

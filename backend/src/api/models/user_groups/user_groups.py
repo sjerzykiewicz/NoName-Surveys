@@ -1,9 +1,11 @@
 import re
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from pydantic import ValidationInfo, field_validator
+
+from src.api.models.base import Base
 
 
-class UserGroupCreator(BaseModel):
+class UserGroupCreator(Base):
     user_email: str
 
     @field_validator("user_email")
@@ -13,9 +15,6 @@ class UserGroupCreator(BaseModel):
         if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
             raise ValueError("invalid email format")
         return v
-
-    class Config:
-        extra = "forbid"
 
 
 class UserGroupCreate(UserGroupCreator):
@@ -39,15 +38,12 @@ class UserGroupCreate(UserGroupCreator):
                 raise ValueError("invalid email format")
         return v
 
-    class Config:
-        extra = "forbid"
-
 
 class UserGroupAction(UserGroupCreator):
     name: str
 
     @field_validator("name")
-    def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
+    def validate_user_group_name(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             raise ValueError("name must be provided")
         if not re.match(r"^[\w /-]+$", v, re.UNICODE):
@@ -55,32 +51,49 @@ class UserGroupAction(UserGroupCreator):
         return v
 
 
+class UserGroupMultipleActions(UserGroupCreator):
+    names: list[str]
+
+    @field_validator("names")
+    def validate_user_group_names(cls, v, info: ValidationInfo) -> str:
+        if v is None or len(v) == 0:
+            raise ValueError("names must be provided")
+        for name in v:
+            if not re.match(r"^[\w /-]+$", name, re.UNICODE):
+                raise ValueError("Invalid group name format")
+        return v
+
+
 class UserGroupNameUpdate(UserGroupAction):
     new_name: str
 
     @field_validator("new_name")
-    def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
+    def validate_new_user_group_name(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             raise ValueError("new name must be provided")
         if not re.match(r"^[\w /-]+$", v, re.UNICODE):
             raise ValueError("Invalid group name format")
         return v
 
-    class Config:
-        extra = "forbid"
+
+class UserGroupUsersActions(UserGroupAction):
+    users: list[str]
+
+    @field_validator("users")
+    def validate_user_emails(cls, v, info: ValidationInfo) -> str:
+        if v is None or len(v) == 0:
+            raise ValueError("users to take action on must be provided")
+        for email in v:
+            if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
+                raise ValueError("invalid email format")
+        return v
 
 
-class AllUserGroupsOutput(BaseModel):
+class AllUserGroupsOutput(Base):
     user_group_name: str
     all_members_have_public_keys: bool
 
-    class Config:
-        extra = "forbid"
 
-
-class UserGroupMembersOutput(BaseModel):
+class UserGroupMembersOutput(Base):
     email: str
     has_public_key: bool
-
-    class Config:
-        extra = "forbid"

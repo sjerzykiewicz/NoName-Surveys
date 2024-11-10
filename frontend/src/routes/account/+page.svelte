@@ -77,7 +77,7 @@
 		icon="encrypted"
 		title="Generating Keys"
 		bind:isHidden={isModalHidden}
-		width={innerWidth <= $M ? 18 : 22}
+		--width={innerWidth <= $M ? '18em' : '22em'}
 	>
 		<span slot="content"
 			>Are you sure you want to generate new keys? Doing so will take away your ability to answer

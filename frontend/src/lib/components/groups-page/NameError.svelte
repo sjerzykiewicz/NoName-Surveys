@@ -7,7 +7,6 @@
 	export let name: string;
 	export let error: GroupError;
 	export let groups: string[];
-	export let fontSize: string = '1em';
 
 	function errorMessage(error: GroupError) {
 		switch (error) {
@@ -38,18 +37,13 @@
 </script>
 
 {#if checkNameError()}
-	<p
-		title="Error"
-		class="error"
-		style="--font-size: {fontSize}"
-		transition:slide={{ duration: 200, easing: cubicInOut }}
-	>
+	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="symbol">error</i>{errorMessage(error)}
 	</p>
 {/if}
 
 <style>
 	.error {
-		font-size: var(--font-size);
+		font-size: var(--font-size, 1em);
 	}
 </style>

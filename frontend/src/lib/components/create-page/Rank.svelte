@@ -48,12 +48,12 @@
 				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
-				<i class="symbol">cancel</i>
+				<i class="symbol">delete</i>
 			</button>
 		</div>
 	{/each}
 	<button title="Add choice" class="add-choice" on:click={addChoice}>
-		<i class="symbol">add_circle</i>Choice
+		<i class="symbol">add</i>Choice
 	</button>
 </div>
 

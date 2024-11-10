@@ -75,7 +75,7 @@
 
 * {
 	font-family: 'Jura';
-	font-weight: 500;
+	font-weight: inherit;
 }
 
 html,
@@ -102,6 +102,10 @@ body {
 	);
 	background: linear-gradient(0deg, var(--secondary-color-2) 0%, var(--secondary-color-1) 100%);
 	background-attachment: fixed;
+	font-weight: 500;
+	transition:
+		0.2s,
+		outline 0s;
 }
 
 .hamburger {
@@ -287,12 +291,14 @@ button:hover,
 	background-color: var(--secondary-color-1);
 }
 
-.save {
+.save,
+.done {
 	background-color: var(--accent-color-1);
 	color: var(--text-color-2);
 }
 
-.save:hover {
+.save:hover,
+.done:hover {
 	background-color: var(--accent-color-2);
 }
 
@@ -308,6 +314,7 @@ button:hover,
 button:active,
 .footer-button:active,
 .save:active,
+.done:active,
 .not:active {
 	background-color: var(--border-color-1);
 }
@@ -317,8 +324,17 @@ button:active,
 	margin-left: 2.25em;
 }
 
+.add-choice i,
+.done i,
+.not i {
+	font-variation-settings: 'wght' 700;
+}
+
 .remove-choice {
 	font-size: 1em;
+	transition:
+		color 0.2s,
+		background-color 0.2s;
 }
 
 .add-group,
@@ -364,6 +380,7 @@ button:active,
 .error i,
 .warning i,
 .save i,
+.done i,
 .not i,
 .sign-out i,
 .file-button i,
@@ -383,7 +400,6 @@ button:active,
 }
 
 .arrows i {
-	font-variation-settings: 'wght' 700;
 	line-height: 0.7em;
 	overflow: hidden;
 }
@@ -409,12 +425,18 @@ button:disabled,
 
 .button-row {
 	display: flex;
-	flex-flow: row wrap;
+	flex-flow: row;
 	align-items: flex-start;
-	justify-content: flex-start;
-	align-content: space-between;
+	justify-content: space-between;
 	font-size: 1.25em;
 	margin-top: 0.5em;
+}
+
+.button-sub-row {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: flex-start;
 }
 
 .footer-button-group {
@@ -1071,7 +1093,7 @@ select {
 	background-color: var(--primary-color-1);
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--box-shadow-color);
+	box-shadow: 0px 4px 4px var(--shadow-color-1);
 	color: var(--text-color-1);
 	font-size: 1em;
 	padding: 0.25em;

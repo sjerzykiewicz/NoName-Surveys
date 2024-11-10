@@ -78,7 +78,7 @@
 		isModalHidden = true;
 		selectedGroup = '';
 		newName = '';
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	onMount(() => {
@@ -107,7 +107,7 @@
 	title="Rename Group"
 	bind:isHidden={isModalHidden}
 	bind:element={nameInput}
-	width={innerWidth <= $M ? 20 : 36}
+	--width={innerWidth <= $M ? '20em' : '36em'}
 >
 	<div slot="content" class="modal-content">
 		<div class="renaming">Renaming {selectedGroup}.</div>
@@ -126,11 +126,11 @@
 			--margin-right="0em"
 			--char-count-left="6.5em"
 		/>
-		<NameError name={newName.trim()} error={nameError} groups={groupNames} fontSize="0.8em" />
+		<NameError name={newName.trim()} error={nameError} groups={groupNames} --font-size="0.8em" />
 	</div>
 	<button
 		title="Save the new group name"
-		class="save"
+		class="done"
 		on:click={() => renameGroup(selectedGroup, newName.trim())}
 		><i class="symbol">done</i>Apply</button
 	>
@@ -223,9 +223,5 @@
 	.modal-content .renaming {
 		overflow-wrap: break-word;
 		margin-bottom: 0.5em;
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
 	}
 </style>

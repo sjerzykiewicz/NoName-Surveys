@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { getSurveyDrafts } from '$lib/server/database';
+import { countSurveyDrafts, getSurveyDrafts } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent, params }) => {
@@ -10,15 +10,21 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 
 	const page = parseInt(params.draftsPage);
 
-	const response = await getSurveyDrafts(session.user!.email!, page);
-	if (!response.ok) {
-		error(response.status, { message: await response.json() });
+	const draftsResponse = await getSurveyDrafts(session.user!.email!, page);
+	if (!draftsResponse.ok) {
+		error(draftsResponse.status, { message: await draftsResponse.json() });
 	}
 	const drafts: {
 		id: number;
 		title: string;
 		creation_date: string;
-	}[] = await response.json();
+	}[] = await draftsResponse.json();
 
-	return { drafts };
+	const countResponse = await countSurveyDrafts(session.user!.email!);
+	if (!countResponse.ok) {
+		error(countResponse.status, { message: await countResponse.json() });
+	}
+	const numDrafts: number = await countResponse.json();
+
+	return { drafts, numDrafts };
 };

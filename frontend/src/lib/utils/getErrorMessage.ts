@@ -1,4 +1,9 @@
 export function getErrorMessage(detail: string | { msg: string }[]): string {
-	if (typeof detail === 'string') return detail;
-	else return detail[0].msg;
+	return typeof detail === 'string'
+		? detail
+		: typeof detail === 'undefined'
+			? 'Something went wrong'
+			: typeof detail[0].msg === 'string'
+				? detail[0].msg
+				: 'Something went wrong';
 }

@@ -1,9 +1,9 @@
 from typing import Any
 
-from pydantic import BaseModel
+from src.api.models.base import Base
 
 
-class Question(BaseModel):
+class Question(Base):
     required: bool
     question: str
     answer: Any

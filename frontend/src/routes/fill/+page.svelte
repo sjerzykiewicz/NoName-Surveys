@@ -1,11 +1,10 @@
 <script lang="ts">
 	import SurveyForm from '$lib/components/fill-page/SurveyForm.svelte';
-	import type { PageServerData } from './$types';
 	import init from 'wasm';
 	import { onMount } from 'svelte';
 	import { title, questions, answers } from '$lib/stores/fill-page';
 
-	export let data: PageServerData;
+	export let data;
 
 	$title = '';
 	$questions = [];

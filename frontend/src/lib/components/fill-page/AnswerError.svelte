@@ -2,7 +2,6 @@
 	import { answers } from '$lib/stores/fill-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { questions } from '$lib/stores/fill-page';
 
 	export let unansweredRequired: Set<number>;
 	export let questionIndex: number;
@@ -21,18 +20,13 @@
 </script>
 
 {#if checkAnswerError(questionIndex)}
-	<p
-		title="Error"
-		class="error"
-		style={$questions[questionIndex].type === 'text' ? 'margin-top: -2.5em;' : ''}
-		transition:slide={{ duration: 200, easing: cubicInOut }}
-	>
+	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="symbol">error</i>{errorMessage(questionIndex)}
 	</p>
 {/if}
 
 <style>
 	.error {
-		margin: -1em 0em 0.5em 2.8em;
+		margin: var(--margin-top, -1em) 0em 0.5em 2.8em;
 	}
 </style>

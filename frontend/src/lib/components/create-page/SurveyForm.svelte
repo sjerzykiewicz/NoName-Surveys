@@ -80,7 +80,7 @@
 		if (overwrite) {
 			const deleteResponse = await fetch('/api/surveys/drafts/delete', {
 				method: 'POST',
-				body: JSON.stringify({ id: $currentDraftId }),
+				body: JSON.stringify({ ids: [$currentDraftId] }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -187,7 +187,7 @@
 	$: isCryptoDisabled = !$useCrypto;
 
 	onMount(() => {
-		function handleEnter(event: KeyboardEvent) {
+		function handleEnterRespondent(event: KeyboardEvent) {
 			if (!isRespondentModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				createSurvey();
@@ -195,10 +195,20 @@
 			}
 		}
 
-		document.body.addEventListener('keydown', handleEnter);
+		function handleEnterDraft(event: KeyboardEvent) {
+			if (!isDraftModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				saveDraft(false);
+				event.stopImmediatePropagation();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnterRespondent);
+		document.body.addEventListener('keydown', handleEnterDraft);
 
 		return () => {
-			document.body.removeEventListener('keydown', handleEnter);
+			document.body.removeEventListener('keydown', handleEnterRespondent);
+			document.body.removeEventListener('keydown', handleEnterDraft);
 		};
 	});
 </script>
@@ -208,16 +218,21 @@
 <WarningModal
 	isExportButtonVisible={true}
 	emails={invalidEmails}
-	width={innerWidth <= $M ? 20 : 23}
+	--width-warning={innerWidth <= $M ? '20em' : '23em'}
 />
 
-<Modal icon="save" title="Saving Draft" bind:isHidden={isDraftModalHidden}>
+<Modal
+	icon="save"
+	title="Saving Draft"
+	bind:isHidden={isDraftModalHidden}
+	--width={innerWidth <= $M ? '20em' : '22em'}
+>
 	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
 	<button title="Overwrite draft" class="save" on:click={() => saveDraft(true)}
-		>Overwrite Draft</button
+		><i class="symbol">save_as</i>Overwrite Draft</button
 	>
 	<button title="Save new draft" class="save" on:click={() => saveDraft(false)}
-		>Save New Draft</button
+		><i class="symbol">save</i>Save New Draft</button
 	>
 </Modal>
 
@@ -225,7 +240,7 @@
 	icon="group"
 	title="Define Respondent Group"
 	bind:isHidden={isRespondentModalHidden}
-	width={innerWidth <= $M ? 20 : 26}
+	--width={innerWidth <= $M ? '20em' : '26em'}
 >
 	<div slot="content">
 		<span>Do you wish to make the survey public or secure?</span>
@@ -259,8 +274,7 @@
 					label="Or import users from a .csv file."
 					id="emails-file"
 					checkKeys={true}
-					width="100%"
-					fontSize={innerWidth <= $M ? '0.8em' : '1em'}
+					--width="100%"
 					bind:disabled={isCryptoDisabled}
 					bind:invalidEmails
 				/>
@@ -300,14 +314,16 @@
 {/each}
 {#if !isPreview}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<AddQuestionButtons {questionInput} />
-		<div class="tooltip create-info">
-			<i class="symbol">info</i>
-			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
-				>Before creating a secure survey, consider setting up a user group. User groups make it easy
-				to select the same set of respondents across multiple surveys. However, if you prefer, you
-				can proceed without using them.</span
-			>
+		<div class="button-sub-row">
+			<AddQuestionButtons {questionInput} />
+			<div class="tooltip create-info">
+				<i class="symbol">info</i>
+				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
+					>Before creating a secure survey, consider setting up a user group. User groups make it
+					easy to select the same set of respondents across multiple surveys. However, if you
+					prefer, you can proceed without using them.</span
+				>
+			</div>
 		</div>
 	</div>
 {/if}

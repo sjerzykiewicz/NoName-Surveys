@@ -6,6 +6,7 @@
 	export let title: string;
 	export let id: string = '';
 	export let element: HTMLDivElement | null = null;
+	export let clearOnce: boolean = false;
 	export let handleEnter: (e: KeyboardEvent) => void = (e) => handleNewLine(e);
 
 	const keys = [
@@ -63,7 +64,9 @@
 		tabindex="0"
 		bind:textContent={text}
 		bind:this={element}
-		on:keydown|once={() => (text = '')}
+		on:keydown|once={() => {
+			if (clearOnce) text = '';
+		}}
 		on:keydown={(e) => {
 			handleEnter(e);
 			limitInput(e);
@@ -109,7 +112,7 @@
 		width: 100%;
 		overflow: hidden;
 		padding: 0.2em;
-		margin: -1em -0.2em;
+		margin: var(--container-margin, -1em) -0.2em;
 		pointer-events: none;
 	}
 

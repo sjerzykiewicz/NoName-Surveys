@@ -19,9 +19,6 @@ class UserFilterOthers(Base):
         return Base.validate_emails(v)
 
 
-key_pem_regex = r"-----BEGIN PUBLIC KEY-----(\n|\r|\r\n)([0-9a-zA-Z\+\/=]{64}(\n|\r|\r\n))*([0-9a-zA-Z\+\/=]{1,63}(\n|\r|\r\n))?-----END PUBLIC KEY-----"
-
-
 class UserUpdatePublicKey(User):
     public_key: str
     fingerprint: str

@@ -10,7 +10,7 @@ class ScaleQuestion(Question):
     answer: Optional[int] = None
 
     @field_validator("answer")
-    def validate_answer(cls, v, info: ValidationInfo) -> Optional[float]:
+    def validate_answer(cls, v) -> Optional[float]:
         if v is None:
             return v
         if not 1 <= v <= 5:

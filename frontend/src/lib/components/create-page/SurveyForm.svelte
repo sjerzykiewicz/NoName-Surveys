@@ -80,7 +80,7 @@
 		if (overwrite) {
 			const deleteResponse = await fetch('/api/surveys/drafts/delete', {
 				method: 'POST',
-				body: JSON.stringify({ id: $currentDraftId }),
+				body: JSON.stringify({ ids: [$currentDraftId] }),
 				headers: {
 					'Content-Type': 'application/json'
 				}

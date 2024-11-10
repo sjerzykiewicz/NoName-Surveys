@@ -16,6 +16,7 @@ def session_fixture():
     with Session(engine) as session:
         yield session
 
+
 @pytest.fixture(name="client")
 def client_fixture(session: Session):
     def get_session_override():

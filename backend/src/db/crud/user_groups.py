@@ -82,6 +82,37 @@ def add_user_to_group(group_id: int, user_id: int, session: Session) -> UserGrou
     session.refresh(user_group_member)
 
 
+def add_users_to_group(
+    group_id: int, user_ids: list[int], session: Session
+) -> list[UserGroupMember]:
+    user_group_members = []
+    for user_id in user_ids:
+        user_group_member = UserGroupMemberBase(
+            group_id=group_id,
+            user_id=user_id,
+        )
+        user_group_member = UserGroupMember.model_validate(user_group_member)
+        session.add(user_group_member)
+        user_group_members.append(user_group_member)
+    session.commit()
+    return user_group_members
+
+
+def remove_users_from_group(
+    group_id: int, user_ids: list[int], session: Session
+) -> list[UserGroupMember]:
+    user_group_members = session.exec(
+        select(UserGroupMember).where(
+            (UserGroupMember.group_id == group_id)
+            & (UserGroupMember.user_id.in_(user_ids))
+        )
+    ).all()
+    for user in user_group_members:
+        user.is_deleted = True
+    session.commit()
+    return user_group_members
+
+
 def delete_user_groups(
     user_id: int, names: list[str], session: Session
 ) -> list[UserGroup]:
@@ -100,7 +131,8 @@ def delete_user_groups(
 
 def get_user_group_members_count(user_group_id: int, session: Session) -> int:
     statement = select(func.count(UserGroupMember.id)).where(
-        UserGroupMember.group_id == user_group_id
+        (UserGroupMember.group_id == user_group_id)
+        & (UserGroupMember.is_deleted == False)  # noqa: E712
     )
     return session.exec(statement).one()
 
@@ -108,7 +140,10 @@ def get_user_group_members_count(user_group_id: int, session: Session) -> int:
 def get_user_group_members(
     user_group_id: int, session: Session
 ) -> list[UserGroupMember]:
-    statement = select(UserGroupMember).where(UserGroupMember.group_id == user_group_id)
+    statement = select(UserGroupMember).where(
+        (UserGroupMember.group_id == user_group_id)
+        & (UserGroupMember.is_deleted == False)  # noqa: E712
+    )
     return [user for user in session.exec(statement).all()]
 
 
@@ -117,7 +152,10 @@ def get_user_group_members_paginated(
 ) -> list[UserGroupMember]:
     statement = (
         select(UserGroupMember)
-        .where(UserGroupMember.group_id == user_group_id)
+        .where(
+            (UserGroupMember.group_id == user_group_id)
+            & (UserGroupMember.is_deleted == False)
+        )  # noqa: E712
         .offset(offset)
         .limit(limit)
     )

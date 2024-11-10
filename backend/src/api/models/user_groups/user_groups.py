@@ -76,6 +76,19 @@ class UserGroupNameUpdate(UserGroupAction):
         return v
 
 
+class UserGroupUsersActions(UserGroupAction):
+    users: list[str]
+
+    @field_validator("users")
+    def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
+        if v is None or len(v) == 0:
+            raise ValueError("users to take action on must be provided")
+        for email in v:
+            if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
+                raise ValueError("invalid email format")
+        return v
+
+
 class AllUserGroupsOutput(Base):
     user_group_name: str
     all_members_have_public_keys: bool

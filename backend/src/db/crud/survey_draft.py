@@ -24,6 +24,7 @@ def get_not_deleted_survey_drafts_for_user(
             (SurveyDraft.creator_id == user_id)
             & (SurveyDraft.is_deleted == False)  # noqa: E712
         )
+        .order_by(SurveyDraft.id.desc())
         .offset(offset)
         .limit(limit)
     )

@@ -172,7 +172,7 @@ async def delete_surveys(
     if len(deleted_surveys) != len(survey_delete.survey_codes):
         raise HTTPException(
             status_code=404,
-            detail="Some survey do not exist or user does not have access to them",
+            detail="Some surveys do not exist or user does not have access to them",
         )
 
     return {"message": "survey deleted successfully"}

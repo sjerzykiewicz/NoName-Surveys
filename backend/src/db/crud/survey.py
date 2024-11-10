@@ -39,8 +39,12 @@ def delete_surveys(
 def get_all_surveys_user_has_ownership_over(
     user_id: int, session: Session
 ) -> list[Survey]:
-    statement = select(Survey).where(
-        (Survey.creator_id == user_id) & (Survey.is_deleted == False)  # noqa: E712
+    statement = (
+        select(Survey)
+        .where(
+            (Survey.creator_id == user_id) & (Survey.is_deleted == False)  # noqa: E712
+        )
+        .order_by(Survey.id.desc())
     )
     return [survey for survey in session.exec(statement).all()]
 
@@ -116,26 +120,22 @@ def take_away_survey_access(
 def get_all_surveys_user_can_view(
     user_id: int, offset: int, limit: int, session: Session
 ) -> list[tuple[Survey, bool]]:
-    statement = (
-        select(AccessToViewResults)
+    statement = select(AccessToViewResults).where(
+        (AccessToViewResults.user_id == user_id)
+        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    )
+    survey_accesses_ids = [access.survey_id for access in session.exec(statement).all()]
+
+    surveys = session.exec(
+        select(Survey)
         .where(
-            (AccessToViewResults.user_id == user_id)
-            & (AccessToViewResults.is_deleted == False)  # noqa: E712
+            (Survey.id.in_(survey_accesses_ids))
+            & (Survey.is_deleted == False)  # noqa: E712
         )
+        .order_by(Survey.id.desc())
         .offset(offset)
         .limit(limit)
-    )
-    survey_accesses = [access for access in session.exec(statement).all()]
-
-    surveys = [
-        session.exec(
-            select(Survey).where(
-                (Survey.id == access.survey_id)
-                & (Survey.is_deleted == False)  # noqa: E712
-            )
-        ).first()
-        for access in survey_accesses
-    ]
+    ).all()
 
     return [(survey, survey.creator_id == user_id) for survey in surveys if survey]
 

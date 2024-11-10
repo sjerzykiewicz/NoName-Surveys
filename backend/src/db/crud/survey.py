@@ -29,7 +29,6 @@ def delete_surveys(
         & (Survey.is_deleted == False)  # noqa: E712
     )
     surveys = session.exec(statement).all()
-    print(surveys)
     for survey in surveys:
         survey.is_deleted = True
     session.commit()

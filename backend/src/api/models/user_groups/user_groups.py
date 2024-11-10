@@ -43,7 +43,7 @@ class UserGroupAction(UserGroupCreator):
     name: str
 
     @field_validator("name")
-    def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
+    def validate_user_group_name(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             raise ValueError("name must be provided")
         if not re.match(r"^[\w /-]+$", v, re.UNICODE):
@@ -55,7 +55,7 @@ class UserGroupMultipleActions(UserGroupCreator):
     names: list[str]
 
     @field_validator("names")
-    def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
+    def validate_user_group_names(cls, v, info: ValidationInfo) -> str:
         if v is None or len(v) == 0:
             raise ValueError("names must be provided")
         for name in v:
@@ -68,7 +68,7 @@ class UserGroupNameUpdate(UserGroupAction):
     new_name: str
 
     @field_validator("new_name")
-    def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
+    def validate_new_user_group_name(cls, v, info: ValidationInfo) -> str:
         if v is None or v == "":
             raise ValueError("new name must be provided")
         if not re.match(r"^[\w /-]+$", v, re.UNICODE):
@@ -80,7 +80,7 @@ class UserGroupUsersActions(UserGroupAction):
     users: list[str]
 
     @field_validator("users")
-    def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
+    def validate_user_emails(cls, v, info: ValidationInfo) -> str:
         if v is None or len(v) == 0:
             raise ValueError("users to take action on must be provided")
         for email in v:

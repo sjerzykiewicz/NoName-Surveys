@@ -162,7 +162,7 @@
 			<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
 			<th title="Group title" id="title-header" colspan="2">Group Title</th>
 		</tr>
-		{#each groups.toSorted((a, b) => a.user_group_name.localeCompare(b.user_group_name)) as group}
+		{#each groups as group}
 			<tr>
 				<td title="Select {group.user_group_name}" class="checkbox-entry"
 					><label>
@@ -188,14 +188,14 @@
 						>
 					{/if}
 				</td>
-				<td title="Open the group" class="title-entry"
+				<td title="Open {group.user_group_name}" class="title-entry"
 					><button
 						on:click={() =>
 							goto($page.url.pathname + '/' + encodeURI(group.user_group_name) + '/0')}
 						>{group.user_group_name}</button
 					></td
 				>
-				<td title="Rename the group" class="button-entry">
+				<td title="Rename {group.user_group_name}" class="button-entry">
 					<button
 						on:click={() => {
 							selectedGroup = group.user_group_name;

@@ -6,10 +6,7 @@
 	export let isHidden: boolean = true;
 	export let icon: string;
 	export let title: string;
-	export let width: number = 20;
-	export let textColor: string = 'var(--text-color-1)';
-	export let borderColor: string = 'var(--border-color-1)';
-	export let zIndex: number = 10;
+	export let element: HTMLDivElement | null = null;
 	export let hide: () => void = () => (isHidden = true);
 
 	let isClickable: boolean = false;
@@ -18,12 +15,14 @@
 		function handleEscape(event: KeyboardEvent) {
 			if (!isHidden && event.key === 'Escape') {
 				hide();
+				event.stopImmediatePropagation();
 			}
 		}
 
 		function handleClick(event: MouseEvent) {
 			if (isClickable && !isHidden && !(event.target as HTMLElement).closest('.modal')) {
 				hide();
+				event.stopImmediatePropagation();
 			}
 		}
 
@@ -38,19 +37,19 @@
 </script>
 
 {#if !isHidden}
-	<section
-		class="overlay"
-		style="z-index: {zIndex - 1};"
-		transition:fade={{ duration: 200, easing: cubicInOut }}
-	>
+	<section class="overlay" transition:fade={{ duration: 200, easing: cubicInOut }}>
 		<div
 			class="modal"
-			style="width: {width}em;color: {textColor};border-color: {borderColor};z-index: {zIndex};"
 			transition:scale={{ duration: 200, easing: cubicInOut }}
-			on:introend={() => (isClickable = true)}
+			on:introend={() => {
+				isClickable = true;
+				if (element) {
+					element.focus();
+				}
+			}}
 			on:outroend={() => (isClickable = false)}
 		>
-			<div class="top" style="border-bottom-color: {borderColor};">
+			<div class="top">
 				<div class="caption">
 					<i class="symbol">{icon}</i>{title}
 				</div>
@@ -81,6 +80,7 @@
 		height: 100%;
 		background: rgba(0, 0, 0, 0.5);
 		backdrop-filter: blur(2px);
+		z-index: calc(var(--z-index, 10) - 1);
 	}
 
 	.modal {
@@ -95,6 +95,10 @@
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		font-size: 1.2em;
+		color: var(--text-color, var(--text-color-1));
+		border-color: var(--border-color, var(--border-color-1));
+		width: var(--width, 20em);
+		z-index: var(--z-index, 10);
 		transition:
 			0.2s,
 			outline 0s;
@@ -110,6 +114,7 @@
 		background-color: var(--secondary-color-2);
 		border-bottom-width: 1px;
 		border-bottom-style: solid;
+		border-bottom-color: var(--border-color, var(--border-color-1));
 		border-top-left-radius: 5px;
 		border-top-right-radius: 5px;
 		padding: 0.5em;

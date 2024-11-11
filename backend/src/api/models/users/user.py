@@ -1,38 +1,22 @@
-import re
+from pydantic import field_validator
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from src.api.models.base import Base
 
 
-class User(BaseModel):
+class User(Base):
     user_email: str
 
     @field_validator("user_email")
-    def validate_user_email(cls, v, info: ValidationInfo) -> str:
-        if v is None:
-            raise ValueError("email must be provided")
-        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
-            raise ValueError("invalid email format")
-        return v
-
-    class Config:
-        extra = "forbid"
+    def validate_user_email(cls, v) -> str:
+        return Base.validate_email(v)
 
 
-class UserFilterOthers(BaseModel):
+class UserFilterOthers(Base):
     emails: list[str]
 
     @field_validator("emails")
-    def validate_users(cls, v, info: ValidationInfo) -> list[str]:
-        for email in v:
-            if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
-                raise ValueError("invalid email format")
-        return v
-
-
-KEY_PEM_REGEX = (
-    r"-----BEGIN PUBLIC KEY-----(\n|\r|\r\n)([0-9a-zA-Z\+\/=]{64}(\n|\r|\r\n))*"
-    r"([0-9a-zA-Z\+\/=]{1,63}(\n|\r|\r\n))?-----END PUBLIC KEY-----"
-)
+    def validate_users(cls, v) -> list[str]:
+        return Base.validate_emails(v)
 
 
 class UserUpdatePublicKey(User):
@@ -40,20 +24,9 @@ class UserUpdatePublicKey(User):
     fingerprint: str
 
     @field_validator("public_key")
-    def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
-        if v is None or v == "":
-            raise ValueError("public key must be provided")
-        if not re.match(KEY_PEM_REGEX, v):
-            raise ValueError("invalid public key format")
-        return v
+    def validate_user_public_key(cls, v) -> str:
+        return Base.validate_pem_key(v)
 
     @field_validator("fingerprint")
-    def validate_fingerprint(cls, v, info: ValidationInfo) -> str:
-        if v is None or v == "":
-            raise ValueError("key fingerprint must be provided")
-        if not re.match(r"^[0-9a-f]*$", v):
-            raise ValueError("invalid fingerprint format")
-        return v
-
-    class Config:
-        extra = "forbid"
+    def validate_fingerprint(cls, v) -> str:
+        return Base.validate_fingerprint(v)

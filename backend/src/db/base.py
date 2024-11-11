@@ -34,11 +34,10 @@ def create_url():
 
 def create_db_engine():
     return (
-        create_engine(create_url(), echo=(settings.environment_type == "dev"))
+        create_engine(create_url())
         if db_connection_is_provided()
         else create_engine(
             "sqlite://",
-            echo=(settings.environment_type == "dev"),
             connect_args={"check_same_thread": False},
         )
     )

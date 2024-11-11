@@ -24,6 +24,7 @@ def get_not_deleted_survey_drafts_for_user(
             (SurveyDraft.creator_id == user_id)
             & (SurveyDraft.is_deleted == False)  # noqa: E712
         )
+        .order_by(SurveyDraft.id.desc())
         .offset(offset)
         .limit(limit)
     )
@@ -48,12 +49,19 @@ def get_survey_draft_by_id(survey_draft_id: int, session: Session) -> SurveyDraf
     return survey_draft
 
 
-def delete_survey_draft_by_id(survey_draft_id: int, session: Session) -> SurveyDraft:
-    statement = select(SurveyDraft).where(SurveyDraft.id == survey_draft_id)
-    survey_draft = session.exec(statement).first()
-    survey_draft.is_deleted = True
+def delete_survey_drafts(
+    user_id: int, survey_draft_ids: list[int], session: Session
+) -> list[SurveyDraft]:
+    statement = select(SurveyDraft).where(
+        (SurveyDraft.creator_id == user_id)
+        & (SurveyDraft.id.in_(survey_draft_ids))
+        & (SurveyDraft.is_deleted == False)  # noqa: E712
+    )
+    drafts = session.exec(statement).all()
+    for draft in drafts:
+        draft.is_deleted = True
     session.commit()
-    return survey_draft
+    return drafts
 
 
 def create_survey_draft(

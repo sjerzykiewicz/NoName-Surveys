@@ -34,12 +34,14 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { onMount } from 'svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
+	import WarningModal from '$lib/components/global/WarningModal.svelte';
 
 	export let users: string[];
 	export let groups: string[];
 	export let isPreview: boolean;
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
+	export let invalidEmails: string[] = [];
 
 	let cryptoError: boolean = false;
 	let questionInput: HTMLDivElement;
@@ -78,7 +80,7 @@
 		if (overwrite) {
 			const deleteResponse = await fetch('/api/surveys/drafts/delete', {
 				method: 'POST',
-				body: JSON.stringify({ id: $currentDraftId }),
+				body: JSON.stringify({ ids: [$currentDraftId] }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -185,30 +187,52 @@
 	$: isCryptoDisabled = !$useCrypto;
 
 	onMount(() => {
-		function handleEnter(event: KeyboardEvent) {
+		function handleEnterRespondent(event: KeyboardEvent) {
 			if (!isRespondentModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				createSurvey();
+				event.stopImmediatePropagation();
 			}
 		}
 
-		document.body.addEventListener('keydown', handleEnter);
+		function handleEnterDraft(event: KeyboardEvent) {
+			if (!isDraftModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				saveDraft(false);
+				event.stopImmediatePropagation();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnterRespondent);
+		document.body.addEventListener('keydown', handleEnterDraft);
 
 		return () => {
-			document.body.removeEventListener('keydown', handleEnter);
+			document.body.removeEventListener('keydown', handleEnterRespondent);
+			document.body.removeEventListener('keydown', handleEnterDraft);
 		};
 	});
 </script>
 
 <svelte:window bind:innerWidth />
 
-<Modal icon="save" title="Saving Draft" bind:isHidden={isDraftModalHidden}>
+<WarningModal
+	isExportButtonVisible={true}
+	emails={invalidEmails}
+	--width-warning={innerWidth <= $M ? '20em' : '23em'}
+/>
+
+<Modal
+	icon="save"
+	title="Saving Draft"
+	bind:isHidden={isDraftModalHidden}
+	--width={innerWidth <= $M ? '20em' : '22em'}
+>
 	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
 	<button title="Overwrite draft" class="save" on:click={() => saveDraft(true)}
-		>Overwrite Draft</button
+		><i class="symbol">save_as</i>Overwrite Draft</button
 	>
 	<button title="Save new draft" class="save" on:click={() => saveDraft(false)}
-		>Save New Draft</button
+		><i class="symbol">save</i>Save New Draft</button
 	>
 </Modal>
 
@@ -216,7 +240,7 @@
 	icon="group"
 	title="Define Respondent Group"
 	bind:isHidden={isRespondentModalHidden}
-	width={innerWidth <= $M ? 20 : 26}
+	--width={innerWidth <= $M ? '20em' : '26em'}
 >
 	<div slot="content">
 		<span>Do you wish to make the survey public or secure?</span>
@@ -243,15 +267,18 @@
 			<div id="or" class:disabled={isCryptoDisabled}>Or</div>
 			<SelectUsers {users} bind:disabled={isCryptoDisabled} />
 			<CryptoError error={cryptoError} />
-			<ImportEmails
-				bind:users={$ringMembers}
-				title="Import users from a .csv file"
-				label="Or import users from a .csv file."
-				id="emails-file"
-				checkKeys={true}
-				width="100%"
-				bind:disabled={isCryptoDisabled}
-			/>
+			<div class="import">
+				<ImportEmails
+					bind:users={$ringMembers}
+					title="Import users from a .csv file"
+					label="Or import users from a .csv file."
+					id="emails-file"
+					checkKeys={true}
+					--width="100%"
+					bind:disabled={isCryptoDisabled}
+					bind:invalidEmails
+				/>
+			</div>
 		</div>
 	</div>
 	<button title="Define respondent group" class="save apply" on:click={createSurvey}
@@ -287,14 +314,16 @@
 {/each}
 {#if !isPreview}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<AddQuestionButtons {questionInput} />
-		<div class="tooltip create-info">
-			<i class="symbol">info</i>
-			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
-				>Before creating a secure survey, consider setting up a user group. User groups make it easy
-				to select the same set of respondents across multiple surveys. However, if you prefer, you
-				can proceed without using them.</span
-			>
+		<div class="button-sub-row">
+			<AddQuestionButtons {questionInput} />
+			<div class="tooltip create-info">
+				<i class="symbol">info</i>
+				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
+					>Before creating a secure survey, consider setting up a user group. User groups make it
+					easy to select the same set of respondents across multiple surveys. However, if you
+					prefer, you can proceed without using them.</span
+				>
+			</div>
 		</div>
 	</div>
 {/if}
@@ -361,10 +390,18 @@
 		cursor: not-allowed !important;
 	}
 
+	.import {
+		font-size: 0.8em;
+	}
+
 	@media screen and (max-width: 768px) {
 		.tooltip {
 			--tooltip-width: 10em;
 			font-size: 1.25em;
+		}
+
+		.import {
+			font-size: 1em;
 		}
 	}
 </style>

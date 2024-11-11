@@ -61,3 +61,8 @@ import { signOut } from '@auth/sveltekit/client';
 	>
 </div>
 ```
+
+```ts
+// src/app.html
+<script src="https://kit.fontawesome.com/c5555d255b.js" crossorigin="anonymous"></script>
+```

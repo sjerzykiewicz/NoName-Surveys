@@ -6,6 +6,7 @@
 	import { copy } from '$lib/utils/copy';
 	import { popup } from '$lib/utils/popup';
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
+	import { onMount } from 'svelte';
 
 	export let isHidden: boolean = true;
 	export let title: string;
@@ -20,13 +21,34 @@
 		}
 	}
 
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isHidden && event.key === 'Enter') {
+				event.preventDefault();
+				isHidden = true;
+				event.stopImmediatePropagation();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
+
 	let innerWidth: number;
 	let innerHeight: number;
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
 
-<Modal icon="qr_code_2" {title} bind:isHidden width={innerWidth > $M && innerHeight > $M ? 30 : 20}>
+<Modal
+	icon="qr_code_2"
+	{title}
+	bind:isHidden
+	--width={innerWidth > $M && innerHeight > $M ? '30em' : '20em'}
+>
 	<div slot="content" class="content">
 		<span class="survey-code">{surveyCode}</span>
 		<a href="/fill?code={surveyCode}" title="Fill out the survey" class="qr-code">
@@ -43,7 +65,7 @@
 		title="Copy the link"
 		class="save popup"
 		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
-		><i class="symbol">content_copy</i>Copy Link
+		><i class="symbol">link</i>Copy Link
 		<span class="popup-text top" id="link-popup">Copied!</span></button
 	>
 	<button

@@ -2,9 +2,7 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
-	import { LIMIT_OF_CHARS } from '$lib/stores/global';
-	import { limitInput } from '$lib/utils/limitInput';
+	import Input from '$lib/components/global/Input.svelte';
 
 	export let questionIndex: number;
 	export let questionTypeData: { title: string; icon: string; text: string };
@@ -29,9 +27,12 @@
 
 	function toggleRequirement() {
 		$questions[questionIndex].required = !$questions[questionIndex].required;
-		$questions = $questions;
 	}
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div
 	class="question-label"
@@ -51,7 +52,7 @@
 			disabled={questionIndex === 0}
 			on:click={moveQuestionUp}
 		>
-			<i class="symbol">arrow_drop_up</i>
+			<i class="symbol">keyboard_arrow_up</i>
 		</button>
 		<button
 			title="Move question down"
@@ -59,30 +60,15 @@
 			disabled={questionIndex === $questions.length - 1}
 			on:click={moveQuestionDown}
 		>
-			<i class="symbol">arrow_drop_down</i>
+			<i class="symbol">keyboard_arrow_down</i>
 		</button>
 	</div>
-	<div
-		class="input-container"
-		class:max={$questions[questionIndex].question.length > $LIMIT_OF_CHARS}
-	>
-		<div
-			title="Enter question"
-			class="question-input"
-			contenteditable
-			bind:textContent={$questions[questionIndex].question}
-			bind:this={questionInput}
-			role="textbox"
-			tabindex="0"
-			on:keydown={(e) => {
-				handleNewLine(e);
-				limitInput(e, $questions[questionIndex].question, $LIMIT_OF_CHARS);
-			}}
-		>
-			{$questions[questionIndex].question}
-		</div>
-		<span class="char-count">{$questions[questionIndex].question.length} / {$LIMIT_OF_CHARS}</span>
-	</div>
+	<Input
+		bind:text={$questions[questionIndex].question}
+		label="Question"
+		title="Enter a question"
+		bind:element={questionInput}
+	/>
 	<button
 		class="required-button tooltip"
 		class:checked={$questions[questionIndex].required}
@@ -94,18 +80,13 @@
 		>
 	</button>
 	<button title="Remove question" class="remove-question" on:click={removeQuestion}>
-		<i class="symbol">close</i>
+		<i class="symbol">delete</i>
 	</button>
 </div>
 
 <style>
 	.tooltip {
 		--tooltip-width: 6.5em;
-	}
-
-	.question-input[contenteditable]:empty::before {
-		content: 'Enter question...';
-		color: var(--text-color-3);
 	}
 
 	.required-button {
@@ -131,25 +112,5 @@
 
 	.required-button.checked:active {
 		background-color: var(--border-color-1);
-	}
-
-	.remove-question i {
-		font-variation-settings: 'wght' 700;
-	}
-
-	.input-container {
-		margin-bottom: -1.4em;
-	}
-
-	.char-count {
-		left: 80%;
-		font-size: 0.56em;
-	}
-
-	@media screen and (max-width: 768px) {
-		.char-count {
-			left: 65%;
-			font-size: 0.5em;
-		}
 	}
 </style>

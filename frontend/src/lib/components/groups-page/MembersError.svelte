@@ -23,3 +23,9 @@
 		<i class="symbol">error</i>{errorMessage()}
 	</p>
 {/if}
+
+<style>
+	.error {
+		margin: 0em;
+	}
+</style>

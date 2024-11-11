@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { SurveyError } from '$lib/entities/SurveyError';
 	import type { BinaryQuestion } from '$lib/entities/questions/Binary';
 	import type { ListQuestion } from '$lib/entities/questions/List';
@@ -10,75 +10,47 @@
 	import type { TextQuestion } from '$lib/entities/questions/Text';
 	import type { NumberQuestion } from '$lib/entities/questions/Number';
 	import { title, questions, currentDraftId, draftStructure } from '$lib/stores/create-page';
-	import Binary from '../create-page/Binary.svelte';
-	import List from '../create-page/List.svelte';
-	import Multi from '../create-page/Multi.svelte';
-	import Rank from '../create-page/Rank.svelte';
-	import Scale from '../create-page/Scale.svelte';
-	import Single from '../create-page/Single.svelte';
-	import Slider from '../create-page/Slider.svelte';
-	import Text from '../create-page/Text.svelte';
-	import Number from '../create-page/Number.svelte';
-	import SinglePreview from '../create-page/preview/SinglePreview.svelte';
-	import MultiPreview from '../create-page/preview/MultiPreview.svelte';
-	import ScalePreview from '../create-page/preview/ScalePreview.svelte';
-	import SliderPreview from '../create-page/preview/SliderPreview.svelte';
-	import ListPreview from '../create-page/preview/ListPreview.svelte';
-	import RankPreview from '../create-page/preview/RankPreview.svelte';
-	import BinaryPreview from '../create-page/preview/BinaryPreview.svelte';
-	import TextPreview from '../create-page/preview/TextPreview.svelte';
-	import NumberPreview from '../create-page/preview/NumberPreview.svelte';
+	import Binary from '$lib/components/create-page/Binary.svelte';
+	import List from '$lib/components/create-page/List.svelte';
+	import Multi from '$lib/components/create-page/Multi.svelte';
+	import Rank from '$lib/components/create-page/Rank.svelte';
+	import Scale from '$lib/components/create-page/Scale.svelte';
+	import Single from '$lib/components/create-page/Single.svelte';
+	import Slider from '$lib/components/create-page/Slider.svelte';
+	import Text from '$lib/components/create-page/Text.svelte';
+	import Number from '$lib/components/create-page/Number.svelte';
+	import SinglePreview from '$lib/components/create-page/preview/SinglePreview.svelte';
+	import MultiPreview from '$lib/components/create-page/preview/MultiPreview.svelte';
+	import ScalePreview from '$lib/components/create-page/preview/ScalePreview.svelte';
+	import SliderPreview from '$lib/components/create-page/preview/SliderPreview.svelte';
+	import ListPreview from '$lib/components/create-page/preview/ListPreview.svelte';
+	import RankPreview from '$lib/components/create-page/preview/RankPreview.svelte';
+	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
+	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
+	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
 	import type Question from '$lib/entities/questions/Question';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 
 	export let drafts: {
 		id: number;
 		title: string;
 		creation_date: string;
 	}[];
+	export let selectedDraftsToRemove: number[] = [];
 
-	let selectedDraftsToRemove: typeof drafts = [];
-	let isModalHidden: boolean = true;
+	$: draftIds = drafts.map((d) => d.id);
 
 	$: allSelected =
-		selectedDraftsToRemove.length === drafts.length && selectedDraftsToRemove.length > 0;
+		selectedDraftsToRemove.length === draftIds.length && selectedDraftsToRemove.length > 0;
 
 	function toggleAll() {
-		selectedDraftsToRemove = allSelected ? [] : [...drafts];
+		selectedDraftsToRemove = allSelected ? [] : [...draftIds];
 	}
 
 	function formatDate(isoString: string): string {
 		return new Date(isoString).toLocaleString();
-	}
-
-	async function deleteDrafts() {
-		selectedDraftsToRemove.forEach(async (draft, i) => {
-			const response = await fetch('/api/surveys/drafts/delete', {
-				method: 'POST',
-				body: JSON.stringify({ id: draft.id }),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!response.ok) {
-				const body = await response.json();
-				$errorModalContent = getErrorMessage(body.detail);
-				$isErrorModalHidden = false;
-				return;
-			}
-
-			drafts.splice(i, 1);
-		});
-
-		isModalHidden = true;
-		$title.title = '';
-		$questions = [];
-		selectedDraftsToRemove = [];
-		invalidateAll();
 	}
 
 	async function loadDraft(draft: { id: number; title: string }) {
@@ -229,15 +201,13 @@
 			}
 		});
 		$draftStructure = getDraft($title.title, $questions);
-		goto('/create');
+		await goto('/create');
 	}
 
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
-
-<DeleteModal title="Deleting Drafts" bind:isHidden={isModalHidden} deleteEntries={deleteDrafts} />
 
 {#if drafts.length === 0}
 	<div class="info-row">
@@ -271,7 +241,7 @@
 			<tr>
 				<td title="Select {draft.title}" class="checkbox-entry"
 					><label>
-						<input type="checkbox" bind:group={selectedDraftsToRemove} value={draft} />
+						<input type="checkbox" bind:group={selectedDraftsToRemove} value={draft.id} />
 					</label></td
 				>
 				<td title="Open the draft" class="title-entry"
@@ -282,21 +252,6 @@
 		{/each}
 	</table>
 {/if}
-<div class="button-row">
-	<button title="Create a draft" class="add-draft" on:click={() => goto('/create')}>
-		<i class="symbol">add</i>Draft
-	</button>
-	{#if drafts.length > 0}
-		<button
-			title="Delete selected drafts"
-			class="delete-draft"
-			disabled={selectedDraftsToRemove.length === 0}
-			on:click={() => (isModalHidden = false)}
-		>
-			<i class="symbol">delete</i>Delete
-		</button>
-	{/if}
-</div>
 
 <style>
 	#date-header {

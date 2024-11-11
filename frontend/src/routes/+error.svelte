@@ -4,11 +4,11 @@
 	$: errorMessage =
 		typeof $page.error!.message === 'string'
 			? $page.error!.message
-			: // @ts-expect-error message is not necessarily a string
-				typeof $page.error!.message.detail === 'string'
-				? // @ts-expect-error message is not necessarily a string
-					$page.error!.message.detail
-				: 'Unknown error';
+			: typeof $page.error!.message === 'undefined'
+				? 'Unknown error' // @ts-expect-error message is not necessarily a string
+				: typeof $page.error!.message.detail === 'string' // @ts-expect-error message is not necessarily a string
+					? $page.error!.message.detail
+					: 'Unknown error';
 </script>
 
 {#if $page.error}
@@ -31,21 +31,15 @@
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		font-weight: 700 !important;
 		cursor: default;
 		transition:
 			0.2s,
 			outline 0s;
 	}
 
-	div * {
-		font-weight: 700 !important;
-	}
-
 	span {
 		color: var(--error-color-1);
-		transition:
-			0.2s,
-			outline 0s;
 	}
 
 	p {

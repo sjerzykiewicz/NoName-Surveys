@@ -9,7 +9,9 @@ from src.api.models.user_groups.user_groups import (  # noqa
     UserGroupCreate,
     UserGroupCreator,
     UserGroupMembersOutput,
+    UserGroupMultipleActions,
     UserGroupNameUpdate,
+    UserGroupUsersActions,
 )
 from src.db.base import get_session
 
@@ -101,7 +103,7 @@ async def get_user_groups_with_members_having_public_keys(
 
 
 @router.post(
-    "/group_members_count",
+    "/group-members-count",
     response_description="Number of members in a given user group",
     response_model=int,
 )
@@ -246,9 +248,32 @@ async def rename_user_group(
     return {"message": "user group updated successfully"}
 
 
-@router.post("/delete", response_description="Delete a user group", response_model=dict)
-async def delete_user_group(
-    user_group_request: UserGroupAction,
+@router.post("/delete", response_description="Delete user groups", response_model=dict)
+async def delete_user_groups(
+    user_group_request: UserGroupMultipleActions,
+    session: Session = Depends(get_session),
+):
+    user = user_crud.get_user_by_email(user_group_request.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not registered")
+
+    deleted_user_groups = user_groups_crud.delete_user_groups(
+        user.id, user_group_request.names, session
+    )
+
+    if len(deleted_user_groups) != len(user_group_request.names):
+        raise HTTPException(
+            status_code=400, detail="Some user groups were not found for the given user"
+        )
+
+    return {"message": "user group deleted successfully"}
+
+
+@router.post(
+    "/add-users", response_description="Add users to a group", response_model=dict
+)
+async def add_users_to_group(
+    user_group_request: UserGroupUsersActions,
     session: Session = Depends(get_session),
 ):
     user = user_crud.get_user_by_email(user_group_request.user_email, session)
@@ -258,11 +283,73 @@ async def delete_user_group(
     user_group = user_groups_crud.get_user_group_by_name(
         user.id, user_group_request.name, session
     )
+
     if user_group is None:
         raise HTTPException(
             status_code=400, detail="User group not found for the given user"
         )
 
-    user_groups_crud.delete_user_group(user_group.id, session)
+    if user_group.creator_id != user.id:
+        raise HTTPException(
+            status_code=400,
+            detail="User does not have access to this User Group",
+        )
 
-    return {"message": "user group deleted successfully"}
+    users_to_add = [
+        user_crud.get_user_by_email(email, session).id
+        for email in user_group_request.users
+    ]
+    added_users = user_groups_crud.add_users_to_group(
+        user_group.id, users_to_add, session
+    )
+
+    if len(added_users) != len(users_to_add):
+        raise HTTPException(
+            status_code=400, detail="Some users could not be added to the group"
+        )
+
+    return {"message": "User added to the group successfully"}
+
+
+@router.post(
+    "/remove-users",
+    response_description="Remove users from a group",
+    response_model=dict,
+)
+async def remove_users_from_group(
+    user_group_request: UserGroupUsersActions,
+    session: Session = Depends(get_session),
+):
+    user = user_crud.get_user_by_email(user_group_request.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not registered")
+
+    user_group = user_groups_crud.get_user_group_by_name(
+        user.id, user_group_request.name, session
+    )
+
+    if user_group is None:
+        raise HTTPException(
+            status_code=400, detail="User group not found for the given user"
+        )
+
+    if user_group.creator_id != user.id:
+        raise HTTPException(
+            status_code=400,
+            detail="User does not have access to this User Group",
+        )
+
+    users_to_remove = [
+        user_crud.get_user_by_email(email, session).id
+        for email in user_group_request.users
+    ]
+    removed_users = user_groups_crud.remove_users_from_group(
+        user_group.id, users_to_remove, session
+    )
+
+    if len(removed_users) != len(users_to_remove):
+        raise HTTPException(
+            status_code=400, detail="Some users could not be removed from the group"
+        )
+
+    return {"message": "User removed from the group successfully"}

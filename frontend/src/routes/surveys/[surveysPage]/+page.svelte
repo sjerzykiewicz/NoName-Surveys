@@ -1,43 +1,32 @@
 <script lang="ts">
-	import type { LayoutServerData } from './$types';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
 	import SurveysTable from '$lib/components/surveys-page/SurveysTable.svelte';
+	import LimitWarning from '$lib/components/global/LimitWarning.svelte';
+	import SurveysButtons from '$lib/components/surveys-page/SurveysButtons.svelte';
 	import { LIMIT_OF_SURVEYS } from '$lib/stores/global';
-	import { cubicInOut } from 'svelte/easing';
-	import { slide } from 'svelte/transition';
-	import { afterUpdate } from 'svelte';
 
-	export let data: LayoutServerData;
-
-	let numSurveys: number = data.survey_list.length;
-
-	afterUpdate(() => {
-		numSurveys = data.survey_list.length;
-	});
+	export let data;
+	export let selectedSurveysToRemove: string[] = [];
 </script>
 
 <Header>
 	<div class="title">
 		Your surveys
-		<span title="Number of surveys" class:max={numSurveys >= $LIMIT_OF_SURVEYS}
-			>[ {numSurveys} / {$LIMIT_OF_SURVEYS} ]</span
+		<span title="Number of surveys" class:max={data.numSurveys >= $LIMIT_OF_SURVEYS}
+			>[ {data.numSurveys} / {$LIMIT_OF_SURVEYS} ]</span
 		>
 	</div>
 </Header>
 
 <Content>
-	{#if numSurveys >= $LIMIT_OF_SURVEYS}
-		<p
-			title="Survey limit reached"
-			class="error"
-			transition:slide={{ duration: 200, easing: cubicInOut }}
-		>
-			<i class="symbol">error</i>You have reached the maximum number of surveys. Please delete some
-			surveys to create new ones.
-		</p>
-	{/if}
-	<SurveysTable survey_list={data.survey_list.toReversed()} />
+	<LimitWarning num={data.numSurveys} limit={$LIMIT_OF_SURVEYS} items="Surveys" />
+	<SurveysTable surveys={data.surveys} bind:selectedSurveysToRemove />
+	<SurveysButtons
+		surveys={data.surveys}
+		numSurveys={data.numSurveys}
+		bind:selectedSurveysToRemove
+	/>
 </Content>
 
 <style>
@@ -48,13 +37,9 @@
 	}
 
 	.title span.max {
-		color: var(--error-color-1);
+		color: var(--warning-color-1);
 		transition:
 			0.2s,
 			outline 0s;
-	}
-
-	.error {
-		margin: 0em 0em 0.75em;
 	}
 </style>

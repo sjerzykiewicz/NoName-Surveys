@@ -1,9 +1,9 @@
-import re
 from datetime import datetime
 from typing import Optional, Union
 
-from pydantic import BaseModel, Field, ValidationInfo, field_validator
+from pydantic import Field, ValidationInfo, field_validator
 
+from src.api.models.base import Base
 from src.api.models.questions.binary_question import BinaryQuestion
 from src.api.models.questions.list_question import ListQuestion
 from src.api.models.questions.multi_question import MultiQuestion
@@ -15,7 +15,7 @@ from src.api.models.questions.slider_question import SliderQuestion
 from src.api.models.questions.text_question import TextQuestion
 
 
-class SurveyStructure(BaseModel):
+class SurveyStructure(Base):
     questions: list[
         Union[
             BinaryQuestion,
@@ -37,24 +37,18 @@ class SurveyStructure(BaseModel):
         for question in self.questions:
             question.validate_for_draft()
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyBase(BaseModel):
+class SurveyBase(Base):
     title: str
 
     @field_validator("title")
-    def validate_survey_title(cls, v, info: ValidationInfo) -> str:
+    def validate_survey_title(cls, v) -> str:
         if v is None or v == "":
             raise ValueError("survey title must be provided")
         return v
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyHeadersOutput(BaseModel):
+class SurveyHeadersOutput(Base):
     title: str
     survey_code: str
     creation_date: datetime
@@ -63,30 +57,20 @@ class SurveyHeadersOutput(BaseModel):
     group_size: int
 
 
-class SurveyInfoFetchInput(BaseModel):
+class SurveyInfoFetchInput(Base):
     survey_code: str
 
     @field_validator("survey_code")
-    def validate_survey_join_code(cls, v, info: ValidationInfo) -> str:
-        if v is None:
-            raise ValueError("survey code must be provided")
-        if not re.match(r"^\d{6}$", v):
-            raise ValueError("survey code must be a string consisting of 6 digits")
-        return v
-
-    class Config:
-        extra = "forbid"
+    def validate_survey_join_code(cls, v) -> str:
+        return Base.validate_survey_code(v)
 
 
-class SurveyStructureFetchOutput(BaseModel):
+class SurveyStructureFetchOutput(Base):
     title: str
     survey_structure: SurveyStructure
     survey_code: str
     uses_cryptographic_module: bool
     public_keys: Optional[list[str]] = Field(default=[])
-
-    class Config:
-        extra = "forbid"
 
 
 class SurveyStructureCreateInput(SurveyBase):
@@ -96,103 +80,47 @@ class SurveyStructureCreateInput(SurveyBase):
     ring_members: Optional[list[str]] = Field(default=[])
 
     @field_validator("user_email")
-    def validate_user_email(cls, v, info: ValidationInfo) -> str:
-        if v is None:
-            raise ValueError("email must be provided")
-        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
-            raise ValueError("invalid email format")
-        return v
+    def validate_user_email(cls, v) -> str:
+        return Base.validate_email(v)
 
     @field_validator("ring_members")
     def validate_emails(cls, v, info: ValidationInfo) -> str:
         if not info.data["uses_cryptographic_module"]:
             return v
-        if v is None or len(v) == 0:
-            raise ValueError("emails must be provided for cryptographic module")
-        for email in v:
-            if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
-                raise ValueError("invalid email format")
-        return v
-
-    class Config:
-        extra = "forbid"
+        return Base.validate_emails(v)
 
 
-class SurveyStructureCreateOutput(BaseModel):
+class SurveyStructureCreateOutput(Base):
     survey_code: str
 
-    class Config:
-        extra = "forbid"
 
-
-class SurveyUserActions(BaseModel):
+class SurveyUserAction(Base):
     user_email: str
-    survey_code: str
 
     @field_validator("user_email")
-    def validate_user_email(cls, v, info: ValidationInfo) -> str:
-        if v is None:
-            raise ValueError("email must be provided")
-        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
-            raise ValueError("invalid email format")
-        return v
-
-    @field_validator("survey_code")
-    def validate_survey_code(cls, v, info: ValidationInfo) -> str:
-        if v is None:
-            raise ValueError("survey code must be provided")
-        if not re.match(r"^\d{6}$", v):
-            raise ValueError("survey code must be a string consisting of 6 digits")
-        return v
-
-    class Config:
-        extra = "forbid"
+    def validate_user_email(cls, v) -> str:
+        return Base.validate_email(v)
 
 
-class ShareSurveyResults(BaseModel):
-    user_email: str
+class SurveyUserActions(SurveyUserAction):
     survey_code: str
-    user_emails_to_share_with: list[str]
-
-    @field_validator("user_email")
-    def validate_user_email(cls, v, info: ValidationInfo) -> str:
-        if v is None:
-            raise ValueError("email must be provided")
-        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
-            raise ValueError("invalid email format")
-        return v
 
     @field_validator("survey_code")
-    def validate_survey_code(cls, v, info: ValidationInfo) -> str:
-        if v is None:
-            raise ValueError("survey code must be provided")
-        if not re.match(r"^\d{6}$", v):
-            raise ValueError("survey code must be a string consisting of 6 digits")
-        return v
-
-    @field_validator("user_emails_to_share_with")
-    def validate_emails(cls, v, info: ValidationInfo) -> str:
-        if v is None or len(v) == 0:
-            raise ValueError("emails to share the survey with must be provided")
-        for email in v:
-            if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", email):
-                raise ValueError("invalid email format")
-        return v
-
-    class Config:
-        extra = "forbid"
+    def validate_survey_code(cls, v) -> str:
+        return Base.validate_survey_code(v)
 
 
-class TakeAwaySurveyAccess(SurveyUserActions):
-    user_email_to_take_access_from: str
+class SurveyUserDeleteAction(SurveyUserAction):
+    survey_codes: list[str]
 
-    @field_validator("user_email_to_take_access_from")
-    def validate_other_user_email(cls, v, info: ValidationInfo) -> str:
-        if v is None:
-            raise ValueError("email must be provided")
-        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
-            raise ValueError("invalid email format")
-        return v
+    @field_validator("survey_codes")
+    def validate_survey_code(cls, v) -> str:
+        return Base.validate_survey_code(v)
 
-    class Config:
-        extra = "forbid"
+
+class ShareSurveyActions(SurveyUserActions):
+    user_emails: list[str]
+
+    @field_validator("user_emails")
+    def validate_emails(cls, v) -> str:
+        return Base.validate_emails(v)

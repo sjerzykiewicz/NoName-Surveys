@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { tick } from 'svelte';
@@ -9,18 +8,27 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import NameError from '$lib/components/groups-page/NameError.svelte';
-	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
-	import { limitInput } from '$lib/utils/limitInput';
-	import { M } from '$lib/stores/global';
+	import {
+		ENTRIES_PER_PAGE,
+		errorModalContent,
+		isErrorModalHidden,
+		LIMIT_OF_CHARS,
+		M
+	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
+	import PageButtons from '$lib/components/global/PageButtons.svelte';
+	import Input from '$lib/components/global/Input.svelte';
+	import { page } from '$app/stores';
+	import { changePage } from '$lib/utils/changePage';
 
 	export let groups: {
 		user_group_name: string;
 		all_members_have_public_keys: true;
 	}[];
 	export let users: string[];
+	export let numGroups: number;
 	export let selectedGroupsToRemove: string[] = [];
 
 	let isPanelVisible: boolean = false;
@@ -29,6 +37,7 @@
 	let nameError: GroupError = GroupError.NoError;
 	let membersError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
+	let nameInput: HTMLDivElement;
 
 	$: groupNames = groups.map((g) => g.user_group_name);
 
@@ -72,14 +81,16 @@
 		return true;
 	}
 
-	async function createGroup(user_group_name: string, user_group_members: string[]) {
-		if (!(await checkCorrectness(user_group_name, user_group_members))) return;
+	async function createGroup() {
+		const name = groupName.trim();
+
+		if (!(await checkCorrectness(name, groupMembers))) return;
 
 		const response = await fetch('/api/groups/create', {
 			method: 'POST',
 			body: JSON.stringify({
-				user_group_name: user_group_name,
-				user_group_members: user_group_members
+				user_group_name: name,
+				user_group_members: groupMembers
 			}),
 			headers: {
 				'Content-Type': 'application/json'
@@ -96,32 +107,38 @@
 		groupName = '';
 		groupMembers = [];
 		isPanelVisible = false;
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	async function deleteGroups() {
-		selectedGroupsToRemove.forEach(async (group) => {
-			const response = await fetch('/api/groups/delete', {
-				method: 'POST',
-				body: JSON.stringify({ name: group }),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!response.ok) {
-				const body = await response.json();
-				$errorModalContent = getErrorMessage(body.detail);
-				$isErrorModalHidden = false;
-				return;
+		const response = await fetch('/api/groups/delete', {
+			method: 'POST',
+			body: JSON.stringify({ names: selectedGroupsToRemove }),
+			headers: {
+				'Content-Type': 'application/json'
 			}
-
-			groups = groups.filter((g) => g.user_group_name !== group);
 		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		const currentPage = parseInt($page.params.groupsPage);
+		const maxPage = Math.ceil(numGroups / $ENTRIES_PER_PAGE) - 1;
+		if (
+			selectedGroupsToRemove.length >= groups.length &&
+			currentPage >= maxPage &&
+			currentPage > 0
+		) {
+			await changePage($page.url.pathname, currentPage - 1);
+		}
 
 		isModalHidden = true;
 		selectedGroupsToRemove = [];
-		invalidateAll();
+		await invalidateAll();
 	}
 
 	let innerWidth: number;
@@ -132,53 +149,58 @@
 <DeleteModal title="Deleting Groups" bind:isHidden={isModalHidden} deleteEntries={deleteGroups} />
 
 <div class="button-row">
-	<button
-		title={isPanelVisible ? 'Stop creating a group' : 'Create a group'}
-		class="add-group"
-		class:clicked={isPanelVisible}
-		on:click={togglePanel}
-	>
-		<i class="symbol">add</i>Group
-	</button>
-	{#if groups.length > 0}
+	<div class="button-sub-row">
 		<button
-			title="Delete selected groups"
-			class="delete-group"
-			disabled={selectedGroupsToRemove.length === 0}
-			on:click={() => (isModalHidden = false)}
+			title={isPanelVisible ? 'Stop creating a group' : 'Create a group'}
+			class="add-group"
+			class:clicked={isPanelVisible}
+			on:click={togglePanel}
 		>
-			<i class="symbol">delete</i>Delete
+			<i class="symbol">add</i>Group
 		</button>
-	{/if}
+		{#if groups.length > 0}
+			<button
+				title="Delete selected groups"
+				class="delete-group"
+				disabled={selectedGroupsToRemove.length === 0}
+				on:click={() => (isModalHidden = false)}
+			>
+				<i class="symbol">delete</i>Delete
+			</button>
+		{/if}
+	</div>
+	<PageButtons numEntries={numGroups} />
 </div>
 {#if isPanelVisible}
-	<div class="buttons-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<div
+		class="buttons-container"
+		transition:slide={{ duration: 200, easing: cubicInOut }}
+		on:introend={() => nameInput.focus()}
+	>
 		<div class="button-row">
-			<div
-				class="input-container"
-				class:max={groupName.length > $LIMIT_OF_CHARS}
-				transition:slide={{ duration: 200, easing: cubicInOut }}
-			>
-				<!-- svelte-ignore a11y-autofocus -->
-				<div
-					title="Enter a group name"
-					class="group-input"
-					contenteditable
-					bind:textContent={groupName}
-					autofocus={innerWidth > $M}
-					role="textbox"
-					tabindex="0"
-					on:keydown={(e) => {
-						handleNewLine(e);
-						limitInput(e, groupName, $LIMIT_OF_CHARS);
-					}}
-				>
-					{groupName}
-				</div>
-				<span class="char-count">{groupName.length} / {$LIMIT_OF_CHARS}</span>
-			</div>
+			<Input
+				bind:text={groupName}
+				label="Group Name"
+				title="Enter a group name"
+				bind:element={nameInput}
+				handleEnter={(e) => {
+					if (e.key === 'Enter') {
+						e.preventDefault();
+						createGroup();
+						e.stopImmediatePropagation();
+					}
+				}}
+				--margin-right="0em"
+				--char-count-left="6.5em"
+				--container-margin="-0.9em"
+			/>
 		</div>
-		<NameError name={groupName.trim()} error={nameError} groups={groupNames} />
+		<NameError
+			name={groupName.trim()}
+			error={nameError}
+			groups={groupNames}
+			--font-size={innerWidth <= $M ? '0.8em' : '1em'}
+		/>
 		<div class="button-row">
 			<div title="Select group members" class="select-list">
 				<MultiSelect
@@ -187,13 +209,7 @@
 					placeholder="Select group members"
 				/>
 			</div>
-			<button
-				title="Save the group"
-				class="save"
-				on:click={() => {
-					createGroup(groupName.trim(), groupMembers);
-				}}
-			>
+			<button title="Save the group" class="done" on:click={createGroup}>
 				<i class="symbol">done</i>Create
 			</button>
 		</div>
@@ -204,7 +220,6 @@
 			label="Or import group members from a .csv file."
 			id="emails-file"
 			checkKeys={false}
-			size={1.25}
 		/>
 	</div>
 {/if}
@@ -213,24 +228,5 @@
 	.buttons-container {
 		padding: 0.2em;
 		margin: -0.2em;
-	}
-
-	.group-input {
-		margin: 0em;
-	}
-
-	.group-input[contenteditable]:empty::before {
-		content: 'Enter group name...';
-		color: var(--text-color-3);
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
-		transform: rotate(0deg);
-		transition: transform 0.2s;
-	}
-
-	.input-container {
-		margin-bottom: -1.4em;
 	}
 </style>

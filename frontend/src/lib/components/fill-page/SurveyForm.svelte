@@ -320,9 +320,9 @@
 		else processForm(undefined);
 	}
 
-	function hideSuccessModal() {
+	async function hideSuccessModal() {
 		$isSuccessModalHidden = true;
-		goto('/', { replaceState: true, invalidateAll: true });
+		await goto('/', { replaceState: true, invalidateAll: true });
 	}
 
 	onMount(() => {
@@ -330,6 +330,7 @@
 			if (!isKeysModalHidden && event.key === 'Enter') {
 				event.preventDefault();
 				processCrypto();
+				event.stopImmediatePropagation();
 			}
 		}
 
@@ -349,7 +350,7 @@
 	icon="encrypted"
 	title="Load Your Keys"
 	bind:isHidden={isKeysModalHidden}
-	width={innerWidth <= $M ? 20 : 38}
+	--width={innerWidth <= $M ? '20em' : '38em'}
 >
 	<div slot="content" title="Load your digital signature keys" class="file-div">
 		<span class="file-label"
@@ -394,12 +395,16 @@
 			/>
 			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
 		</div>
-		<AnswerError {unansweredRequired} {questionIndex} />
+		<AnswerError
+			{unansweredRequired}
+			{questionIndex}
+			--margin-top={question.type === 'text' ? '-2.5em' : ''}
+		/>
 	{/each}
 </Content>
 
 <Footer>
-	<button title="Submit survey" class="footer-button save" on:click={submitSurvey}>
+	<button title="Submit survey" class="footer-button done" on:click={submitSurvey}>
 		<i class="symbol">done</i>Submit
 	</button>
 </Footer>
@@ -409,16 +414,12 @@
 		width: 100%;
 	}
 
-	.save i {
-		font-variation-settings: 'wght' 700;
-	}
-
 	.warning {
 		margin: 0em 0em 0.5em 0em;
 	}
 
 	@media screen and (max-width: 768px) {
-		.footer-button.save {
+		.footer-button.done {
 			font-size: 1.25em;
 		}
 	}

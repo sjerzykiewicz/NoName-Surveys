@@ -4,6 +4,7 @@ from sqlmodel import select
 from src.db.base import Session
 from src.db.models.access_to_view_results import AccessToViewResults
 from src.db.models.survey import Survey
+from src.db.models.user import User
 
 
 def get_count_of_not_deleted_surveys_for_user(user_id: int, session: Session) -> int:
@@ -152,10 +153,12 @@ def get_all_users_with_access_to_survey(
 ) -> list[AccessToViewResults]:
     statement = (
         select(AccessToViewResults)
+        .join(User, AccessToViewResults.user_id == User.id)
         .where(
             (AccessToViewResults.survey_id == survey_id)
             & (AccessToViewResults.is_deleted == False)  # noqa: E712
         )
+        .order_by(User.email.asc())
         .offset(offset)
         .limit(limit)
     )

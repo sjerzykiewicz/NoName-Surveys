@@ -18,6 +18,7 @@ from src.db.base import get_session
 router = APIRouter()
 
 
+LIMIT_OF_ACTIVE_USER_GROUPS = 50
 PAGE_SIZE = 10
 
 
@@ -157,17 +158,13 @@ async def get_user_group(
             status_code=400, detail="User group not found for the given user"
         )
 
-    user_group_members = [
-        member.user_id
-        for member in user_groups_crud.get_user_group_members_paginated(
-            user_group.id, page * PAGE_SIZE, PAGE_SIZE, session
-        )
-    ]
     return [
         UserGroupMembersOutput(
             email=member.email, has_public_key=member.public_key != ""
         )
-        for member in user_crud.get_users_by_id(user_group_members, session)
+        for member in user_groups_crud.get_user_group_members_paginated(
+            user_group.id, page * PAGE_SIZE, PAGE_SIZE, session
+        )
     ]
 
 
@@ -179,6 +176,15 @@ async def create_user_group(
     user = user_crud.get_user_by_email(user_group_creation_request.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
+
+    user_groups_count = user_groups_crud.get_count_of_user_groups_of_user(
+        user.id, session
+    )
+    if user_groups_count >= LIMIT_OF_ACTIVE_USER_GROUPS:
+        raise HTTPException(
+            status_code=400,
+            detail="User has reached the limit of active user groups",
+        )
 
     if not user_crud.all_users_exist(
         user_group_creation_request.user_group_members, session

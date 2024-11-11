@@ -2,6 +2,7 @@ from sqlalchemy import func
 from sqlmodel import select
 
 from src.db.base import Session
+from src.db.models.user import User
 from src.db.models.user_group import UserGroup, UserGroupBase
 from src.db.models.user_group_member import UserGroupMember, UserGroupMemberBase
 
@@ -31,6 +32,7 @@ def get_user_groups(
             (UserGroup.creator_id == user_id)
             & (UserGroup.is_deleted == False)  # noqa: E712
         )
+        .order_by(UserGroup.name.asc())
         .offset(offset)
         .limit(limit)
     )
@@ -149,13 +151,15 @@ def get_user_group_members(
 
 def get_user_group_members_paginated(
     user_group_id: int, offset: int, limit: int, session: Session
-) -> list[UserGroupMember]:
+) -> list[User]:
     statement = (
-        select(UserGroupMember)
+        select(User)
+        .join(UserGroupMember, User.id == UserGroupMember.user_id)
         .where(
             (UserGroupMember.group_id == user_group_id)
             & (UserGroupMember.is_deleted == False)  # noqa: E712
         )
+        .order_by(User.email.asc())
         .offset(offset)
         .limit(limit)
     )

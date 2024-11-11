@@ -92,6 +92,31 @@ def test_create_user_group_when_group_already_exists(client: TestClient):
     assert response.status_code == 400
 
 
+def test_create_user_group_after_reaching_the_limit(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+
+    for i in range(50):
+        response = create_user_group(
+            client,
+            TEST_VALID_USER_EMAIL_1,
+            f"Test Group {i}",
+            [TEST_VALID_USER_EMAIL_1],
+        )
+        assert response.status_code == 200
+
+    # when
+    response = create_user_group(
+        client,
+        TEST_VALID_USER_EMAIL_1,
+        TEST_USER_GROUP_NAME_1,
+        [TEST_VALID_USER_EMAIL_1],
+    )
+
+    # then
+    assert response.status_code == 400
+
+
 def test_get_user_groups_count(client: TestClient):
     # given
     create_users(client, [TEST_VALID_USER_EMAIL_1, TEST_VALID_USER_EMAIL_2])
@@ -208,7 +233,7 @@ def test_get_user_group(client: TestClient):
     data = response.json()
     assert isinstance(data, list)
     assert len(data) == 10
-    assert [user["email"] for user in data] == users[:10]
+    assert [user["email"] for user in data] == sorted(users)[:10]
     assert all(user["has_public_key"] == False for user in data)
 
 
@@ -229,7 +254,7 @@ def test_get_user_group_with_public_keys(client: TestClient):
     data = response.json()
     assert isinstance(data, list)
     assert len(data) == 10
-    assert [user["email"] for user in data] == users[:10]
+    assert [user["email"] for user in data] == sorted(users)[:10]
     assert all(user["has_public_key"] == True for user in data)
 
 

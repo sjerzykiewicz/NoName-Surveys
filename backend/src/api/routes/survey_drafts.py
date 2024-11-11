@@ -17,6 +17,7 @@ from src.db.base import get_session
 router = APIRouter()
 
 
+LIMIT_OF_ACTIVE_SURVEY_DRAFTS = 50
 PAGE_SIZE = 10
 
 
@@ -118,6 +119,17 @@ async def create_survey_draft(
     user = user_crud.get_user_by_email(survey_draft_create.user_email, session)
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
+
+    survey_drafts_count = (
+        survey_draft_crud.get_count_of_not_deleted_survey_drafts_for_user(
+            user.id, session
+        )
+    )
+    if survey_drafts_count >= LIMIT_OF_ACTIVE_SURVEY_DRAFTS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"User cannot have more than {LIMIT_OF_ACTIVE_SURVEY_DRAFTS} active survey drafts",
+        )
 
     try:
         survey_draft_create.survey_structure.validate()

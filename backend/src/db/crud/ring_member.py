@@ -19,6 +19,7 @@ def get_ring_members_for_survey_paginated(
     statement = (
         select(RingMember)
         .where(RingMember.survey_id == survey_id)
+        .order_by(RingMember.user_email.asc())
         .offset(offset)
         .limit(limit)
     )

@@ -208,11 +208,17 @@ async def create_user_group(
     user_group = user_groups_crud.create_user_group(
         user.id, user_group_creation_request.user_group_name, session
     )
-    for user_group_member in user_group_creation_request.user_group_members:
-        user_groups_crud.add_user_to_group(
-            user_group.id,
-            user_crud.get_user_by_email(user_group_member, session).id,
-            session,
+
+    users_to_add = [
+        user_crud.get_user_by_email(email, session).id
+        for email in user_group_creation_request.user_group_members
+    ]
+    added_users = user_groups_crud.add_users_to_group(
+        user_group.id, users_to_add, session
+    )
+    if len(added_users) != len(users_to_add):
+        raise HTTPException(
+            status_code=400, detail="Some users could not be added to the group"
         )
 
     return {"message": "user group created successfully"}

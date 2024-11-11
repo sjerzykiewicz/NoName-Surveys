@@ -193,7 +193,7 @@ async def create_survey(
 
     if (
         survey_crud.get_count_of_active_surveys_of_user(user.id, session)
-        > LIMIT_OF_ACTIVE_SURVEYS
+        >= LIMIT_OF_ACTIVE_SURVEYS
     ):
         raise HTTPException(
             status_code=400,

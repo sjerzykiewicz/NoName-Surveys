@@ -297,7 +297,7 @@ export const addUsersToGroup = (user_email: string, name: string, users: string[
 			'Content-Type': 'application/json'
 		}
 	});
-}
+};
 
 export const removeUsersFromGroup = (user_email: string, name: string, users: string[]) => {
 	return fetch(`${host}/user-groups/remove-users`, {
@@ -307,7 +307,7 @@ export const removeUsersFromGroup = (user_email: string, name: string, users: st
 			'Content-Type': 'application/json'
 		}
 	});
-}
+};
 
 // users
 

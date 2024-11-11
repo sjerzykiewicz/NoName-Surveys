@@ -93,7 +93,11 @@
 
 		const currentPage = parseInt($page.params.accessPage);
 		const maxPage = Math.ceil(numUsers / $ENTRIES_PER_PAGE) - 1;
-		if (selectedUsersToRemove.length >= usersWithAccess.length && currentPage >= maxPage && currentPage > 0) {
+		if (
+			selectedUsersToRemove.length >= usersWithAccess.length &&
+			currentPage >= maxPage &&
+			currentPage > 0
+		) {
 			await changePage($page.url.pathname, currentPage - 1);
 		}
 
@@ -129,13 +133,13 @@
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div title="Select users" class="select-list">
-			<MultiSelect bind:selected={selectedUsersToAdd} options={usersWithoutAccess} placeholder="Select users" />
+			<MultiSelect
+				bind:selected={selectedUsersToAdd}
+				options={usersWithoutAccess}
+				placeholder="Select users"
+			/>
 		</div>
-		<button
-			title="Finish giving access"
-			class="done"
-			on:click={addUsers}
-		>
+		<button title="Finish giving access" class="done" on:click={addUsers}>
 			<i class="symbol">done</i>Apply
 		</button>
 	</div>

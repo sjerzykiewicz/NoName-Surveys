@@ -164,7 +164,7 @@
 		</tr>
 		{#each groups.toSorted((a, b) => a.user_group_name.localeCompare(b.user_group_name)) as group}
 			<tr>
-				<td title="Select {group}" class="checkbox-entry"
+				<td title="Select {group.user_group_name}" class="checkbox-entry"
 					><label>
 						<input
 							type="checkbox"

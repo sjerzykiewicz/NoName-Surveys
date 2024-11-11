@@ -103,9 +103,7 @@ body {
 	background: linear-gradient(0deg, var(--secondary-color-2) 0%, var(--secondary-color-1) 100%);
 	background-attachment: fixed;
 	font-weight: 500;
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .hamburger {
@@ -149,7 +147,8 @@ body {
 	cursor: not-allowed !important;
 }
 
-:root::-webkit-scrollbar,
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
 .select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar,
 .select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar {
 	width: 1em;
@@ -161,7 +160,8 @@ body {
 	width: 0.8em;
 }
 
-:root::-webkit-scrollbar-track,
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
 .text-input.display::-webkit-scrollbar-track,
 .text-answers::-webkit-scrollbar-track,
 .input::-webkit-scrollbar-track,
@@ -179,7 +179,8 @@ body {
 	border-bottom-right-radius: 5px;
 }
 
-:root::-webkit-scrollbar-corner,
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
 .text-input.display::-webkit-scrollbar-corner,
 .text-answers::-webkit-scrollbar-corner .input::-webkit-scrollbar-corner,
 .select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-corner,
@@ -187,7 +188,8 @@ body {
 	background-color: var(--secondary-color-2);
 }
 
-:root::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
 .text-input.display::-webkit-scrollbar-thumb,
 .text-answers::-webkit-scrollbar-thumb,
 .input::-webkit-scrollbar-thumb,
@@ -203,7 +205,8 @@ body {
 		outline 0s;
 }
 
-:root::-webkit-scrollbar-thumb:hover,
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
 .text-input.display::-webkit-scrollbar-thumb:hover,
 .text-answers::-webkit-scrollbar-thumb:hover,
 .input::-webkit-scrollbar-thumb:hover,
@@ -212,13 +215,22 @@ body {
 	background-color: var(--text-color-3);
 }
 
-:root::-webkit-scrollbar-thumb:active,
+html::-webkit-scrollbar-thumb:active,
+body::-webkit-scrollbar-thumb:active,
 .text-input.display::-webkit-scrollbar-thumb:hover,
 .text-answers::-webkit-scrollbar-thumb:active,
 .input::-webkit-scrollbar-thumb:active,
 .select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:active,
 .select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb:active {
 	background-color: var(--border-color-1);
+}
+
+/* firefox */
+
+html,
+body {
+	scrollbar-color: var(--primary-color-1) var(--secondary-color-2);
+	scrollbar-width: auto;
 }
 
 /* sign in AMU button */

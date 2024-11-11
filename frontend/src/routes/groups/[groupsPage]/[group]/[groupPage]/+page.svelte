@@ -11,7 +11,9 @@
 	export let data;
 	export let selectedMembersToRemove: string[] = [];
 
-	$: notMembers = data.user_list.filter((user) => !new Set(data.users.map((user) => user.email)).has(user));
+	$: notMembers = data.user_list.filter(
+		(user) => !new Set(data.users.map((user) => user.email)).has(user)
+	);
 </script>
 
 <Header>

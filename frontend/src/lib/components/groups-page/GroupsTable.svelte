@@ -54,14 +54,16 @@
 		return true;
 	}
 
-	async function renameGroup(name: string, new_name: string) {
-		if (!(await checkCorrectness(new_name))) return;
+	async function renameGroup() {
+		const newGroupName = newName.trim();
+
+		if (!(await checkCorrectness(newGroupName))) return;
 
 		const response = await fetch('/api/groups/rename', {
 			method: 'POST',
 			body: JSON.stringify({
-				name: name,
-				new_name: new_name
+				name: selectedGroup,
+				new_name: newGroupName
 			}),
 			headers: {
 				'Content-Type': 'application/json'
@@ -85,7 +87,7 @@
 		function handleEnter(event: KeyboardEvent) {
 			if (!isModalHidden && event.key === 'Enter') {
 				event.preventDefault();
-				renameGroup(selectedGroup, newName.trim());
+				renameGroup();
 				event.stopImmediatePropagation();
 			}
 		}
@@ -119,7 +121,7 @@
 			handleEnter={(e) => {
 				if (e.key === 'Enter') {
 					e.preventDefault();
-					renameGroup(selectedGroup, newName.trim());
+					renameGroup();
 					e.stopImmediatePropagation();
 				}
 			}}
@@ -128,10 +130,7 @@
 		/>
 		<NameError name={newName.trim()} error={nameError} groups={groupNames} --font-size="0.8em" />
 	</div>
-	<button
-		title="Save the new group name"
-		class="done"
-		on:click={() => renameGroup(selectedGroup, newName.trim())}
+	<button title="Save the new group name" class="done" on:click={renameGroup}
 		><i class="symbol">done</i>Apply</button
 	>
 </Modal>
@@ -165,7 +164,7 @@
 		</tr>
 		{#each groups.toSorted((a, b) => a.user_group_name.localeCompare(b.user_group_name)) as group}
 			<tr>
-				<td title="Select {group}" class="checkbox-entry"
+				<td title="Select {group.user_group_name}" class="checkbox-entry"
 					><label>
 						<input
 							type="checkbox"

@@ -28,8 +28,6 @@
 	let membersError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
 
-	$: memberEmails = members.map((m) => m.email);
-
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
 		membersError = GroupError.NoError;
@@ -51,40 +49,22 @@
 		return true;
 	}
 
-	// TODO: fix this
 	async function addMembers() {
 		if (!(await checkCorrectness(selectedMembersToAdd))) return;
 
-		const deleteResponse = await fetch('/api/groups/delete', {
-			method: 'POST',
-			body: JSON.stringify({ names: [group] }),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!deleteResponse.ok) {
-			const body = await deleteResponse.json();
-			$errorModalContent = getErrorMessage(body.detail);
-			$isErrorModalHidden = false;
-			return;
-		}
-
-		const newMembers = memberEmails.concat(selectedMembersToAdd);
-
-		const createResponse = await fetch('/api/groups/create', {
+		const response = await fetch('/api/groups/add-users', {
 			method: 'POST',
 			body: JSON.stringify({
-				user_group_name: group,
-				user_group_members: newMembers
+				name: group,
+				users: selectedMembersToAdd
 			}),
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		});
 
-		if (!createResponse.ok) {
-			const body = await createResponse.json();
+		if (!response.ok) {
+			const body = await response.json();
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
@@ -95,24 +75,23 @@
 		await invalidateAll();
 	}
 
-	// TODO: fix this
 	async function removeMembers() {
-		const deleteResponse = await fetch('/api/groups/delete', {
-			method: 'POST',
-			body: JSON.stringify({ names: [group] }),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!deleteResponse.ok) {
-			const body = await deleteResponse.json();
-			$errorModalContent = getErrorMessage(body.detail);
-			$isErrorModalHidden = false;
-			return;
-		}
-
 		if (selectedMembersToRemove.length >= numMembers) {
+			const response = await fetch('/api/groups/delete', {
+				method: 'POST',
+				body: JSON.stringify({ names: [group] }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!response.ok) {
+				const body = await response.json();
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
+				return;
+			}
+
 			await goto('/groups/' + $page.params.groupsPage, {
 				replaceState: true,
 				invalidateAll: true
@@ -120,21 +99,19 @@
 			return;
 		}
 
-		const newMembers = memberEmails.filter((m) => !new Set(selectedMembersToRemove).has(m));
-
-		const createResponse = await fetch('/api/groups/create', {
+		const response = await fetch('/api/groups/remove-users', {
 			method: 'POST',
 			body: JSON.stringify({
-				user_group_name: group,
-				user_group_members: newMembers
+				name: group,
+				users: selectedMembersToRemove
 			}),
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		});
 
-		if (!createResponse.ok) {
-			const body = await createResponse.json();
+		if (!response.ok) {
+			const body = await response.json();
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;

@@ -289,6 +289,26 @@ export const deleteUserGroups = (user_email: string, names: string[]) => {
 	});
 };
 
+export const addUsersToGroup = (user_email: string, name: string, users: string[]) => {
+	return fetch(`${host}/user-groups/add-users`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, name, users }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
+export const removeUsersFromGroup = (user_email: string, name: string, users: string[]) => {
+	return fetch(`${host}/user-groups/remove-users`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, name, users }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
 // users
 
 export const getUsers = () => {

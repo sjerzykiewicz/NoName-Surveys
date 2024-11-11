@@ -266,7 +266,7 @@ async def delete_user_groups(
 @router.post(
     "/add-users", response_description="Add users to a group", response_model=dict
 )
-async def delete_user_groups(
+async def add_users_to_group(
     user_group_request: UserGroupUsersActions,
     session: Session = Depends(get_session),
 ):
@@ -310,7 +310,7 @@ async def delete_user_groups(
     response_description="Remove users from a group",
     response_model=dict,
 )
-async def delete_user_groups(
+async def remove_users_from_group(
     user_group_request: UserGroupUsersActions,
     session: Session = Depends(get_session),
 ):

@@ -14,7 +14,8 @@
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
 
-	export let users: string[];
+	export let usersWithoutAccess: string[];
+	export let usersWithAccess: string[];
 	export let code: string;
 	export let numUsers: number;
 	export let selectedUsersToRemove: string[] = [];
@@ -45,14 +46,14 @@
 		return true;
 	}
 
-	async function addUsers(survey_code: string, user_emails: string[]) {
-		if (!(await checkCorrectness(user_emails))) return;
+	async function addUsers() {
+		if (!(await checkCorrectness(selectedUsersToAdd))) return;
 
 		const response = await fetch('/api/surveys/give-access', {
 			method: 'POST',
 			body: JSON.stringify({
-				survey_code: survey_code,
-				user_emails: user_emails
+				survey_code: code,
+				user_emails: selectedUsersToAdd
 			}),
 			headers: {
 				'Content-Type': 'application/json'
@@ -92,7 +93,11 @@
 
 		const currentPage = parseInt($page.params.accessPage);
 		const maxPage = Math.ceil(numUsers / $ENTRIES_PER_PAGE) - 1;
-		if (selectedUsersToRemove.length >= users.length && currentPage >= maxPage && currentPage > 0) {
+		if (
+			selectedUsersToRemove.length >= usersWithAccess.length &&
+			currentPage >= maxPage &&
+			currentPage > 0
+		) {
 			await changePage($page.url.pathname, currentPage - 1);
 		}
 
@@ -128,13 +133,13 @@
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div title="Select users" class="select-list">
-			<MultiSelect bind:selected={selectedUsersToAdd} options={users} placeholder="Select users" />
+			<MultiSelect
+				bind:selected={selectedUsersToAdd}
+				options={usersWithoutAccess}
+				placeholder="Select users"
+			/>
 		</div>
-		<button
-			title="Finish giving access"
-			class="done"
-			on:click={() => addUsers(code, selectedUsersToAdd)}
-		>
+		<button title="Finish giving access" class="done" on:click={addUsers}>
 			<i class="symbol">done</i>Apply
 		</button>
 	</div>

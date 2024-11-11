@@ -99,6 +99,7 @@
 		cursor: text;
 		overflow-x: hidden;
 		overflow-y: auto;
+		overflow-wrap: break-word;
 		max-height: 5.75em;
 		white-space: pre-wrap !important;
 		pointer-events: all;

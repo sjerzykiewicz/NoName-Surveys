@@ -5,19 +5,15 @@
 	import Back from '$lib/components/global/Back.svelte';
 	import MembersTable from '$lib/components/groups-page/group/MembersTable.svelte';
 	import MembersButtons from '$lib/components/groups-page/group/MembersButtons.svelte';
-	import { afterUpdate } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	export let data;
 	export let selectedMembersToRemove: string[] = [];
 
-	let notMembers: string[] = [];
-
-	afterUpdate(() => {
-		const membersEmailsSet = new Set(data.users.map((user) => user.email));
-		notMembers = data.user_list.filter((user) => !membersEmailsSet.has(user));
-	});
+	$: notMembers = data.user_list.filter(
+		(user) => !new Set(data.users.map((user) => user.email)).has(user)
+	);
 </script>
 
 <Header>

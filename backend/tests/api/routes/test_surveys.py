@@ -143,3 +143,107 @@ def test_delete_survey(client: TestClient):
     assert response.status_code == 200
     data = response.json()
     assert data["message"] == "survey deleted successfully"
+
+
+def test_give_access_to_surveys(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+    create_user(client, TEST_VALID_USER_EMAIL_2)
+    create_survey_response = create_survey(client, TEST_VALID_USER_EMAIL_1)
+    survey_code = create_survey_response.json()["survey_code"]
+
+    # when
+    response = client.post(
+        "/surveys/give-access",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "survey_code": survey_code,
+            "user_emails": [TEST_VALID_USER_EMAIL_2],
+        },
+    )
+
+    # then
+    assert response.status_code == 200
+
+    response = client.post(
+        "/surveys/all-with-access-count",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "survey_code": survey_code,
+        },
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data == 2
+
+
+def test_take_away_access_to_surveys(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+    create_user(client, TEST_VALID_USER_EMAIL_2)
+    create_survey_response = create_survey(client, TEST_VALID_USER_EMAIL_1)
+    survey_code = create_survey_response.json()["survey_code"]
+    client.post(
+        "/surveys/give-access",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "survey_code": survey_code,
+            "user_emails": [TEST_VALID_USER_EMAIL_2],
+        },
+    )
+
+    # when
+    response = client.post(
+        "/surveys/take-away-access",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "survey_code": survey_code,
+            "user_emails": [TEST_VALID_USER_EMAIL_2],
+        },
+    )
+
+    # then
+    assert response.status_code == 200
+
+    response = client.post(
+        "/surveys/all-with-access-count",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "survey_code": survey_code,
+        },
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data == 1
+
+
+def test_check_access_to_surveys(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+    create_user(client, TEST_VALID_USER_EMAIL_2)
+    create_survey_response = create_survey(client, TEST_VALID_USER_EMAIL_1)
+    survey_code = create_survey_response.json()["survey_code"]
+    client.post(
+        "/surveys/give-access",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "survey_code": survey_code,
+            "user_emails": [TEST_VALID_USER_EMAIL_2],
+        },
+    )
+
+    # when
+    response = client.post(
+        "/surveys/get-all-with-access/0",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "survey_code": survey_code,
+        },
+    )
+
+    # then
+
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) == 2

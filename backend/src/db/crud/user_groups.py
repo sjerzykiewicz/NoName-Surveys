@@ -157,8 +157,8 @@ def get_user_group_members_paginated(
         .join(UserGroupMember, User.id == UserGroupMember.user_id)
         .where(
             (UserGroupMember.group_id == user_group_id)
-            & (UserGroupMember.is_deleted == False)
-        )  # noqa: E712
+            & (UserGroupMember.is_deleted == False)  # noqa: E712
+        )
         .order_by(User.email.asc())
         .offset(offset)
         .limit(limit)

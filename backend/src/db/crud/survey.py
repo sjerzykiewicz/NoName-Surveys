@@ -143,8 +143,8 @@ def get_all_surveys_user_can_view(
 def get_all_users_with_access_to_survey_count(survey_id: int, session: Session) -> int:
     statement = select(func.count(AccessToViewResults.id)).where(
         (AccessToViewResults.survey_id == survey_id)
-        & (AccessToViewResults.is_deleted == False)
-    )  # noqa: E712
+        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    )
     return session.exec(statement).one()
 
 

@@ -128,7 +128,10 @@ async def create_survey_draft(
     if survey_drafts_count >= LIMIT_OF_ACTIVE_SURVEY_DRAFTS:
         raise HTTPException(
             status_code=400,
-            detail=f"User cannot have more than {LIMIT_OF_ACTIVE_SURVEY_DRAFTS} active survey drafts",
+            detail=(
+                f"User cannot have more than"
+                f"{LIMIT_OF_ACTIVE_SURVEY_DRAFTS} active survey drafts"
+            ),
         )
 
     try:

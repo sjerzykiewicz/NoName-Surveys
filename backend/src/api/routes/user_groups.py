@@ -75,7 +75,10 @@ async def get_user_groups(
 
 @router.post(
     "/all-with-public-keys",
-    response_description="List of names of all user groups of a given user which members all have public keys",
+    response_description=(
+        "List of names of all user groups of a given user which "
+        "members all have public keys"
+    ),
     response_model=list[str],
 )
 async def get_user_groups_with_members_having_public_keys(
@@ -188,7 +191,10 @@ async def create_user_group(
     ):
         raise HTTPException(
             status_code=400,
-            detail="Not all users are registered (or perhaps duplicate emails cause this issue)",
+            detail=(
+                "Not all users are registered "
+                "(or perhaps duplicate emails cause this issue)"
+            ),
         )
 
     existing_user_group = user_groups_crud.get_user_group_by_name(

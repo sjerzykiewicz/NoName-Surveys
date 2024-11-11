@@ -6,7 +6,10 @@ EMAIL_REGEX = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 SURVEY_CODE_REGEX = r"^\d{6}$"
 DIGITS_ONLY_REGEX = r"^\d+$"
 USER_GROUP_NAME_REGEX = r"^[\w /-]+$"
-KEY_PEM_REGEX = r"-----BEGIN PUBLIC KEY-----(\n|\r|\r\n)([0-9a-zA-Z\+\/=]{64}(\n|\r|\r\n))*([0-9a-zA-Z\+\/=]{1,63}(\n|\r|\r\n))?-----END PUBLIC KEY-----"
+KEY_PEM_REGEX = (
+    r"-----BEGIN PUBLIC KEY-----(\n|\r|\r\n)([0-9a-zA-Z\+\/=]{64}(\n|\r|\r\n))*"
+    r"([0-9a-zA-Z\+\/=]{1,63}(\n|\r|\r\n))?-----END PUBLIC KEY-----"
+)
 FINGERPRINT_REGEX = r"^[0-9a-f]*$"
 
 

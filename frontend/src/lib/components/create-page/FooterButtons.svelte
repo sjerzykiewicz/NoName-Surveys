@@ -14,12 +14,24 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
-	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		isWarningModalHidden,
+		LIMIT_OF_CHARS,
+		LIMIT_OF_DRAFTS,
+		LIMIT_OF_SURVEYS,
+		warningModalContent
+	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { invalidateAll } from '$app/navigation';
 
+	export let numSurveys: number;
+	export let numDrafts: number;
 	export let isPreview: boolean = false;
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
+	export let isExportButtonVisible: boolean = false;
 
 	function togglePreview() {
 		isPreview = !isPreview;
@@ -90,14 +102,27 @@
 	}
 
 	async function saveDraft() {
-		$title.title = $title.title.trim();
-		$questions = trimQuestions($questions);
-
-		if (!(await checkCorrectness())) return;
-
 		if ($currentDraftId !== null) {
+			$title.title = $title.title.trim();
+			$questions = trimQuestions($questions);
+
+			if (!(await checkCorrectness())) return;
+
 			isDraftModalHidden = false;
 		} else {
+			if (numDrafts >= $LIMIT_OF_DRAFTS) {
+				isExportButtonVisible = false;
+				$warningModalContent =
+					'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
+				$isWarningModalHidden = false;
+				return;
+			}
+
+			$title.title = $title.title.trim();
+			$questions = trimQuestions($questions);
+
+			if (!(await checkCorrectness())) return;
+
 			const parsedSurvey = new Survey(constructQuestionList($questions));
 			const draftInfo = new DraftCreateInfo(
 				$page.data.session!.user!.email!,
@@ -123,10 +148,19 @@
 			$currentDraftId = await response.json();
 			$draftStructure = getDraft($title.title, $questions);
 			popup('draft-popup');
+			await invalidateAll();
 		}
 	}
 
 	async function createSurvey() {
+		if (numSurveys >= $LIMIT_OF_SURVEYS) {
+			isExportButtonVisible = false;
+			$warningModalContent =
+				'You have reached the maximum number of surveys you can create. Please delete some surveys to create new ones.';
+			$isWarningModalHidden = false;
+			return;
+		}
+
 		$title.title = $title.title.trim();
 		$questions = trimQuestions($questions);
 
@@ -176,9 +210,5 @@
 <style>
 	.popup {
 		--tooltip-width: 4em;
-	}
-
-	.done i {
-		font-variation-settings: 'wght' 700;
 	}
 </style>

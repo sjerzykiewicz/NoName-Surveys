@@ -21,11 +21,41 @@
 		currentDraftId,
 		draftStructure
 	} from '$lib/stores/create-page';
+	import WarningModal from '$lib/components/global/WarningModal.svelte';
+	import { onMount } from 'svelte';
+	import {
+		isWarningModalHidden,
+		LIMIT_OF_DRAFTS,
+		LIMIT_OF_SURVEYS,
+		M,
+		warningModalContent
+	} from '$lib/stores/global.js';
 
 	export let data;
 	export let isPreview: boolean;
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
+	export let invalidEmails: string[] = [];
+	export let isExportButtonVisible: boolean = false;
+
+	onMount(() => {
+		if (data.numSurveys >= $LIMIT_OF_SURVEYS && data.numDrafts >= $LIMIT_OF_DRAFTS) {
+			isExportButtonVisible = false;
+			$warningModalContent =
+				'You have reached the maximum number of surveys and drafts you can create. Please delete some surveys and drafts to create new ones.';
+			$isWarningModalHidden = false;
+		} else if (data.numSurveys >= $LIMIT_OF_SURVEYS) {
+			isExportButtonVisible = false;
+			$warningModalContent =
+				'You have reached the maximum number of surveys you can create. Please delete some surveys to create new ones.';
+			$isWarningModalHidden = false;
+		} else if (data.numDrafts >= $LIMIT_OF_DRAFTS) {
+			isExportButtonVisible = false;
+			$warningModalContent =
+				'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
+			$isWarningModalHidden = false;
+		}
+	});
 
 	beforeNavigate((event) => {
 		if (getDraft($title.title.trim(), trimQuestions($questions)) !== $draftStructure) {
@@ -48,7 +78,17 @@
 		$currentDraftId = null;
 		$draftStructure = getDraft('', []);
 	});
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
+
+<WarningModal
+	{isExportButtonVisible}
+	emails={invalidEmails}
+	--width-warning={innerWidth <= $M ? '20em' : '23em'}
+/>
 
 <Header>
 	{#if isPreview}
@@ -58,15 +98,27 @@
 		<TitleError />
 	{/if}
 </Header>
+
 <Content>
 	<SurveyForm
 		{isPreview}
 		groups={data.group_list}
 		users={data.user_list}
+		numDrafts={data.numDrafts}
 		bind:isDraftModalHidden
 		bind:isRespondentModalHidden
+		bind:invalidEmails
+		bind:isExportButtonVisible
 	/>
 </Content>
+
 <Footer>
-	<FooterButtons bind:isPreview bind:isDraftModalHidden bind:isRespondentModalHidden />
+	<FooterButtons
+		numSurveys={data.numSurveys}
+		numDrafts={data.numDrafts}
+		bind:isPreview
+		bind:isDraftModalHidden
+		bind:isRespondentModalHidden
+		bind:isExportButtonVisible
+	/>
 </Footer>

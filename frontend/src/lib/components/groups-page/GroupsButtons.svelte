@@ -12,8 +12,11 @@
 		ENTRIES_PER_PAGE,
 		errorModalContent,
 		isErrorModalHidden,
+		isWarningModalHidden,
 		LIMIT_OF_CHARS,
-		M
+		LIMIT_OF_GROUPS,
+		M,
+		warningModalContent
 	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
@@ -22,6 +25,7 @@
 	import Input from '$lib/components/global/Input.svelte';
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
+	import WarningModal from '../global/WarningModal.svelte';
 
 	export let groups: {
 		user_group_name: string;
@@ -30,6 +34,8 @@
 	export let users: string[];
 	export let numGroups: number;
 	export let selectedGroupsToRemove: string[] = [];
+	export let invalidEmails: string[] = [];
+	export let isExportButtonVisible: boolean = false;
 
 	let isPanelVisible: boolean = false;
 	let groupName: string = '';
@@ -82,6 +88,14 @@
 	}
 
 	async function createGroup() {
+		if (numGroups >= $LIMIT_OF_GROUPS) {
+			isExportButtonVisible = false;
+			$warningModalContent =
+				'You have reached the maximum number of groups you can create. Please delete some groups to create new ones.';
+			$isWarningModalHidden = false;
+			return;
+		}
+
 		const name = groupName.trim();
 
 		if (!(await checkCorrectness(name, groupMembers))) return;
@@ -145,6 +159,12 @@
 </script>
 
 <svelte:window bind:innerWidth />
+
+<WarningModal
+	{isExportButtonVisible}
+	emails={invalidEmails}
+	--width-warning={innerWidth <= $M ? '20em' : '22em'}
+/>
 
 <DeleteModal title="Deleting Groups" bind:isHidden={isModalHidden} deleteEntries={deleteGroups} />
 
@@ -220,6 +240,8 @@
 			label="Or import group members from a .csv file."
 			id="emails-file"
 			checkKeys={false}
+			bind:invalidEmails
+			bind:isExportButtonVisible
 		/>
 	</div>
 {/if}

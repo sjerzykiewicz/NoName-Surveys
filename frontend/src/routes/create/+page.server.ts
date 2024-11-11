@@ -1,5 +1,10 @@
 import type { PageServerLoad } from './$types';
-import { getUserGroupsWithKeys, getUsersWithKeys } from '$lib/server/database';
+import {
+	getUserGroupsWithKeys,
+	getUsersWithKeys,
+	countSurveyDrafts,
+	countSurveys
+} from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent }) => {
@@ -20,5 +25,17 @@ export const load: PageServerLoad = async ({ parent }) => {
 	}
 	const user_list: string[] = await usersResponse.json();
 
-	return { group_list, user_list };
+	const draftCountResponse = await countSurveyDrafts(session.user!.email!);
+	if (!draftCountResponse.ok) {
+		error(draftCountResponse.status, { message: await draftCountResponse.json() });
+	}
+	const numDrafts = await draftCountResponse.json();
+
+	const surveyCountResponse = await countSurveys(session.user!.email!);
+	if (!surveyCountResponse.ok) {
+		error(surveyCountResponse.status, { message: await surveyCountResponse.json() });
+	}
+	const numSurveys = await surveyCountResponse.json();
+
+	return { group_list, user_list, numDrafts, numSurveys };
 };

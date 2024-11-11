@@ -17,6 +17,7 @@
 	export let checkKeys: boolean;
 	export let disabled: boolean = false;
 	export let invalidEmails: string[] = [];
+	export let isExportButtonVisible: boolean = false;
 
 	let fileElement: HTMLInputElement | null = null;
 	let fileName: string = 'No file selected';
@@ -53,6 +54,7 @@
 		invalidEmails = Array.from(invalidEmailsSet);
 
 		if (invalidEmailsSet.size > 0 && $isErrorModalHidden) {
+			isExportButtonVisible = true;
 			$warningModalContent = `Could not import ${invalidEmailsSet.size} users, because they haven't ${checkKeys ? 'generated keys' : 'registered'} yet. You can export the list of invalid users if you want.`;
 			$isWarningModalHidden = false;
 		}

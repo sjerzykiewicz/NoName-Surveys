@@ -23,25 +23,34 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { getDraft } from '$lib/utils/getDraft';
-	import { trimQuestions } from '$lib/utils/trimQuestions';
 	import Modal from '$lib/components/global/Modal.svelte';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import { popup } from '$lib/utils/popup';
-	import { errorModalContent, isErrorModalHidden, S, M } from '$lib/stores/global';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		S,
+		M,
+		LIMIT_OF_DRAFTS,
+		warningModalContent,
+		isWarningModalHidden
+	} from '$lib/stores/global';
 	import SelectGroup from './SelectGroup.svelte';
 	import SelectUsers from './SelectUsers.svelte';
 	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { onMount } from 'svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
-	import WarningModal from '$lib/components/global/WarningModal.svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	export let users: string[];
 	export let groups: string[];
+	export let numDrafts: number;
 	export let isPreview: boolean;
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
 	export let invalidEmails: string[] = [];
+	export let isExportButtonVisible: boolean = false;
 
 	let cryptoError: boolean = false;
 	let questionInput: HTMLDivElement;
@@ -67,15 +76,16 @@
 	async function saveDraft(overwrite: boolean) {
 		isDraftModalHidden = true;
 
-		$title.title = $title.title.trim();
-		$questions = trimQuestions($questions);
-
-		const parsedSurvey = new Survey(constructQuestionList($questions));
-		const draftInfo = new DraftCreateInfo(
-			$page.data.session!.user!.email!,
-			$title.title,
-			parsedSurvey
-		);
+		if (
+			(overwrite && numDrafts > $LIMIT_OF_DRAFTS) ||
+			(!overwrite && numDrafts >= $LIMIT_OF_DRAFTS)
+		) {
+			isExportButtonVisible = false;
+			$warningModalContent =
+				'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
+			$isWarningModalHidden = false;
+			return;
+		}
 
 		if (overwrite) {
 			const deleteResponse = await fetch('/api/surveys/drafts/delete', {
@@ -93,6 +103,13 @@
 				return;
 			}
 		}
+
+		const parsedSurvey = new Survey(constructQuestionList($questions));
+		const draftInfo = new DraftCreateInfo(
+			$page.data.session!.user!.email!,
+			$title.title,
+			parsedSurvey
+		);
 
 		const createResponse = await fetch('/api/surveys/drafts/create', {
 			method: 'POST',
@@ -112,6 +129,7 @@
 		$currentDraftId = await createResponse.json();
 		$draftStructure = getDraft($title.title, $questions);
 		popup('draft-popup');
+		await invalidateAll();
 	}
 
 	async function fetchGroup(name: string) {
@@ -180,6 +198,7 @@
 		$selectedGroup = [];
 		surveyCode = body.survey_code;
 		isSurveyModalHidden = false;
+		await invalidateAll();
 	}
 
 	let innerWidth: number;
@@ -214,12 +233,6 @@
 </script>
 
 <svelte:window bind:innerWidth />
-
-<WarningModal
-	isExportButtonVisible={true}
-	emails={invalidEmails}
-	--width-warning={innerWidth <= $M ? '20em' : '23em'}
-/>
 
 <Modal
 	icon="save"
@@ -277,6 +290,7 @@
 					--width="100%"
 					bind:disabled={isCryptoDisabled}
 					bind:invalidEmails
+					bind:isExportButtonVisible
 				/>
 			</div>
 		</div>

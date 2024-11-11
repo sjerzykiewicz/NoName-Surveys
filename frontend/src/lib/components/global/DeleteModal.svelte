@@ -29,9 +29,7 @@
 <svelte:window bind:innerWidth />
 
 <Modal icon="delete" {title} bind:isHidden --width={innerWidth <= $M ? '20em' : '22em'}>
-	<span slot="content"
-		>Are you sure you want to delete selected entries? You cannot undo this action.</span
-	>
+	<span slot="content">Are you sure you want to delete selected entries?</span>
 	<button
 		title="Delete"
 		class="save"

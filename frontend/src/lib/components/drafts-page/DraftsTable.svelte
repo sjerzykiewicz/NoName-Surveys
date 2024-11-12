@@ -163,7 +163,8 @@
 							question: q.question,
 							choices: [
 								(q as SliderQuestion).min_value.toString(),
-								(q as SliderQuestion).max_value.toString()
+								(q as SliderQuestion).max_value.toString(),
+								(q as SliderQuestion).precision.toString()
 							],
 							error: SurveyError.NoError
 						}

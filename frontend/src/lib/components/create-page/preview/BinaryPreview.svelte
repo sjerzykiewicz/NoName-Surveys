@@ -46,8 +46,12 @@
 		cursor: pointer;
 	}
 
+	.choice-input {
+		margin-top: 0.5em;
+	}
+
 	i {
-		font-size: 1em;
+		font-size: 1.25em;
 	}
 
 	.selected i {

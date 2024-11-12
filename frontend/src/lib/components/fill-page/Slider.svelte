@@ -3,10 +3,16 @@
 
 	export let questionIndex: number;
 
-	let value: number = Math.round(
-		(parseFloat($questions[questionIndex].choices[0]) +
-			parseFloat($questions[questionIndex].choices[1])) /
-			2
+	let value: number = parseFloat(
+		(
+			Math.round(
+				Math.round(
+					(parseFloat($questions[questionIndex].choices[0]) +
+						parseFloat($questions[questionIndex].choices[1])) /
+						2
+				) / parseFloat($questions[questionIndex].choices[2])
+			) * parseFloat($questions[questionIndex].choices[2])
+		).toFixed(3)
 	);
 
 	$answers[questionIndex].choices[0] = value.toString();
@@ -17,7 +23,12 @@
 				value = parseFloat($questions[questionIndex].choices[0]);
 			} else if (value > parseFloat($questions[questionIndex].choices[1])) {
 				value = parseFloat($questions[questionIndex].choices[1]);
+			} else if (value % parseFloat($questions[questionIndex].choices[2]) !== 0) {
+				value =
+					Math.round(value / parseFloat($questions[questionIndex].choices[2])) *
+					parseFloat($questions[questionIndex].choices[2]);
 			}
+			value = parseFloat(value.toFixed(3));
 			$answers[questionIndex].choices[0] = value.toString();
 		}
 	}

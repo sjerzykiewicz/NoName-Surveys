@@ -41,6 +41,10 @@
 			outline 0s;
 	}
 
+	.choice-input {
+		margin-top: 0.5em;
+	}
+
 	.selected .choice-input,
 	.selected .choice-input:hover {
 		background-color: var(--secondary-color-2);
@@ -54,7 +58,7 @@
 	}
 
 	i {
-		font-size: 1em;
+		font-size: 1.25em;
 	}
 
 	.selected i {

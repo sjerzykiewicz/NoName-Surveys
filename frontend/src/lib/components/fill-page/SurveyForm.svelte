@@ -6,7 +6,7 @@
 	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
 	import { SingleQuestion, SingleQuestionAnswered } from '$lib/entities/questions/Single';
 	import { SliderQuestionAnswered, type SliderQuestion } from '$lib/entities/questions/Slider';
-	import { NumberQuestionAnswered } from '$lib/entities/questions/Number';
+	import { NumberQuestion, NumberQuestionAnswered } from '$lib/entities/questions/Number';
 	import type Survey from '$lib/entities/surveys/Survey';
 	import type Question from '$lib/entities/questions/Question';
 	import { MultiQuestionAnswered } from '$lib/entities/questions/Multi';
@@ -92,9 +92,13 @@
 				$questions[i].choices = ['1', '2', '3', '4', '5'];
 				break;
 			case 'slider':
-			case 'number':
 				$questions[i].choices[0] = (survey.questions[i] as SliderQuestion).min_value.toString();
 				$questions[i].choices[1] = (survey.questions[i] as SliderQuestion).max_value.toString();
+				$questions[i].choices[2] = (survey.questions[i] as SliderQuestion).precision.toString();
+				break;
+			case 'number':
+				$questions[i].choices[0] = (survey.questions[i] as NumberQuestion).min_value.toString();
+				$questions[i].choices[1] = (survey.questions[i] as NumberQuestion).max_value.toString();
 				break;
 			default:
 				$questions[i].choices = (survey.questions[i] as SingleQuestion).choices;
@@ -173,6 +177,7 @@
 						$questions[i].question,
 						parseFloat($questions[i].choices[0]),
 						parseFloat($questions[i].choices[1]),
+						parseFloat($questions[i].choices[2]),
 						parseFloat($answers[i].choices[0])
 					);
 					break;

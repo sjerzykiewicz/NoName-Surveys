@@ -19,28 +19,13 @@
 			$questions[questionIndex].choices[i] = max.toString();
 		}
 	}
-
-	$: value = Math.round(
-		(parseFloat($questions[questionIndex].choices[0]) +
-			parseFloat($questions[questionIndex].choices[1])) /
-			2
-	);
 </script>
 
 <svelte:window bind:innerWidth />
 
 <div class="choice-area slider" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="slider-area">
-		<input
-			class="range"
-			type="range"
-			min={$questions[questionIndex].choices[0]}
-			max={$questions[questionIndex].choices[1]}
-			step={$questions[questionIndex].choices[2]}
-			name={questionIndex.toString()}
-			disabled
-			bind:value
-		/>
+		<input class="range" type="range" name={questionIndex.toString()} disabled />
 	</div>
 	<div class="limits">
 		<label class="min">

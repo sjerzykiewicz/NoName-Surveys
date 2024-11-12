@@ -28,11 +28,12 @@ export const POST: RequestHandler = async ({ cookies }) => {
 			headers: oauth.toHeader(oauthData)
 		});
 
+		cookies.delete('user_session', { path: '/' });
+		cookies.delete('oauth_token_secret', { path: '/' });
+
 		if (!response.ok) {
 			throw error(response.status, 'Failed to revoke access token');
 		}
-
-		cookies.delete('user_session', { path: '/' });
 
 		throw redirect(302, '/account');
 	} catch (err) {

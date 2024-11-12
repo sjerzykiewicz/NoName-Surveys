@@ -11,9 +11,10 @@
 	import Number from './Number.svelte';
 	import type { ComponentType } from 'svelte';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import type SurveySummary from '$lib/entities/surveys/SurveySummary';
 
-	export let answer;
-	export let id: string;
+	export let answer: SurveySummary;
+	export let id: number;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -28,8 +29,8 @@
 	};
 </script>
 
-<div title="Answer no. {parseFloat(id) + 1}" class="title answers">
-	{parseFloat(id) + 1}. Answer
+<div title="Answer no. {id + 1}" class="title answers">
+	{id + 1}. Answer
 </div>
 {#each answer.questions as question, questionIndex}
 	<div class="question">

@@ -5,7 +5,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		session: locals.user
 			? {
 					user: {
-						email: locals.user?.email
+						email: locals.user?.email as string
 					}
 				}
 			: null

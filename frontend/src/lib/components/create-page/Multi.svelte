@@ -3,10 +3,8 @@
 	import { afterUpdate, tick } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
-	import { LIMIT_OF_CHARS } from '$lib/stores/global';
-	import { limitInput } from '$lib/utils/limitInput';
 	import { M } from '$lib/stores/global';
+	import Input from '$lib/components/global/Input.svelte';
 
 	export let questionIndex: number;
 
@@ -39,46 +37,25 @@
 
 <svelte:window bind:innerWidth />
 
-<div
-	class="choice-area"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice">
 			<div class="checkbox">
 				<input type="checkbox" disabled name={questionIndex.toString()} />
 			</div>
-			<div class="input-container" class:max={choice.length > $LIMIT_OF_CHARS}>
-				<div
-					title="Enter choice"
-					class="choice-input"
-					contenteditable
-					bind:textContent={choice}
-					bind:this={choiceInput}
-					role="textbox"
-					tabindex="0"
-					on:keydown={(e) => {
-						handleNewLine(e);
-						limitInput(e, choice, $LIMIT_OF_CHARS);
-					}}
-				>
-					{choice}
-				</div>
-				<span class="char-count">{choice.length} / {$LIMIT_OF_CHARS}</span>
-			</div>
+			<Input bind:text={choice} label="Choice" title="Enter a choice" bind:element={choiceInput} />
 			<button
 				title="Remove choice"
 				class="remove-choice"
 				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
-				<i class="material-symbols-rounded">cancel</i>
+				<i class="symbol">delete</i>
 			</button>
 		</div>
 	{/each}
 	<button title="Add choice" class="add-choice" on:click={addChoice}>
-		<i class="material-symbols-rounded">add_circle</i>Choice
+		<i class="symbol">add</i>Choice
 	</button>
 </div>
 

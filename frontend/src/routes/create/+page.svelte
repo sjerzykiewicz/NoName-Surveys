@@ -1,13 +1,12 @@
 <script lang="ts">
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
+	import Footer from '$lib/components/global/Footer.svelte';
 	import SurveyTitle from '$lib/components/create-page/SurveyTitle.svelte';
 	import SurveyTitlePreview from '$lib/components/create-page/preview/SurveyTitlePreview.svelte';
 	import TitleError from '$lib/components/create-page/TitleError.svelte';
 	import SurveyForm from '$lib/components/create-page/SurveyForm.svelte';
 	import FooterButtons from '$lib/components/create-page/FooterButtons.svelte';
-	import type { PageServerData } from './$types';
 	import { beforeNavigate } from '$app/navigation';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
@@ -23,8 +22,8 @@
 		draftStructure
 	} from '$lib/stores/create-page';
 
+	export let data;
 	export let isPreview: boolean;
-	export let data: PageServerData;
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
 

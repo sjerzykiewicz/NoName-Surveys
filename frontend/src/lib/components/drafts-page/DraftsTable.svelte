@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { SurveyError } from '$lib/entities/SurveyError';
 	import type { BinaryQuestion } from '$lib/entities/questions/Binary';
 	import type { ListQuestion } from '$lib/entities/questions/List';
@@ -10,25 +10,24 @@
 	import type { TextQuestion } from '$lib/entities/questions/Text';
 	import type { NumberQuestion } from '$lib/entities/questions/Number';
 	import { title, questions, currentDraftId, draftStructure } from '$lib/stores/create-page';
-	import Binary from '../create-page/Binary.svelte';
-	import List from '../create-page/List.svelte';
-	import Multi from '../create-page/Multi.svelte';
-	import Rank from '../create-page/Rank.svelte';
-	import Scale from '../create-page/Scale.svelte';
-	import Single from '../create-page/Single.svelte';
-	import Slider from '../create-page/Slider.svelte';
-	import Text from '../create-page/Text.svelte';
-	import Number from '../create-page/Number.svelte';
-	import SinglePreview from '../create-page/preview/SinglePreview.svelte';
-	import MultiPreview from '../create-page/preview/MultiPreview.svelte';
-	import ScalePreview from '../create-page/preview/ScalePreview.svelte';
-	import SliderPreview from '../create-page/preview/SliderPreview.svelte';
-	import ListPreview from '../create-page/preview/ListPreview.svelte';
-	import RankPreview from '../create-page/preview/RankPreview.svelte';
-	import BinaryPreview from '../create-page/preview/BinaryPreview.svelte';
-	import TextPreview from '../create-page/preview/TextPreview.svelte';
-	import NumberPreview from '../create-page/preview/NumberPreview.svelte';
-	import { page } from '$app/stores';
+	import Binary from '$lib/components/create-page/Binary.svelte';
+	import List from '$lib/components/create-page/List.svelte';
+	import Multi from '$lib/components/create-page/Multi.svelte';
+	import Rank from '$lib/components/create-page/Rank.svelte';
+	import Scale from '$lib/components/create-page/Scale.svelte';
+	import Single from '$lib/components/create-page/Single.svelte';
+	import Slider from '$lib/components/create-page/Slider.svelte';
+	import Text from '$lib/components/create-page/Text.svelte';
+	import Number from '$lib/components/create-page/Number.svelte';
+	import SinglePreview from '$lib/components/create-page/preview/SinglePreview.svelte';
+	import MultiPreview from '$lib/components/create-page/preview/MultiPreview.svelte';
+	import ScalePreview from '$lib/components/create-page/preview/ScalePreview.svelte';
+	import SliderPreview from '$lib/components/create-page/preview/SliderPreview.svelte';
+	import ListPreview from '$lib/components/create-page/preview/ListPreview.svelte';
+	import RankPreview from '$lib/components/create-page/preview/RankPreview.svelte';
+	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
+	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
+	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
 	import type Question from '$lib/entities/questions/Question';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
@@ -39,50 +38,25 @@
 		title: string;
 		creation_date: string;
 	}[];
+	export let selectedDraftsToRemove: number[] = [];
 
-	let selectedDraftsToRemove: typeof drafts = [];
+	$: draftIds = drafts.map((d) => d.id);
 
 	$: allSelected =
-		selectedDraftsToRemove.length === drafts.length && selectedDraftsToRemove.length > 0;
+		selectedDraftsToRemove.length === draftIds.length && selectedDraftsToRemove.length > 0;
 
 	function toggleAll() {
-		selectedDraftsToRemove = allSelected ? [] : [...drafts];
+		selectedDraftsToRemove = allSelected ? [] : [...draftIds];
 	}
 
 	function formatDate(isoString: string): string {
 		return new Date(isoString).toLocaleString();
 	}
 
-	async function deleteDrafts() {
-		selectedDraftsToRemove.forEach(async (draft, i) => {
-			const response = await fetch('/api/surveys/drafts/delete', {
-				method: 'POST',
-				body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: draft.id }),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!response.ok) {
-				const body = await response.json();
-				$errorModalContent = getErrorMessage(body.detail);
-				$isErrorModalHidden = false;
-				return;
-			}
-
-			drafts.splice(i, 1);
-		});
-
-		$title.title = '';
-		$questions = [];
-		selectedDraftsToRemove = [];
-		invalidateAll();
-	}
-
 	async function loadDraft(draft: { id: number; title: string }) {
 		const response = await fetch('/api/surveys/drafts/fetch', {
 			method: 'POST',
-			body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: draft.id }),
+			body: JSON.stringify({ id: draft.id }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -227,7 +201,7 @@
 			}
 		});
 		$draftStructure = getDraft($title.title, $questions);
-		goto('/create');
+		await goto('/create');
 	}
 
 	let innerWidth: number;
@@ -239,7 +213,7 @@
 	<div class="info-row">
 		<div title="Drafts" class="title empty">No drafts yet!</div>
 		<div class="tooltip">
-			<i class="material-symbols-rounded">info</i>
+			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 				When creating a survey, you can save it as a draft for later use. To create a survey, click
 				on the "Create" tab at the top of the page or the button below. All your saved drafts will
@@ -267,32 +241,17 @@
 			<tr>
 				<td title="Select {draft.title}" class="checkbox-entry"
 					><label>
-						<input type="checkbox" bind:group={selectedDraftsToRemove} value={draft} />
+						<input type="checkbox" bind:group={selectedDraftsToRemove} value={draft.id} />
 					</label></td
 				>
-				<td title="Open the draft" class="title-entry" on:click={() => loadDraft(draft)}
-					>{draft.title}</td
+				<td title="Open the draft" class="title-entry"
+					><button on:click={() => loadDraft(draft)}>{draft.title}</button></td
 				>
 				<td title="Creation date" class="date-entry">{formatDate(draft.creation_date)}</td>
 			</tr>
 		{/each}
 	</table>
 {/if}
-<div class="button-row">
-	<button title="Create a draft" class="add-draft" on:click={() => goto('/create')}>
-		<i class="material-symbols-rounded">add</i>Draft
-	</button>
-	{#if drafts.length > 0}
-		<button
-			title="Delete selected drafts"
-			class="delete-draft"
-			disabled={selectedDraftsToRemove.length === 0}
-			on:click={deleteDrafts}
-		>
-			<i class="material-symbols-rounded">delete</i>Delete
-		</button>
-	{/if}
-</div>
 
 <style>
 	#date-header {

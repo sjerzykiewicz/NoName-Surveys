@@ -23,7 +23,7 @@
 
 <div class="sign-buttons">
 	<button title={$t('account_sign_out')} class="sign-out" on:click={() => signOut()}
-		><i class="material-symbols-rounded">logout</i><Tx text="account_sign_out"></Tx>
+		><i class="symbol">logout</i><Tx text="account_sign_out"></Tx>
 	</button>
 </div>
 

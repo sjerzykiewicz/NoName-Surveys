@@ -9,5 +9,6 @@ COPY ./pyproject.toml ./poetry.lock* /app/
 
 COPY . .
 
+RUN poetry lock
 RUN poetry install --no-root
 CMD ["poetry", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]

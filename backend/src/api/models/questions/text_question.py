@@ -26,6 +26,3 @@ class TextQuestion(Question):
             or self.details != answer.details
         ):
             raise ValueError("Invalid answer!")
-
-    class Config:
-        extra = "forbid"

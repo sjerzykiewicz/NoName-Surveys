@@ -18,11 +18,7 @@
 	}
 </script>
 
-<div
-	class="choice-area display"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
->
+<div class="choice-area display" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div title="Answer no. {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
@@ -33,7 +29,7 @@
 					disabled={choiceIndex === 0}
 					on:click={() => moveChoiceUp(choiceIndex)}
 				>
-					<i class="material-symbols-rounded">arrow_drop_up</i>
+					<i class="symbol">keyboard_arrow_up</i>
 				</button>
 				<button
 					title="Move answer down"
@@ -41,7 +37,7 @@
 					disabled={choiceIndex === $questions[questionIndex].choices.length - 1}
 					on:click={() => moveChoiceDown(choiceIndex)}
 				>
-					<i class="material-symbols-rounded">arrow_drop_down</i>
+					<i class="symbol">keyboard_arrow_down</i>
 				</button>
 			</div>
 			<div class="choice-input display">
@@ -54,7 +50,10 @@
 <style>
 	.choice-input,
 	.choice-input:hover {
-		background-color: var(--primary-dark-color);
+		background-color: var(--primary-color-2);
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 </style>

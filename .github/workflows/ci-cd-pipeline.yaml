@@ -1,0 +1,143 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+  push:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+jobs:
+  test-frontend:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Setup backend
+        working-directory: ./backend
+        run: |
+          docker build . --file Dockerfile --tag noname-surveys-backend:latest
+          docker run -d -p 8000:8000 --name noname-surveys-backend noname-surveys-backend:latest
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate env file
+        run: |
+          echo "BACKEND_HOST=http://localhost:8000" >> .env
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
+
+  test-backend:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+
+      - name: Install dependencies
+        run: |
+          poetry lock
+          poetry install
+
+      - name: Run backend tests
+        run: make test
+
+  dockerize:
+    needs: [test-frontend, test-backend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set Docker tags
+        id: tags
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "FRONTEND_TAG=main" >> $GITHUB_ENV
+            echo "BACKEND_TAG=main" >> $GITHUB_ENV
+          else
+            echo "FRONTEND_TAG=dev" >> $GITHUB_ENV
+            echo "BACKEND_TAG=dev" >> $GITHUB_ENV
+          fi
+
+      - name: Build and push frontend Docker image
+        run: |
+          docker build ./frontend/. --file ./frontend/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-frontend:${{ env.FRONTEND_TAG }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-frontend:${{ env.FRONTEND_TAG }}
+
+      - name: Build and push backend Docker image
+        run: |
+          docker build ./backend/. --file ./backend/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-backend:${{ env.BACKEND_TAG }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-backend:${{ env.BACKEND_TAG }}
+
+  deploy:
+    needs: dockerize
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set Docker tags
+        id: tags
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "FRONTEND_TAG=main" >> $GITHUB_ENV
+            echo "BACKEND_TAG=main" >> $GITHUB_ENV
+          else
+            echo "FRONTEND_TAG=dev" >> $GITHUB_ENV
+            echo "BACKEND_TAG=dev" >> $GITHUB_ENV
+          fi
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Deploy to Minikube via kubectl
+        run: |
+          ssh -p 443 -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_ADDRESS }} <<EOF
+            kubectl set image deployment/frontend frontend=${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-frontend:${{ env.FRONTEND_TAG }} --namespace=default
+            kubectl set image deployment/backend backend=${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-backend:${{ env.BACKEND_TAG }} --namespace=default
+            kubectl rollout restart deployment/frontend
+            kubectl rollout restart deployment/backend
+          EOF

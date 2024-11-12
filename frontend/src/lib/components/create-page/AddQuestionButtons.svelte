@@ -40,8 +40,8 @@
 		Binary,
 		Number,
 		Slider,
-		Rank,
-		List
+		List,
+		Rank
 	];
 
 	function getPreviewComponent(component: ComponentType) {
@@ -150,15 +150,25 @@
 	}
 
 	onMount(() => {
-		function handleClick(event: MouseEvent) {
-			if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
+		function handleEscape(event: KeyboardEvent) {
+			if (isPanelVisible && event.key === 'Escape') {
 				isPanelVisible = false;
+				event.stopImmediatePropagation();
 			}
 		}
 
+		function handleClick(event: MouseEvent) {
+			if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
+				isPanelVisible = false;
+				event.stopImmediatePropagation();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEscape);
 		document.body.addEventListener('click', handleClick);
 
 		return () => {
+			document.body.removeEventListener('keydown', handleEscape);
 			document.body.removeEventListener('click', handleClick);
 		};
 	});
@@ -177,7 +187,7 @@
 			class:previous={$previousQuestion}
 			on:click={togglePanel}
 		>
-			<i class="material-symbols-rounded">add</i>Question
+			<i class="symbol">add</i>Question
 		</button>
 		{#if $previousQuestion}
 			<QuestionTypeButton
@@ -216,34 +226,32 @@
 		width: fit-content;
 		font-size: 1.25em;
 		margin-right: 0.5em;
-		margin-bottom: 0.5em;
 	}
 
 	.add-buttons {
 		display: flex;
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
+		box-shadow: 0px 4px 4px var(--shadow-color-1);
 	}
 
 	.add-question {
 		transition:
-			background-color 0.2s,
-			color 0.2s,
-			border-radius 0.2s;
+			0.2s,
+			outline 0s;
 	}
 
 	.add-question.clicked {
-		background-color: var(--primary-dark-color);
+		background-color: var(--primary-color-2);
 		border-bottom-right-radius: 0px;
 		border-bottom-left-radius: 0px;
 	}
 
 	.add-question.clicked:hover {
-		background-color: var(--secondary-color);
+		background-color: var(--secondary-color-1);
 	}
 
 	.add-question.clicked:active {
-		background-color: var(--border-color);
+		background-color: var(--border-color-1);
 	}
 
 	.add-question.previous {
@@ -255,7 +263,7 @@
 		display: flex;
 		flex-flow: column;
 		border-radius: 0px 0px 5px 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
+		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		width: fit-content;
 		height: auto;
 		position: absolute;

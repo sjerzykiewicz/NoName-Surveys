@@ -8,11 +8,7 @@
 	let checked: number;
 </script>
 
-<div
-	class="choice-area display scale"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
->
+<div class="choice-area display scale" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<label title="Select your answer" class="choice scale">
 			<input

@@ -9,7 +9,14 @@ export const XL: Readable<number> = readable(1440);
 export const LIMIT_OF_SURVEYS: Readable<number> = readable(50);
 export const LIMIT_OF_DRAFTS: Readable<number> = readable(50);
 export const LIMIT_OF_GROUPS: Readable<number> = readable(50);
-export const LIMIT_OF_CHARS: Readable<number> = readable(5000);
+export const LIMIT_OF_CHARS: Readable<number> = readable(1000);
+export const ENTRIES_PER_PAGE: Readable<number> = readable(10);
 
 export const isErrorModalHidden: Writable<boolean> = writable(true);
 export const errorModalContent: Writable<string> = writable('');
+
+export const isWarningModalHidden: Writable<boolean> = writable(true);
+export const warningModalContent: Writable<string> = writable('');
+
+export const isSuccessModalHidden: Writable<boolean> = writable(true);
+export const successModalContent: Writable<string> = writable('');

@@ -3,7 +3,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 
-	export let unansweredRequired: Array<number>;
+	export let unansweredRequired: Set<number>;
 	export let questionIndex: number;
 
 	function errorMessage(i: number) {
@@ -12,26 +12,21 @@
 
 	$: checkAnswerError = (i: number) => {
 		return (
-			unansweredRequired.includes(questionIndex) &&
+			unansweredRequired.has(questionIndex) &&
 			($answers[i].choices.length === 0 ||
 				$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0))
 		);
 	};
 </script>
 
-<div
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
-	{#if checkAnswerError(questionIndex)}
-		<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<i class="material-symbols-rounded">error</i>{errorMessage(questionIndex)}
-		</p>
-	{/if}
-</div>
+{#if checkAnswerError(questionIndex)}
+	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<i class="symbol">error</i>{errorMessage(questionIndex)}
+	</p>
+{/if}
 
 <style>
 	.error {
-		margin: -1em 0em 0.5em 2.8em;
+		margin: var(--margin-top, -1em) 0em 0.5em 2.8em;
 	}
 </style>

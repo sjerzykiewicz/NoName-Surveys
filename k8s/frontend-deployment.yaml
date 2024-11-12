@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.24.0 (4a2a0458)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: frontend
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: frontend
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.24.0 (4a2a0458)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: frontend
+    spec:
+      containers:
+        - image: sjerzykiewicz/noname-surveys-frontend:dev
+          imagePullPolicy: Always
+          name: frontend
+          ports:
+            - containerPort: 3000
+          env:
+            - name: ORIGIN
+              value: "https://noname-stage.projektstudencki.pl"
+            - name: BACKEND_HOST
+              value: "http://backend:8000"
+            - name: AUTH_USOS_ID
+              valueFrom:
+                secretKeyRef:
+                  name: frontend
+                  key: AUTH_USOS_ID
+            - name: AUTH_USOS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: frontend
+                  key: AUTH_USOS_SECRET
+            - name: AUTH_USOS_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: frontend
+                  key: AUTH_USOS_BASE_URL
+          resources: {}
+      restartPolicy: Always
+status: {}

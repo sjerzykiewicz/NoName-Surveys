@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { title, questions, answers } from '$lib/stores/fill-page';
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
+	import Footer from '$lib/components/global/Footer.svelte';
 	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
 	import { SingleQuestion, SingleQuestionAnswered } from '$lib/entities/questions/Single';
 	import { SliderQuestionAnswered, type SliderQuestion } from '$lib/entities/questions/Slider';
@@ -14,7 +14,7 @@
 	import { RankQuestionAnswered } from '$lib/entities/questions/Rank';
 	import { ListQuestionAnswered } from '$lib/entities/questions/List';
 	import { ScaleQuestionAnswered } from '$lib/entities/questions/Scale';
-	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
+	import SurveyAnswer from '$lib/entities/surveys/SurveyAnswer';
 	import QuestionTitle from './QuestionTitle.svelte';
 	import Single from './Single.svelte';
 	import Text from './Text.svelte';
@@ -35,21 +35,32 @@
 	import { onMount, tick } from 'svelte';
 	import init, { linkable_ring_signature } from 'wasm';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
-	import Modal from '$lib/components/Modal.svelte';
-	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
+	import Modal from '$lib/components/global/Modal.svelte';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		successModalContent,
+		isSuccessModalHidden,
+		M
+	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { FileError } from '$lib/entities/FileError';
+	import KeysError from './KeysError.svelte';
+	import { readFile } from '$lib/utils/readFile';
+	import SuccessModal from '$lib/components/global/SuccessModal.svelte';
 
 	onMount(async () => {
 		await init();
 	});
 
+	export let survey_title: string;
 	export let survey: Survey;
+	export let code: string;
 	export let uses_crypto: boolean;
 	export let keys: Array<string>;
-	export let code: string;
 
 	let innerWidth: number;
-	let isModalHidden: boolean = true;
+	let isKeysModalHidden: boolean = true;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -63,7 +74,7 @@
 		list: List
 	};
 
-	$title = survey.title;
+	$title = survey_title;
 
 	for (let i in survey.questions) {
 		$questions[i] = {
@@ -179,28 +190,90 @@
 		return answerList;
 	}
 
-	let unansweredRequired: Array<number> = [];
+	let unansweredRequired: Set<number> = new Set();
 
-	async function processForm(keyPair: KeyPair | undefined) {
-		unansweredRequired = [];
+	async function checkAnswerCorrectness() {
+		unansweredRequired = new Set();
 		for (let i = 0; i < numQuestions; i++) {
 			if ($questions[i].required) {
 				if ($answers[i].choices.length === 0) {
-					unansweredRequired.push(i);
+					unansweredRequired.add(i);
 				} else if (
 					$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0)
 				) {
-					unansweredRequired.push(i);
+					unansweredRequired.add(i);
 				}
 			}
 		}
 
-		if (unansweredRequired.length > 0) {
+		if (unansweredRequired.size > 0) {
 			await tick();
-			scrollToElementById(unansweredRequired[0].toString());
+			const [first] = unansweredRequired;
+			scrollToElementById(first.toString());
+			return false;
+		}
+
+		return true;
+	}
+
+	let fileElement: HTMLInputElement | null = null;
+	let fileName: string = 'No file selected';
+	let fileError: FileError = FileError.NoError;
+
+	function handleFileChange() {
+		fileElement = document.querySelector<HTMLInputElement>('#keys-file');
+		fileName = fileElement?.files?.[0]?.name ?? 'No file selected';
+	}
+
+	function checkFileCorrectness() {
+		fileError = FileError.NoError;
+
+		if (fileElement?.files?.length === 0) {
+			fileError = FileError.FileRequired;
+			return false;
+		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'pem') {
+			fileError = FileError.FileInvalid;
+			return false;
+		}
+
+		return true;
+	}
+
+	async function processCrypto() {
+		if (!checkFileCorrectness()) return;
+
+		const text = await readFile(fileElement).then(
+			(resolve) => {
+				return resolve;
+			},
+			(reject) => {
+				$errorModalContent = reject as string;
+				$isErrorModalHidden = false;
+				return '';
+			}
+		);
+
+		let keyPair: KeyPair = getKeys(text);
+
+		if (!keys.includes(keyPair.publicKey)) {
+			$errorModalContent = 'Your public key is not on the list.';
+			$isErrorModalHidden = false;
 			return;
 		}
 
+		processForm(keyPair);
+	}
+
+	function getKeys(text: string): KeyPair {
+		const words = text.split('\n\n');
+
+		let publicKey = words[0] + '\n';
+		let privateKey = words[1];
+
+		return new KeyPair(privateKey, publicKey);
+	}
+
+	async function processForm(keyPair: KeyPair | undefined) {
 		let signature: string[] = [];
 
 		const answerList: Array<Question> = constructAnswerList();
@@ -236,69 +309,66 @@
 			return;
 		}
 
-		isModalHidden = false;
+		isKeysModalHidden = true;
+		$successModalContent = 'Your answer has been submitted successfully.';
+		$isSuccessModalHidden = false;
 	}
 
-	function getKeys(text: string): KeyPair {
-		const words = text.split('\n');
-
-		let publicKey = words[0];
-		let privateKey = words[1];
-
-		return new KeyPair(privateKey, publicKey);
+	async function submitSurvey() {
+		if (!(await checkAnswerCorrectness())) return;
+		if (uses_crypto) isKeysModalHidden = false;
+		else processForm(undefined);
 	}
 
-	function processCrypto() {
-		const keyInput = document.querySelector<HTMLInputElement>('#keys-file');
+	async function hideSuccessModal() {
+		$isSuccessModalHidden = true;
+		await goto('/', { replaceState: true, invalidateAll: true });
+	}
 
-		const keysReader = new FileReader();
-		const keysFile = keyInput?.files?.[0];
-		try {
-			keysReader.readAsText(keysFile!);
-		} catch {
-			$errorModalContent = 'No key file has been provided.';
-			$isErrorModalHidden = false;
-			return;
-		}
-		let keyPair: KeyPair | undefined;
-		keysReader.onload = (e) => {
-			const fileData = e.target?.result;
-			const text = fileData as string;
-			keyPair = getKeys(text);
-			if (!keys.includes(keyPair.publicKey)) {
-				$errorModalContent = 'Your public key is not on the list.';
-				$isErrorModalHidden = false;
-				return;
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isKeysModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				processCrypto();
+				event.stopImmediatePropagation();
 			}
-			processForm(keyPair);
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
 		};
-	}
-
-	function submitSurvey() {
-		if (uses_crypto) {
-			processCrypto();
-		} else processForm(undefined);
-	}
-
-	let filename: string = 'No file chosen';
-
-	function handleFileChange() {
-		filename =
-			document.querySelector<HTMLInputElement>('#keys-file')?.files?.[0]?.name ?? 'No file chosen';
-	}
-
-	function hideModal() {
-		isModalHidden = true;
-		goto('/', { replaceState: true, invalidateAll: true });
-	}
+	});
 </script>
 
 <svelte:window bind:innerWidth />
 
-<Modal icon="check_circle" title="Survey Answered" bind:isHidden={isModalHidden} hide={hideModal}>
-	<span slot="content">Your answer has been submitted successfully.</span>
-	<button title="Ok" class="save" on:click={hideModal}
-		><i class="material-symbols-rounded">done</i>OK</button
+<SuccessModal hide={hideSuccessModal} />
+
+<Modal
+	icon="encrypted"
+	title="Load Your Keys"
+	bind:isHidden={isKeysModalHidden}
+	--width={innerWidth <= $M ? '20em' : '38em'}
+>
+	<div slot="content" title="Load your digital signature keys" class="file-div">
+		<span class="file-label"
+			>Please load the file which you have previously generated on this application. The file
+			contains your keys, necessary for cryptographic calculations which are needed for validating
+			your right to fill out this survey.<br /><br />Default filename: "noname-keys.pem"</span
+		>
+		<label for="keys-file">
+			<div class="file-input">
+				<span class="file-button"><i class="symbol">upload_file</i>Select File</span>
+				<span class="file-name">{fileName}</span>
+			</div>
+			<input type="file" name="keys" id="keys-file" on:change={handleFileChange} />
+		</label>
+		<KeysError error={fileError} element={fileElement} />
+	</div>
+	<button title="Submit keys" class="save" on:click={processCrypto}
+		><i class="symbol">done</i>Submit</button
 	>
 </Modal>
 
@@ -309,6 +379,14 @@
 </Header>
 
 <Content>
+	{#if keys.length === 1 || keys.length === 2}
+		<p title="Survey not secure" class="warning">
+			<i class="symbol">warning</i>This survey is not secure.
+			{keys.length === 1
+				? ' You are the only person who can respond to this survey.'
+				: ' There are only two people who can respond to this survey. The other person could be the creator of this survey.'}
+		</p>
+	{/if}
 	{#each $questions as question, questionIndex (question)}
 		<div class="question" in:slide={{ duration: 200, easing: cubicInOut }}>
 			<QuestionTitle
@@ -317,171 +395,32 @@
 			/>
 			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
 		</div>
-		<AnswerError {unansweredRequired} {questionIndex} />
+		<AnswerError
+			{unansweredRequired}
+			{questionIndex}
+			--margin-top={question.type === 'text' ? '-2.5em' : ''}
+		/>
 	{/each}
-	{#if uses_crypto}
-		<div title="Load your digital signature keys" class="load-div">
-			<div class="load-text">
-				<span class="load-label">Load your keys</span>
-				<div title="" class="tooltip">
-					<i class="material-symbols-rounded">info</i>
-					<span class="tooltip-text {innerWidth <= $S ? 'top' : 'right'}"
-						>Please load the file which you have previously generated on this application. The file
-						contains your keys, necessary for cryptographic calculations which are needed for
-						validating your right to fill out this survey.<br /><br />Default filename:
-						"noname-keys.txt"</span
-					>
-				</div>
-			</div>
-			<label for="keys-file">
-				<div class="file-input">
-					<span class="file-button"
-						><i class="material-symbols-rounded">upload_file</i>Choose File</span
-					>
-					<span class="file-name">{filename}</span>
-				</div>
-				<input type="file" name="keys" id="keys-file" on:change={handleFileChange} />
-			</label>
-		</div>
-	{/if}
 </Content>
 
 <Footer>
-	<button title="Submit survey" class="footer-button save" on:click={submitSurvey}>
-		<i class="material-symbols-rounded">done</i>Submit
+	<button title="Submit survey" class="footer-button done" on:click={submitSurvey}>
+		<i class="symbol">done</i>Submit
 	</button>
 </Footer>
 
 <style>
-	.tooltip {
-		--tooltip-width: 38em;
-		margin-left: 0.5em;
-	}
-
-	.tooltip i {
-		font-size: 1em;
-	}
-
-	.load-div {
-		color: var(--text-color);
-		font-size: 1.25em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+	.file-div {
 		width: 100%;
-		text-align: center;
-		margin-top: 2.25em;
-		padding-top: 1.5em;
-		border-top: 1px solid var(--border-color);
 	}
 
-	.load-text {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: flex-start;
-	}
-
-	.load-label {
-		cursor: default;
-	}
-
-	.load-div label {
-		display: block;
-		width: fit-content;
-	}
-
-	.load-text,
-	.load-div label {
-		font-size: 1.2em;
-	}
-
-	input[type='file'] {
-		display: none;
-	}
-
-	.file-input {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		align-items: center;
-		text-align: left;
-		width: fit-content;
-		margin-top: 0.5em;
-		background-color: var(--secondary-dark-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		padding: 0.5em;
-		font-size: 0.8em;
-		cursor: default;
-	}
-
-	.file-button {
-		display: flex;
-		align-items: center;
-		padding: 0.25em;
-		background-color: var(--primary-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		text-shadow: none;
-		color: var(--text-color);
-		cursor: pointer;
-		transition: 0.2s;
-		margin-right: 0.5em;
-		min-width: 7em;
-	}
-
-	.file-button:hover {
-		background-color: var(--secondary-color);
-	}
-
-	.file-button:active {
-		background-color: var(--border-color);
-	}
-
-	.file-name {
-		overflow: hidden;
-		overflow-wrap: anywhere;
-		text-overflow: ellipsis;
-		height: 1.15em;
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
-	}
-
-	@media screen and (max-width: 1440px) {
-		.tooltip {
-			--tooltip-width: 26.9em;
-		}
+	.warning {
+		margin: 0em 0em 0.5em 0em;
 	}
 
 	@media screen and (max-width: 768px) {
-		.load-div {
-			font-size: 1em;
-		}
-
-		.save {
+		.footer-button.done {
 			font-size: 1.25em;
-		}
-
-		.file-input {
-			flex-flow: column;
-		}
-
-		.file-button {
-			margin-right: 0em;
-			margin-bottom: 0.5em;
-		}
-
-		.tooltip {
-			--tooltip-width: 14em;
-		}
-	}
-
-	@media screen and (max-width: 425px) {
-		.tooltip {
-			--tooltip-width: 17em;
 		}
 	}
 </style>

@@ -1,6 +1,6 @@
 import type Question from '$lib/entities/questions/Question';
 
-export class SurveyAnswer {
+export default class SurveyAnswer {
 	survey_code: string;
 	questions: Array<Question>;
 	signature: string[];

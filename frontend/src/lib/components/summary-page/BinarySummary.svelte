@@ -10,7 +10,7 @@
 	<label title="Choice" class="choice binary">
 		<div class="icon">
 			<input type="radio" disabled />
-			<i class="material-symbols-rounded">thumb_up</i>
+			<i class="symbol">thumb_up</i>
 		</div>
 		<div class="choice-input display binary">
 			{data.choices[0]}
@@ -22,7 +22,7 @@
 	<label title="Choice" class="choice binary">
 		<div class="icon">
 			<input type="radio" disabled />
-			<i class="material-symbols-rounded">thumb_down</i>
+			<i class="symbol">thumb_down</i>
 		</div>
 		<div class="choice-input display binary">
 			{data.choices[1]}
@@ -36,12 +36,15 @@
 <style>
 	.choice-input,
 	.choice-input:hover {
-		background-color: var(--primary-dark-color);
+		background-color: var(--primary-color-2);
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	input {
-		cursor: default;
+		cursor: default !important;
 	}
 
 	i {

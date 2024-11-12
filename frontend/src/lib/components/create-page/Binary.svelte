@@ -2,75 +2,39 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
-	import { LIMIT_OF_CHARS } from '$lib/stores/global';
-	import { limitInput } from '$lib/utils/limitInput';
+	import Input from '$lib/components/global/Input.svelte';
 
 	export let questionIndex: number;
 </script>
 
-<div
-	class="choice-area binary"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="choice-area binary" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<label class="choice binary">
 		<div class="icon">
 			<input type="radio" disabled name={questionIndex.toString()} />
-			<i class="material-symbols-rounded">thumb_up</i>
+			<i class="symbol">thumb_up</i>
 		</div>
-		<div
-			class="input-container"
-			class:max={$questions[questionIndex].choices[0].length > $LIMIT_OF_CHARS}
-		>
-			<div
-				title="Enter positive choice"
-				class="choice-input yes binary"
-				contenteditable
-				role="textbox"
-				tabindex="0"
-				bind:textContent={$questions[questionIndex].choices[0]}
-				on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
-				on:keydown={(e) => {
-					handleNewLine(e);
-					limitInput(e, $questions[questionIndex].choices[0], $LIMIT_OF_CHARS);
-				}}
-			>
-				{$questions[questionIndex].choices[0]}
-			</div>
-			<span class="char-count"
-				>{$questions[questionIndex].choices[0].length} / {$LIMIT_OF_CHARS}</span
-			>
-		</div>
+		<Input
+			bind:text={$questions[questionIndex].choices[0]}
+			label="Positive Choice"
+			title="Enter a positive choice"
+			clearOnce={true}
+			--label-top="18px"
+			--label-top-mobile="14px"
+		/>
 	</label>
 	<label class="choice binary">
 		<div class="icon">
 			<input type="radio" disabled name={questionIndex.toString()} />
-			<i class="material-symbols-rounded">thumb_down</i>
+			<i class="symbol">thumb_down</i>
 		</div>
-		<div
-			class="input-container"
-			class:max={$questions[questionIndex].choices[1].length > $LIMIT_OF_CHARS}
-		>
-			<div
-				title="Enter negative choice"
-				class="choice-input no binary"
-				contenteditable
-				role="textbox"
-				tabindex="0"
-				bind:textContent={$questions[questionIndex].choices[1]}
-				on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
-				on:keydown={(e) => {
-					handleNewLine(e);
-					limitInput(e, $questions[questionIndex].choices[1], $LIMIT_OF_CHARS);
-				}}
-			>
-				{$questions[questionIndex].choices[1]}
-			</div>
-			<span class="char-count"
-				>{$questions[questionIndex].choices[1].length} / {$LIMIT_OF_CHARS}</span
-			>
-		</div>
+		<Input
+			bind:text={$questions[questionIndex].choices[1]}
+			label="Negative Choice"
+			title="Enter a negative choice"
+			clearOnce={true}
+			--label-top="18px"
+			--label-top-mobile="14px"
+		/>
 	</label>
 </div>
 
@@ -80,34 +44,17 @@
 		width: calc(86% - 2.25em);
 	}
 
-	.choice-input {
-		width: 12em;
-	}
-
 	input {
-		cursor: default;
-	}
-
-	.yes[contenteditable]:empty::before {
-		content: 'Enter positive choice...';
-	}
-
-	.no[contenteditable]:empty::before {
-		content: 'Enter negative choice...';
+		cursor: default !important;
 	}
 
 	i {
 		font-size: 1em;
-		color: var(--border-color);
+		color: var(--border-color-1);
 		cursor: default;
-	}
-
-	.input-container {
-		flex: none;
-	}
-
-	.char-count {
-		left: 30%;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -117,10 +64,6 @@
 
 		.choice {
 			width: 100%;
-		}
-
-		.char-count {
-			left: 65%;
 		}
 	}
 </style>

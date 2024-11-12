@@ -1,28 +1,35 @@
 <script lang="ts">
 	import { invalidateAll, goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
-	import NameTableError from '$lib/components/groups-page/NameTableError.svelte';
-	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
-	import { limitInput } from '$lib/utils/limitInput';
+	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS, XL } from '$lib/stores/global';
 	import { M, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import Modal from '$lib/components/global/Modal.svelte';
+	import NameError from './NameError.svelte';
+	import { page } from '$app/stores';
+	import Input from '$lib/components/global/Input.svelte';
 
-	export let groups: string[];
+	export let groups: {
+		user_group_name: string;
+		all_members_have_public_keys: true;
+	}[];
 	export let selectedGroupsToRemove: string[] = [];
-	export let editedIndex: number = -1;
 
+	let selectedGroup: string = '';
 	let newName: string = '';
 	let nameError: GroupError = GroupError.NoError;
+	let isModalHidden: boolean = true;
+	let nameInput: HTMLDivElement;
+
+	$: groupNames = groups.map((g) => g.user_group_name);
 
 	$: allSelected =
-		selectedGroupsToRemove.length === groups.length && selectedGroupsToRemove.length > 0;
+		selectedGroupsToRemove.length === groupNames.length && selectedGroupsToRemove.length > 0;
 
 	function toggleAll() {
-		selectedGroupsToRemove = allSelected ? [] : [...groups];
+		selectedGroupsToRemove = allSelected ? [] : [...groupNames];
 	}
 
 	async function checkCorrectness(name: string) {
@@ -32,7 +39,7 @@
 			nameError = GroupError.NameRequired;
 		} else if (n.length > $LIMIT_OF_CHARS) {
 			nameError = GroupError.NameTooLong;
-		} else if (groups.some((g) => g === n)) {
+		} else if (groupNames.some((g) => g === n)) {
 			nameError = GroupError.NameNonUnique;
 		} else if (n.match(/^[\p{L}\p{N} /-]+$/u) === null) {
 			nameError = GroupError.NameInvalid;
@@ -40,22 +47,23 @@
 
 		if (nameError !== GroupError.NoError) {
 			await tick();
-			scrollToElement('.table-input');
+			scrollToElement('.group-input');
 			return false;
 		}
 
 		return true;
 	}
 
-	async function renameGroup(name: string, new_name: string) {
-		if (!(await checkCorrectness(new_name))) return;
+	async function renameGroup() {
+		const newGroupName = newName.trim();
+
+		if (!(await checkCorrectness(newGroupName))) return;
 
 		const response = await fetch('/api/groups/rename', {
 			method: 'POST',
 			body: JSON.stringify({
-				user_email: $page.data.session?.user?.email,
-				name: name,
-				new_name: new_name
+				name: selectedGroup,
+				new_name: newGroupName
 			}),
 			headers: {
 				'Content-Type': 'application/json'
@@ -69,21 +77,69 @@
 			return;
 		}
 
-		editedIndex = -1;
+		isModalHidden = true;
+		selectedGroup = '';
 		newName = '';
-		invalidateAll();
+		await invalidateAll();
 	}
+
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				renameGroup();
+				event.stopImmediatePropagation();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
 
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
 
+<Modal
+	icon="edit"
+	title="Rename Group"
+	bind:isHidden={isModalHidden}
+	bind:element={nameInput}
+	--width={innerWidth <= $M ? '20em' : '36em'}
+>
+	<div slot="content" class="modal-content">
+		<div class="renaming">Renaming {selectedGroup}.</div>
+		<Input
+			bind:text={newName}
+			label="Group Name"
+			title="Enter a new group name"
+			bind:element={nameInput}
+			handleEnter={(e) => {
+				if (e.key === 'Enter') {
+					e.preventDefault();
+					renameGroup();
+					e.stopImmediatePropagation();
+				}
+			}}
+			--margin-right="0em"
+			--char-count-left="6.5em"
+		/>
+		<NameError name={newName.trim()} error={nameError} groups={groupNames} --font-size="0.8em" />
+	</div>
+	<button title="Save the new group name" class="done" on:click={renameGroup}
+		><i class="symbol">done</i>Apply</button
+	>
+</Modal>
+
 {#if groups.length === 0}
 	<div class="info-row">
 		<div title="Groups" class="title empty">No groups yet!</div>
 		<div class="tooltip">
-			<i class="material-symbols-rounded">info</i>
+			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 				When creating a secure survey, you can choose a group of possible respondents. To create a
 				group, click on the button below. All your created groups will be stored on this page.
@@ -103,99 +159,68 @@
 					/></label
 				></th
 			>
-			<th title="Group title" id="title-header" colspan="3">Group Title</th>
+			<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
+			<th title="Group title" id="title-header" colspan="2">Group Title</th>
 		</tr>
-		{#each groups.toSorted() as group, groupIndex}
+		{#each groups.toSorted((a, b) => a.user_group_name.localeCompare(b.user_group_name)) as group}
 			<tr>
-				<td title="Select {group}" class="checkbox-entry"
+				<td title="Select {group.user_group_name}" class="checkbox-entry"
 					><label>
-						<input type="checkbox" bind:group={selectedGroupsToRemove} value={group} />
+						<input
+							type="checkbox"
+							bind:group={selectedGroupsToRemove}
+							value={group.user_group_name}
+						/>
 					</label></td
 				>
-				{#if editedIndex === groupIndex}
-					<td
-						title="Stop renaming the group"
-						class="button-entry"
+				<td class="info-entry tooltip">
+					{#if group.all_members_have_public_keys}
+						<i class="symbol">key</i>
+						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+							>Everyone in this group have generated their keys. You can use this group in secure
+							surveys.</span
+						>
+					{:else}
+						<i class="symbol">key_off</i>
+						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+							>Not everyone in this group have generated their keys. You cannot use this group in
+							secure surveys.</span
+						>
+					{/if}
+				</td>
+				<td title="Open the group" class="title-entry"
+					><button
+						on:click={() =>
+							goto($page.url.pathname + '/' + encodeURI(group.user_group_name) + '/0')}
+						>{group.user_group_name}</button
+					></td
+				>
+				<td title="Rename the group" class="button-entry">
+					<button
 						on:click={() => {
-							editedIndex = -1;
+							selectedGroup = group.user_group_name;
 							newName = '';
 							nameError = GroupError.NoError;
-						}}><i class="material-symbols-rounded">edit_off</i></td
-					>
-					<td>
-						<div class="input-container" class:max={newName.length > $LIMIT_OF_CHARS}>
-							<!-- svelte-ignore a11y-autofocus -->
-							<div
-								title="Enter a new group name"
-								class="table-input"
-								contenteditable
-								bind:textContent={newName}
-								autofocus={innerWidth > $M}
-								role="textbox"
-								tabindex="0"
-								on:keydown={(e) => {
-									handleNewLine(e);
-									limitInput(e, newName, $LIMIT_OF_CHARS);
-								}}
-							>
-								{newName}
-							</div>
-							<span class="char-count">{newName.length} / {$LIMIT_OF_CHARS}</span>
-						</div>
-						<NameTableError name={newName.trim()} error={nameError} {groups} />
-					</td>
-					<td
-						title="Save the new group name"
-						class="button-entry save-entry"
-						on:click={() => renameGroup(group, newName.trim())}
-					>
-						<i class="material-symbols-rounded">save</i></td
-					>
-				{:else}
-					<td
-						title="Rename the group"
-						class="button-entry"
-						on:click={() => {
-							editedIndex = groupIndex;
-							newName = '';
-							nameError = GroupError.NoError;
-						}}><i class="material-symbols-rounded">edit</i></td
-					>
-					<td
-						title="Open the group"
-						class="title-entry"
-						colspan="2"
-						on:click={() => goto('/groups/' + encodeURI(group))}>{group}</td
-					>
-				{/if}
+							isModalHidden = false;
+						}}><i class="symbol">edit</i></button
+					></td
+				>
 			</tr>
 		{/each}
 	</table>
 {/if}
 
 <style>
-	.table-input {
-		margin: 0em;
-		overflow-wrap: anywhere;
+	.info-entry.tooltip {
+		--tooltip-width: 16em;
 	}
 
-	.table-input[contenteditable]:empty::before {
-		content: 'Enter group name...';
-		color: var(--text-dark-color);
-	}
-	.save-entry {
-		background-color: var(--accent-color);
+	.modal-content {
+		width: 100%;
 	}
 
-	.save-entry:hover {
-		background-color: var(--accent-dark-color);
-	}
-
-	.save-entry:active {
-		background-color: var(--border-color);
-	}
-
-	.input-container {
-		margin-bottom: -1.35em;
+	.modal-content .renaming {
+		overflow-wrap: break-word;
+		margin-bottom: 0.5em;
 	}
 </style>

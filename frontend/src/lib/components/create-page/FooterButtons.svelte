@@ -98,8 +98,12 @@
 		if ($currentDraftId !== null) {
 			isDraftModalHidden = false;
 		} else {
-			const parsedSurvey = new Survey($title.title, constructQuestionList($questions));
-			const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
+			const parsedSurvey = new Survey(constructQuestionList($questions));
+			const draftInfo = new DraftCreateInfo(
+				$page.data.session!.user!.email!,
+				$title.title,
+				parsedSurvey
+			);
 
 			const response = await fetch('/api/surveys/drafts/create', {
 				method: 'POST',
@@ -134,7 +138,7 @@
 
 {#if isPreview}
 	<button title="Edit survey" class="footer-button" on:click={togglePreview}>
-		<i class="material-symbols-rounded">edit</i>Edit
+		<i class="symbol">edit</i>Edit
 	</button>
 {:else}
 	<button
@@ -146,36 +150,32 @@
 			togglePreview();
 		}}
 	>
-		<i class="material-symbols-rounded">search</i>Preview
+		<i class="symbol">search</i>Preview
 	</button>
 {/if}
-<button
-	title="Save draft"
-	class="footer-button save popup"
-	disabled={$questions.length === 0 || isPreview}
-	on:click={saveDraft}
->
-	<i class="material-symbols-rounded">save</i>Save Draft
-	<span class="popup-text top" id="draft-popup">Saved!</span>
-</button>
-<button
-	title="Finish survey creation"
-	class="footer-button save done"
-	disabled={$questions.length === 0 || isPreview}
-	on:click={createSurvey}
->
-	<i class="material-symbols-rounded">done</i>Create
-</button>
+<div class="footer-button-group">
+	<button
+		title="Save draft"
+		class="footer-button save popup"
+		disabled={$questions.length === 0 || isPreview}
+		on:click={saveDraft}
+	>
+		<i class="symbol">save</i>Save Draft
+		<span class="popup-text top" id="draft-popup">Saved!</span>
+	</button>
+	<button
+		title="Finish survey creation"
+		class="footer-button save done"
+		disabled={$questions.length === 0 || isPreview}
+		on:click={createSurvey}
+	>
+		<i class="symbol">done</i>Create
+	</button>
+</div>
 
 <style>
 	.popup {
 		--tooltip-width: 4em;
-	}
-
-	.footer-button:disabled {
-		color: var(--text-dark-color);
-		background-color: var(--secondary-color);
-		cursor: not-allowed;
 	}
 
 	.done i {

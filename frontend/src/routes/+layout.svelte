@@ -1,8 +1,8 @@
 <script lang="ts">
 	import '../app.css';
-	import NavBar from '$lib/components/NavBar.svelte';
-	import ScrollToTop from '$lib/components/ScrollToTop.svelte';
-	import ErrorModal from '$lib/components/ErrorModal.svelte';
+	import NavBar from '$lib/components/global/NavBar.svelte';
+	import ScrollToTop from '$lib/components/global/ScrollToTop.svelte';
+	import ErrorModal from '$lib/components/global/ErrorModal.svelte';
 	import Translate from 'sveltekit-translate/translate/Translate.svelte';
 	import type { TranslateOptions } from 'sveltekit-translate/translate/translateStore';
 
@@ -34,10 +34,13 @@
 		min-width: 768px;
 		margin: auto;
 		margin-top: 1.5em;
-		border: 1px solid var(--border-color);
+		border: 1px solid var(--border-color-1);
 		border-bottom: none;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		background-color: var(--secondary-color);
+		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		background-color: var(--secondary-color-1);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	@media screen and (max-width: 768px) {

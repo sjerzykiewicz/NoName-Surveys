@@ -1,8 +1,9 @@
 import type { LayoutServerLoad } from './$types';
 import { getSurveys, countSurveys } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
+import { getEmail } from '$lib/utils/getEmail';
 
-export const load: LayoutServerLoad = async ({ parent, params }) => {
+export const load: LayoutServerLoad = async ({ parent, params, cookies }) => {
 	const { session } = await parent();
 	if (!session) {
 		redirect(303, `/account`);
@@ -10,7 +11,10 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 
 	const page = parseInt(params.surveysPage);
 
-	const surveysResponse = await getSurveys(session.user!.email!, page);
+	const sessionCookie = cookies.get('user_session');
+	const user_email = await getEmail(sessionCookie ?? '');
+
+	const surveysResponse = await getSurveys(user_email, page);
 	if (!surveysResponse.ok) {
 		error(surveysResponse.status, { message: await surveysResponse.json() });
 	}
@@ -23,7 +27,7 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 		group_size: number;
 	}[] = await surveysResponse.json();
 
-	const countResponse = await countSurveys(session.user!.email!);
+	const countResponse = await countSurveys(user_email);
 	if (!countResponse.ok) {
 		error(countResponse.status, { message: await countResponse.json() });
 	}

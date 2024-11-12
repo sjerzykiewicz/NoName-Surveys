@@ -8,7 +8,6 @@
 	import { SurveyError } from '$lib/entities/SurveyError';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
-	import { page } from '$app/stores';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { popup } from '$lib/utils/popup';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
@@ -99,11 +98,7 @@
 			isDraftModalHidden = false;
 		} else {
 			const parsedSurvey = new Survey(constructQuestionList($questions));
-			const draftInfo = new DraftCreateInfo(
-				$page.data.session!.user!.email!,
-				$title.title,
-				parsedSurvey
-			);
+			const draftInfo = new DraftCreateInfo($title.title, parsedSurvey);
 
 			const response = await fetch('/api/surveys/drafts/create', {
 				method: 'POST',

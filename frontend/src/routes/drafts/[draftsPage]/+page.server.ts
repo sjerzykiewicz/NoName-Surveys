@@ -1,8 +1,9 @@
 import type { PageServerLoad } from './$types';
 import { countSurveyDrafts, getSurveyDrafts } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
+import { getEmail } from '$lib/utils/getEmail';
 
-export const load: PageServerLoad = async ({ parent, params }) => {
+export const load: PageServerLoad = async ({ parent, params, cookies }) => {
 	const { session } = await parent();
 	if (!session) {
 		redirect(303, `/account`);
@@ -10,7 +11,10 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 
 	const page = parseInt(params.draftsPage);
 
-	const draftsResponse = await getSurveyDrafts(session.user!.email!, page);
+	const sessionCookie = cookies.get('user_session');
+	const user_email = await getEmail(sessionCookie ?? '');
+
+	const draftsResponse = await getSurveyDrafts(user_email, page);
 	if (!draftsResponse.ok) {
 		error(draftsResponse.status, { message: await draftsResponse.json() });
 	}
@@ -20,7 +24,7 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 		creation_date: string;
 	}[] = await draftsResponse.json();
 
-	const countResponse = await countSurveyDrafts(session.user!.email!);
+	const countResponse = await countSurveyDrafts(user_email);
 	if (!countResponse.ok) {
 		error(countResponse.status, { message: await countResponse.json() });
 	}

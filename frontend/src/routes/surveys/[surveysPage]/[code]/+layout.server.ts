@@ -3,8 +3,9 @@ import { getSurvey, getSurveyAnswers } from '$lib/server/database';
 import { error } from '@sveltejs/kit';
 import Survey from '$lib/entities/surveys/Survey';
 import SurveySummary from '$lib/entities/surveys/SurveySummary';
+import { getEmail } from '$lib/utils/getEmail';
 
-export const load: LayoutServerLoad = async ({ parent, params }) => {
+export const load: LayoutServerLoad = async ({ parent, params, cookies }) => {
 	const { session } = await parent();
 	if (!session) {
 		error(401, 'You must be logged in to access this page.');
@@ -24,7 +25,10 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 		public_keys: string[];
 	} = await surveyResponse.json();
 
-	const answersResponse = await getSurveyAnswers(session.user!.email!, code);
+	const sessionCookie = cookies.get('user_session');
+	const user_email = await getEmail(sessionCookie ?? '');
+
+	const answersResponse = await getSurveyAnswers(user_email, code);
 	if (!answersResponse.ok) {
 		error(answersResponse.status, { message: await answersResponse.json() });
 	}

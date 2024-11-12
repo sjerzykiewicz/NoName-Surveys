@@ -1,8 +1,9 @@
 import type { LayoutServerLoad } from './$types';
 import { getUserGroups, getUsers, countUserGroups } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
+import { getEmail } from '$lib/utils/getEmail';
 
-export const load: LayoutServerLoad = async ({ parent, params }) => {
+export const load: LayoutServerLoad = async ({ parent, params, cookies }) => {
 	const { session } = await parent();
 	if (!session) {
 		redirect(303, `/account`);
@@ -10,7 +11,10 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 
 	const page = parseInt(params.groupsPage);
 
-	const groupsResponse = await getUserGroups(session.user!.email!, page);
+	const sessionCookie = cookies.get('user_session');
+	const user_email = await getEmail(sessionCookie ?? '');
+
+	const groupsResponse = await getUserGroups(user_email, page);
 	if (!groupsResponse.ok) {
 		error(groupsResponse.status, { message: await groupsResponse.json() });
 	}
@@ -25,7 +29,7 @@ export const load: LayoutServerLoad = async ({ parent, params }) => {
 	}
 	const user_list: string[] = await usersResponse.json();
 
-	const countResponse = await countUserGroups(session.user!.email!);
+	const countResponse = await countUserGroups(user_email);
 	if (!countResponse.ok) {
 		error(countResponse.status, { message: await countResponse.json() });
 	}

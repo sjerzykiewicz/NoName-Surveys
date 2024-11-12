@@ -17,7 +17,6 @@
 	import { slide } from 'svelte/transition';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
-	import { page } from '$app/stores';
 	import Survey from '$lib/entities/surveys/Survey';
 	import SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
@@ -105,11 +104,7 @@
 		}
 
 		const parsedSurvey = new Survey(constructQuestionList($questions));
-		const draftInfo = new DraftCreateInfo(
-			$page.data.session!.user!.email!,
-			$title.title,
-			parsedSurvey
-		);
+		const draftInfo = new DraftCreateInfo($title.title, parsedSurvey);
 
 		const createResponse = await fetch('/api/surveys/drafts/create', {
 			method: 'POST',
@@ -167,13 +162,7 @@
 			finalRing = [...$ringMembers];
 		}
 
-		const surveyInfo = new SurveyCreateInfo(
-			$page.data.session!.user!.email!,
-			$title.title,
-			parsedSurvey,
-			$useCrypto,
-			finalRing
-		);
+		const surveyInfo = new SurveyCreateInfo($title.title, parsedSurvey, $useCrypto, finalRing);
 
 		const response = await fetch('/api/surveys/create', {
 			method: 'POST',

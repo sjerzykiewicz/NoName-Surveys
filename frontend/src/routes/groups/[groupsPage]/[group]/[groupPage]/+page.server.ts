@@ -5,8 +5,9 @@ import {
 	getAllUsersWhoAreNotMembers
 } from '$lib/server/database';
 import { error } from '@sveltejs/kit';
+import { getEmail } from '$lib/utils/getEmail';
 
-export const load: PageServerLoad = async ({ parent, params }) => {
+export const load: PageServerLoad = async ({ parent, params, cookies }) => {
 	const { session } = await parent();
 	if (!session) {
 		error(401, 'You must be logged in to access this page.');
@@ -15,7 +16,10 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 	const group = params.group;
 	const page = parseInt(params.groupPage);
 
-	const membersResponse = await getUserGroup(session.user!.email!, group, page);
+	const sessionCookie = cookies.get('user_session');
+	const user_email = await getEmail(sessionCookie ?? '');
+
+	const membersResponse = await getUserGroup(user_email, group, page);
 	if (!membersResponse.ok) {
 		error(membersResponse.status, { message: await membersResponse.json() });
 	}
@@ -27,7 +31,7 @@ export const load: PageServerLoad = async ({ parent, params }) => {
 	}
 	const notMembers: string[] = await notMembersResponse.json();
 
-	const countResponse = await countUserGroupMembers(session.user!.email!, group);
+	const countResponse = await countUserGroupMembers(user_email, group);
 	if (!countResponse.ok) {
 		error(countResponse.status, { message: await countResponse.json() });
 	}

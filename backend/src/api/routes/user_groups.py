@@ -134,6 +134,41 @@ async def get_user_group_members_count(
 
 
 @router.post(
+    "/all-who-are-not-members",
+    response_description="List of users who are not members of a given user group",
+    response_model=list[str],
+)
+async def get_users_who_are_not_members(
+    user_group_request: UserGroupAction,
+    session: Session = Depends(get_session),
+):
+    user = user_crud.get_user_by_email(user_group_request.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not registered")
+
+    user_group = user_groups_crud.get_user_group_by_name(
+        user.id, user_group_request.name, session
+    )
+    if user_group is None:
+        raise HTTPException(
+            status_code=400, detail="User group not found for the given user"
+        )
+
+    if user_group.creator_id != user.id:
+        raise HTTPException(
+            status_code=400,
+            detail="User does not have access to this User Group",
+        )
+
+    return [
+        user.email
+        for user in user_groups_crud.get_all_users_who_are_not_members_of_user_group(
+            user_group.id, session
+        )
+    ]
+
+
+@router.post(
     "/fetch/{page}",
     response_description="List of user emails in a given user group",
     response_model=list[UserGroupMembersOutput],

@@ -29,13 +29,13 @@ export const load: PageServerLoad = async ({ parent, cookies }) => {
 	}
 	const user_list: string[] = await usersResponse.json();
 
-	const draftCountResponse = await countSurveyDrafts(session.user!.email!);
+	const draftCountResponse = await countSurveyDrafts(user_email);
 	if (!draftCountResponse.ok) {
 		error(draftCountResponse.status, { message: await draftCountResponse.json() });
 	}
 	const numDrafts: number = await draftCountResponse.json();
 
-	const surveyCountResponse = await countSurveys(session.user!.email!);
+	const surveyCountResponse = await countSurveys(user_email);
 	if (!surveyCountResponse.ok) {
 		error(surveyCountResponse.status, { message: await surveyCountResponse.json() });
 	}

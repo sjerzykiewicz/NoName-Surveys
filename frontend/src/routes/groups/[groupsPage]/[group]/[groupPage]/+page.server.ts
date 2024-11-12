@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
 	}
 	const members: { email: string; has_public_key: boolean }[] = await membersResponse.json();
 
-	const notMembersResponse = await getAllUsersWhoAreNotMembers(session.user!.email!, group);
+	const notMembersResponse = await getAllUsersWhoAreNotMembers(user_email, group);
 	if (!notMembersResponse.ok) {
 		error(notMembersResponse.status, { message: await notMembersResponse.json() });
 	}

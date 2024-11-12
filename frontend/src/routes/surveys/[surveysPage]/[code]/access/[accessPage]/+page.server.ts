@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 	}
 	const usersWithAccess: string[] = await accessResponse.json();
 
-	const notAccessResponse = await getAllUsersWithoutAccess(session!.user!.email!, code);
+	const notAccessResponse = await getAllUsersWithoutAccess(user_email, code);
 	if (!notAccessResponse.ok) {
 		error(notAccessResponse.status, { message: await notAccessResponse.json() });
 	}

@@ -858,7 +858,7 @@ input[type='file'] {
 
 .limits {
 	display: flex;
-	flex-flow: row wrap;
+	flex-flow: row;
 	align-items: center;
 	justify-content: space-between;
 	width: calc(100% - 2.25em);

@@ -5,7 +5,7 @@
 
 	export let questionIndex: number;
 
-	$: value = Math.round(
+	let value: number = Math.round(
 		(parseFloat($questions[questionIndex].choices[0]) +
 			parseFloat($questions[questionIndex].choices[1])) /
 			2

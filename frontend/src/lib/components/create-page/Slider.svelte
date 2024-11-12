@@ -10,8 +10,6 @@
 	let min: number = -999999999999;
 	let max: number = 999999999999;
 
-	$questions[questionIndex].choices[2] = '1';
-
 	function handleChange(value: number, i: number) {
 		if (isNaN(value) || value === null || value === undefined) {
 			$questions[questionIndex].choices[i] = '';
@@ -71,7 +69,7 @@
 				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={innerWidth <= $M ? 'Enter step...' : 'Enter precision...'}
+				placeholder={innerWidth <= $M ? 'Enter prec...' : 'Enter precision...'}
 				bind:value={$questions[questionIndex].choices[2]}
 				on:keydown|once={() => ($questions[questionIndex].choices[2] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[2]), 2)}
@@ -113,8 +111,9 @@
 		}
 	}
 
-	@media screen and (max-width: 435px) {
+	@media screen and (max-width: 425px) {
 		.limits {
+			flex-wrap: wrap;
 			justify-content: space-around;
 		}
 
@@ -132,7 +131,16 @@
 		}
 	}
 
-	@media screen and (max-width: 312px) {
+	@media screen and (max-width: 320px) {
+		.limits {
+			flex-direction: column;
+			flex-wrap: nowrap;
+		}
+
+		.limit-input {
+			width: 9em;
+		}
+
 		.min {
 			order: 0;
 		}

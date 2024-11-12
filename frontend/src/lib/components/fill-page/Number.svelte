@@ -3,11 +3,13 @@
 
 	export let questionIndex: number;
 
-	$answers[questionIndex].choices[0] = Math.round(
+	let value: number = Math.round(
 		(parseFloat($questions[questionIndex].choices[0]) +
 			parseFloat($questions[questionIndex].choices[1])) /
 			2
-	).toString();
+	);
+
+	$answers[questionIndex].choices[0] = value.toString();
 
 	function handleChange() {
 		if (value !== null) {
@@ -19,12 +21,6 @@
 			$answers[questionIndex].choices[0] = value.toString();
 		}
 	}
-
-	$: value = Math.round(
-		(parseFloat($questions[questionIndex].choices[0]) +
-			parseFloat($questions[questionIndex].choices[1])) /
-			2
-	);
 </script>
 
 <div class="choice-area display slider">

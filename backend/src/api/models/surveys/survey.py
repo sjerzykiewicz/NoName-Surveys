@@ -115,7 +115,7 @@ class SurveyUserDeleteAction(SurveyUserAction):
 
     @field_validator("survey_codes")
     def validate_survey_code(cls, v) -> str:
-        return Base.validate_survey_code(v)
+        return Base.validate_survey_codes(v)
 
 
 class ShareSurveyActions(SurveyUserActions):

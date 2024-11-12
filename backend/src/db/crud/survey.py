@@ -151,6 +151,22 @@ def get_all_users_with_access_to_survey_count(survey_id: int, session: Session) 
     return session.exec(statement).one()
 
 
+def get_all_users_with_no_access_to_survey(
+    survey_id: int, session: Session
+) -> list[User]:
+    statement = select(User).where(
+        User.id.notin_(
+            select(AccessToViewResults.user_id)
+            .where(
+                (AccessToViewResults.survey_id == survey_id)
+                & (AccessToViewResults.is_deleted == False)  # noqa: E712
+            )
+            .distinct()
+        )
+    )
+    return [user for user in session.exec(statement).all()]
+
+
 def get_all_users_with_access_to_survey(
     survey_id: int, offset: int, limit: int, session: Session
 ) -> list[AccessToViewResults]:

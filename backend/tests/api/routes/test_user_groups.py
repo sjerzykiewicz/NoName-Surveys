@@ -483,3 +483,32 @@ def test_remove_users_from_group(client: TestClient):
     )
     data = response.json()
     assert data == 1
+
+
+def test_get_all_who_are_not_members(client: TestClient):
+    # given
+    create_users(
+        client,
+        [TEST_VALID_USER_EMAIL_1, TEST_VALID_USER_EMAIL_2, TEST_VALID_USER_EMAIL_3]
+    )
+    create_user_group(
+        client,
+        TEST_VALID_USER_EMAIL_1,
+        TEST_USER_GROUP_NAME_1,
+        [TEST_VALID_USER_EMAIL_2]
+    )
+
+    # when
+    response = client.post(
+        "/user-groups/all-who-are-not-members",
+        json={"user_email": TEST_VALID_USER_EMAIL_1, "name": TEST_USER_GROUP_NAME_1},
+    )
+
+    # then
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) == 2
+    assert TEST_VALID_USER_EMAIL_1 in data
+    assert TEST_VALID_USER_EMAIL_2 not in data
+    assert TEST_VALID_USER_EMAIL_3 in data

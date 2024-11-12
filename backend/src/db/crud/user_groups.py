@@ -4,7 +4,7 @@ from sqlmodel import select
 from src.db.base import Session
 from src.db.models.user import User
 from src.db.models.user_group import UserGroup, UserGroupBase
-from src.db.models.user_group_member import UserGroupMember, UserGroupMemberBase
+from src.db.models.user_group_member import UserGroupMember
 
 
 def get_count_of_user_groups_of_user(user_id: int, session: Session) -> int:
@@ -73,29 +73,29 @@ def create_user_group(creator_id: int, name: str, session: Session) -> UserGroup
     return user_group
 
 
-def add_user_to_group(group_id: int, user_id: int, session: Session) -> UserGroupMember:
-    user_group_member = UserGroupMemberBase(
-        group_id=group_id,
-        user_id=user_id,
-    )
-    user_group_member = UserGroupMember.model_validate(user_group_member)
-    session.add(user_group_member)
-    session.commit()
-    session.refresh(user_group_member)
-
-
 def add_users_to_group(
     group_id: int, user_ids: list[int], session: Session
 ) -> list[UserGroupMember]:
     user_group_members = []
     for user_id in user_ids:
-        user_group_member = UserGroupMemberBase(
-            group_id=group_id,
-            user_id=user_id,
-        )
-        user_group_member = UserGroupMember.model_validate(user_group_member)
+        user_group_member = session.exec(
+            select(UserGroupMember).where(
+                (UserGroupMember.group_id == group_id)
+                & (UserGroupMember.user_id == user_id)
+            )
+        ).first()
+
+        if user_group_member is not None:
+            user_group_member.is_deleted = False
+        else:
+            user_group_member = UserGroupMember(
+                group_id=group_id,
+                user_id=user_id,
+            )
+
         session.add(user_group_member)
         user_group_members.append(user_group_member)
+
     session.commit()
     return user_group_members
 
@@ -157,10 +157,28 @@ def get_user_group_members_paginated(
         .join(UserGroupMember, User.id == UserGroupMember.user_id)
         .where(
             (UserGroupMember.group_id == user_group_id)
-            & (UserGroupMember.is_deleted == False)
-        )  # noqa: E712
+            & (UserGroupMember.is_deleted == False)  # noqa: E712
+        )
         .order_by(User.email.asc())
         .offset(offset)
         .limit(limit)
+    )
+    return [user for user in session.exec(statement).all()]
+
+
+def get_all_users_who_are_not_members_of_user_group(
+    user_group_id: int, session: Session
+) -> list[User]:
+    statement = (
+        select(User)
+        .where(
+            User.id.notin_(
+                select(UserGroupMember.user_id).where(
+                    (UserGroupMember.group_id == user_group_id)
+                    & (UserGroupMember.is_deleted == False)  # noqa: E712
+                )
+            )
+        )
+        .order_by(User.email.asc())
     )
     return [user for user in session.exec(statement).all()]

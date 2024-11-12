@@ -75,7 +75,10 @@ async def get_user_groups(
 
 @router.post(
     "/all-with-public-keys",
-    response_description="List of names of all user groups of a given user which members all have public keys",
+    response_description=(
+        "List of names of all user groups of a given user which "
+        "members all have public keys"
+    ),
     response_model=list[str],
 )
 async def get_user_groups_with_members_having_public_keys(
@@ -128,6 +131,41 @@ async def get_user_group_members_count(
         )
 
     return user_groups_crud.get_user_group_members_count(user_group.id, session)
+
+
+@router.post(
+    "/all-who-are-not-members",
+    response_description="List of users who are not members of a given user group",
+    response_model=list[str],
+)
+async def get_users_who_are_not_members(
+    user_group_request: UserGroupAction,
+    session: Session = Depends(get_session),
+):
+    user = user_crud.get_user_by_email(user_group_request.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not registered")
+
+    user_group = user_groups_crud.get_user_group_by_name(
+        user.id, user_group_request.name, session
+    )
+    if user_group is None:
+        raise HTTPException(
+            status_code=400, detail="User group not found for the given user"
+        )
+
+    if user_group.creator_id != user.id:
+        raise HTTPException(
+            status_code=400,
+            detail="User does not have access to this User Group",
+        )
+
+    return [
+        user.email
+        for user in user_groups_crud.get_all_users_who_are_not_members_of_user_group(
+            user_group.id, session
+        )
+    ]
 
 
 @router.post(
@@ -188,7 +226,10 @@ async def create_user_group(
     ):
         raise HTTPException(
             status_code=400,
-            detail="Not all users are registered (or perhaps duplicate emails cause this issue)",
+            detail=(
+                "Not all users are registered "
+                "(or perhaps duplicate emails cause this issue)"
+            ),
         )
 
     existing_user_group = user_groups_crud.get_user_group_by_name(
@@ -202,11 +243,17 @@ async def create_user_group(
     user_group = user_groups_crud.create_user_group(
         user.id, user_group_creation_request.user_group_name, session
     )
-    for user_group_member in user_group_creation_request.user_group_members:
-        user_groups_crud.add_user_to_group(
-            user_group.id,
-            user_crud.get_user_by_email(user_group_member, session).id,
-            session,
+
+    users_to_add = [
+        user_crud.get_user_by_email(email, session).id
+        for email in user_group_creation_request.user_group_members
+    ]
+    added_users = user_groups_crud.add_users_to_group(
+        user_group.id, users_to_add, session
+    )
+    if len(added_users) != len(users_to_add):
+        raise HTTPException(
+            status_code=400, detail="Some users could not be added to the group"
         )
 
     return {"message": "user group created successfully"}

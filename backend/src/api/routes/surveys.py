@@ -339,6 +339,35 @@ async def get_count_of_users_with_access(
 
 
 @router.post(
+    "/all-without-access",
+    response_description="Users who do not have access to a survey",
+    response_model=list[str],
+)
+async def get_all_users_without_access(
+    user_input: SurveyUserActions, session: Session = Depends(get_session)
+):
+    owner = user_crud.get_user_by_email(user_input.user_email, session)
+    if owner is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    survey = survey_crud.get_survey_by_code(user_input.survey_code, session)
+    if survey is None:
+        raise HTTPException(status_code=404, detail="Survey does not exist")
+
+    if survey.creator_id != owner.id:
+        raise HTTPException(
+            status_code=403, detail="User does not have access to this survey"
+        )
+
+    return [
+        user.email
+        for user in survey_crud.get_all_users_with_no_access_to_survey(
+            survey.id, session
+        )
+    ]
+
+
+@router.post(
     "/get-all-with-access/{page}",
     response_description="Check who has access to results of a given survey",
     response_model=list[str],

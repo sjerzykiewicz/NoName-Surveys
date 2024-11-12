@@ -1,6 +1,6 @@
 from typing import Literal, Optional
 
-from pydantic import ValidationInfo, field_validator
+from pydantic import field_validator
 
 from src.api.models.questions.question_base import Question
 

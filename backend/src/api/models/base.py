@@ -6,7 +6,10 @@ EMAIL_REGEX = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 SURVEY_CODE_REGEX = r"^\d{6}$"
 DIGITS_ONLY_REGEX = r"^\d+$"
 USER_GROUP_NAME_REGEX = r"^[\w /-]+$"
-KEY_PEM_REGEX = r"-----BEGIN PUBLIC KEY-----(\n|\r|\r\n)([0-9a-zA-Z\+\/=]{64}(\n|\r|\r\n))*([0-9a-zA-Z\+\/=]{1,63}(\n|\r|\r\n))?-----END PUBLIC KEY-----"
+KEY_PEM_REGEX = (
+    r"-----BEGIN PUBLIC KEY-----(\n|\r|\r\n)([0-9a-zA-Z\+\/=]{64}(\n|\r|\r\n))*"
+    r"([0-9a-zA-Z\+\/=]{1,63}(\n|\r|\r\n))?-----END PUBLIC KEY-----"
+)
 FINGERPRINT_REGEX = r"^[0-9a-f]*$"
 
 
@@ -44,6 +47,19 @@ class Base(BaseModel):
 
         if not match(SURVEY_CODE_REGEX, value):
             raise ValueError("survey code must be a string consisting of 6 digits")
+        return value
+
+    def validate_survey_codes(value):
+        if value is None:
+            raise ValueError("survey codes must be provided")
+        if not isinstance(value, list):
+            raise ValueError("survey codes must be a list")
+
+        if len(value) == 0:
+            raise ValueError("survey codes must be provided")
+
+        for code in value:
+            Base.validate_survey_code(code)
         return value
 
     def validate_digits_only(value):

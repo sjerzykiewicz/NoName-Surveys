@@ -90,15 +90,18 @@ def give_survey_access(survey_id: int, user_id: int, session: Session) -> None:
             & (AccessToViewResults.user_id == user_id)
         )
     ).first()
+
     if survey_access:
         survey_access.is_deleted = False
-        session.commit()
-        return
+    else:
+        survey_access = AccessToViewResults(
+            survey_id=survey_id,
+            user_id=user_id,
+        )
 
-    access = AccessToViewResults(survey_id=survey_id, user_id=user_id)
-    session.add(access)
+    session.add(survey_access)
     session.commit()
-    session.refresh(access)
+    session.refresh(survey_access)
 
 
 def take_away_survey_access(
@@ -143,9 +146,25 @@ def get_all_surveys_user_can_view(
 def get_all_users_with_access_to_survey_count(survey_id: int, session: Session) -> int:
     statement = select(func.count(AccessToViewResults.id)).where(
         (AccessToViewResults.survey_id == survey_id)
-        & (AccessToViewResults.is_deleted == False)
-    )  # noqa: E712
+        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    )
     return session.exec(statement).one()
+
+
+def get_all_users_with_no_access_to_survey(
+    survey_id: int, session: Session
+) -> list[User]:
+    statement = select(User).where(
+        User.id.notin_(
+            select(AccessToViewResults.user_id)
+            .where(
+                (AccessToViewResults.survey_id == survey_id)
+                & (AccessToViewResults.is_deleted == False)  # noqa: E712
+            )
+            .distinct()
+        )
+    )
+    return [user for user in session.exec(statement).all()]
 
 
 def get_all_users_with_access_to_survey(

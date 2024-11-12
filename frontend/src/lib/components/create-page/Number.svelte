@@ -25,33 +25,33 @@
 
 <div class="choice-area slider" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="limits">
-		<label>
+		<label class="min">
 			Minimum
 			<input
-				title="Enter minimum value"
+				title="Enter a minimum value"
 				class="limit-input"
 				type="number"
 				{min}
 				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={innerWidth <= $M ? 'Enter min...' : 'Enter minimum value...'}
+				placeholder={innerWidth <= $M ? 'Enter a min value...' : 'Enter a minimum value...'}
 				bind:value={$questions[questionIndex].choices[0]}
 				on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[0]), 0)}
 			/></label
 		>
-		<label>
+		<label class="max">
 			Maximum
 			<input
-				title="Enter maximum value"
+				title="Enter a maximum value"
 				class="limit-input"
 				type="number"
 				{min}
 				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={innerWidth <= $M ? 'Enter max...' : 'Enter maximum value...'}
+				placeholder={innerWidth <= $M ? 'Enter a max value...' : 'Enter a maximum value...'}
 				bind:value={$questions[questionIndex].choices[1]}
 				on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[1]), 1)}
@@ -69,7 +69,17 @@
 
 	@media screen and (max-width: 768px) {
 		.limit-input {
-			width: 6em;
+			width: 9em;
+		}
+	}
+
+	@media screen and (max-width: 425px) {
+		.limits {
+			flex-direction: column;
+		}
+
+		.max {
+			margin-top: 0.75em;
 		}
 	}
 </style>

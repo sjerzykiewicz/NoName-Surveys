@@ -21,6 +21,7 @@
 			autocomplete="off"
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
+			step={$questions[questionIndex].choices[2]}
 			name={questionIndex.toString()}
 			bind:value
 		/>
@@ -29,9 +30,9 @@
 		<input
 			class="range"
 			type="range"
-			step="1"
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
+			step={$questions[questionIndex].choices[2]}
 			name={questionIndex.toString()}
 			bind:value
 		/>

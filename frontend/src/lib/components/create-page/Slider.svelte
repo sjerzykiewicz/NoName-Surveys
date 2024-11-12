@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { questions } from '$lib/stores/create-page';
 	import { M } from '$lib/stores/global';
-	import { afterUpdate } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 
@@ -11,11 +10,7 @@
 	let min: number = -999999999999;
 	let max: number = 999999999999;
 
-	let value: number = Math.round(
-		(parseFloat($questions[questionIndex].choices[0]) +
-			parseFloat($questions[questionIndex].choices[1])) /
-			2
-	);
+	$questions[questionIndex].choices[2] = '1';
 
 	function handleChange(value: number, i: number) {
 		if (isNaN(value) || value === null || value === undefined) {
@@ -27,13 +22,11 @@
 		}
 	}
 
-	afterUpdate(() => {
-		value = Math.round(
-			(parseFloat($questions[questionIndex].choices[0]) +
-				parseFloat($questions[questionIndex].choices[1])) /
-				2
-		);
-	});
+	$: value = Math.round(
+		(parseFloat($questions[questionIndex].choices[0]) +
+			parseFloat($questions[questionIndex].choices[1])) /
+			2
+	);
 </script>
 
 <svelte:window bind:innerWidth />
@@ -43,42 +36,58 @@
 		<input
 			class="range"
 			type="range"
-			step="1"
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
+			step={$questions[questionIndex].choices[2]}
 			name={questionIndex.toString()}
 			disabled
 			bind:value
 		/>
 	</div>
 	<div class="limits">
-		<label>
+		<label class="min">
 			Minimum
 			<input
-				title="Enter minimum value"
+				title="Enter a minimum value"
 				class="limit-input"
 				type="number"
 				{min}
 				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={innerWidth <= $M ? 'Enter min...' : 'Enter minimum value...'}
+				placeholder={innerWidth <= $M ? 'Enter min...' : 'Enter minimum...'}
 				bind:value={$questions[questionIndex].choices[0]}
 				on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[0]), 0)}
 			/></label
 		>
-		<label>
-			Maximum
+		<label class="step">
+			Precision
 			<input
-				title="Enter maximum value"
+				title="Enter the precision"
 				class="limit-input"
 				type="number"
 				{min}
 				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={innerWidth <= $M ? 'Enter max...' : 'Enter maximum value...'}
+				placeholder={innerWidth <= $M ? 'Enter step...' : 'Enter precision...'}
+				bind:value={$questions[questionIndex].choices[2]}
+				on:keydown|once={() => ($questions[questionIndex].choices[2] = '')}
+				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[2]), 2)}
+			/></label
+		>
+		<label class="max">
+			Maximum
+			<input
+				title="Enter a maximum value"
+				class="limit-input"
+				type="number"
+				{min}
+				{max}
+				name={questionIndex.toString()}
+				autocomplete="off"
+				placeholder={innerWidth <= $M ? 'Enter max...' : 'Enter maximum...'}
 				bind:value={$questions[questionIndex].choices[1]}
 				on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[1]), 1)}
@@ -94,9 +103,48 @@
 		align-items: center;
 	}
 
+	.limit-input {
+		width: 9em;
+	}
+
 	@media screen and (max-width: 768px) {
 		.limit-input {
 			width: 6em;
+		}
+	}
+
+	@media screen and (max-width: 435px) {
+		.limits {
+			justify-content: space-around;
+		}
+
+		.min {
+			order: 0;
+		}
+
+		.max {
+			order: 1;
+		}
+
+		.step {
+			order: 2;
+			margin-top: 0.75em;
+		}
+	}
+
+	@media screen and (max-width: 312px) {
+		.min {
+			order: 0;
+		}
+
+		.step {
+			order: 1;
+			margin-top: 0.75em;
+		}
+
+		.max {
+			order: 2;
+			margin-top: 0.75em;
 		}
 	}
 </style>

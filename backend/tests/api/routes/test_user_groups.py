@@ -512,3 +512,28 @@ def test_get_all_who_are_not_members(client: TestClient):
     assert TEST_VALID_USER_EMAIL_1 in data
     assert TEST_VALID_USER_EMAIL_2 not in data
     assert TEST_VALID_USER_EMAIL_3 in data
+
+
+def test_get_all_users_in_user_group(client: TestClient):
+    # given
+    users = [TEST_VALID_USER_EMAIL_1, TEST_VALID_USER_EMAIL_2, TEST_VALID_USER_EMAIL_3]
+    create_users(client, users)
+    create_user_group(
+        client,
+        TEST_VALID_USER_EMAIL_1,
+        TEST_USER_GROUP_NAME_1,
+        users
+    )
+
+    # when
+    response = client.post(
+        "/user-groups/fetch",
+        json={"user_email": TEST_VALID_USER_EMAIL_1, "name": TEST_USER_GROUP_NAME_1},
+    )
+
+    # then
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) == 3
+    assert [user["email"] for user in data] == sorted(users)

@@ -206,7 +206,6 @@ pub fn linkable_ring_signature(
         Err(_) => return Err(JsValue::from_str("Invalid private key format")),
     };
 
-    // TODO - concatenation of keys is not an ideal method, some encoding will be used in future
     let keys_concatenated = pub_keys.join("");
 
     let h = h2(&keys_concatenated);

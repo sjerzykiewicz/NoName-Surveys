@@ -49,6 +49,19 @@ class Base(BaseModel):
             raise ValueError("survey code must be a string consisting of 6 digits")
         return value
 
+    def validate_survey_codes(value):
+        if value is None:
+            raise ValueError("survey codes must be provided")
+        if not isinstance(value, list):
+            raise ValueError("survey codes must be a list")
+
+        if len(value) == 0:
+            raise ValueError("survey codes must be provided")
+
+        for code in value:
+            Base.validate_survey_code(code)
+        return value
+
     def validate_digits_only(value):
         if value is None:
             raise ValueError("value must be provided")

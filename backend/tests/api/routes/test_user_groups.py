@@ -234,7 +234,7 @@ def test_get_user_group(client: TestClient):
     assert isinstance(data, list)
     assert len(data) == 10
     assert [user["email"] for user in data] == sorted(users)[:10]
-    assert all(user["has_public_key"] == False for user in data)
+    assert all(user["has_public_key"] is False for user in data)
 
 
 def test_get_user_group_with_public_keys(client: TestClient):
@@ -255,7 +255,7 @@ def test_get_user_group_with_public_keys(client: TestClient):
     assert isinstance(data, list)
     assert len(data) == 10
     assert [user["email"] for user in data] == sorted(users)[:10]
-    assert all(user["has_public_key"] == True for user in data)
+    assert all(user["has_public_key"] is True for user in data)
 
 
 def test_rename_user_group(client: TestClient):
@@ -382,7 +382,12 @@ def test_add_users_to_group(client: TestClient):
     create_user(client, TEST_VALID_USER_EMAIL_1)
     create_user(client, TEST_VALID_USER_EMAIL_2)
     create_user(client, TEST_VALID_USER_EMAIL_3)
-    create_user_group(client, TEST_VALID_USER_EMAIL_1, TEST_USER_GROUP_NAME_1, [TEST_VALID_USER_EMAIL_2])
+    create_user_group(
+        client,
+        TEST_VALID_USER_EMAIL_1,
+        TEST_USER_GROUP_NAME_1,
+        [TEST_VALID_USER_EMAIL_2]
+    )
 
     # when
     response = client.post(
@@ -415,12 +420,49 @@ def test_add_users_to_group(client: TestClient):
     assert data[1]["email"] == TEST_VALID_USER_EMAIL_3
 
 
+def test_add_users_to_group_twice_the_same_one(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+    create_user(client, TEST_VALID_USER_EMAIL_2)
+    create_user_group(
+        client,
+        TEST_VALID_USER_EMAIL_1,
+        TEST_USER_GROUP_NAME_1,
+        [TEST_VALID_USER_EMAIL_2]
+    )
+
+    # when
+    response = client.post(
+        "/user-groups/add-users",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "name": TEST_USER_GROUP_NAME_1,
+            "users": [TEST_VALID_USER_EMAIL_2],
+        },
+    )
+
+    # then
+    assert response.status_code == 200
+
+    response = client.post(
+        "/user-groups/group-members-count",
+        json={"user_email": TEST_VALID_USER_EMAIL_1, "name": TEST_USER_GROUP_NAME_1},
+    )
+    data = response.json()
+    assert data == 1
+
+
 def test_remove_users_from_group(client: TestClient):
     # given
     create_user(client, TEST_VALID_USER_EMAIL_1)
     create_user(client, TEST_VALID_USER_EMAIL_2)
     create_user(client, TEST_VALID_USER_EMAIL_3)
-    create_user_group(client, TEST_VALID_USER_EMAIL_1, TEST_USER_GROUP_NAME_1, [TEST_VALID_USER_EMAIL_2, TEST_VALID_USER_EMAIL_3])
+    create_user_group(
+        client,
+        TEST_VALID_USER_EMAIL_1,
+        TEST_USER_GROUP_NAME_1,
+        [TEST_VALID_USER_EMAIL_2, TEST_VALID_USER_EMAIL_3]
+    )
 
     # when
     response = client.post(
@@ -441,3 +483,57 @@ def test_remove_users_from_group(client: TestClient):
     )
     data = response.json()
     assert data == 1
+
+
+def test_get_all_who_are_not_members(client: TestClient):
+    # given
+    create_users(
+        client,
+        [TEST_VALID_USER_EMAIL_1, TEST_VALID_USER_EMAIL_2, TEST_VALID_USER_EMAIL_3]
+    )
+    create_user_group(
+        client,
+        TEST_VALID_USER_EMAIL_1,
+        TEST_USER_GROUP_NAME_1,
+        [TEST_VALID_USER_EMAIL_2]
+    )
+
+    # when
+    response = client.post(
+        "/user-groups/all-who-are-not-members",
+        json={"user_email": TEST_VALID_USER_EMAIL_1, "name": TEST_USER_GROUP_NAME_1},
+    )
+
+    # then
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) == 2
+    assert TEST_VALID_USER_EMAIL_1 in data
+    assert TEST_VALID_USER_EMAIL_2 not in data
+    assert TEST_VALID_USER_EMAIL_3 in data
+
+
+def test_get_all_users_in_user_group(client: TestClient):
+    # given
+    users = [TEST_VALID_USER_EMAIL_1, TEST_VALID_USER_EMAIL_2, TEST_VALID_USER_EMAIL_3]
+    create_users(client, users)
+    create_user_group(
+        client,
+        TEST_VALID_USER_EMAIL_1,
+        TEST_USER_GROUP_NAME_1,
+        users
+    )
+
+    # when
+    response = client.post(
+        "/user-groups/fetch",
+        json={"user_email": TEST_VALID_USER_EMAIL_1, "name": TEST_USER_GROUP_NAME_1},
+    )
+
+    # then
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+    assert len(data) == 3
+    assert [user["email"] for user in data] == sorted(users)

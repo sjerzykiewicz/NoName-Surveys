@@ -149,6 +149,19 @@ def get_user_group_members(
     return [user for user in session.exec(statement).all()]
 
 
+def get_all_users_in_user_group(user_group_id: int, session: Session) -> list[User]:
+    statement = (
+        select(User)
+        .join(UserGroupMember, User.id == UserGroupMember.user_id)
+        .where(
+            (UserGroupMember.group_id == user_group_id)
+            & (UserGroupMember.is_deleted == False)  # noqa: E712
+        )
+        .order_by(User.email.asc())
+    )
+    return [user for user in session.exec(statement).all()]
+
+
 def get_user_group_members_paginated(
     user_group_id: int, offset: int, limit: int, session: Session
 ) -> list[User]:

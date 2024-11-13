@@ -5,13 +5,18 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	function errorMessage() {
 		const error = $title.error;
 		switch (error) {
 			case SurveyError.TitleRequired:
-				return 'Please enter survey title.';
+				return $t('create_survey_error_title');
 			case SurveyError.TitleTooLong:
-				return 'Title must be ' + $LIMIT_OF_CHARS + ' or less characters long.';
+				return $t('create_survey_error_limit', { limit: $LIMIT_OF_CHARS });
 		}
 	}
 
@@ -30,7 +35,10 @@
 <div transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#if checkTitleError()}
 		<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<i class="symbol">error</i>{errorMessage()}
+			<i class="symbol">error</i>
+			{#key $t}
+				{errorMessage()}
+			{/key}
 		</p>
 	{/if}
 </div>

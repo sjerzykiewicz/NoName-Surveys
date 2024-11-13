@@ -1553,8 +1553,8 @@ button.popup {
 	}
 }
 
-.accent {
-	color: var(--accent-color);
+.account-accent {
+	color: var(--accent-color-1);
 	font-weight: 700;
 }
 

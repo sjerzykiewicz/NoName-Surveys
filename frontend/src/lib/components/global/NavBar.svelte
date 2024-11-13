@@ -147,25 +147,23 @@
 	<button
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={() => changeLang('pl')}
-		class="toggle-mode lang-btn zindex-0"
+		class="toggle-mode lang-btn tooltip"
 	>
 		PL
+		<span class="tooltip-text left"><Tx text="nav_toggle_lang"></Tx></span>
 	</button>
 {:else if showToggleButtons && $options.currentLang === 'pl'}
 	<button
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={() => changeLang('en')}
-		class="toggle-mode lang-btn zindex-0"
+		class="toggle-mode lang-btn tooltip"
 	>
 		EN
+		<span class="tooltip-text left"><Tx text="nav_toggle_lang"></Tx></span>
 	</button>
 {/if}
 
 <style>
-	.zindex-0 {
-		z-index: 0;
-	}
-
 	.bar .tooltip .tooltip-text {
 		font-size: 0.8em;
 		font-weight: normal;
@@ -174,12 +172,10 @@
 
 	.toggle-mode.tooltip {
 		--tooltip-width: 7em;
-		z-index: 1;
 	}
 
 	.toggle-mode.tooltip .tooltip-text {
 		font-size: 0.8em;
-		z-index: 2;
 		background-color: var(--primary-color-2);
 	}
 

@@ -22,6 +22,11 @@
 		draftStructure
 	} from '$lib/stores/create-page';
 
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let data;
 	export let isPreview: boolean;
 	export let isDraftModalHidden: boolean = true;
@@ -29,11 +34,7 @@
 
 	beforeNavigate((event) => {
 		if (getDraft($title.title.trim(), trimQuestions($questions)) !== $draftStructure) {
-			if (
-				!confirm(
-					'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.'
-				)
-			) {
+			if (!confirm($t('info_about_leaving'))) {
 				event.cancel();
 				return;
 			}

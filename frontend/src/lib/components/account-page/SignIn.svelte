@@ -49,33 +49,7 @@
 	</div>
 </div>
 
-<!-- TODO: Make it better!-->
-<!-- Placeholder to ensure ul/li CSS styles are used -->
-{#if false}
-	<ul class="icon accent">
-		<li></li>
-	</ul>
-{/if}
-
 <style>
-	ul {
-		list-style-type: none;
-		margin-top: 0.25em;
-		padding-left: 1.5em;
-	}
-
-	li {
-		display: flex;
-		flex-flow: row nowrap;
-		justify-content: flex-start;
-		align-items: flex-start;
-		padding-top: 0.75em;
-	}
-
-	.icon {
-		margin-right: 0.5em;
-	}
-
 	h1 {
 		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
@@ -119,18 +93,9 @@
 		text-align: justify;
 	}
 
-	.accent {
-		color: var(--accent-color-1);
-		font-weight: 700 !important;
-	}
-
 	@media screen and (max-width: 768px) {
 		h1 {
 			font-size: 2em;
-		}
-
-		ul {
-			padding-left: 0.5em;
 		}
 
 		.info {

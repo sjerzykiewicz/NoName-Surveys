@@ -9,6 +9,9 @@ export const data = {
 		cancel: 'Cancel',
 		sign_in: 'Sign in',
 
+		info_about_leaving:
+			'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.',
+
 		error_message: 'Something went wrong, please contact the administrator.',
 
 		nav_fill: 'Fill out',
@@ -18,6 +21,7 @@ export const data = {
 		nav_groups: 'Groups',
 		nav_account: 'Account',
 		nav_toggle_theme: 'Toggle theme',
+		nav_toggle_lang: 'Change language',
 		nav_sign_in_info: 'Sign in to access ',
 
 		home_code_info: 'Enter a survey code to fill it out',
@@ -36,41 +40,41 @@ Authorizing yourself will enable you to:
 		<div class="account-icon"><i class="symbol">article</i></div>
 		<div>
 			Create both
-			<span class="accent">public</span>
-			and <span class="accent">secure</span> surveys,
+			<span class="account-accent">public</span>
+			and <span class="account-accent">secure</span> surveys,
 		</div>
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">save</i></div>
 		<div>
 			Save surveys as
-			<span class="accent">drafts</span> for later editing,
+			<span class="account-accent">drafts</span> for later editing,
 		</div>
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">bar_chart</i></div>
 		<div>
-			View <span class="accent">responses</span>
-			and <span class="accent">summaries</span> of your surveys,
+			View <span class="account-accent">responses</span>
+			and <span class="account-accent">summaries</span> of your surveys,
 		</div>
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">share</i></div>
-		<div><span class="accent">Share</span> surveys' results with others,</div>
+		<div><span class="account-accent">Share</span> surveys' results with others,</div>
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">group</i></div>
 		<div>
 			Create and manage
-			<span class="accent">user groups</span>,
+			<span class="account-accent">user groups</span>,
 		</div>
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">encrypted</i></div>
 		<div>
-			Generate <span class="accent">digital signature keys</span> that allow you to participate
+			Generate <span class="account-accent">digital signature keys</span> that allow you to participate
 			in
-			<span class="accent">secure surveys</span> without the need to sign in each time.
+			<span class="account-accent">secure surveys</span> without the need to sign in each time.
 		</div>
 	</li>
 </ul>
@@ -84,8 +88,22 @@ Authorizing yourself will enable you to:
 		account_new_key: 'Generate new key pair',
 		account_keys_info: `These keys allow you to participate in secure surveys. Once they are generated, it is your
 			responsibility to keep them safe. When submitting a secure survey, you will be asked to
-			provide these keys to your browser for digital signature.`
+			provide these keys to your browser for digital signature.`,
+
+		create_survey_title: 'Survey title',
+		create_survey_title_enter: 'Enter a survey title',
+		create_survey_error_title: 'Please enter survey title.',
+		create_survey_error_limit: 'Title must be {limit} or less characters long.',
+
+		footer_edit: 'Edit',
+		footer_edit_t: 'Edit survey',
+		footer_preview: 'Preview',
+		footer_save_draft: 'Save draft',
+		footer_saved: 'Saved!',
+		footer_create: 'Create',
+		footer_create_t: 'Finish survey creation'
 	},
+
 	pl: {
 		submit: 'Zatwierdź',
 		error: 'Błąd',
@@ -96,6 +114,9 @@ Authorizing yourself will enable you to:
 		cancel: 'Anuluj',
 		sign_in: 'Zaloguj się',
 
+		info_about_leaving:
+			'Czy na pewno chcesz opuścić tę stronę?\nOpuszczenie to spowoduje utratę wszystkich niezapisanych zmian.',
+
 		error_message: 'Coś poszło nie tak, skontaktuj się z administratorem.',
 
 		nav_fill: 'Wypełnij',
@@ -105,6 +126,7 @@ Authorizing yourself will enable you to:
 		nav_groups: 'Grupy',
 		nav_account: 'Konto',
 		nav_toggle_theme: 'Zmień motyw',
+		nav_toggle_lang: 'Zmień język',
 		nav_sign_in_info: 'Zaloguj się, aby uzyskać dostęp do',
 
 		home_code_info: 'Wprowadź kod ankiety, aby ją wypełnić',
@@ -122,19 +144,19 @@ Zautoryzowanie się pozwoli Ci na:
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">article</i></div>
 		<div>
-			Tworzenie zarówno <span class="accent">publicznych</span>, jak i <span class="accent">bezpiecznych</span> ankiet,
+			Tworzenie zarówno <span class="account-accent">publicznych</span>, jak i <span class="account-accent">bezpiecznych</span> ankiet,
 		</div>
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">save</i></div>
 		<div>
-			Zapisywanie ankiet jako <span class="accent">szkice</span> do późniejszej edycji,
+			Zapisywanie ankiet jako <span class="account-accent">szkice</span> do późniejszej edycji,
 		</div>
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">bar_chart</i></div>
 		<div>
-			Podgląd <span class="accent">odpowiedzi</span> i <span class="accent">podsumowań</span> swoich ankiet,
+			Podgląd <span class="account-accent">odpowiedzi</span> i <span class="account-accent">podsumowań</span> swoich ankiet,
 		</div>
 	</li>
 	<li class="account-li">
@@ -144,14 +166,14 @@ Zautoryzowanie się pozwoli Ci na:
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">group</i></div>
 		<div>
-			Tworzenie i zarządzanie <span class="accent">grupami użytkowników</span>,
+			Tworzenie i zarządzanie <span class="account-accent">grupami użytkowników</span>,
 		</div>
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">encrypted</i></div>
 		<div>
-			Generowanie <span class="accent">kluczy podpisu cyfrowego</span>, które pozwalają na uczestniczenie
-			w <span class="accent">bezpiecznych ankietach</span> bez konieczności logowania się za każdym razem.
+			Generowanie <span class="account-accent">kluczy podpisu cyfrowego</span>, które pozwalają na uczestniczenie
+			w <span class="account-accent">bezpiecznych ankietach</span> bez konieczności logowania się za każdym razem.
 		</div>
 	</li>
 </ul>
@@ -165,6 +187,19 @@ Zautoryzowanie się pozwoli Ci na:
 		account_new_key: 'Wygeneruj nową parę kluczy',
 		account_keys_info: `Te klucze pozwalają na uczestniczenie w bezpiecznych ankietach. Po ich wygenerowaniu, należy
 			zabezpieczyć je. Podczas wypełniania bezpiecznej ankiety, zostaniesz poproszony o podanie
-			tych kluczy przeglądarce do podpisu cyfrowego.`
+			tych kluczy przeglądarce do podpisu cyfrowego.`,
+
+		create_survey_title: 'Tytuł ankiety',
+		create_survey_title_enter: 'Wprowadź tytuł ankiety',
+		create_survey_error_title: 'Proszę wprowadzić tytuł ankiety.',
+		create_survey_error_limit: 'Tytuł musi mieć mniej niż {limit} znaków.',
+
+		footer_edit: 'Edytuj',
+		footer_edit_t: 'Edytuj ankietę',
+		footer_preview: 'Podgląd',
+		footer_save_draft: 'Zapisz szkic',
+		footer_saved: 'Zapisano!',
+		footer_create: 'Utwórz',
+		footer_create_t: 'Zakończ tworzenie ankiety'
 	}
 };

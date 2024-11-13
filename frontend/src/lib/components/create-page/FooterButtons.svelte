@@ -16,6 +16,12 @@
 	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let isPreview: boolean = false;
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
@@ -132,12 +138,12 @@
 </script>
 
 {#if isPreview}
-	<button title="Edit survey" class="footer-button" on:click={togglePreview}>
-		<i class="symbol">edit</i>Edit
+	<button title={$t('footer_edit_t')} class="footer-button" on:click={togglePreview}>
+		<i class="symbol">edit</i><Tx text="footer_edit"></Tx>
 	</button>
 {:else}
 	<button
-		title="Preview survey"
+		title={$t('footer_preview')}
 		class="footer-button"
 		on:click={() => {
 			$title.title = $title.title.trim();
@@ -145,26 +151,26 @@
 			togglePreview();
 		}}
 	>
-		<i class="symbol">search</i>Preview
+		<i class="symbol">search</i><Tx text="footer_preview"></Tx>
 	</button>
 {/if}
 <div class="footer-button-group">
 	<button
-		title="Save draft"
+		title={$t('footer_save_draft')}
 		class="footer-button save popup"
 		disabled={$questions.length === 0 || isPreview}
 		on:click={saveDraft}
 	>
-		<i class="symbol">save</i>Save Draft
-		<span class="popup-text top" id="draft-popup">Saved!</span>
+		<i class="symbol">save</i><Tx text="footer_save_draft"></Tx>
+		<span class="popup-text top" id="draft-popup"><Tx text="footer_saved"></Tx></span>
 	</button>
 	<button
-		title="Finish survey creation"
+		title={$t('footer_create_t')}
 		class="footer-button save done"
 		disabled={$questions.length === 0 || isPreview}
 		on:click={createSurvey}
 	>
-		<i class="symbol">done</i>Create
+		<i class="symbol">done</i><Tx text="footer_create"></Tx>
 	</button>
 </div>
 

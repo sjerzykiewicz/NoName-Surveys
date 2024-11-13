@@ -142,4 +142,18 @@
 	#page-limit {
 		width: 1.5em;
 	}
+
+	@media screen and (max-width: 768px) {
+		#page-input {
+			width: 1.25em;
+		}
+
+		#slash {
+			width: 0.75em;
+		}
+
+		#page-limit {
+			width: 1.25em;
+		}
+	}
 </style>

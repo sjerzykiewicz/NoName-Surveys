@@ -152,7 +152,7 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		.button-row {
+		.top-row {
 			font-size: 0.9em;
 		}
 	}

@@ -55,7 +55,6 @@
 	let questionInput: HTMLDivElement;
 	let isSurveyModalHidden: boolean = true;
 	let surveyCode: string;
-	let ring: string[] = [];
 
 	function checkCorrectness() {
 		cryptoError = false;
@@ -127,7 +126,7 @@
 		await invalidateAll();
 	}
 
-	async function fetchGroup(name: string) {
+	async function fetchGroup(name: string): Promise<string[]> {
 		const response = await fetch('/api/groups/fetch', {
 			method: 'POST',
 			body: JSON.stringify({ name: name }),
@@ -140,11 +139,11 @@
 			const body = await response.json();
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
-			return;
+			return [];
 		}
 
-		const body = await response.json();
-		ring = [...$ringMembers, ...body];
+		const body: { email: string; has_public_key: boolean }[] = await response.json();
+		return body.map((member) => member.email);
 	}
 
 	async function createSurvey() {
@@ -152,17 +151,17 @@
 
 		isRespondentModalHidden = true;
 
-		const parsedSurvey = new Survey(constructQuestionList($questions));
-		let finalRing: string[] = [];
+		let ring: string[] = [];
 
 		if ($selectedGroup.length > 0) {
-			await fetchGroup($selectedGroup[0]);
-			finalRing = [...new Set(ring)];
-		} else if ($ringMembers.length > 0) {
-			finalRing = [...$ringMembers];
+			const groupMembers = await fetchGroup($selectedGroup[0]);
+			ring = Array.from(new Set([...$ringMembers, ...groupMembers]));
+		} else {
+			ring = $ringMembers;
 		}
 
-		const surveyInfo = new SurveyCreateInfo($title.title, parsedSurvey, $useCrypto, finalRing);
+		const parsedSurvey = new Survey(constructQuestionList($questions));
+		const surveyInfo = new SurveyCreateInfo($title.title, parsedSurvey, $useCrypto, ring);
 
 		const response = await fetch('/api/surveys/create', {
 			method: 'POST',
@@ -180,8 +179,6 @@
 		}
 
 		const body = await response.json();
-		ring = [];
-		finalRing = [];
 		$useCrypto = false;
 		$ringMembers = [];
 		$selectedGroup = [];

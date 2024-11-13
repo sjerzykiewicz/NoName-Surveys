@@ -265,6 +265,16 @@ export const getAllUsersWhoAreNotMembers = (user_email: string, name: string) =>
 	});
 };
 
+export const getWholeUserGroup = (user_email: string, name: string) => {
+	return fetch(`${host}/user-groups/fetch`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, name }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
 export const getUserGroup = (user_email: string, name: string, page: number) => {
 	return fetch(`${host}/user-groups/fetch/${page}`, {
 		method: 'POST',

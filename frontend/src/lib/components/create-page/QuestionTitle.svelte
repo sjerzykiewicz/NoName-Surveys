@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { questions } from '$lib/stores/create-page';
+	import { focusedIndex, questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import Input from '$lib/components/global/Input.svelte';
+	import setQuestionFocus from '$lib/utils/setQuestionFocus';
 
 	export let questionIndex: number;
 	export let questionTypeData: { title: string; icon: string; text: string };
@@ -11,6 +12,12 @@
 	function removeQuestion() {
 		$questions.splice(questionIndex, 1);
 		$questions = $questions;
+		if ($focusedIndex === 0) {
+			if ($questions.length === 0) $focusedIndex = undefined;
+		} else {
+			$focusedIndex!--;
+			setQuestionFocus($focusedIndex!);
+		}
 	}
 
 	function moveQuestionUp() {

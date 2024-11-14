@@ -30,3 +30,5 @@ export const selectedGroup: Writable<Array<string>> = writable([]);
 export const currentDraftId: Writable<number | null> = writable(null);
 
 export const draftStructure: Writable<string> = writable(getDraft('', []));
+
+export const focusedIndex: Writable<number | undefined> = writable(undefined);

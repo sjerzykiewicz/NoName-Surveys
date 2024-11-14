@@ -28,6 +28,8 @@
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { M } from '$lib/stores/global';
+	import { focusedIndex } from '$lib/stores/create-page';
+	import setQuestionFocus from '$lib/utils/setQuestionFocus';
 
 	export let questionInput: HTMLDivElement;
 
@@ -145,19 +147,25 @@
 		$previousQuestion = component;
 		isPanelVisible = false;
 
+		if ($focusedIndex === undefined) {
+			$focusedIndex = 0;
+		} else {
+			$focusedIndex++;
+		}
+
 		if (innerWidth > $M) {
 			await tick();
 			questionInput.focus();
 		}
 	}
 
-	function deleteLastQuestion() {
-		$questions.splice($questions.length - 1, 1);
+	function deleteQuestion(index: number) {
+		$questions.splice(index, 1);
 		$questions = $questions;
 	}
 
-	function switchRequired() {
-		$questions[$questions.length - 1].required = !$questions[$questions.length - 1].required;
+	function switchRequired(index: number) {
+		$questions[index].required = !$questions[index].required;
 	}
 
 	onMount(() => {
@@ -210,10 +218,32 @@
 						if ($previousQuestion) addQuestion($previousQuestion);
 						break;
 					case 'Backspace':
-						deleteLastQuestion();
+						if ($focusedIndex !== undefined) {
+							deleteQuestion($focusedIndex);
+							if ($focusedIndex === 0) {
+								if ($questions.length === 0) $focusedIndex = undefined;
+							} else {
+								$focusedIndex--;
+								setQuestionFocus($focusedIndex);
+							}
+						}
 						break;
 					case 'e':
-						switchRequired();
+						if ($focusedIndex !== undefined) {
+							switchRequired($focusedIndex);
+						}
+						break;
+					case 'ArrowLeft':
+						if ($focusedIndex !== undefined) {
+							$focusedIndex = Math.max(0, $focusedIndex - 1);
+							setQuestionFocus($focusedIndex);
+						}
+						break;
+					case 'ArrowRight':
+						if ($focusedIndex !== undefined) {
+							$focusedIndex = Math.min($focusedIndex + 1, $questions.length - 1);
+							setQuestionFocus($focusedIndex);
+						}
 						break;
 				}
 			}

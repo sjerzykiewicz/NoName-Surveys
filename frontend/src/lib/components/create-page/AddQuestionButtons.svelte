@@ -253,10 +253,12 @@
 		document.body.addEventListener('keydown', handleEscape);
 		document.body.addEventListener('click', handleClick);
 		document.body.addEventListener('keydown', handleHotkeys);
+		document.body.addEventListener('keydown', handleHotkeys);
 
 		return () => {
 			document.body.removeEventListener('keydown', handleEscape);
 			document.body.removeEventListener('click', handleClick);
+			document.body.removeEventListener('keydown', handleHotkeys);
 			document.body.removeEventListener('keydown', handleHotkeys);
 		};
 	});

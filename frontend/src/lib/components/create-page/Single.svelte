@@ -50,7 +50,7 @@
 			</div>
 			<Input
 				bind:text={choice}
-				label={$t('create_choice')}
+				label={$t('choice')}
 				title={$t('create_choice_title')}
 				bind:element={choiceInput}
 			/>

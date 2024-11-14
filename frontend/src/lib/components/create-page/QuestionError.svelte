@@ -15,11 +15,9 @@
 		const error = $questions[i].error;
 		switch (error) {
 			case SurveyError.QuestionRequired:
-				return 'Please enter question no. ' + (i + 1) + '.';
+				return $t('create_question_error_required', { index: i + 1 });
 			case SurveyError.QuestionTooLong:
-				return (
-					'Question no. ' + (i + 1) + ' must be ' + $LIMIT_OF_CHARS + ' or less characters long.'
-				);
+				return $t('create_question_error_limit', { index: i + 1, limit: $LIMIT_OF_CHARS });
 		}
 	}
 
@@ -38,7 +36,10 @@
 <div transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#if checkQuestionError(questionIndex)}
 		<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<i class="symbol">error</i>{errorMessage(questionIndex)}
+			<i class="symbol">error</i>
+			{#key $t}
+				{errorMessage(questionIndex)}
+			{/key}
 		</p>
 	{/if}
 </div>

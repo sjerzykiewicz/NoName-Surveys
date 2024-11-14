@@ -11,7 +11,7 @@
 
 <div class="choice-area display slider">
 	<div class="choice slider">
-		<div title="Average" class="limit">{avg}</div>
+		<div title={$t('average')} class="limit">{avg}</div>
 	</div>
 	<div class="limits">
 		<div title={$t('minimum_value')} class="limit">{data.min_value}</div>

@@ -28,6 +28,7 @@
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { M } from '$lib/stores/global';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -187,13 +188,15 @@
 <div class="button-group">
 	<div class="add-buttons">
 		<button
-			title={isPanelVisible ? $t('choose_question_type_stop') : $t('create_choose_type')}
+			title={isPanelVisible
+				? $t('create_question_choose_type_stop')
+				: $t('create_question_choose_type')}
 			class="add-question"
 			class:clicked={isPanelVisible}
 			class:previous={$previousQuestion}
 			on:click={togglePanel}
 		>
-			<i class="symbol">add</i>Question
+			<i class="symbol">add</i><Tx text="create_question"></Tx>
 		</button>
 		{#if $previousQuestion}
 			<QuestionTypeButton

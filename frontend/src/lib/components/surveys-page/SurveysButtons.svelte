@@ -6,6 +6,7 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let surveys: {
 		title: string;
@@ -68,7 +69,7 @@
 				disabled={selectedSurveysToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="symbol">delete</i>Delete
+				<i class="symbol">delete</i><Tx text="delete"></Tx>
 			</button>
 		{/if}
 	</div>

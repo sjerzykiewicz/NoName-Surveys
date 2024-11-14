@@ -11,9 +11,9 @@
 
 <div class="choice-area display slider">
 	<div class="choice slider">
-		<div title="Average" class="limit">{avg}</div>
+		<div title={$t('average')} class="limit">{avg}</div>
 	</div>
-	<div title="Average" class="slider-area">
+	<div title={$t('average')} class="slider-area">
 		<input
 			class="range"
 			type="range"

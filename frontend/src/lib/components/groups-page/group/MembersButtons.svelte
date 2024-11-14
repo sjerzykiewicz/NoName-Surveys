@@ -13,6 +13,7 @@
 	import { page } from '$app/stores';
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
 	import { changePage } from '$lib/utils/changePage';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let members: {
 		email: string;
@@ -156,7 +157,7 @@
 				disabled={selectedMembersToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="symbol">delete</i>Delete
+				<i class="symbol">delete</i><Tx text="delete"></Tx>
 			</button>
 		{/if}
 	</div>
@@ -172,7 +173,7 @@
 			/>
 		</div>
 		<button title="Finish adding group members" class="done" on:click={addMembers}>
-			<i class="symbol">done</i>Apply
+			<i class="symbol">done</i><Tx text="submit"></Tx>
 		</button>
 	</div>
 	<MembersError members={selectedMembersToAdd} error={membersError} />

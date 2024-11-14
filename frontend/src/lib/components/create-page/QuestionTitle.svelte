@@ -3,6 +3,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import Input from '$lib/components/global/Input.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -46,8 +47,8 @@
 	<div title={$t('create_question_index', { index: questionIndex + 1 })} class="index">
 		{questionIndex + 1}.
 	</div>
-	<div title={questionTypeData.title} class="type">
-		<i class="symbol">{questionTypeData.icon}</i>{questionTypeData.text}
+	<div title={$t(questionTypeData.title)} class="type">
+		<i class="symbol">{questionTypeData.icon}</i><Tx text={questionTypeData.text}></Tx>
 	</div>
 </div>
 <div class="question-area" transition:slide={{ duration: 200, easing: cubicInOut }}>

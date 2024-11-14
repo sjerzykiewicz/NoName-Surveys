@@ -10,7 +10,7 @@
 	export let error: boolean;
 
 	function errorMessage() {
-		return 'Please define respondent group.';
+		return $t('create_define_respondent_group_error');
 	}
 
 	$: checkCryptoError = () => {
@@ -27,7 +27,10 @@
 
 {#if checkCryptoError()}
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<i class="symbol">error</i>{errorMessage()}
+		<i class="symbol">error</i>
+		{#key $t}
+			{errorMessage()}
+		{/key}
 	</p>
 {/if}
 

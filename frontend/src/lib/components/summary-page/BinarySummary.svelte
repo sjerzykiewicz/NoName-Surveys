@@ -1,4 +1,9 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let data: { answers: string[]; choices: string[] };
 
 	function calculatePercentage(answer: string, answers: string[]) {
@@ -7,7 +12,7 @@
 </script>
 
 <div class="choice-area display binary">
-	<label title="Choice" class="choice binary">
+	<label title={$t('choice')} class="choice binary">
 		<div class="icon">
 			<input type="radio" disabled />
 			<i class="symbol">thumb_up</i>
@@ -15,11 +20,11 @@
 		<div class="choice-input display binary">
 			{data.choices[0]}
 		</div>
-		<div class="choice-percentage" title="Average">
+		<div class="choice-percentage" title={$t('average')}>
 			{calculatePercentage(data.choices[0], data.answers)}%
 		</div>
 	</label>
-	<label title="Choice" class="choice binary">
+	<label title={$t('choice')} class="choice binary">
 		<div class="icon">
 			<input type="radio" disabled />
 			<i class="symbol">thumb_down</i>
@@ -27,7 +32,7 @@
 		<div class="choice-input display binary">
 			{data.choices[1]}
 		</div>
-		<div class="choice-percentage" title="Average">
+		<div class="choice-percentage" title={$t('average')}>
 			{calculatePercentage(data.choices[1], data.answers)}%
 		</div>
 	</label>

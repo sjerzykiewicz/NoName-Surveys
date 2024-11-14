@@ -13,6 +13,7 @@
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let usersWithoutAccess: string[];
 	export let usersWithAccess: string[];
@@ -125,7 +126,7 @@
 			disabled={selectedUsersToRemove.length === 0}
 			on:click={() => (isModalHidden = false)}
 		>
-			<i class="symbol">delete</i>Delete
+			<i class="symbol">delete</i><Tx text="delete"></Tx>
 		</button>
 	</div>
 	<PageButtons numEntries={numUsers} />
@@ -140,7 +141,7 @@
 			/>
 		</div>
 		<button title="Finish giving access" class="done" on:click={addUsers}>
-			<i class="symbol">done</i>Apply
+			<i class="symbol">done</i><Tx text="submit"></Tx>
 		</button>
 	</div>
 	<UsersError users={selectedUsersToAdd} error={usersError} />

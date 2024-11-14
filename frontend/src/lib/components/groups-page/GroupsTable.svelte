@@ -10,6 +10,7 @@
 	import NameError from './NameError.svelte';
 	import { page } from '$app/stores';
 	import Input from '$lib/components/global/Input.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -135,7 +136,7 @@
 		<NameError name={newName.trim()} error={nameError} groups={groupNames} --font-size="0.8em" />
 	</div>
 	<button title="Save the new group name" class="done" on:click={renameGroup}
-		><i class="symbol">done</i>Apply</button
+		><i class="symbol">done</i><Tx text="submit"></Tx></button
 	>
 </Modal>
 

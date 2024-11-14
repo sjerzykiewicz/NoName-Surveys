@@ -14,23 +14,48 @@ export const data = {
 		sign_out: 'Sign Out',
 		public: 'Public',
 		secure: 'Secure',
+		choice: 'Choice',
 		minimum: 'Minimum',
 		minimum_value: 'Minimum value',
 		maximum: 'Maximum',
 		maximum_value: 'Maximum value',
 		precision: 'Precision',
-		access_code: 'Access Code',
-		survey_title: 'Survey title',
 		answer: 'Answer',
+		average: 'Average',
 		select_answer: 'Select your answer',
 		selected_value: 'Selected value',
 		creation_date: 'Creation Date',
+		access_code: 'Access Code',
+		survey_title: 'Survey Title',
 		group_size: 'Group Size',
 		survey_info: 'Survey Information',
 		select_all: 'Select all',
 
+		single_text: 'Single',
+		single_title: 'Single choice',
+		multi_text: 'Multi',
+		multi_title: 'Multiple choice',
+		scale_text: 'Scale',
+		scale_title: '1-5 choice',
+		slider_text: 'Slider',
+		slider_title: 'Range of values',
+		list_text: 'List',
+		list_title: 'Dropdown menu choice',
+		rank_text: 'Rank',
+		rank_title: 'Ranking choice',
+		binary_text: 'Binary',
+		binary_title: 'Yes/No choice',
+		text_text: 'Text',
+		text_title: 'Open question',
+		number_text: 'Number',
+		number_title: 'Numerical question',
+
+		possible_respondents: 'Possible Respondents',
+		possible_respondents_empty: 'No possible respondents to display!',
+
 		info_about_leaving:
 			'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.',
+		info_about_deleting: 'Are you sure you want to delete selected entries?',
 
 		error_message: 'Something went wrong, please contact the administrator.',
 
@@ -109,11 +134,16 @@ Authorizing yourself will enable you to:
 			responsibility to keep them safe. When submitting a secure survey, you will be asked to
 			provide these keys to your browser for digital signature.`,
 
+		create_groups_info: `Before creating a secure survey, consider setting up a user group. User groups make it
+			easy to select the same set of respondents across multiple surveys. However, if you
+			prefer, you can proceed without using them.`,
+
 		create_survey_title_label: 'Survey Title',
 		create_survey_title_title: 'Enter a survey title',
 		create_survey_title_error_required: 'Please enter survey title.',
 		create_survey_title_error_limit: 'Title must be {limit} or less characters long.',
 
+		create_question: 'Question',
 		create_question_index: 'Question no. {index}',
 		create_question_up: 'Move question up',
 		create_question_down: 'Move question down',
@@ -125,7 +155,9 @@ Authorizing yourself will enable you to:
 		create_question_choose_type: 'Choose question type',
 		create_question_choose_type_stop: 'Stop choosing question type',
 
-		create_choice: 'Choice',
+		create_question_error_required: 'Please enter question no. {index}.',
+		create_question_error_limit: 'Question no. {index} must be {limit} or less characters long.',
+
 		create_choice_title: 'Enter a choice',
 		create_choice_remove: 'Remove choice',
 		create_choice_add: 'Add choice',
@@ -155,12 +187,25 @@ Authorizing yourself will enable you to:
 		create_binary_negative_label: 'Negative Choice',
 		create_binary_negative_title: 'Enter a negative choice',
 
+		create_choice_error_required: 'Please enter all choices for question no. {index}.',
+		create_choice_error_binary_required: 'Please enter both choices for question no. {index}.',
+		create_choice_error_number_required: 'Please enter both values for question no. {index}.',
+		create_choice_error_slider_required: 'Please enter all values for question no. {index}.',
+		create_choice_error_limit:
+			'Choices must be {limit} or less characters long in question no. {index}.',
+		create_choice_error_duplicate: 'Please remove duplicate choices from question no. {index}.',
+		create_choice_error_slider_values:
+			'Maximum value must be greater than minimum value in question no. {index}.',
+		create_choice_error_slider_precision:
+			'Precision must be lower than the range in question no. {index}.',
+
 		create_saving_draft: 'Saving Draft',
 		create_saving_draft_alert: 'Do you wish to overwrite the draft or save a new draft?',
 		create_overwrite_draft: 'Overwrite Draft',
 		create_save_new_draft: 'Save New Draft',
 		create_define_respondent_group: 'Define Respondent Group',
 		create_define_respondent_group_alert: 'Do you wish to make the survey public or secure?',
+		create_define_respondent_group_error: 'Please define respondent group.',
 		create_survey_success: 'Survey Created Successfully!',
 
 		footer_edit: 'Edit',
@@ -194,23 +239,48 @@ Authorizing yourself will enable you to:
 		sign_out: 'Wyloguj się',
 		public: 'Publiczna',
 		secure: 'Bezpieczna',
+		choice: 'Wybór',
 		minimum: 'Minimum',
 		minimum_value: 'Wartość minimalna',
 		maximum: 'Maksimum',
 		maximum_value: 'Wartość maksymalna',
 		precision: 'Precyzja',
-		access_code: 'Kod Dostępu',
-		survey_title: 'Tytuł ankiety',
 		answer: 'Odpowiedź',
+		average: 'Średnia',
 		select_answer: 'Wybierz swoją odpowiedź',
 		selected_value: 'Wybrana wartość',
 		creation_date: 'Data utworzenia',
+		access_code: 'Kod dostępu',
+		survey_title: 'Tytuł ankiety',
 		group_size: 'Rozmiar grupy',
 		survey_info: 'Informacje o ankiecie',
 		select_all: 'Wybierz wszystko',
 
+		single_text: 'Jednokrotne',
+		single_title: 'Jednokrotny wybór',
+		multi_text: 'Wielokrotne',
+		multi_title: 'Wielokrotny wybór',
+		scale_text: 'Skala',
+		scale_title: 'Wybór 1-5',
+		slider_text: 'Suwak',
+		slider_title: 'Zakres wartości',
+		list_text: 'Lista',
+		list_title: 'Wybór z listy rozwijanej',
+		rank_text: 'Ranking',
+		rank_title: 'Wybór rankingowy',
+		binary_text: 'Binarne',
+		binary_title: 'Wybór Tak/Nie',
+		text_text: 'Tekstowe',
+		text_title: 'Pytanie otwarte',
+		number_text: 'Liczbowe',
+		number_title: 'Pytanie numeryczne',
+
+		possible_respondents: 'Możliwi respondenci',
+		possible_respondents_empty: 'Brak możliwych respondentów do wyświetlenia!',
+
 		info_about_leaving:
 			'Czy na pewno chcesz opuścić tę stronę?\nOpuszczenie spowoduje utratę wszystkich niezapisanych zmian.',
+		info_about_deleting: 'Czy na pewno chcesz usunąć wybrane wpisy?',
 
 		error_message: 'Coś poszło nie tak, skontaktuj się z administratorem.',
 
@@ -284,11 +354,15 @@ Zautoryzowanie się pozwoli Ci na:
 			je zabezpieczyć. Podczas wypełniania bezpiecznej ankiety, zostaniesz poproszony o podanie
 			tych kluczy przeglądarce do podpisu cyfrowego.`,
 
+		create_groups_info: `Przed utworzeniem bezpiecznej ankiety, rozważ utworzenie grupy użytkowników. Grupy użytkowników ułatwiają wybór
+			takiego samego zestawu respondentów w wielu ankietach. Możesz jednak kontynuować bez ich użycia, jeśli chcesz.`,
+
 		create_survey_title_label: 'Tytuł ankiety',
 		create_survey_title_title: 'Wprowadź tytuł ankiety',
 		create_survey_title_error_required: 'Proszę wprowadzić tytuł ankiety.',
 		create_survey_title_error_limit: 'Tytuł musi mieć {limit} lub mniej znaków.',
 
+		create_question: 'Pytanie',
 		create_question_index: 'Pytanie nr {index}',
 		create_question_up: 'Przesuń pytanie w górę',
 		create_question_down: 'Przesuń pytanie w dół',
@@ -300,7 +374,9 @@ Zautoryzowanie się pozwoli Ci na:
 		create_question_choose_type: 'Wybierz typ pytania',
 		create_question_choose_type_stop: 'Przestań wybierać typ pytania',
 
-		create_choice: 'Wybór',
+		create_question_error_required: 'Proszę wprowadzić pytanie nr {index}.',
+		create_question_error_limit: 'Pytanie nr {index} musi mieć {limit} lub mniej znaków.',
+
 		create_choice_title: 'Wprowadź wybór',
 		create_choice_remove: 'Usuń wybór',
 		create_choice_add: 'Dodaj wybór',
@@ -330,12 +406,25 @@ Zautoryzowanie się pozwoli Ci na:
 		create_binary_negative_label: 'Negatywny wybór',
 		create_binary_negative_title: 'Wprowadź negatywny wybór',
 
+		create_choice_error_required: 'Proszę wprowadzić wszystkie wybory dla pytania nr {index}.',
+		create_choice_error_binary_required: 'Proszę wprowadzić oba wybory dla pytania nr {index}.',
+		create_choice_error_number_required: 'Proszę wprowadzić obie wartości dla pytania nr {index}.',
+		create_choice_error_slider_required:
+			'Proszę wprowadzić wszystkie wartości dla pytania nr {index}.',
+		create_choice_error_limit: 'Wybory muszą mieć {limit} lub mniej znaków w pytaniu nr {index}.',
+		create_choice_error_duplicate: 'Proszę usunąć zduplikowane wybory z pytania nr {index}.',
+		create_choice_error_slider_values:
+			'Maksymalna wartość musi być większa niż minimalna wartość w pytaniu nr {index}.',
+		create_choice_error_slider_precision:
+			'Precyzja musi być mniejsza niż zakres w pytaniu nr {index}.',
+
 		create_saving_draft: 'Zapisywanie szkicu',
 		create_saving_draft_alert: 'Chcesz nadpisać szkic czy zapisać nowy szkic?',
 		create_overwrite_draft: 'Nadpisz szkic',
 		create_save_new_draft: 'Zapisz nowy szkic',
 		create_define_respondent_group: 'Zdefiniuj grupę respondentów',
 		create_define_respondent_group_alert: 'Chcesz stworzyć ankietę publiczną czy bezpieczną?',
+		create_define_respondent_group_error: 'Proszę zdefiniować grupę respondentów.',
 		create_survey_success: 'Ankieta utworzona pomyślnie!',
 
 		footer_edit: 'Edytuj',

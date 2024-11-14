@@ -287,7 +287,7 @@
 		</div>
 	</div>
 	<button title={$t('create_define_respondent_group')} class="done" on:click={createSurvey}
-		><i class="symbol">done</i>Apply</button
+		><i class="symbol">done</i><Tx text="submit"></Tx></button
 	>
 </Modal>
 
@@ -324,9 +324,7 @@
 			<div class="tooltip create-info">
 				<i class="symbol">info</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
-					>Before creating a secure survey, consider setting up a user group. User groups make it
-					easy to select the same set of respondents across multiple surveys. However, if you
-					prefer, you can proceed without using them.</span
+					><Tx text="create_groups_info"></Tx></span
 				>
 			</div>
 		</div>

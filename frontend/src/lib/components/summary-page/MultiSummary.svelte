@@ -1,4 +1,9 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let data: { multi_answers: string[]; choices: string[] };
 
 	function calculatePercentage(choice: string) {
@@ -10,14 +15,14 @@
 
 <div class="choice-area display">
 	{#each data.choices as choice}
-		<label title="Choice" class="choice">
+		<label title={$t('choice')} class="choice">
 			<div class="checkbox">
 				<input type="checkbox" disabled />
 			</div>
 			<div class="choice-input display">
 				{choice}
 			</div>
-			<div title="Average" class="choice-percentage">
+			<div title={$t('average')} class="choice-percentage">
 				{calculatePercentage(choice)}
 			</div>
 		</label>

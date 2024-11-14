@@ -25,7 +25,8 @@
 	import Input from '$lib/components/global/Input.svelte';
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
-	import WarningModal from '../global/WarningModal.svelte';
+	import WarningModal from '$lib/components/global/WarningModal.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let groups: {
 		user_group_name: string;
@@ -185,7 +186,7 @@
 				disabled={selectedGroupsToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="symbol">delete</i>Delete
+				<i class="symbol">delete</i><Tx text="delete"></Tx>
 			</button>
 		{/if}
 	</div>

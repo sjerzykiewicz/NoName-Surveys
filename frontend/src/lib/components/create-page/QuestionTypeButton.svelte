@@ -3,6 +3,11 @@
 	import { createEventDispatcher } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionType: ComponentType;
 	export let questionTypeData: { title: string; icon: string; text: string };
@@ -16,12 +21,12 @@
 </script>
 
 <button
-	title={questionTypeData.title}
+	title={$t(questionTypeData.title)}
 	class:previous={questionTypeIndex === -1}
 	class:last={questionTypeIndex === 8}
 	in:slide={{ axis: 'x', duration: 200, easing: cubicInOut }}
 	on:click={handleClick}
-	><i class="symbol">{questionTypeData.icon}</i>{questionTypeData.text}</button
+	><i class="symbol">{questionTypeData.icon}</i><Tx text={questionTypeData.text}></Tx></button
 >
 
 <style>

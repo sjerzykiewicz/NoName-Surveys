@@ -7,6 +7,7 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let drafts: {
 		id: number;
@@ -66,7 +67,7 @@
 				disabled={selectedDraftsToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="symbol">delete</i>Delete
+				<i class="symbol">delete</i><Tx text="delete"></Tx>
 			</button>
 		{/if}
 	</div>

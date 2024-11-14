@@ -39,5 +39,6 @@ class SliderQuestion(Question):
             or self.question != answer.question
             or self.min_value != answer.min_value
             or self.max_value != answer.max_value
+            or self.precision != answer.precision
         ):
             raise ValueError("Invalid answer!")

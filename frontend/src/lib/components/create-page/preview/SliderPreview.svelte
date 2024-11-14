@@ -5,11 +5,32 @@
 
 	export let questionIndex: number;
 
-	let value: number = Math.round(
-		(parseFloat($questions[questionIndex].choices[0]) +
-			parseFloat($questions[questionIndex].choices[1])) /
-			2
+	let value: number = parseFloat(
+		(
+			Math.round(
+				Math.round(
+					(parseFloat($questions[questionIndex].choices[0]) +
+						parseFloat($questions[questionIndex].choices[1])) /
+						2
+				) / parseFloat($questions[questionIndex].choices[2])
+			) * parseFloat($questions[questionIndex].choices[2])
+		).toFixed(3)
 	);
+
+	function handleChange() {
+		if (value !== null) {
+			if (value < parseFloat($questions[questionIndex].choices[0])) {
+				value = parseFloat($questions[questionIndex].choices[0]);
+			} else if (value > parseFloat($questions[questionIndex].choices[1])) {
+				value = parseFloat($questions[questionIndex].choices[1]);
+			} else if (value % parseFloat($questions[questionIndex].choices[2]) !== 0) {
+				value =
+					Math.round(value / parseFloat($questions[questionIndex].choices[2])) *
+					parseFloat($questions[questionIndex].choices[2]);
+			}
+			value = parseFloat(value.toFixed(3));
+		}
+	}
 </script>
 
 <div class="choice-area display slider" transition:slide={{ duration: 200, easing: cubicInOut }}>
@@ -21,19 +42,22 @@
 			autocomplete="off"
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
+			step={$questions[questionIndex].choices[2]}
 			name={questionIndex.toString()}
 			bind:value
+			on:change={handleChange}
 		/>
 	</div>
 	<div title="Select your answer" class="slider-area">
 		<input
 			class="range"
 			type="range"
-			step="1"
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
+			step={$questions[questionIndex].choices[2]}
 			name={questionIndex.toString()}
 			bind:value
+			on:change={handleChange}
 		/>
 	</div>
 	<div class="limits">

@@ -43,12 +43,16 @@
 			outline 0s;
 	}
 
+	.choice-input {
+		margin-top: 0.5em;
+	}
+
 	input {
 		cursor: default !important;
 	}
 
 	i {
-		font-size: 1em;
+		font-size: 1.25em;
 	}
 
 	.choice-percentage {

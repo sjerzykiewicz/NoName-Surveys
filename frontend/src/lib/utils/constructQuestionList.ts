@@ -39,7 +39,8 @@ export function constructQuestionList(questions: Array<QuestionsStore>): Array<Q
 						q.required,
 						q.question,
 						parseFloat(q.choices[0]),
-						parseFloat(q.choices[1])
+						parseFloat(q.choices[1]),
+						parseFloat(q.choices[2])
 					)
 				];
 				break;

@@ -49,7 +49,7 @@
 	}
 
 	i {
-		font-size: 1em;
+		font-size: 1.25em;
 		color: var(--border-color-1);
 		cursor: default;
 		transition:

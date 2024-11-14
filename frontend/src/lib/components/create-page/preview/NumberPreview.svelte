@@ -10,6 +10,18 @@
 			parseFloat($questions[questionIndex].choices[1])) /
 			2
 	);
+
+	function handleChange() {
+		if (value !== null) {
+			if (value < parseFloat($questions[questionIndex].choices[0])) {
+				value = parseFloat($questions[questionIndex].choices[0]);
+			} else if (value > parseFloat($questions[questionIndex].choices[1])) {
+				value = parseFloat($questions[questionIndex].choices[1]);
+			} else {
+				value = Math.round(value);
+			}
+		}
+	}
 </script>
 
 <div class="choice-area display slider" transition:slide={{ duration: 200, easing: cubicInOut }}>
@@ -23,6 +35,7 @@
 			max={$questions[questionIndex].choices[1]}
 			name={questionIndex.toString()}
 			bind:value
+			on:change={handleChange}
 		/>
 	</div>
 	<div class="limits">

@@ -773,7 +773,7 @@ input[type='file'] {
 
 .choice.binary .input {
 	margin: 0.5em 0em 0em 0em !important;
-	width: 12em !important;
+	width: 13em !important;
 	max-width: 15em !important;
 	overflow-wrap: anywhere !important;
 }
@@ -844,6 +844,7 @@ input[type='file'] {
 
 .limits {
 	display: flex;
+	flex-flow: row;
 	align-items: center;
 	justify-content: space-between;
 	width: calc(100% - 2.25em);
@@ -871,7 +872,7 @@ input[type='file'] {
 	text-align: center;
 	cursor: text;
 	overflow: hidden;
-	width: 12em;
+	width: 13em;
 	transition:
 		0.2s,
 		outline 0s;

@@ -168,7 +168,7 @@
 
 <DeleteModal title="Deleting Groups" bind:isHidden={isModalHidden} deleteEntries={deleteGroups} />
 
-<div class="button-row">
+<div class="button-row top-row">
 	<div class="button-sub-row">
 		<button
 			title={isPanelVisible ? 'Stop creating a group' : 'Create a group'}
@@ -250,5 +250,11 @@
 	.buttons-container {
 		padding: 0.2em;
 		margin: -0.2em;
+	}
+
+	@media screen and (max-width: 768px) {
+		.top-row {
+			font-size: 0.9em;
+		}
 	}
 </style>

@@ -42,4 +42,10 @@
 	.button-row {
 		justify-content: flex-end;
 	}
+
+	@media screen and (max-width: 768px) {
+		.button-row {
+			font-size: 0.9em;
+		}
+	}
 </style>

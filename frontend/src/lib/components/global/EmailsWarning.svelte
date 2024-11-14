@@ -2,6 +2,10 @@
 	import { FileError } from '$lib/entities/FileError';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let warning: FileError;
 	export let element: HTMLInputElement | null;
@@ -27,7 +31,7 @@
 </script>
 
 {#if checkFileWarning()}
-	<p title="Warning" class="warning" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<p title={$t('warning')} class="warning" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="symbol">warning</i>{warningMessage()}
 	</p>
 {/if}

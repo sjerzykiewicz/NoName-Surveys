@@ -2,6 +2,10 @@
 	import { onMount } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { fade, scale } from 'svelte/transition';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let isHidden: boolean = true;
 	export let icon: string;
@@ -53,7 +57,7 @@
 				<div class="caption">
 					<i class="symbol">{icon}</i>{title}
 				</div>
-				<button title="Cancel" class="cancel" on:click={hide}>
+				<button title={$t('cancel')} class="cancel" on:click={hide}>
 					<i class="symbol">close</i>
 				</button>
 			</div>

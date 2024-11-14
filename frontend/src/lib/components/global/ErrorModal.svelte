@@ -2,6 +2,10 @@
 	import Modal from '$lib/components/global/Modal.svelte';
 	import { errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { onMount } from 'svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let hide: () => void = () => ($isErrorModalHidden = true);
 
@@ -24,7 +28,7 @@
 
 <Modal
 	icon="error"
-	title="Error"
+	title={$t('error')}
 	--text-color="var(--error-color-1)"
 	--border-color="var(--error-color-1)"
 	--z-index="12"

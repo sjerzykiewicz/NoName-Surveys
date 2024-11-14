@@ -3,6 +3,11 @@
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import { S, XL } from '$lib/stores/global';
 	import { page } from '$app/stores';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let surveys: {
 		title: string;
@@ -35,7 +40,7 @@
 
 <svelte:window bind:innerWidth />
 
-<QrCodeModal title="Access Code" bind:isHidden={isModalHidden} surveyCode={selectedCode} />
+<QrCodeModal title={$t('access_code')} bind:isHidden={isModalHidden} surveyCode={selectedCode} />
 
 {#if surveys.length === 0}
 	<div class="info-row">
@@ -51,7 +56,10 @@
 {:else}
 	<table>
 		<tr>
-			<th title="Select all" class="checkbox-entry" class:disabled={ownedSurveyCodes.length === 0}
+			<th
+				title={$t('select_all')}
+				class="checkbox-entry"
+				class:disabled={ownedSurveyCodes.length === 0}
 				><label
 					><input
 						type="checkbox"
@@ -61,11 +69,11 @@
 					/></label
 				></th
 			>
-			<th title="Survey information" id="info-header" colspan="2">Info</th>
-			<th title="Survey title" id="title-header">Survey Title</th>
-			<th title="Group size" id="group-header">Group Size</th>
-			<th title="Access code" id="code-header">Access Code</th>
-			<th title="Creation date" id="date-header">Creation Date</th>
+			<th title={$t('survey_info')} id="info-header" colspan="2">Info</th>
+			<th title={$t('survey_title')} id="title-header"><Tx text="survey_title"></Tx></th>
+			<th title={$t('group_size')} id="group-header"><Tx text="group_size"></Tx></th>
+			<th title={$t('access_code')} id="code-header"><Tx text="access_code"></Tx></th>
+			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date"></Tx></th>
 		</tr>
 		{#each surveys as survey}
 			<tr>
@@ -132,7 +140,7 @@
 						}}>{survey.survey_code}</button
 					>
 				</td>
-				<td title="Creation date" class="date-entry">{formatDate(survey.creation_date)}</td>
+				<td title={$t('creation_date')} class="date-entry">{formatDate(survey.creation_date)}</td>
 			</tr>
 		{/each}
 	</table>

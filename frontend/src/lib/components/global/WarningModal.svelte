@@ -3,6 +3,10 @@
 	import { warningModalContent, isWarningModalHidden } from '$lib/stores/global';
 	import { onMount } from 'svelte';
 	import { downloadFile } from '$lib/utils/downloadFile';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let isExportButtonVisible: boolean = false;
 	export let emails: string[] = [];
@@ -27,7 +31,7 @@
 
 <Modal
 	icon="warning"
-	title="Warning"
+	title={$t('warning')}
 	--text-color="var(--warning-color-1)"
 	--border-color="var(--warning-color-1)"
 	--width="var(--width-warning)"

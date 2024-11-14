@@ -3,6 +3,10 @@
 	import { slide } from 'svelte/transition';
 	import { GroupError } from '$lib/entities/GroupError';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let name: string;
 	export let error: GroupError;
@@ -37,7 +41,7 @@
 </script>
 
 {#if checkNameError()}
-	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="symbol">error</i>{errorMessage(error)}
 	</p>
 {/if}

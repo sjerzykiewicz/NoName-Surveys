@@ -3,6 +3,10 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import Input from '$lib/components/global/Input.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 	export let questionTypeData: { title: string; icon: string; text: string };
@@ -39,7 +43,9 @@
 	id={questionIndex.toString()}
 	transition:slide={{ duration: 200, easing: cubicInOut }}
 >
-	<div title="Question no. {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
+	<div title={$t('create_question_index', { index: questionIndex + 1 })} class="index">
+		{questionIndex + 1}.
+	</div>
 	<div title={questionTypeData.title} class="type">
 		<i class="symbol">{questionTypeData.icon}</i>{questionTypeData.text}
 	</div>
@@ -47,7 +53,7 @@
 <div class="question-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="arrows">
 		<button
-			title="Move question up"
+			title={$t('create_question_up')}
 			class="up"
 			disabled={questionIndex === 0}
 			on:click={moveQuestionUp}
@@ -55,7 +61,7 @@
 			<i class="symbol">keyboard_arrow_up</i>
 		</button>
 		<button
-			title="Move question down"
+			title={$t('create_question_down')}
 			class="down"
 			disabled={questionIndex === $questions.length - 1}
 			on:click={moveQuestionDown}
@@ -65,8 +71,8 @@
 	</div>
 	<Input
 		bind:text={$questions[questionIndex].question}
-		label="Question"
-		title="Enter a question"
+		label={$t('create_question_label')}
+		title={$t('create_question_title')}
 		bind:element={questionInput}
 	/>
 	<button
@@ -76,10 +82,12 @@
 	>
 		<i class="symbol">asterisk</i>
 		<span class="tooltip-text top"
-			>{$questions[questionIndex].required ? 'Required.' : 'Not required.'}</span
+			>{$questions[questionIndex].required
+				? $t('create_question_required')
+				: $t('create_question_not_required')}</span
 		>
 	</button>
-	<button title="Remove question" class="remove-question" on:click={removeQuestion}>
+	<button title={$t('create_question_remove')} class="remove-question" on:click={removeQuestion}>
 		<i class="symbol">delete</i>
 	</button>
 </div>

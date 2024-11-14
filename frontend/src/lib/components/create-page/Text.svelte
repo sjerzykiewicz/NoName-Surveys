@@ -3,6 +3,10 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import Input from '$lib/components/global/Input.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 </script>
@@ -11,8 +15,8 @@
 	<div class="details">
 		<Input
 			bind:text={$questions[questionIndex].choices[0]}
-			label="Question Details"
-			title="Enter question details"
+			label={$t('create_text_details_label')}
+			title={$t('create_text_details_title')}
 			--margin-right="0em"
 		/>
 	</div>

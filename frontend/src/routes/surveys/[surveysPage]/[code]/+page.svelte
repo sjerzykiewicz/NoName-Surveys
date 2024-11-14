@@ -7,6 +7,10 @@
 	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data;
 	export let isModalHidden: boolean = true;
@@ -14,12 +18,12 @@
 
 <QrCodeModal
 	bind:isHidden={isModalHidden}
-	title="Access Code"
+	title={$t('access_code')}
 	surveyCode={data.survey.survey_code}
 />
 
 <Header>
-	<div title="Survey title" class="title">{data.survey.title}</div>
+	<div title={$t('survey_title')} class="title">{data.survey.title}</div>
 </Header>
 
 <Content>

@@ -5,13 +5,12 @@
 	import { M } from '$lib/stores/global';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
+	import { page } from '$app/stores';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
-
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
-	import { page } from '$app/stores';
 
 	export let form: ActionData;
 
@@ -47,7 +46,11 @@
 				autofocus={innerWidth > $M}
 			/>
 			{#if form?.error}
-				<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+				<p
+					title={$t('error')}
+					class="error"
+					transition:slide={{ duration: 200, easing: cubicInOut }}
+				>
 					<i class="symbol">error</i>{form.error}
 				</p>
 			{/if}

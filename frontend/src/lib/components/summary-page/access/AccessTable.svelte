@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { XL } from '$lib/stores/global';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let users: string[];
 	export let selectedUsersToRemove: string[] = [];
@@ -24,7 +28,10 @@
 {:else}
 	<table>
 		<tr>
-			<th title="Select all" class="checkbox-entry" class:disabled={usersWithoutOwner.length === 0}
+			<th
+				title={$t('select_all')}
+				class="checkbox-entry"
+				class:disabled={usersWithoutOwner.length === 0}
 				><label
 					><input
 						type="checkbox"

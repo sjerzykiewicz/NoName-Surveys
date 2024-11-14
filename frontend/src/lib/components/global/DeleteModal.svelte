@@ -2,6 +2,10 @@
 	import Modal from '$lib/components/global/Modal.svelte';
 	import { M } from '$lib/stores/global';
 	import { onMount } from 'svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let isHidden: boolean = true;
 	export let title: string;
@@ -31,7 +35,7 @@
 <Modal icon="delete" {title} bind:isHidden --width={innerWidth <= $M ? '20em' : '22em'}>
 	<span slot="content">Are you sure you want to delete selected entries?</span>
 	<button
-		title="Delete"
+		title={$t('delete')}
 		class="save"
 		on:click={() => {
 			isHidden = true;
@@ -40,7 +44,7 @@
 	>
 		<i class="symbol">delete</i>Delete
 	</button>
-	<button title="Cancel" class="not" on:click={() => (isHidden = true)}>
+	<button title={$t('cancel')} class="not" on:click={() => (isHidden = true)}>
 		<i class="symbol">close</i>Cancel
 	</button>
 </Modal>

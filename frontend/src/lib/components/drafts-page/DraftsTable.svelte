@@ -32,6 +32,10 @@
 	import { getDraft } from '$lib/utils/getDraft';
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let drafts: {
 		id: number;
@@ -225,7 +229,7 @@
 {:else}
 	<table>
 		<tr>
-			<th title="Select all" class="checkbox-entry" class:disabled={drafts.length === 0}
+			<th title={$t('select_all')} class="checkbox-entry" class:disabled={drafts.length === 0}
 				><label
 					><input
 						type="checkbox"
@@ -236,7 +240,7 @@
 				></th
 			>
 			<th title="Draft title" id="title-header">Draft Title</th>
-			<th title="Creation date" id="date-header">Creation Date</th>
+			<th title={$t('creation_date')} id="date-header">Creation Date</th>
 		</tr>
 		{#each drafts as draft}
 			<tr>
@@ -248,7 +252,7 @@
 				<td title="Open {draft.title}" class="title-entry"
 					><button on:click={() => loadDraft(draft)}>{draft.title}</button></td
 				>
-				<td title="Creation date" class="date-entry">{formatDate(draft.creation_date)}</td>
+				<td title={$t('creation_date')} class="date-entry">{formatDate(draft.creation_date)}</td>
 			</tr>
 		{/each}
 	</table>

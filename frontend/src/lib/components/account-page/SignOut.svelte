@@ -22,8 +22,8 @@
 </script>
 
 <div class="sign-buttons">
-	<button title={$t('account_sign_out')} class="sign-out" on:click={() => signOut()}
-		><i class="symbol">logout</i><Tx text="account_sign_out"></Tx>
+	<button title={$t('sign_out')} class="sign-out" on:click={signOut}
+		><i class="symbol">logout</i><Tx text="sign_out"></Tx>
 	</button>
 </div>
 

@@ -41,6 +41,11 @@
 	import { onMount } from 'svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 	import { invalidateAll } from '$app/navigation';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let users: string[];
 	export let groups: string[];
@@ -222,43 +227,43 @@
 
 <Modal
 	icon="save"
-	title="Saving Draft"
+	title={$t('create_saving_draft')}
 	bind:isHidden={isDraftModalHidden}
 	--width={innerWidth <= $M ? '20em' : '22em'}
 >
-	<span slot="content">Do you wish to overwrite the draft or save a new draft?</span>
-	<button title="Overwrite draft" class="save" on:click={() => saveDraft(true)}
-		><i class="symbol">save_as</i>Overwrite Draft</button
+	<span slot="content"><Tx text="create_saving_draft_alert"></Tx></span>
+	<button title={$t('create_overwrite_draft')} class="save" on:click={() => saveDraft(true)}
+		><i class="symbol">save_as</i><Tx text="create_overwrite_draft"></Tx></button
 	>
-	<button title="Save new draft" class="save" on:click={() => saveDraft(false)}
-		><i class="symbol">save</i>Save New Draft</button
+	<button title={$t('create_save_new_draft')} class="save" on:click={() => saveDraft(false)}
+		><i class="symbol">save</i><Tx text="create_save_new_draft"></Tx></button
 	>
 </Modal>
 
 <Modal
 	icon="group"
-	title="Define Respondent Group"
+	title={$t('create_define_respondent_group')}
 	bind:isHidden={isRespondentModalHidden}
 	--width={innerWidth <= $M ? '20em' : '26em'}
 >
 	<div slot="content">
-		<span>Do you wish to make the survey public or secure?</span>
+		<span><Tx text="create_define_respondent_group_alert"></Tx></span>
 		<div class="crypto-buttons">
 			<button
-				title="Public"
+				title={$t('public')}
 				class="access-button"
 				class:save={!$useCrypto}
 				on:click={() => ($useCrypto = false)}
 			>
-				<i class="symbol">public</i>Public
+				<i class="symbol">public</i><Tx text="public"></Tx>
 			</button>
 			<button
-				title="Secure"
+				title={$t('secure')}
 				class="access-button"
 				class:save={$useCrypto}
 				on:click={() => ($useCrypto = true)}
 			>
-				<i class="symbol">encrypted</i>Secure
+				<i class="symbol">encrypted</i><Tx text="secure"></Tx>
 			</button>
 		</div>
 		<div class="select-box">
@@ -269,8 +274,8 @@
 			<div class="import">
 				<ImportEmails
 					bind:users={$ringMembers}
-					title="Import users from a .csv file"
-					label="Or import users from a .csv file."
+					title={$t('import_csv_title')}
+					label={$t('import_csv_label')}
 					id="emails-file"
 					checkKeys={true}
 					--width="100%"
@@ -281,12 +286,12 @@
 			</div>
 		</div>
 	</div>
-	<button title="Define respondent group" class="save apply" on:click={createSurvey}
+	<button title={$t('create_define_respondent_group')} class="done" on:click={createSurvey}
 		><i class="symbol">done</i>Apply</button
 	>
 </Modal>
 
-<QrCodeModal bind:isHidden={isSurveyModalHidden} title="Survey Created Successfully" {surveyCode} />
+<QrCodeModal bind:isHidden={isSurveyModalHidden} title={$t('create_survey_success')} {surveyCode} />
 
 {#each $questions as question, questionIndex (question)}
 	<div
@@ -361,10 +366,6 @@
 
 	.access-button i {
 		margin-right: 0.15em;
-	}
-
-	.apply i {
-		font-variation-settings: 'wght' 700;
 	}
 
 	.select-box {

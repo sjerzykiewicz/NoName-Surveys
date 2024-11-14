@@ -24,7 +24,6 @@
 	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { invalidateAll } from '$app/navigation';
-
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -185,7 +184,7 @@
 </script>
 
 {#if isPreview}
-	<button title={$t('footer_edit_t')} class="footer-button" on:click={togglePreview}>
+	<button title={$t('footer_edit_title')} class="footer-button" on:click={togglePreview}>
 		<i class="symbol">edit</i><Tx text="footer_edit"></Tx>
 	</button>
 {:else}
@@ -212,7 +211,7 @@
 		<span class="popup-text top" id="draft-popup"><Tx text="footer_saved"></Tx></span>
 	</button>
 	<button
-		title={$t('footer_create_t')}
+		title={$t('footer_create_title')}
 		class="footer-button done"
 		disabled={$questions.length === 0 || isPreview}
 		on:click={createSurvey}

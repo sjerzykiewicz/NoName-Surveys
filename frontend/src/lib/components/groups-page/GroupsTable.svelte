@@ -10,6 +10,10 @@
 	import NameError from './NameError.svelte';
 	import { page } from '$app/stores';
 	import Input from '$lib/components/global/Input.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let groups: {
 		user_group_name: string;
@@ -149,7 +153,7 @@
 {:else}
 	<table>
 		<tr>
-			<th title="Select all" class="checkbox-entry" class:disabled={groups.length === 0}
+			<th title={$t('select_all')} class="checkbox-entry" class:disabled={groups.length === 0}
 				><label
 					><input
 						type="checkbox"

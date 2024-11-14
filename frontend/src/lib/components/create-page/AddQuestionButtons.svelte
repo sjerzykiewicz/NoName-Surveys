@@ -28,6 +28,10 @@
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { M } from '$lib/stores/global';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionInput: HTMLDivElement;
 
@@ -183,7 +187,7 @@
 <div class="button-group">
 	<div class="add-buttons">
 		<button
-			title={isPanelVisible ? 'Stop choosing question type' : 'Choose question type'}
+			title={isPanelVisible ? $t('choose_question_type_stop') : $t('create_choose_type')}
 			class="add-question"
 			class:clicked={isPanelVisible}
 			class:previous={$previousQuestion}

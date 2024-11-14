@@ -48,6 +48,10 @@
 	import KeysError from './KeysError.svelte';
 	import { readFile } from '$lib/utils/readFile';
 	import SuccessModal from '$lib/components/global/SuccessModal.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	onMount(async () => {
 		await init();
@@ -378,7 +382,7 @@
 </Modal>
 
 <Header>
-	<div title="Survey title" class="title" in:slide={{ duration: 200, easing: cubicInOut }}>
+	<div title={$t('survey_title')} class="title" in:slide={{ duration: 200, easing: cubicInOut }}>
 		{$title}
 	</div>
 </Header>

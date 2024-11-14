@@ -114,7 +114,7 @@
 					></td
 				>
 				{#if survey.uses_cryptographic_module}
-					<td title="View the respondents" class="code-entry"
+					<td title="View possible respondents" class="code-entry"
 						><button
 							on:click={() =>
 								goto($page.url.pathname + '/' + survey.survey_code + '/respondents/0')}
@@ -122,7 +122,7 @@
 						>
 					</td>
 				{:else}
-					<td title="Not Available" class="info-entry">N/A</td>
+					<td title="Not available for public survey" class="info-entry">N/A</td>
 				{/if}
 				<td title="View QR code" class="code-entry"
 					><button

@@ -18,6 +18,14 @@ class SliderQuestion(Question):
             raise ValueError("max_value must be greater than min_value")
         return v
 
+    @field_validator("precision")
+    def validate_precision(cls, v, info: ValidationInfo) -> float:
+        if v > info.data["max_value"] - info.data["min_value"]:
+            raise ValueError(
+                "precision cannot be greater than the difference between max_value and min_value"  # noqa
+            )
+        return v
+
     @field_validator("answer")
     def validate_answer(cls, v, info: ValidationInfo) -> Optional[float]:
         if v is None:
@@ -39,5 +47,6 @@ class SliderQuestion(Question):
             or self.question != answer.question
             or self.min_value != answer.min_value
             or self.max_value != answer.max_value
+            or self.precision != answer.precision
         ):
             raise ValueError("Invalid answer!")

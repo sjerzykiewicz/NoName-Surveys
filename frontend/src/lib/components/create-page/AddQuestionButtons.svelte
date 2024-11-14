@@ -113,7 +113,9 @@
 			return ['1', '2', '3', '4', '5'];
 		} else if (component === Binary) {
 			return ['Yes', 'No'];
-		} else if (component === Slider || component === Number) {
+		} else if (component === Slider) {
+			return ['0', '10', '1'];
+		} else if (component === Number) {
 			return ['0', '10'];
 		} else {
 			return [''];

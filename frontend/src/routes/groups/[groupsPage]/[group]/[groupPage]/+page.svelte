@@ -10,10 +10,6 @@
 
 	export let data;
 	export let selectedMembersToRemove: string[] = [];
-
-	$: notMembers = data.user_list.filter(
-		(user) => !new Set(data.users.map((user) => user.email)).has(user)
-	);
 </script>
 
 <Header>
@@ -21,10 +17,10 @@
 </Header>
 
 <Content>
-	<MembersTable bind:members={data.users} bind:selectedMembersToRemove />
+	<MembersTable bind:members={data.members} bind:selectedMembersToRemove />
 	<MembersButtons
-		bind:members={data.users}
-		{notMembers}
+		bind:members={data.members}
+		notMembers={data.notMembers}
 		group={data.group}
 		numMembers={data.numMembers}
 		bind:selectedMembersToRemove

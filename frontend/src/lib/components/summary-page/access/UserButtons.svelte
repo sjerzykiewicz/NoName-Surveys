@@ -109,7 +109,7 @@
 
 <DeleteModal title="Removing Access" bind:isHidden={isModalHidden} deleteEntries={removeUsers} />
 
-<div class="button-row">
+<div class="button-row top-row">
 	<div class="button-sub-row">
 		<button
 			title={isPanelVisible ? 'Stop giving access' : 'Give access'}
@@ -149,5 +149,11 @@
 <style>
 	.select-list {
 		margin-bottom: 0em;
+	}
+
+	@media screen and (max-width: 768px) {
+		.top-row {
+			font-size: 0.9em;
+		}
 	}
 </style>

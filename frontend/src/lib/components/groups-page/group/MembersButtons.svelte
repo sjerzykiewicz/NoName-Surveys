@@ -139,7 +139,7 @@
 	deleteEntries={removeMembers}
 />
 
-<div class="button-row">
+<div class="button-row top-row">
 	<div class="button-sub-row">
 		<button
 			title={isPanelVisible ? 'Stop adding group members' : 'Add group members'}
@@ -177,3 +177,11 @@
 	</div>
 	<MembersError members={selectedMembersToAdd} error={membersError} />
 {/if}
+
+<style>
+	@media screen and (max-width: 768px) {
+		.top-row {
+			font-size: 0.9em;
+		}
+	}
+</style>

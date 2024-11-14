@@ -14,8 +14,10 @@
 				return 'Please enter all choices for question no. ' + (i + 1) + '.';
 			case SurveyError.BinaryChoicesRequired:
 				return 'Please enter both choices for question no. ' + (i + 1) + '.';
-			case SurveyError.SliderValuesRequired:
+			case SurveyError.NumberValuesRequired:
 				return 'Please enter both values for question no. ' + (i + 1) + '.';
+			case SurveyError.SliderValuesRequired:
+				return 'Please enter all values for question no. ' + (i + 1) + '.';
 			case SurveyError.ChoicesTooLong:
 				return (
 					'Choices must be ' +
@@ -28,6 +30,8 @@
 				return 'Please remove duplicate choices from question no. ' + (i + 1) + '.';
 			case SurveyError.ImproperSliderValues:
 				return 'Maximum value must be greater than minimum value in question no. ' + (i + 1) + '.';
+			case SurveyError.ImproperSliderPrecision:
+				return 'Precision must be lower than the range in question no. ' + (i + 1) + '.';
 		}
 	}
 
@@ -36,9 +40,10 @@
 		switch (error) {
 			case SurveyError.ChoicesRequired:
 			case SurveyError.BinaryChoicesRequired:
+			case SurveyError.NumberValuesRequired:
 			case SurveyError.SliderValuesRequired:
 				return $questions[i].choices.some(
-					(c) => c === null || c === undefined || c.trim().length === 0
+					(c) => c === null || c === undefined || c.toString().trim().length === 0
 				);
 			case SurveyError.ChoicesTooLong:
 				return $questions[i].choices.some((c) => c.length > $LIMIT_OF_CHARS);
@@ -46,6 +51,11 @@
 				return new Set($questions[i].choices).size !== $questions[i].choices.length;
 			case SurveyError.ImproperSliderValues:
 				return parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1]);
+			case SurveyError.ImproperSliderPrecision:
+				return (
+					parseFloat($questions[i].choices[2]) >
+					parseFloat($questions[i].choices[1]) - parseFloat($questions[i].choices[0])
+				);
 		}
 	};
 </script>

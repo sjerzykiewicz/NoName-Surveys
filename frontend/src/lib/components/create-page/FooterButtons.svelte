@@ -13,8 +13,17 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { getDraft } from '$lib/utils/getDraft';
 	import { trimQuestions } from '$lib/utils/trimQuestions';
-	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS } from '$lib/stores/global';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		isWarningModalHidden,
+		LIMIT_OF_CHARS,
+		LIMIT_OF_DRAFTS,
+		LIMIT_OF_SURVEYS,
+		warningModalContent
+	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { invalidateAll } from '$app/navigation';
 
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
@@ -22,9 +31,12 @@
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
+	export let numSurveys: number;
+	export let numDrafts: number;
 	export let isPreview: boolean = false;
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
+	export let isExportButtonVisible: boolean = false;
 
 	function togglePreview() {
 		isPreview = !isPreview;
@@ -50,11 +62,15 @@
 				$questions[i].error = SurveyError.QuestionTooLong;
 			} else if (
 				$questions[i].component != Text &&
-				$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+				$questions[i].choices.some(
+					(c) => c === null || c === undefined || c.toString().length === 0
+				)
 			) {
 				switch ($questions[i].component) {
-					case Slider:
 					case Number:
+						$questions[i].error = SurveyError.NumberValuesRequired;
+						break;
+					case Slider:
 						$questions[i].error = SurveyError.SliderValuesRequired;
 						break;
 					case Binary:
@@ -70,7 +86,16 @@
 				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
 			) {
 				$questions[i].error = SurveyError.ImproperSliderValues;
-			} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
+			} else if (
+				$questions[i].component === Slider &&
+				parseFloat($questions[i].choices[2]) >
+					parseFloat($questions[i].choices[1]) - parseFloat($questions[i].choices[0])
+			) {
+				$questions[i].error = SurveyError.ImproperSliderPrecision;
+			} else if (
+				$questions[i].component !== Slider &&
+				new Set($questions[i].choices).size !== $questions[i].choices.length
+			) {
 				$questions[i].error = SurveyError.DuplicateChoices;
 			} else {
 				$questions[i].error = SurveyError.NoError;
@@ -95,14 +120,27 @@
 	}
 
 	async function saveDraft() {
-		$title.title = $title.title.trim();
-		$questions = trimQuestions($questions);
-
-		if (!(await checkCorrectness())) return;
-
 		if ($currentDraftId !== null) {
+			$title.title = $title.title.trim();
+			$questions = trimQuestions($questions);
+
+			if (!(await checkCorrectness())) return;
+
 			isDraftModalHidden = false;
 		} else {
+			if (numDrafts >= $LIMIT_OF_DRAFTS) {
+				isExportButtonVisible = false;
+				$warningModalContent =
+					'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
+				$isWarningModalHidden = false;
+				return;
+			}
+
+			$title.title = $title.title.trim();
+			$questions = trimQuestions($questions);
+
+			if (!(await checkCorrectness())) return;
+
 			const parsedSurvey = new Survey(constructQuestionList($questions));
 			const draftInfo = new DraftCreateInfo($title.title, parsedSurvey);
 
@@ -124,10 +162,19 @@
 			$currentDraftId = await response.json();
 			$draftStructure = getDraft($title.title, $questions);
 			popup('draft-popup');
+			await invalidateAll();
 		}
 	}
 
 	async function createSurvey() {
+		if (numSurveys >= $LIMIT_OF_SURVEYS) {
+			isExportButtonVisible = false;
+			$warningModalContent =
+				'You have reached the maximum number of surveys you can create. Please delete some surveys to create new ones.';
+			$isWarningModalHidden = false;
+			return;
+		}
+
 		$title.title = $title.title.trim();
 		$questions = trimQuestions($questions);
 

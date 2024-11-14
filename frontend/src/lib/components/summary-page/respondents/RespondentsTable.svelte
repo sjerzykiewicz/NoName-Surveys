@@ -12,7 +12,7 @@
 		<tr>
 			<th title="Possible respondents" id="title-header">Possible Respondents</th>
 		</tr>
-		{#each respondents.toSorted() as respondent}
+		{#each respondents as respondent}
 			<tr>
 				<td title={respondent} class="basic-entry">{respondent}</td>
 			</tr>
@@ -26,5 +26,11 @@
 <style>
 	.button-row {
 		justify-content: flex-end;
+	}
+
+	@media screen and (max-width: 768px) {
+		.button-row {
+			font-size: 0.9em;
+		}
 	}
 </style>

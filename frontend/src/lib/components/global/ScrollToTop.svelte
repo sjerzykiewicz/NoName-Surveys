@@ -71,13 +71,13 @@
 		}
 	}
 
-	@media screen and (max-width: 355px) {
+	@media screen and (max-width: 362px) {
 		.scroll-to-top.create-page {
 			bottom: 2.5em;
 		}
 	}
 
-	@media screen and (max-width: 322px) {
+	@media screen and (max-width: 327px) {
 		.scroll-to-top.create-page {
 			bottom: 0.25em;
 		}

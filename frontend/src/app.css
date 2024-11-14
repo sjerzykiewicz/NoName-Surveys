@@ -147,8 +147,7 @@ body {
 	cursor: not-allowed !important;
 }
 
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
+:root::-webkit-scrollbar,
 .select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar,
 .select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar {
 	width: 1em;
@@ -160,8 +159,7 @@ body::-webkit-scrollbar,
 	width: 0.8em;
 }
 
-html::-webkit-scrollbar-track,
-body::-webkit-scrollbar-track,
+:root::-webkit-scrollbar-track,
 .text-input.display::-webkit-scrollbar-track,
 .text-answers::-webkit-scrollbar-track,
 .input::-webkit-scrollbar-track,
@@ -179,8 +177,7 @@ body::-webkit-scrollbar-track,
 	border-bottom-right-radius: 5px;
 }
 
-html::-webkit-scrollbar-corner,
-body::-webkit-scrollbar-corner,
+:root::-webkit-scrollbar-corner,
 .text-input.display::-webkit-scrollbar-corner,
 .text-answers::-webkit-scrollbar-corner .input::-webkit-scrollbar-corner,
 .select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-corner,
@@ -188,8 +185,7 @@ body::-webkit-scrollbar-corner,
 	background-color: var(--secondary-color-2);
 }
 
-html::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb,
+:root::-webkit-scrollbar-thumb,
 .text-input.display::-webkit-scrollbar-thumb,
 .text-answers::-webkit-scrollbar-thumb,
 .input::-webkit-scrollbar-thumb,
@@ -205,8 +201,7 @@ body::-webkit-scrollbar-thumb,
 		outline 0s;
 }
 
-html::-webkit-scrollbar-thumb:hover,
-body::-webkit-scrollbar-thumb:hover,
+:root::-webkit-scrollbar-thumb:hover,
 .text-input.display::-webkit-scrollbar-thumb:hover,
 .text-answers::-webkit-scrollbar-thumb:hover,
 .input::-webkit-scrollbar-thumb:hover,
@@ -215,22 +210,13 @@ body::-webkit-scrollbar-thumb:hover,
 	background-color: var(--text-color-3);
 }
 
-html::-webkit-scrollbar-thumb:active,
-body::-webkit-scrollbar-thumb:active,
+:root::-webkit-scrollbar-thumb:active,
 .text-input.display::-webkit-scrollbar-thumb:hover,
 .text-answers::-webkit-scrollbar-thumb:active,
 .input::-webkit-scrollbar-thumb:active,
 .select-list *:where(div.multiselect > ul.options)::-webkit-scrollbar-thumb:active,
 .select-list *:where(div.multiselect > ul.selected)::-webkit-scrollbar-thumb:active {
 	background-color: var(--border-color-1);
-}
-
-/* firefox */
-
-html,
-body {
-	scrollbar-color: var(--primary-color-1) var(--secondary-color-2);
-	scrollbar-width: auto;
 }
 
 /* sign in AMU button */
@@ -787,7 +773,7 @@ input[type='file'] {
 
 .choice.binary .input {
 	margin: 0.5em 0em 0em 0em !important;
-	width: 12em !important;
+	width: 13em !important;
 	max-width: 15em !important;
 	overflow-wrap: anywhere !important;
 }
@@ -858,6 +844,7 @@ input[type='file'] {
 
 .limits {
 	display: flex;
+	flex-flow: row;
 	align-items: center;
 	justify-content: space-between;
 	width: calc(100% - 2.25em);
@@ -885,7 +872,7 @@ input[type='file'] {
 	text-align: center;
 	cursor: text;
 	overflow: hidden;
-	width: 12em;
+	width: 13em;
 	transition:
 		0.2s,
 		outline 0s;

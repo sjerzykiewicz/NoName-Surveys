@@ -88,7 +88,7 @@
 		<span slot="content"><Tx text="account_new_key_alert"></Tx></span>
 		<button
 			title={$t('generate')}
-			class="save"
+			class="done"
 			on:click={() => {
 				isModalHidden = true;
 				generateKeyPair();
@@ -116,9 +116,3 @@
 		<SignIn />
 	</Content>
 {/if}
-
-<style>
-	button i {
-		font-variation-settings: 'wght' 700;
-	}
-</style>

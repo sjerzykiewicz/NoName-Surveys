@@ -17,6 +17,8 @@
 				value = parseFloat($questions[questionIndex].choices[0]);
 			} else if (value > parseFloat($questions[questionIndex].choices[1])) {
 				value = parseFloat($questions[questionIndex].choices[1]);
+			} else {
+				value = Math.round(value);
 			}
 			$answers[questionIndex].choices[0] = value.toString();
 		}

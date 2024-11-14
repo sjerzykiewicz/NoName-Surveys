@@ -37,7 +37,7 @@
 			<th title="User type" id="info-header"><i class="symbol">person</i></th>
 			<th title="Users with access" id="title-header">Users With Access</th>
 		</tr>
-		{#each users.toSorted() as user}
+		{#each users as user}
 			<tr>
 				<td
 					title="Select {user}"

@@ -12,8 +12,6 @@
 	export let data;
 	export let selectedUsersToRemove: string[] = [];
 	export let isModalHidden: boolean = true;
-
-	$: usersWithoutAccess = data.allUsers.filter((user) => !new Set(data.usersWithAccess).has(user));
 </script>
 
 <QrCodeModal
@@ -29,8 +27,8 @@
 <Content>
 	<AccessTable users={data.usersWithAccess} bind:selectedUsersToRemove />
 	<UserButtons
-		{usersWithoutAccess}
 		usersWithAccess={data.usersWithAccess}
+		usersWithoutAccess={data.usersWithoutAccess}
 		code={data.survey.survey_code}
 		numUsers={data.numUsers}
 		bind:selectedUsersToRemove

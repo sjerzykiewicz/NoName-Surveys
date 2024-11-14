@@ -10,7 +10,7 @@
 	let min: number = -999999999999;
 	let max: number = 999999999999;
 
-	function handleChange(value: number, i: number) {
+	function handleChange(value: number, i: number, min: number, max: number) {
 		if (isNaN(value) || value === null || value === undefined) {
 			$questions[questionIndex].choices[i] = '';
 		} else if (value < min) {
@@ -41,7 +41,8 @@
 				placeholder={innerWidth <= $M ? 'Enter min...' : 'Enter minimum...'}
 				bind:value={$questions[questionIndex].choices[0]}
 				on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
-				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[0]), 0)}
+				on:change={() =>
+					handleChange(parseFloat($questions[questionIndex].choices[0]), 0, min, max)}
 			/></label
 		>
 		<label class="step">
@@ -50,14 +51,15 @@
 				title="Enter the precision"
 				class="limit-input"
 				type="number"
-				{min}
+				min="0"
 				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
 				placeholder={innerWidth <= $M ? 'Enter prec...' : 'Enter precision...'}
 				bind:value={$questions[questionIndex].choices[2]}
 				on:keydown|once={() => ($questions[questionIndex].choices[2] = '')}
-				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[2]), 2)}
+				on:change={() =>
+					handleChange(parseFloat($questions[questionIndex].choices[2]), 2, 0.001, max)}
 			/></label
 		>
 		<label class="max">
@@ -73,7 +75,8 @@
 				placeholder={innerWidth <= $M ? 'Enter max...' : 'Enter maximum...'}
 				bind:value={$questions[questionIndex].choices[1]}
 				on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
-				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[1]), 1)}
+				on:change={() =>
+					handleChange(parseFloat($questions[questionIndex].choices[1]), 1, min, max)}
 			/></label
 		>
 	</div>

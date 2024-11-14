@@ -8,7 +8,6 @@
 	import noname_light from '$lib/assets/noname_light.png';
 	import { M } from '$lib/stores/global';
 	import NavLinks from './NavLinks.svelte';
-
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -150,7 +149,8 @@
 		class="toggle-mode lang-btn tooltip"
 	>
 		PL
-		<span class="tooltip-text left"><Tx text="nav_toggle_lang"></Tx></span>
+		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="nav_toggle_lang"></Tx></span
+			>{/if}
 	</button>
 {:else if showToggleButtons && $options.currentLang === 'pl'}
 	<button
@@ -159,7 +159,8 @@
 		class="toggle-mode lang-btn tooltip"
 	>
 		EN
-		<span class="tooltip-text left"><Tx text="nav_toggle_lang"></Tx></span>
+		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="nav_toggle_lang"></Tx></span
+			>{/if}
 	</button>
 {/if}
 
@@ -168,10 +169,6 @@
 		font-size: 0.8em;
 		font-weight: normal;
 		background-color: var(--primary-dark-color);
-	}
-
-	.toggle-mode.tooltip {
-		--tooltip-width: 7em;
 	}
 
 	.toggle-mode.tooltip .tooltip-text {
@@ -224,7 +221,7 @@
 		justify-content: center;
 		top: 0.25em;
 		right: 0.25em;
-		background-color: var(--primary-color-2);
+		background-color: var(--primary-color-1);
 		border: none;
 		font-size: 1.5em;
 		z-index: 1;
@@ -235,13 +232,17 @@
 	}
 
 	.theme-btn {
+		--tooltip-width: 7em;
 		top: 0.25em;
 		right: 0.25em;
+		z-index: 2;
 	}
 
 	.lang-btn {
+		--tooltip-width: 8em;
 		top: 0.25em;
 		right: 2.25em;
+		font-weight: 700 !important;
 	}
 
 	.toggle-mode:hover {
@@ -285,7 +286,9 @@
 		.toggle-mode {
 			top: 2.5em;
 		}
+	}
 
+	@media screen and (max-width: 880px) {
 		.nav-logo {
 			visibility: hidden;
 			opacity: 0 !important;
@@ -316,10 +319,6 @@
 
 		.lang-btn {
 			right: 5em;
-		}
-
-		.toggle-mode.tooltip .tooltip-text {
-			font-size: 0.5em;
 		}
 	}
 </style>

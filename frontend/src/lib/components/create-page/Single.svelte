@@ -65,7 +65,7 @@
 		</div>
 	{/each}
 	<button title={$t('create_choice_add')} class="add-choice" on:click={addChoice}>
-		<i class="symbol">add</i><Tx text="create_choice"></Tx>
+		<i class="symbol">add</i><Tx text="choice"></Tx>
 	</button>
 </div>
 

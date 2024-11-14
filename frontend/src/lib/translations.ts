@@ -66,7 +66,8 @@ export const data = {
 		nav_groups: 'Groups',
 		nav_account: 'Account',
 		nav_toggle_theme: 'Toggle theme',
-		nav_toggle_lang: 'Toggle lang',
+		nav_toggle_lang: 'Toggle language',
+		nav_scroll_to_top: 'Scroll to the top',
 		nav_sign_in_info: 'Sign in to access ',
 
 		home_code_info: 'Enter a survey code to fill it out',
@@ -149,8 +150,8 @@ Authorizing yourself will enable you to:
 		create_question_down: 'Move question down',
 		create_question_label: 'Question',
 		create_question_title: 'Enter a question',
-		create_question_required: 'Required.',
-		create_question_not_required: 'Not required.',
+		create_question_required: 'Required',
+		create_question_not_required: 'Not required',
 		create_question_remove: 'Remove question',
 		create_question_choose_type: 'Choose question type',
 		create_question_choose_type_stop: 'Stop choosing question type',
@@ -174,10 +175,6 @@ Authorizing yourself will enable you to:
 		create_number_max_placeholder: 'Enter a maximum value...',
 		create_number_max_placeholder_short: 'Enter a max value...',
 
-		create_slider_min_placeholder: 'Enter minimum...',
-		create_slider_min_placeholder_short: 'Enter min...',
-		create_slider_max_placeholder: 'Enter maximum...',
-		create_slider_max_placeholder_short: 'Enter max...',
 		create_slider_precision_title: 'Enter the precision',
 		create_slider_precision_placeholder: 'Enter precision...',
 		create_slider_precision_placeholder_short: 'Enter prec...',
@@ -292,7 +289,8 @@ Authorizing yourself will enable you to:
 		nav_account: 'Konto',
 		nav_toggle_theme: 'Zmień motyw',
 		nav_toggle_lang: 'Zmień język',
-		nav_sign_in_info: 'Zaloguj się, aby uzyskać dostęp do',
+		nav_scroll_to_top: 'Przewiń na samą górę',
+		nav_sign_in_info: 'Zaloguj się, aby uzyskać dostęp do ',
 
 		home_code_info: 'Wprowadź kod ankiety, aby ją wypełnić',
 		home_code_info_2:
@@ -326,7 +324,7 @@ Zautoryzowanie się pozwoli Ci na:
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">share</i></div>
-		<div><span class="account-accent">Udostępnianie</span>wyników ankiet innym osobom,</div>
+		<div><span class="account-accent">Udostępnianie</span> wyników ankiet innym osobom,</div>
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">group</i></div>
@@ -368,8 +366,8 @@ Zautoryzowanie się pozwoli Ci na:
 		create_question_down: 'Przesuń pytanie w dół',
 		create_question_label: 'Pytanie',
 		create_question_title: 'Wprowadź pytanie',
-		create_question_required: 'Wymagane.',
-		create_question_not_required: 'Nie wymagane.',
+		create_question_required: 'Wymagane',
+		create_question_not_required: 'Nie wymagane',
 		create_question_remove: 'Usuń pytanie',
 		create_question_choose_type: 'Wybierz typ pytania',
 		create_question_choose_type_stop: 'Przestań wybierać typ pytania',
@@ -386,20 +384,16 @@ Zautoryzowanie się pozwoli Ci na:
 		create_text_details_label: 'Szczegóły pytania',
 		create_text_details_title: 'Wprowadź szczegóły pytania',
 
-		create_number_min_title: 'Wprowadź minimalną wartość',
-		create_number_min_placeholder: 'Wprowadź minimalną wartość...',
-		create_number_min_placeholder_short: 'Wprowadź minimum...',
-		create_number_max_title: 'Wprowadź maksymalną wartość',
-		create_number_max_placeholder: 'Wprowadź maksymalną wartość...',
-		create_number_max_placeholder_short: 'Wprowadź maksimum...',
+		create_number_min_title: 'Podaj minimalną wartość',
+		create_number_min_placeholder: 'Podaj minimum...',
+		create_number_min_placeholder_short: 'Podaj min...',
+		create_number_max_title: 'Podaj maksymalną wartość',
+		create_number_max_placeholder: 'Podaj maksimum...',
+		create_number_max_placeholder_short: 'Podaj maks...',
 
-		create_slider_min_placeholder: 'Wprowadź minimum...',
-		create_slider_min_placeholder_short: 'Wprowadź min...',
-		create_slider_max_placeholder: 'Wprowadź maksimum...',
-		create_slider_max_placeholder_short: 'Wprowadź max...',
-		create_slider_precision_title: 'Wprowadź precyzję',
-		create_slider_precision_placeholder: 'Wprowadź precyzję...',
-		create_slider_precision_placeholder_short: 'Wprowadź prec...',
+		create_slider_precision_title: 'Podaj precyzję',
+		create_slider_precision_placeholder: 'Podaj precyzję...',
+		create_slider_precision_placeholder_short: 'Podaj prec...',
 
 		create_binary_positive_label: 'Pozytywny wybór',
 		create_binary_positive_title: 'Wprowadź pozytywny wybór',

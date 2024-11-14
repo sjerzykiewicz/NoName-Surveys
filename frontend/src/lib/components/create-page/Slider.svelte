@@ -44,8 +44,8 @@
 				name={questionIndex.toString()}
 				autocomplete="off"
 				placeholder={innerWidth <= $M
-					? $t('create_slider_min_placeholder_short')
-					: $t('create_slider_min_placeholder')}
+					? $t('create_number_min_placeholder_short')
+					: $t('create_number_min_placeholder')}
 				bind:value={$questions[questionIndex].choices[0]}
 				on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
 				on:change={() =>
@@ -82,8 +82,8 @@
 				name={questionIndex.toString()}
 				autocomplete="off"
 				placeholder={innerWidth <= $M
-					? $t('create_slider_max_placeholder_short')
-					: $t('create_slider_max_placeholder')}
+					? $t('create_number_max_placeholder_short')
+					: $t('create_number_max_placeholder')}
 				bind:value={$questions[questionIndex].choices[1]}
 				on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
 				on:change={() =>

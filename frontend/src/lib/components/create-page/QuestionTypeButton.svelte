@@ -26,13 +26,16 @@
 	class:last={questionTypeIndex === 8}
 	in:slide={{ axis: 'x', duration: 200, easing: cubicInOut }}
 	on:click={handleClick}
-	><i class="symbol">{questionTypeData.icon}</i><Tx text={questionTypeData.text}></Tx></button
->
+	><i class="symbol">{questionTypeData.icon}</i>
+	{#key questionTypeData.text}
+		<Tx text={questionTypeData.text}></Tx>
+	{/key}
+</button>
 
 <style>
 	button {
 		flex: 1;
-		width: 6.25em;
+		width: var(--width, 7.5em);
 		border: 0px;
 		border-radius: 0px;
 		border-left: 1px solid var(--border-color-1);
@@ -50,7 +53,7 @@
 		border-left: 0px;
 		border-top: 1px solid var(--border-color-1);
 		border-bottom: 1px solid var(--border-color-1);
-		width: auto;
+		width: fit-content;
 	}
 
 	i {

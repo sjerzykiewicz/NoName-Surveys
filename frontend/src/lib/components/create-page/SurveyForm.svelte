@@ -333,7 +333,7 @@
 
 <style>
 	.tooltip {
-		--tooltip-width: 22em;
+		--tooltip-width: 19em;
 		font-size: 1.5em;
 	}
 
@@ -397,6 +397,18 @@
 		.tooltip {
 			--tooltip-width: 10em;
 			font-size: 1.25em;
+		}
+
+		.tooltip .tooltip-text.bottom {
+			left: unset;
+			right: 20%;
+			margin-left: 0em;
+			margin-right: -1.15em;
+		}
+
+		.tooltip .tooltip-text.bottom::after {
+			left: 91.5%;
+			margin-left: -1.15em;
 		}
 
 		.import {

@@ -95,7 +95,7 @@
 
 <style>
 	.tooltip {
-		--tooltip-width: 6.5em;
+		--tooltip-width: 7.25em;
 	}
 
 	.required-button {

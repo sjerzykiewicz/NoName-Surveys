@@ -166,7 +166,7 @@
 	</button>
 	<button
 		title={$t('footer_create_t')}
-		class="footer-button save done"
+		class="footer-button done"
 		disabled={$questions.length === 0 || isPreview}
 		on:click={createSurvey}
 	>
@@ -176,10 +176,6 @@
 
 <style>
 	.popup {
-		--tooltip-width: 4em;
-	}
-
-	.done i {
-		font-variation-settings: 'wght' 700;
+		--tooltip-width: 5em;
 	}
 </style>

@@ -34,7 +34,7 @@
 
 <h1><Tx text="account_sign_in"></Tx></h1>
 <div class="sign-buttons">
-	<button title="AMU USOS" class="sign-in" on:click={startOAuth}
+	<button title={$t('sign_in')} class="sign-in" on:click={startOAuth}
 		><img src={amu} alt="AMU logo" class="amu-logo" /><Tx text="sign_in"></Tx></button
 	>
 </div>

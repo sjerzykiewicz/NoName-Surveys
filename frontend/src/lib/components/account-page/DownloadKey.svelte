@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { M } from '$lib/stores/global';
+	import { L } from '$lib/stores/global';
 
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
@@ -20,7 +20,7 @@
 	</button>
 	<div class="tooltip">
 		<i class="symbol">info</i>
-		<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
+		<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
 			<Tx html="account_keys_info"></Tx>
 		</span>
 	</div>
@@ -61,13 +61,13 @@
 
 	@media screen and (max-width: 1440px) {
 		.tooltip {
-			--tooltip-width: 15.5em;
+			--tooltip-width: 14.5em;
 		}
 	}
 
 	@media screen and (max-width: 1024px) {
 		.tooltip {
-			--tooltip-width: 9em;
+			--tooltip-width: 17em;
 		}
 	}
 
@@ -77,7 +77,7 @@
 		}
 
 		.tooltip {
-			--tooltip-width: 18em;
+			--tooltip-width: 19em;
 		}
 
 		.tooltip .tooltip-text.bottom {

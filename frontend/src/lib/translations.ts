@@ -7,21 +7,21 @@ export const data = {
 		generate: 'Generate',
 		save: 'Save',
 		cancel: 'Cancel',
-		sign_in: 'Sign in',
+		sign_in: 'Sign In',
 
 		info_about_leaving:
 			'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.',
 
 		error_message: 'Something went wrong, please contact the administrator.',
 
-		nav_fill: 'Fill out',
+		nav_fill: 'Fill Out',
 		nav_create: 'Create',
 		nav_drafts: 'Drafts',
 		nav_surveys: 'Surveys',
 		nav_groups: 'Groups',
 		nav_account: 'Account',
 		nav_toggle_theme: 'Toggle theme',
-		nav_toggle_lang: 'Change language',
+		nav_toggle_lang: 'Toggle lang',
 		nav_sign_in_info: 'Sign in to access ',
 
 		home_code_info: 'Enter a survey code to fill it out',
@@ -81,11 +81,11 @@ Authorizing yourself will enable you to:
 		`,
 		account_info: `We do not recommend signing in if you only wish to fill out a survey. For secure surveys, if you
 		have already generated your digital signature keys, signing in is also not necessary.`,
-		account_sign_out: 'Sign out',
+		account_sign_out: 'Sign Out',
 		account_generating_keys: 'Generating Keys',
 		account_new_key_alert:
 			'Are you sure you want to generate new keys? Doing so will take away your ability to answer existing secure surveys.',
-		account_new_key: 'Generate new key pair',
+		account_new_key: 'Generate New Keys',
 		account_keys_info: `These keys allow you to participate in secure surveys. Once they are generated, it is your
 			responsibility to keep them safe. When submitting a secure survey, you will be asked to
 			provide these keys to your browser for digital signature.`,
@@ -115,7 +115,7 @@ Authorizing yourself will enable you to:
 		sign_in: 'Zaloguj się',
 
 		info_about_leaving:
-			'Czy na pewno chcesz opuścić tę stronę?\nOpuszczenie to spowoduje utratę wszystkich niezapisanych zmian.',
+			'Czy na pewno chcesz opuścić tę stronę?\nOpuszczenie spowoduje utratę wszystkich niezapisanych zmian.',
 
 		error_message: 'Coś poszło nie tak, skontaktuj się z administratorem.',
 
@@ -161,7 +161,7 @@ Zautoryzowanie się pozwoli Ci na:
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">share</i></div>
-		<div>Dzielenie się wynikami ankiet z innymi,</div>
+		<div><span class="account-accent">Udostępnianie</span>wyników ankiet innym osobom,</div>
 	</li>
 	<li class="account-li">
 		<div class="account-icon"><i class="symbol">group</i></div>
@@ -179,20 +179,20 @@ Zautoryzowanie się pozwoli Ci na:
 </ul>
 		`,
 		account_info: `Nie zalecamy logowania się, jeśli chcesz jedynie wypełnić ankietę. W przypadku bezpiecznych ankiet, jeśli
-		już wygenerowałeś klucze podpisu cyfrowego, logowanie się nie jest również konieczne.`,
+		już wygenerowałeś klucze podpisu cyfrowego, logowanie się również nie jest konieczne.`,
 		account_sign_out: 'Wyloguj się',
 		account_generating_keys: 'Generowanie kluczy',
 		account_new_key_alert:
 			'Czy na pewno chcesz wygenerować nowe klucze? Spowoduje to utratę możliwości odpowiedzi na istniejące bezpieczne ankiety.',
-		account_new_key: 'Wygeneruj nową parę kluczy',
+		account_new_key: 'Wygeneruj nowe klucze',
 		account_keys_info: `Te klucze pozwalają na uczestniczenie w bezpiecznych ankietach. Po ich wygenerowaniu, należy
-			zabezpieczyć je. Podczas wypełniania bezpiecznej ankiety, zostaniesz poproszony o podanie
+			je zabezpieczyć. Podczas wypełniania bezpiecznej ankiety, zostaniesz poproszony o podanie
 			tych kluczy przeglądarce do podpisu cyfrowego.`,
 
 		create_survey_title: 'Tytuł ankiety',
 		create_survey_title_enter: 'Wprowadź tytuł ankiety',
 		create_survey_error_title: 'Proszę wprowadzić tytuł ankiety.',
-		create_survey_error_limit: 'Tytuł musi mieć mniej niż {limit} znaków.',
+		create_survey_error_limit: 'Tytuł musi mieć {limit} lub mniej znaków.',
 
 		footer_edit: 'Edytuj',
 		footer_edit_t: 'Edytuj ankietę',

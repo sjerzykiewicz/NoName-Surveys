@@ -70,6 +70,12 @@
 			) {
 				$questions[i].error = SurveyError.ImproperSliderValues;
 			} else if (
+				$questions[i].component === Slider &&
+				parseFloat($questions[i].choices[2]) >
+					parseFloat($questions[i].choices[1]) - parseFloat($questions[i].choices[0])
+			) {
+				$questions[i].error = SurveyError.ImproperSliderPrecision;
+			} else if (
 				$questions[i].component !== Slider &&
 				new Set($questions[i].choices).size !== $questions[i].choices.length
 			) {

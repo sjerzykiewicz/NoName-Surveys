@@ -30,6 +30,8 @@
 				return 'Please remove duplicate choices from question no. ' + (i + 1) + '.';
 			case SurveyError.ImproperSliderValues:
 				return 'Maximum value must be greater than minimum value in question no. ' + (i + 1) + '.';
+			case SurveyError.ImproperSliderPrecision:
+				return 'Precision must be lower than the range in question no. ' + (i + 1) + '.';
 		}
 	}
 
@@ -49,6 +51,11 @@
 				return new Set($questions[i].choices).size !== $questions[i].choices.length;
 			case SurveyError.ImproperSliderValues:
 				return parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1]);
+			case SurveyError.ImproperSliderPrecision:
+				return (
+					parseFloat($questions[i].choices[2]) >
+					parseFloat($questions[i].choices[1]) - parseFloat($questions[i].choices[0])
+				);
 		}
 	};
 </script>

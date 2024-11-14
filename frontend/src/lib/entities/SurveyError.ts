@@ -9,6 +9,7 @@ export enum SurveyError {
 	SliderValuesRequired,
 	ChoicesTooLong,
 	ImproperSliderValues,
+	ImproperSliderPrecision,
 	DuplicateChoices,
 	NoError
 }

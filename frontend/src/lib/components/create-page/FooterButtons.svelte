@@ -45,11 +45,15 @@
 				$questions[i].error = SurveyError.QuestionTooLong;
 			} else if (
 				$questions[i].component != Text &&
-				$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+				$questions[i].choices.some(
+					(c) => c === null || c === undefined || c.toString().length === 0
+				)
 			) {
 				switch ($questions[i].component) {
-					case Slider:
 					case Number:
+						$questions[i].error = SurveyError.NumberValuesRequired;
+						break;
+					case Slider:
 						$questions[i].error = SurveyError.SliderValuesRequired;
 						break;
 					case Binary:
@@ -65,7 +69,10 @@
 				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
 			) {
 				$questions[i].error = SurveyError.ImproperSliderValues;
-			} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
+			} else if (
+				$questions[i].component !== Slider &&
+				new Set($questions[i].choices).size !== $questions[i].choices.length
+			) {
 				$questions[i].error = SurveyError.DuplicateChoices;
 			} else {
 				$questions[i].error = SurveyError.NoError;

@@ -14,8 +14,10 @@
 				return 'Please enter all choices for question no. ' + (i + 1) + '.';
 			case SurveyError.BinaryChoicesRequired:
 				return 'Please enter both choices for question no. ' + (i + 1) + '.';
-			case SurveyError.SliderValuesRequired:
+			case SurveyError.NumberValuesRequired:
 				return 'Please enter both values for question no. ' + (i + 1) + '.';
+			case SurveyError.SliderValuesRequired:
+				return 'Please enter all values for question no. ' + (i + 1) + '.';
 			case SurveyError.ChoicesTooLong:
 				return (
 					'Choices must be ' +
@@ -36,9 +38,10 @@
 		switch (error) {
 			case SurveyError.ChoicesRequired:
 			case SurveyError.BinaryChoicesRequired:
+			case SurveyError.NumberValuesRequired:
 			case SurveyError.SliderValuesRequired:
 				return $questions[i].choices.some(
-					(c) => c === null || c === undefined || c.trim().length === 0
+					(c) => c === null || c === undefined || c.toString().trim().length === 0
 				);
 			case SurveyError.ChoicesTooLong:
 				return $questions[i].choices.some((c) => c.length > $LIMIT_OF_CHARS);

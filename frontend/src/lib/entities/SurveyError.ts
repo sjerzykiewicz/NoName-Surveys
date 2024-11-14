@@ -5,6 +5,7 @@ export enum SurveyError {
 	QuestionTooLong,
 	ChoicesRequired,
 	BinaryChoicesRequired,
+	NumberValuesRequired,
 	SliderValuesRequired,
 	ChoicesTooLong,
 	ImproperSliderValues,

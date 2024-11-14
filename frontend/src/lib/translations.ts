@@ -292,7 +292,7 @@ Authorizing yourself will enable you to:
 		nav_scroll_to_top: 'Przewiń na samą górę',
 		nav_sign_in_info: 'Zaloguj się, aby uzyskać dostęp do ',
 
-		home_code_info: 'Wprowadź kod ankiety, aby ją wypełnić',
+		home_code_info: 'Podaj kod ankiety, by ją wypełnić',
 		home_code_info_2:
 			'Wprowadź kod podany przez twórcę ankiety. Twoje odpowiedzi są w pełni anonimowe.',
 		home_submit: 'Wyślij kod',

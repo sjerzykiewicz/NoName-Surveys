@@ -22,31 +22,39 @@
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { getDraft } from '$lib/utils/getDraft';
-	import { trimQuestions } from '$lib/utils/trimQuestions';
 	import Modal from '$lib/components/global/Modal.svelte';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import { popup } from '$lib/utils/popup';
-	import { errorModalContent, isErrorModalHidden, S, M } from '$lib/stores/global';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		S,
+		M,
+		LIMIT_OF_DRAFTS,
+		warningModalContent,
+		isWarningModalHidden
+	} from '$lib/stores/global';
 	import SelectGroup from './SelectGroup.svelte';
 	import SelectUsers from './SelectUsers.svelte';
 	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { onMount } from 'svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
-	import WarningModal from '$lib/components/global/WarningModal.svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	export let users: string[];
 	export let groups: string[];
+	export let numDrafts: number;
 	export let isPreview: boolean;
 	export let isDraftModalHidden: boolean = true;
 	export let isRespondentModalHidden: boolean = true;
 	export let invalidEmails: string[] = [];
+	export let isExportButtonVisible: boolean = false;
 
 	let cryptoError: boolean = false;
 	let questionInput: HTMLDivElement;
 	let isSurveyModalHidden: boolean = true;
 	let surveyCode: string;
-	let ring: string[] = [];
 
 	function checkCorrectness() {
 		cryptoError = false;
@@ -66,11 +74,16 @@
 	async function saveDraft(overwrite: boolean) {
 		isDraftModalHidden = true;
 
-		$title.title = $title.title.trim();
-		$questions = trimQuestions($questions);
-
-		const parsedSurvey = new Survey(constructQuestionList($questions));
-		const draftInfo = new DraftCreateInfo($title.title, parsedSurvey);
+		if (
+			(overwrite && numDrafts > $LIMIT_OF_DRAFTS) ||
+			(!overwrite && numDrafts >= $LIMIT_OF_DRAFTS)
+		) {
+			isExportButtonVisible = false;
+			$warningModalContent =
+				'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
+			$isWarningModalHidden = false;
+			return;
+		}
 
 		if (overwrite) {
 			const deleteResponse = await fetch('/api/surveys/drafts/delete', {
@@ -88,6 +101,9 @@
 				return;
 			}
 		}
+
+		const parsedSurvey = new Survey(constructQuestionList($questions));
+		const draftInfo = new DraftCreateInfo($title.title, parsedSurvey);
 
 		const createResponse = await fetch('/api/surveys/drafts/create', {
 			method: 'POST',
@@ -107,9 +123,10 @@
 		$currentDraftId = await createResponse.json();
 		$draftStructure = getDraft($title.title, $questions);
 		popup('draft-popup');
+		await invalidateAll();
 	}
 
-	async function fetchGroup(name: string) {
+	async function fetchGroup(name: string): Promise<string[]> {
 		const response = await fetch('/api/groups/fetch', {
 			method: 'POST',
 			body: JSON.stringify({ name: name }),
@@ -122,11 +139,11 @@
 			const body = await response.json();
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
-			return;
+			return [];
 		}
 
-		const body = await response.json();
-		ring = [...$ringMembers, ...body];
+		const body: { email: string; has_public_key: boolean }[] = await response.json();
+		return body.map((member) => member.email);
 	}
 
 	async function createSurvey() {
@@ -134,17 +151,17 @@
 
 		isRespondentModalHidden = true;
 
-		const parsedSurvey = new Survey(constructQuestionList($questions));
-		let finalRing: string[] = [];
+		let ring: string[] = [];
 
 		if ($selectedGroup.length > 0) {
-			await fetchGroup($selectedGroup[0]);
-			finalRing = [...new Set(ring)];
-		} else if ($ringMembers.length > 0) {
-			finalRing = [...$ringMembers];
+			const groupMembers = await fetchGroup($selectedGroup[0]);
+			ring = Array.from(new Set([...$ringMembers, ...groupMembers]));
+		} else {
+			ring = $ringMembers;
 		}
 
-		const surveyInfo = new SurveyCreateInfo($title.title, parsedSurvey, $useCrypto, finalRing);
+		const parsedSurvey = new Survey(constructQuestionList($questions));
+		const surveyInfo = new SurveyCreateInfo($title.title, parsedSurvey, $useCrypto, ring);
 
 		const response = await fetch('/api/surveys/create', {
 			method: 'POST',
@@ -162,13 +179,12 @@
 		}
 
 		const body = await response.json();
-		ring = [];
-		finalRing = [];
 		$useCrypto = false;
 		$ringMembers = [];
 		$selectedGroup = [];
 		surveyCode = body.survey_code;
 		isSurveyModalHidden = false;
+		await invalidateAll();
 	}
 
 	let innerWidth: number;
@@ -203,12 +219,6 @@
 </script>
 
 <svelte:window bind:innerWidth />
-
-<WarningModal
-	isExportButtonVisible={true}
-	emails={invalidEmails}
-	--width-warning={innerWidth <= $M ? '20em' : '23em'}
-/>
 
 <Modal
 	icon="save"
@@ -266,6 +276,7 @@
 					--width="100%"
 					bind:disabled={isCryptoDisabled}
 					bind:invalidEmails
+					bind:isExportButtonVisible
 				/>
 			</div>
 		</div>

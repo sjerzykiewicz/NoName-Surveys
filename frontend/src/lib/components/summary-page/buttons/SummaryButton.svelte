@@ -4,7 +4,7 @@
 </script>
 
 <button
-	title="View survey summary"
+	title="View the summary"
 	class="footer-button"
 	class:save={$page.route.id === '/surveys/[surveysPage]/[code]'}
 	on:click={() => goto('/surveys/' + $page.params.surveysPage + '/' + $page.params.code)}

@@ -1,5 +1,9 @@
 import type { PageServerLoad } from './$types';
-import { checkAccessToSurvey, getUsers, countUsersWithAccess } from '$lib/server/database';
+import {
+	checkAccessToSurvey,
+	getAllUsersWithoutAccess,
+	countUsersWithAccess
+} from '$lib/server/database';
 import { error } from '@sveltejs/kit';
 import { getEmail } from '$lib/utils/getEmail';
 
@@ -16,17 +20,17 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
 	}
 	const usersWithAccess: string[] = await accessResponse.json();
 
-	const usersResponse = await getUsers();
-	if (!usersResponse.ok) {
-		error(usersResponse.status, { message: await usersResponse.json() });
+	const notAccessResponse = await getAllUsersWithoutAccess(user_email, code);
+	if (!notAccessResponse.ok) {
+		error(notAccessResponse.status, { message: await notAccessResponse.json() });
 	}
-	const allUsers: string[] = await usersResponse.json();
+	const usersWithoutAccess: string[] = await notAccessResponse.json();
 
 	const countResponse = await countUsersWithAccess(user_email, code);
 	if (!countResponse.ok) {
 		error(countResponse.status, { message: await countResponse.json() });
 	}
-	const numUsers = await countResponse.json();
+	const numUsers: number = await countResponse.json();
 
-	return { usersWithAccess, allUsers, numUsers };
+	return { usersWithAccess, usersWithoutAccess, numUsers };
 };

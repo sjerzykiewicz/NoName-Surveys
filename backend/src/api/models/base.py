@@ -103,3 +103,11 @@ class Base(BaseModel):
         if not match(FINGERPRINT_REGEX, value):
             raise ValueError("invalid fingerprint format")
         return value
+
+    def validate_signature(value):
+        if value is None or not isinstance(value, str) or value == "":
+            raise ValueError("signature field must be provided")
+
+        if not match(DIGITS_ONLY_REGEX, value):
+            raise ValueError("invalid signature format")
+        return value

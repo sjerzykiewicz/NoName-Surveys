@@ -314,7 +314,18 @@ Authorizing yourself will enable you to:
 		survey_shared: 'Results of this survey have been shared with you.',
 		view_summary: 'View the summary',
 		view_respondents: 'View possible respondents',
-		not_available_for_public: 'Not available for public survey'
+		not_available_for_public: 'Not available for public survey',
+
+		no_users_with_access: 'No users with access to display!',
+		users_with_access: 'Users With Access',
+		owner: 'Owner',
+		user_with_access: 'User with access',
+		removing_access: 'Removing access',
+		give_access: 'Give access',
+		stop_giving_access: 'Stop giving access',
+		users: 'Users',
+		take_away_access: 'Take away access from selected users',
+		error_select_users: 'Please select users.'
 	},
 
 	pl: {
@@ -626,6 +637,17 @@ Zautoryzowanie się pozwoli Ci na:
 		survey_shared: 'Wyniki tej ankiety zostały tobie udostępnione.',
 		view_summary: 'Pokaż podsumowanie',
 		view_respondents: 'Pokaż możliwych respondentów',
-		not_available_for_public: 'Niedostępne dla ankiety publicznej'
+		not_available_for_public: 'Niedostępne dla ankiety publicznej',
+
+		no_users_with_access: 'Żaden użytkownik nie ma dostępu!',
+		users_with_access: 'Użytkownicy Z Dostępem',
+		owner: 'Właściciel',
+		user_with_access: 'Użytkownik z dostepem',
+		removing_access: 'Odbieranie dostępu',
+		give_access: 'Daj dostęp',
+		stop_giving_access: 'Przestań dawać dostęp',
+		users: 'Użytkownicy',
+		take_away_access: 'Odbierz dostęp wybranym użytkownikom',
+		error_select_users: 'Wybierz użytkowników.'
 	}
 };

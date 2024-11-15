@@ -14,6 +14,10 @@
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let usersWithoutAccess: string[];
 	export let usersWithAccess: string[];
@@ -108,20 +112,24 @@
 	}
 </script>
 
-<DeleteModal title="Removing Access" bind:isHidden={isModalHidden} deleteEntries={removeUsers} />
+<DeleteModal
+	title={$t('removing_access')}
+	bind:isHidden={isModalHidden}
+	deleteEntries={removeUsers}
+/>
 
 <div class="button-row top-row">
 	<div class="button-sub-row">
 		<button
-			title={isPanelVisible ? 'Stop giving access' : 'Give access'}
+			title={isPanelVisible ? $t('stop_giving_access') : $t('give_access')}
 			class="add-group"
 			class:clicked={isPanelVisible}
 			on:click={togglePanel}
 		>
-			<i class="symbol">add</i>Users
+			<i class="symbol">add</i><Tx text="users"></Tx>
 		</button>
 		<button
-			title="Take away access from selected users"
+			title={$t('take_away_access')}
 			class="delete-group"
 			disabled={selectedUsersToRemove.length === 0}
 			on:click={() => (isModalHidden = false)}
@@ -133,11 +141,11 @@
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div title="Select users" class="select-list">
+		<div title={$t('select_users')} class="select-list">
 			<MultiSelect
 				bind:selected={selectedUsersToAdd}
 				options={usersWithoutAccess}
-				placeholder="Select users"
+				placeholder={$t('select_users')}
 			/>
 		</div>
 		<button title="Finish giving access" class="done" on:click={addUsers}>

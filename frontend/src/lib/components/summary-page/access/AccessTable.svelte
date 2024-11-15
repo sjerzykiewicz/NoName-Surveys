@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { XL } from '$lib/stores/global';
 	import { getContext } from 'svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
@@ -24,7 +25,7 @@
 <svelte:window bind:innerWidth />
 
 {#if users.length === 0}
-	<div title="Users with access" class="title empty">No users with access to display!</div>
+	<div title="Users with access" class="title empty"><Tx text="no_surveys_with_access"></Tx></div>
 {:else}
 	<table>
 		<tr>
@@ -42,7 +43,7 @@
 				></th
 			>
 			<th title="User type" id="info-header"><i class="symbol">person</i></th>
-			<th title="Users with access" id="title-header">Users With Access</th>
+			<th title="Users with access" id="title-header"><Tx text="users_with_access"></Tx></th>
 		</tr>
 		{#each users as user}
 			<tr>
@@ -62,11 +63,13 @@
 				<td class="info-entry tooltip">
 					{#if user === $page.data.session?.user?.email}
 						<i class="symbol">verified</i>
-						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}">Owner.</span>
+						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+							><Tx text="owner"></Tx>.</span
+						>
 					{:else}
 						<i class="symbol">share</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>User with access.</span
+							><Tx text="user_with_access"></Tx>.</span
 						>
 					{/if}
 				</td>

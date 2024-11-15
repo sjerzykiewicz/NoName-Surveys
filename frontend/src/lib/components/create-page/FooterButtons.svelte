@@ -129,7 +129,7 @@
 		} else {
 			if (numDrafts >= $LIMIT_OF_DRAFTS) {
 				isExportButtonVisible = false;
-				$warningModalContent = $t('draft_limit_reached');
+				$warningModalContent = $t('limit_reached', { items: $t('drafts_genitive') });
 				$isWarningModalHidden = false;
 				return;
 			}
@@ -167,7 +167,7 @@
 	async function createSurvey() {
 		if (numSurveys >= $LIMIT_OF_SURVEYS) {
 			isExportButtonVisible = false;
-			$warningModalContent = $t('survey_limit_reached');
+			$warningModalContent = $t('limit_reached', { items: $t('surveys_genitive') });
 			$isWarningModalHidden = false;
 			return;
 		}

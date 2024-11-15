@@ -46,15 +46,17 @@
 	onMount(() => {
 		if (data.numSurveys >= $LIMIT_OF_SURVEYS && data.numDrafts >= $LIMIT_OF_DRAFTS) {
 			isExportButtonVisible = false;
-			$warningModalContent = $t('survey_and_draft_limit_reached');
+			$warningModalContent = $t('limit_reached', {
+				items: $t('surveys_genitive') + ' and ' + $t('drafts_genitive')
+			});
 			$isWarningModalHidden = false;
 		} else if (data.numSurveys >= $LIMIT_OF_SURVEYS) {
 			isExportButtonVisible = false;
-			$warningModalContent = $t('survey_limit_reached');
+			$warningModalContent = $t('limit_reached', { items: $t('surveys_genitive') });
 			$isWarningModalHidden = false;
 		} else if (data.numDrafts >= $LIMIT_OF_DRAFTS) {
 			isExportButtonVisible = false;
-			$warningModalContent = $t('draft_limit_reached');
+			$warningModalContent = $t('limit_reached', { items: $t('drafts_genitive') });
 			$isWarningModalHidden = false;
 		}
 	});

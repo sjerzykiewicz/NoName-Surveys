@@ -84,7 +84,7 @@
 			(!overwrite && numDrafts >= $LIMIT_OF_DRAFTS)
 		) {
 			isExportButtonVisible = false;
-			$warningModalContent = $t('draft_limit_reached');
+			$warningModalContent = $t('limit_reached', { items: $t('drafts_genitive') });
 			$isWarningModalHidden = false;
 			return;
 		}

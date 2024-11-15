@@ -141,7 +141,7 @@
 	<div title={$t('number_of_answers')} class="title empty"><Tx text="no_answers_yet"></Tx></div>
 {:else}
 	<div title={$t('number_of_answers')} class="title answers">
-		<Tx text="number_of_answers"></Tx>
+		<Tx text="number_of_answers"></Tx>:
 		{surveyAnswers.length}
 	</div>
 	{#each groupedAnswers as question, questionIndex}

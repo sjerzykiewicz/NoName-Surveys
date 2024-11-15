@@ -60,7 +60,10 @@
 
 		if (invalidEmailsSet.size > 0 && $isErrorModalHidden) {
 			isExportButtonVisible = true;
-			$warningModalContent = `Could not import ${invalidEmailsSet.size} users, because they haven't ${checkKeys ? 'generated keys' : 'registered'} yet. You can export the list of invalid users if you want.`;
+			$warningModalContent = $t('could_not_import_emails', {
+				number: invalidEmailsSet.size,
+				reason: checkKeys ? $t('some_users_without_keys') : $t('some_users_not_registered')
+			});
 			$isWarningModalHidden = false;
 		}
 

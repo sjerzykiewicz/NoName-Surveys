@@ -39,9 +39,14 @@ export const data = {
 		drafts_genitive: 'drafts',
 		groups_genitive: 'groups',
 
-		limit_reached: 'You have reached the maximum number of',
-		delete_some: 'Please delete some',
-		to_create_new_ones: 'to create new ones',
+		limit_reached:
+			'You have reached the maximum number of {items}. Please delete some {items} to create new ones',
+		limit_reached_title: '{items} limit reached',
+
+		some_users_not_registered: `they haven't registered yet`,
+		some_users_without_keys: `they haven't generated keys yet`,
+		could_not_import_emails: `Could not import {number} users, because {reason}.
+			You can export the list of invalid users if you want.`,
 
 		single_text: 'Single',
 		single_title: 'Single choice',
@@ -297,7 +302,7 @@ Authorizing yourself will enable you to:
 		import_members_label: 'Or import group members from a .csv file.',
 		members_error: 'Please select group members.',
 		group_error_name_required: 'Please enter group name.',
-		group_error_name_too_long: `Group name must be {$LIMIT_OF_CHARS} or less characters long.`,
+		group_error_name_too_long: `Group name must be {limit} or less characters long.`,
 		group_error_already_exists: 'This group name already exists.',
 		group_error_name_invalid:
 			'Group name can only contain letters, numbers, spaces, slashes and hyphens.',
@@ -400,9 +405,14 @@ Authorizing yourself will enable you to:
 		drafts_genitive: 'szkiców',
 		groups_genitive: 'grup',
 
-		limit_reached: 'Osiągnięto maksymalną liczbę',
-		delete_some: 'Usuń niektóre z istniejących',
-		to_create_new_ones: 'aby utworzyć nowe',
+		limit_reached:
+			'Osiągnięto maksymalną liczbę {items}. Usuń niektóre z istniejących {items} aby utworzyć nowe.',
+		limit_reached_title: 'Osiągnięto maksymalną liczbę {items}',
+
+		some_users_not_registered: 'nie są zarejestrowani',
+		some_users_without_keys: 'nie mają kluczy',
+		could_not_import_emails: `Nie udało się zaimportować {number} użytkowników, ponieważ {reason}.
+			Jeśli chcesz, możesz wyeksportować ich listę.`,
 
 		single_text: 'Jednokrotne',
 		single_title: 'Jednokrotny wybór',
@@ -652,7 +662,7 @@ Zautoryzowanie się pozwoli Ci na:
 		members_error: 'Wybierz członkow grupy.',
 
 		group_error_name_required: 'Wprowadź nazwę grupy.',
-		group_error_name_too_long: `Nazwa grupy musi mieć {$LIMIT_OF_CHARS} lub mniej znaków.`,
+		group_error_name_too_long: `Nazwa grupy musi mieć {limit} lub mniej znaków.`,
 		group_error_already_exists: 'Grupa o tej nazwie już istnieje.',
 		group_error_name_invalid:
 			'Nazwa gupy może zawierać tylko litery, cyfry, spacje, ukośniki i łączniki.',

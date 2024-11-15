@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let num: number;
 	export let limit: number;
@@ -10,15 +13,11 @@
 
 {#if num >= limit}
 	<p
-		title="{items} limit reached"
+		title={$t('limit_reached_title', { items: items })}
 		class="warning"
 		transition:slide={{ duration: 200, easing: cubicInOut }}
 	>
-		<i class="symbol">warning</i><Tx text="limit_reached"></Tx>
-		{items.toLowerCase()}.
-		<Tx text="delete_some"></Tx>
-		{items.toLowerCase()}
-		<Tx text="to_create_new_ones"></Tx>.
+		<i class="symbol">warning</i>{$t('limit_reached', { items: items.toLowerCase() })}.
 	</p>
 {/if}
 

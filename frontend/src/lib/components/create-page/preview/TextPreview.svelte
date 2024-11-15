@@ -16,5 +16,5 @@
 	<div title={$t('question_details')} class="details">
 		{$questions[questionIndex].choices[0]}
 	</div>
-	<Input bind:text label="Answer" title={$t('enter_answer')} --margin-right="0em" />
+	<Input bind:text label={$t('answer')} title={$t('enter_answer')} --margin-right="0em" />
 </div>

@@ -120,7 +120,7 @@
 		<div class="renaming"><Tx text="renaming"></Tx> {selectedGroup}.</div>
 		<Input
 			bind:text={newName}
-			label="Group Name"
+			label={$t('group_name')}
 			title={$t('enter_new_group_name')}
 			bind:element={nameInput}
 			handleEnter={(e) => {

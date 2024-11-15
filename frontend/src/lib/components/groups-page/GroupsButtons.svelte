@@ -208,7 +208,7 @@
 		<div class="button-row">
 			<Input
 				bind:text={groupName}
-				label="Group Name"
+				label={$t('group_name')}
 				title={$t('enter_group_name')}
 				bind:element={nameInput}
 				handleEnter={(e) => {

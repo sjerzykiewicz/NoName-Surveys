@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { XL } from '$lib/stores/global';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -26,7 +27,7 @@
 <svelte:window bind:innerWidth />
 
 {#if members.length === 0}
-	<div title="Group members" class="title empty">No group members yet!</div>
+	<div title={$t('group_members')} class="title empty"><Tx text="no_members_yet"></Tx></div>
 {:else}
 	<table>
 		<tr>
@@ -41,7 +42,7 @@
 				></th
 			>
 			<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
-			<th title="Group members" id="title-header">Group Members</th>
+			<th title="Group members" id="title-header"><Tx text="group_members"></Tx></th>
 		</tr>
 		{#each members as member}
 			<tr>
@@ -54,12 +55,12 @@
 					{#if member.has_public_key}
 						<i class="symbol">key</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>This user has already generated his keys.</span
+							><Tx text="user_has_keys"></Tx></span
 						>
 					{:else}
 						<i class="symbol">key_off</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>This user has not generated his keys yet.</span
+							><Tx text="user_has_no_keys"></Tx></span
 						>
 					{/if}
 				</td>

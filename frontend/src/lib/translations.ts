@@ -288,7 +288,19 @@ Authorizing yourself will enable you to:
 		group_error_name_too_long: `Group name must be {$LIMIT_OF_CHARS} or less characters long.`,
 		group_error_already_exists: 'This group name already exists.',
 		group_error_name_invalid:
-			'Group name can only contain letters, numbers, spaces, slashes and hyphens.'
+			'Group name can only contain letters, numbers, spaces, slashes and hyphens.',
+
+		removing_group_members: 'Removing group members',
+		add_group_members: 'Add group memebers',
+		add_group_members_stop: 'Stop adding group members',
+		members: 'Members',
+		remove_selected_members: 'Remove selected group members',
+		select_mebers: 'Select group members',
+		add_members_finish: 'Finish adding group members',
+		group_members: 'Group members',
+		no_members_yet: 'No group members yet!',
+		user_has_keys: 'This user has already generated their keys.',
+		user_has_no_keys: 'This user has not generated their keys yet.'
 	},
 
 	pl: {
@@ -574,6 +586,18 @@ Zautoryzowanie się pozwoli Ci na:
 		group_error_name_too_long: `Nazwa grupy musi mieć {$LIMIT_OF_CHARS} lub mniej znaków.`,
 		group_error_already_exists: 'Grupa o tej nazwie już istnieje.',
 		group_error_name_invalid:
-			'Nazwa gupy może zawierać tylko litery, cyfry, spacje, ukośniki i łączniki.'
+			'Nazwa gupy może zawierać tylko litery, cyfry, spacje, ukośniki i łączniki.',
+
+		removing_group_members: 'Usuwanie członków grupy',
+		add_group_members: 'Dodaj członków grupy',
+		add_group_members_stop: 'Przestań dodawać członków grupy',
+		members: 'Członkowie',
+		remove_selected_members: 'Usuń wybranych członków grupy',
+		select_mebers: 'Wybierz członków grupy',
+		add_members_finish: 'Zakończ dodawanie członków grupy',
+		group_members: 'Członkowie grupy',
+		no_members_yet: 'Brak członków grupy!',
+		user_has_keys: 'Ten użytkownik posiada klucze.',
+		user_has_no_keys: 'Ten użytkownik nie posiada kluczy.'
 	}
 };

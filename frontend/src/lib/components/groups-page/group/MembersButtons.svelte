@@ -14,6 +14,10 @@
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
 	import { changePage } from '$lib/utils/changePage';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let members: {
 		email: string;
@@ -135,7 +139,7 @@
 </script>
 
 <DeleteModal
-	title="Removing Group Members"
+	title={$t('removing_group_members')}
 	bind:isHidden={isModalHidden}
 	deleteEntries={removeMembers}
 />
@@ -143,16 +147,16 @@
 <div class="button-row top-row">
 	<div class="button-sub-row">
 		<button
-			title={isPanelVisible ? 'Stop adding group members' : 'Add group members'}
+			title={isPanelVisible ? $t('add_group_members_stop') : $t('add_group_members')}
 			class="add-group"
 			class:clicked={isPanelVisible}
 			on:click={togglePanel}
 		>
-			<i class="symbol">add</i>Members
+			<i class="symbol">add</i><Tx text="members"></Tx>
 		</button>
 		{#if members.length > 0}
 			<button
-				title="Remove selected group members"
+				title={$t('remove_group_members')}
 				class="delete-group"
 				disabled={selectedMembersToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
@@ -165,14 +169,14 @@
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div title="Select group members" class="select-list">
+		<div title={$t('select_members')} class="select-list">
 			<MultiSelect
 				bind:selected={selectedMembersToAdd}
 				options={notMembers}
-				placeholder="Select group members"
+				placeholder={$t('select_members')}
 			/>
 		</div>
-		<button title="Finish adding group members" class="done" on:click={addMembers}>
+		<button title={$t('add_members_finish')} class="done" on:click={addMembers}>
 			<i class="symbol">done</i><Tx text="submit"></Tx>
 		</button>
 	</div>

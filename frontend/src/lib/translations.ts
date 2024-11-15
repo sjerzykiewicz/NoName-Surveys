@@ -30,6 +30,7 @@ export const data = {
 		group_size: 'Group Size',
 		survey_info: 'Survey Information',
 		select_all: 'Select all',
+		draft: 'Draft',
 
 		single_text: 'Single',
 		single_title: 'Single choice',
@@ -232,7 +233,15 @@ Authorizing yourself will enable you to:
 		draft_limit_reached:
 			'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.',
 		survey_and_draft_limit_reached:
-			'You have reached the maximum number of surveys and drafts you can create. Please delete some surveys and drafts to create new ones.'
+			'You have reached the maximum number of surveys and drafts you can create. Please delete some surveys and drafts to create new ones.',
+
+		your_drafts: 'Your drafts',
+		number_of_drafts: 'Number of drafts',
+		no_drafts_yet: 'No drafts yet!',
+		draft_tooltip: `When creating a survey, you can save it as a draft for later use. To create a survey, click
+			on the "Create" tab at the top of the page or the button below. All your saved drafts will
+			be stored on this page.`,
+		draft_title: 'Draft Title'
 	},
 
 	pl: {
@@ -266,6 +275,7 @@ Authorizing yourself will enable you to:
 		group_size: 'Rozmiar grupy',
 		survey_info: 'Informacje o ankiecie',
 		select_all: 'Wybierz wszystko',
+		draft: 'Szkic',
 
 		single_text: 'Jednokrotne',
 		single_title: 'Jednokrotny wybór',
@@ -462,6 +472,13 @@ Zautoryzowanie się pozwoli Ci na:
 		draft_limit_reached:
 			'Osiągnięto maksymalną liczbę szkiców możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
 		survey_and_draft_limit_reached:
-			'Osiągnięto maksymalną liczbę ankiet możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.'
+			'Osiągnięto maksymalną liczbę ankiet możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+
+		your_drafts: 'Twoje szkice',
+		number_of_drafts: 'Liczba szkicy',
+		no_drafts_yet: 'Brak szkicy!',
+		draft_tooltip: `Podczas tworzenia ankiety, możesz zapisać ją jako szkic do późniejszego wykorzystania. Aby stworzyć ankietę, wejdź
+			w zakładkę "Utwórz" na górze strony lub kliknij przycisk poniżej. Wszystkie zapisane szkice będą dostępne na tej stronie.`,
+		draft_title: 'Tytuł Szkicu'
 	}
 };

@@ -58,7 +58,7 @@
 <div class="button-row">
 	<div class="button-sub-row">
 		<button title="Create a draft" class="add-draft" on:click={() => goto('/create')}>
-			<i class="symbol">add</i>Draft
+			<i class="symbol">add</i><Tx text="draft"></Tx>
 		</button>
 		{#if drafts.length > 0}
 			<button

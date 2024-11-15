@@ -32,6 +32,7 @@
 	import { getDraft } from '$lib/utils/getDraft';
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -216,13 +217,11 @@
 
 {#if drafts.length === 0}
 	<div class="info-row">
-		<div title="Drafts" class="title empty">No drafts yet!</div>
+		<div title="Drafts" class="title empty"><Tx text="no_drafts_yet"></Tx></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				When creating a survey, you can save it as a draft for later use. To create a survey, click
-				on the "Create" tab at the top of the page or the button below. All your saved drafts will
-				be stored on this page.
+				<Tx text="draft_tooltip"></Tx>
 			</span>
 		</div>
 	</div>
@@ -239,8 +238,8 @@
 					/></label
 				></th
 			>
-			<th title="Draft title" id="title-header">Draft Title</th>
-			<th title={$t('creation_date')} id="date-header">Creation Date</th>
+			<th title="Draft title" id="title-header"><Tx text="draft_title"></Tx></th>
+			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date"></Tx></th>
 		</tr>
 		{#each drafts as draft}
 			<tr>

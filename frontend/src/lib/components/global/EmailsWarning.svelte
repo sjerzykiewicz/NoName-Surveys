@@ -14,9 +14,9 @@
 	function warningMessage() {
 		switch (warning) {
 			case FileError.FileRequired:
-				return 'No file selected.';
+				return $t('no_file_selected');
 			case FileError.FileInvalid:
-				return 'File must be in .csv format.';
+				return $t('error_file_not_csv');
 		}
 	}
 

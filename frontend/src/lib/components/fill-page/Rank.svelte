@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let questionIndex: number;
 
 	$answers[questionIndex].choices = [...$questions[questionIndex].choices];
@@ -24,7 +27,7 @@
 			<div class="rank">{choiceIndex + 1}.</div>
 			<div class="arrows">
 				<button
-					title="Move answer up"
+					title={$t('move_answer_up')}
 					class="up"
 					disabled={choiceIndex === 0}
 					on:click={() => moveChoiceUp(choiceIndex)}
@@ -32,7 +35,7 @@
 					<i class="symbol">keyboard_arrow_up</i>
 				</button>
 				<button
-					title="Move answer down"
+					title={$t('move_answer_down')}
 					class="down"
 					disabled={choiceIndex === $questions[questionIndex].choices.length - 1}
 					on:click={() => moveChoiceDown(choiceIndex)}

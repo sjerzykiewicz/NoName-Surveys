@@ -34,6 +34,7 @@ export const data = {
 		group: 'Group',
 		create: 'Create',
 		survey: 'Survey',
+		code: 'Code',
 
 		single_text: 'Single',
 		single_title: 'Single choice',
@@ -225,6 +226,7 @@ Authorizing yourself will enable you to:
 		import_csv_label: 'Or import users from .csv file',
 		select_file: 'Select file',
 		no_file_selected: 'No file selected',
+		error_file_not_csv: 'File must be in .csv format.',
 
 		copy_link: 'Copy link',
 		copy_code: 'Copy code',
@@ -260,6 +262,8 @@ Authorizing yourself will enable you to:
 		answer_question_no: 'Please answer question no. ',
 		error_no_file: 'Please select a file.',
 		error_invalid_file: 'Please select a .pem file.',
+		move_answer_up: 'Move answer up',
+		move_answer_down: 'Move answer down',
 
 		your_groups: 'Your groups',
 		number_of_groups: 'Number of groups',
@@ -336,7 +340,14 @@ Authorizing yourself will enable you to:
 		selected_answer: 'Selected answer',
 		other_choice: 'Other choice',
 		question_details: 'Question details',
-		click_to_get_answers: 'Click to display all answers'
+		click_to_get_answers: 'Click to display all answers',
+
+		share: 'Share',
+		respondents: 'Respondents',
+		summary: 'Summary',
+		back: 'Back',
+
+		ordered_by_average_place: 'Ordered by average place'
 	},
 
 	pl: {
@@ -374,6 +385,7 @@ Authorizing yourself will enable you to:
 		group: 'Grupa',
 		create: 'Utwórz',
 		survey: 'Ankieta',
+		code: 'Kod',
 
 		single_text: 'Jednokrotne',
 		single_title: 'Jednokrotny wybór',
@@ -559,6 +571,7 @@ Zautoryzowanie się pozwoli Ci na:
 		import_csv_label: 'Lub importuj użytkowników z pliku .csv',
 		select_file: 'Wybierz plik',
 		no_file_selected: 'Nie wybrano pliku',
+		error_file_not_csv: 'Plik musi być w formacie .csv.',
 
 		copy_link: 'Kopiuj link',
 		copy_code: 'Kopiuj kod',
@@ -593,6 +606,8 @@ Zautoryzowanie się pozwoli Ci na:
 		answer_question_no: 'Wprowadź odpowiedź na pytanie nr. ',
 		error_no_file: 'Załaduj plik.',
 		error_invalid_file: 'Załaduj plik .pem.',
+		move_answer_up: 'Przenieś odpowiedź w górę',
+		move_answer_down: 'Przenieś odpowiedź w dół',
 
 		your_groups: 'Twoje grupy',
 		number_of_groups: 'Liczba grup',
@@ -670,6 +685,13 @@ Zautoryzowanie się pozwoli Ci na:
 		selected_answer: 'Wybrana odpowiedź',
 		other_choice: 'Inny wybór',
 		question_details: 'Szczegóły pytania',
-		click_to_get_answers: 'Kliknij, aby wyświetlić wszystkie odpowiedzi'
+		click_to_get_answers: 'Kliknij, aby wyświetlić wszystkie odpowiedzi',
+
+		share: 'Udostępnij',
+		respondents: 'Respondenci',
+		summary: 'Podsumowanie',
+		back: 'Wróć',
+
+		ordered_by_average_place: 'Uporządkowane według średniej pozycji'
 	}
 };

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 </script>
 
 <button
@@ -10,5 +11,5 @@
 	on:click={() =>
 		goto('/surveys/' + $page.params.surveysPage + '/' + $page.params.code + '/respondents/0')}
 >
-	<i class="symbol">group</i>Respondents
+	<i class="symbol">group</i><Tx text="respondents"></Tx>
 </button>

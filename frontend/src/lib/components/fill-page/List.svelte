@@ -4,6 +4,7 @@
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let questionIndex: number;
 
@@ -16,7 +17,7 @@
 		name={questionIndex.toString()}
 		bind:value={$answers[questionIndex].choices[0]}
 	>
-		<option value="" disabled selected hidden>Select your answer</option>
+		<option value="" disabled selected hidden><Tx text="select_answer"></Tx></option>
 		{#each $questions[questionIndex].choices as choice}
 			<option value={choice}>
 				{choice}

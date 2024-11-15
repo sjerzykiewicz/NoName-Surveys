@@ -6,13 +6,14 @@
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let questionIndex: number;
 </script>
 
 <div class="choice-area display" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<select title={$t('select_answer')} name={questionIndex.toString()}>
-		<option value="" disabled selected hidden>Select your answer</option>
+		<option value="" disabled selected hidden><Tx text="select_answer"></Tx></option>
 		{#each $questions[questionIndex].choices as choice}
 			<option value={choice}>
 				{choice}

@@ -15,13 +15,13 @@
 	function errorMessage(error: GroupError) {
 		switch (error) {
 			case GroupError.NameRequired:
-				return 'Please enter group name.';
+				return $t('group_error_name_required');
 			case GroupError.NameTooLong:
-				return 'Group name must be ' + $LIMIT_OF_CHARS + ' or less characters long.';
+				return $t('group_error_name_too_long');
 			case GroupError.NameNonUnique:
-				return 'This group name already exists.';
+				return $t('group_error_already_exists');
 			case GroupError.NameInvalid:
-				return 'Group name can only contain letters, numbers, spaces, slashes and hyphens.';
+				return $t('group_error_name_invalid');
 		}
 	}
 

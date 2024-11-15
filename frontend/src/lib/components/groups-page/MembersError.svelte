@@ -11,7 +11,7 @@
 	export let error: GroupError;
 
 	function errorMessage() {
-		return 'Please select group members.';
+		return $t('members_error');
 	}
 
 	$: checkMembersError = () => {

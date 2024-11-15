@@ -117,11 +117,11 @@
 	--width={innerWidth <= $M ? '20em' : '36em'}
 >
 	<div slot="content" class="modal-content">
-		<div class="renaming">Renaming {selectedGroup}.</div>
+		<div class="renaming"><Tx text="renaming"></Tx> {selectedGroup}.</div>
 		<Input
 			bind:text={newName}
 			label="Group Name"
-			title="Enter a new group name"
+			title={$t('enter_new_group_name')}
 			bind:element={nameInput}
 			handleEnter={(e) => {
 				if (e.key === 'Enter') {
@@ -142,12 +142,11 @@
 
 {#if groups.length === 0}
 	<div class="info-row">
-		<div title="Groups" class="title empty">No groups yet!</div>
+		<div title="Groups" class="title empty"><Tx text="no_groups_yet"></Tx></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				When creating a secure survey, you can choose a group of possible respondents. To create a
-				group, click on the button below. All your created groups will be stored on this page.
+				<Tx text="groups_tooltip"></Tx>
 			</span>
 		</div>
 	</div>
@@ -165,7 +164,7 @@
 				></th
 			>
 			<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
-			<th title="Group title" id="title-header" colspan="2">Group Title</th>
+			<th title="Group title" id="title-header" colspan="2"><Tx text="group_name"></Tx></th>
 		</tr>
 		{#each groups as group}
 			<tr>
@@ -182,14 +181,12 @@
 					{#if group.all_members_have_public_keys}
 						<i class="symbol">key</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>Everyone in this group have generated their keys. You can use this group in secure
-							surveys.</span
+							><Tx text="everyone_has_keys"></Tx></span
 						>
 					{:else}
 						<i class="symbol">key_off</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>Not everyone in this group have generated their keys. You cannot use this group in
-							secure surveys.</span
+							><Tx text="not_everyone_has_keys"></Tx></span
 						>
 					{/if}
 				</td>

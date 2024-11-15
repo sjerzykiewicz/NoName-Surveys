@@ -5,6 +5,11 @@
 	import GroupsButtons from '$lib/components/groups-page/GroupsButtons.svelte';
 	import LimitWarning from '$lib/components/global/LimitWarning.svelte';
 	import { LIMIT_OF_GROUPS } from '$lib/stores/global';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data;
 	export let selectedGroupsToRemove: string[] = [];
@@ -12,8 +17,8 @@
 
 <Header>
 	<div class="title">
-		Your groups
-		<span title="Number of groups" class:max={data.numGroups >= $LIMIT_OF_GROUPS}
+		<Tx text="your_groups"></Tx>
+		<span title={$t('number_of_groups')} class:max={data.numGroups >= $LIMIT_OF_GROUPS}
 			>[ {data.numGroups} / {$LIMIT_OF_GROUPS} ]</span
 		>
 	</div>

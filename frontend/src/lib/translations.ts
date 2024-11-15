@@ -31,6 +31,8 @@ export const data = {
 		survey_info: 'Survey Information',
 		select_all: 'Select all',
 		draft: 'Draft',
+		group: 'Group',
+		create: 'Create',
 
 		single_text: 'Single',
 		single_title: 'Single choice',
@@ -256,7 +258,37 @@ Authorizing yourself will enable you to:
 			' There are only two people who can respond to this survey. The other person could be the creator of this survey.',
 		answer_question_no: 'Please answer question no. ',
 		error_no_file: 'Please select a file.',
-		error_invalid_file: 'Please select a .pem file.'
+		error_invalid_file: 'Please select a .pem file.',
+
+		your_groups: 'Your groups',
+		number_of_groups: 'Number of groups',
+		renaming: 'Renaming',
+		enter_new_group_name: 'Enter a new group name',
+		no_groups_yet: 'No groups yet!',
+		groups_tooltip: `When creating a secure survey, you can choose a group of possible respondents. To create a
+			group, click on the button below. All your created groups will be stored on this page.`,
+		group_name: 'Group Name',
+		everyone_has_keys:
+			'Everyone in this group have generated their keys. You can use this group in secure surveys.',
+		not_everyone_has_keys:
+			'Not everyone in this group have generated their keys. You cannot use this group in secure surveys.',
+		max_groups_reached:
+			'You have reached the maximum number of groups you can create. Please delete some groups to create new ones.',
+
+		create_group: 'Create a group',
+		create_group_stop: 'Stop creating group',
+		delete_selected_groups: 'Delete selected groups',
+		enter_group_name: 'Enter a group name',
+		select_group_members: 'Select group members',
+		save_group: 'Save the group',
+		import_members_title: 'Import group members from a .csv file',
+		import_members_label: 'Or import group members from a .csv file.',
+		members_error: 'Please select group members.',
+		group_error_name_required: 'Please enter group name.',
+		group_error_name_too_long: `Group name must be {$LIMIT_OF_CHARS} or less characters long.`,
+		group_error_already_exists: 'This group name already exists.',
+		group_error_name_invalid:
+			'Group name can only contain letters, numbers, spaces, slashes and hyphens.'
 	},
 
 	pl: {
@@ -291,6 +323,8 @@ Authorizing yourself will enable you to:
 		survey_info: 'Informacje o ankiecie',
 		select_all: 'Wybierz wszystko',
 		draft: 'Szkic',
+		group: 'Grupa',
+		create: 'Utwórz',
 
 		single_text: 'Jednokrotne',
 		single_title: 'Jednokrotny wybór',
@@ -509,6 +543,37 @@ Zautoryzowanie się pozwoli Ci na:
 			' Tylko dwie osoby mogą wypełnić tę ankietę. Istnieje możliwość, że drugą osobą jest twórca ankiety.',
 		answer_question_no: 'Wprowadź odpowiedź na pytanie nr. ',
 		error_no_file: 'Załaduj plik.',
-		error_invalid_file: 'Załaduj plik .pem.'
+		error_invalid_file: 'Załaduj plik .pem.',
+
+		your_groups: 'Twoje grupy',
+		number_of_groups: 'Liczba grup',
+		renaming: 'Zmienianie nazwy',
+		enter_new_group_name: 'Wprowadź nową nazwę grupy',
+		no_groups_yet: 'Brak grup!',
+		groups_tooltip: `Podczas tworzenia bezpiecznej ankiety możesz wybrać grupę uprawnionych respondentów. Aby stworzyć
+			grupę, kliknij przycisk poniżej. Wszystkie utworzone grupy będą dostępne na tej stronie.`,
+		group_name: 'Nazwa Grupy',
+		everyone_has_keys:
+			'Każdy członek tej grupy wygenerował klucze. Ta grupa może być wykorzystana w bezpiecznych ankietach.',
+		not_everyone_has_keys:
+			'Nie każdy członek tej grupy wygenerował klucze. Ta grupa nie może być wykorzystana w bezpiecznych ankietach.',
+		max_groups_reached:
+			'Osiągnięto maksymalną liczbę grup możliwych do utworzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+
+		create_group: 'Stwórz grupę',
+		create_group_stop: 'Przestań tworzyć grupę',
+		delete_selected_groups: 'Usuń wybrane grupy',
+		enter_group_name: 'Wprowadź nazwę grupy',
+		select_group_members: 'Wybierz członków grupy',
+		save_group: 'Zapisz grupę',
+		import_members_title: 'Importuj członków grupy z pliku .csv',
+		import_members_label: 'Lub importuj członków grupy z pliku .csv.',
+		members_error: 'Wybierz członkow grupy.',
+
+		group_error_name_required: 'Wprowadź nazwę grupy.',
+		group_error_name_too_long: `Nazwa grupy musi mieć {$LIMIT_OF_CHARS} lub mniej znaków.`,
+		group_error_already_exists: 'Grupa o tej nazwie już istnieje.',
+		group_error_name_invalid:
+			'Nazwa gupy może zawierać tylko litery, cyfry, spacje, ukośniki i łączniki.'
 	}
 };

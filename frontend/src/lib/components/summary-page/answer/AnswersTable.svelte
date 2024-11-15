@@ -16,19 +16,18 @@
 </script>
 
 {#if numbersPaginated.length === 0}
-	<div title={$t('number_of_answers')} class="title empty"><Tx text="no_answers_yet"></Tx></div>
+	<div title={$t('number_of_answers')} class="title empty"><Tx text="no_answers_yet" /></div>
 {:else}
 	<table>
 		<tr>
 			<th title={$t('number_of_answers')} id="info-header"><i class="symbol">numbers</i></th>
-			<th title={$t('answers')} id="title-header"><Tx text="answers"></Tx></th>
+			<th title={$t('answers')} id="title-header"><Tx text="answers" /></th>
 		</tr>
 		{#each numbersPaginated as i}
 			<tr>
 				<td title="{$t('answer_no')} {i + 1}" class="info-entry">{i + 1}.</td>
 				<td title="{$t('view_answer_no')} {i + 1}" class="title-entry"
-					><button on:click={() => goto($page.url.pathname + '/' + i)}
-						><Tx text="answer"></Tx></button
+					><button on:click={() => goto($page.url.pathname + '/' + i)}><Tx text="answer" /></button
 					></td
 				>
 			</tr>

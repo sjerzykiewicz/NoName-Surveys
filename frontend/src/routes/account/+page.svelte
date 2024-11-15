@@ -85,7 +85,7 @@
 		bind:isHidden={isModalHidden}
 		--width={innerWidth <= $M ? '18em' : '22em'}
 	>
-		<span slot="content"><Tx text="account_new_key_alert"></Tx></span>
+		<span slot="content"><Tx text="account_new_key_alert" /></span>
 		<button
 			title={$t('generate')}
 			class="done"
@@ -94,16 +94,16 @@
 				generateKeyPair();
 			}}
 		>
-			<i class="symbol">done</i><Tx text="generate"></Tx>
+			<i class="symbol">done</i><Tx text="generate" />
 		</button>
 		<button title={$t('cancel')} class="not" on:click={() => (isModalHidden = true)}>
-			<i class="symbol">close</i><Tx text="cancel"></Tx>
+			<i class="symbol">close</i><Tx text="cancel" />
 		</button>
 	</Modal>
 
 	<Header>
 		<div title={$t('account_your')} class="title">
-			<Tx text="welcome"></Tx>, {$page.data.session.user?.email}
+			<Tx text="welcome" />, {$page.data.session.user?.email}
 		</div>
 	</Header>
 

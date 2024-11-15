@@ -65,7 +65,7 @@
 <div class="button-row">
 	<div class="button-sub-row">
 		<button title={$t('create_draft')} class="add-draft" on:click={() => goto('/create')}>
-			<i class="symbol">add</i><Tx text="draft"></Tx>
+			<i class="symbol">add</i><Tx text="draft" />
 		</button>
 		{#if drafts.length > 0}
 			<button
@@ -74,7 +74,7 @@
 				disabled={selectedDraftsToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="symbol">delete</i><Tx text="delete"></Tx>
+				<i class="symbol">delete</i><Tx text="delete" />
 			</button>
 		{/if}
 	</div>

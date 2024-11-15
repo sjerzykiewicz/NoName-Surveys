@@ -364,14 +364,11 @@
 >
 	<div slot="content" title={$t('load_keys')} class="file-div">
 		<span class="file-label"
-			><Tx text="key_file_label"></Tx><br /><br /><Tx text="default_filename"></Tx>:
-			"noname-keys.pem"</span
+			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.pem"</span
 		>
 		<label for="keys-file">
 			<div class="file-input">
-				<span class="file-button"
-					><i class="symbol">upload_file</i><Tx text="select_file"></Tx></span
-				>
+				<span class="file-button"><i class="symbol">upload_file</i><Tx text="select_file" /></span>
 				<span class="file-name">{fileName}</span>
 			</div>
 			<input type="file" name="keys" id="keys-file" on:change={handleFileChange} />
@@ -379,7 +376,7 @@
 		<KeysError error={fileError} element={fileElement} />
 	</div>
 	<button title={$t('submit_keys')} class="save" on:click={processCrypto}
-		><i class="symbol">done</i><Tx text="submit"></Tx></button
+		><i class="symbol">done</i><Tx text="submit" /></button
 	>
 </Modal>
 
@@ -392,7 +389,7 @@
 <Content>
 	{#if keys.length === 1 || keys.length === 2}
 		<p title={$t('survey_not_secure_title')} class="warning">
-			<i class="symbol">warning</i><Tx text="survey_not_secure"></Tx>
+			<i class="symbol">warning</i><Tx text="survey_not_secure" />
 			{keys.length === 1 ? $t('only_respondent') : $t('two_respondents')}
 		</p>
 	{/if}
@@ -414,7 +411,7 @@
 
 <Footer>
 	<button title={$t('submit_survey')} class="footer-button done" on:click={submitSurvey}>
-		<i class="symbol">done</i><Tx text="submit"></Tx>
+		<i class="symbol">done</i><Tx text="submit" />
 	</button>
 </Footer>
 

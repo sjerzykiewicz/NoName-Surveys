@@ -152,7 +152,7 @@
 			class:clicked={isPanelVisible}
 			on:click={togglePanel}
 		>
-			<i class="symbol">add</i><Tx text="members"></Tx>
+			<i class="symbol">add</i><Tx text="members" />
 		</button>
 		{#if members.length > 0}
 			<button
@@ -161,7 +161,7 @@
 				disabled={selectedMembersToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="symbol">delete</i><Tx text="delete"></Tx>
+				<i class="symbol">delete</i><Tx text="delete" />
 			</button>
 		{/if}
 	</div>
@@ -177,7 +177,7 @@
 			/>
 		</div>
 		<button title={$t('add_members_finish')} class="done" on:click={addMembers}>
-			<i class="symbol">done</i><Tx text="submit"></Tx>
+			<i class="symbol">done</i><Tx text="submit" />
 		</button>
 	</div>
 	<MembersError members={selectedMembersToAdd} error={membersError} />

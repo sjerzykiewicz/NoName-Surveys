@@ -199,7 +199,7 @@
 			class:previous={$previousQuestion}
 			on:click={togglePanel}
 		>
-			<div class="button-text"><i class="symbol add">add</i><Tx text="create_question"></Tx></div>
+			<div class="button-text"><i class="symbol add">add</i><Tx text="create_question" /></div>
 			<i class="symbol arrow">arrow_drop_down</i>
 		</button>
 		{#if $previousQuestion}

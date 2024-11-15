@@ -21,7 +21,7 @@
 		on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
 	>
 		<i class="symbol">north</i>
-		{#if innerWidth > $M}<span class="tooltip-text right"><Tx text="nav_scroll_to_top"></Tx></span
+		{#if innerWidth > $M}<span class="tooltip-text right"><Tx text="nav_scroll_to_top" /></span
 			>{/if}
 	</button>
 {/if}

@@ -15,5 +15,5 @@
 	on:click={() =>
 		goto('/surveys/' + $page.params.surveysPage + '/' + $page.params.code + '/access/0')}
 >
-	<i class="symbol">share</i><Tx text="share"></Tx>
+	<i class="symbol">share</i><Tx text="share" />
 </button>

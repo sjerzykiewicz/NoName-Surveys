@@ -14,5 +14,5 @@
 	class:save={$page.route.id === '/surveys/[surveysPage]/[code]'}
 	on:click={() => goto('/surveys/' + $page.params.surveysPage + '/' + $page.params.code)}
 >
-	<i class="symbol">bar_chart</i><Tx text="summary"></Tx>
+	<i class="symbol">bar_chart</i><Tx text="summary" />
 </button>

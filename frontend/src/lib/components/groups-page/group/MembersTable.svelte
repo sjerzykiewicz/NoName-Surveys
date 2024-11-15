@@ -27,7 +27,7 @@
 <svelte:window bind:innerWidth />
 
 {#if members.length === 0}
-	<div title={$t('group_members')} class="title empty"><Tx text="no_members_yet"></Tx></div>
+	<div title={$t('group_members')} class="title empty"><Tx text="no_members_yet" /></div>
 {:else}
 	<table>
 		<tr>
@@ -42,7 +42,7 @@
 				></th
 			>
 			<th title={$t('keys_info_title')} id="info-header"><i class="symbol">encrypted</i></th>
-			<th title={$t('group_members')} id="title-header"><Tx text="group_members"></Tx></th>
+			<th title={$t('group_members')} id="title-header"><Tx text="group_members" /></th>
 		</tr>
 		{#each members as member}
 			<tr>
@@ -55,12 +55,12 @@
 					{#if member.has_public_key}
 						<i class="symbol">key</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="user_has_keys"></Tx></span
+							><Tx text="user_has_keys" /></span
 						>
 					{:else}
 						<i class="symbol">key_off</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="user_has_no_keys"></Tx></span
+							><Tx text="user_has_no_keys" /></span
 						>
 					{/if}
 				</td>

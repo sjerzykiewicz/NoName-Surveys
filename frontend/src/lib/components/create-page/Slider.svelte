@@ -34,7 +34,7 @@
 	</div>
 	<div class="limits">
 		<label class="min">
-			<Tx text="minimum"></Tx>
+			<Tx text="minimum" />
 			<input
 				title={$t('create_number_min_title')}
 				class="limit-input"
@@ -53,7 +53,7 @@
 			/></label
 		>
 		<label class="step">
-			<Tx text="precision"></Tx>
+			<Tx text="precision" />
 			<input
 				title={$t('create_slider_precision_title')}
 				class="limit-input"
@@ -72,7 +72,7 @@
 			/></label
 		>
 		<label class="max">
-			<Tx text="maximum"></Tx>
+			<Tx text="maximum" />
 			<input
 				title={$t('create_number_max_title')}
 				class="limit-input"

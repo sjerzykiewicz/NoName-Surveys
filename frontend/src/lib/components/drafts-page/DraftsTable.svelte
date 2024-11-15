@@ -217,11 +217,11 @@
 
 {#if drafts.length === 0}
 	<div class="info-row">
-		<div title={$t('drafts')} class="title empty"><Tx text="no_drafts_yet"></Tx></div>
+		<div title={$t('drafts')} class="title empty"><Tx text="no_drafts_yet" /></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				<Tx text="draft_tooltip"></Tx>
+				<Tx text="draft_tooltip" />
 			</span>
 		</div>
 	</div>
@@ -238,8 +238,8 @@
 					/></label
 				></th
 			>
-			<th title={$t('draft_title')} id="title-header"><Tx text="draft_title"></Tx></th>
-			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date"></Tx></th>
+			<th title={$t('draft_title')} id="title-header"><Tx text="draft_title" /></th>
+			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date" /></th>
 		</tr>
 		{#each drafts as draft}
 			<tr>

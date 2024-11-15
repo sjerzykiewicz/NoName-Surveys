@@ -230,12 +230,12 @@
 	bind:isHidden={isDraftModalHidden}
 	--width={innerWidth <= $M ? '20em' : '22em'}
 >
-	<span slot="content"><Tx text="create_saving_draft_alert"></Tx></span>
+	<span slot="content"><Tx text="create_saving_draft_alert" /></span>
 	<button title={$t('create_overwrite_draft')} class="save" on:click={() => saveDraft(true)}
-		><i class="symbol">save_as</i><Tx text="create_overwrite_draft"></Tx></button
+		><i class="symbol">save_as</i><Tx text="create_overwrite_draft" /></button
 	>
 	<button title={$t('create_save_new_draft')} class="save" on:click={() => saveDraft(false)}
-		><i class="symbol">save</i><Tx text="create_save_new_draft"></Tx></button
+		><i class="symbol">save</i><Tx text="create_save_new_draft" /></button
 	>
 </Modal>
 
@@ -246,7 +246,7 @@
 	--width={innerWidth <= $M ? '20em' : '26em'}
 >
 	<div slot="content">
-		<span><Tx text="create_define_respondent_group_alert"></Tx></span>
+		<span><Tx text="create_define_respondent_group_alert" /></span>
 		<div class="crypto-buttons">
 			<button
 				title={$t('public')}
@@ -254,7 +254,7 @@
 				class:save={!$useCrypto}
 				on:click={() => ($useCrypto = false)}
 			>
-				<i class="symbol">public</i><Tx text="public"></Tx>
+				<i class="symbol">public</i><Tx text="public" />
 			</button>
 			<button
 				title={$t('secure')}
@@ -262,7 +262,7 @@
 				class:save={$useCrypto}
 				on:click={() => ($useCrypto = true)}
 			>
-				<i class="symbol">encrypted</i><Tx text="secure"></Tx>
+				<i class="symbol">encrypted</i><Tx text="secure" />
 			</button>
 		</div>
 		<div class="select-box">
@@ -286,7 +286,7 @@
 		</div>
 	</div>
 	<button title={$t('create_define_respondent_group')} class="done" on:click={createSurvey}
-		><i class="symbol">done</i><Tx text="submit"></Tx></button
+		><i class="symbol">done</i><Tx text="submit" /></button
 	>
 </Modal>
 
@@ -323,7 +323,7 @@
 			<div class="tooltip create-info">
 				<i class="symbol">info</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
-					><Tx text="create_groups_info"></Tx></span
+					><Tx text="create_groups_info" /></span
 				>
 			</div>
 		</div>

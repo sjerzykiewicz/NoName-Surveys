@@ -44,11 +44,11 @@
 
 {#if surveys.length === 0}
 	<div class="info-row">
-		<div title={$t('surveys')} class="title empty"><Tx text="no_surveys_yet"></Tx></div>
+		<div title={$t('surveys')} class="title empty"><Tx text="no_surveys_yet" /></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				<Tx text="surveys_tooltip"></Tx>
+				<Tx text="surveys_tooltip" />
 			</span>
 		</div>
 	</div>
@@ -69,10 +69,10 @@
 				></th
 			>
 			<th title={$t('survey_info')} id="info-header" colspan="2">Info</th>
-			<th title={$t('survey_title')} id="title-header"><Tx text="survey_title"></Tx></th>
-			<th title={$t('group_size')} id="group-header"><Tx text="group_size"></Tx></th>
-			<th title={$t('access_code')} id="code-header"><Tx text="access_code"></Tx></th>
-			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date"></Tx></th>
+			<th title={$t('survey_title')} id="title-header"><Tx text="survey_title" /></th>
+			<th title={$t('group_size')} id="group-header"><Tx text="group_size" /></th>
+			<th title={$t('access_code')} id="code-header"><Tx text="access_code" /></th>
+			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date" /></th>
 		</tr>
 		{#each surveys as survey}
 			<tr>
@@ -93,12 +93,12 @@
 					{#if survey.uses_cryptographic_module}
 						<i class="symbol">encrypted</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="survey_has_group"></Tx></span
+							><Tx text="survey_has_group" /></span
 						>
 					{:else}
 						<i class="symbol">public</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="survey_is_open"></Tx></span
+							><Tx text="survey_is_open" /></span
 						>
 					{/if}
 				</td>
@@ -106,12 +106,12 @@
 					{#if survey.is_owned_by_user}
 						<i class="symbol">verified</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="survey_owner"></Tx></span
+							><Tx text="survey_owner" /></span
 						>
 					{:else}
 						<i class="symbol">share</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="survey_shared"></Tx></span
+							><Tx text="survey_shared" /></span
 						>
 					{/if}
 				</td>

@@ -32,20 +32,20 @@
 	}
 </script>
 
-<h1><Tx text="account_sign_in"></Tx></h1>
+<h1><Tx text="account_sign_in" /></h1>
 <div class="sign-buttons">
 	<button title={$t('sign_in')} class="sign-in" on:click={startOAuth}
-		><img src={amu} alt="AMU logo" class="amu-logo" /><Tx text="sign_in"></Tx></button
+		><img src={amu} alt="AMU logo" class="amu-logo" /><Tx text="sign_in" /></button
 	>
 </div>
 <div title={$t('account_info_title')} class="info">
 	<div class="text">
-		<Tx html="account_authorization_info"></Tx>
+		<Tx html="account_authorization_info" />
 	</div>
 </div>
 <div title={$t('account_info_title')} class="info">
 	<div class="text">
-		<Tx text="account_info"></Tx>
+		<Tx text="account_info" />
 	</div>
 </div>
 

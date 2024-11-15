@@ -16,12 +16,12 @@
 
 <div class="download-key">
 	<button title={$t('account_new_key')} class="save" on:click={() => (isModalHidden = false)}>
-		<i class="symbol">encrypted</i><Tx text="account_new_key"></Tx>
+		<i class="symbol">encrypted</i><Tx text="account_new_key" />
 	</button>
 	<div class="tooltip">
 		<i class="symbol">info</i>
 		<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-			<Tx html="account_keys_info"></Tx>
+			<Tx html="account_keys_info" />
 		</span>
 	</div>
 </div>

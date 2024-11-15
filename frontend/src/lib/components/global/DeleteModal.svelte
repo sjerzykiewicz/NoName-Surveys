@@ -34,7 +34,7 @@
 <svelte:window bind:innerWidth />
 
 <Modal icon="delete" {title} bind:isHidden --width={innerWidth <= $M ? '20em' : '22em'}>
-	<span slot="content"><Tx text="info_about_deleting"></Tx></span>
+	<span slot="content"><Tx text="info_about_deleting" /></span>
 	<button
 		title={$t('delete')}
 		class="save"
@@ -43,9 +43,9 @@
 			deleteEntries();
 		}}
 	>
-		<i class="symbol">delete</i><Tx text="delete"></Tx>
+		<i class="symbol">delete</i><Tx text="delete" />
 	</button>
 	<button title={$t('cancel')} class="not" on:click={() => (isHidden = true)}>
-		<i class="symbol">close</i><Tx text="cancel"></Tx>
+		<i class="symbol">close</i><Tx text="cancel" />
 	</button>
 </Modal>

@@ -117,7 +117,7 @@
 	--width={innerWidth <= $M ? '20em' : '36em'}
 >
 	<div slot="content" class="modal-content">
-		<div class="renaming"><Tx text="renaming"></Tx> {selectedGroup}.</div>
+		<div class="renaming"><Tx text="renaming" /> {selectedGroup}.</div>
 		<Input
 			bind:text={newName}
 			label={$t('group_name')}
@@ -136,17 +136,17 @@
 		<NameError name={newName.trim()} error={nameError} groups={groupNames} --font-size="0.8em" />
 	</div>
 	<button title={$t('save_new_group_name_title')} class="done" on:click={renameGroup}
-		><i class="symbol">done</i><Tx text="submit"></Tx></button
+		><i class="symbol">done</i><Tx text="submit" /></button
 	>
 </Modal>
 
 {#if groups.length === 0}
 	<div class="info-row">
-		<div title={$t('groups')} class="title empty"><Tx text="no_groups_yet"></Tx></div>
+		<div title={$t('groups')} class="title empty"><Tx text="no_groups_yet" /></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				<Tx text="groups_tooltip"></Tx>
+				<Tx text="groups_tooltip" />
 			</span>
 		</div>
 	</div>
@@ -164,7 +164,7 @@
 				></th
 			>
 			<th title={$t('keys_info_title')} id="info-header"><i class="symbol">encrypted</i></th>
-			<th title={$t('group_title')} id="title-header" colspan="2"><Tx text="group_name"></Tx></th>
+			<th title={$t('group_title')} id="title-header" colspan="2"><Tx text="group_name" /></th>
 		</tr>
 		{#each groups as group}
 			<tr>
@@ -181,12 +181,12 @@
 					{#if group.all_members_have_public_keys}
 						<i class="symbol">key</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="everyone_has_keys"></Tx></span
+							><Tx text="everyone_has_keys" /></span
 						>
 					{:else}
 						<i class="symbol">key_off</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="not_everyone_has_keys"></Tx></span
+							><Tx text="not_everyone_has_keys" /></span
 						>
 					{/if}
 				</td>

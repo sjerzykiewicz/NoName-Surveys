@@ -28,7 +28,7 @@
 	on:click={handleClick}
 	><i class="symbol">{questionTypeData.icon}</i>
 	{#key questionTypeData.text}
-		<Tx text={questionTypeData.text}></Tx>
+		<Tx text={questionTypeData.text} />
 	{/key}
 </button>
 

@@ -46,7 +46,7 @@
 			title={$t('export_invalid_emails')}
 			class="export"
 			on:click={() => downloadFile('invalid-emails.csv', emails.join(';\n'))}
-			><i class="symbol">file_save</i><Tx text="export"></Tx></button
+			><i class="symbol">file_save</i><Tx text="export" /></button
 		>
 	{/if}
 	<button title="Ok" class="done" on:click={() => ($isWarningModalHidden = true)}

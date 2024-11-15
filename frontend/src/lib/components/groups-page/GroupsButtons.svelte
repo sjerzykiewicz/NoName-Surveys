@@ -184,7 +184,7 @@
 			class:clicked={isPanelVisible}
 			on:click={togglePanel}
 		>
-			<i class="symbol">add</i><Tx text="group"></Tx>
+			<i class="symbol">add</i><Tx text="group" />
 		</button>
 		{#if groups.length > 0}
 			<button
@@ -193,7 +193,7 @@
 				disabled={selectedGroupsToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="symbol">delete</i><Tx text="delete"></Tx>
+				<i class="symbol">delete</i><Tx text="delete" />
 			</button>
 		{/if}
 	</div>
@@ -238,7 +238,7 @@
 				/>
 			</div>
 			<button title={$t('save_group')} class="done" on:click={createGroup}>
-				<i class="symbol">done</i><Tx text="create"></Tx>
+				<i class="symbol">done</i><Tx text="create" />
 			</button>
 		</div>
 		<MembersError members={groupMembers} error={membersError} />

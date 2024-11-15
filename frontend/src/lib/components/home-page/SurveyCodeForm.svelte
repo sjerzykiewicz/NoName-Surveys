@@ -22,13 +22,13 @@
 <Content>
 	<h1>NoName Anonymous Surveys</h1>
 	<div class="code-text">
-		<span><Tx text="home_code_info"></Tx></span>
+		<span><Tx text="home_code_info" /></span>
 		<div title="" class="tooltip">
 			<i class="symbol">info</i>
 			<span
 				class="tooltip-text {innerWidth <= $M ? (innerWidth <= $M ? 'top' : 'left') : 'bottom'}"
 			>
-				<Tx text="home_code_info_2"></Tx>
+				<Tx text="home_code_info_2" />
 			</span>
 		</div>
 	</div>
@@ -55,16 +55,14 @@
 				</p>
 			{/if}
 			<button title={$t('home_submit')} class="done" type="submit">
-				<i class="symbol">done</i><Tx text="submit"></Tx>
+				<i class="symbol">done</i><Tx text="submit" />
 			</button>
 		</label>
 	</form>
 	<p class="home-info">
-		<Tx text="home_redirect"></Tx>
-		{#if $page.data.session}<a href="/create" title={$t('nav_create')}
-				><Tx text="nav_create"></Tx></a
-			>.
-		{:else}<a href="/account" title={$t('nav_account')}><Tx text="nav_account"></Tx></a>.
+		<Tx text="home_redirect" />
+		{#if $page.data.session}<a href="/create" title={$t('nav_create')}><Tx text="nav_create" /></a>.
+		{:else}<a href="/account" title={$t('nav_account')}><Tx text="nav_account" /></a>.
 		{/if}
 	</p>
 </Content>

@@ -48,7 +48,7 @@
 		{questionIndex + 1}.
 	</div>
 	<div title={$t(questionTypeData.title)} class="type">
-		<i class="symbol">{questionTypeData.icon}</i><Tx text={questionTypeData.text}></Tx>
+		<i class="symbol">{questionTypeData.icon}</i><Tx text={questionTypeData.text} />
 	</div>
 </div>
 <div class="question-area" transition:slide={{ duration: 200, easing: cubicInOut }}>

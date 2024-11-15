@@ -26,7 +26,7 @@
 
 {#if users.length === 0}
 	<div title={$t('users_with_access')} class="title empty">
-		<Tx text="no_surveys_with_access"></Tx>
+		<Tx text="no_surveys_with_access" />
 	</div>
 {:else}
 	<table>
@@ -45,7 +45,7 @@
 				></th
 			>
 			<th title={$t('user_type')} id="info-header"><i class="symbol">person</i></th>
-			<th title={$t('users_with_access')} id="title-header"><Tx text="users_with_access"></Tx></th>
+			<th title={$t('users_with_access')} id="title-header"><Tx text="users_with_access" /></th>
 		</tr>
 		{#each users as user}
 			<tr>
@@ -66,12 +66,12 @@
 					{#if user === $page.data.session?.user?.email}
 						<i class="symbol">verified</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="owner"></Tx>.</span
+							><Tx text="owner" />.</span
 						>
 					{:else}
 						<i class="symbol">share</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="user_with_access"></Tx>.</span
+							><Tx text="user_with_access" />.</span
 						>
 					{/if}
 				</td>

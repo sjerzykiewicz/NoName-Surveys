@@ -11,5 +11,5 @@
 </script>
 
 <button title={$t('back_title')} class="footer-button" on:click={goBack}
-	><i class="symbol">undo</i><Tx text="back"></Tx></button
+	><i class="symbol">undo</i><Tx text="back" /></button
 >

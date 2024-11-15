@@ -17,7 +17,7 @@
 		name={questionIndex.toString()}
 		bind:value={$answers[questionIndex].choices[0]}
 	>
-		<option value="" disabled selected hidden><Tx text="select_answer"></Tx></option>
+		<option value="" disabled selected hidden><Tx text="select_answer" /></option>
 		{#each $questions[questionIndex].choices as choice}
 			<option value={choice}>
 				{choice}

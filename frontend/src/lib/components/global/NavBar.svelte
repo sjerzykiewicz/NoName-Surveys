@@ -12,6 +12,7 @@
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	let open: boolean;
@@ -110,7 +111,7 @@
 		<a href="/" title="NoName" class="nav-burger-logo"
 			><img src={logo} alt="NoName logo" width="48" height="48" /></a
 		>
-		<div title={open ? $options('close_menu') : $options('open_menu')}>
+		<div title={open ? $t('close_menu') : $t('open_menu')}>
 			<Hamburger bind:open --color="var(--text-color-1)" />
 		</div>
 	</div>
@@ -139,7 +140,7 @@
 		class="toggle-mode theme-btn tooltip"
 	>
 		<i class="symbol">{bulb}</i>
-		<span class="tooltip-text left"><Tx text="nav_toggle_theme"></Tx></span>
+		<span class="tooltip-text left"><Tx text="nav_toggle_theme" /></span>
 	</button>
 {/if}
 {#if showToggleButtons && $options.currentLang === 'en'}
@@ -149,8 +150,7 @@
 		class="toggle-mode lang-btn tooltip"
 	>
 		PL
-		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="nav_toggle_lang"></Tx></span
-			>{/if}
+		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="nav_toggle_lang" /></span>{/if}
 	</button>
 {:else if showToggleButtons && $options.currentLang === 'pl'}
 	<button
@@ -159,8 +159,7 @@
 		class="toggle-mode lang-btn tooltip"
 	>
 		EN
-		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="nav_toggle_lang"></Tx></span
-			>{/if}
+		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="nav_toggle_lang" /></span>{/if}
 	</button>
 {/if}
 

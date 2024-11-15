@@ -8,5 +8,5 @@
 </script>
 
 <button title={$t('view_qr')} class="footer-button" on:click={() => (isModalHidden = false)}>
-	<i class="symbol">qr_code_2</i><Tx text="code"></Tx>
+	<i class="symbol">qr_code_2</i><Tx text="code" />
 </button>

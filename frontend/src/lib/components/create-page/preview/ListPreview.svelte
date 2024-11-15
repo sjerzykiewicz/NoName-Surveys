@@ -13,7 +13,7 @@
 
 <div class="choice-area display" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<select title={$t('select_answer')} name={questionIndex.toString()}>
-		<option value="" disabled selected hidden><Tx text="select_answer"></Tx></option>
+		<option value="" disabled selected hidden><Tx text="select_answer" /></option>
 		{#each $questions[questionIndex].choices as choice}
 			<option value={choice}>
 				{choice}

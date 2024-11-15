@@ -183,7 +183,7 @@
 
 {#if isPreview}
 	<button title={$t('footer_edit_title')} class="footer-button" on:click={togglePreview}>
-		<i class="symbol">edit</i><Tx text="footer_edit"></Tx>
+		<i class="symbol">edit</i><Tx text="footer_edit" />
 	</button>
 {:else}
 	<button
@@ -195,7 +195,7 @@
 			togglePreview();
 		}}
 	>
-		<i class="symbol">search</i><Tx text="footer_preview"></Tx>
+		<i class="symbol">search</i><Tx text="footer_preview" />
 	</button>
 {/if}
 <div class="footer-button-group">
@@ -205,8 +205,8 @@
 		disabled={$questions.length === 0 || isPreview}
 		on:click={saveDraft}
 	>
-		<i class="symbol">save</i><Tx text="footer_save_draft"></Tx>
-		<span class="popup-text top" id="draft-popup"><Tx text="footer_saved"></Tx></span>
+		<i class="symbol">save</i><Tx text="footer_save_draft" />
+		<span class="popup-text top" id="draft-popup"><Tx text="footer_saved" /></span>
 	</button>
 	<button
 		title={$t('footer_create_title')}
@@ -214,7 +214,7 @@
 		disabled={$questions.length === 0 || isPreview}
 		on:click={createSurvey}
 	>
-		<i class="symbol">done</i><Tx text="footer_create"></Tx>
+		<i class="symbol">done</i><Tx text="footer_create" />
 	</button>
 </div>
 

@@ -34,7 +34,7 @@
 </script>
 
 <div title="{$t('answer_no')} {id + 1}" class="title answers">
-	{id + 1}. <Tx text="answer"></Tx>
+	{id + 1}. <Tx text="answer" />
 </div>
 {#each answer.questions as question, questionIndex}
 	<div class="question">

@@ -17,7 +17,7 @@
 
 <Header>
 	<div class="title">
-		<Tx text="your_surveys"></Tx>
+		<Tx text="your_surveys" />
 		<span title={$t('number_of_surveys')} class:max={data.numSurveys >= $LIMIT_OF_SURVEYS}
 			>[ {data.numSurveys} / {$LIMIT_OF_SURVEYS} ]</span
 		>

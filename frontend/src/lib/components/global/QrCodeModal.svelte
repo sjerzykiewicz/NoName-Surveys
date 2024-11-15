@@ -70,15 +70,15 @@
 		title={$t('copy_link_title')}
 		class="save popup"
 		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
-		><i class="symbol">link</i><Tx text="copy_link"></Tx>
-		<span class="popup-text top" id="link-popup"><Tx text="copied"></Tx></span></button
+		><i class="symbol">link</i><Tx text="copy_link" />
+		<span class="popup-text top" id="link-popup"><Tx text="copied" /></span></button
 	>
 	<button
 		title={$t('copy_code_title')}
 		class="save popup"
 		on:click={() => handleCopy(surveyCode, 'code-popup')}
-		><i class="symbol">content_copy</i><Tx text="copy_code"></Tx>
-		<span class="popup-text top" id="code-popup"><Tx text="copied"></Tx></span></button
+		><i class="symbol">content_copy</i><Tx text="copy_code" />
+		<span class="popup-text top" id="code-popup"><Tx text="copied" /></span></button
 	>
 </Modal>
 

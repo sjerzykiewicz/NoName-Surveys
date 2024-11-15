@@ -126,7 +126,7 @@
 			class:clicked={isPanelVisible}
 			on:click={togglePanel}
 		>
-			<i class="symbol">add</i><Tx text="users"></Tx>
+			<i class="symbol">add</i><Tx text="users" />
 		</button>
 		<button
 			title={$t('take_away_access')}
@@ -134,7 +134,7 @@
 			disabled={selectedUsersToRemove.length === 0}
 			on:click={() => (isModalHidden = false)}
 		>
-			<i class="symbol">delete</i><Tx text="delete"></Tx>
+			<i class="symbol">delete</i><Tx text="delete" />
 		</button>
 	</div>
 	<PageButtons numEntries={numUsers} />
@@ -149,7 +149,7 @@
 			/>
 		</div>
 		<button title={$t('finish_giving_access')} class="done" on:click={addUsers}>
-			<i class="symbol">done</i><Tx text="submit"></Tx>
+			<i class="symbol">done</i><Tx text="submit" />
 		</button>
 	</div>
 	<UsersError users={selectedUsersToAdd} error={usersError} />

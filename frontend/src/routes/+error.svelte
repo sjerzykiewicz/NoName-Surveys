@@ -14,9 +14,9 @@
 
 {#if $page.error}
 	<div>
-		<h1><Tx text="error"></Tx>: <span>{$page.status}</span></h1>
-		<h2><Tx text="Message"></Tx>: <span>{errorMessage}</span></h2>
-		<p><Tx text="error_message"></Tx></p>
+		<h1><Tx text="error" />: <span>{$page.status}</span></h1>
+		<h2><Tx text="Message" />: <span>{errorMessage}</span></h2>
+		<p><Tx text="error_message" /></p>
 	</div>
 {/if}
 

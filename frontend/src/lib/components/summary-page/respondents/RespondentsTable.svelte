@@ -12,13 +12,13 @@
 
 {#if respondents.length === 0}
 	<div title={$t('possible_respondents')} class="title empty">
-		<Tx text="possible_respondents_empty"></Tx>
+		<Tx text="possible_respondents_empty" />
 	</div>
 {:else}
 	<table>
 		<tr>
 			<th title={$t('possible_respondents')} id="title-header"
-				><Tx text="possible_respondents"></Tx></th
+				><Tx text="possible_respondents" /></th
 			>
 		</tr>
 		{#each respondents as respondent}

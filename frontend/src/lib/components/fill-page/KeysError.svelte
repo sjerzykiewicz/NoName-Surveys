@@ -24,14 +24,17 @@
 			case FileError.FileRequired:
 				return element?.files?.length === 0;
 			case FileError.FileInvalid:
-				return element?.files?.[0]?.name.split('.').pop() !== 'txt';
+				return element?.files?.[0]?.name.split('.').pop() !== 'pem';
 		}
 	};
 </script>
 
 {#if checkFileError()}
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<i class="symbol">error</i>{errorMessage()}
+		<i class="symbol">error</i>
+		{#key $t}
+			{errorMessage()}
+		{/key}
 	</p>
 {/if}
 

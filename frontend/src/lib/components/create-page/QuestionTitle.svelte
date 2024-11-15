@@ -44,7 +44,7 @@
 	id={questionIndex.toString()}
 	transition:slide={{ duration: 200, easing: cubicInOut }}
 >
-	<div title={$t('create_question_index', { index: questionIndex + 1 })} class="index">
+	<div title={$t('question_index', { index: questionIndex + 1 })} class="index">
 		{questionIndex + 1}.
 	</div>
 	<div title={$t(questionTypeData.title)} class="type">
@@ -54,7 +54,7 @@
 <div class="question-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="arrows">
 		<button
-			title={$t('create_question_up')}
+			title={$t('question_up')}
 			class="up"
 			disabled={questionIndex === 0}
 			on:click={moveQuestionUp}
@@ -62,7 +62,7 @@
 			<i class="symbol">keyboard_arrow_up</i>
 		</button>
 		<button
-			title={$t('create_question_down')}
+			title={$t('question_down')}
 			class="down"
 			disabled={questionIndex === $questions.length - 1}
 			on:click={moveQuestionDown}
@@ -72,8 +72,8 @@
 	</div>
 	<Input
 		bind:text={$questions[questionIndex].question}
-		label={$t('create_question_label')}
-		title={$t('create_question_title')}
+		label={$t('question_label')}
+		title={$t('question_title')}
 		bind:element={questionInput}
 	/>
 	<button
@@ -84,11 +84,11 @@
 		<i class="symbol">asterisk</i>
 		<span class="tooltip-text top"
 			>{$questions[questionIndex].required
-				? $t('create_question_required')
-				: $t('create_question_not_required')}</span
+				? $t('question_required')
+				: $t('question_not_required')}</span
 		>
 	</button>
-	<button title={$t('create_question_remove')} class="remove-question" on:click={removeQuestion}>
+	<button title={$t('question_remove')} class="remove-question" on:click={removeQuestion}>
 		<i class="symbol">delete</i>
 	</button>
 </div>

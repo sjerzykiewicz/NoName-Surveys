@@ -10,7 +10,7 @@
 </script>
 
 <div
-	title={$t('create_survey_title')}
+	title={$t('survey_title')}
 	class="title"
 	transition:slide={{ duration: 200, easing: cubicInOut }}
 >

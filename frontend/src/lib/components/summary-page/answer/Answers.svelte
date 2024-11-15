@@ -33,7 +33,7 @@
 	};
 </script>
 
-<div title="{$t('answer_no')} {id + 1}" class="title answers">
+<div title={$t('answer_no', { index: id + 1 })} class="title answers">
 	{id + 1}. <Tx text="answer" />
 </div>
 {#each answer.questions as question, questionIndex}

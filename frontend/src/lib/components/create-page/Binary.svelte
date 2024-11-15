@@ -19,8 +19,8 @@
 		</div>
 		<Input
 			bind:text={$questions[questionIndex].choices[0]}
-			label={$t('create_binary_positive_label')}
-			title={$t('create_binary_positive_title')}
+			label={$t('binary_positive_label')}
+			title={$t('binary_positive_title')}
 			clearOnce={true}
 			--label-top="18px"
 			--label-top-mobile="14px"
@@ -33,8 +33,8 @@
 		</div>
 		<Input
 			bind:text={$questions[questionIndex].choices[1]}
-			label={$t('create_binary_negative_label')}
-			title={$t('create_binary_negative_title')}
+			label={$t('binary_negative_label')}
+			title={$t('binary_negative_title')}
 			clearOnce={true}
 			--label-top="18px"
 			--label-top-mobile="14px"

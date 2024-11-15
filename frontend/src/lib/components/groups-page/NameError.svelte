@@ -12,7 +12,7 @@
 	export let error: GroupError;
 	export let groups: string[];
 
-	function errorMessage(error: GroupError) {
+	function errorMessage() {
 		switch (error) {
 			case GroupError.NameRequired:
 				return $t('group_error_name_required');
@@ -42,7 +42,10 @@
 
 {#if checkNameError()}
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<i class="symbol">error</i>{errorMessage(error)}
+		<i class="symbol">error</i>
+		{#key $t}
+			{errorMessage()}
+		{/key}
 	</p>
 {/if}
 

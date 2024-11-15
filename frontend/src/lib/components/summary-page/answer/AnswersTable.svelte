@@ -25,8 +25,8 @@
 		</tr>
 		{#each numbersPaginated as i}
 			<tr>
-				<td title="{$t('answer_no')} {i + 1}" class="info-entry">{i + 1}.</td>
-				<td title="{$t('view_answer_no')} {i + 1}" class="title-entry"
+				<td title={$t('answer_no', { index: i + 1 })} class="info-entry">{i + 1}.</td>
+				<td title={$t('view_answer_no', { index: i + 1 })} class="title-entry"
 					><button on:click={() => goto($page.url.pathname + '/' + i)}><Tx text="answer" /></button
 					></td
 				>

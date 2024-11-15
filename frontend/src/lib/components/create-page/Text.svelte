@@ -15,8 +15,8 @@
 	<div class="details">
 		<Input
 			bind:text={$questions[questionIndex].choices[0]}
-			label={$t('create_text_details_label')}
-			title={$t('create_text_details_title')}
+			label={$t('text_details_label')}
+			title={$t('text_details_title')}
 			--margin-right="0em"
 		/>
 	</div>

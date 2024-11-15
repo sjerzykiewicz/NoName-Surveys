@@ -56,7 +56,7 @@
 >
 	<div slot="content" class="content">
 		<span class="survey-code">{surveyCode}</span>
-		<a href="/fill?code={surveyCode}" title={$t('fill_survey_title')} class="qr-code">
+		<a href="/fill?code={surveyCode}" title={$t('fill_survey')} class="qr-code">
 			<QrCode
 				code={surveyCode}
 				codeSize={innerWidth > $M && innerHeight > $M ? 360 : 260}
@@ -84,7 +84,7 @@
 
 <style>
 	.popup .popup-text {
-		--tooltip-width: 4em;
+		--tooltip-width: 6em;
 	}
 
 	.content {

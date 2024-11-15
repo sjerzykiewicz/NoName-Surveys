@@ -8,7 +8,7 @@
 
 <div class="choice-area display">
 	{#each data.answer as answer, answerIndex}
-		<div title="{$t('answer_no')} {answerIndex + 1}" class="choice">
+		<div title={$t('answer_no', { index: answerIndex + 1 })} class="choice">
 			<div class="rank">{answerIndex + 1}.</div>
 			<div class="choice-input display">
 				{answer}

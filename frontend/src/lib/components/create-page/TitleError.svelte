@@ -13,9 +13,9 @@
 		const error = $title.error;
 		switch (error) {
 			case SurveyError.TitleRequired:
-				return $t('create_survey_title_error_required');
+				return $t('survey_title_error_required');
 			case SurveyError.TitleTooLong:
-				return $t('create_survey_title_error_limit', { limit: $LIMIT_OF_CHARS });
+				return $t('survey_title_error_limit', { limit: $LIMIT_OF_CHARS });
 		}
 	}
 

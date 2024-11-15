@@ -33,7 +33,7 @@
 		<label class="min">
 			<Tx text="minimum" />
 			<input
-				title={$t('create_number_min_title')}
+				title={$t('number_min_title')}
 				class="limit-input"
 				type="number"
 				{min}
@@ -41,8 +41,8 @@
 				name={questionIndex.toString()}
 				autocomplete="off"
 				placeholder={innerWidth <= $M
-					? $t('create_number_min_placeholder_short')
-					: $t('create_number_min_placeholder')}
+					? $t('number_min_placeholder_short')
+					: $t('number_min_placeholder')}
 				bind:value={$questions[questionIndex].choices[0]}
 				on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[0]), 0)}
@@ -51,7 +51,7 @@
 		<label class="max">
 			<Tx text="maximum" />
 			<input
-				title={$t('create_number_max_title')}
+				title={$t('number_max_title')}
 				class="limit-input"
 				type="number"
 				{min}
@@ -59,8 +59,8 @@
 				name={questionIndex.toString()}
 				autocomplete="off"
 				placeholder={innerWidth <= $M
-					? $t('create_number_max_placeholder_short')
-					: $t('create_number_max_placeholder')}
+					? $t('number_max_placeholder_short')
+					: $t('number_max_placeholder')}
 				bind:value={$questions[questionIndex].choices[1]}
 				on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[1]), 1)}

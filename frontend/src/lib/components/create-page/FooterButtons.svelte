@@ -182,12 +182,12 @@
 </script>
 
 {#if isPreview}
-	<button title={$t('footer_edit_title')} class="footer-button" on:click={togglePreview}>
-		<i class="symbol">edit</i><Tx text="footer_edit" />
+	<button title={$t('edit_title')} class="footer-button" on:click={togglePreview}>
+		<i class="symbol">edit</i><Tx text="edit" />
 	</button>
 {:else}
 	<button
-		title={$t('footer_preview')}
+		title={$t('preview_title')}
 		class="footer-button"
 		on:click={() => {
 			$title.title = $title.title.trim();
@@ -195,26 +195,26 @@
 			togglePreview();
 		}}
 	>
-		<i class="symbol">search</i><Tx text="footer_preview" />
+		<i class="symbol">search</i><Tx text="preview" />
 	</button>
 {/if}
 <div class="footer-button-group">
 	<button
-		title={$t('footer_save_draft')}
+		title={$t('save_draft')}
 		class="footer-button save popup"
 		disabled={$questions.length === 0 || isPreview}
 		on:click={saveDraft}
 	>
-		<i class="symbol">save</i><Tx text="footer_save_draft" />
-		<span class="popup-text top" id="draft-popup"><Tx text="footer_saved" /></span>
+		<i class="symbol">save</i><Tx text="save_draft" />
+		<span class="popup-text top" id="draft-popup"><Tx text="saved" /></span>
 	</button>
 	<button
-		title={$t('footer_create_title')}
+		title={$t('create_title')}
 		class="footer-button done"
 		disabled={$questions.length === 0 || isPreview}
 		on:click={createSurvey}
 	>
-		<i class="symbol">done</i><Tx text="footer_create" />
+		<i class="symbol">done</i><Tx text="create" />
 	</button>
 </div>
 

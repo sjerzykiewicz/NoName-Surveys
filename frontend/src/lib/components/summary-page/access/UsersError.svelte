@@ -24,6 +24,9 @@
 
 {#if checkUsersError()}
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<i class="symbol">error</i>{errorMessage()}
+		<i class="symbol">error</i>
+		{#key $t}
+			{errorMessage()}
+		{/key}
 	</p>
 {/if}

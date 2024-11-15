@@ -15,9 +15,9 @@
 		const error = $questions[i].error;
 		switch (error) {
 			case SurveyError.QuestionRequired:
-				return $t('create_question_error_required', { index: i + 1 });
+				return $t('question_error_required', { index: i + 1 });
 			case SurveyError.QuestionTooLong:
-				return $t('create_question_error_limit', { index: i + 1, limit: $LIMIT_OF_CHARS });
+				return $t('question_error_limit', { index: i + 1, limit: $LIMIT_OF_CHARS });
 		}
 	}
 

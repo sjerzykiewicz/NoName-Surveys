@@ -93,12 +93,12 @@
 					{#if survey.uses_cryptographic_module}
 						<i class="symbol">encrypted</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="survey_has_group" /></span
+							><Tx text="survey_is_secure" /></span
 						>
 					{:else}
 						<i class="symbol">public</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							><Tx text="survey_is_open" /></span
+							><Tx text="survey_is_public" /></span
 						>
 					{/if}
 				</td>

@@ -169,11 +169,11 @@
 </div>
 {#if isPanelVisible}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div title={$t('select_members')} class="select-list">
+		<div title={$t('select_group_members')} class="select-list">
 			<MultiSelect
 				bind:selected={selectedMembersToAdd}
 				options={notMembers}
-				placeholder={$t('select_members')}
+				placeholder={$t('select_group_members')}
 			/>
 		</div>
 		<button title={$t('add_members_finish')} class="done" on:click={addMembers}>

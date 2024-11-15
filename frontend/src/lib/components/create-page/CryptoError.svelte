@@ -10,7 +10,7 @@
 	export let error: boolean;
 
 	function errorMessage() {
-		return $t('create_define_respondent_group_error');
+		return $t('define_respondent_group_error');
 	}
 
 	$: checkCryptoError = () => {

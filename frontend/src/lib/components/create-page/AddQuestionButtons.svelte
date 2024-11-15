@@ -191,15 +191,13 @@
 <div class="button-group" style="--width: {currentLang === 'en' ? '7.5em' : '8em'}">
 	<div class="add-buttons">
 		<button
-			title={isPanelVisible
-				? $t('create_question_choose_type_stop')
-				: $t('create_question_choose_type')}
+			title={isPanelVisible ? $t('question_choose_type_stop') : $t('question_choose_type')}
 			class="add-question"
 			class:clicked={isPanelVisible}
 			class:previous={$previousQuestion}
 			on:click={togglePanel}
 		>
-			<div class="button-text"><i class="symbol add">add</i><Tx text="create_question" /></div>
+			<div class="button-text"><i class="symbol add">add</i><Tx text="question" /></div>
 			<i class="symbol arrow">arrow_drop_down</i>
 		</button>
 		{#if $previousQuestion}

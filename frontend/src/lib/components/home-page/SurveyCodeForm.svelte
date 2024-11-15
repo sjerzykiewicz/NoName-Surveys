@@ -22,18 +22,18 @@
 <Content>
 	<h1>NoName Anonymous Surveys</h1>
 	<div class="code-text">
-		<span><Tx text="home_code_info" /></span>
+		<span><Tx text="code_info" /></span>
 		<div title="" class="tooltip">
 			<i class="symbol">info</i>
 			<span
 				class="tooltip-text {innerWidth <= $M ? (innerWidth <= $M ? 'top' : 'left') : 'bottom'}"
 			>
-				<Tx text="home_code_info_2" />
+				<Tx text="code_tooltip" />
 			</span>
 		</div>
 	</div>
 	<form method="POST" use:enhance>
-		<label title={$t('home_code_info')} for="code-input">
+		<label title={$t('code_info')} for="code-input">
 			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				id="code-input"
@@ -54,15 +54,15 @@
 					<i class="symbol">error</i>{form.error}
 				</p>
 			{/if}
-			<button title={$t('home_submit')} class="done" type="submit">
+			<button title={$t('submit_code')} class="done" type="submit">
 				<i class="symbol">done</i><Tx text="submit" />
 			</button>
 		</label>
 	</form>
 	<p class="home-info">
 		<Tx text="home_redirect" />
-		{#if $page.data.session}<a href="/create" title={$t('nav_create')}><Tx text="nav_create" /></a>.
-		{:else}<a href="/account" title={$t('nav_account')}><Tx text="nav_account" /></a>.
+		{#if $page.data.session}<a href="/create" title={$t('create')}><Tx text="create" /></a>.
+		{:else}<a href="/account" title={$t('account')}><Tx text="account" /></a>.
 		{/if}
 	</p>
 </Content>

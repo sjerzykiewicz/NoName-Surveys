@@ -596,7 +596,7 @@ input[type='file'] {
 }
 
 .question-label .tooltip {
-	--tooltip-width: 4.5em;
+	--tooltip-width: 5.5em;
 	margin-left: 0.5em;
 }
 
@@ -688,7 +688,7 @@ input[type='file'] {
 }
 
 .choice-area.text.display {
-	width: 86%;
+	width: calc(100% - 4.5em);
 }
 
 .choice-area.display .input {

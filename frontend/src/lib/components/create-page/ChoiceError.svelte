@@ -15,21 +15,21 @@
 		const error = $questions[i].error;
 		switch (error) {
 			case SurveyError.ChoicesRequired:
-				return $t('create_choice_error_required', { index: i + 1 });
+				return $t('choice_error_required', { index: i + 1 });
 			case SurveyError.BinaryChoicesRequired:
-				return $t('create_choice_error_binary_required', { index: i + 1 });
+				return $t('choice_error_binary_required', { index: i + 1 });
 			case SurveyError.NumberValuesRequired:
-				return $t('create_choice_error_number_required', { index: i + 1 });
+				return $t('choice_error_number_required', { index: i + 1 });
 			case SurveyError.SliderValuesRequired:
-				return $t('create_choice_error_slider_required', { index: i + 1 });
+				return $t('choice_error_slider_required', { index: i + 1 });
 			case SurveyError.ChoicesTooLong:
-				return $t('create_choice_error_limit', { index: i + 1, limit: $LIMIT_OF_CHARS });
+				return $t('choice_error_limit', { index: i + 1, limit: $LIMIT_OF_CHARS });
 			case SurveyError.DuplicateChoices:
-				return $t('create_choice_error_duplicate', { index: i + 1 });
+				return $t('choice_error_duplicate', { index: i + 1 });
 			case SurveyError.ImproperSliderValues:
-				return $t('create_choice_error_slider_values', { index: i + 1 });
+				return $t('choice_error_slider_values', { index: i + 1 });
 			case SurveyError.ImproperSliderPrecision:
-				return $t('create_choice_error_slider_precision', { index: i + 1 });
+				return $t('choice_error_slider_precision', { index: i + 1 });
 		}
 	}
 

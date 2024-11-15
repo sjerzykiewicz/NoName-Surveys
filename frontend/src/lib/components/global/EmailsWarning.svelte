@@ -14,9 +14,9 @@
 	function warningMessage() {
 		switch (warning) {
 			case FileError.FileRequired:
-				return $t('no_file_selected');
+				return $t('warning_no_file');
 			case FileError.FileInvalid:
-				return $t('error_file_not_csv');
+				return $t('warning_file_not_csv');
 		}
 	}
 
@@ -32,6 +32,9 @@
 
 {#if checkFileWarning()}
 	<p title={$t('warning')} class="warning" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<i class="symbol">warning</i>{warningMessage()}
+		<i class="symbol">warning</i>
+		{#key $t}
+			{warningMessage()}
+		{/key}
 	</p>
 {/if}

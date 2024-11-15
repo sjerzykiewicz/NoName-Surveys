@@ -69,4 +69,10 @@
 			0.2s,
 			outline 0s;
 	}
+
+	@media screen and (max-width: 768px) {
+		.choice-input {
+			margin-top: 0em;
+		}
+	}
 </style>

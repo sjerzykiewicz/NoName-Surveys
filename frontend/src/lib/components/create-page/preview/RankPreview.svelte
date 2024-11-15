@@ -23,7 +23,7 @@
 
 <div class="choice-area display" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<div title="{$t('answer_no')} {choiceIndex + 1}" class="choice">
+		<div title={$t('answer_no', { index: choiceIndex + 1 })} class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
 			<div class="arrows">
 				<button

@@ -259,7 +259,7 @@
 
 <style>
 	#date-header {
-		width: 19%;
+		width: 22%;
 	}
 
 	@media screen and (max-width: 768px) {

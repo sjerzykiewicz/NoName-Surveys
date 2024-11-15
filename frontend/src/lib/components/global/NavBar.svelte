@@ -20,37 +20,37 @@
 
 	const navLinks = {
 		Fill: {
-			name: 'nav_fill',
+			name: 'fill',
 			href: '/',
 			page: '',
 			disabled: false
 		},
 		Create: {
-			name: 'nav_create',
+			name: 'create',
 			href: '/create',
 			page: '',
 			disabled: !$page.data.session
 		},
 		Drafts: {
-			name: 'nav_drafts',
+			name: 'drafts',
 			href: '/drafts',
 			page: '/0',
 			disabled: !$page.data.session
 		},
 		Surveys: {
-			name: 'nav_surveys',
+			name: 'surveys',
 			href: '/surveys',
 			page: '/0',
 			disabled: !$page.data.session
 		},
 		Groups: {
-			name: 'nav_groups',
+			name: 'groups',
 			href: '/groups',
 			page: '/0',
 			disabled: !$page.data.session
 		},
 		Account: {
-			name: 'nav_account',
+			name: 'account',
 			href: '/account',
 			page: '',
 			disabled: false
@@ -140,7 +140,7 @@
 		class="toggle-mode theme-btn tooltip"
 	>
 		<i class="symbol">{bulb}</i>
-		<span class="tooltip-text left"><Tx text="nav_toggle_theme" /></span>
+		<span class="tooltip-text left"><Tx text="toggle_theme" /></span>
 	</button>
 {/if}
 {#if showToggleButtons && $options.currentLang === 'en'}
@@ -150,7 +150,7 @@
 		class="toggle-mode lang-btn tooltip"
 	>
 		PL
-		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="nav_toggle_lang" /></span>{/if}
+		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_lang" /></span>{/if}
 	</button>
 {:else if showToggleButtons && $options.currentLang === 'pl'}
 	<button
@@ -159,7 +159,7 @@
 		class="toggle-mode lang-btn tooltip"
 	>
 		EN
-		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="nav_toggle_lang" /></span>{/if}
+		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_lang" /></span>{/if}
 	</button>
 {/if}
 

@@ -23,8 +23,8 @@
 <div class="title-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<Input
 		bind:text={$title.title}
-		label={$t('create_survey_title_label')}
-		title={$t('create_survey_title_title')}
+		label={$t('survey_title')}
+		title={$t('survey_title_title')}
 		id="title"
 		bind:element={titleInput}
 		--margin-right="0em"

@@ -164,7 +164,7 @@
 				></th
 			>
 			<th title={$t('keys_info_title')} id="info-header"><i class="symbol">encrypted</i></th>
-			<th title={$t('group_title')} id="title-header" colspan="2"><Tx text="group_name" /></th>
+			<th title={$t('group_name')} id="title-header" colspan="2"><Tx text="group_name" /></th>
 		</tr>
 		{#each groups as group}
 			<tr>

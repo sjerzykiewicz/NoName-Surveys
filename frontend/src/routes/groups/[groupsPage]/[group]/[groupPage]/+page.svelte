@@ -17,7 +17,7 @@
 </script>
 
 <Header>
-	<div title={$t('group_title')} class="title">{data.group}</div>
+	<div title={$t('group_name')} class="title">{data.group}</div>
 </Header>
 
 <Content>

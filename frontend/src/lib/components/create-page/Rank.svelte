@@ -44,16 +44,16 @@
 
 <div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<div title={$t('create_rank_choice', { index: choiceIndex + 1 })} class="choice">
+		<div title={$t('rank_choice', { index: choiceIndex + 1 })} class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
 			<Input
 				bind:text={choice}
 				label={$t('choice')}
-				title={$t('create_choice_title')}
+				title={$t('choice_title')}
 				bind:element={choiceInput}
 			/>
 			<button
-				title={$t('create_choice_remove')}
+				title={$t('choice_remove')}
 				class="remove-choice"
 				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
@@ -62,7 +62,7 @@
 			</button>
 		</div>
 	{/each}
-	<button title={$t('create_choice_add')} class="add-choice" on:click={addChoice}>
+	<button title={$t('choice_add')} class="add-choice" on:click={addChoice}>
 		<i class="symbol">add</i><Tx text="choice" />
 	</button>
 </div>

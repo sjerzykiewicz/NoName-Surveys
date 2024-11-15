@@ -11,7 +11,7 @@
 	export let questionIndex: number;
 
 	function errorMessage(i: number) {
-		return $t('answer_question_no') + (i + 1) + '.';
+		return $t('answer_question_no', { index: i + 1 });
 	}
 
 	$: checkAnswerError = (i: number) => {
@@ -25,7 +25,10 @@
 
 {#if checkAnswerError(questionIndex)}
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<i class="symbol">error</i>{errorMessage(questionIndex)}
+		<i class="symbol">error</i>
+		{#key $t}
+			{errorMessage(questionIndex)}
+		{/key}
 	</p>
 {/if}
 

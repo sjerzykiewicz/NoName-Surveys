@@ -226,27 +226,27 @@
 
 <Modal
 	icon="save"
-	title={$t('create_saving_draft')}
+	title={$t('saving_draft')}
 	bind:isHidden={isDraftModalHidden}
-	--width={innerWidth <= $M ? '20em' : '22em'}
+	--width={innerWidth <= $M ? '20em' : '24em'}
 >
-	<span slot="content"><Tx text="create_saving_draft_alert" /></span>
-	<button title={$t('create_overwrite_draft')} class="save" on:click={() => saveDraft(true)}
-		><i class="symbol">save_as</i><Tx text="create_overwrite_draft" /></button
+	<span slot="content"><Tx text="saving_draft_alert" /></span>
+	<button title={$t('overwrite_draft')} class="save" on:click={() => saveDraft(true)}
+		><i class="symbol">save_as</i><Tx text="overwrite_draft" /></button
 	>
-	<button title={$t('create_save_new_draft')} class="save" on:click={() => saveDraft(false)}
-		><i class="symbol">save</i><Tx text="create_save_new_draft" /></button
+	<button title={$t('save_new_draft')} class="save" on:click={() => saveDraft(false)}
+		><i class="symbol">save</i><Tx text="save_new_draft" /></button
 	>
 </Modal>
 
 <Modal
 	icon="group"
-	title={$t('create_define_respondent_group')}
+	title={$t('define_respondent_group')}
 	bind:isHidden={isRespondentModalHidden}
 	--width={innerWidth <= $M ? '20em' : '26em'}
 >
 	<div slot="content">
-		<span><Tx text="create_define_respondent_group_alert" /></span>
+		<span><Tx text="define_respondent_group_alert" /></span>
 		<div class="crypto-buttons">
 			<button
 				title={$t('public')}
@@ -267,14 +267,14 @@
 		</div>
 		<div class="select-box">
 			<SelectGroup {groups} bind:disabled={isCryptoDisabled} />
-			<div id="or" class:disabled={isCryptoDisabled}>Or</div>
+			<div id="or" class:disabled={isCryptoDisabled}><Tx text="or" /></div>
 			<SelectUsers {users} bind:disabled={isCryptoDisabled} />
 			<CryptoError error={cryptoError} />
 			<div class="import">
 				<ImportEmails
 					bind:users={$ringMembers}
-					title={$t('import_csv_title')}
-					label={$t('import_csv_label')}
+					title={$t('import_users_title')}
+					label={$t('import_users_label')}
 					id="emails-file"
 					checkKeys={true}
 					--width="100%"
@@ -285,12 +285,12 @@
 			</div>
 		</div>
 	</div>
-	<button title={$t('create_define_respondent_group')} class="done" on:click={createSurvey}
-		><i class="symbol">done</i><Tx text="submit" /></button
+	<button title={$t('define_respondent_group')} class="done" on:click={createSurvey}
+		><i class="symbol">done</i><Tx text="create" /></button
 	>
 </Modal>
 
-<QrCodeModal bind:isHidden={isSurveyModalHidden} title={$t('create_survey_success')} {surveyCode} />
+<QrCodeModal bind:isHidden={isSurveyModalHidden} title={$t('survey_success')} {surveyCode} />
 
 {#each $questions as question, questionIndex (question)}
 	<div
@@ -323,7 +323,7 @@
 			<div class="tooltip create-info">
 				<i class="symbol">info</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
-					><Tx text="create_groups_info" /></span
+					><Tx text="groups_info" /></span
 				>
 			</div>
 		</div>

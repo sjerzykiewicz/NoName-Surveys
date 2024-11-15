@@ -6,6 +6,7 @@
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import { page } from '$app/stores';
 	import FooterButtons from '$lib/components/summary-page/buttons/FooterButtons.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -29,7 +30,9 @@
 
 <Content>
 	{#if !data.answers[id]}
-		<div title="{$t('answer_no')} {id + 1}" class="title empty">No {id + 1}. answer yet!</div>
+		<div title={$t('answer_no', { index: id + 1 })} class="title empty">
+			<Tx text="no_answer_yet" params={{ index: id + 1 }} />
+		</div>
 	{:else}
 		<Answers answer={data.answers[id]} {id} />
 	{/if}

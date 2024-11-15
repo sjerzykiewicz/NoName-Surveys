@@ -31,7 +31,7 @@
 		<a href={data.disabled ? '' : data.href + data.page} on:click={hideNav}>{$t(data.name)}</a>
 		{#if innerWidth > $M && data.disabled}
 			<span class="tooltip-text bottom">
-				<Tx text="nav_sign_in_info" />
+				<Tx text="sign_in_info" />
 				<Tx text={data.name} />
 			</span>
 		{/if}

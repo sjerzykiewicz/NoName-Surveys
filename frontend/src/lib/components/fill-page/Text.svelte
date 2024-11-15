@@ -17,7 +17,7 @@
 	<Input
 		bind:text={$answers[questionIndex].choices[0]}
 		label={$t('answer')}
-		title={$t('enter_answer_title')}
+		title={$t('enter_answer')}
 		--margin-right="0em"
 	/>
 </div>

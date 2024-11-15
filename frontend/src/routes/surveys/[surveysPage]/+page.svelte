@@ -25,7 +25,7 @@
 </Header>
 
 <Content>
-	<LimitWarning num={data.numSurveys} limit={$LIMIT_OF_SURVEYS} items="Surveys" />
+	<LimitWarning num={data.numSurveys} limit={$LIMIT_OF_SURVEYS} items={$t('surveys_genitive')} />
 	<SurveysTable surveys={data.surveys} bind:selectedSurveysToRemove />
 	<SurveysButtons
 		surveys={data.surveys}

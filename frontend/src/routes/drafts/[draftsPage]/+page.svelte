@@ -25,7 +25,7 @@
 </Header>
 
 <Content>
-	<LimitWarning num={data.numDrafts} limit={$LIMIT_OF_DRAFTS} items="Drafts" />
+	<LimitWarning num={data.numDrafts} limit={$LIMIT_OF_DRAFTS} items={$t('drafts_genitive')} />
 	<DraftsTable drafts={data.drafts} bind:selectedDraftsToRemove />
 	<DraftsButtons drafts={data.drafts} numDrafts={data.numDrafts} bind:selectedDraftsToRemove />
 </Content>

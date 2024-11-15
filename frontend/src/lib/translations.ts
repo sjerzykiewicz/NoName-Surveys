@@ -35,6 +35,13 @@ export const data = {
 		create: 'Create',
 		survey: 'Survey',
 		code: 'Code',
+		surveys_genitive: 'surveys',
+		drafts_genitive: 'drafts',
+		groups_genitive: 'groups',
+
+		limit_reached: 'You have reached the maximum number of',
+		delete_some: 'Please delete some',
+		to_create_new_ones: 'to create new ones',
 
 		single_text: 'Single',
 		single_title: 'Single choice',
@@ -347,7 +354,10 @@ Authorizing yourself will enable you to:
 		summary: 'Summary',
 		back: 'Back',
 
-		ordered_by_average_place: 'Ordered by average place'
+		ordered_by_average_place: 'Ordered by average place',
+
+		export: 'Export',
+		export_invalid_emails: 'Export invalid emails'
 	},
 
 	pl: {
@@ -386,6 +396,13 @@ Authorizing yourself will enable you to:
 		create: 'Utwórz',
 		survey: 'Ankieta',
 		code: 'Kod',
+		surveys_genitive: 'ankiet',
+		drafts_genitive: 'szkiców',
+		groups_genitive: 'grup',
+
+		limit_reached: 'Osiągnięto maksymalną liczbę',
+		delete_some: 'Usuń niektóre z istniejących',
+		to_create_new_ones: 'aby utworzyć nowe',
 
 		single_text: 'Jednokrotne',
 		single_title: 'Jednokrotny wybór',
@@ -692,6 +709,9 @@ Zautoryzowanie się pozwoli Ci na:
 		summary: 'Podsumowanie',
 		back: 'Wróć',
 
-		ordered_by_average_place: 'Uporządkowane według średniej pozycji'
+		ordered_by_average_place: 'Uporządkowane według średniej pozycji',
+
+		export: 'Eksportuj',
+		export_invalid_emails: 'Eksportuj niepoprawne emaile'
 	}
 };

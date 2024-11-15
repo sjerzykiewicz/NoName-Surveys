@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let num: number;
 	export let limit: number;
@@ -13,8 +14,11 @@
 		class="warning"
 		transition:slide={{ duration: 200, easing: cubicInOut }}
 	>
-		<i class="symbol">warning</i>You have reached the maximum number of {items.toLowerCase()}.
-		Please delete some {items.toLowerCase()} to create new ones.
+		<i class="symbol">warning</i><Tx text="limit_reached"></Tx>
+		{items.toLowerCase()}.
+		<Tx text="delete_some"></Tx>
+		{items.toLowerCase()}
+		<Tx text="to_create_new_ones"></Tx>.
 	</p>
 {/if}
 

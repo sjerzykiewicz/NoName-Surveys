@@ -25,7 +25,7 @@
 </Header>
 
 <Content>
-	<LimitWarning num={data.numGroups} limit={$LIMIT_OF_GROUPS} items="Groups" />
+	<LimitWarning num={data.numGroups} limit={$LIMIT_OF_GROUPS} items={$t('groups_genitive')} />
 	<GroupsTable bind:groups={data.group_list} bind:selectedGroupsToRemove />
 	<GroupsButtons
 		bind:groups={data.group_list}

@@ -586,8 +586,8 @@ Zautoryzowanie się pozwoli Ci na:
 			'Osiągnięto maksymalną liczbę ankiet i szkiców możliwych do utworzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
 
 		your_drafts: 'Twoje szkice',
-		number_of_drafts: 'Liczba szkicy',
-		no_drafts_yet: 'Brak szkicy!',
+		number_of_drafts: 'Liczba szkiców',
+		no_drafts_yet: 'Brak szkiców!',
 		draft_tooltip: `Podczas tworzenia ankiety, możesz zapisać ją jako szkic do późniejszego wykorzystania. Aby stworzyć ankietę, wejdź
 			w zakładkę "Utwórz" na górze strony lub kliknij przycisk poniżej. Wszystkie zapisane szkice będą dostępne na tej stronie.`,
 		draft_title: 'Tytuł Szkicu',

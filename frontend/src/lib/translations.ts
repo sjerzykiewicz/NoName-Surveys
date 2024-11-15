@@ -241,7 +241,22 @@ Authorizing yourself will enable you to:
 		draft_tooltip: `When creating a survey, you can save it as a draft for later use. To create a survey, click
 			on the "Create" tab at the top of the page or the button below. All your saved drafts will
 			be stored on this page.`,
-		draft_title: 'Draft Title'
+		draft_title: 'Draft Title',
+
+		public_key_not_on_list: 'Your public key is not on the list.',
+		answer_submit_success: 'Your answer has been submitted successfully.',
+		load_keys: 'Load your digital signature keys',
+		key_file_label: `Please load the file which you have previously generated on this application. The file
+			contains your keys, necessary for cryptographic calculations which are needed for validating
+			your right to fill out this survey.`,
+		default_filename: 'Default filename',
+		survey_not_secure: 'This survey is not secure.',
+		only_respondent: ' You are the only person who can respond to this survey.',
+		two_respondents:
+			' There are only two people who can respond to this survey. The other person could be the creator of this survey.',
+		answer_question_no: 'Please answer question no. ',
+		error_no_file: 'Please select a file.',
+		error_invalid_file: 'Please select a .pem file.'
 	},
 
 	pl: {
@@ -479,6 +494,21 @@ Zautoryzowanie się pozwoli Ci na:
 		no_drafts_yet: 'Brak szkicy!',
 		draft_tooltip: `Podczas tworzenia ankiety, możesz zapisać ją jako szkic do późniejszego wykorzystania. Aby stworzyć ankietę, wejdź
 			w zakładkę "Utwórz" na górze strony lub kliknij przycisk poniżej. Wszystkie zapisane szkice będą dostępne na tej stronie.`,
-		draft_title: 'Tytuł Szkicu'
+		draft_title: 'Tytuł Szkicu',
+
+		public_key_not_on_list: 'Twój klucz publiczny nie znajduje się na liście',
+		answer_submit_success: 'Twoja odpowiedź została przesłana pomyślnie',
+		load_keys: 'Załaduj klucze kryptograficzne',
+		key_file_label: `Załaduj plik wygenerowany wcześniej za pośrednictwem aplikacji. Plik zawiera Twoje klucze,
+			niezbędne do przeprowadzenia obliczeń kryptograficznych potrzebnych do zweryfikowania Twojego prawa do
+			wypełnienia tej ankiety.`,
+		default_filename: 'Domyślna nazwa pliku',
+		survey_not_secure: 'Ta ankieta nie jest bezpieczna.',
+		only_respondent: ' Jesteś jedyną osobą, która może wypełnić tę ankietę.',
+		two_respondents:
+			' Tylko dwie osoby mogą wypełnić tę ankietę. Istnieje możliwość, że drugą osobą jest twórca ankiety.',
+		answer_question_no: 'Wprowadź odpowiedź na pytanie nr. ',
+		error_no_file: 'Załaduj plik.',
+		error_invalid_file: 'Załaduj plik .pem.'
 	}
 };

@@ -13,9 +13,9 @@
 	function errorMessage() {
 		switch (error) {
 			case FileError.FileRequired:
-				return 'Please select a file.';
+				return $t('error_no_file');
 			case FileError.FileInvalid:
-				return 'Please select a .pem file.';
+				return $t('error_invalid_file');
 		}
 	}
 

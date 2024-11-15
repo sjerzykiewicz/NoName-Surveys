@@ -11,7 +11,7 @@
 	export let questionIndex: number;
 
 	function errorMessage(i: number) {
-		return 'Please answer question no. ' + (i + 1) + '.';
+		return $t('answer_question_no') + (i + 1) + '.';
 	}
 
 	$: checkAnswerError = (i: number) => {

@@ -48,6 +48,7 @@
 	import KeysError from './KeysError.svelte';
 	import { readFile } from '$lib/utils/readFile';
 	import SuccessModal from '$lib/components/global/SuccessModal.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -226,12 +227,12 @@
 	}
 
 	let fileElement: HTMLInputElement | null = null;
-	let fileName: string = 'No file selected';
+	let fileName: string = $t('no_file_selected');
 	let fileError: FileError = FileError.NoError;
 
 	function handleFileChange() {
 		fileElement = document.querySelector<HTMLInputElement>('#keys-file');
-		fileName = fileElement?.files?.[0]?.name ?? 'No file selected';
+		fileName = fileElement?.files?.[0]?.name ?? $t('no_file_selected');
 	}
 
 	function checkFileCorrectness() {
@@ -265,7 +266,7 @@
 		let keyPair: KeyPair = getKeys(text);
 
 		if (!keys.includes(keyPair.publicKey)) {
-			$errorModalContent = 'Your public key is not on the list.';
+			$errorModalContent = $t('public_key_not_on_list');
 			$isErrorModalHidden = false;
 			return;
 		}
@@ -319,7 +320,7 @@
 		}
 
 		isKeysModalHidden = true;
-		$successModalContent = 'Your answer has been submitted successfully.';
+		$successModalContent = $t('answer_submit_success');
 		$isSuccessModalHidden = false;
 	}
 
@@ -361,15 +362,16 @@
 	bind:isHidden={isKeysModalHidden}
 	--width={innerWidth <= $M ? '20em' : '38em'}
 >
-	<div slot="content" title="Load your digital signature keys" class="file-div">
+	<div slot="content" title={$t('load_keys')} class="file-div">
 		<span class="file-label"
-			>Please load the file which you have previously generated on this application. The file
-			contains your keys, necessary for cryptographic calculations which are needed for validating
-			your right to fill out this survey.<br /><br />Default filename: "noname-keys.pem"</span
+			><Tx text="key_file_label"></Tx><br /><br /><Tx text="default_filename"></Tx>:
+			"noname-keys.pem"</span
 		>
 		<label for="keys-file">
 			<div class="file-input">
-				<span class="file-button"><i class="symbol">upload_file</i>Select File</span>
+				<span class="file-button"
+					><i class="symbol">upload_file</i><Tx text="select_file"></Tx></span
+				>
 				<span class="file-name">{fileName}</span>
 			</div>
 			<input type="file" name="keys" id="keys-file" on:change={handleFileChange} />
@@ -377,7 +379,7 @@
 		<KeysError error={fileError} element={fileElement} />
 	</div>
 	<button title="Submit keys" class="save" on:click={processCrypto}
-		><i class="symbol">done</i>Submit</button
+		><i class="symbol">done</i><Tx text="submit"></Tx></button
 	>
 </Modal>
 
@@ -390,10 +392,8 @@
 <Content>
 	{#if keys.length === 1 || keys.length === 2}
 		<p title="Survey not secure" class="warning">
-			<i class="symbol">warning</i>This survey is not secure.
-			{keys.length === 1
-				? ' You are the only person who can respond to this survey.'
-				: ' There are only two people who can respond to this survey. The other person could be the creator of this survey.'}
+			<i class="symbol">warning</i><Tx text="survey_not_secure"></Tx>
+			{keys.length === 1 ? $t('only_respondent') : $t('two_respondents')}
 		</p>
 	{/if}
 	{#each $questions as question, questionIndex (question)}
@@ -414,7 +414,7 @@
 
 <Footer>
 	<button title="Submit survey" class="footer-button done" on:click={submitSurvey}>
-		<i class="symbol">done</i>Submit
+		<i class="symbol">done</i><Tx text="submit"></Tx>
 	</button>
 </Footer>
 

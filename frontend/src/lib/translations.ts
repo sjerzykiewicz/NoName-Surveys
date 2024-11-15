@@ -229,7 +229,7 @@ Authorizing yourself will enable you to:
 		no_copy_insecure_connection: 'Could not copy due to an insecure connection.',
 
 		survey_limit_reached:
-			'You have reached the maximum number of surveys you can create. Please delete some surveys and drafts to create new ones.',
+			'You have reached the maximum number of surveys you can create. Please delete some surveys to create new ones.',
 		draft_limit_reached:
 			'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.',
 		survey_and_draft_limit_reached:
@@ -468,11 +468,11 @@ Zautoryzowanie się pozwoli Ci na:
 		no_copy_insecure_connection: 'Kopiowanie nie powiodło się z powodu niebezpiecznego połączenia.',
 
 		survey_limit_reached:
-			'Osiągnięto maksymalną liczbę ankiet możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+			'Osiągnięto maksymalną liczbę ankiet możliwych do utworzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
 		draft_limit_reached:
-			'Osiągnięto maksymalną liczbę szkiców możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+			'Osiągnięto maksymalną liczbę szkiców możliwych do utworzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
 		survey_and_draft_limit_reached:
-			'Osiągnięto maksymalną liczbę ankiet możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+			'Osiągnięto maksymalną liczbę ankiet i szkiców możliwych do utworzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
 
 		your_drafts: 'Twoje szkice',
 		number_of_drafts: 'Liczba szkicy',

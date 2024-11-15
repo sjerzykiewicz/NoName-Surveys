@@ -46,15 +46,18 @@
 	onMount(() => {
 		if (data.numSurveys >= $LIMIT_OF_SURVEYS && data.numDrafts >= $LIMIT_OF_DRAFTS) {
 			isExportButtonVisible = false;
-			$warningModalContent = $t('survey_and_draft_limit_reached');
+			$warningModalContent =
+				'You have reached the maximum number of surveys and drafts you can create. Please delete some surveys and drafts to create new ones.';
 			$isWarningModalHidden = false;
 		} else if (data.numSurveys >= $LIMIT_OF_SURVEYS) {
 			isExportButtonVisible = false;
-			$warningModalContent = $t('survey_limit_reached');
+			$warningModalContent =
+				'You have reached the maximum number of surveys you can create. Please delete some surveys to create new ones.';
 			$isWarningModalHidden = false;
 		} else if (data.numDrafts >= $LIMIT_OF_DRAFTS) {
 			isExportButtonVisible = false;
-			$warningModalContent = $t('draft_limit_reached');
+			$warningModalContent =
+				'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
 			$isWarningModalHidden = false;
 		}
 	});

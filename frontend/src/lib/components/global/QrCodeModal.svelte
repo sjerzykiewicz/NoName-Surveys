@@ -8,11 +8,6 @@
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 	import { onMount } from 'svelte';
 
-	import { getContext } from 'svelte';
-	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
-
-	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
-
 	export let isHidden: boolean = true;
 	export let title: string;
 	export let surveyCode: string;
@@ -70,15 +65,15 @@
 		title="Copy the link"
 		class="save popup"
 		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
-		><i class="symbol">link</i>{$t('copy_link')}
-		<span class="popup-text top" id="link-popup">{$t('copied')}</span></button
+		><i class="symbol">link</i>Copy Link
+		<span class="popup-text top" id="link-popup">Copied!</span></button
 	>
 	<button
 		title="Copy the code"
 		class="save popup"
 		on:click={() => handleCopy(surveyCode, 'code-popup')}
-		><i class="symbol">content_copy</i>{$t('copy_code')}
-		<span class="popup-text top" id="code-popup">{$t('copied')}</span></button
+		><i class="symbol">content_copy</i>Copy Code
+		<span class="popup-text top" id="code-popup">Copied!</span></button
 	>
 </Modal>
 

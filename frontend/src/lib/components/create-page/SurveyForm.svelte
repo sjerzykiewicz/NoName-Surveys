@@ -41,7 +41,7 @@
 	import { onMount } from 'svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 	import { invalidateAll } from '$app/navigation';
-
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -84,7 +84,8 @@
 			(!overwrite && numDrafts >= $LIMIT_OF_DRAFTS)
 		) {
 			isExportButtonVisible = false;
-			$warningModalContent = $t('draft_limit_reached');
+			$warningModalContent =
+				'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
 			$isWarningModalHidden = false;
 			return;
 		}
@@ -226,55 +227,55 @@
 
 <Modal
 	icon="save"
-	title={$t('saving_draft')}
+	title={$t('create_saving_draft')}
 	bind:isHidden={isDraftModalHidden}
 	--width={innerWidth <= $M ? '20em' : '22em'}
 >
-	<span slot="content">{$t('draft_overwrite_query')}</span>
-	<button title="Overwrite draft" class="save" on:click={() => saveDraft(true)}
-		><i class="symbol">save_as</i>{$t('overwrite_draft')}</button
+	<span slot="content"><Tx text="create_saving_draft_alert"></Tx></span>
+	<button title={$t('create_overwrite_draft')} class="save" on:click={() => saveDraft(true)}
+		><i class="symbol">save_as</i><Tx text="create_overwrite_draft"></Tx></button
 	>
-	<button title="Save new draft" class="save" on:click={() => saveDraft(false)}
-		><i class="symbol">save</i>{$t('save_new_draft')}</button
+	<button title={$t('create_save_new_draft')} class="save" on:click={() => saveDraft(false)}
+		><i class="symbol">save</i><Tx text="create_save_new_draft"></Tx></button
 	>
 </Modal>
 
 <Modal
 	icon="group"
-	title={$t('define_respondent_group')}
+	title={$t('create_define_respondent_group')}
 	bind:isHidden={isRespondentModalHidden}
 	--width={innerWidth <= $M ? '20em' : '26em'}
 >
 	<div slot="content">
-		<span>{$t('make_public_or_secure')}</span>
+		<span><Tx text="create_define_respondent_group_alert"></Tx></span>
 		<div class="crypto-buttons">
 			<button
-				title="Public"
+				title={$t('public')}
 				class="access-button"
 				class:save={!$useCrypto}
 				on:click={() => ($useCrypto = false)}
 			>
-				<i class="symbol">public</i>{$t('public')}
+				<i class="symbol">public</i><Tx text="public"></Tx>
 			</button>
 			<button
-				title="Secure"
+				title={$t('secure')}
 				class="access-button"
 				class:save={$useCrypto}
 				on:click={() => ($useCrypto = true)}
 			>
-				<i class="symbol">encrypted</i>{$t('secure')}
+				<i class="symbol">encrypted</i><Tx text="secure"></Tx>
 			</button>
 		</div>
 		<div class="select-box">
 			<SelectGroup {groups} bind:disabled={isCryptoDisabled} />
-			<div id="or" class:disabled={isCryptoDisabled}>{$t('or')}</div>
+			<div id="or" class:disabled={isCryptoDisabled}>Or</div>
 			<SelectUsers {users} bind:disabled={isCryptoDisabled} />
 			<CryptoError error={cryptoError} />
 			<div class="import">
 				<ImportEmails
 					bind:users={$ringMembers}
-					title="Import users from a .csv file"
-					label={$t('or') + ' ' + $t('import_users_from_csv')}
+					title={$t('import_csv_title')}
+					label={$t('import_csv_label')}
 					id="emails-file"
 					checkKeys={true}
 					--width="100%"
@@ -285,16 +286,12 @@
 			</div>
 		</div>
 	</div>
-	<button title={$t('define_respondent_group')} class="save apply" on:click={createSurvey}
-		><i class="symbol">done</i>{$t('apply')}</button
+	<button title={$t('create_define_respondent_group')} class="done" on:click={createSurvey}
+		><i class="symbol">done</i><Tx text="submit"></Tx></button
 	>
 </Modal>
 
-<QrCodeModal
-	bind:isHidden={isSurveyModalHidden}
-	title={$t('survey_created_successfully')}
-	{surveyCode}
-/>
+<QrCodeModal bind:isHidden={isSurveyModalHidden} title={$t('create_survey_success')} {surveyCode} />
 
 {#each $questions as question, questionIndex (question)}
 	<div
@@ -327,9 +324,7 @@
 			<div class="tooltip create-info">
 				<i class="symbol">info</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
-					>Before creating a secure survey, consider setting up a user group. User groups make it
-					easy to select the same set of respondents across multiple surveys. However, if you
-					prefer, you can proceed without using them.</span
+					><Tx text="create_groups_info"></Tx></span
 				>
 			</div>
 		</div>
@@ -338,7 +333,7 @@
 
 <style>
 	.tooltip {
-		--tooltip-width: 22em;
+		--tooltip-width: 19em;
 		font-size: 1.5em;
 	}
 
@@ -369,10 +364,6 @@
 
 	.access-button i {
 		margin-right: 0.15em;
-	}
-
-	.apply i {
-		font-variation-settings: 'wght' 700;
 	}
 
 	.select-box {
@@ -406,6 +397,18 @@
 		.tooltip {
 			--tooltip-width: 10em;
 			font-size: 1.25em;
+		}
+
+		.tooltip .tooltip-text.bottom {
+			left: unset;
+			right: 20%;
+			margin-left: 0em;
+			margin-right: -1.15em;
+		}
+
+		.tooltip .tooltip-text.bottom::after {
+			left: 91.5%;
+			margin-left: -1.15em;
 		}
 
 		.import {

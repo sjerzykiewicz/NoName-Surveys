@@ -8,16 +8,11 @@
 
 	export let data;
 	export let selectedDraftsToRemove: number[] = [];
-
-	import { getContext } from 'svelte';
-	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
-
-	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 </script>
 
 <Header>
 	<div class="title">
-		{$t('your_drafts')}
+		Your drafts
 		<span title="Number of drafts" class:max={data.numDrafts >= $LIMIT_OF_DRAFTS}
 			>[ {data.numDrafts} / {$LIMIT_OF_DRAFTS} ]</span
 		>

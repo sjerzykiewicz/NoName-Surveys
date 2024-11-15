@@ -7,13 +7,17 @@
 	import MembersButtons from '$lib/components/groups-page/group/MembersButtons.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data;
 	export let selectedMembersToRemove: string[] = [];
 </script>
 
 <Header>
-	<div title="Group title" class="title">{data.group}</div>
+	<div title={$t('group_name')} class="title">{data.group}</div>
 </Header>
 
 <Content>

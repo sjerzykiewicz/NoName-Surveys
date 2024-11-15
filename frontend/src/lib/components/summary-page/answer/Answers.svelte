@@ -12,7 +12,11 @@
 	import type { ComponentType } from 'svelte';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import type SurveySummary from '$lib/entities/surveys/SurveySummary';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let answer: SurveySummary;
 	export let id: number;
 
@@ -29,8 +33,8 @@
 	};
 </script>
 
-<div title="Answer no. {id + 1}" class="title answers">
-	{id + 1}. Answer
+<div title={$t('answer_no', { index: id + 1 })} class="title answers">
+	{id + 1}. <Tx text="answer" />
 </div>
 {#each answer.questions as question, questionIndex}
 	<div class="question">

@@ -25,7 +25,12 @@
 	import Input from '$lib/components/global/Input.svelte';
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
-	import WarningModal from '../global/WarningModal.svelte';
+	import WarningModal from '$lib/components/global/WarningModal.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let groups: {
 		user_group_name: string;
@@ -90,8 +95,7 @@
 	async function createGroup() {
 		if (numGroups >= $LIMIT_OF_GROUPS) {
 			isExportButtonVisible = false;
-			$warningModalContent =
-				'You have reached the maximum number of groups you can create. Please delete some groups to create new ones.';
+			$warningModalContent = $t('max_groups_reached');
 			$isWarningModalHidden = false;
 			return;
 		}
@@ -166,26 +170,30 @@
 	--width-warning={innerWidth <= $M ? '20em' : '22em'}
 />
 
-<DeleteModal title="Deleting Groups" bind:isHidden={isModalHidden} deleteEntries={deleteGroups} />
+<DeleteModal
+	title={$t('deleting_group')}
+	bind:isHidden={isModalHidden}
+	deleteEntries={deleteGroups}
+/>
 
 <div class="button-row top-row">
 	<div class="button-sub-row">
 		<button
-			title={isPanelVisible ? 'Stop creating a group' : 'Create a group'}
+			title={isPanelVisible ? $t('create_group_stop') : $t('create_group')}
 			class="add-group"
 			class:clicked={isPanelVisible}
 			on:click={togglePanel}
 		>
-			<i class="symbol">add</i>Group
+			<i class="symbol">add</i><Tx text="group" />
 		</button>
 		{#if groups.length > 0}
 			<button
-				title="Delete selected groups"
+				title={$t('delete_selected_groups')}
 				class="delete-group"
 				disabled={selectedGroupsToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="symbol">delete</i>Delete
+				<i class="symbol">delete</i><Tx text="delete" />
 			</button>
 		{/if}
 	</div>
@@ -200,8 +208,8 @@
 		<div class="button-row">
 			<Input
 				bind:text={groupName}
-				label="Group Name"
-				title="Enter a group name"
+				label={$t('group_name')}
+				title={$t('enter_group_name')}
 				bind:element={nameInput}
 				handleEnter={(e) => {
 					if (e.key === 'Enter') {
@@ -222,22 +230,22 @@
 			--font-size={innerWidth <= $M ? '0.8em' : '1em'}
 		/>
 		<div class="button-row">
-			<div title="Select group members" class="select-list">
+			<div title={$t('select_group_members')} class="select-list">
 				<MultiSelect
 					bind:selected={groupMembers}
 					options={users}
-					placeholder="Select group members"
+					placeholder={$t('select_group_members')}
 				/>
 			</div>
-			<button title="Save the group" class="done" on:click={createGroup}>
-				<i class="symbol">done</i>Create
+			<button title={$t('save_group')} class="done" on:click={createGroup}>
+				<i class="symbol">done</i><Tx text="create" />
 			</button>
 		</div>
 		<MembersError members={groupMembers} error={membersError} />
 		<ImportEmails
 			bind:users={groupMembers}
-			title="Import group members from a .csv file"
-			label="Or import group members from a .csv file."
+			title={$t('import_members_title')}
+			label={$t('import_members_label')}
 			id="emails-file"
 			checkKeys={false}
 			bind:invalidEmails

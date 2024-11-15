@@ -2,7 +2,10 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let questionIndex: number;
 
 	function moveChoiceUp(index: number) {
@@ -20,11 +23,11 @@
 
 <div class="choice-area display" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<div title="Answer no. {choiceIndex + 1}" class="choice">
+		<div title={$t('answer_no', { index: choiceIndex + 1 })} class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
 			<div class="arrows">
 				<button
-					title="Move answer up"
+					title={$t('move_answer_up')}
 					class="up"
 					disabled={choiceIndex === 0}
 					on:click={() => moveChoiceUp(choiceIndex)}
@@ -32,7 +35,7 @@
 					<i class="symbol">keyboard_arrow_up</i>
 				</button>
 				<button
-					title="Move answer down"
+					title={$t('move_answer_down')}
 					class="down"
 					disabled={choiceIndex === $questions[questionIndex].choices.length - 1}
 					on:click={() => moveChoiceDown(choiceIndex)}

@@ -3,6 +3,11 @@
 	import { warningModalContent, isWarningModalHidden } from '$lib/stores/global';
 	import { onMount } from 'svelte';
 	import { downloadFile } from '$lib/utils/downloadFile';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let isExportButtonVisible: boolean = false;
 	export let emails: string[] = [];
@@ -27,7 +32,7 @@
 
 <Modal
 	icon="warning"
-	title="Warning"
+	title={$t('warning')}
 	--text-color="var(--warning-color-1)"
 	--border-color="var(--warning-color-1)"
 	--width="var(--width-warning)"
@@ -38,10 +43,10 @@
 	<div slot="content" class="content">{$warningModalContent}</div>
 	{#if isExportButtonVisible}
 		<button
-			title="Export invalid emails"
+			title={$t('export_invalid_emails')}
 			class="export"
 			on:click={() => downloadFile('invalid-emails.csv', emails.join(';\n'))}
-			><i class="symbol">file_save</i>Export</button
+			><i class="symbol">file_save</i><Tx text="export" /></button
 		>
 	{/if}
 	<button title="Ok" class="done" on:click={() => ($isWarningModalHidden = true)}

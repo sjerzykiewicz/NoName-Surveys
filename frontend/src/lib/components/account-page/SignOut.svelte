@@ -1,4 +1,11 @@
 <script lang="ts">
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	async function signOut() {
 		try {
 			await fetch('/api/oauth/sign-out', {
@@ -15,9 +22,9 @@
 </script>
 
 <div class="sign-buttons">
-	<button title="Sign out" class="sign-out" on:click={signOut}
-		><i class="symbol">logout</i>Sign Out</button
-	>
+	<button title={$t('sign_out')} class="sign-out" on:click={signOut}
+		><i class="symbol">logout</i><Tx text="sign_out" />
+	</button>
 </div>
 
 <style>

@@ -4,6 +4,10 @@
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 
@@ -11,27 +15,21 @@
 		const error = $questions[i].error;
 		switch (error) {
 			case SurveyError.ChoicesRequired:
-				return 'Please enter all choices for question no. ' + (i + 1) + '.';
+				return $t('choice_error_required', { index: i + 1 });
 			case SurveyError.BinaryChoicesRequired:
-				return 'Please enter both choices for question no. ' + (i + 1) + '.';
+				return $t('choice_error_binary_required', { index: i + 1 });
 			case SurveyError.NumberValuesRequired:
-				return 'Please enter both values for question no. ' + (i + 1) + '.';
+				return $t('choice_error_number_required', { index: i + 1 });
 			case SurveyError.SliderValuesRequired:
-				return 'Please enter all values for question no. ' + (i + 1) + '.';
+				return $t('choice_error_slider_required', { index: i + 1 });
 			case SurveyError.ChoicesTooLong:
-				return (
-					'Choices must be ' +
-					$LIMIT_OF_CHARS +
-					' or less characters long in question no. ' +
-					(i + 1) +
-					'.'
-				);
+				return $t('choice_error_limit', { index: i + 1, limit: $LIMIT_OF_CHARS });
 			case SurveyError.DuplicateChoices:
-				return 'Please remove duplicate choices from question no. ' + (i + 1) + '.';
+				return $t('choice_error_duplicate', { index: i + 1 });
 			case SurveyError.ImproperSliderValues:
-				return 'Maximum value must be greater than minimum value in question no. ' + (i + 1) + '.';
+				return $t('choice_error_slider_values', { index: i + 1 });
 			case SurveyError.ImproperSliderPrecision:
-				return 'Precision must be lower than the range in question no. ' + (i + 1) + '.';
+				return $t('choice_error_slider_precision', { index: i + 1 });
 		}
 	}
 
@@ -62,8 +60,11 @@
 
 <div transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#if checkChoiceError(questionIndex)}
-		<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<i class="symbol">error</i>{errorMessage(questionIndex)}
+		<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+			<i class="symbol">error</i>
+			{#key $t}
+				{errorMessage(questionIndex)}
+			{/key}
 		</p>
 	{/if}
 </div>

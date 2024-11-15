@@ -2,6 +2,8 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { scale } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import { M } from '$lib/stores/global';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	let scrollHeight: number;
 
@@ -19,7 +21,7 @@
 		on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
 	>
 		<i class="symbol">north</i>
-		<span class="tooltip-text right">Scroll to the top.</span>
+		{#if innerWidth > $M}<span class="tooltip-text right"><Tx text="scroll_to_top" /></span>{/if}
 	</button>
 {/if}
 
@@ -42,7 +44,7 @@
 		justify-content: center;
 		bottom: 0.25em;
 		left: 0.25em;
-		background-color: var(--primary-color-2);
+		background-color: var(--primary-color-1);
 		border: none;
 		font-size: 1.5em;
 		z-index: 1;
@@ -61,10 +63,6 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		.tooltip .tooltip-text {
-			font-size: 0.6em;
-		}
-
 		.scroll-to-top.fill-page {
 			left: 0.5em;
 			bottom: 0.5em;

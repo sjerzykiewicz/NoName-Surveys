@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let questionIndex: number;
 
@@ -8,11 +13,11 @@
 
 <div class="choice-area display">
 	<select
-		title="Select your answer"
+		title={$t('select_answer')}
 		name={questionIndex.toString()}
 		bind:value={$answers[questionIndex].choices[0]}
 	>
-		<option value="" disabled selected hidden>Select your answer</option>
+		<option value="" disabled selected hidden><Tx text="select_answer" /></option>
 		{#each $questions[questionIndex].choices as choice}
 			<option value={choice}>
 				{choice}

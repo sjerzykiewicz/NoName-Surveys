@@ -24,6 +24,11 @@
 	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { invalidateAll } from '$app/navigation';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let numSurveys: number;
 	export let numDrafts: number;
@@ -124,8 +129,7 @@
 		} else {
 			if (numDrafts >= $LIMIT_OF_DRAFTS) {
 				isExportButtonVisible = false;
-				$warningModalContent =
-					'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
+				$warningModalContent = $t('limit_reached', { items: $t('drafts_genitive') });
 				$isWarningModalHidden = false;
 				return;
 			}
@@ -163,8 +167,7 @@
 	async function createSurvey() {
 		if (numSurveys >= $LIMIT_OF_SURVEYS) {
 			isExportButtonVisible = false;
-			$warningModalContent =
-				'You have reached the maximum number of surveys you can create. Please delete some surveys to create new ones.';
+			$warningModalContent = $t('limit_reached', { items: $t('surveys_genitive') });
 			$isWarningModalHidden = false;
 			return;
 		}
@@ -179,12 +182,12 @@
 </script>
 
 {#if isPreview}
-	<button title="Edit survey" class="footer-button" on:click={togglePreview}>
-		<i class="symbol">edit</i>Edit
+	<button title={$t('edit_title')} class="footer-button" on:click={togglePreview}>
+		<i class="symbol">edit</i><Tx text="edit" />
 	</button>
 {:else}
 	<button
-		title="Preview survey"
+		title={$t('preview_title')}
 		class="footer-button"
 		on:click={() => {
 			$title.title = $title.title.trim();
@@ -192,31 +195,31 @@
 			togglePreview();
 		}}
 	>
-		<i class="symbol">search</i>Preview
+		<i class="symbol">search</i><Tx text="preview" />
 	</button>
 {/if}
 <div class="footer-button-group">
 	<button
-		title="Save draft"
+		title={$t('save_draft')}
 		class="footer-button save popup"
 		disabled={$questions.length === 0 || isPreview}
 		on:click={saveDraft}
 	>
-		<i class="symbol">save</i>Save Draft
-		<span class="popup-text top" id="draft-popup">Saved!</span>
+		<i class="symbol">save</i><Tx text="save_draft" />
+		<span class="popup-text top" id="draft-popup"><Tx text="saved" /></span>
 	</button>
 	<button
-		title="Finish survey creation"
-		class="footer-button save done"
+		title={$t('create_title')}
+		class="footer-button done"
 		disabled={$questions.length === 0 || isPreview}
 		on:click={createSurvey}
 	>
-		<i class="symbol">done</i>Create
+		<i class="symbol">done</i><Tx text="create" />
 	</button>
 </div>
 
 <style>
 	.popup {
-		--tooltip-width: 4em;
+		--tooltip-width: 5em;
 	}
 </style>

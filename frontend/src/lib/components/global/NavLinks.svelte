@@ -2,6 +2,11 @@
 	import { page } from '$app/stores';
 	import { M } from '$lib/stores/global';
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let navLinks: Record<
 		string,
 		{ name: string; href: string; page: string; disabled: boolean }
@@ -15,7 +20,7 @@
 
 {#each Object.entries(navLinks) as [id, data]}
 	<div
-		title={data.disabled ? '' : data.name}
+		title={data.disabled ? '' : $t(data.name)}
 		{id}
 		class="nav-link"
 		class:tooltip={innerWidth > $M && data.disabled}
@@ -23,10 +28,11 @@
 		class:active={$page.route.id === data.href ||
 			$page.route.id === data.href + '/[' + data.name.toLowerCase() + 'Page]'}
 	>
-		<a href={data.disabled ? '' : data.href + data.page} on:click={hideNav}>{data.name}</a>
+		<a href={data.disabled ? '' : data.href + data.page} on:click={hideNav}>{$t(data.name)}</a>
 		{#if innerWidth > $M && data.disabled}
 			<span class="tooltip-text bottom">
-				Sign in to access {data.name}.
+				<Tx text="sign_in_info" />
+				<Tx text={data.name} />
 			</span>
 		{/if}
 	</div>

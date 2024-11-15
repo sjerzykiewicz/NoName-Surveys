@@ -6,6 +6,11 @@
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import { page } from '$app/stores';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let form: ActionData;
 
@@ -17,18 +22,18 @@
 <Content>
 	<h1>NoName Anonymous Surveys</h1>
 	<div class="code-text">
-		<span>Enter a survey code to fill it out</span>
+		<span><Tx text="code_info" /></span>
 		<div title="" class="tooltip">
 			<i class="symbol">info</i>
 			<span
 				class="tooltip-text {innerWidth <= $M ? (innerWidth <= $M ? 'top' : 'left') : 'bottom'}"
 			>
-				Enter the code provided to you by the survey creator. Your answers are completely anonymous.
+				<Tx text="code_tooltip" />
 			</span>
 		</div>
 	</div>
 	<form method="POST" use:enhance>
-		<label title="Enter a survey code to fill it out" for="code-input">
+		<label title={$t('code_info')} for="code-input">
 			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				id="code-input"
@@ -41,19 +46,23 @@
 				autofocus={innerWidth > $M}
 			/>
 			{#if form?.error}
-				<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+				<p
+					title={$t('error')}
+					class="error"
+					transition:slide={{ duration: 200, easing: cubicInOut }}
+				>
 					<i class="symbol">error</i>{form.error}
 				</p>
 			{/if}
-			<button title="Submit the code" class="done" type="submit">
-				<i class="symbol">done</i>Submit
+			<button title={$t('submit_code')} class="done" type="submit">
+				<i class="symbol">done</i><Tx text="submit" />
 			</button>
 		</label>
 	</form>
 	<p class="home-info">
-		If you want to create your own survey, go to
-		{#if $page.data.session}<a href="/create" title="Create"> Create</a>.
-		{:else}<a href="/account" title="Account"> Account</a>.
+		<Tx text="home_redirect" />
+		{#if $page.data.session}<a href="/create" title={$t('create')}><Tx text="create" /></a>.
+		{:else}<a href="/account" title={$t('account')}><Tx text="account" /></a>.
 		{/if}
 	</p>
 </Content>

@@ -2,11 +2,15 @@
 	import { useCrypto, ringMembers, selectedGroup } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let error: boolean;
 
 	function errorMessage() {
-		return 'Please define respondent group.';
+		return $t('define_respondent_group_error');
 	}
 
 	$: checkCryptoError = () => {
@@ -22,8 +26,11 @@
 </script>
 
 {#if checkCryptoError()}
-	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<i class="symbol">error</i>{errorMessage()}
+	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<i class="symbol">error</i>
+		{#key $t}
+			{errorMessage()}
+		{/key}
 	</p>
 {/if}
 

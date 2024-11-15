@@ -28,6 +28,14 @@
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { M } from '$lib/stores/global';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
+	$: currentLang = $options.currentLang;
 
 	export let questionInput: HTMLDivElement;
 
@@ -180,16 +188,17 @@
 
 <svelte:window bind:innerWidth />
 
-<div class="button-group">
+<div class="button-group" style="--width: {currentLang === 'en' ? '7.5em' : '8em'}">
 	<div class="add-buttons">
 		<button
-			title={isPanelVisible ? 'Stop choosing question type' : 'Choose question type'}
+			title={isPanelVisible ? $t('question_choose_type_stop') : $t('question_choose_type')}
 			class="add-question"
 			class:clicked={isPanelVisible}
 			class:previous={$previousQuestion}
 			on:click={togglePanel}
 		>
-			<i class="symbol">add</i>Question
+			<div class="button-text"><i class="symbol add">add</i><Tx text="question" /></div>
+			<i class="symbol arrow">arrow_drop_down</i>
 		</button>
 		{#if $previousQuestion}
 			<QuestionTypeButton
@@ -219,11 +228,6 @@
 </div>
 
 <style>
-	button {
-		width: 6.25em;
-		box-shadow: none;
-	}
-
 	.button-group {
 		width: fit-content;
 		font-size: 1.25em;
@@ -237,9 +241,18 @@
 	}
 
 	.add-question {
+		display: flex;
+		justify-content: space-between;
+		width: var(--width, 7.5em);
+		box-shadow: none;
 		transition:
 			0.2s,
 			outline 0s;
+	}
+
+	.button-text {
+		display: flex;
+		align-items: center;
 	}
 
 	.add-question.clicked {
@@ -266,19 +279,26 @@
 		flex-flow: column;
 		border-radius: 0px 0px 5px 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
-		width: fit-content;
+		width: var(--width, 7.5em);
 		height: auto;
 		position: absolute;
 		z-index: 1;
 	}
 
-	.add-question.clicked i {
+	.add-question.clicked .add {
 		transform: rotate(45deg);
 	}
 
-	.add-question i {
+	.add-question.clicked .arrow {
+		transform: rotate(180deg);
+	}
+
+	.add-question .add {
 		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
+	}
+
+	.add-question i {
 		transform: rotate(0deg);
 		transition: transform 0.2s;
 	}

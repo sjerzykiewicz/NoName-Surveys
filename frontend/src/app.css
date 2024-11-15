@@ -596,7 +596,7 @@ input[type='file'] {
 }
 
 .question-label .tooltip {
-	--tooltip-width: 4.5em;
+	--tooltip-width: 5.5em;
 	margin-left: 0.5em;
 }
 
@@ -688,7 +688,7 @@ input[type='file'] {
 }
 
 .choice-area.text.display {
-	width: 86%;
+	width: calc(100% - 4.5em);
 }
 
 .choice-area.display .input {
@@ -1538,4 +1538,27 @@ button.popup {
 	.select-list *:where(div.multiselect > ul.selected) {
 		max-height: 15.5em;
 	}
+}
+
+.account-accent {
+	color: var(--accent-color-1);
+	font-weight: 700;
+}
+
+.account-ul {
+	list-style-type: none;
+	margin-top: 0.25em;
+	padding-left: 1.5em;
+}
+
+.account-li {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding-top: 0.75em;
+}
+
+.account-icon {
+	margin-right: 0.5em;
 }

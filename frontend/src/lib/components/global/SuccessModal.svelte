@@ -2,6 +2,10 @@
 	import Modal from '$lib/components/global/Modal.svelte';
 	import { successModalContent, isSuccessModalHidden } from '$lib/stores/global';
 	import { onMount } from 'svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let hide: () => void = () => ($isSuccessModalHidden = true);
 
@@ -24,7 +28,7 @@
 
 <Modal
 	icon="check_circle"
-	title="Success"
+	title={$t('success')}
 	--text-color="var(--accent-color-1)"
 	--border-color="var(--accent-color-1)"
 	--z-index="12"

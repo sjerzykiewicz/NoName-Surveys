@@ -2,6 +2,10 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 
@@ -9,7 +13,7 @@
 </script>
 
 <div class="choice-area display binary" transition:slide={{ duration: 200, easing: cubicInOut }}>
-	<label title="Select your answer" class="choice binary" class:selected={checked === 0}
+	<label title={$t('select_answer')} class="choice binary" class:selected={checked === 0}
 		><div class="icon">
 			<input
 				type="radio"
@@ -24,7 +28,7 @@
 			{$questions[questionIndex].choices[0]}
 		</div>
 	</label>
-	<label title="Select your answer" class="choice binary" class:selected={checked === 1}
+	<label title={$t('select_answer')} class="choice binary" class:selected={checked === 1}
 		><div class="icon">
 			<input
 				type="radio"
@@ -62,5 +66,11 @@
 		transition:
 			0.2s,
 			outline 0s;
+	}
+
+	@media screen and (max-width: 768px) {
+		.choice-input {
+			margin-top: 0em;
+		}
 	}
 </style>

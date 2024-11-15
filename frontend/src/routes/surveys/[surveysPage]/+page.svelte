@@ -5,6 +5,11 @@
 	import LimitWarning from '$lib/components/global/LimitWarning.svelte';
 	import SurveysButtons from '$lib/components/surveys-page/SurveysButtons.svelte';
 	import { LIMIT_OF_SURVEYS } from '$lib/stores/global';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data;
 	export let selectedSurveysToRemove: string[] = [];
@@ -12,8 +17,8 @@
 
 <Header>
 	<div class="title">
-		Your surveys
-		<span title="Number of surveys" class:max={data.numSurveys >= $LIMIT_OF_SURVEYS}
+		<Tx text="your_surveys"></Tx>
+		<span title={$t('number_of_surveys')} class:max={data.numSurveys >= $LIMIT_OF_SURVEYS}
 			>[ {data.numSurveys} / {$LIMIT_OF_SURVEYS} ]</span
 		>
 	</div>

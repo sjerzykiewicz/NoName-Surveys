@@ -33,6 +33,7 @@ export const data = {
 		draft: 'Draft',
 		group: 'Group',
 		create: 'Create',
+		survey: 'Survey',
 
 		single_text: 'Single',
 		single_title: 'Single choice',
@@ -300,7 +301,20 @@ Authorizing yourself will enable you to:
 		group_members: 'Group members',
 		no_members_yet: 'No group members yet!',
 		user_has_keys: 'This user has already generated their keys.',
-		user_has_no_keys: 'This user has not generated their keys yet.'
+		user_has_no_keys: 'This user has not generated their keys yet.',
+
+		your_surveys: 'Your surveys',
+		number_of_surveys: 'Number of surveys',
+		no_surveys_yet: 'No surveys yet!',
+		surveys_tooltip: `To create a survey, click on the "Create" tab at the top of the page or the button below.
+			All your created surveys will be stored on this page.`,
+		survey_has_group: 'This survey has an established group of possible respondents.',
+		survey_is_open: 'Everyone can submit an answer to this survey.',
+		survey_owner: 'You are the owner of this survey.',
+		survey_shared: 'Results of this survey have been shared with you.',
+		view_summary: 'View the summary',
+		view_respondents: 'View possible respondents',
+		not_available_for_public: 'Not available for public survey'
 	},
 
 	pl: {
@@ -337,6 +351,7 @@ Authorizing yourself will enable you to:
 		draft: 'Szkic',
 		group: 'Grupa',
 		create: 'Utwórz',
+		survey: 'Ankieta',
 
 		single_text: 'Jednokrotne',
 		single_title: 'Jednokrotny wybór',
@@ -598,6 +613,19 @@ Zautoryzowanie się pozwoli Ci na:
 		group_members: 'Członkowie grupy',
 		no_members_yet: 'Brak członków grupy!',
 		user_has_keys: 'Ten użytkownik posiada klucze.',
-		user_has_no_keys: 'Ten użytkownik nie posiada kluczy.'
+		user_has_no_keys: 'Ten użytkownik nie posiada kluczy.',
+
+		your_surveys: 'Twoje ankiety',
+		number_of_surveys: 'Liczba ankiet',
+		no_surveys_yet: 'Brak ankiet!',
+		surveys_tooltip: `Aby stworzyć ankietę, wejdź w zakładkę "Utwórz" na górze strony lub kliknij przycisk poniżej.
+			Wszystkie stworzone ankiety będą dostępne na tej stronie.`,
+		survey_has_group: 'Ta ankieta ma okresloną grupę repondentów.',
+		survey_is_open: 'Każdy może przesłać odpowiedź na tę ankietę.',
+		survey_owner: 'Jesteś właścicielem tej ankiety.',
+		survey_shared: 'Wyniki tej ankiety zostały tobie udostępnione.',
+		view_summary: 'Pokaż podsumowanie',
+		view_respondents: 'Pokaż możliwych respondentów',
+		not_available_for_public: 'Niedostępne dla ankiety publicznej'
 	}
 };

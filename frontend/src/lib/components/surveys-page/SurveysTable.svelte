@@ -44,12 +44,11 @@
 
 {#if surveys.length === 0}
 	<div class="info-row">
-		<div title="Surveys" class="title empty">No surveys yet!</div>
+		<div title="Surveys" class="title empty"><Tx text="no_surveys_yet"></Tx></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				To create a survey, click on the "Create" tab at the top of the page or the button below.
-				All your created surveys will be stored on this page.
+				<Tx text="surveys_tooltip"></Tx>
 			</span>
 		</div>
 	</div>
@@ -94,12 +93,12 @@
 					{#if survey.uses_cryptographic_module}
 						<i class="symbol">encrypted</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>This survey has an established group of possible respondents.</span
+							><Tx text="survey_has_group"></Tx></span
 						>
 					{:else}
 						<i class="symbol">public</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>Everyone can submit an answer to this survey.</span
+							><Tx text="survey_is_open"></Tx></span
 						>
 					{/if}
 				</td>
@@ -107,22 +106,22 @@
 					{#if survey.is_owned_by_user}
 						<i class="symbol">verified</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>You are the owner of this survey.</span
+							><Tx text="survey_owner"></Tx></span
 						>
 					{:else}
 						<i class="symbol">share</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>Results of this survey have been shared with you.</span
+							><Tx text="survey_shared"></Tx></span
 						>
 					{/if}
 				</td>
-				<td title="View the summary" class="title-entry"
+				<td title={$t('view_summary')} class="title-entry"
 					><button on:click={() => goto($page.url.pathname + '/' + survey.survey_code)}
 						>{survey.title}</button
 					></td
 				>
 				{#if survey.uses_cryptographic_module}
-					<td title="View possible respondents" class="code-entry"
+					<td title={$t('view_respondents')} class="code-entry"
 						><button
 							on:click={() =>
 								goto($page.url.pathname + '/' + survey.survey_code + '/respondents/0')}
@@ -130,7 +129,7 @@
 						>
 					</td>
 				{:else}
-					<td title="Not available for public survey" class="info-entry">N/A</td>
+					<td title={$t('not_available_for_public')} class="info-entry">N/A</td>
 				{/if}
 				<td title="View QR code" class="code-entry"
 					><button

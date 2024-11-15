@@ -60,7 +60,7 @@
 <div class="button-row">
 	<div class="button-sub-row">
 		<button title="Create a survey" class="add-survey" on:click={() => goto('/create')}>
-			<i class="symbol">add</i>Survey
+			<i class="symbol">add</i><Tx text="survey"></Tx>
 		</button>
 		{#if surveys.length > 0}
 			<button

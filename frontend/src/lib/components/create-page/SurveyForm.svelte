@@ -84,8 +84,7 @@
 			(!overwrite && numDrafts >= $LIMIT_OF_DRAFTS)
 		) {
 			isExportButtonVisible = false;
-			$warningModalContent =
-				'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
+			$warningModalContent = $t('draft_limit_reached');
 			$isWarningModalHidden = false;
 			return;
 		}

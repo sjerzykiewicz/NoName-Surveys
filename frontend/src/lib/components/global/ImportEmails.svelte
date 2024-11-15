@@ -10,6 +10,11 @@
 		warningModalContent
 	} from '$lib/stores/global';
 
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let users: string[];
 	export let title: string;
 	export let label: string;
@@ -20,7 +25,7 @@
 	export let isExportButtonVisible: boolean = false;
 
 	let fileElement: HTMLInputElement | null = null;
-	let fileName: string = 'No file selected';
+	let fileName: string = $t('no_file_selected');
 	let fileWarning: FileError = FileError.NoError;
 
 	async function filterUsers(filter: string, emails: string[]): Promise<string[]> {
@@ -44,7 +49,7 @@
 
 	async function handleFileChange() {
 		fileElement = document.querySelector<HTMLInputElement>('#emails-file');
-		fileName = fileElement?.files?.[0]?.name ?? 'No file selected';
+		fileName = fileElement?.files?.[0]?.name ?? $t('no_file_selected');
 
 		const emails: string[] = await processEmails();
 		const endpoint: string = checkKeys
@@ -103,7 +108,7 @@
 		<span class="file-label">{label}</span>
 		<label for={id}>
 			<div class="file-input">
-				<span class="file-button"><i class="symbol">upload_file</i>Select File</span>
+				<span class="file-button"><i class="symbol">upload_file</i>{$t('select_file')}</span>
 				<span class="file-name">{fileName}</span>
 			</div>
 			<input type="file" name={id} {id} {disabled} on:change={handleFileChange} />

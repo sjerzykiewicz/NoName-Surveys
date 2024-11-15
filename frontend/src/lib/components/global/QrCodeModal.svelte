@@ -7,6 +7,11 @@
 	import { popup } from '$lib/utils/popup';
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 	import { onMount } from 'svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let isHidden: boolean = true;
 	export let title: string;
@@ -16,7 +21,7 @@
 		if (copy(str)) {
 			popup(id);
 		} else {
-			$errorModalContent = 'Could not copy due to an insecure connection.';
+			$errorModalContent = $t('no_copy_insecure_connection');
 			$isErrorModalHidden = false;
 		}
 	}
@@ -65,15 +70,15 @@
 		title="Copy the link"
 		class="save popup"
 		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
-		><i class="symbol">link</i>Copy Link
-		<span class="popup-text top" id="link-popup">Copied!</span></button
+		><i class="symbol">link</i><Tx text="copy_link"></Tx>
+		<span class="popup-text top" id="link-popup"><Tx text="copied"></Tx></span></button
 	>
 	<button
 		title="Copy the code"
 		class="save popup"
 		on:click={() => handleCopy(surveyCode, 'code-popup')}
-		><i class="symbol">content_copy</i>Copy Code
-		<span class="popup-text top" id="code-popup">Copied!</span></button
+		><i class="symbol">content_copy</i><Tx text="copy_code"></Tx>
+		<span class="popup-text top" id="code-popup"><Tx text="copied"></Tx></span></button
 	>
 </Modal>
 

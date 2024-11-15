@@ -218,7 +218,21 @@ Authorizing yourself will enable you to:
 		select_members: 'Select members',
 
 		import_csv_title: 'Import users from .csv file',
-		import_csv_label: 'Or import users from .csv file'
+		import_csv_label: 'Or import users from .csv file',
+		select_file: 'Select file',
+		no_file_selected: 'No file selected',
+
+		copy_link: 'Copy link',
+		copy_code: 'Copy code',
+		copied: 'Copied!',
+		no_copy_insecure_connection: 'Could not copy due to an insecure connection.',
+
+		survey_limit_reached:
+			'You have reached the maximum number of surveys you can create. Please delete some surveys and drafts to create new ones.',
+		draft_limit_reached:
+			'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.',
+		survey_and_draft_limit_reached:
+			'You have reached the maximum number of surveys and drafts you can create. Please delete some surveys and drafts to create new ones.'
 	},
 
 	pl: {
@@ -434,6 +448,20 @@ Zautoryzowanie się pozwoli Ci na:
 		select_members: 'Wybierz członków',
 
 		import_csv_title: 'Importuj użytkowników z pliku .csv',
-		import_csv_label: 'Lub importuj użytkowników z pliku .csv'
+		import_csv_label: 'Lub importuj użytkowników z pliku .csv',
+		select_file: 'Wybierz plik',
+		no_file_selected: 'Nie wybrano pliku',
+
+		copy_link: 'Kopiuj link',
+		copy_code: 'Kopiuj kod',
+		copied: 'Skopiowano!',
+		no_copy_insecure_connection: 'Kopiowanie nie powiodło się z powodu niebezpiecznego połączenia.',
+
+		survey_limit_reached:
+			'Osiągnięto maksymalną liczbę ankiet możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+		draft_limit_reached:
+			'Osiągnięto maksymalną liczbę szkiców możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+		survey_and_draft_limit_reached:
+			'Osiągnięto maksymalną liczbę ankiet możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.'
 	}
 };

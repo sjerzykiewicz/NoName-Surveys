@@ -1,10 +1,14 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let data: { answer: string; choices: string[] };
 </script>
 
 <div class="choice-area display binary">
 	<label
-		title={data.choices[0] === data.answer ? 'Selected answer' : 'Other choice'}
+		title={data.choices[0] === data.answer ? $t('selected_answer') : $t('other_choice')}
 		class="choice binary"
 		class:selected={data.choices[0] === data.answer}
 	>
@@ -17,7 +21,7 @@
 		</div>
 	</label>
 	<label
-		title={data.choices[1] === data.answer ? 'Selected answer' : 'Other choice'}
+		title={data.choices[1] === data.answer ? $t('selected_answer') : $t('other_choice')}
 		class="choice binary"
 		class:selected={data.choices[1] === data.answer}
 	>

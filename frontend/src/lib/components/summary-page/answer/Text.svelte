@@ -8,7 +8,7 @@
 </script>
 
 <div class="choice-area text display">
-	<div title="Question details" class="details">
+	<div title={$t('question_details')} class="details">
 		{data.details}
 	</div>
 	<div title={$t('answer')} class="text-input display">

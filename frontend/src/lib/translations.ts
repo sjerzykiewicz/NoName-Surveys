@@ -325,7 +325,18 @@ Authorizing yourself will enable you to:
 		stop_giving_access: 'Stop giving access',
 		users: 'Users',
 		take_away_access: 'Take away access from selected users',
-		error_select_users: 'Please select users.'
+		error_select_users: 'Please select users.',
+
+		no_answers_yet: 'No answers yet!',
+		answers: 'Answers',
+		number_of_answers: 'Number of answers',
+		answer_no: 'Answer no.',
+		view_answer_no: 'View answer no.',
+
+		selected_answer: 'Selected answer',
+		other_choice: 'Other choice',
+		question_details: 'Question details',
+		click_to_get_answers: 'Click to display all answers'
 	},
 
 	pl: {
@@ -648,6 +659,17 @@ Zautoryzowanie się pozwoli Ci na:
 		stop_giving_access: 'Przestań dawać dostęp',
 		users: 'Użytkownicy',
 		take_away_access: 'Odbierz dostęp wybranym użytkownikom',
-		error_select_users: 'Wybierz użytkowników.'
+		error_select_users: 'Wybierz użytkowników.',
+
+		no_answers_yet: 'Brak odpowiedzi!',
+		answers: 'Odpowiedzi',
+		number_of_answers: 'Liczba odpowiedzi',
+		answer_no: 'Odpowiedź nr.',
+		view_answer_no: 'Pokaż odpowiedź nr.',
+
+		selected_answer: 'Wybrana odpowiedź',
+		other_choice: 'Inny wybór',
+		question_details: 'Szczegóły pytania',
+		click_to_get_answers: 'Kliknij, aby wyświetlić wszystkie odpowiedzi'
 	}
 };

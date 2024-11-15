@@ -29,7 +29,7 @@
 
 <Content>
 	{#if !data.answers[id]}
-		<div title="Answer no. {id + 1}" class="title empty">No {id + 1}. answer yet!</div>
+		<div title="{$t('answer_no')} {id + 1}" class="title empty">No {id + 1}. answer yet!</div>
 	{:else}
 		<Answers answer={data.answers[id]} {id} />
 	{/if}

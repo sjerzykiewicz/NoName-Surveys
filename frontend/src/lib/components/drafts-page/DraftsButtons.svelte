@@ -8,7 +8,10 @@
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let drafts: {
 		id: number;
 		title: string;
@@ -53,16 +56,20 @@
 	}
 </script>
 
-<DeleteModal title="Deleting Drafts" bind:isHidden={isModalHidden} deleteEntries={deleteDrafts} />
+<DeleteModal
+	title={$t('deleting_drafts')}
+	bind:isHidden={isModalHidden}
+	deleteEntries={deleteDrafts}
+/>
 
 <div class="button-row">
 	<div class="button-sub-row">
-		<button title="Create a draft" class="add-draft" on:click={() => goto('/create')}>
+		<button title={$t('create_draft')} class="add-draft" on:click={() => goto('/create')}>
 			<i class="symbol">add</i><Tx text="draft"></Tx>
 		</button>
 		{#if drafts.length > 0}
 			<button
-				title="Delete selected drafts"
+				title={$t('delete_selected_drafts')}
 				class="delete-draft"
 				disabled={selectedDraftsToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}

@@ -217,7 +217,7 @@
 
 {#if drafts.length === 0}
 	<div class="info-row">
-		<div title="Drafts" class="title empty"><Tx text="no_drafts_yet"></Tx></div>
+		<div title={$t('drafts')} class="title empty"><Tx text="no_drafts_yet"></Tx></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
@@ -238,17 +238,17 @@
 					/></label
 				></th
 			>
-			<th title="Draft title" id="title-header"><Tx text="draft_title"></Tx></th>
+			<th title={$t('draft_title')} id="title-header"><Tx text="draft_title"></Tx></th>
 			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date"></Tx></th>
 		</tr>
 		{#each drafts as draft}
 			<tr>
-				<td title="Select {draft.title}" class="checkbox-entry"
+				<td title="{$t('select')} {draft.title}" class="checkbox-entry"
 					><label>
 						<input type="checkbox" bind:group={selectedDraftsToRemove} value={draft.id} />
 					</label></td
 				>
-				<td title="Open {draft.title}" class="title-entry"
+				<td title="{$t('open')} {draft.title}" class="title-entry"
 					><button on:click={() => loadDraft(draft)}>{draft.title}</button></td
 				>
 				<td title={$t('creation_date')} class="date-entry">{formatDate(draft.creation_date)}</td>

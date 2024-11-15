@@ -25,7 +25,9 @@
 <svelte:window bind:innerWidth />
 
 {#if users.length === 0}
-	<div title="Users with access" class="title empty"><Tx text="no_surveys_with_access"></Tx></div>
+	<div title={$t('users_with_access')} class="title empty">
+		<Tx text="no_surveys_with_access"></Tx>
+	</div>
 {:else}
 	<table>
 		<tr>
@@ -42,13 +44,13 @@
 					/></label
 				></th
 			>
-			<th title="User type" id="info-header"><i class="symbol">person</i></th>
-			<th title="Users with access" id="title-header"><Tx text="users_with_access"></Tx></th>
+			<th title={$t('user_type')} id="info-header"><i class="symbol">person</i></th>
+			<th title={$t('users_with_access')} id="title-header"><Tx text="users_with_access"></Tx></th>
 		</tr>
 		{#each users as user}
 			<tr>
 				<td
-					title="Select {user}"
+					title="{$t('select')} {user}"
 					class="checkbox-entry"
 					class:disabled={user === $page.data.session?.user?.email}
 					><label>

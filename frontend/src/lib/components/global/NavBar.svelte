@@ -110,7 +110,7 @@
 		<a href="/" title="NoName" class="nav-burger-logo"
 			><img src={logo} alt="NoName logo" width="48" height="48" /></a
 		>
-		<div title={open ? 'Close menu' : 'Open menu'}>
+		<div title={open ? $options('close_menu') : $options('open_menu')}>
 			<Hamburger bind:open --color="var(--text-color-1)" />
 		</div>
 	</div>

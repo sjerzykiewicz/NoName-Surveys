@@ -44,7 +44,7 @@
 
 {#if surveys.length === 0}
 	<div class="info-row">
-		<div title="Surveys" class="title empty"><Tx text="no_surveys_yet"></Tx></div>
+		<div title={$t('surveys')} class="title empty"><Tx text="no_surveys_yet"></Tx></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
@@ -77,7 +77,7 @@
 		{#each surveys as survey}
 			<tr>
 				<td
-					title="Select {survey.title}"
+					title="{$t('select')} {survey.title}"
 					class="checkbox-entry"
 					class:disabled={!survey.is_owned_by_user}
 					><label>
@@ -131,7 +131,7 @@
 				{:else}
 					<td title={$t('not_available_for_public')} class="info-entry">N/A</td>
 				{/if}
-				<td title="View QR code" class="code-entry"
+				<td title={$t('view_qr')} class="code-entry"
 					><button
 						on:click={() => {
 							selectedCode = survey.survey_code;

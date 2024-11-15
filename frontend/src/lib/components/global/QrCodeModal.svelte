@@ -56,7 +56,7 @@
 >
 	<div slot="content" class="content">
 		<span class="survey-code">{surveyCode}</span>
-		<a href="/fill?code={surveyCode}" title="Fill out the survey" class="qr-code">
+		<a href="/fill?code={surveyCode}" title={$t('fill_survey_title')} class="qr-code">
 			<QrCode
 				code={surveyCode}
 				codeSize={innerWidth > $M && innerHeight > $M ? 360 : 260}
@@ -67,14 +67,14 @@
 		</a>
 	</div>
 	<button
-		title="Copy the link"
+		title={$t('copy_link_title')}
 		class="save popup"
 		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
 		><i class="symbol">link</i><Tx text="copy_link"></Tx>
 		<span class="popup-text top" id="link-popup"><Tx text="copied"></Tx></span></button
 	>
 	<button
-		title="Copy the code"
+		title={$t('copy_code_title')}
 		class="save popup"
 		on:click={() => handleCopy(surveyCode, 'code-popup')}
 		><i class="symbol">content_copy</i><Tx text="copy_code"></Tx>

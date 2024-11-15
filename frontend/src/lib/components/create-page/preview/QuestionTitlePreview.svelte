@@ -17,7 +17,7 @@
 	id={questionIndex.toString()}
 	transition:slide={{ duration: 200, easing: cubicInOut }}
 >
-	<div title="Question no. {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
+	<div title="{$t('question_no')} {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
 	<div title={$t(questionTypeData.title)} class="type">
 		<i class="symbol">{questionTypeData.icon}</i><Tx text={questionTypeData.text}></Tx>
 	</div>

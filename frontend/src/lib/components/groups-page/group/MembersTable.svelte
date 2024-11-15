@@ -41,12 +41,12 @@
 					/></label
 				></th
 			>
-			<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
-			<th title="Group members" id="title-header"><Tx text="group_members"></Tx></th>
+			<th title={$t('keys_info_title')} id="info-header"><i class="symbol">encrypted</i></th>
+			<th title={$t('group_members')} id="title-header"><Tx text="group_members"></Tx></th>
 		</tr>
 		{#each members as member}
 			<tr>
-				<td title="Select {member.email}" class="checkbox-entry"
+				<td title="{$t('select')} {member.email}" class="checkbox-entry"
 					><label>
 						<input type="checkbox" bind:group={selectedMembersToRemove} value={member.email} />
 					</label></td

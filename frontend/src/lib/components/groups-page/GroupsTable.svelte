@@ -111,7 +111,7 @@
 
 <Modal
 	icon="edit"
-	title="Rename Group"
+	title={$t('rename_group')}
 	bind:isHidden={isModalHidden}
 	bind:element={nameInput}
 	--width={innerWidth <= $M ? '20em' : '36em'}
@@ -135,14 +135,14 @@
 		/>
 		<NameError name={newName.trim()} error={nameError} groups={groupNames} --font-size="0.8em" />
 	</div>
-	<button title="Save the new group name" class="done" on:click={renameGroup}
+	<button title={$t('save_new_group_name_title')} class="done" on:click={renameGroup}
 		><i class="symbol">done</i><Tx text="submit"></Tx></button
 	>
 </Modal>
 
 {#if groups.length === 0}
 	<div class="info-row">
-		<div title="Groups" class="title empty"><Tx text="no_groups_yet"></Tx></div>
+		<div title={$t('groups')} class="title empty"><Tx text="no_groups_yet"></Tx></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
@@ -163,12 +163,12 @@
 					/></label
 				></th
 			>
-			<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
-			<th title="Group title" id="title-header" colspan="2"><Tx text="group_name"></Tx></th>
+			<th title={$t('keys_info_title')} id="info-header"><i class="symbol">encrypted</i></th>
+			<th title={$t('group_title')} id="title-header" colspan="2"><Tx text="group_name"></Tx></th>
 		</tr>
 		{#each groups as group}
 			<tr>
-				<td title="Select {group.user_group_name}" class="checkbox-entry"
+				<td title="{$t('select')} {group.user_group_name}" class="checkbox-entry"
 					><label>
 						<input
 							type="checkbox"
@@ -190,14 +190,14 @@
 						>
 					{/if}
 				</td>
-				<td title="Open {group.user_group_name}" class="title-entry"
+				<td title="{$t('open')} {group.user_group_name}" class="title-entry"
 					><button
 						on:click={() =>
 							goto($page.url.pathname + '/' + encodeURI(group.user_group_name) + '/0')}
 						>{group.user_group_name}</button
 					></td
 				>
-				<td title="Rename {group.user_group_name}" class="button-entry">
+				<td title="{$t('rename')} {group.user_group_name}" class="button-entry">
 					<button
 						on:click={() => {
 							selectedGroup = group.user_group_name;

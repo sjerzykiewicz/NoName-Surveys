@@ -358,7 +358,7 @@
 
 <Modal
 	icon="encrypted"
-	title="Load Your Keys"
+	title={$t('load_keys_title')}
 	bind:isHidden={isKeysModalHidden}
 	--width={innerWidth <= $M ? '20em' : '38em'}
 >
@@ -378,7 +378,7 @@
 		</label>
 		<KeysError error={fileError} element={fileElement} />
 	</div>
-	<button title="Submit keys" class="save" on:click={processCrypto}
+	<button title={$t('submit_keys')} class="save" on:click={processCrypto}
 		><i class="symbol">done</i><Tx text="submit"></Tx></button
 	>
 </Modal>
@@ -391,7 +391,7 @@
 
 <Content>
 	{#if keys.length === 1 || keys.length === 2}
-		<p title="Survey not secure" class="warning">
+		<p title={$t('survey_not_secure_title')} class="warning">
 			<i class="symbol">warning</i><Tx text="survey_not_secure"></Tx>
 			{keys.length === 1 ? $t('only_respondent') : $t('two_respondents')}
 		</p>
@@ -413,7 +413,7 @@
 </Content>
 
 <Footer>
-	<button title="Submit survey" class="footer-button done" on:click={submitSurvey}>
+	<button title={$t('submit_survey')} class="footer-button done" on:click={submitSurvey}>
 		<i class="symbol">done</i><Tx text="submit"></Tx>
 	</button>
 </Footer>

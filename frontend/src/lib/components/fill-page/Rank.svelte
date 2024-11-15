@@ -23,7 +23,7 @@
 
 <div class="choice-area display">
 	{#each $answers[questionIndex].choices as choice, choiceIndex}
-		<div title="Answer no. {choiceIndex + 1}" class="choice">
+		<div title="{$t('answer_no')} {choiceIndex + 1}" class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
 			<div class="arrows">
 				<button

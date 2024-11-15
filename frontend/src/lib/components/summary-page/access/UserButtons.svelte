@@ -148,7 +148,7 @@
 				placeholder={$t('select_users')}
 			/>
 		</div>
-		<button title="Finish giving access" class="done" on:click={addUsers}>
+		<button title={$t('finish_giving_access')} class="done" on:click={addUsers}>
 			<i class="symbol">done</i><Tx text="submit"></Tx>
 		</button>
 	</div>

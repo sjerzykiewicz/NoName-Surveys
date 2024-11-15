@@ -31,14 +31,33 @@ export const data = {
 		survey_info: 'Survey Information',
 		select_all: 'Select all',
 		draft: 'Draft',
+		drafts: 'Drafts',
 		group: 'Group',
+		groups: 'Groups',
 		create: 'Create',
 		survey: 'Survey',
+		surveys: 'Surveys',
 		code: 'Code',
 		surveys_genitive: 'surveys',
 		drafts_genitive: 'drafts',
 		groups_genitive: 'groups',
 		and: 'and',
+		select: 'Select',
+		open: 'Open',
+		rename: 'Rename',
+
+		close_menu: 'Close menu',
+		open_menu: 'Open menu',
+
+		first_page: 'First page',
+		previous_page: 'Previous page',
+		current_page: 'Current page',
+		next_page: 'Next page',
+		last_page: 'Last page',
+
+		fill_survey_title: 'Fill out the survey',
+		copy_link_title: 'Copy the link',
+		copy_code_title: 'Copy the code',
 
 		limit_reached:
 			'You have reached the maximum number of {items}. Please delete some {items} to create new ones',
@@ -253,14 +272,20 @@ Authorizing yourself will enable you to:
 			on the "Create" tab at the top of the page or the button below. All your saved drafts will
 			be stored on this page.`,
 		draft_title: 'Draft Title',
+		deleting_drafts: 'Deleting Drafts',
+		create_draft: 'Create a draft',
+		delete_selected_drafts: 'Delete selected drafts',
 
 		public_key_not_on_list: 'Your public key is not on the list.',
 		answer_submit_success: 'Your answer has been submitted successfully.',
+		load_keys_title: 'Load your keys',
 		load_keys: 'Load your digital signature keys',
+		submit_keys: 'Submit keys',
 		key_file_label: `Please load the file which you have previously generated on this application. The file
 			contains your keys, necessary for cryptographic calculations which are needed for validating
 			your right to fill out this survey.`,
 		default_filename: 'Default filename',
+		survey_not_secure_title: 'Survey not secure',
 		survey_not_secure: 'This survey is not secure.',
 		only_respondent: ' You are the only person who can respond to this survey.',
 		two_respondents:
@@ -270,6 +295,10 @@ Authorizing yourself will enable you to:
 		error_invalid_file: 'Please select a .pem file.',
 		move_answer_up: 'Move answer up',
 		move_answer_down: 'Move answer down',
+		question_no: 'Question no.',
+		enter_answer_title: 'Enter your answer',
+		enter_answer: 'Please enter your answer',
+		submit_survey: 'Submit survey',
 
 		your_groups: 'Your groups',
 		number_of_groups: 'Number of groups',
@@ -285,6 +314,7 @@ Authorizing yourself will enable you to:
 			'Not everyone in this group have generated their keys. You cannot use this group in secure surveys.',
 		max_groups_reached:
 			'You have reached the maximum number of groups you can create. Please delete some groups to create new ones.',
+		deleting_groups: 'DeletingGroups',
 
 		create_group: 'Create a group',
 		create_group_stop: 'Stop creating group',
@@ -300,6 +330,10 @@ Authorizing yourself will enable you to:
 		group_error_already_exists: 'This group name already exists.',
 		group_error_name_invalid:
 			'Group name can only contain letters, numbers, spaces, slashes and hyphens.',
+		rename_group_title: 'Rename Group',
+		save_new_group_name_title: 'Save the new group name',
+		group_title: 'Group Title',
+		keys_info_title: 'Keys Information',
 
 		removing_group_members: 'Removing group members',
 		add_group_members: 'Add group memebers',
@@ -325,14 +359,22 @@ Authorizing yourself will enable you to:
 		view_summary: 'View the summary',
 		view_respondents: 'View possible respondents',
 		not_available_for_public: 'Not available for public survey',
+		view_individual_answers: 'View individual answers',
+		view_qr: 'View QR code',
+		deleting_surveys: 'Deleting Surveys',
+		create_survey: 'Create a survey',
+		delete_selected_surveys: 'Delete selected surveys',
 
+		share_results: 'Share survey results',
 		no_users_with_access: 'No users with access to display!',
 		users_with_access: 'Users With Access',
+		user_type: 'User type',
 		owner: 'Owner',
 		user_with_access: 'User with access',
 		removing_access: 'Removing access',
 		give_access: 'Give access',
 		stop_giving_access: 'Stop giving access',
+		finish_giving_access: 'Finish giving access',
 		users: 'Users',
 		take_away_access: 'Take away access from selected users',
 		error_select_users: 'Please select users.',
@@ -352,6 +394,7 @@ Authorizing yourself will enable you to:
 		respondents: 'Respondents',
 		summary: 'Summary',
 		back: 'Back',
+		back_title: 'Go back',
 
 		ordered_by_average_place: 'Ordered by average place',
 
@@ -391,14 +434,33 @@ Authorizing yourself will enable you to:
 		survey_info: 'Informacje o ankiecie',
 		select_all: 'Wybierz wszystko',
 		draft: 'Szkic',
+		drafts: 'Szkice',
 		group: 'Grupa',
+		groups: 'Grupy',
 		create: 'Utwórz',
 		survey: 'Ankieta',
+		surveys: 'Ankiety',
 		code: 'Kod',
 		surveys_genitive: 'ankiet',
 		drafts_genitive: 'szkiców',
 		groups_genitive: 'grup',
 		and: 'i',
+		select: 'Wybierz',
+		open: 'Otwórz',
+		rename: 'Zmień nazwę',
+
+		close_menu: 'Zamknij menu',
+		open_menu: 'Otwórz menu',
+
+		first_page: 'Pierwsza strona',
+		previous_page: 'Poprzednia strona',
+		current_page: 'Aktualna strona',
+		next_page: 'Następna strona',
+		last_page: 'Ostatnia strona',
+
+		fill_survey_title: 'Wypełnij ankietę',
+		copy_link_title: 'Skopiuj link',
+		copy_code_title: 'Skopiuj kod',
 
 		limit_reached:
 			'Osiągnięto maksymalną liczbę {items}. Usuń niektóre z istniejących {items} aby utworzyć nowe.',
@@ -606,14 +668,20 @@ Zautoryzowanie się pozwoli Ci na:
 		draft_tooltip: `Podczas tworzenia ankiety, możesz zapisać ją jako szkic do późniejszego wykorzystania. Aby stworzyć ankietę, wejdź
 			w zakładkę "Utwórz" na górze strony lub kliknij przycisk poniżej. Wszystkie zapisane szkice będą dostępne na tej stronie.`,
 		draft_title: 'Tytuł Szkicu',
+		deleting_drafts: 'Usuwanie Szkiców',
+		create_draft: 'Stwórz szkic',
+		delete_selected_drafts: 'Usuń wybrane szkice',
 
 		public_key_not_on_list: 'Twój klucz publiczny nie znajduje się na liście',
 		answer_submit_success: 'Twoja odpowiedź została przesłana pomyślnie',
+		load_keys_title: 'Załaduj klucze',
 		load_keys: 'Załaduj klucze kryptograficzne',
+		submit_keys: 'Załaduj klucze',
 		key_file_label: `Załaduj plik wygenerowany wcześniej za pośrednictwem aplikacji. Plik zawiera Twoje klucze,
 			niezbędne do przeprowadzenia obliczeń kryptograficznych potrzebnych do zweryfikowania Twojego prawa do
 			wypełnienia tej ankiety.`,
 		default_filename: 'Domyślna nazwa pliku',
+		survey_not_secure_title: 'Niebezpieczna ankieta',
 		survey_not_secure: 'Ta ankieta nie jest bezpieczna.',
 		only_respondent: ' Jesteś jedyną osobą, która może wypełnić tę ankietę.',
 		two_respondents:
@@ -623,6 +691,10 @@ Zautoryzowanie się pozwoli Ci na:
 		error_invalid_file: 'Załaduj plik .pem.',
 		move_answer_up: 'Przenieś odpowiedź w górę',
 		move_answer_down: 'Przenieś odpowiedź w dół',
+		question_no: 'Pytanie nr.',
+		enter_answer_title: 'Wprowadź odpowiedź',
+		enter_answer: 'Wprowadź odpowiedź',
+		submit_survey: 'Prześlij ankietę',
 
 		your_groups: 'Twoje grupy',
 		number_of_groups: 'Liczba grup',
@@ -638,6 +710,7 @@ Zautoryzowanie się pozwoli Ci na:
 			'Nie każdy członek tej grupy wygenerował klucze. Ta grupa nie może być wykorzystana w bezpiecznych ankietach.',
 		max_groups_reached:
 			'Osiągnięto maksymalną liczbę grup możliwych do utworzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+		deleting_group: 'Usuwanie Grupy',
 
 		create_group: 'Stwórz grupę',
 		create_group_stop: 'Przestań tworzyć grupę',
@@ -648,6 +721,10 @@ Zautoryzowanie się pozwoli Ci na:
 		import_members_title: 'Importuj członków grupy z pliku .csv',
 		import_members_label: 'Lub importuj członków grupy z pliku .csv.',
 		members_error: 'Wybierz członkow grupy.',
+		rename_group_title: 'Zmień nazwę grupy',
+		save_new_group_name_title: 'Zapisz nową nazwę grupy',
+		group_title: 'Nazwa grupy',
+		keys_info_title: 'Informacja o kluczach',
 
 		group_error_name_required: 'Wprowadź nazwę grupy.',
 		group_error_name_too_long: `Nazwa grupy musi mieć {limit} lub mniej znaków.`,
@@ -679,14 +756,22 @@ Zautoryzowanie się pozwoli Ci na:
 		view_summary: 'Pokaż podsumowanie',
 		view_respondents: 'Pokaż możliwych respondentów',
 		not_available_for_public: 'Niedostępne dla ankiety publicznej',
+		view_individual_answers: 'Pokaż indywidualne odpowiedzi',
+		view_qr: 'Pokaż kod QR',
+		deleting_surveys: 'Usuwanie Ankiet',
+		create_surveys: 'Stwórz ankietę',
+		delete_selected_surveys: 'Usuń wybrane ankiety',
 
+		share_results: 'Udostępnij wyniki ankiety',
 		no_users_with_access: 'Żaden użytkownik nie ma dostępu!',
 		users_with_access: 'Użytkownicy Z Dostępem',
+		user_type: 'Typ użytkownika',
 		owner: 'Właściciel',
 		user_with_access: 'Użytkownik z dostepem',
 		removing_access: 'Odbieranie dostępu',
 		give_access: 'Daj dostęp',
 		stop_giving_access: 'Przestań dawać dostęp',
+		finish_giving_access: 'Zakończ dawanie dostępu',
 		users: 'Użytkownicy',
 		take_away_access: 'Odbierz dostęp wybranym użytkownikom',
 		error_select_users: 'Wybierz użytkowników.',
@@ -706,6 +791,7 @@ Zautoryzowanie się pozwoli Ci na:
 		respondents: 'Respondenci',
 		summary: 'Podsumowanie',
 		back: 'Wróć',
+		back_title: 'Wróć',
 
 		ordered_by_average_place: 'Uporządkowane według średniej pozycji',
 

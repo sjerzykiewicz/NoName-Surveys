@@ -170,7 +170,11 @@
 	--width-warning={innerWidth <= $M ? '20em' : '22em'}
 />
 
-<DeleteModal title="Deleting Groups" bind:isHidden={isModalHidden} deleteEntries={deleteGroups} />
+<DeleteModal
+	title={$t('deleting_group')}
+	bind:isHidden={isModalHidden}
+	deleteEntries={deleteGroups}
+/>
 
 <div class="button-row top-row">
 	<div class="button-sub-row">

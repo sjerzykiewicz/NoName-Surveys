@@ -2,13 +2,16 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let questionIndex: number;
 </script>
 
 <div class="choice-area scale" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice}
-		<div title={choice} class="choice scale">
+		<div title={$t('choice')} class="choice scale">
 			<input type="radio" disabled name={questionIndex.toString()} />
 			<div class="choice-input display scale">
 				{choice}

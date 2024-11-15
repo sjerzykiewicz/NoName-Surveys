@@ -7,6 +7,10 @@
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let surveys: {
 		title: string;
@@ -55,16 +59,20 @@
 	}
 </script>
 
-<DeleteModal title="Deleting Surveys" bind:isHidden={isModalHidden} deleteEntries={deleteSurveys} />
+<DeleteModal
+	title={$t('deleting_surveys')}
+	bind:isHidden={isModalHidden}
+	deleteEntries={deleteSurveys}
+/>
 
 <div class="button-row">
 	<div class="button-sub-row">
-		<button title="Create a survey" class="add-survey" on:click={() => goto('/create')}>
+		<button title={$t('create_survey')} class="add-survey" on:click={() => goto('/create')}>
 			<i class="symbol">add</i><Tx text="survey"></Tx>
 		</button>
 		{#if surveys.length > 0}
 			<button
-				title="Delete selected surveys"
+				title={$t('delete_selected_surveys')}
 				class="delete-survey"
 				disabled={selectedSurveysToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}

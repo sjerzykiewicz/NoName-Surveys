@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let data: { answers: string[]; details: string };
 </script>
 
 <div class="choice-area text display">
 	{#if data.details}
-		<div title="Question details" class="details">
+		<div title={$t('question_details')} class="details">
 			{data.details}
 		</div>
 	{/if}
@@ -15,7 +18,7 @@
 			{#if answer}
 				<a
 					href="{$page.url.pathname}/answers/0/{i}"
-					title="Click to get all answers"
+					title={$t('click_to_get_answers')}
 					class="text-input display"
 				>
 					{answer}

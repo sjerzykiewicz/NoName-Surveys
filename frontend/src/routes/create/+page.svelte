@@ -47,7 +47,7 @@
 		if (data.numSurveys >= $LIMIT_OF_SURVEYS && data.numDrafts >= $LIMIT_OF_DRAFTS) {
 			isExportButtonVisible = false;
 			$warningModalContent = $t('limit_reached', {
-				items: $t('surveys_genitive') + ' and ' + $t('drafts_genitive')
+				items: $t('surveys_genitive') + ' ' + $t('and') + ' ' + $t('drafts_genitive')
 			});
 			$isWarningModalHidden = false;
 		} else if (data.numSurveys >= $LIMIT_OF_SURVEYS) {

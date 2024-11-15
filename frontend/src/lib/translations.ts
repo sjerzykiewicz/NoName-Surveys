@@ -38,6 +38,7 @@ export const data = {
 		surveys_genitive: 'surveys',
 		drafts_genitive: 'drafts',
 		groups_genitive: 'groups',
+		and: 'and',
 
 		limit_reached:
 			'You have reached the maximum number of {items}. Please delete some {items} to create new ones',
@@ -397,6 +398,7 @@ Authorizing yourself will enable you to:
 		surveys_genitive: 'ankiet',
 		drafts_genitive: 'szkiców',
 		groups_genitive: 'grup',
+		and: 'i',
 
 		limit_reached:
 			'Osiągnięto maksymalną liczbę {items}. Usuń niektóre z istniejących {items} aby utworzyć nowe.',

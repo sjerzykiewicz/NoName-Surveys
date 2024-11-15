@@ -129,8 +129,7 @@
 		} else {
 			if (numDrafts >= $LIMIT_OF_DRAFTS) {
 				isExportButtonVisible = false;
-				$warningModalContent =
-					'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
+				$warningModalContent = $t('draft_limit_reached');
 				$isWarningModalHidden = false;
 				return;
 			}
@@ -168,8 +167,7 @@
 	async function createSurvey() {
 		if (numSurveys >= $LIMIT_OF_SURVEYS) {
 			isExportButtonVisible = false;
-			$warningModalContent =
-				'You have reached the maximum number of surveys you can create. Please delete some surveys to create new ones.';
+			$warningModalContent = $t('survey_limit_reached');
 			$isWarningModalHidden = false;
 			return;
 		}

@@ -30,6 +30,8 @@ export const data = {
 		group_size: 'Group Size',
 		survey_info: 'Survey Information',
 		select_all: 'Select all',
+		apply: 'Apply',
+		or: 'or',
 
 		single_text: 'Single',
 		single_title: 'Single choice',
@@ -218,7 +220,33 @@ Authorizing yourself will enable you to:
 		select_members: 'Select members',
 
 		import_csv_title: 'Import users from .csv file',
-		import_csv_label: 'Or import users from .csv file'
+		import_csv_label: 'Or import users from .csv file',
+
+		saving_draft: 'Saving draft',
+		draft_overwrite_query: 'Do you wish to overwrite the draft or save a new draft?',
+		overwrite_draft: 'Overwrite draft',
+		save_new_draft: 'Save new draft',
+
+		survey_limit_reached:
+			'You have reached the maximum number of surveys you can create. Please delete some surveys and drafts to create new ones.',
+		draft_limit_reached:
+			'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.',
+		survey_and_draft_limit_reached:
+			'You have reached the maximum number of surveys and drafts you can create. Please delete some surveys and drafts to create new ones.',
+
+		define_respondent_group: 'Define respondent group',
+		make_public_or_secure: 'Do you wish to make the survey public or secure?',
+
+		import_users_from_csv: 'import users from a .csv file.',
+		select_file: 'Select file',
+		no_file_selected: 'No file selected',
+
+		survey_created_successfully: 'Survey created successfully',
+		copy_link: 'Copy link',
+		copy_code: 'Copy code',
+		copied: 'Copied!',
+
+		your_drafts: 'Your drafts'
 	},
 
 	pl: {
@@ -252,6 +280,8 @@ Authorizing yourself will enable you to:
 		group_size: 'Rozmiar grupy',
 		survey_info: 'Informacje o ankiecie',
 		select_all: 'Wybierz wszystko',
+		apply: 'Zastosuj',
+		or: 'lub',
 
 		single_text: 'Jednokrotne',
 		single_title: 'Jednokrotny wybór',
@@ -434,6 +464,32 @@ Zautoryzowanie się pozwoli Ci na:
 		select_members: 'Wybierz członków',
 
 		import_csv_title: 'Importuj użytkowników z pliku .csv',
-		import_csv_label: 'Lub importuj użytkowników z pliku .csv'
+		import_csv_label: 'Lub importuj użytkowników z pliku .csv',
+
+		saving_draft: 'Zapisywanie szkicu',
+		draft_overwrite_query: 'Czy chcesz nadpisać istniejący szkic, czy utworzyć nowy?',
+		overwrite_draft: 'Nadpisz szkic',
+		save_new_draft: 'Zapisz nowy szkic',
+
+		survey_limit_reached:
+			'Osiągnięto maksymalną liczbę ankiet i szkiców możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+		draft_limit_reached:
+			'Osiągnięto maksymalną liczbę szkiców możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+		survey_and_draft_limit_reached:
+			'Osiągnięto maksymalną liczbę ankiet możliwych do utowrzenia. Usuń któreś z istniejących, aby utworzyć nowe.',
+
+		define_respondent_group: 'Zdefiniuj grupę respondentów',
+		make_public_or_secure: 'Czy chcesz utworzyć ankietę publiczną, czy bezpieczną?',
+
+		import_users_from_csv: 'importuj użytkowników z pliku .csv.',
+		select_file: 'Wybierz plik',
+		no_file_selected: 'Nie wybrano pliku',
+
+		survey_created_successfully: 'Ankieta utworzona pomyślnie',
+		copy_link: 'Kopiuj link',
+		copy_code: 'Kopiuj kod',
+		copied: 'Skopiowano!',
+
+		your_drafts: 'Twoje szkice'
 	}
 };

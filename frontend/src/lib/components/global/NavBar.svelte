@@ -281,13 +281,13 @@
 		opacity: 0.7;
 	}
 
-	@media screen and (max-width: 980px) {
+	@media screen and (max-width: 1000px) {
 		.toggle-mode {
 			top: 2.5em;
 		}
 	}
 
-	@media screen and (max-width: 880px) {
+	@media screen and (max-width: 900px) {
 		.nav-logo {
 			visibility: hidden;
 			opacity: 0 !important;

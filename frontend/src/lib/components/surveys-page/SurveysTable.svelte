@@ -17,20 +17,17 @@
 		is_owned_by_user: boolean;
 		group_size: number;
 	}[];
-	export let selectedSurveysToRemove: string[] = [];
+	export let selectedSurveysToRemove: typeof surveys = [];
 
 	let innerWidth: number;
 	let selectedCode: string;
 	let isModalHidden: boolean = true;
 
-	$: ownedSurveyCodes = surveys.filter((s) => s.is_owned_by_user).map((s) => s.survey_code);
-
 	$: allSelected =
-		selectedSurveysToRemove.length === ownedSurveyCodes.length &&
-		selectedSurveysToRemove.length > 0;
+		selectedSurveysToRemove.length === surveys.length && selectedSurveysToRemove.length > 0;
 
 	function toggleAll() {
-		selectedSurveysToRemove = allSelected ? [] : [...ownedSurveyCodes];
+		selectedSurveysToRemove = allSelected ? [] : [...surveys];
 	}
 
 	function formatDate(isoString: string): string {
@@ -55,14 +52,11 @@
 {:else}
 	<table>
 		<tr>
-			<th
-				title={$t('select_all')}
-				class="checkbox-entry"
-				class:disabled={ownedSurveyCodes.length === 0}
+			<th title={$t('select_all')} class="checkbox-entry" class:disabled={surveys.length === 0}
 				><label
 					><input
 						type="checkbox"
-						disabled={ownedSurveyCodes.length === 0}
+						disabled={surveys.length === 0}
 						on:change={toggleAll}
 						checked={allSelected}
 					/></label
@@ -76,17 +70,9 @@
 		</tr>
 		{#each surveys as survey}
 			<tr>
-				<td
-					title="{$t('select')} {survey.title}"
-					class="checkbox-entry"
-					class:disabled={!survey.is_owned_by_user}
+				<td title="{$t('select')} {survey.title}" class="checkbox-entry"
 					><label>
-						<input
-							type="checkbox"
-							disabled={!survey.is_owned_by_user}
-							bind:group={selectedSurveysToRemove}
-							value={survey.survey_code}
-						/>
+						<input type="checkbox" bind:group={selectedSurveysToRemove} value={survey} />
 					</label></td
 				>
 				<td class="info-entry tooltip">

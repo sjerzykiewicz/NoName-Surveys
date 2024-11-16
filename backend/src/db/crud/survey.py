@@ -120,6 +120,27 @@ def take_away_survey_access(
     return accesses
 
 
+def reject_access_to_surveys(
+    user_id: int, survey_codes: list[str], session: Session
+) -> list[AccessToViewResults]:
+    statement = (
+        select(AccessToViewResults)
+        .join(Survey)
+        .where(
+            (AccessToViewResults.user_id == user_id)
+            & (AccessToViewResults.survey_id == Survey.id)
+            & (Survey.survey_code.in_(survey_codes))
+            & (Survey.creator_id != user_id)
+            & (AccessToViewResults.is_deleted == False)  # noqa: E712
+        )
+    )
+    accesses = session.exec(statement).all()
+    for access in accesses:
+        access.is_deleted = True
+    session.commit()
+    return accesses
+
+
 def get_all_surveys_user_can_view(
     user_id: int, offset: int, limit: int, session: Session
 ) -> list[tuple[Survey, bool]]:

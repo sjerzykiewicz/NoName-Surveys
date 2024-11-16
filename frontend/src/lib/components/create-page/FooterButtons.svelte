@@ -1,10 +1,6 @@
 <script lang="ts">
 	import { title, questions, currentDraftId, draftStructure } from '$lib/stores/create-page';
 	import Survey from '$lib/entities/surveys/Survey';
-	import Slider from '$lib/components/create-page/Slider.svelte';
-	import Number from '$lib/components/create-page/Number.svelte';
-	import Text from '$lib/components/create-page/Text.svelte';
-	import Binary from '$lib/components/create-page/Binary.svelte';
 	import { SurveyError } from '$lib/entities/SurveyError';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
@@ -24,6 +20,7 @@
 	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { invalidateAll } from '$app/navigation';
+	import { checkQuestionError } from '$lib/utils/checkQuestionError';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -54,51 +51,7 @@
 		const numQuestions = $questions.length;
 
 		for (let i = 0; i < numQuestions; i++) {
-			const q = $questions[i].question;
-			if (q === null || q === undefined || q.length === 0) {
-				$questions[i].error = SurveyError.QuestionRequired;
-			} else if (q.length > $LIMIT_OF_CHARS) {
-				$questions[i].error = SurveyError.QuestionTooLong;
-			} else if (
-				$questions[i].component != Text &&
-				$questions[i].choices.some(
-					(c) => c === null || c === undefined || c.toString().length === 0
-				)
-			) {
-				switch ($questions[i].component) {
-					case Number:
-						$questions[i].error = SurveyError.NumberValuesRequired;
-						break;
-					case Slider:
-						$questions[i].error = SurveyError.SliderValuesRequired;
-						break;
-					case Binary:
-						$questions[i].error = SurveyError.BinaryChoicesRequired;
-						break;
-					default:
-						$questions[i].error = SurveyError.ChoicesRequired;
-				}
-			} else if ($questions[i].choices.some((c) => c.length > $LIMIT_OF_CHARS)) {
-				$questions[i].error = SurveyError.ChoicesTooLong;
-			} else if (
-				($questions[i].component === Slider || $questions[i].component === Number) &&
-				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
-			) {
-				$questions[i].error = SurveyError.ImproperSliderValues;
-			} else if (
-				$questions[i].component === Slider &&
-				parseFloat($questions[i].choices[2]) >
-					parseFloat($questions[i].choices[1]) - parseFloat($questions[i].choices[0])
-			) {
-				$questions[i].error = SurveyError.ImproperSliderPrecision;
-			} else if (
-				$questions[i].component !== Slider &&
-				new Set($questions[i].choices).size !== $questions[i].choices.length
-			) {
-				$questions[i].error = SurveyError.DuplicateChoices;
-			} else {
-				$questions[i].error = SurveyError.NoError;
-			}
+			checkQuestionError($questions[i], $LIMIT_OF_CHARS);
 		}
 
 		if ($title.error !== SurveyError.NoError) {

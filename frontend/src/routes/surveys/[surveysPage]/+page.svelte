@@ -12,7 +12,7 @@
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data;
-	export let selectedSurveysToRemove: string[] = [];
+	export let selectedSurveysToRemove: typeof data.surveys = [];
 </script>
 
 <Header>

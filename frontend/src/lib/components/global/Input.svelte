@@ -35,10 +35,6 @@
 		}
 	}
 
-	function trimBr() {
-		if (text.length === 0 && element) element.innerHTML = '';
-	}
-
 	function handlePaste(e: ClipboardEvent) {
 		e.preventDefault();
 		const text = e.clipboardData ? e.clipboardData.getData('text/plain') : '';
@@ -49,6 +45,10 @@
 		e.preventDefault();
 		const text = e.dataTransfer ? e.dataTransfer.getData('text/plain') : '';
 		document.execCommand('insertText', false, text);
+	}
+
+	function trimBr(elem: HTMLDivElement) {
+		if (text.length === 0) elem.innerHTML = '';
 	}
 </script>
 
@@ -71,9 +71,9 @@
 			handleEnter(e);
 			limitInput(e);
 		}}
-		on:keyup={trimBr}
 		on:paste={handlePaste}
 		on:drop={handleDrop}
+		on:keyup={(e) => trimBr(e.currentTarget)}
 	></div>
 	<div class="char-count" class:max={text.length > $LIMIT_OF_CHARS}>
 		{text.length} / {$LIMIT_OF_CHARS}

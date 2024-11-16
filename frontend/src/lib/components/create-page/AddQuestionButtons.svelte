@@ -28,6 +28,7 @@
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { M } from '$lib/stores/global';
+	import { checkQuestionError } from '$lib/utils/checkQuestionError';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -75,41 +76,6 @@
 		}
 	}
 
-	function checkError(i: number) {
-		const q = $questions[i].question;
-		if (q === null || q === undefined || q.length === 0) {
-			$questions[i].error = SurveyError.QuestionRequired;
-		} else if (q.length > $LIMIT_OF_CHARS) {
-			$questions[i].error = SurveyError.QuestionTooLong;
-		} else if (
-			$questions[i].component != Text &&
-			$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
-		) {
-			switch ($questions[i].component) {
-				case Slider:
-				case Number:
-					$questions[i].error = SurveyError.SliderValuesRequired;
-					break;
-				case Binary:
-					$questions[i].error = SurveyError.BinaryChoicesRequired;
-					break;
-				default:
-					$questions[i].error = SurveyError.ChoicesRequired;
-			}
-		} else if ($questions[i].choices.some((c) => c.length > $LIMIT_OF_CHARS)) {
-			$questions[i].error = SurveyError.ChoicesTooLong;
-		} else if (
-			($questions[i].component === Slider || $questions[i].component === Number) &&
-			parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
-		) {
-			$questions[i].error = SurveyError.ImproperSliderValues;
-		} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
-			$questions[i].error = SurveyError.DuplicateChoices;
-		} else {
-			$questions[i].error = SurveyError.NoError;
-		}
-	}
-
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
 	}
@@ -132,9 +98,7 @@
 
 	async function addQuestion(component: ComponentType) {
 		const i: number = $questions.length - 1;
-		if (i >= 0) {
-			checkError(i);
-		}
+		if (i >= 0) checkQuestionError($questions[i], $LIMIT_OF_CHARS);
 
 		const choices: Array<string> = setQuestionChoices(component);
 

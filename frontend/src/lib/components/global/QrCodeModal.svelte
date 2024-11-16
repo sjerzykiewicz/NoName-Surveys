@@ -7,6 +7,11 @@
 	import { popup } from '$lib/utils/popup';
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 	import { onMount } from 'svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let isHidden: boolean = true;
 	export let title: string;
@@ -16,7 +21,7 @@
 		if (copy(str)) {
 			popup(id);
 		} else {
-			$errorModalContent = 'Could not copy due to an insecure connection.';
+			$errorModalContent = $t('no_copy_insecure_connection');
 			$isErrorModalHidden = false;
 		}
 	}
@@ -51,7 +56,7 @@
 >
 	<div slot="content" class="content">
 		<span class="survey-code">{surveyCode}</span>
-		<a href="/fill?code={surveyCode}" title="Fill out the survey" class="qr-code">
+		<a href="/fill?code={surveyCode}" title={$t('fill_survey')} class="qr-code">
 			<QrCode
 				code={surveyCode}
 				codeSize={innerWidth > $M && innerHeight > $M ? 360 : 260}
@@ -62,24 +67,24 @@
 		</a>
 	</div>
 	<button
-		title="Copy the link"
+		title={$t('copy_link_title')}
 		class="save popup"
 		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
-		><i class="symbol">link</i>Copy Link
-		<span class="popup-text top" id="link-popup">Copied!</span></button
+		><i class="symbol">link</i><Tx text="copy_link" />
+		<span class="popup-text top" id="link-popup"><Tx text="copied" /></span></button
 	>
 	<button
-		title="Copy the code"
+		title={$t('copy_code_title')}
 		class="save popup"
 		on:click={() => handleCopy(surveyCode, 'code-popup')}
-		><i class="symbol">content_copy</i>Copy Code
-		<span class="popup-text top" id="code-popup">Copied!</span></button
+		><i class="symbol">content_copy</i><Tx text="copy_code" />
+		<span class="popup-text top" id="code-popup"><Tx text="copied" /></span></button
 	>
 </Modal>
 
 <style>
 	.popup .popup-text {
-		--tooltip-width: 4em;
+		--tooltip-width: 6em;
 	}
 
 	.content {

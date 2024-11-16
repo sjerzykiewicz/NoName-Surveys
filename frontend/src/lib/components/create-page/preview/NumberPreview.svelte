@@ -2,6 +2,10 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 
@@ -27,7 +31,7 @@
 <div class="choice-area display slider" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="choice slider">
 		<input
-			title="Selected value"
+			title={$t('selected_value')}
 			class="limit-input"
 			type="number"
 			autocomplete="off"
@@ -39,8 +43,8 @@
 		/>
 	</div>
 	<div class="limits">
-		<div title="Minimum value" class="limit">{$questions[questionIndex].choices[0]}</div>
-		<div title="Maximum value" class="limit">{$questions[questionIndex].choices[1]}</div>
+		<div title={$t('minimum_value')} class="limit">{$questions[questionIndex].choices[0]}</div>
+		<div title={$t('maximum_value')} class="limit">{$questions[questionIndex].choices[1]}</div>
 	</div>
 </div>
 

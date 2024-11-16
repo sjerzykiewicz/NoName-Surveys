@@ -12,7 +12,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		);
 
 		event.locals.user = {
-			email: userData.email
+			email: userData.email as string
 		};
 	}
 

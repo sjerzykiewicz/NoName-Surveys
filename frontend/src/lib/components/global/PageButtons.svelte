@@ -2,7 +2,10 @@
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
 	import { ENTRIES_PER_PAGE } from '$lib/stores/global';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let numEntries: number;
 
 	let pageInput: HTMLInputElement;
@@ -31,17 +34,17 @@
 {#if numEntries > 0}
 	<div class="page-buttons">
 		<div class="prev-buttons">
-			<button title="First page" disabled={currentPage === minPage} on:click={firstPage}
+			<button title={$t('first_page')} disabled={currentPage === minPage} on:click={firstPage}
 				><i class="symbol">first_page</i></button
 			>
-			<button title="Previous page" disabled={currentPage <= minPage} on:click={previousPage}
+			<button title={$t('previous_page')} disabled={currentPage <= minPage} on:click={previousPage}
 				><i class="symbol">chevron_left</i></button
 			>
 		</div>
 		<form
 			on:submit|preventDefault={() => changePage($page.url.pathname, parseInt(pageInput.value) - 1)}
 		>
-			<label title="Current page" class="page-number">
+			<label title={$t('current_page')} class="page-number">
 				<input
 					id="page-input"
 					name="page-input"
@@ -57,10 +60,10 @@
 			</label>
 		</form>
 		<div class="next-buttons">
-			<button title="Next page" disabled={currentPage >= maxPage} on:click={nextPage}
+			<button title={$t('next_page')} disabled={currentPage >= maxPage} on:click={nextPage}
 				><i class="symbol">chevron_right</i></button
 			>
-			<button title="Last page" disabled={currentPage === maxPage} on:click={lastPage}
+			<button title={$t('last_page')} disabled={currentPage === maxPage} on:click={lastPage}
 				><i class="symbol">last_page</i></button
 			>
 		</div>

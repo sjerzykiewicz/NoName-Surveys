@@ -1,10 +1,17 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let data: { answer: string; choices: string[] };
 </script>
 
 <div class="choice-area display">
 	{#each data.choices as choice}
-		<label title={choice === data.answer ? 'Selected answer' : 'Other choice'} class="choice">
+		<label
+			title={choice === data.answer ? $t('selected_answer') : $t('other_choice')}
+			class="choice"
+		>
 			<div class="radio" class:selected={choice === data.answer}>
 				<input type="radio" checked={choice === data.answer} disabled />
 			</div>

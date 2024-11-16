@@ -6,6 +6,11 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let surveys: {
 		title: string;
@@ -16,23 +21,47 @@
 		group_size: number;
 	}[];
 	export let numSurveys: number;
-	export let selectedSurveysToRemove: string[] = [];
+	export let selectedSurveysToRemove: typeof surveys = [];
 
 	let isModalHidden: boolean = true;
 
 	async function deleteSurveys() {
-		const response = await fetch('/api/surveys/delete', {
+		const ownedSurveyCodes = selectedSurveysToRemove
+			.filter((s) => s.is_owned_by_user)
+			.map((s) => s.survey_code);
+		const sharedSurveyCodes = selectedSurveysToRemove
+			.filter((s) => !s.is_owned_by_user)
+			.map((s) => s.survey_code);
+
+		const deleteResponse = await fetch('/api/surveys/delete', {
 			method: 'POST',
 			body: JSON.stringify({
-				survey_codes: selectedSurveysToRemove
+				survey_codes: ownedSurveyCodes
 			}),
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		});
 
-		if (!response.ok) {
-			const body = await response.json();
+		if (!deleteResponse.ok) {
+			const body = await deleteResponse.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		const rejectResponse = await fetch('/api/surveys/reject-access', {
+			method: 'POST',
+			body: JSON.stringify({
+				survey_codes: sharedSurveyCodes
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!rejectResponse.ok) {
+			const body = await rejectResponse.json();
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
@@ -54,21 +83,25 @@
 	}
 </script>
 
-<DeleteModal title="Deleting Surveys" bind:isHidden={isModalHidden} deleteEntries={deleteSurveys} />
+<DeleteModal
+	title={$t('deleting_surveys')}
+	bind:isHidden={isModalHidden}
+	deleteEntries={deleteSurveys}
+/>
 
 <div class="button-row">
 	<div class="button-sub-row">
-		<button title="Create a survey" class="add-survey" on:click={() => goto('/create')}>
-			<i class="symbol">add</i>Survey
+		<button title={$t('create_survey')} class="add-survey" on:click={() => goto('/create')}>
+			<i class="symbol">add</i><Tx text="survey" />
 		</button>
 		{#if surveys.length > 0}
 			<button
-				title="Delete selected surveys"
+				title={$t('delete_selected_surveys')}
 				class="delete-survey"
 				disabled={selectedSurveysToRemove.length === 0}
 				on:click={() => (isModalHidden = false)}
 			>
-				<i class="symbol">delete</i>Delete
+				<i class="symbol">delete</i><Tx text="delete" />
 			</button>
 		{/if}
 	</div>

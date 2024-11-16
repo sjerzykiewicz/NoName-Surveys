@@ -1,9 +1,14 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let data: { answer: number; min_value: number; max_value: number };
 </script>
 
 <div class="choice-area display slider">
-	<div title="Answer" class="choice slider">
+	<div title={$t('answer')} class="choice slider">
 		<input
 			class="limit-input"
 			type="number"
@@ -12,7 +17,7 @@
 			disabled
 		/>
 	</div>
-	<div title="Answer" class="slider-area">
+	<div title={$t('answer')} class="slider-area">
 		<input
 			class="range"
 			type="range"
@@ -24,8 +29,8 @@
 		/>
 	</div>
 	<div class="limits">
-		<div title="Minimum value" class="limit">{data.min_value}</div>
-		<div title="Maximum value" class="limit">{data.max_value}</div>
+		<div title={$t('minimum_value')} class="limit">{data.min_value}</div>
+		<div title={$t('maximum_value')} class="limit">{data.max_value}</div>
 	</div>
 </div>
 

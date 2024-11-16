@@ -3,6 +3,10 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import Input from '$lib/components/global/Input.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 </script>
@@ -15,8 +19,8 @@
 		</div>
 		<Input
 			bind:text={$questions[questionIndex].choices[0]}
-			label="Positive Choice"
-			title="Enter a positive choice"
+			label={$t('binary_positive_label')}
+			title={$t('binary_positive_title')}
 			clearOnce={true}
 			--label-top="18px"
 			--label-top-mobile="14px"
@@ -29,8 +33,8 @@
 		</div>
 		<Input
 			bind:text={$questions[questionIndex].choices[1]}
-			label="Negative Choice"
-			title="Enter a negative choice"
+			label={$t('binary_negative_label')}
+			title={$t('binary_negative_title')}
 			clearOnce={true}
 			--label-top="18px"
 			--label-top-mobile="14px"

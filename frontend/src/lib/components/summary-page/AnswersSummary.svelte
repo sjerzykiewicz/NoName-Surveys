@@ -21,6 +21,11 @@
 	import type { NumberQuestionAnswered } from '$lib/entities/questions/Number';
 	import SurveySummary from '$lib/entities/surveys/SurveySummary';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let surveyAnswers: Array<SurveySummary>;
 
@@ -133,10 +138,10 @@
 </script>
 
 {#if surveyAnswers.length === 0}
-	<div title="Number of answers" class="title empty">No answers yet!</div>
+	<div title={$t('number_of_answers_title')} class="title empty"><Tx text="no_answers_yet" /></div>
 {:else}
-	<div title="Number of answers" class="title answers">
-		Number of answers: {surveyAnswers.length}
+	<div title={$t('number_of_answers_title')} class="title answers">
+		<Tx text="number_of_answers" params={{ number: surveyAnswers.length }} />
 	</div>
 	{#each groupedAnswers as question, questionIndex}
 		<div class="question">

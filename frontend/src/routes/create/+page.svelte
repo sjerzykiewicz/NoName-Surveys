@@ -31,6 +31,11 @@
 		warningModalContent
 	} from '$lib/stores/global.js';
 
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let data;
 	export let isPreview: boolean;
 	export let isDraftModalHidden: boolean = true;
@@ -41,29 +46,24 @@
 	onMount(() => {
 		if (data.numSurveys >= $LIMIT_OF_SURVEYS && data.numDrafts >= $LIMIT_OF_DRAFTS) {
 			isExportButtonVisible = false;
-			$warningModalContent =
-				'You have reached the maximum number of surveys and drafts you can create. Please delete some surveys and drafts to create new ones.';
+			$warningModalContent = $t('limit_reached', {
+				items: $t('surveys_genitive') + ' ' + $t('and') + ' ' + $t('drafts_genitive')
+			});
 			$isWarningModalHidden = false;
 		} else if (data.numSurveys >= $LIMIT_OF_SURVEYS) {
 			isExportButtonVisible = false;
-			$warningModalContent =
-				'You have reached the maximum number of surveys you can create. Please delete some surveys to create new ones.';
+			$warningModalContent = $t('limit_reached', { items: $t('surveys_genitive') });
 			$isWarningModalHidden = false;
 		} else if (data.numDrafts >= $LIMIT_OF_DRAFTS) {
 			isExportButtonVisible = false;
-			$warningModalContent =
-				'You have reached the maximum number of drafts you can create. Please delete some drafts to create new ones.';
+			$warningModalContent = $t('limit_reached', { items: $t('drafts_genitive') });
 			$isWarningModalHidden = false;
 		}
 	});
 
 	beforeNavigate((event) => {
 		if (getDraft($title.title.trim(), trimQuestions($questions)) !== $draftStructure) {
-			if (
-				!confirm(
-					'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.'
-				)
-			) {
+			if (!confirm($t('info_about_leaving'))) {
 				event.cancel();
 				return;
 			}

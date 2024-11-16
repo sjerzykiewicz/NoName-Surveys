@@ -5,12 +5,18 @@
 	import SignIn from '$lib/components/account-page/SignIn.svelte';
 	import SignOut from '$lib/components/account-page/SignOut.svelte';
 	import DownloadKey from '$lib/components/account-page/DownloadKey.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import Modal from '$lib/components/global/Modal.svelte';
 	import init, { get_keypair } from 'wasm';
 	import { onMount } from 'svelte';
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { downloadFile } from '$lib/utils/downloadFile';
+
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let isModalHidden: boolean = true;
 
@@ -75,32 +81,29 @@
 {#if $page.data.session}
 	<Modal
 		icon="encrypted"
-		title="Generating Keys"
+		title={$t('account_generating_keys')}
 		bind:isHidden={isModalHidden}
 		--width={innerWidth <= $M ? '18em' : '22em'}
 	>
-		<span slot="content"
-			>Are you sure you want to generate new keys? Doing so will take away your ability to answer
-			existing secure surveys.</span
-		>
+		<span slot="content"><Tx text="account_new_key_alert" /></span>
 		<button
-			title="Generate"
+			title={$t('generate')}
 			class="done"
 			on:click={() => {
 				isModalHidden = true;
 				generateKeyPair();
 			}}
 		>
-			<i class="symbol">done</i>Generate
+			<i class="symbol">done</i><Tx text="generate" />
 		</button>
-		<button title="Cancel" class="not" on:click={() => (isModalHidden = true)}>
-			<i class="symbol">close</i>Cancel
+		<button title={$t('cancel')} class="not" on:click={() => (isModalHidden = true)}>
+			<i class="symbol">close</i><Tx text="cancel" />
 		</button>
 	</Modal>
 
 	<Header>
-		<div title="Your account" class="title">
-			Welcome, {$page.data.session.user?.email}
+		<div title={$t('account_your')} class="title">
+			<Tx text="welcome" />, {$page.data.session.user?.email}
 		</div>
 	</Header>
 

@@ -2,12 +2,16 @@
 	import { answers } from '$lib/stores/fill-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let unansweredRequired: Set<number>;
 	export let questionIndex: number;
 
 	function errorMessage(i: number) {
-		return 'Please answer question no. ' + (i + 1) + '.';
+		return $t('answer_question_no', { index: i + 1 });
 	}
 
 	$: checkAnswerError = (i: number) => {
@@ -20,8 +24,11 @@
 </script>
 
 {#if checkAnswerError(questionIndex)}
-	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<i class="symbol">error</i>{errorMessage(questionIndex)}
+	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<i class="symbol">error</i>
+		{#key $t}
+			{errorMessage(questionIndex)}
+		{/key}
 	</p>
 {/if}
 

@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { XL } from '$lib/stores/global';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let members: {
 		email: string;
@@ -22,11 +27,11 @@
 <svelte:window bind:innerWidth />
 
 {#if members.length === 0}
-	<div title="Group members" class="title empty">No group members yet!</div>
+	<div title={$t('group_members')} class="title empty"><Tx text="no_members_yet" /></div>
 {:else}
 	<table>
 		<tr>
-			<th title="Select all" class="checkbox-entry" class:disabled={members.length === 0}
+			<th title={$t('select_all')} class="checkbox-entry" class:disabled={members.length === 0}
 				><label
 					><input
 						type="checkbox"
@@ -36,12 +41,12 @@
 					/></label
 				></th
 			>
-			<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
-			<th title="Group members" id="title-header">Group Members</th>
+			<th title={$t('keys_info_title')} id="info-header"><i class="symbol">encrypted</i></th>
+			<th title={$t('group_members')} id="title-header"><Tx text="group_members" /></th>
 		</tr>
 		{#each members as member}
 			<tr>
-				<td title="Select {member.email}" class="checkbox-entry"
+				<td title="{$t('select')} {member.email}" class="checkbox-entry"
 					><label>
 						<input type="checkbox" bind:group={selectedMembersToRemove} value={member.email} />
 					</label></td
@@ -50,12 +55,12 @@
 					{#if member.has_public_key}
 						<i class="symbol">key</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>This user has already generated his keys.</span
+							><Tx text="user_has_keys" /></span
 						>
 					{:else}
 						<i class="symbol">key_off</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>This user has not generated his keys yet.</span
+							><Tx text="user_has_no_keys" /></span
 						>
 					{/if}
 				</td>

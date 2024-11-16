@@ -2,12 +2,16 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { GroupError } from '$lib/entities/GroupError';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let users: string[];
 	export let error: GroupError;
 
 	function errorMessage() {
-		return 'Please select users.';
+		return $t('error_select_users');
 	}
 
 	$: checkUsersError = () => {
@@ -19,7 +23,10 @@
 </script>
 
 {#if checkUsersError()}
-	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<i class="symbol">error</i>{errorMessage()}
+	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<i class="symbol">error</i>
+		{#key $t}
+			{errorMessage()}
+		{/key}
 	</p>
 {/if}

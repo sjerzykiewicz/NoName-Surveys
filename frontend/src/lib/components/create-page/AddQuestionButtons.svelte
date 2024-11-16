@@ -30,6 +30,15 @@
 	import { M } from '$lib/stores/global';
 	import { focusedIndex } from '$lib/stores/create-page';
 	import setQuestionFocus from '$lib/utils/setQuestionFocus';
+	import { checkQuestionError } from '$lib/utils/checkQuestionError';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
+	$: currentLang = $options.currentLang;
 
 	export let questionInput: HTMLDivElement;
 
@@ -69,41 +78,6 @@
 		}
 	}
 
-	function checkError(i: number) {
-		const q = $questions[i].question;
-		if (q === null || q === undefined || q.length === 0) {
-			$questions[i].error = SurveyError.QuestionRequired;
-		} else if (q.length > $LIMIT_OF_CHARS) {
-			$questions[i].error = SurveyError.QuestionTooLong;
-		} else if (
-			$questions[i].component != Text &&
-			$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
-		) {
-			switch ($questions[i].component) {
-				case Slider:
-				case Number:
-					$questions[i].error = SurveyError.SliderValuesRequired;
-					break;
-				case Binary:
-					$questions[i].error = SurveyError.BinaryChoicesRequired;
-					break;
-				default:
-					$questions[i].error = SurveyError.ChoicesRequired;
-			}
-		} else if ($questions[i].choices.some((c) => c.length > $LIMIT_OF_CHARS)) {
-			$questions[i].error = SurveyError.ChoicesTooLong;
-		} else if (
-			($questions[i].component === Slider || $questions[i].component === Number) &&
-			parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
-		) {
-			$questions[i].error = SurveyError.ImproperSliderValues;
-		} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
-			$questions[i].error = SurveyError.DuplicateChoices;
-		} else {
-			$questions[i].error = SurveyError.NoError;
-		}
-	}
-
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
 	}
@@ -126,9 +100,7 @@
 
 	async function addQuestion(component: ComponentType) {
 		const i: number = $questions.length - 1;
-		if (i >= 0) {
-			checkError(i);
-		}
+		if (i >= 0) checkQuestionError($questions[i], $LIMIT_OF_CHARS);
 
 		const choices: Array<string> = setQuestionChoices(component);
 
@@ -268,16 +240,17 @@
 
 <svelte:window bind:innerWidth />
 
-<div class="button-group">
+<div class="button-group" style="--width: {currentLang === 'en' ? '7.5em' : '8em'}">
 	<div class="add-buttons">
 		<button
-			title={isPanelVisible ? 'Stop choosing question type' : 'Choose question type'}
+			title={isPanelVisible ? $t('question_choose_type_stop') : $t('question_choose_type')}
 			class="add-question"
 			class:clicked={isPanelVisible}
 			class:previous={$previousQuestion}
 			on:click={togglePanel}
 		>
-			<i class="symbol">add</i>Question
+			<div class="button-text"><i class="symbol add">add</i><Tx text="question" /></div>
+			<i class="symbol arrow">arrow_drop_down</i>
 		</button>
 		{#if $previousQuestion}
 			<QuestionTypeButton
@@ -307,11 +280,6 @@
 </div>
 
 <style>
-	button {
-		width: 6.25em;
-		box-shadow: none;
-	}
-
 	.button-group {
 		width: fit-content;
 		font-size: 1.25em;
@@ -325,9 +293,18 @@
 	}
 
 	.add-question {
+		display: flex;
+		justify-content: space-between;
+		width: var(--width, 7.5em);
+		box-shadow: none;
 		transition:
 			0.2s,
 			outline 0s;
+	}
+
+	.button-text {
+		display: flex;
+		align-items: center;
 	}
 
 	.add-question.clicked {
@@ -354,19 +331,26 @@
 		flex-flow: column;
 		border-radius: 0px 0px 5px 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
-		width: fit-content;
+		width: var(--width, 7.5em);
 		height: auto;
 		position: absolute;
 		z-index: 1;
 	}
 
-	.add-question.clicked i {
+	.add-question.clicked .add {
 		transform: rotate(45deg);
 	}
 
-	.add-question i {
+	.add-question.clicked .arrow {
+		transform: rotate(180deg);
+	}
+
+	.add-question .add {
 		margin-right: 0.15em;
 		font-variation-settings: 'wght' 700;
+	}
+
+	.add-question i {
 		transform: rotate(0deg);
 		transition: transform 0.2s;
 	}

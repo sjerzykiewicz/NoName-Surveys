@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	$: errorMessage =
 		typeof $page.error!.message === 'string'
@@ -13,9 +14,9 @@
 
 {#if $page.error}
 	<div>
-		<h1>Error: <span>{$page.status}</span></h1>
-		<h2>Message: <span>{errorMessage}</span></h2>
-		<p>Something went wrong, please contact the administrator.</p>
+		<h1><Tx text="error" />: <span>{$page.status}</span></h1>
+		<h2><Tx text="Message" />: <span>{errorMessage}</span></h2>
+		<p><Tx text="error_message" /></p>
 	</div>
 {/if}
 

@@ -3,6 +3,11 @@
 	import { M } from '$lib/stores/global';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 
@@ -26,32 +31,36 @@
 <div class="choice-area slider" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="limits">
 		<label class="min">
-			Minimum
+			<Tx text="minimum" />
 			<input
-				title="Enter a minimum value"
+				title={$t('number_min_title')}
 				class="limit-input"
 				type="number"
 				{min}
 				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={innerWidth <= $M ? 'Enter a min value...' : 'Enter a minimum value...'}
+				placeholder={innerWidth <= $M
+					? $t('number_min_placeholder_short')
+					: $t('number_min_placeholder')}
 				bind:value={$questions[questionIndex].choices[0]}
 				on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[0]), 0)}
 			/></label
 		>
 		<label class="max">
-			Maximum
+			<Tx text="maximum" />
 			<input
-				title="Enter a maximum value"
+				title={$t('number_max_title')}
 				class="limit-input"
 				type="number"
 				{min}
 				{max}
 				name={questionIndex.toString()}
 				autocomplete="off"
-				placeholder={innerWidth <= $M ? 'Enter a max value...' : 'Enter a maximum value...'}
+				placeholder={innerWidth <= $M
+					? $t('number_max_placeholder_short')
+					: $t('number_max_placeholder')}
 				bind:value={$questions[questionIndex].choices[1]}
 				on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[1]), 1)}

@@ -1,15 +1,20 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let data: { answers: number[] };
 </script>
 
 <div class="choice-area display scale">
 	{#each [1, 2, 3, 4, 5] as choice}
-		<label title="Choice" class="choice scale">
+		<label title={$t('choice')} class="choice scale">
 			<input type="radio" disabled />
 			<div class="choice-input display scale">
 				{choice}
 			</div>
-			<div class="choice-percentage" title="Average">
+			<div class="choice-percentage" title={$t('average')}>
 				{(
 					(data.answers.filter((answer) => answer === choice).length / data.answers.length) *
 					100

@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 </script>
 
 <div class="choice-area display binary">
 	<label
-		title="Select your answer"
+		title={$t('select_answer')}
 		class="choice binary"
 		class:selected={$answers[questionIndex].choices[0] === $questions[questionIndex].choices[0]}
 		><div class="icon">
@@ -24,7 +28,7 @@
 		</div>
 	</label>
 	<label
-		title="Select your answer"
+		title={$t('select_answer')}
 		class="choice binary"
 		class:selected={$answers[questionIndex].choices[0] === $questions[questionIndex].choices[1]}
 		><div class="icon">
@@ -58,11 +62,15 @@
 
 	.selected i {
 		color: var(--accent-color-1);
-		font-variation-settings:
-			'FILL' 1,
-			'GRAD' 200;
+		font-variation-settings: 'FILL' 1;
 		transition:
 			0.2s,
 			outline 0s;
+	}
+
+	@media screen and (max-width: 768px) {
+		.choice-input {
+			margin-top: 0em;
+		}
 	}
 </style>

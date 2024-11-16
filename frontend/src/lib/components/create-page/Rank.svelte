@@ -5,6 +5,11 @@
 	import { slide } from 'svelte/transition';
 	import { M } from '$lib/stores/global';
 	import Input from '$lib/components/global/Input.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 
@@ -39,11 +44,16 @@
 
 <div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<div title="Choice no. {choiceIndex + 1}" class="choice">
+		<div title={$t('rank_choice', { index: choiceIndex + 1 })} class="choice">
 			<div class="rank">{choiceIndex + 1}.</div>
-			<Input bind:text={choice} label="Choice" title="Enter a choice" bind:element={choiceInput} />
+			<Input
+				bind:text={choice}
+				label={$t('choice')}
+				title={$t('choice_title')}
+				bind:element={choiceInput}
+			/>
 			<button
-				title="Remove choice"
+				title={$t('choice_remove')}
 				class="remove-choice"
 				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
@@ -52,8 +62,8 @@
 			</button>
 		</div>
 	{/each}
-	<button title="Add choice" class="add-choice" on:click={addChoice}>
-		<i class="symbol">add</i>Choice
+	<button title={$t('choice_add')} class="add-choice" on:click={addChoice}>
+		<i class="symbol">add</i><Tx text="choice" />
 	</button>
 </div>
 

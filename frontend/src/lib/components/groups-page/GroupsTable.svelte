@@ -10,6 +10,11 @@
 	import NameError from './NameError.svelte';
 	import { page } from '$app/stores';
 	import Input from '$lib/components/global/Input.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let groups: {
 		user_group_name: string;
@@ -106,17 +111,17 @@
 
 <Modal
 	icon="edit"
-	title="Rename Group"
+	title={$t('rename_group')}
 	bind:isHidden={isModalHidden}
 	bind:element={nameInput}
 	--width={innerWidth <= $M ? '20em' : '36em'}
 >
 	<div slot="content" class="modal-content">
-		<div class="renaming">Renaming {selectedGroup}.</div>
+		<div class="renaming"><Tx text="renaming" /> {selectedGroup}.</div>
 		<Input
 			bind:text={newName}
-			label="Group Name"
-			title="Enter a new group name"
+			label={$t('group_name')}
+			title={$t('enter_new_group_name')}
 			bind:element={nameInput}
 			handleEnter={(e) => {
 				if (e.key === 'Enter') {
@@ -130,26 +135,25 @@
 		/>
 		<NameError name={newName.trim()} error={nameError} groups={groupNames} --font-size="0.8em" />
 	</div>
-	<button title="Save the new group name" class="done" on:click={renameGroup}
-		><i class="symbol">done</i>Apply</button
+	<button title={$t('save_new_group_name_title')} class="done" on:click={renameGroup}
+		><i class="symbol">done</i><Tx text="submit" /></button
 	>
 </Modal>
 
 {#if groups.length === 0}
 	<div class="info-row">
-		<div title="Groups" class="title empty">No groups yet!</div>
+		<div title={$t('groups')} class="title empty"><Tx text="no_groups_yet" /></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				When creating a secure survey, you can choose a group of possible respondents. To create a
-				group, click on the button below. All your created groups will be stored on this page.
+				<Tx text="groups_tooltip" />
 			</span>
 		</div>
 	</div>
 {:else}
 	<table>
 		<tr>
-			<th title="Select all" class="checkbox-entry" class:disabled={groups.length === 0}
+			<th title={$t('select_all')} class="checkbox-entry" class:disabled={groups.length === 0}
 				><label
 					><input
 						type="checkbox"
@@ -159,12 +163,12 @@
 					/></label
 				></th
 			>
-			<th title="Keys information" id="info-header"><i class="symbol">encrypted</i></th>
-			<th title="Group title" id="title-header" colspan="2">Group Title</th>
+			<th title={$t('keys_info_title')} id="info-header"><i class="symbol">encrypted</i></th>
+			<th title={$t('group_name')} id="title-header" colspan="2"><Tx text="group_name" /></th>
 		</tr>
 		{#each groups as group}
 			<tr>
-				<td title="Select {group.user_group_name}" class="checkbox-entry"
+				<td title="{$t('select')} {group.user_group_name}" class="checkbox-entry"
 					><label>
 						<input
 							type="checkbox"
@@ -177,25 +181,23 @@
 					{#if group.all_members_have_public_keys}
 						<i class="symbol">key</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>Everyone in this group have generated their keys. You can use this group in secure
-							surveys.</span
+							><Tx text="everyone_has_keys" /></span
 						>
 					{:else}
 						<i class="symbol">key_off</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>Not everyone in this group have generated their keys. You cannot use this group in
-							secure surveys.</span
+							><Tx text="not_everyone_has_keys" /></span
 						>
 					{/if}
 				</td>
-				<td title="Open {group.user_group_name}" class="title-entry"
+				<td title="{$t('open')} {group.user_group_name}" class="title-entry"
 					><button
 						on:click={() =>
 							goto($page.url.pathname + '/' + encodeURI(group.user_group_name) + '/0')}
 						>{group.user_group_name}</button
 					></td
 				>
-				<td title="Rename {group.user_group_name}" class="button-entry">
+				<td title="{$t('rename')} {group.user_group_name}" class="button-entry">
 					<button
 						on:click={() => {
 							selectedGroup = group.user_group_name;

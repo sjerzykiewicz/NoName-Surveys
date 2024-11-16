@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { M } from '$lib/stores/global';
+	import { L } from '$lib/stores/global';
+
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let isModalHidden: boolean = true;
 
@@ -9,15 +15,13 @@
 <svelte:window bind:innerWidth />
 
 <div class="download-key">
-	<button title="Generate new keys" class="save" on:click={() => (isModalHidden = false)}>
-		<i class="symbol">encrypted</i>Generate New Keys
+	<button title={$t('account_new_key')} class="save" on:click={() => (isModalHidden = false)}>
+		<i class="symbol">encrypted</i><Tx text="account_new_key" />
 	</button>
 	<div class="tooltip">
 		<i class="symbol">info</i>
-		<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
-			These keys allow you to participate in secure surveys. Once they are generated, it is your
-			responsibility to keep them safe. When submitting a secure survey, you will be asked to
-			provide these keys to your browser for digital signature.
+		<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
+			<Tx html="account_keys_info" />
 		</span>
 	</div>
 </div>
@@ -57,13 +61,13 @@
 
 	@media screen and (max-width: 1440px) {
 		.tooltip {
-			--tooltip-width: 15.5em;
+			--tooltip-width: 14.5em;
 		}
 	}
 
 	@media screen and (max-width: 1024px) {
 		.tooltip {
-			--tooltip-width: 9em;
+			--tooltip-width: 17em;
 		}
 	}
 
@@ -73,7 +77,7 @@
 		}
 
 		.tooltip {
-			--tooltip-width: 18em;
+			--tooltip-width: 19em;
 		}
 
 		.tooltip .tooltip-text.bottom {

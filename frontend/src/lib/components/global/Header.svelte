@@ -7,4 +7,10 @@
 		padding: 0.75em;
 		border-bottom: 1px solid var(--border-color-1);
 	}
+
+	@media screen and (max-width: 768px) {
+		.header {
+			padding: 0.5em;
+		}
+	}
 </style>

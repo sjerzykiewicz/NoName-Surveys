@@ -32,6 +32,11 @@
 	import { getDraft } from '$lib/utils/getDraft';
 	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let drafts: {
 		id: number;
@@ -212,20 +217,18 @@
 
 {#if drafts.length === 0}
 	<div class="info-row">
-		<div title="Drafts" class="title empty">No drafts yet!</div>
+		<div title={$t('drafts')} class="title empty"><Tx text="no_drafts_yet" /></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				When creating a survey, you can save it as a draft for later use. To create a survey, click
-				on the "Create" tab at the top of the page or the button below. All your saved drafts will
-				be stored on this page.
+				<Tx text="draft_tooltip" />
 			</span>
 		</div>
 	</div>
 {:else}
 	<table>
 		<tr>
-			<th title="Select all" class="checkbox-entry" class:disabled={drafts.length === 0}
+			<th title={$t('select_all')} class="checkbox-entry" class:disabled={drafts.length === 0}
 				><label
 					><input
 						type="checkbox"
@@ -235,20 +238,20 @@
 					/></label
 				></th
 			>
-			<th title="Draft title" id="title-header">Draft Title</th>
-			<th title="Creation date" id="date-header">Creation Date</th>
+			<th title={$t('draft_title')} id="title-header"><Tx text="draft_title" /></th>
+			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date" /></th>
 		</tr>
 		{#each drafts as draft}
 			<tr>
-				<td title="Select {draft.title}" class="checkbox-entry"
+				<td title="{$t('select')} {draft.title}" class="checkbox-entry"
 					><label>
 						<input type="checkbox" bind:group={selectedDraftsToRemove} value={draft.id} />
 					</label></td
 				>
-				<td title="Open {draft.title}" class="title-entry"
+				<td title="{$t('open')} {draft.title}" class="title-entry"
 					><button on:click={() => loadDraft(draft)}>{draft.title}</button></td
 				>
-				<td title="Creation date" class="date-entry">{formatDate(draft.creation_date)}</td>
+				<td title={$t('creation_date')} class="date-entry">{formatDate(draft.creation_date)}</td>
 			</tr>
 		{/each}
 	</table>
@@ -256,7 +259,7 @@
 
 <style>
 	#date-header {
-		width: 19%;
+		width: 22%;
 	}
 
 	@media screen and (max-width: 768px) {

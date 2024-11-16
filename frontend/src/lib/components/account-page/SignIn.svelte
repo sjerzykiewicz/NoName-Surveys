@@ -1,4 +1,10 @@
 <script lang="ts">
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	import amu from '$lib/assets/amu.png';
 
 	async function startOAuth() {
@@ -26,91 +32,29 @@
 	}
 </script>
 
-<h1>Authorize yourself with AMU USOS</h1>
+<h1><Tx text="account_sign_in" /></h1>
 <div class="sign-buttons">
-	<button title="Sign in" class="sign-in" on:click={startOAuth}
-		><img src={amu} alt="AMU logo" class="amu-logo" />Sign In</button
+	<button title={$t('sign_in')} class="sign-in" on:click={startOAuth}
+		><img src={amu} alt="AMU logo" class="amu-logo" /><Tx text="sign_in" /></button
 	>
 </div>
-<div title="Account information" class="info">
+<div title={$t('account_info_title')} class="info">
 	<div class="text">
-		Authorizing yourself will enable you to:
-		<ul>
-			<li>
-				<div class="icon"><i class="symbol">article</i></div>
-				<div>
-					Create both
-					<span class="accent">public</span>
-					and <span class="accent">secure</span> surveys,
-				</div>
-			</li>
-			<li>
-				<div class="icon"><i class="symbol">save</i></div>
-				<div>
-					Save surveys as
-					<span class="accent">drafts</span> for later editing,
-				</div>
-			</li>
-			<li>
-				<div class="icon"><i class="symbol">bar_chart</i></div>
-				<div>
-					View <span class="accent">responses</span>
-					and <span class="accent">summaries</span> of your surveys,
-				</div>
-			</li>
-			<li>
-				<div class="icon"><i class="symbol">share</i></div>
-				<div><span class="accent">Share</span> surveys' results with others,</div>
-			</li>
-			<li>
-				<div class="icon"><i class="symbol">group</i></div>
-				<div>
-					Create and manage
-					<span class="accent">user groups</span>,
-				</div>
-			</li>
-			<li>
-				<div class="icon"><i class="symbol">encrypted</i></div>
-				<div>
-					Generate <span class="accent">digital signature keys</span> that allow you to participate
-					in
-					<span class="accent">secure surveys</span> without the need to sign in each time.
-				</div>
-			</li>
-		</ul>
+		<Tx html="account_authorization_info" />
 	</div>
 </div>
-<div title="Account information" class="info">
+<div title={$t('account_info_title')} class="info">
 	<div class="text">
-		We do not recommend signing in if you only wish to fill out a survey. For secure surveys, if you
-		have already generated your digital signature keys, signing in is also not necessary.
+		<Tx text="account_info" />
 	</div>
 </div>
 
 <style>
-	ul {
-		list-style-type: none;
-		margin-top: 0.25em;
-		padding-left: 1.5em;
-	}
-
-	li {
-		display: flex;
-		flex-flow: row nowrap;
-		justify-content: flex-start;
-		align-items: flex-start;
-		padding-top: 0.75em;
-	}
-
-	.icon {
-		margin-right: 0.5em;
-	}
-
 	h1 {
 		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		color: var(--text-color-1);
-		font-size: 3em;
+		font-size: 2.75em;
 		font-weight: 700 !important;
 		cursor: default;
 		margin: 0;
@@ -149,18 +93,9 @@
 		text-align: justify;
 	}
 
-	.accent {
-		color: var(--accent-color-1);
-		font-weight: 700 !important;
-	}
-
 	@media screen and (max-width: 768px) {
 		h1 {
 			font-size: 2em;
-		}
-
-		ul {
-			padding-left: 0.5em;
 		}
 
 		.info {

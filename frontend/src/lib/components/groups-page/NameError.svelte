@@ -3,21 +3,25 @@
 	import { slide } from 'svelte/transition';
 	import { GroupError } from '$lib/entities/GroupError';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let name: string;
 	export let error: GroupError;
 	export let groups: string[];
 
-	function errorMessage(error: GroupError) {
+	function errorMessage() {
 		switch (error) {
 			case GroupError.NameRequired:
-				return 'Please enter group name.';
+				return $t('group_error_name_required');
 			case GroupError.NameTooLong:
-				return 'Group name must be ' + $LIMIT_OF_CHARS + ' or less characters long.';
+				return $t('group_error_name_too_long');
 			case GroupError.NameNonUnique:
-				return 'This group name already exists.';
+				return $t('group_error_already_exists');
 			case GroupError.NameInvalid:
-				return 'Group name can only contain letters, numbers, spaces, slashes and hyphens.';
+				return $t('group_error_name_invalid');
 		}
 	}
 
@@ -37,8 +41,11 @@
 </script>
 
 {#if checkNameError()}
-	<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<i class="symbol">error</i>{errorMessage(error)}
+	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<i class="symbol">error</i>
+		{#key $t}
+			{errorMessage()}
+		{/key}
 	</p>
 {/if}
 

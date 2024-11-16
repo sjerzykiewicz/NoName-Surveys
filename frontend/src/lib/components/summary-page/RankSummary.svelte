@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let data: { answers: string[][]; choices: string[] };
 
 	function calculateAvgPlace(choice: string) {
@@ -11,7 +15,7 @@
 	}
 </script>
 
-<div title="Ordered by average place" class="choice-area display">
+<div title={$t('ordered_by_average_place')} class="choice-area display">
 	{#each data.choices.sort((a, b) => parseFloat(calculateAvgPlace(a)) - parseFloat(calculateAvgPlace(b))) as choice, answerIndex}
 		<div class="choice">
 			<div class="rank">{answerIndex + 1}.</div>

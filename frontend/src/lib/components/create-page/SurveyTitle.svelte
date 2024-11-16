@@ -5,6 +5,10 @@
 	import { slide } from 'svelte/transition';
 	import { onMount } from 'svelte';
 	import Input from '$lib/components/global/Input.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	let titleInput: HTMLDivElement;
 	let innerWidth: number;
@@ -19,8 +23,8 @@
 <div class="title-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<Input
 		bind:text={$title.title}
-		label="Survey Title"
-		title="Enter a survey title"
+		label={$t('survey_title')}
+		title={$t('survey_title_title')}
 		id="title"
 		bind:element={titleInput}
 		--margin-right="0em"

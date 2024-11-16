@@ -8,43 +8,49 @@
 	import noname_light from '$lib/assets/noname_light.png';
 	import { M } from '$lib/stores/global';
 	import NavLinks from './NavLinks.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	let open: boolean;
 	let innerWidth: number;
 
 	const navLinks = {
 		Fill: {
-			name: 'Fill Out',
+			name: 'fill',
 			href: '/',
 			page: '',
 			disabled: false
 		},
 		Create: {
-			name: 'Create',
+			name: 'create',
 			href: '/create',
 			page: '',
 			disabled: !$page.data.session
 		},
 		Drafts: {
-			name: 'Drafts',
+			name: 'drafts',
 			href: '/drafts',
 			page: '/0',
 			disabled: !$page.data.session
 		},
 		Surveys: {
-			name: 'Surveys',
+			name: 'surveys',
 			href: '/surveys',
 			page: '/0',
 			disabled: !$page.data.session
 		},
 		Groups: {
-			name: 'Groups',
+			name: 'groups',
 			href: '/groups',
 			page: '/0',
 			disabled: !$page.data.session
 		},
 		Account: {
-			name: 'Account',
+			name: 'account',
 			href: '/account',
 			page: '',
 			disabled: false
@@ -69,6 +75,8 @@
 			logo = noname_dark;
 			bulb = 'light_off';
 		}
+
+		$options.currentLang = localStorage.getItem('langPref') || 'en';
 	});
 
 	function toggleThemeMode() {
@@ -87,8 +95,13 @@
 		}
 	}
 
+	function changeLang(lang: string) {
+		$options.currentLang = lang;
+		localStorage.setItem('langPref', lang);
+	}
+
 	let scrollHeight: number;
-	$: showToggleThemeMode = scrollHeight == 0;
+	$: showToggleButtons = scrollHeight == 0;
 </script>
 
 <svelte:window bind:innerWidth bind:scrollY={scrollHeight} />
@@ -98,7 +111,7 @@
 		<a href="/" title="NoName" class="nav-burger-logo"
 			><img src={logo} alt="NoName logo" width="48" height="48" /></a
 		>
-		<div title={open ? 'Close menu' : 'Open menu'}>
+		<div title={open ? $t('close_menu') : $t('open_menu')}>
 			<Hamburger bind:open --color="var(--text-color-1)" />
 		</div>
 	</div>
@@ -120,20 +133,41 @@
 	</div>
 {/if}
 
-{#if showToggleThemeMode}
+{#if showToggleButtons}
 	<button
 		transition:scale={{ duration: 200, easing: cubicInOut }}
 		on:click={toggleThemeMode}
-		class="toggle-mode tooltip"
+		class="toggle-mode theme-btn tooltip"
 	>
 		<i class="symbol">{bulb}</i>
-		<span class="tooltip-text left">Toggle theme.</span>
+		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_theme" /></span>{/if}
+	</button>
+{/if}
+{#if showToggleButtons && $options.currentLang === 'en'}
+	<button
+		transition:scale={{ duration: 200, easing: cubicInOut }}
+		on:click={() => changeLang('pl')}
+		class="toggle-mode lang-btn tooltip"
+	>
+		PL
+		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_lang" /></span>{/if}
+	</button>
+{:else if showToggleButtons && $options.currentLang === 'pl'}
+	<button
+		transition:scale={{ duration: 200, easing: cubicInOut }}
+		on:click={() => changeLang('en')}
+		class="toggle-mode lang-btn tooltip"
+	>
+		EN
+		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_lang" /></span>{/if}
 	</button>
 {/if}
 
 <style>
-	.toggle-mode.tooltip {
-		--tooltip-width: 7em;
+	.bar .tooltip .tooltip-text {
+		font-size: 0.8em;
+		font-weight: normal;
+		background-color: var(--primary-dark-color);
 	}
 
 	.toggle-mode.tooltip .tooltip-text {
@@ -186,14 +220,31 @@
 		justify-content: center;
 		top: 0.25em;
 		right: 0.25em;
-		background-color: var(--primary-color-2);
+		background-color: var(--primary-color-1);
 		border: none;
+		box-shadow: none;
+		width: 1.667em;
+		height: 1.667em;
 		font-size: 1.5em;
 		z-index: 1;
 		cursor: pointer;
 		transition:
 			0.2s,
 			outline 0s;
+	}
+
+	.theme-btn {
+		--tooltip-width: 7em;
+		top: 0.25em;
+		right: 0.25em;
+		z-index: 2;
+	}
+
+	.lang-btn {
+		--tooltip-width: 8em;
+		top: 0.25em;
+		right: 2.25em;
+		font-weight: 700 !important;
 	}
 
 	.toggle-mode:hover {
@@ -233,11 +284,13 @@
 		opacity: 0.7;
 	}
 
-	@media screen and (max-width: 880px) {
+	@media screen and (max-width: 980px) {
 		.toggle-mode {
 			top: 2.5em;
 		}
+	}
 
+	@media screen and (max-width: 900px) {
 		.nav-logo {
 			visibility: hidden;
 			opacity: 0 !important;
@@ -263,11 +316,13 @@
 		.toggle-mode {
 			top: 0.6em;
 			right: 3em;
+			width: 1.75em;
+			height: 1.75em;
 			font-size: 1.75em;
 		}
 
-		.toggle-mode.tooltip .tooltip-text {
-			font-size: 0.5em;
+		.lang-btn {
+			right: 5em;
 		}
 	}
 </style>

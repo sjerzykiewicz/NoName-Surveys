@@ -3,6 +3,11 @@
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
 	import { S, XL } from '$lib/stores/global';
 	import { page } from '$app/stores';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let surveys: {
 		title: string;
@@ -12,20 +17,17 @@
 		is_owned_by_user: boolean;
 		group_size: number;
 	}[];
-	export let selectedSurveysToRemove: string[] = [];
+	export let selectedSurveysToRemove: typeof surveys = [];
 
 	let innerWidth: number;
 	let selectedCode: string;
 	let isModalHidden: boolean = true;
 
-	$: ownedSurveyCodes = surveys.filter((s) => s.is_owned_by_user).map((s) => s.survey_code);
-
 	$: allSelected =
-		selectedSurveysToRemove.length === ownedSurveyCodes.length &&
-		selectedSurveysToRemove.length > 0;
+		selectedSurveysToRemove.length === surveys.length && selectedSurveysToRemove.length > 0;
 
 	function toggleAll() {
-		selectedSurveysToRemove = allSelected ? [] : [...ownedSurveyCodes];
+		selectedSurveysToRemove = allSelected ? [] : [...surveys];
 	}
 
 	function formatDate(isoString: string): string {
@@ -35,63 +37,54 @@
 
 <svelte:window bind:innerWidth />
 
-<QrCodeModal title="Access Code" bind:isHidden={isModalHidden} surveyCode={selectedCode} />
+<QrCodeModal title={$t('access_code')} bind:isHidden={isModalHidden} surveyCode={selectedCode} />
 
 {#if surveys.length === 0}
 	<div class="info-row">
-		<div title="Surveys" class="title empty">No surveys yet!</div>
+		<div title={$t('surveys')} class="title empty"><Tx text="no_surveys_yet" /></div>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				To create a survey, click on the "Create" tab at the top of the page or the button below.
-				All your created surveys will be stored on this page.
+				<Tx text="surveys_tooltip" />
 			</span>
 		</div>
 	</div>
 {:else}
 	<table>
 		<tr>
-			<th title="Select all" class="checkbox-entry" class:disabled={ownedSurveyCodes.length === 0}
+			<th title={$t('select_all')} class="checkbox-entry" class:disabled={surveys.length === 0}
 				><label
 					><input
 						type="checkbox"
-						disabled={ownedSurveyCodes.length === 0}
+						disabled={surveys.length === 0}
 						on:change={toggleAll}
 						checked={allSelected}
 					/></label
 				></th
 			>
-			<th title="Survey information" id="info-header" colspan="2">Info</th>
-			<th title="Survey title" id="title-header">Survey Title</th>
-			<th title="Group size" id="group-header">Group Size</th>
-			<th title="Access code" id="code-header">Access Code</th>
-			<th title="Creation date" id="date-header">Creation Date</th>
+			<th title={$t('survey_info')} id="info-header" colspan="2">Info</th>
+			<th title={$t('survey_title')} id="title-header"><Tx text="survey_title" /></th>
+			<th title={$t('group_size')} id="group-header"><Tx text="group_size" /></th>
+			<th title={$t('access_code')} id="code-header"><Tx text="access_code" /></th>
+			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date" /></th>
 		</tr>
 		{#each surveys as survey}
 			<tr>
-				<td
-					title="Select {survey.title}"
-					class="checkbox-entry"
-					class:disabled={!survey.is_owned_by_user}
+				<td title="{$t('select')} {survey.title}" class="checkbox-entry"
 					><label>
-						<input
-							type="checkbox"
-							disabled={!survey.is_owned_by_user}
-							bind:group={selectedSurveysToRemove}
-							value={survey.survey_code}
-						/>
+						<input type="checkbox" bind:group={selectedSurveysToRemove} value={survey} />
 					</label></td
 				>
 				<td class="info-entry tooltip">
 					{#if survey.uses_cryptographic_module}
 						<i class="symbol">encrypted</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>This survey has an established group of possible respondents.</span
+							><Tx text="survey_is_secure" /></span
 						>
 					{:else}
 						<i class="symbol">public</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>Everyone can submit an answer to this survey.</span
+							><Tx text="survey_is_public" /></span
 						>
 					{/if}
 				</td>
@@ -99,22 +92,22 @@
 					{#if survey.is_owned_by_user}
 						<i class="symbol">verified</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>You are the owner of this survey.</span
+							><Tx text="survey_owner" /></span
 						>
 					{:else}
 						<i class="symbol">share</i>
 						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-							>Results of this survey have been shared with you.</span
+							><Tx text="survey_shared" /></span
 						>
 					{/if}
 				</td>
-				<td title="View the summary" class="title-entry"
+				<td title={$t('view_summary')} class="title-entry"
 					><button on:click={() => goto($page.url.pathname + '/' + survey.survey_code)}
 						>{survey.title}</button
 					></td
 				>
 				{#if survey.uses_cryptographic_module}
-					<td title="View possible respondents" class="code-entry"
+					<td title={$t('view_respondents')} class="code-entry"
 						><button
 							on:click={() =>
 								goto($page.url.pathname + '/' + survey.survey_code + '/respondents/0')}
@@ -122,9 +115,9 @@
 						>
 					</td>
 				{:else}
-					<td title="Not available for public survey" class="info-entry">N/A</td>
+					<td title={$t('not_available_for_public')} class="info-entry">N/A</td>
 				{/if}
-				<td title="View QR code" class="code-entry"
+				<td title={$t('view_qr')} class="code-entry"
 					><button
 						on:click={() => {
 							selectedCode = survey.survey_code;
@@ -132,7 +125,7 @@
 						}}>{survey.survey_code}</button
 					>
 				</td>
-				<td title="Creation date" class="date-entry">{formatDate(survey.creation_date)}</td>
+				<td title={$t('creation_date')} class="date-entry">{formatDate(survey.creation_date)}</td>
 			</tr>
 		{/each}
 	</table>

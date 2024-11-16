@@ -183,6 +183,16 @@ export const takeAwayAccessToSurvey = (
 	});
 };
 
+export const rejectAccessToSurveys = (user_email: string, survey_codes: string[]) => {
+	return fetch(`${host}/surveys/reject-access`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, survey_codes }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
 export const countUsersWithAccess = (user_email: string, survey_code: string) => {
 	return fetch(`${host}/surveys/all-with-access-count`, {
 		method: 'POST',

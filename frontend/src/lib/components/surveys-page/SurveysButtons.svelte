@@ -21,23 +21,47 @@
 		group_size: number;
 	}[];
 	export let numSurveys: number;
-	export let selectedSurveysToRemove: string[] = [];
+	export let selectedSurveysToRemove: typeof surveys = [];
 
 	let isModalHidden: boolean = true;
 
 	async function deleteSurveys() {
-		const response = await fetch('/api/surveys/delete', {
+		const ownedSurveyCodes = selectedSurveysToRemove
+			.filter((s) => s.is_owned_by_user)
+			.map((s) => s.survey_code);
+		const sharedSurveyCodes = selectedSurveysToRemove
+			.filter((s) => !s.is_owned_by_user)
+			.map((s) => s.survey_code);
+
+		const deleteResponse = await fetch('/api/surveys/delete', {
 			method: 'POST',
 			body: JSON.stringify({
-				survey_codes: selectedSurveysToRemove
+				survey_codes: ownedSurveyCodes
 			}),
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		});
 
-		if (!response.ok) {
-			const body = await response.json();
+		if (!deleteResponse.ok) {
+			const body = await deleteResponse.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		const rejectResponse = await fetch('/api/surveys/reject-access', {
+			method: 'POST',
+			body: JSON.stringify({
+				survey_codes: sharedSurveyCodes
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!rejectResponse.ok) {
+			const body = await rejectResponse.json();
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;

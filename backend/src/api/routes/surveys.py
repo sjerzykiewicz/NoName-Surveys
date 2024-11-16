@@ -315,6 +315,32 @@ async def take_away_access_to_surveys(
 
 
 @router.post(
+    "/reject-access",
+    response_description="Reject access to surveys given by another user",
+    response_model=dict,
+)
+async def reject_access_to_surveys(
+    reject_access_input: SurveyUserDeleteAction,
+    session: Session = Depends(get_session),
+):
+    user = user_crud.get_user_by_email(reject_access_input.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not found")
+
+    rejected_surveys = survey_crud.reject_access_to_surveys(
+        user.id, reject_access_input.survey_codes, session
+    )
+
+    if len(rejected_surveys) != len(reject_access_input.survey_codes):
+        raise HTTPException(
+            status_code=404,
+            detail="Some surveys do not exist or user does not have access to them",
+        )
+
+    return {"message": "Survey access rejected successfully"}
+
+
+@router.post(
     "/all-with-access-count",
     response_description="Number of users who can view results of a survey",
     response_model=int,

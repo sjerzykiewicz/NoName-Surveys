@@ -45,20 +45,22 @@
 
 @font-face {
 	font-family: Jura;
-	src: url('lib/fonts/Jura-VariableFont_wght.ttf');
+	src: url('lib/fonts/Jura.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: Material Symbols Rounded;
+	font-style: normal;
+	font-weight: 400 700;
 	font-display: block;
-	src: url('lib/fonts/MaterialSymbolsRounded-VariableFont_FILL,GRAD,opsz,wght.ttf');
+	src: url('lib/fonts/MaterialSymbolsRounded.woff2') format('woff2');
 }
 
 .symbol {
 	font-family: 'Material Symbols Rounded';
-	font-weight: 400 !important;
+	font-weight: normal;
 	font-style: normal;
-	font-size: 24px;
+	font-size: 1.15em;
 	line-height: 1;
 	letter-spacing: normal;
 	text-transform: none;
@@ -324,7 +326,8 @@ button:active,
 
 .add-choice i,
 .done i,
-.not i {
+.not i,
+.cancel i {
 	font-variation-settings: 'wght' 700;
 }
 
@@ -367,10 +370,6 @@ button:active,
 
 .hidden {
 	visibility: hidden;
-}
-
-.symbol {
-	font-size: 1.15em;
 }
 
 .add-choice i,

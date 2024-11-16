@@ -140,7 +140,7 @@
 		class="toggle-mode theme-btn tooltip"
 	>
 		<i class="symbol">{bulb}</i>
-		<span class="tooltip-text left"><Tx text="toggle_theme" /></span>
+		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_theme" /></span>{/if}
 	</button>
 {/if}
 {#if showToggleButtons && $options.currentLang === 'en'}
@@ -222,6 +222,9 @@
 		right: 0.25em;
 		background-color: var(--primary-color-1);
 		border: none;
+		box-shadow: none;
+		width: 1.667em;
+		height: 1.667em;
 		font-size: 1.5em;
 		z-index: 1;
 		cursor: pointer;
@@ -281,7 +284,7 @@
 		opacity: 0.7;
 	}
 
-	@media screen and (max-width: 980px) {
+	@media screen and (max-width: 970px) {
 		.toggle-mode {
 			top: 2.5em;
 		}
@@ -313,6 +316,8 @@
 		.toggle-mode {
 			top: 0.6em;
 			right: 3em;
+			width: 1.75em;
+			height: 1.75em;
 			font-size: 1.75em;
 		}
 

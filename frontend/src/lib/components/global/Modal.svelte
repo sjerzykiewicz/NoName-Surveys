@@ -136,10 +136,6 @@
 		margin-right: 0.15em;
 	}
 
-	.cancel i {
-		font-variation-settings: 'wght' 700;
-	}
-
 	.content {
 		flex-flow: column;
 		justify-content: center;

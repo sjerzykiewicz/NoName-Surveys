@@ -70,5 +70,9 @@
 			margin-left: 0.5em;
 			margin-top: 0em;
 		}
+
+		.choice-input {
+			margin-top: 0em;
+		}
 	}
 </style>

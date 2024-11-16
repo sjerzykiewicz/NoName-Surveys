@@ -67,11 +67,15 @@
 
 	.selected i {
 		color: var(--accent-color-1);
-		font-variation-settings:
-			'FILL' 1,
-			'GRAD' 200;
+		font-variation-settings: 'FILL' 1;
 		transition:
 			0.2s,
 			outline 0s;
+	}
+
+	@media screen and (max-width: 768px) {
+		.choice-input {
+			margin-top: 0em;
+		}
 	}
 </style>

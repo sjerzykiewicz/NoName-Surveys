@@ -1,9 +1,12 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlmodel import SQLModel
 
+from config import settings
 from src.api.router import api_router
 from src.db.base import engine
 
@@ -27,6 +30,58 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+security = HTTPBearer()
+
+
+@app.middleware("http")
+async def validate_token(request: Request, call_next):
+    if request.url.path == "/docs" or request.url.path == "/openapi.json":
+        response = await call_next(request)
+        return response
+
+    if "Authorization" not in request.headers:
+        raise HTTPException(status_code=403, detail="Authorization header missing")
+
+    auth: HTTPAuthorizationCredentials = await security(request)
+    token = auth.credentials
+
+    if not validate_token_logic(token):
+        raise HTTPException(status_code=403, detail="Invalid token")
+
+    response = await call_next(request)
+    return response
+
+
+def validate_token_logic(token: str) -> bool:
+    return token == settings.bearer_token
+
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="Your API",
+        version="1.0.0",
+        description="API description",
+        routes=app.routes,
+    )
+    security_scheme = {
+        "HTTPBearer": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+        }
+    }
+    openapi_schema["components"]["securitySchemes"] = security_scheme
+    for path in openapi_schema["paths"].values():
+        for method in path.values():
+            method["security"] = [{"HTTPBearer": []}]
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+
+app.openapi = custom_openapi
 
 
 app.include_router(api_router)

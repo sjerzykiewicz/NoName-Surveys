@@ -379,6 +379,16 @@ export const hasPublicKey = (user_email: string) => {
 	});
 };
 
+export const getKeyCreationDate = (user_email: string) => {
+	return fetch(`${host}/users/key-creation-date`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email }),
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	});
+};
+
 export const createUser = (user_email: string) => {
 	return fetch(`${host}/users/register`, {
 		method: 'POST',

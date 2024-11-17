@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
@@ -49,6 +51,20 @@ async def check_if_user_has_public_key(
     if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
     return user.public_key != ""
+
+
+@router.post(
+    "/key-creation-date",
+    response_description="Get the time of key creation",
+    response_model=datetime | None,
+)
+async def get_key_creation_date(
+    user_input: User, session: Session = Depends(get_session)
+):
+    user = user_crud.get_user_by_email(user_input.user_email, session)
+    if user is None:
+        raise HTTPException(status_code=400, detail="User not registered")
+    return user.key_creation_date
 
 
 @router.post(

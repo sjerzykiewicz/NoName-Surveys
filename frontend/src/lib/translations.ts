@@ -343,6 +343,9 @@ export const data = {
 		account_keys_info: `These keys allow you to participate in secure surveys. Once they are generated, it is your
 			responsibility to keep them safe. When submitting a secure survey, you will be asked to
 			provide these keys to your browser for digital signature.`,
+		account_last_key_update: 'Last key update',
+		account_key_update_info:
+			'In order to increase security, we recommend to generate a new key pair every year.',
 		account_authorization_info: `
 			Authorizing yourself will enable you to:
 			<ul class="account-ul">
@@ -732,6 +735,9 @@ export const data = {
 		account_keys_info: `Te klucze pozwalają na uczestniczenie w bezpiecznych ankietach. Po ich wygenerowaniu, należy
 			je zabezpieczyć. Podczas wypełniania bezpiecznej ankiety, zostaniesz poproszony o podanie
 			tych kluczy przeglądarce do podpisu cyfrowego.`,
+		account_last_key_update: 'Ostatnia aktualizacja kluczy',
+		account_key_update_info:
+			'Aby zwiększyć bezpieczeństwo, zalecamy wygenerowanie nowej pary kluczy raz na rok.',
 		account_authorization_info: `
 			Zautoryzowanie się pozwoli Ci na:
 			<ul class="account-ul">

@@ -61,9 +61,9 @@ def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
     openapi_schema = get_openapi(
-        title="Your API",
+        title="NoName Anonymous Surveys API",
         version="1.0.0",
-        description="API description",
+        description="This is the API for the NoName Anonymous Surveys project.",
         routes=app.routes,
     )
     security_scheme = {

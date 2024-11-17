@@ -24,6 +24,7 @@ jobs:
       - name: Setup backend
         working-directory: ./backend
         run: |
+          echo "BEARER_TOKEN=<string>" >> .env
           docker build . --file Dockerfile --tag noname-surveys-backend:latest
           docker run -d -p 8000:8000 --name noname-surveys-backend noname-surveys-backend:latest
 
@@ -33,6 +34,7 @@ jobs:
       - name: Generate env file
         run: |
           echo "BACKEND_HOST=http://localhost:8000" >> .env
+          echo "BEARER_TOKEN=<string>" >> .env
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps

@@ -332,19 +332,31 @@
 {/if}
 
 <style>
-	.tooltip {
-		--tooltip-width: 19em;
+	.create-info.tooltip {
+		--tooltip-width: 17em;
 		font-size: 1.5em;
 	}
 
-	.tooltip .tooltip-text {
+	.create-info.tooltip .tooltip-text {
 		font-size: 0.8em;
+	}
+
+	.tooltip i {
+		color: var(--border-color-1);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.button-row {
 		align-items: center;
 		font-size: 1em;
 		margin-top: 0em;
+	}
+
+	.button-sub-row {
+		gap: 0.5em;
 	}
 
 	.crypto-buttons {
@@ -394,19 +406,19 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		.tooltip {
+		.create-info.tooltip {
 			--tooltip-width: 10em;
 			font-size: 1.25em;
 		}
 
-		.tooltip .tooltip-text.bottom {
+		.create-info.tooltip .tooltip-text.bottom {
 			left: unset;
 			right: 20%;
 			margin-left: 0em;
 			margin-right: -1.15em;
 		}
 
-		.tooltip .tooltip-text.bottom::after {
+		.create-info.tooltip .tooltip-text.bottom::after {
 			left: 91.5%;
 			margin-left: -1.15em;
 		}

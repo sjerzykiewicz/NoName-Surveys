@@ -53,6 +53,10 @@
 		Rank
 	];
 
+	$: questionsInfo = questionTypes.map((questionType) =>
+		$t(getQuestionTypeData(questionType).text)
+	);
+
 	function getPreviewComponent(component: ComponentType) {
 		switch (component) {
 			case Single:
@@ -451,17 +455,15 @@
 					break;
 				case 'Backquote':
 				case 'Backslash':
-				case 'NumpadDecimal':
 					toggleRequirement();
 					break;
 				case 'Backspace':
 				case 'Delete':
-				case 'NumpadAdd':
 					removeQuestionOrChoice();
 					break;
 				case 'Enter':
-				case 'Insert':
 				case 'NumpadEnter':
+				case 'Insert':
 					addChoice();
 					break;
 			}
@@ -538,12 +540,32 @@
 		</div>
 	{/if}
 </div>
+{#if innerWidth > $M}
+	<div class="tooltip hotkeys-info">
+		<i class="symbol">bolt</i>
+		<span class="tooltip-text right">
+			<Tx
+				html="hotkeys_info"
+				params={{
+					one: questionsInfo[0],
+					two: questionsInfo[1],
+					three: questionsInfo[2],
+					four: questionsInfo[3],
+					five: questionsInfo[4],
+					six: questionsInfo[5],
+					seven: questionsInfo[6],
+					eight: questionsInfo[7],
+					nine: questionsInfo[8]
+				}}
+			/>
+		</span>
+	</div>
+{/if}
 
 <style>
 	.button-group {
 		width: fit-content;
 		font-size: 1.25em;
-		margin-right: 0.5em;
 	}
 
 	.add-buttons {
@@ -613,6 +635,43 @@
 	.add-question i {
 		transform: rotate(0deg);
 		transition: transform 0.2s;
+	}
+
+	.hotkeys-info.tooltip {
+		--tooltip-width: 35em;
+		font-size: 1.5em;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text {
+		text-align: left;
+		font-size: 0.67em;
+		z-index: 2;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.right {
+		top: 400%;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.right::after {
+		top: 27.5%;
+	}
+
+	.tooltip i {
+		color: var(--accent-color-2);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		transition:
+			0.2s,
+			outline 0s;
+	}
+
+	@media screen and (max-width: 1145px) {
+		.hotkeys-info.tooltip {
+			--tooltip-width: 28.1em;
+		}
+
+		.hotkeys-info.tooltip .tooltip-text {
+			font-size: 0.6em;
+		}
 	}
 
 	@media screen and (max-width: 768px) {

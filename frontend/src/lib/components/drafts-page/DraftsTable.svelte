@@ -35,6 +35,7 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import formatDate from '$lib/utils/formatDate';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -52,10 +53,6 @@
 
 	function toggleAll() {
 		selectedDraftsToRemove = allSelected ? [] : [...draftIds];
-	}
-
-	function formatDate(isoString: string): string {
-		return new Date(isoString).toLocaleString();
 	}
 
 	async function loadDraft(draft: { id: number; title: string }) {

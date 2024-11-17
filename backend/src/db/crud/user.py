@@ -1,7 +1,12 @@
+from datetime import datetime
+
+import pytz
 from sqlmodel import select
 
 from src.db.base import Session
 from src.db.models.user import User, UserBase, UserWithKey
+
+tz = pytz.timezone("Europe/Warsaw")
 
 
 def get_all_users(session: Session) -> list[User]:
@@ -76,11 +81,14 @@ def create_user(email: str, session: Session) -> User:
 
 
 def update_user_public_key(email: str, public_key: str, session: Session) -> User:
-    user_update_key = UserWithKey(email=email, public_key=public_key)
+    user_update_key = UserWithKey(
+        email=email, public_key=public_key, key_creation_date=datetime.now(tz)
+    )
     user = session.exec(
         select(User).filter(User.email == user_update_key.email)
     ).first()
     user.public_key = user_update_key.public_key
+    user.key_creation_date = user_update_key.key_creation_date
     session.add(user)
     session.commit()
     session.refresh(user)

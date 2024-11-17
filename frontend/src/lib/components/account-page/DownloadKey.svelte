@@ -4,10 +4,12 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import formatDate from '$lib/utils/formatDate';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let isModalHidden: boolean = true;
+	export let lastTime: string | null;
 
 	let innerWidth: number;
 </script>
@@ -25,6 +27,17 @@
 		</span>
 	</div>
 </div>
+{#if lastTime}
+	<div class="last-update-info">
+		<span><Tx text="account_last_key_update" />: {formatDate(lastTime)}</span>
+		<div class="tooltip">
+			<i class="symbol">info</i>
+			<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
+				<Tx html="account_key_update_info" />
+			</span>
+		</div>
+	</div>
+{/if}
 
 <style>
 	.tooltip {
@@ -57,6 +70,12 @@
 
 	.download-key .tooltip .tooltip-text {
 		font-size: 0.7em;
+	}
+
+	.last-update-info {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
 	}
 
 	@media screen and (max-width: 1440px) {

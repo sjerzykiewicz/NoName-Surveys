@@ -15,14 +15,28 @@
 
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import type { PageServerData } from './$types';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let isModalHidden: boolean = true;
 
+	export let data: PageServerData;
+
 	onMount(async () => {
 		await init();
 	});
+
+	async function reloadKeyCreationDate() {
+		const response = await fetch('/api/users/key-creation-date');
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+		data.key_creation_date = await response.json();
+	}
 
 	async function generateKeyPair() {
 		try {
@@ -54,6 +68,8 @@
 			$isErrorModalHidden = false;
 			return;
 		}
+
+		reloadKeyCreationDate();
 	}
 
 	onMount(() => {
@@ -108,7 +124,7 @@
 	</Header>
 
 	<Content>
-		<DownloadKey bind:isModalHidden />
+		<DownloadKey bind:isModalHidden lastTime={data.key_creation_date} />
 		<SignOut />
 	</Content>
 {:else}

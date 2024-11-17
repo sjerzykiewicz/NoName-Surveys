@@ -25,8 +25,10 @@
 	}
 
 	function removeChoice(index: number) {
-		$questions[questionIndex].choices.splice(index, 1);
-		$questions = $questions;
+		if ($questions[questionIndex].choices.length > 2) {
+			$questions[questionIndex].choices.splice(index, 1);
+			$questions = $questions;
+		}
 	}
 
 	afterUpdate(() => {
@@ -44,7 +46,11 @@
 
 <div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<div title={$t('rank_choice', { index: choiceIndex + 1 })} class="choice">
+		<div
+			title={$t('rank_choice', { index: choiceIndex + 1 })}
+			class="choice"
+			id={`q${questionIndex}c${choiceIndex}`}
+		>
 			<div class="rank">{choiceIndex + 1}.</div>
 			<Input
 				bind:text={choice}

@@ -4,7 +4,6 @@
 	export let text: string;
 	export let label: string;
 	export let title: string;
-	export let id: string = '';
 	export let element: HTMLDivElement | null = null;
 	export let clearOnce: boolean = false;
 	export let handleEnter: (e: KeyboardEvent) => void = (e) => handleNewLine(e);
@@ -56,7 +55,6 @@
 	<div class="input-label">{label}</div>
 	<div
 		{title}
-		{id}
 		class="input"
 		placeholder={title + '...'}
 		contenteditable

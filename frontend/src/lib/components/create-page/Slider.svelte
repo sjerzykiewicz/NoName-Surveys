@@ -33,11 +33,11 @@
 		<input class="range" type="range" name={questionIndex.toString()} disabled />
 	</div>
 	<div class="limits">
-		<label class="min">
+		<label class="min choice" id={`q${questionIndex}c0`}>
 			<Tx text="minimum" />
 			<input
 				title={$t('number_min_title')}
-				class="limit-input"
+				class="limit-input input"
 				type="number"
 				{min}
 				{max}
@@ -52,11 +52,11 @@
 					handleChange(parseFloat($questions[questionIndex].choices[0]), 0, min, max)}
 			/></label
 		>
-		<label class="step">
+		<label class="step choice" id={`q${questionIndex}c1`}>
 			<Tx text="precision" />
 			<input
 				title={$t('slider_precision_title')}
-				class="limit-input"
+				class="limit-input input"
 				type="number"
 				min="0"
 				{max}
@@ -71,11 +71,11 @@
 					handleChange(parseFloat($questions[questionIndex].choices[2]), 2, 0.001, max)}
 			/></label
 		>
-		<label class="max">
+		<label class="max choice" id={`q${questionIndex}c2`}>
 			<Tx text="maximum" />
 			<input
 				title={$t('number_max_title')}
-				class="limit-input"
+				class="limit-input input"
 				type="number"
 				{min}
 				{max}
@@ -102,6 +102,10 @@
 
 	.limit-input {
 		width: 9em;
+	}
+
+	.choice {
+		margin-bottom: 0em;
 	}
 
 	@media screen and (max-width: 768px) {

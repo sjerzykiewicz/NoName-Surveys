@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { focusedIndex, questions } from '$lib/stores/create-page';
+	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import Input from '$lib/components/global/Input.svelte';
-	import setQuestionFocus from '$lib/utils/setQuestionFocus';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -13,17 +12,6 @@
 	export let questionIndex: number;
 	export let questionTypeData: { title: string; icon: string; text: string };
 	export let questionInput: HTMLDivElement;
-
-	function removeQuestion() {
-		$questions.splice(questionIndex, 1);
-		$questions = $questions;
-		if ($focusedIndex === 0) {
-			if ($questions.length === 0) $focusedIndex = undefined;
-		} else {
-			$focusedIndex!--;
-			setQuestionFocus($focusedIndex!);
-		}
-	}
 
 	function moveQuestionUp() {
 		const higher = $questions[questionIndex];
@@ -41,16 +29,17 @@
 		$questions[questionIndex].required = !$questions[questionIndex].required;
 	}
 
+	function removeQuestion() {
+		$questions.splice(questionIndex, 1);
+		$questions = $questions;
+	}
+
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
 
-<div
-	class="question-label"
-	id={questionIndex.toString()}
-	transition:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="question-label" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div title={$t('question_index', { index: questionIndex + 1 })} class="index">
 		{questionIndex + 1}.
 	</div>

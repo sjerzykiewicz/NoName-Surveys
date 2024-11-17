@@ -25,8 +25,10 @@
 	}
 
 	function removeChoice(index: number) {
-		$questions[questionIndex].choices.splice(index, 1);
-		$questions = $questions;
+		if ($questions[questionIndex].choices.length > 2) {
+			$questions[questionIndex].choices.splice(index, 1);
+			$questions = $questions;
+		}
 	}
 
 	afterUpdate(() => {
@@ -44,7 +46,7 @@
 
 <div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<div class="choice">
+		<div class="choice" id={`q${questionIndex}c${choiceIndex}`}>
 			<div class="radio">
 				<input type="radio" disabled name={questionIndex.toString()} />
 			</div>

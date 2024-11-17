@@ -28,8 +28,6 @@
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { M } from '$lib/stores/global';
-	import { focusedIndex } from '$lib/stores/create-page';
-	import setQuestionFocus from '$lib/utils/setQuestionFocus';
 	import { checkQuestionError } from '$lib/utils/checkQuestionError';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
@@ -119,25 +117,357 @@
 		$previousQuestion = component;
 		isPanelVisible = false;
 
-		if ($focusedIndex === undefined) {
-			$focusedIndex = 0;
-		} else {
-			$focusedIndex++;
-		}
-
 		if (innerWidth > $M) {
 			await tick();
 			questionInput.focus();
+			questionInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		}
 	}
 
-	function deleteQuestion(index: number) {
-		$questions.splice(index, 1);
-		$questions = $questions;
+	function focusPreviousInput() {
+		const c = getClosestElement('choice');
+		const q = getClosestElement('question');
+
+		let element: HTMLElement | null = null;
+
+		if (c && q) {
+			if (c.index === 0) {
+				element = document.getElementById(`q${q.index}`);
+			} else {
+				element = document.getElementById(`q${q.index}c${c.index - 1}`);
+			}
+		} else if (q) {
+			if (q.index === 0) {
+				element = document.getElementById('header');
+			} else {
+				if ($questions[q.index - 1].component === Scale) {
+					element = document.getElementById(`q${q.index - 1}`);
+				} else {
+					element = document.getElementById(
+						`q${q.index - 1}c${$questions[q.index - 1].choices.length - 1}`
+					);
+				}
+			}
+		} else {
+			if ($questions[$questions.length - 1].component === Scale) {
+				element = document.getElementById(`q${$questions.length - 1}`);
+			} else {
+				element = document.getElementById(
+					`q${$questions.length - 1}c${$questions[$questions.length - 1].choices.length - 1}`
+				);
+			}
+		}
+
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && (input instanceof HTMLDivElement || input instanceof HTMLInputElement)) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
 	}
 
-	function switchRequired(index: number) {
-		$questions[index].required = !$questions[index].required;
+	function focusNextInput() {
+		const c = getClosestElement('choice');
+		const q = getClosestElement('question');
+
+		let element: HTMLElement | null = null;
+
+		if (c && q) {
+			if (c.index === $questions[q.index].choices.length - 1) {
+				if (q.index === $questions.length - 1) {
+					element = document.getElementById('header');
+				} else {
+					element = document.getElementById(`q${q.index + 1}`);
+				}
+			} else {
+				element = document.getElementById(`q${q.index}c${c.index + 1}`);
+			}
+		} else if (q) {
+			if ($questions[q.index].component === Scale) {
+				if (q.index === $questions.length - 1) {
+					element = document.getElementById('header');
+				} else {
+					element = document.getElementById(`q${q.index + 1}`);
+				}
+			} else {
+				element = document.getElementById(`q${q.index}c0`);
+			}
+		} else {
+			element = document.getElementById(`q0`);
+		}
+
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && (input instanceof HTMLDivElement || input instanceof HTMLInputElement)) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function focusPreviousQuestion() {
+		const q = getClosestElement('question');
+
+		let element: HTMLElement | null = null;
+
+		if (q) {
+			if (q.index === 0) {
+				element = document.getElementById(`q${$questions.length - 1}`);
+			} else {
+				element = document.getElementById(`q${q.index - 1}`);
+			}
+		}
+
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && input instanceof HTMLDivElement) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function focusNextQuestion() {
+		const q = getClosestElement('question');
+
+		let element: HTMLElement | null = null;
+
+		if (q) {
+			if (q.index === $questions.length - 1) {
+				element = document.getElementById(`q0`);
+			} else {
+				element = document.getElementById(`q${q.index + 1}`);
+			}
+		}
+
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && input instanceof HTMLDivElement) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function focusTitle() {
+		const element = document.getElementById('header');
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && input instanceof HTMLDivElement) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function focusCreate() {
+		const element = document.getElementById('create');
+		if (element) {
+			element.focus();
+			element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
+	}
+
+	async function moveQuestionUp() {
+		const q = getClosestElement('question');
+		if (!q || q.index === 0) return;
+
+		const higher = $questions[q.index];
+		$questions[q.index] = $questions[q.index - 1];
+		$questions[q.index - 1] = higher;
+
+		await tick();
+		q.element.focus();
+		q.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	}
+
+	async function moveQuestionDown() {
+		const q = getClosestElement('question');
+		if (!q || q.index === $questions.length - 1) return;
+
+		const lower = $questions[q.index];
+		$questions[q.index] = $questions[q.index + 1];
+		$questions[q.index + 1] = lower;
+
+		await tick();
+		q.element.focus();
+		q.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	}
+
+	function toggleRequirement() {
+		const q = getClosestElement('question');
+		if (!q) return;
+
+		$questions[q.index].required = !$questions[q.index].required;
+	}
+
+	async function removeQuestionOrChoice() {
+		const c = getClosestElement('choice');
+		const q = getClosestElement('question');
+
+		let element: HTMLElement | null = null;
+
+		if (c && q) {
+			if ($questions[q.index].choices.length > 2 && $questions[q.index].component !== Slider) {
+				if (c.index === $questions[q.index].choices.length - 1) {
+					element = document.getElementById(`q${q.index}c${c.index - 1}`);
+				} else {
+					element = document.getElementById(`q${q.index}c${c.index}`);
+				}
+
+				$questions[q.index].choices.splice(c.index, 1);
+			}
+		} else if (q) {
+			if (q.index === $questions.length - 1) {
+				element = document.getElementById(`q${q.index - 1}`);
+			} else {
+				element = document.getElementById(`q${q.index + 1}`);
+			}
+
+			$questions.splice(q.index, 1);
+		} else {
+			return;
+		}
+
+		$questions = $questions;
+
+		await tick();
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && input instanceof HTMLDivElement) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	async function addChoice() {
+		const q = getClosestElement('question');
+		if (!q) return;
+
+		$questions[q.index].choices = [...$questions[q.index].choices, ''];
+
+		await tick();
+		const element = document.getElementById(
+			`q${q.index}c${$questions[q.index].choices.length - 1}`
+		);
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && (input instanceof HTMLDivElement || input instanceof HTMLInputElement)) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function getClosestElement(item: string) {
+		const focusedElement = document.activeElement;
+		if (!focusedElement) return null;
+		if (
+			!(
+				focusedElement instanceof HTMLDivElement ||
+				focusedElement instanceof HTMLInputElement ||
+				focusedElement instanceof HTMLButtonElement
+			)
+		)
+			return null;
+
+		const itemElement = focusedElement.closest<HTMLDivElement>(`.${item}`);
+		if (!itemElement) return null;
+
+		const charIndex = itemElement.id.indexOf(item[0]);
+
+		return { index: parseInt(itemElement.id.substring(charIndex + 1)), element: focusedElement };
+	}
+
+	function handleHotkeys(e: KeyboardEvent) {
+		if (e.altKey) {
+			const key = e.code;
+			switch (key) {
+				case 'Digit1':
+				case 'Numpad1':
+					addQuestion(questionTypes[0]);
+					break;
+				case 'Digit2':
+				case 'Numpad2':
+					addQuestion(questionTypes[1]);
+					break;
+				case 'Digit3':
+				case 'Numpad3':
+					addQuestion(questionTypes[2]);
+					break;
+				case 'Digit4':
+				case 'Numpad4':
+					addQuestion(questionTypes[3]);
+					break;
+				case 'Digit5':
+				case 'Numpad5':
+					addQuestion(questionTypes[4]);
+					break;
+				case 'Digit6':
+				case 'Numpad6':
+					addQuestion(questionTypes[5]);
+					break;
+				case 'Digit7':
+				case 'Numpad7':
+					addQuestion(questionTypes[6]);
+					break;
+				case 'Digit8':
+				case 'Numpad8':
+					addQuestion(questionTypes[7]);
+					break;
+				case 'Digit9':
+				case 'Numpad9':
+					addQuestion(questionTypes[8]);
+					break;
+				case 'Digit0':
+				case 'Numpad0':
+					if ($previousQuestion) addQuestion($previousQuestion);
+					break;
+				case 'ArrowUp':
+					focusPreviousQuestion();
+					break;
+				case 'ArrowDown':
+					focusNextQuestion();
+					break;
+				case 'ArrowLeft':
+					focusPreviousInput();
+					break;
+				case 'ArrowRight':
+					focusNextInput();
+					break;
+				case 'Home':
+					focusTitle();
+					break;
+				case 'End':
+					focusCreate();
+					break;
+				case 'PageUp':
+					moveQuestionUp();
+					break;
+				case 'PageDown':
+					moveQuestionDown();
+					break;
+				case 'Backquote':
+				case 'Backslash':
+				case 'NumpadDecimal':
+					toggleRequirement();
+					break;
+				case 'Backspace':
+				case 'Delete':
+				case 'NumpadAdd':
+					removeQuestionOrChoice();
+					break;
+				case 'Enter':
+				case 'Insert':
+				case 'NumpadEnter':
+					addChoice();
+					break;
+			}
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		}
 	}
 
 	onMount(() => {
@@ -155,83 +485,12 @@
 			}
 		}
 
-		function handleHotkeys(event: KeyboardEvent) {
-			const keyname = event.key;
-			if (event.ctrlKey) {
-				switch (keyname) {
-					case '1':
-						addQuestion(Text);
-						break;
-					case '2':
-						addQuestion(Single);
-						break;
-					case '3':
-						addQuestion(Multi);
-						break;
-					case '4':
-						addQuestion(Scale);
-						break;
-					case '5':
-						addQuestion(Binary);
-						break;
-					case '6':
-						addQuestion(Number);
-						break;
-					case '7':
-						addQuestion(Slider);
-						break;
-					case '8':
-						addQuestion(List);
-						break;
-					case '9':
-						addQuestion(Rank);
-						break;
-					case '0':
-						if ($previousQuestion) addQuestion($previousQuestion);
-						break;
-					case 'Backspace':
-						if ($focusedIndex !== undefined) {
-							deleteQuestion($focusedIndex);
-							if ($focusedIndex === 0) {
-								if ($questions.length === 0) $focusedIndex = undefined;
-							} else {
-								$focusedIndex--;
-								setQuestionFocus($focusedIndex);
-							}
-						}
-						break;
-					case 'e':
-						if ($focusedIndex !== undefined) {
-							switchRequired($focusedIndex);
-						}
-						break;
-					case 'ArrowLeft':
-						if ($focusedIndex !== undefined) {
-							$focusedIndex = Math.max(0, $focusedIndex - 1);
-							setQuestionFocus($focusedIndex);
-						}
-						break;
-					case 'ArrowRight':
-						if ($focusedIndex !== undefined) {
-							$focusedIndex = Math.min($focusedIndex + 1, $questions.length - 1);
-							setQuestionFocus($focusedIndex);
-						}
-						break;
-				}
-			}
-			event.stopImmediatePropagation();
-		}
-
 		document.body.addEventListener('keydown', handleEscape);
 		document.body.addEventListener('click', handleClick);
-		document.body.addEventListener('keydown', handleHotkeys);
-		document.body.addEventListener('keydown', handleHotkeys);
 
 		return () => {
 			document.body.removeEventListener('keydown', handleEscape);
 			document.body.removeEventListener('click', handleClick);
-			document.body.removeEventListener('keydown', handleHotkeys);
-			document.body.removeEventListener('keydown', handleHotkeys);
 		};
 	});
 
@@ -239,6 +498,7 @@
 </script>
 
 <svelte:window bind:innerWidth />
+<svelte:body on:keydown|capture={handleHotkeys} />
 
 <div class="button-group" style="--width: {currentLang === 'en' ? '7.5em' : '8em'}">
 	<div class="add-buttons">

@@ -63,7 +63,7 @@
 		if (!$questions.every((q) => q.error === SurveyError.NoError)) {
 			await tick();
 			scrollToElementById(
-				$questions.indexOf($questions.find((q) => q.error !== SurveyError.NoError)!).toString()
+				`q${$questions.indexOf($questions.find((q) => q.error !== SurveyError.NoError)!).toString()}`
 			);
 			return false;
 		}
@@ -164,6 +164,7 @@
 	<button
 		title={$t('create_title')}
 		class="footer-button done"
+		id="create"
 		disabled={$questions.length === 0 || isPreview}
 		on:click={createSurvey}
 	>

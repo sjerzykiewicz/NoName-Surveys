@@ -295,6 +295,7 @@
 {#each $questions as question, questionIndex (question)}
 	<div
 		class="question"
+		id={`q${questionIndex}`}
 		in:slide={{ duration: 200, easing: cubicInOut }}
 		on:introend={() => scrollToElement('.add-question')}
 	>

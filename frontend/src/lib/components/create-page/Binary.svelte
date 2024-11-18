@@ -12,7 +12,7 @@
 </script>
 
 <div class="choice-area binary" transition:slide={{ duration: 200, easing: cubicInOut }}>
-	<label class="choice binary">
+	<label class="choice binary" id={`q${questionIndex}c0`}>
 		<div class="icon">
 			<input type="radio" disabled name={questionIndex.toString()} />
 			<i class="symbol">thumb_up</i>
@@ -26,7 +26,7 @@
 			--label-top-mobile="14px"
 		/>
 	</label>
-	<label class="choice binary">
+	<label class="choice binary" id={`q${questionIndex}c1`}>
 		<div class="icon">
 			<input type="radio" disabled name={questionIndex.toString()} />
 			<i class="symbol">thumb_down</i>

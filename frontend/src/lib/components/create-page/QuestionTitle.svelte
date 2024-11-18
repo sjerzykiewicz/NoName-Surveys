@@ -13,11 +13,6 @@
 	export let questionTypeData: { title: string; icon: string; text: string };
 	export let questionInput: HTMLDivElement;
 
-	function removeQuestion() {
-		$questions.splice(questionIndex, 1);
-		$questions = $questions;
-	}
-
 	function moveQuestionUp() {
 		const higher = $questions[questionIndex];
 		$questions[questionIndex] = $questions[questionIndex - 1];
@@ -34,16 +29,17 @@
 		$questions[questionIndex].required = !$questions[questionIndex].required;
 	}
 
+	function removeQuestion() {
+		$questions.splice(questionIndex, 1);
+		$questions = $questions;
+	}
+
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
 
-<div
-	class="question-label"
-	id={questionIndex.toString()}
-	transition:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="question-label" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div title={$t('question_index', { index: questionIndex + 1 })} class="index">
 		{questionIndex + 1}.
 	</div>

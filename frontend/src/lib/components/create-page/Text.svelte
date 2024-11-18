@@ -12,7 +12,7 @@
 </script>
 
 <div class="choice-area text" transition:slide={{ duration: 200, easing: cubicInOut }}>
-	<div class="details">
+	<div class="details choice" id={`q${questionIndex}c0`}>
 		<Input
 			bind:text={$questions[questionIndex].choices[0]}
 			label={$t('text_details_label')}
@@ -25,5 +25,9 @@
 <style>
 	.details {
 		display: flex;
+	}
+
+	.choice {
+		margin-bottom: 0em;
 	}
 </style>

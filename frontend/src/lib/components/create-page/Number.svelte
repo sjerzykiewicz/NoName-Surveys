@@ -30,11 +30,11 @@
 
 <div class="choice-area slider" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="limits">
-		<label class="min">
+		<label class="min choice" id={`q${questionIndex}c0`}>
 			<Tx text="minimum" />
 			<input
 				title={$t('number_min_title')}
-				class="limit-input"
+				class="limit-input input"
 				type="number"
 				{min}
 				{max}
@@ -48,11 +48,11 @@
 				on:change={() => handleChange(parseFloat($questions[questionIndex].choices[0]), 0)}
 			/></label
 		>
-		<label class="max">
+		<label class="max choice" id={`q${questionIndex}c1`}>
 			<Tx text="maximum" />
 			<input
 				title={$t('number_max_title')}
-				class="limit-input"
+				class="limit-input input"
 				type="number"
 				{min}
 				{max}
@@ -74,6 +74,10 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+	}
+
+	.choice {
+		margin-bottom: 0em;
 	}
 
 	@media screen and (max-width: 768px) {

@@ -25,8 +25,10 @@
 	}
 
 	function removeChoice(index: number) {
-		$questions[questionIndex].choices.splice(index, 1);
-		$questions = $questions;
+		if ($questions[questionIndex].choices.length > 2) {
+			$questions[questionIndex].choices.splice(index, 1);
+			$questions = $questions;
+		}
 	}
 
 	afterUpdate(() => {
@@ -47,7 +49,7 @@
 		<select disabled />
 	</div>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<div class="choice">
+		<div class="choice" id={`q${questionIndex}c${choiceIndex}`}>
 			<Input
 				bind:text={choice}
 				label={$t('choice')}

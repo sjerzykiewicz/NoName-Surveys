@@ -1007,8 +1007,7 @@ input[type='radio']:disabled {
 .download-key .tooltip i,
 .crypto-row .tooltip i,
 .load-text .tooltip i,
-.code-text .tooltip i,
-.create-info i {
+.code-text .tooltip i {
 	color: var(--border-color-1);
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
 	transition:
@@ -1539,7 +1538,13 @@ button.popup {
 	}
 }
 
-.account-accent {
+.accent {
+	display: inline-flex;
+	align-items: flex-end;
+}
+
+.account-accent,
+.accent {
 	color: var(--accent-color-1);
 	font-weight: 700;
 }

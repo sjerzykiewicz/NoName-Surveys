@@ -25,7 +25,6 @@
 		bind:text={$title.title}
 		label={$t('survey_title')}
 		title={$t('survey_title_title')}
-		id="title"
 		bind:element={titleInput}
 		--margin-right="0em"
 		--char-count-left="7em"

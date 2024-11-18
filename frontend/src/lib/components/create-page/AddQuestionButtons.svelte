@@ -53,6 +53,10 @@
 		Rank
 	];
 
+	$: questionsInfo = questionTypes.map((questionType) =>
+		$t(getQuestionTypeData(questionType).text)
+	);
+
 	function getPreviewComponent(component: ComponentType) {
 		switch (component) {
 			case Single:
@@ -120,6 +124,351 @@
 		if (innerWidth > $M) {
 			await tick();
 			questionInput.focus();
+			questionInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
+	}
+
+	function focusPreviousInput() {
+		const c = getClosestElement('choice');
+		const q = getClosestElement('question');
+
+		let element: HTMLElement | null = null;
+
+		if (c && q) {
+			if (c.index === 0) {
+				element = document.getElementById(`q${q.index}`);
+			} else {
+				element = document.getElementById(`q${q.index}c${c.index - 1}`);
+			}
+		} else if (q) {
+			if (q.index === 0) {
+				element = document.getElementById('header');
+			} else {
+				if ($questions[q.index - 1].component === Scale) {
+					element = document.getElementById(`q${q.index - 1}`);
+				} else {
+					element = document.getElementById(
+						`q${q.index - 1}c${$questions[q.index - 1].choices.length - 1}`
+					);
+				}
+			}
+		} else {
+			if ($questions[$questions.length - 1].component === Scale) {
+				element = document.getElementById(`q${$questions.length - 1}`);
+			} else {
+				element = document.getElementById(
+					`q${$questions.length - 1}c${$questions[$questions.length - 1].choices.length - 1}`
+				);
+			}
+		}
+
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && (input instanceof HTMLDivElement || input instanceof HTMLInputElement)) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function focusNextInput() {
+		const c = getClosestElement('choice');
+		const q = getClosestElement('question');
+
+		let element: HTMLElement | null = null;
+
+		if (c && q) {
+			if (c.index === $questions[q.index].choices.length - 1) {
+				if (q.index === $questions.length - 1) {
+					element = document.getElementById('header');
+				} else {
+					element = document.getElementById(`q${q.index + 1}`);
+				}
+			} else {
+				element = document.getElementById(`q${q.index}c${c.index + 1}`);
+			}
+		} else if (q) {
+			if ($questions[q.index].component === Scale) {
+				if (q.index === $questions.length - 1) {
+					element = document.getElementById('header');
+				} else {
+					element = document.getElementById(`q${q.index + 1}`);
+				}
+			} else {
+				element = document.getElementById(`q${q.index}c0`);
+			}
+		} else {
+			element = document.getElementById(`q0`);
+		}
+
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && (input instanceof HTMLDivElement || input instanceof HTMLInputElement)) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function focusPreviousQuestion() {
+		const q = getClosestElement('question');
+
+		let element: HTMLElement | null = null;
+
+		if (q) {
+			if (q.index === 0) {
+				element = document.getElementById(`q${$questions.length - 1}`);
+			} else {
+				element = document.getElementById(`q${q.index - 1}`);
+			}
+		}
+
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && input instanceof HTMLDivElement) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function focusNextQuestion() {
+		const q = getClosestElement('question');
+
+		let element: HTMLElement | null = null;
+
+		if (q) {
+			if (q.index === $questions.length - 1) {
+				element = document.getElementById(`q0`);
+			} else {
+				element = document.getElementById(`q${q.index + 1}`);
+			}
+		}
+
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && input instanceof HTMLDivElement) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function focusTitle() {
+		const element = document.getElementById('header');
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && input instanceof HTMLDivElement) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function focusCreate() {
+		const element = document.getElementById('create');
+		if (element) {
+			element.focus();
+			element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
+	}
+
+	async function moveQuestionUp() {
+		const q = getClosestElement('question');
+		if (!q || q.index === 0) return;
+
+		const higher = $questions[q.index];
+		$questions[q.index] = $questions[q.index - 1];
+		$questions[q.index - 1] = higher;
+
+		await tick();
+		q.element.focus();
+		q.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	}
+
+	async function moveQuestionDown() {
+		const q = getClosestElement('question');
+		if (!q || q.index === $questions.length - 1) return;
+
+		const lower = $questions[q.index];
+		$questions[q.index] = $questions[q.index + 1];
+		$questions[q.index + 1] = lower;
+
+		await tick();
+		q.element.focus();
+		q.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+	}
+
+	function toggleRequirement() {
+		const q = getClosestElement('question');
+		if (!q) return;
+
+		$questions[q.index].required = !$questions[q.index].required;
+	}
+
+	async function removeQuestionOrChoice() {
+		const c = getClosestElement('choice');
+		const q = getClosestElement('question');
+
+		let element: HTMLElement | null = null;
+
+		if (c && q) {
+			if ($questions[q.index].choices.length > 2 && $questions[q.index].component !== Slider) {
+				if (c.index === $questions[q.index].choices.length - 1) {
+					element = document.getElementById(`q${q.index}c${c.index - 1}`);
+				} else {
+					element = document.getElementById(`q${q.index}c${c.index}`);
+				}
+
+				$questions[q.index].choices.splice(c.index, 1);
+			}
+		} else if (q) {
+			if (q.index === $questions.length - 1) {
+				element = document.getElementById(`q${q.index - 1}`);
+			} else {
+				element = document.getElementById(`q${q.index + 1}`);
+			}
+
+			$questions.splice(q.index, 1);
+		} else {
+			return;
+		}
+
+		$questions = $questions;
+
+		await tick();
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && input instanceof HTMLDivElement) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	async function addChoice() {
+		const q = getClosestElement('question');
+		if (!q) return;
+
+		$questions[q.index].choices = [...$questions[q.index].choices, ''];
+
+		await tick();
+		const element = document.getElementById(
+			`q${q.index}c${$questions[q.index].choices.length - 1}`
+		);
+		if (element) {
+			const input = element.querySelector('.input');
+			if (input && (input instanceof HTMLDivElement || input instanceof HTMLInputElement)) {
+				input.focus();
+				input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
+	}
+
+	function getClosestElement(item: string) {
+		const focusedElement = document.activeElement;
+		if (!focusedElement) return null;
+		if (
+			!(
+				focusedElement instanceof HTMLDivElement ||
+				focusedElement instanceof HTMLInputElement ||
+				focusedElement instanceof HTMLButtonElement
+			)
+		)
+			return null;
+
+		const itemElement = focusedElement.closest<HTMLDivElement>(`.${item}`);
+		if (!itemElement) return null;
+
+		const charIndex = itemElement.id.indexOf(item[0]);
+
+		return { index: parseInt(itemElement.id.substring(charIndex + 1)), element: focusedElement };
+	}
+
+	function handleHotkeys(e: KeyboardEvent) {
+		if (e.altKey) {
+			const key = e.code;
+			switch (key) {
+				case 'Digit1':
+				case 'Numpad1':
+					addQuestion(questionTypes[0]);
+					break;
+				case 'Digit2':
+				case 'Numpad2':
+					addQuestion(questionTypes[1]);
+					break;
+				case 'Digit3':
+				case 'Numpad3':
+					addQuestion(questionTypes[2]);
+					break;
+				case 'Digit4':
+				case 'Numpad4':
+					addQuestion(questionTypes[3]);
+					break;
+				case 'Digit5':
+				case 'Numpad5':
+					addQuestion(questionTypes[4]);
+					break;
+				case 'Digit6':
+				case 'Numpad6':
+					addQuestion(questionTypes[5]);
+					break;
+				case 'Digit7':
+				case 'Numpad7':
+					addQuestion(questionTypes[6]);
+					break;
+				case 'Digit8':
+				case 'Numpad8':
+					addQuestion(questionTypes[7]);
+					break;
+				case 'Digit9':
+				case 'Numpad9':
+					addQuestion(questionTypes[8]);
+					break;
+				case 'Digit0':
+				case 'Numpad0':
+					if ($previousQuestion) addQuestion($previousQuestion);
+					break;
+				case 'ArrowUp':
+					focusPreviousQuestion();
+					break;
+				case 'ArrowDown':
+					focusNextQuestion();
+					break;
+				case 'ArrowLeft':
+					focusPreviousInput();
+					break;
+				case 'ArrowRight':
+					focusNextInput();
+					break;
+				case 'Home':
+					focusTitle();
+					break;
+				case 'End':
+					focusCreate();
+					break;
+				case 'PageUp':
+					moveQuestionUp();
+					break;
+				case 'PageDown':
+					moveQuestionDown();
+					break;
+				case 'Backquote':
+				case 'Backslash':
+					toggleRequirement();
+					break;
+				case 'Backspace':
+				case 'Delete':
+					removeQuestionOrChoice();
+					break;
+				case 'Enter':
+				case 'NumpadEnter':
+				case 'Insert':
+					addChoice();
+					break;
+			}
+			e.preventDefault();
+			e.stopImmediatePropagation();
 		}
 	}
 
@@ -151,6 +500,7 @@
 </script>
 
 <svelte:window bind:innerWidth />
+<svelte:body on:keydown|capture={handleHotkeys} />
 
 <div class="button-group" style="--width: {currentLang === 'en' ? '7.5em' : '8em'}">
 	<div class="add-buttons">
@@ -190,12 +540,32 @@
 		</div>
 	{/if}
 </div>
+{#if innerWidth > $M}
+	<div class="tooltip hotkeys-info">
+		<i class="symbol">bolt</i>
+		<span class="tooltip-text right">
+			<Tx
+				html="hotkeys_info"
+				params={{
+					one: questionsInfo[0],
+					two: questionsInfo[1],
+					three: questionsInfo[2],
+					four: questionsInfo[3],
+					five: questionsInfo[4],
+					six: questionsInfo[5],
+					seven: questionsInfo[6],
+					eight: questionsInfo[7],
+					nine: questionsInfo[8]
+				}}
+			/>
+		</span>
+	</div>
+{/if}
 
 <style>
 	.button-group {
 		width: fit-content;
 		font-size: 1.25em;
-		margin-right: 0.5em;
 	}
 
 	.add-buttons {
@@ -265,6 +635,43 @@
 	.add-question i {
 		transform: rotate(0deg);
 		transition: transform 0.2s;
+	}
+
+	.hotkeys-info.tooltip {
+		--tooltip-width: 35em;
+		font-size: 1.5em;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text {
+		text-align: left;
+		font-size: 0.67em;
+		z-index: 2;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.right {
+		top: 400%;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.right::after {
+		top: 27.5%;
+	}
+
+	.tooltip i {
+		color: var(--accent-color-2);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		transition:
+			0.2s,
+			outline 0s;
+	}
+
+	@media screen and (max-width: 1145px) {
+		.hotkeys-info.tooltip {
+			--tooltip-width: 28.1em;
+		}
+
+		.hotkeys-info.tooltip .tooltip-text {
+			font-size: 0.6em;
+		}
 	}
 
 	@media screen and (max-width: 768px) {

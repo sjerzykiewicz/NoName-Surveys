@@ -193,7 +193,7 @@
 				<td title="{$t('open')} {group.user_group_name}" class="title-entry"
 					><button
 						on:click={() =>
-							goto($page.url.pathname + '/' + encodeURI(group.user_group_name) + '/0')}
+							goto($page.url.pathname + '/' + encodeURIComponent(group.user_group_name) + '/0')}
 						>{group.user_group_name}</button
 					></td
 				>

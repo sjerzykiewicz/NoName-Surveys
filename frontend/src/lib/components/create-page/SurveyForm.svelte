@@ -275,7 +275,6 @@
 					bind:users={$ringMembers}
 					title={$t('import_users_title')}
 					label={$t('import_users_label')}
-					id="emails-file"
 					checkKeys={true}
 					--width="100%"
 					bind:disabled={isCryptoDisabled}

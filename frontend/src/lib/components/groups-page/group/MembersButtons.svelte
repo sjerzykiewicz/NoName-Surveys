@@ -7,7 +7,7 @@
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { tick } from 'svelte';
-	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import { page } from '$app/stores';
@@ -16,6 +16,8 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
+	import WarningModal from '$lib/components/global/WarningModal.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -27,6 +29,8 @@
 	export let selectedMembersToRemove: string[] = [];
 	export let group: string;
 	export let numMembers: number;
+	export let invalidEmails: string[] = [];
+	export let isExportButtonVisible: boolean = false;
 
 	let isPanelVisible: boolean = false;
 	let selectedMembersToAdd: string[] = [];
@@ -136,7 +140,17 @@
 		selectedMembersToRemove = [];
 		await invalidateAll();
 	}
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
+
+<WarningModal
+	{isExportButtonVisible}
+	emails={invalidEmails}
+	--width-warning={innerWidth <= $M ? '20em' : '22em'}
+/>
 
 <DeleteModal
 	title={$t('removing_group_members')}
@@ -168,22 +182,37 @@
 	<PageButtons numEntries={numMembers} />
 </div>
 {#if isPanelVisible}
-	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div title={$t('select_group_members')} class="select-list">
-			<MultiSelect
-				bind:selected={selectedMembersToAdd}
-				options={notMembers}
-				placeholder={$t('select_group_members')}
-			/>
+	<div class="buttons-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<div class="button-row">
+			<div title={$t('select_group_members')} class="select-list">
+				<MultiSelect
+					bind:selected={selectedMembersToAdd}
+					options={notMembers}
+					placeholder={$t('select_group_members')}
+				/>
+			</div>
+			<button title={$t('add_members_finish')} class="done" on:click={addMembers}>
+				<i class="symbol">done</i><Tx text="submit" />
+			</button>
 		</div>
-		<button title={$t('add_members_finish')} class="done" on:click={addMembers}>
-			<i class="symbol">done</i><Tx text="submit" />
-		</button>
+		<MembersError members={selectedMembersToAdd} error={membersError} />
+		<ImportEmails
+			bind:users={selectedMembersToAdd}
+			title={$t('import_members_title')}
+			label={$t('import_members_label')}
+			checkKeys={false}
+			bind:invalidEmails
+			bind:isExportButtonVisible
+		/>
 	</div>
-	<MembersError members={selectedMembersToAdd} error={membersError} />
 {/if}
 
 <style>
+	.buttons-container {
+		padding: 0.2em;
+		margin: -0.2em;
+	}
+
 	@media screen and (max-width: 768px) {
 		.top-row {
 			font-size: 0.9em;

@@ -15,9 +15,6 @@
 		title,
 		questions,
 		previousQuestion,
-		useCrypto,
-		ringMembers,
-		selectedGroup,
 		currentDraftId,
 		draftStructure
 	} from '$lib/stores/create-page';
@@ -42,6 +39,9 @@
 	export let isRespondentModalHidden: boolean = true;
 	export let invalidEmails: string[] = [];
 	export let isExportButtonVisible: boolean = false;
+	export let ringMembers: string[] = [];
+	export let selectedGroups: string[] = [];
+	export let useCrypto: boolean = false;
 
 	onMount(() => {
 		if (data.numSurveys >= $LIMIT_OF_SURVEYS && data.numDrafts >= $LIMIT_OF_DRAFTS) {
@@ -72,9 +72,9 @@
 		$title = { title: '', error: SurveyError.NoError };
 		$questions = [];
 		$previousQuestion = null;
-		$useCrypto = false;
-		$ringMembers = [];
-		$selectedGroup = [];
+		useCrypto = false;
+		ringMembers = [];
+		selectedGroups = [];
 		$currentDraftId = null;
 		$draftStructure = getDraft('', []);
 	});
@@ -109,6 +109,9 @@
 		bind:isRespondentModalHidden
 		bind:invalidEmails
 		bind:isExportButtonVisible
+		bind:ringMembers
+		bind:selectedGroups
+		bind:useCrypto
 	/>
 </Content>
 

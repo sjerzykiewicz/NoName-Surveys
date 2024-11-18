@@ -1,13 +1,5 @@
 <script lang="ts">
-	import {
-		questions,
-		title,
-		currentDraftId,
-		draftStructure,
-		useCrypto,
-		ringMembers,
-		selectedGroup
-	} from '$lib/stores/create-page';
+	import { questions, title, currentDraftId, draftStructure } from '$lib/stores/create-page';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import QuestionError from './QuestionError.svelte';
@@ -55,6 +47,9 @@
 	export let isRespondentModalHidden: boolean = true;
 	export let invalidEmails: string[] = [];
 	export let isExportButtonVisible: boolean = false;
+	export let ringMembers: string[] = [];
+	export let selectedGroups: string[] = [];
+	export let useCrypto: boolean = false;
 
 	let cryptoError: boolean = false;
 	let questionInput: HTMLDivElement;
@@ -63,10 +58,10 @@
 
 	function checkCorrectness() {
 		cryptoError = false;
-		const g = $selectedGroup;
-		const r = $ringMembers;
+		const g = selectedGroups;
+		const r = ringMembers;
 		if (
-			$useCrypto &&
+			useCrypto &&
 			(g === null || g === undefined || g.length === 0) &&
 			(r === null || r === undefined || r.length === 0)
 		) {
@@ -130,42 +125,13 @@
 		await invalidateAll();
 	}
 
-	async function fetchGroup(name: string): Promise<string[]> {
-		const response = await fetch('/api/groups/fetch', {
-			method: 'POST',
-			body: JSON.stringify({ name: name }),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			const body = await response.json();
-			$errorModalContent = getErrorMessage(body.detail);
-			$isErrorModalHidden = false;
-			return [];
-		}
-
-		const body: { email: string; has_public_key: boolean }[] = await response.json();
-		return body.map((member) => member.email);
-	}
-
 	async function createSurvey() {
 		if (!checkCorrectness()) return;
 
 		isRespondentModalHidden = true;
 
-		let ring: string[] = [];
-
-		if ($selectedGroup.length > 0) {
-			const groupMembers = await fetchGroup($selectedGroup[0]);
-			ring = Array.from(new Set([...$ringMembers, ...groupMembers]));
-		} else {
-			ring = $ringMembers;
-		}
-
 		const parsedSurvey = new Survey(constructQuestionList($questions));
-		const surveyInfo = new SurveyCreateInfo($title.title, parsedSurvey, $useCrypto, ring);
+		const surveyInfo = new SurveyCreateInfo($title.title, parsedSurvey, useCrypto, ringMembers);
 
 		const response = await fetch('/api/surveys/create', {
 			method: 'POST',
@@ -183,9 +149,9 @@
 		}
 
 		const body = await response.json();
-		$useCrypto = false;
-		$ringMembers = [];
-		$selectedGroup = [];
+		useCrypto = false;
+		ringMembers = [];
+		selectedGroups = [];
 		surveyCode = body.survey_code;
 		isSurveyModalHidden = false;
 		await invalidateAll();
@@ -193,7 +159,7 @@
 
 	let innerWidth: number;
 
-	$: isCryptoDisabled = !$useCrypto;
+	$: isCryptoDisabled = !useCrypto;
 
 	onMount(() => {
 		function handleEnterRespondent(event: KeyboardEvent) {
@@ -251,33 +217,33 @@
 			<button
 				title={$t('public')}
 				class="access-button"
-				class:save={!$useCrypto}
-				on:click={() => ($useCrypto = false)}
+				class:save={!useCrypto}
+				on:click={() => (useCrypto = false)}
 			>
 				<i class="symbol">public</i><Tx text="public" />
 			</button>
 			<button
 				title={$t('secure')}
 				class="access-button"
-				class:save={$useCrypto}
-				on:click={() => ($useCrypto = true)}
+				class:save={useCrypto}
+				on:click={() => (useCrypto = true)}
 			>
 				<i class="symbol">encrypted</i><Tx text="secure" />
 			</button>
 		</div>
-		<div class="select-box">
-			<SelectGroup {groups} bind:disabled={isCryptoDisabled} />
+		<div class="select-box" transition:slide={{ duration: 0.2, easing: cubicInOut }}>
+			<SelectGroup {groups} bind:ringMembers bind:selectedGroups disabled={isCryptoDisabled} />
 			<div id="or" class:disabled={isCryptoDisabled}><Tx text="or" /></div>
-			<SelectUsers {users} bind:disabled={isCryptoDisabled} />
-			<CryptoError error={cryptoError} />
+			<SelectUsers {users} bind:ringMembers disabled={isCryptoDisabled} />
+			<CryptoError error={cryptoError} bind:ringMembers bind:selectedGroups bind:useCrypto />
 			<div class="import">
 				<ImportEmails
-					bind:users={$ringMembers}
+					bind:users={ringMembers}
 					title={$t('import_users_title')}
 					label={$t('import_users_label')}
 					checkKeys={true}
 					--width="100%"
-					bind:disabled={isCryptoDisabled}
+					disabled={isCryptoDisabled}
 					bind:invalidEmails
 					bind:isExportButtonVisible
 				/>

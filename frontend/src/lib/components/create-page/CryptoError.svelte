@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { useCrypto, ringMembers, selectedGroup } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { getContext } from 'svelte';
@@ -8,17 +7,20 @@
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let error: boolean;
+	export let selectedGroups: string[];
+	export let ringMembers: string[];
+	export let useCrypto: boolean;
 
 	function errorMessage() {
 		return $t('define_respondent_group_error');
 	}
 
 	$: checkCryptoError = () => {
-		const g = $selectedGroup;
-		const r = $ringMembers;
+		const g = selectedGroups;
+		const r = ringMembers;
 		return (
 			error &&
-			$useCrypto &&
+			useCrypto &&
 			(g === null || g === undefined || g.length === 0) &&
 			(r === null || r === undefined || r.length === 0)
 		);

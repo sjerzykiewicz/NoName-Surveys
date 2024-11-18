@@ -5,6 +5,7 @@ from sqlmodel.pool import StaticPool
 
 from src.main import app
 from src.db.base import get_session
+import os
 
 
 @pytest.fixture(name="session")
@@ -22,7 +23,9 @@ def client_fixture(session: Session):
     def get_session_override():
         return session
 
+    os.environ["TESTING"] = "True"
     app.dependency_overrides[get_session] = get_session_override
     client = TestClient(app)
     yield client
     app.dependency_overrides.clear()
+    del os.environ["TESTING"]

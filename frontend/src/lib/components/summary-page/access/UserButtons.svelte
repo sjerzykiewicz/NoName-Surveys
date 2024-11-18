@@ -7,7 +7,7 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
 	import UsersError from './UsersError.svelte';
-	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
@@ -16,6 +16,8 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
+	import WarningModal from '$lib/components/global/WarningModal.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -24,6 +26,8 @@
 	export let code: string;
 	export let numUsers: number;
 	export let selectedUsersToRemove: string[] = [];
+	export let invalidEmails: string[] = [];
+	export let isExportButtonVisible: boolean = false;
 
 	let isPanelVisible: boolean = false;
 	let selectedUsersToAdd: string[] = [];
@@ -110,7 +114,17 @@
 		selectedUsersToRemove = [];
 		await invalidateAll();
 	}
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
+
+<WarningModal
+	{isExportButtonVisible}
+	emails={invalidEmails}
+	--width-warning={innerWidth <= $M ? '20em' : '22em'}
+/>
 
 <DeleteModal
 	title={$t('removing_access')}
@@ -140,24 +154,35 @@
 	<PageButtons numEntries={numUsers} />
 </div>
 {#if isPanelVisible}
-	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
-		<div title={$t('select_users')} class="select-list">
-			<MultiSelect
-				bind:selected={selectedUsersToAdd}
-				options={usersWithoutAccess}
-				placeholder={$t('select_users')}
-			/>
+	<div class="buttons-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<div class="button-row">
+			<div title={$t('select_users')} class="select-list">
+				<MultiSelect
+					bind:selected={selectedUsersToAdd}
+					options={usersWithoutAccess}
+					placeholder={$t('select_users')}
+				/>
+			</div>
+			<button title={$t('finish_giving_access')} class="done" on:click={addUsers}>
+				<i class="symbol">done</i><Tx text="submit" />
+			</button>
 		</div>
-		<button title={$t('finish_giving_access')} class="done" on:click={addUsers}>
-			<i class="symbol">done</i><Tx text="submit" />
-		</button>
+		<UsersError users={selectedUsersToAdd} error={usersError} />
+		<ImportEmails
+			bind:users={selectedUsersToAdd}
+			title={$t('import_users_title')}
+			label={$t('import_users_label')}
+			checkKeys={false}
+			bind:invalidEmails
+			bind:isExportButtonVisible
+		/>
 	</div>
-	<UsersError users={selectedUsersToAdd} error={usersError} />
 {/if}
 
 <style>
-	.select-list {
-		margin-bottom: 0em;
+	.buttons-container {
+		padding: 0.2em;
+		margin: -0.2em;
 	}
 
 	@media screen and (max-width: 768px) {

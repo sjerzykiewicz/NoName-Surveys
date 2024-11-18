@@ -18,7 +18,6 @@
 	export let users: string[];
 	export let title: string;
 	export let label: string;
-	export let id: string;
 	export let checkKeys: boolean;
 	export let disabled: boolean = false;
 	export let invalidEmails: string[] = [];
@@ -48,10 +47,11 @@
 	}
 
 	async function handleFileChange() {
-		fileElement = document.querySelector<HTMLInputElement>('#emails-file');
 		fileName = fileElement?.files?.[0]?.name ?? $t('no_file_selected');
 
 		const emails: string[] = await processEmails();
+		if (emails.length === 0) return;
+
 		const endpoint: string = checkKeys
 			? 'filter-users-with-no-public-key'
 			: 'filter-unregistered-users';
@@ -70,7 +70,7 @@
 		const validEmails: string[] = emails.filter((e) => !invalidEmailsSet.has(e));
 		const newUsers: string[] = [...users, ...validEmails];
 
-		users = [...new Set(newUsers)];
+		users = Array.from(new Set(newUsers));
 	}
 
 	function checkFileCorrectness() {
@@ -109,12 +109,12 @@
 <div class="button-row">
 	<div {title} class="file-div" class:disabled>
 		<span class="file-label">{label}</span>
-		<label for={id}>
+		<label>
 			<div class="file-input">
 				<span class="file-button"><i class="symbol">upload_file</i>{$t('select_file')}</span>
 				<span class="file-name">{fileName}</span>
 			</div>
-			<input type="file" name={id} {id} {disabled} on:change={handleFileChange} />
+			<input type="file" {disabled} bind:this={fileElement} on:change={handleFileChange} />
 		</label>
 	</div>
 </div>

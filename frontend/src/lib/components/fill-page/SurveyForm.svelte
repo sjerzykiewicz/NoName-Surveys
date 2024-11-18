@@ -231,7 +231,6 @@
 	let fileError: FileError = FileError.NoError;
 
 	function handleFileChange() {
-		fileElement = document.querySelector<HTMLInputElement>('#keys-file');
 		fileName = fileElement?.files?.[0]?.name ?? $t('no_file_selected');
 	}
 
@@ -366,12 +365,12 @@
 		<span class="file-label"
 			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.pem"</span
 		>
-		<label for="keys-file">
+		<label>
 			<div class="file-input">
 				<span class="file-button"><i class="symbol">upload_file</i><Tx text="select_file" /></span>
 				<span class="file-name">{fileName}</span>
 			</div>
-			<input type="file" name="keys" id="keys-file" on:change={handleFileChange} />
+			<input type="file" bind:this={fileElement} on:change={handleFileChange} />
 		</label>
 		<KeysError error={fileError} element={fileElement} />
 	</div>

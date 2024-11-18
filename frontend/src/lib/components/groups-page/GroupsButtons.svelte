@@ -246,7 +246,6 @@
 			bind:users={groupMembers}
 			title={$t('import_members_title')}
 			label={$t('import_members_label')}
-			id="emails-file"
 			checkKeys={false}
 			bind:invalidEmails
 			bind:isExportButtonVisible

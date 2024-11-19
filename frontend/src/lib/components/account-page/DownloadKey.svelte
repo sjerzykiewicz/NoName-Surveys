@@ -11,6 +11,12 @@
 	export let isModalHidden: boolean = true;
 	export let lastTime: string | null;
 
+	$: timeDiff = lastTime !== null ? Date.now() - Date.parse(lastTime) : 0;
+	function secondsToDays(seconds: number) {
+		return (seconds / 3600 / 24).toFixed(0);
+	}
+	const WARNING_TRESHOLD = 335;
+
 	let innerWidth: number;
 </script>
 
@@ -29,7 +35,7 @@
 </div>
 {#if lastTime}
 	<div class="last-update-info">
-		<span><Tx text="account_last_key_update" />: {formatDate(lastTime)}</span>
+		<p><Tx text="account_last_key_update" />: {formatDate(lastTime)}</p>
 		<div class="tooltip">
 			<i class="symbol">info</i>
 			<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
@@ -37,6 +43,13 @@
 			</span>
 		</div>
 	</div>
+	{#if secondsToDays(timeDiff) >= WARNING_TRESHOLD}
+		<p title={$t('')} class="warning">
+			<i class="symbol">warning</i>{$t('account_keys_expire_soon', {
+				number: secondsToDays(timeDiff)
+			})}
+		</p>
+	{/if}
 {/if}
 
 <style>

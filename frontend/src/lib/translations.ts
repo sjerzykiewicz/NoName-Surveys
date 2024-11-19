@@ -368,6 +368,9 @@ export const data = {
 		account_last_key_update: 'Last key update',
 		account_key_update_info:
 			'In order to increase security, we recommend to generate a new key pair every year.',
+		account_expiration_warning: 'Key expiration warning',
+		account_keys_expire_soon:
+			'Your keys have been generated {number} days ago. We recommend generating a new pair soon.',
 		account_authorization_info: `
 			Authorizing yourself will enable you to:
 			<ul class="account-ul">
@@ -782,6 +785,9 @@ export const data = {
 		account_last_key_update: 'Ostatnia aktualizacja kluczy',
 		account_key_update_info:
 			'Aby zwiększyć bezpieczeństwo, zalecamy wygenerowanie nowej pary kluczy raz na rok.',
+		account_expiration_warning: 'Ostrzeżenie o wygaśnięciu kluczy',
+		account_keys_expire_soon:
+			'Twoje klucze zostały wygenerowane {number} dni temu. Zalecamy wygenerowanie nowej pary.',
 		account_authorization_info: `
 			Zautoryzowanie się pozwoli Ci na:
 			<ul class="account-ul">

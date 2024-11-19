@@ -59,6 +59,11 @@ spec:
                 secretKeyRef:
                   name: backend
                   key: SETTINGS_db_name
+            - name: SETTINGS_bearer_token
+              valueFrom:
+                secretKeyRef:
+                  name: backend
+                  key: SETTINGS_bearer_token
           resources: {}
       restartPolicy: Always
 status: {}

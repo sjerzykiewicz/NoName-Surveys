@@ -92,14 +92,20 @@ async def save_survey_answer(
                 status_code=400, detail="User already answered this survey"
             )
 
+        message = (
+            "".join(question.answer for question in survey_answer.questions)
+            + survey_answer.survey_code
+        )
+
         public_keys = [
             ring_member.public_key
             for ring_member in ring_member_crud.get_ring_members_for_survey(
                 survey.id, session
             )
         ]
+
         if not verify_lrs(
-            survey.survey_code,
+            message,
             public_keys,
             [mpz(x) for x in survey_answer.signature],
         ):

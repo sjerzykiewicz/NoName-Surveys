@@ -31,4 +31,8 @@ export class SliderQuestionAnswered extends SliderQuestion {
 		super(required, question, min_value, max_value, precision);
 		this.answer = answer;
 	}
+
+	getAnswer(): string {
+		return this.answer.toString();
+	}
 }

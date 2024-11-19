@@ -293,6 +293,13 @@ export const data = {
 		no_members_yet: 'No group members yet!',
 		user_has_keys: 'This user has already generated their keys.',
 		user_has_no_keys: 'This user has not generated their keys yet.',
+		create_option: 'Create this option',
+		default_disabled_title: 'This option is disabled',
+		disabled_input_title: 'This input is disabled',
+		no_matching_options: 'No matching options',
+		duplicate_options: 'This option is already selected',
+		remove_all_title: 'Remove all',
+		remove_btn_title: 'Remove',
 
 		// answers
 
@@ -704,6 +711,13 @@ export const data = {
 		no_members_yet: 'Brak członków grupy!',
 		user_has_keys: 'Ten użytkownik wygenerował klucze.',
 		user_has_no_keys: 'Ten użytkownik nie wygenerował kluczy.',
+		create_option: 'Utwórz tę opcję',
+		default_disabled_title: 'Ta opcja jest wyłączona',
+		disabled_input_title: 'To pole jest wyłączone',
+		no_matching_options: 'Brak pasujących opcji',
+		duplicate_options: 'Ta opcja jest już wybrana',
+		remove_all_title: 'Usuń wszystko',
+		remove_btn_title: 'Usuń',
 
 		// answers
 

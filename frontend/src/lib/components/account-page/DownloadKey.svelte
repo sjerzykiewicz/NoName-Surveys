@@ -91,6 +91,12 @@
 		align-items: center;
 	}
 
+	.last-update-info {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
 	@media screen and (max-width: 1440px) {
 		.tooltip {
 			--tooltip-width: 14.5em;

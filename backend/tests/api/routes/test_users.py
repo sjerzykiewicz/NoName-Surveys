@@ -243,3 +243,43 @@ def test_validate_user_when_user_not_registered(client: TestClient):
     data = response.json()
     assert isinstance(data, bool)
     assert not data
+
+def test_check_creation_date_when_user_not_registered(client: TestClient):
+    # when
+    response = client.post(
+        "/users/key-creation-date",
+        json={"user_email": TEST_VALID_USER_EMAIL_1},
+    )
+
+    # then
+    assert response.status_code == 400
+
+def test_check_if_key_creation_date_is_none_when_user_has_no_public_key(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+
+    # when
+    response = client.post(
+        "/users/key-creation-date",
+        json={"user_email": TEST_VALID_USER_EMAIL_1},
+    )
+
+    # then
+    assert response.status_code == 200
+    data = response.json()
+    assert data is None
+
+def test_get_key_creation_date_happy_path(client: TestClient):
+    # given
+    create_user_with_public_key(client, TEST_VALID_USER_EMAIL_1)
+
+    # when
+    response = client.post(
+        "/users/key-creation-date",
+        json={"user_email": TEST_VALID_USER_EMAIL_1},
+    )
+
+    # then
+    assert response.status_code == 200
+    data = response.json()
+    assert data is not None

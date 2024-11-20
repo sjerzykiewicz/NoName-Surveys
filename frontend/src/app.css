@@ -1003,8 +1003,10 @@ input[type='radio']:disabled {
 	font-size: 1.5em;
 }
 
+.create-info .tooltip i,
 .info-row .tooltip i,
 .download-key .tooltip i,
+.last-update-container .tooltip i,
 .crypto-row .tooltip i,
 .load-text .tooltip i,
 .code-text .tooltip i {

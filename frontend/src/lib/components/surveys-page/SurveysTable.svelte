@@ -6,6 +6,7 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import { formatDateTime } from '$lib/utils/formatDate';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -28,10 +29,6 @@
 
 	function toggleAll() {
 		selectedSurveysToRemove = allSelected ? [] : [...surveys];
-	}
-
-	function formatDate(isoString: string): string {
-		return new Date(isoString).toLocaleString();
 	}
 </script>
 
@@ -125,7 +122,9 @@
 						}}>{survey.survey_code}</button
 					>
 				</td>
-				<td title={$t('creation_date')} class="date-entry">{formatDate(survey.creation_date)}</td>
+				<td title={$t('creation_date')} class="date-entry"
+					>{formatDateTime(survey.creation_date)}</td
+				>
 			</tr>
 		{/each}
 	</table>

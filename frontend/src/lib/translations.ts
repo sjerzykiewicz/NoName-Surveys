@@ -372,6 +372,15 @@ export const data = {
 		account_keys_info: `These keys allow you to participate in secure surveys. Once they are generated, it is your
 			responsibility to keep them safe. When submitting a secure survey, you will be asked to
 			provide these keys to your browser for digital signature.`,
+		account_last_key_update: 'Last key update',
+		account_key_update_info:
+			'In order to increase security, we recommend to generate a new key pair every year.',
+		account_expiration_warning: 'Key expiration warning',
+		account_expiration_critical: 'Key expiration critical warning',
+		account_keys_expire_soon:
+			'Your keys have been generated {number} days ago.<br />We recommend generating a new pair soon.',
+		account_keys_expired:
+			'Your keys have been generated {number} days ago.<br />Please generate a new pair for increased security.',
 		account_authorization_info: `
 			Authorizing yourself will enable you to:
 			<ul class="account-ul">
@@ -790,6 +799,15 @@ export const data = {
 		account_keys_info: `Te klucze pozwalają na uczestniczenie w bezpiecznych ankietach. Po ich wygenerowaniu, należy
 			je zabezpieczyć. Podczas wypełniania bezpiecznej ankiety, zostaniesz poproszony o podanie
 			tych kluczy przeglądarce do podpisu cyfrowego.`,
+		account_last_key_update: 'Ostatnia aktualizacja kluczy',
+		account_key_update_info:
+			'Aby zwiększyć bezpieczeństwo, zalecamy wygenerowanie nowej pary kluczy raz na rok.',
+		account_expiration_warning: 'Ostrzeżenie o wygaśnięciu kluczy',
+		account_expiration_critical: 'Krytyczne ostrzeżenie o wygaśnięciu kluczy',
+		account_keys_expire_soon:
+			'Twoje klucze zostały wygenerowane {number} dni temu.<br />Zalecamy wygenerowanie nowej pary.',
+		account_keys_expired:
+			'Twoje klucze zostały wygenerowane {number} dni temu.<br />Proszę wygenerować nową parę dla większego bezpieczeństwa.',
 		account_authorization_info: `
 			Zautoryzowanie się pozwoli Ci na:
 			<ul class="account-ul">

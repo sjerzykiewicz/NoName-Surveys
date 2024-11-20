@@ -12,12 +12,14 @@
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { downloadFile } from '$lib/utils/downloadFile';
-
+	import type { PageServerData } from './$types';
+	import { invalidateAll } from '$app/navigation';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
+	export let data: PageServerData;
 	export let isModalHidden: boolean = true;
 
 	onMount(async () => {
@@ -49,6 +51,7 @@
 			}
 
 			downloadFile('noname-keys.pem', publicKey + '\n\n' + privateKey);
+			await invalidateAll();
 		} catch (e) {
 			$errorModalContent = e as string;
 			$isErrorModalHidden = false;
@@ -108,7 +111,7 @@
 	</Header>
 
 	<Content>
-		<DownloadKey bind:isModalHidden />
+		<DownloadKey bind:isModalHidden lastTime={data.key_creation_date} />
 		<SignOut />
 	</Content>
 {:else}

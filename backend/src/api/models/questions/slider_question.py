@@ -50,3 +50,6 @@ class SliderQuestion(Question):
             or self.precision != answer.precision
         ):
             raise ValueError("Invalid answer!")
+
+    def get_answer(self):
+        return str(self.answer) if self.answer is not None else ""

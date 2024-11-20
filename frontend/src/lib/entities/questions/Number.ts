@@ -24,6 +24,6 @@ export class NumberQuestionAnswered extends NumberQuestion {
 	}
 
 	getAnswer(): string {
-		return this.answer.toString();
+		return this.answer ? this.answer.toString() : '';
 	}
 }

@@ -40,3 +40,6 @@ class NumberQuestion(Question):
             or self.max_value != answer.max_value
         ):
             raise ValueError("Invalid answer!")
+
+    def get_answer(self):
+        return str(self.answer) if self.answer is not None else ""

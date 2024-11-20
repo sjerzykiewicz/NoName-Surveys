@@ -16,6 +16,6 @@ export class BinaryQuestionAnswered extends BinaryQuestion {
 	}
 
 	getAnswer(): string {
-		return this.answer;
+		return this.answer ? this.answer : '';
 	}
 }

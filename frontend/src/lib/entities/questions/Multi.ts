@@ -16,6 +16,6 @@ export class MultiQuestionAnswered extends MultiQuestion {
 	}
 
 	getAnswer(): string {
-		return this.answer.join('');
+		return this.answer ? this.answer.join('') : '';
 	}
 }

@@ -16,6 +16,6 @@ export class ListQuestionAnswered extends ListQuestion {
 	}
 
 	getAnswer(): string {
-		return this.answer;
+		return this.answer ? this.answer : '';
 	}
 }

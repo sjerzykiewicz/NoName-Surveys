@@ -36,3 +36,6 @@ class BinaryQuestion(Question):
             or self.choices != answer.choices
         ):
             raise ValueError("Invalid answer!")
+
+    def get_answer(self):
+        return self.answer if self.answer is not None else ""

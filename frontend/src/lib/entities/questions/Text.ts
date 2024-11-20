@@ -16,6 +16,6 @@ export class TextQuestionAnswered extends TextQuestion {
 	}
 
 	getAnswer(): string {
-		return this.answer;
+		return this.answer ? this.answer : '';
 	}
 }

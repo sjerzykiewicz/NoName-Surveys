@@ -26,3 +26,6 @@ class TextQuestion(Question):
             or self.details != answer.details
         ):
             raise ValueError("Invalid answer!")
+
+    def get_answer(self):
+        return self.answer if self.answer is not None else ""

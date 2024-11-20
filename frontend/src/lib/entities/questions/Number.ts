@@ -22,4 +22,8 @@ export class NumberQuestionAnswered extends NumberQuestion {
 		super(required, question, min_value, max_value);
 		this.answer = answer;
 	}
+
+	getAnswer(): string {
+		return this.answer ? this.answer.toString() : '';
+	}
 }

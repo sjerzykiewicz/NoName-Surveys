@@ -18,3 +18,6 @@ class Question(Base):
 
     def validate_structure_against(self, answer) -> None:
         pass
+
+    def get_answer(self):
+        return self.answer

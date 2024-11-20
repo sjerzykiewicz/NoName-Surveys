@@ -14,4 +14,8 @@ export class BinaryQuestionAnswered extends BinaryQuestion {
 		super(required, question, choices);
 		this.answer = answer;
 	}
+
+	getAnswer(): string {
+		return this.answer ? this.answer : '';
+	}
 }

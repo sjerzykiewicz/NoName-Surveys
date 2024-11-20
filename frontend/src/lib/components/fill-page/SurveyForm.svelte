@@ -288,12 +288,13 @@
 		const answerList: Array<Question> = constructAnswerList();
 
 		if (uses_crypto) {
+			const message = answerList.map(answer => answer.getAnswer()).join('') + code;
 			const privateKey = keyPair!.privateKey;
 			const publicKey = keyPair!.publicKey;
 			const index = keys.indexOf(publicKey);
 
 			try {
-				signature = linkable_ring_signature(code, keys, privateKey, index);
+				signature = linkable_ring_signature(message, keys, privateKey, index);
 			} catch (e) {
 				$errorModalContent = e as string;
 				$isErrorModalHidden = false;

@@ -4,14 +4,18 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { M } from '$lib/stores/global';
 	import NavLinks from './NavLinks.svelte';
-	import { getContext } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import AccountButtons from './AccountButtons.svelte';
+	import noname_dark from '$lib/assets/noname_dark.png';
+	import noname_light from '$lib/assets/noname_light.png';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let logo: string;
-
+	let colorScheme: string;
+	let logo: string = noname_light;
+	let bulb: string = 'lightbulb';
 	let open: boolean = false;
 
 	function handleClick(event: MouseEvent) {
@@ -19,6 +23,22 @@
 			open = false;
 		}
 	}
+
+	onMount(() => {
+		colorScheme = localStorage.getItem('colorScheme') || 'dark';
+
+		if (colorScheme === 'dark') {
+			document.documentElement.dataset.colorScheme = 'dark';
+			logo = noname_light;
+			bulb = 'lightbulb';
+		} else {
+			document.documentElement.dataset.colorScheme = 'light';
+			logo = noname_dark;
+			bulb = 'light_off';
+		}
+
+		$options.currentLang = localStorage.getItem('langPref') || 'en';
+	});
 
 	let innerWidth: number;
 </script>
@@ -31,7 +51,7 @@
 		<a href="/" title="NoName" class="nav-burger-logo"
 			><img src={logo} alt="NoName" width="48" height="48" /></a
 		>
-		<AccountButtons bind:logo />
+		<AccountButtons bind:colorScheme bind:logo bind:bulb />
 		<div title={open ? $t('close_menu') : $t('open_menu')} class="hamburger">
 			<Hamburger bind:open --color="var(--text-color-1)" --padding="10px" />
 		</div>
@@ -52,7 +72,7 @@
 			<NavLinks />
 		</nav>
 	</div>
-	<AccountButtons bind:logo />
+	<AccountButtons bind:colorScheme bind:logo bind:bulb />
 {/if}
 
 <style>
@@ -118,13 +138,12 @@
 	.nav-burger-logo:active,
 	.nav-logo:hover,
 	.nav-logo:active {
-		opacity: 0.7;
+		opacity: 0.75;
 	}
 
 	@media screen and (max-width: 900px) {
-		.nav-logo {
-			visibility: hidden;
-			opacity: 0 !important;
+		nav {
+			min-width: 638px;
 		}
 	}
 

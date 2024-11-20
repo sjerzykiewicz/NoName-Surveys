@@ -3,7 +3,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { M } from '$lib/stores/global';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
-	import { getContext, onMount } from 'svelte';
+	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import { page } from '$app/stores';
 	import { signOut } from '$lib/utils/signOut';
@@ -14,13 +14,15 @@
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
+	export let colorScheme: string;
 	export let logo: string;
+	export let bulb: string;
 
-	let bulb: string;
-	let theme: string;
 	let isPanelVisible: boolean = false;
 
 	const ACCOUNT_BUTTON_BREAKPOINT = 1155;
+
+	$: otherLang = $options.currentLang === 'en' ? 'pl' : 'en';
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -32,42 +34,20 @@
 	}
 
 	function toggleThemeMode() {
-		const currentColorScheme = document.documentElement.dataset.colorScheme;
-
-		if (currentColorScheme === 'dark') {
+		if (colorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'light';
 			logo = noname_dark;
 			bulb = 'light_off';
-			theme = $t('dark_theme');
 			localStorage.setItem('colorScheme', 'light');
 		} else {
 			document.documentElement.dataset.colorScheme = 'dark';
 			logo = noname_light;
 			bulb = 'lightbulb';
-			theme = $t('light_theme');
 			localStorage.setItem('colorScheme', 'dark');
 		}
+
+		colorScheme = document.documentElement.dataset.colorScheme;
 	}
-
-	$: otherLang = $options.currentLang === 'en' ? 'pl' : 'en';
-
-	onMount(() => {
-		const colorScheme = localStorage.getItem('colorScheme') || 'dark';
-
-		if (colorScheme === 'dark') {
-			document.documentElement.dataset.colorScheme = 'dark';
-			logo = noname_light;
-			bulb = 'lightbulb';
-			theme = $t('light_theme');
-		} else {
-			document.documentElement.dataset.colorScheme = 'light';
-			logo = noname_dark;
-			bulb = 'light_off';
-			theme = $t('dark_theme');
-		}
-
-		$options.currentLang = localStorage.getItem('langPref') || 'en';
-	});
 
 	function handleClick(event: MouseEvent) {
 		if (isPanelVisible && !(event.target as HTMLElement).closest('.button-group')) {
@@ -114,7 +94,14 @@
 				><i class="symbol">language</i><Tx text="other_lang" />
 			</button>
 			<button title={$t('toggle_theme')} class="nav-button" on:click={toggleThemeMode}>
-				<i class="symbol">{bulb}</i>{#key $t}{theme}{/key}
+				<i class="symbol">{bulb}</i>
+				{#key $t}
+					{#if colorScheme === 'dark'}
+						<Tx text="light_theme" />
+					{:else}
+						<Tx text="dark_theme" />
+					{/if}
+				{/key}
 			</button>
 		</div>
 	{/if}
@@ -126,7 +113,12 @@
 	}
 
 	.tooltip .tooltip-text {
+		background-color: var(--primary-color-2);
 		font-size: 0.8em;
+	}
+
+	.tooltip .tooltip-text.left::after {
+		border-color: transparent transparent transparent var(--primary-color-2);
 	}
 
 	.button-group {
@@ -144,35 +136,36 @@
 	.account-button {
 		display: flex;
 		justify-content: space-between;
-		width: 9.2em;
+		max-width: 9.2em;
+		width: fit-content;
 		height: 100%;
 		background-color: var(--secondary-color-2);
 		box-shadow: none;
 		border: none;
 		border-radius: 0px;
 		opacity: 1;
-		transition:
-			0.2s,
-			outline 0s;
 	}
 
 	.account-button:hover .button-text,
 	.account-button:hover .arrow {
-		opacity: 0.7;
+		opacity: 0.75;
+	}
+
+	.account-button .arrow {
+		transform: rotate(0deg);
+		transition:
+			transform 0.2s,
+			opacity 0.2s;
 	}
 
 	.account-button.clicked .arrow {
 		transform: rotate(180deg);
 	}
 
-	.account-button i {
-		transform: rotate(0deg);
-		transition: transform 0.2s;
-	}
-
-	.button-text {
+	.account-button .button-text {
 		display: flex;
 		align-items: center;
+		transition: opacity 0.2s;
 	}
 
 	.nav-button-panel {
@@ -203,12 +196,6 @@
 	.nav-button i,
 	.button-text i {
 		margin-right: 0.15em;
-	}
-
-	@media screen and (max-width: 1155px) {
-		.account-button {
-			width: 3em;
-		}
 	}
 
 	@media screen and (max-width: 768px) {

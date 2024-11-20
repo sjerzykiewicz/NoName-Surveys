@@ -52,4 +52,10 @@ class SliderQuestion(Question):
             raise ValueError("Invalid answer!")
 
     def get_answer(self):
-        return str(self.answer) if self.answer is not None else ""
+        if self.answer is not None:
+            return (
+                str(self.answer).rstrip("0").rstrip(".")
+                if "." in str(self.answer)
+                else str(self.answer)
+            )
+        return ""

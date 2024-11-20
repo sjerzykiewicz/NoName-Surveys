@@ -1,6 +1,5 @@
 from fastapi.testclient import TestClient
 import Crypto.Hash.SHA3_256 as SHA256
-from datetime import datetime
 
 
 TEST_VALID_USER_EMAIL_1 = "user1@st.amu.edu.pl"

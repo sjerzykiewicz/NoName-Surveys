@@ -7,11 +7,46 @@
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let navLinks: Record<
-		string,
-		{ name: string; href: string; page: string; disabled: boolean }
-	>;
 	export let hideNav: () => void;
+
+	const navLinks = {
+		Fill: {
+			name: 'fill',
+			href: '/',
+			page: '',
+			disabled: false
+		},
+		Create: {
+			name: 'create',
+			href: '/create',
+			page: '',
+			disabled: !$page.data.session
+		},
+		Drafts: {
+			name: 'drafts',
+			href: '/drafts',
+			page: '/0',
+			disabled: !$page.data.session
+		},
+		Surveys: {
+			name: 'surveys',
+			href: '/surveys',
+			page: '/0',
+			disabled: !$page.data.session
+		},
+		Groups: {
+			name: 'groups',
+			href: '/groups',
+			page: '/0',
+			disabled: !$page.data.session
+		},
+		Account: {
+			name: 'account',
+			href: '/account',
+			page: '',
+			disabled: false
+		}
+	};
 
 	let innerWidth: number;
 </script>

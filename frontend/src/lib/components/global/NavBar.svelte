@@ -1,68 +1,35 @@
 <script lang="ts">
 	import { Hamburger } from 'svelte-hamburgers';
-	import { slide, scale } from 'svelte/transition';
-	import { page } from '$app/stores';
+	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { onMount } from 'svelte';
-	import noname_dark from '$lib/assets/noname_dark.png';
-	import noname_light from '$lib/assets/noname_light.png';
 	import { M } from '$lib/stores/global';
 	import NavLinks from './NavLinks.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
-	import { getContext } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import LangButton from './LangButton.svelte';
+	import ThemeButton from './ThemeButton.svelte';
+	import { page } from '$app/stores';
+	import { signOut } from '$lib/utils/signOut';
+	import { startOAuth } from '$lib/utils/startOAuth';
+	import noname_dark from '$lib/assets/noname_dark.png';
+	import noname_light from '$lib/assets/noname_light.png';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
-	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	let open: boolean;
-	let innerWidth: number;
+	export let logo: string;
+	export let bulb: string;
 
-	const navLinks = {
-		Fill: {
-			name: 'fill',
-			href: '/',
-			page: '',
-			disabled: false
-		},
-		Create: {
-			name: 'create',
-			href: '/create',
-			page: '',
-			disabled: !$page.data.session
-		},
-		Drafts: {
-			name: 'drafts',
-			href: '/drafts',
-			page: '/0',
-			disabled: !$page.data.session
-		},
-		Surveys: {
-			name: 'surveys',
-			href: '/surveys',
-			page: '/0',
-			disabled: !$page.data.session
-		},
-		Groups: {
-			name: 'groups',
-			href: '/groups',
-			page: '/0',
-			disabled: !$page.data.session
-		},
-		Account: {
-			name: 'account',
-			href: '/account',
-			page: '',
-			disabled: false
-		}
-	};
+	let open: boolean = false;
+	let isPanelVisible: boolean = false;
 
 	function hideNav() {
 		open = false;
 	}
 
-	let bulb = 'lightbulb';
-	let logo = noname_dark;
+	function togglePanel() {
+		isPanelVisible = !isPanelVisible;
+	}
 
 	onMount(() => {
 		const colorScheme = localStorage.getItem('colorScheme') || 'dark';
@@ -70,41 +37,18 @@
 		if (colorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'dark';
 			logo = noname_light;
+			bulb = 'lightbulb';
 		} else {
 			document.documentElement.dataset.colorScheme = 'light';
 			logo = noname_dark;
 			bulb = 'light_off';
 		}
-
-		$options.currentLang = localStorage.getItem('langPref') || 'en';
 	});
 
-	function toggleThemeMode() {
-		const currentColorScheme = document.documentElement.dataset.colorScheme;
-
-		if (currentColorScheme === 'dark') {
-			document.documentElement.dataset.colorScheme = 'light';
-			bulb = 'light_off';
-			logo = noname_dark;
-			localStorage.setItem('colorScheme', 'light');
-		} else {
-			document.documentElement.dataset.colorScheme = 'dark';
-			bulb = 'lightbulb';
-			logo = noname_light;
-			localStorage.setItem('colorScheme', 'dark');
-		}
-	}
-
-	function changeLang(lang: string) {
-		$options.currentLang = lang;
-		localStorage.setItem('langPref', lang);
-	}
-
-	let scrollHeight: number;
-	$: showToggleButtons = scrollHeight == 0;
+	let innerWidth: number;
 </script>
 
-<svelte:window bind:innerWidth bind:scrollY={scrollHeight} />
+<svelte:window bind:innerWidth />
 
 {#if innerWidth <= $M}
 	<div class="nav-burger">
@@ -118,7 +62,7 @@
 	{#if open}
 		<div class="bar">
 			<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
-				<NavLinks {navLinks} {hideNav} />
+				<NavLinks {hideNav} />
 			</nav>
 		</div>
 	{/if}
@@ -128,55 +72,96 @@
 			><img src={logo} alt="NoName logo" width="48" height="48" /></a
 		>
 		<nav>
-			<NavLinks {navLinks} {hideNav} />
+			<NavLinks {hideNav} />
 		</nav>
 	</div>
 {/if}
 
-{#if showToggleButtons}
-	<button
-		transition:scale={{ duration: 200, easing: cubicInOut }}
-		on:click={toggleThemeMode}
-		class="toggle-mode theme-btn tooltip"
-	>
-		<i class="symbol">{bulb}</i>
-		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_theme" /></span>{/if}
+<div class="button-group">
+	<button title="" class="account-button" class:clicked={isPanelVisible} on:click={togglePanel}>
+		<i class="symbol">{$page.data.session ? 'account_circle' : 'account_circle_off'}</i>
+		<i class="symbol arrow">arrow_drop_down</i>
 	</button>
-{/if}
-{#if showToggleButtons && $options.currentLang === 'en'}
-	<button
-		transition:scale={{ duration: 200, easing: cubicInOut }}
-		on:click={() => changeLang('pl')}
-		class="toggle-mode lang-btn tooltip"
-	>
-		PL
-		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_lang" /></span>{/if}
-	</button>
-{:else if showToggleButtons && $options.currentLang === 'pl'}
-	<button
-		transition:scale={{ duration: 200, easing: cubicInOut }}
-		on:click={() => changeLang('en')}
-		class="toggle-mode lang-btn tooltip"
-	>
-		EN
-		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_lang" /></span>{/if}
-	</button>
-{/if}
+	{#if isPanelVisible}
+		<div class="nav-button-panel" transition:slide={{ duration: 200, easing: cubicInOut }}>
+			{#if $page.data.session}
+				<button title={$t('sign_out')} class="nav-button" on:click={signOut}
+					><i class="symbol">logout</i><Tx text="sign_out" />
+				</button>
+			{:else}
+				<button title={$t('sign_in')} class="nav-button" on:click={startOAuth}
+					><i class="symbol">login</i><Tx text="sign_in" /></button
+				>
+			{/if}
+			<LangButton />
+			<ThemeButton bind:logo {bulb} />
+		</div>
+	{/if}
+</div>
 
 <style>
-	.bar .tooltip .tooltip-text {
-		font-size: 0.8em;
-		font-weight: normal;
-		background-color: var(--primary-dark-color);
+	.button-group {
+		display: flex;
+		position: absolute;
+		top: 0.45em;
+		right: 0.45em;
+		font-size: 1.25em;
 	}
 
-	.toggle-mode.tooltip .tooltip-text {
-		font-size: 0.8em;
+	.account-button {
+		display: flex;
+		justify-content: center;
+		width: fit-content;
+		height: 1.75em;
+		box-shadow: none;
+		border: none;
+		transition:
+			0.2s,
+			outline 0s;
+	}
+
+	.account-button.clicked {
 		background-color: var(--primary-color-2);
 	}
 
-	.toggle-mode.tooltip .tooltip-text.left::after {
-		border-color: transparent transparent transparent var(--primary-color-2);
+	.account-button.clicked:hover {
+		background-color: var(--secondary-color-1);
+	}
+
+	.account-button.clicked:active {
+		background-color: var(--border-color-1);
+	}
+
+	.nav-button-panel {
+		display: flex;
+		flex-flow: column;
+		position: absolute;
+		top: 1.75em;
+		right: 0;
+		border-radius: 0px 0px 5px 5px;
+		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		height: auto;
+		position: absolute;
+		z-index: 1;
+	}
+
+	:global(.nav-button-panel button:first-child) {
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+	}
+
+	:global(.nav-button-panel button:last-child) {
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+	}
+
+	.account-button.clicked .arrow {
+		transform: rotate(180deg);
+	}
+
+	.account-button i {
+		transform: rotate(0deg);
+		transition: transform 0.2s;
 	}
 
 	nav {
@@ -215,46 +200,6 @@
 			outline 0s;
 	}
 
-	.toggle-mode {
-		position: fixed;
-		justify-content: center;
-		top: 0.25em;
-		right: 0.25em;
-		background-color: var(--primary-color-1);
-		border: none;
-		box-shadow: none;
-		width: 1.667em;
-		height: 1.667em;
-		font-size: 1.5em;
-		z-index: 1;
-		cursor: pointer;
-		transition:
-			0.2s,
-			outline 0s;
-	}
-
-	.theme-btn {
-		--tooltip-width: 7em;
-		top: 0.25em;
-		right: 0.25em;
-		z-index: 2;
-	}
-
-	.lang-btn {
-		--tooltip-width: 8em;
-		top: 0.25em;
-		right: 2.25em;
-		font-weight: 700 !important;
-	}
-
-	.toggle-mode:hover {
-		transform: scale(110%);
-	}
-
-	.toggle-mode:active {
-		background-color: var(--border-color-1);
-	}
-
 	.nav-burger-logo {
 		display: flex;
 		text-decoration: none;
@@ -284,12 +229,6 @@
 		opacity: 0.7;
 	}
 
-	@media screen and (max-width: 980px) {
-		.toggle-mode {
-			top: 2.5em;
-		}
-	}
-
 	@media screen and (max-width: 900px) {
 		.nav-logo {
 			visibility: hidden;
@@ -298,10 +237,6 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		.tooltip .tooltip-text {
-			font-size: 0.6em;
-		}
-
 		nav {
 			flex-flow: column;
 			border-left: none;
@@ -311,18 +246,6 @@
 
 		.bar {
 			border-bottom: none;
-		}
-
-		.toggle-mode {
-			top: 0.6em;
-			right: 3em;
-			width: 1.75em;
-			height: 1.75em;
-			font-size: 1.75em;
-		}
-
-		.lang-btn {
-			right: 5em;
 		}
 	}
 </style>

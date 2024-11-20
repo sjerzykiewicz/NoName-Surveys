@@ -340,14 +340,6 @@
 		font-size: 0.8em;
 	}
 
-	.tooltip i {
-		color: var(--border-color-1);
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		transition:
-			0.2s,
-			outline 0s;
-	}
-
 	.button-row {
 		align-items: center;
 		font-size: 1em;
@@ -411,15 +403,11 @@
 		}
 
 		.create-info.tooltip .tooltip-text.bottom {
-			left: unset;
-			right: 20%;
-			margin-left: 0em;
-			margin-right: -1.15em;
+			left: -250%;
 		}
 
 		.create-info.tooltip .tooltip-text.bottom::after {
-			left: 91.5%;
-			margin-left: -1.15em;
+			left: 90%;
 		}
 
 		.import {

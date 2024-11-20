@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { M } from '$lib/stores/global';
-
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
-
-	export let hideNav: () => void;
 
 	const navLinks = {
 		Fill: {
@@ -63,7 +60,7 @@
 		class:active={$page.route.id === data.href ||
 			$page.route.id === data.href + '/[' + data.name.toLowerCase() + 'Page]'}
 	>
-		<a href={data.disabled ? '' : data.href + data.page} on:click={hideNav}>{$t(data.name)}</a>
+		<a href={data.disabled ? '' : data.href + data.page}>{$t(data.name)}</a>
 		{#if innerWidth > $M && data.disabled}
 			<span class="tooltip-text bottom">
 				<Tx text="sign_in_info" />

@@ -16,6 +16,6 @@ export class SingleQuestionAnswered extends SingleQuestion {
 	}
 
 	getAnswer(): string {
-		return this.answer.toString();
+		return this.answer;
 	}
 }

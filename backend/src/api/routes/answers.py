@@ -93,7 +93,7 @@ async def save_survey_answer(
             )
 
         message = (
-            "".join(question.answer for question in survey_answer.questions)
+            "".join(question.get_answer() for question in survey_answer.questions)
             + survey_answer.survey_code
         )
 

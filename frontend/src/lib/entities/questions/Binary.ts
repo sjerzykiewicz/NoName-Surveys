@@ -16,6 +16,6 @@ export class BinaryQuestionAnswered extends BinaryQuestion {
 	}
 
 	getAnswer(): string {
-		return this.answer.toString();
+		return this.answer;
 	}
 }

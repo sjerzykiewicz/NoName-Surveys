@@ -16,6 +16,6 @@ export class RankQuestionAnswered extends RankQuestion {
 	}
 
 	getAnswer(): string {
-		return this.answer.toString();
+		return this.answer.join('');
 	}
 }

@@ -37,3 +37,6 @@ class MultiQuestion(Question):
             or self.choices != answer.choices
         ):
             raise ValueError("Invalid answer!")
+
+    def get_answer(self):
+        return "".join(self.answer) if self.answer else ""

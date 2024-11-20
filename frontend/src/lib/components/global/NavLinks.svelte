@@ -1,17 +1,49 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { M } from '$lib/stores/global';
-
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let navLinks: Record<
-		string,
-		{ name: string; href: string; page: string; disabled: boolean }
-	>;
-	export let hideNav: () => void;
+	const navLinks = {
+		Fill: {
+			name: 'fill',
+			href: '/',
+			page: '',
+			disabled: false
+		},
+		Create: {
+			name: 'create',
+			href: '/create',
+			page: '',
+			disabled: !$page.data.session
+		},
+		Drafts: {
+			name: 'drafts',
+			href: '/drafts',
+			page: '/0',
+			disabled: !$page.data.session
+		},
+		Surveys: {
+			name: 'surveys',
+			href: '/surveys',
+			page: '/0',
+			disabled: !$page.data.session
+		},
+		Groups: {
+			name: 'groups',
+			href: '/groups',
+			page: '/0',
+			disabled: !$page.data.session
+		},
+		Account: {
+			name: 'account',
+			href: '/account',
+			page: '',
+			disabled: false
+		}
+	};
 
 	let innerWidth: number;
 </script>
@@ -28,7 +60,7 @@
 		class:active={$page.route.id === data.href ||
 			$page.route.id === data.href + '/[' + data.name.toLowerCase() + 'Page]'}
 	>
-		<a href={data.disabled ? '' : data.href + data.page} on:click={hideNav}>{$t(data.name)}</a>
+		<a href={data.disabled ? '' : data.href + data.page}>{$t(data.name)}</a>
 		{#if innerWidth > $M && data.disabled}
 			<span class="tooltip-text bottom">
 				<Tx text="sign_in_info" />

@@ -483,7 +483,6 @@
 		function handleClick(event: MouseEvent) {
 			if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
 				isPanelVisible = false;
-				event.stopImmediatePropagation();
 			}
 		}
 

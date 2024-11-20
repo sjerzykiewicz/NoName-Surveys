@@ -1,75 +1,36 @@
 <script lang="ts">
 	import { Hamburger } from 'svelte-hamburgers';
-	import { slide, scale } from 'svelte/transition';
-	import { page } from '$app/stores';
+	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { onMount } from 'svelte';
-	import noname_dark from '$lib/assets/noname_dark.png';
-	import noname_light from '$lib/assets/noname_light.png';
 	import { M } from '$lib/stores/global';
 	import NavLinks from './NavLinks.svelte';
-	import Tx from 'sveltekit-translate/translate/tx.svelte';
-	import { getContext } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import AccountButtons from './AccountButtons.svelte';
+	import noname_dark from '$lib/assets/noname_dark.png';
+	import noname_light from '$lib/assets/noname_light.png';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	let open: boolean;
-	let innerWidth: number;
+	let colorScheme: string;
+	let logo: string = noname_light;
+	let bulb: string = 'lightbulb';
+	let open: boolean = false;
 
-	const navLinks = {
-		Fill: {
-			name: 'fill',
-			href: '/',
-			page: '',
-			disabled: false
-		},
-		Create: {
-			name: 'create',
-			href: '/create',
-			page: '',
-			disabled: !$page.data.session
-		},
-		Drafts: {
-			name: 'drafts',
-			href: '/drafts',
-			page: '/0',
-			disabled: !$page.data.session
-		},
-		Surveys: {
-			name: 'surveys',
-			href: '/surveys',
-			page: '/0',
-			disabled: !$page.data.session
-		},
-		Groups: {
-			name: 'groups',
-			href: '/groups',
-			page: '/0',
-			disabled: !$page.data.session
-		},
-		Account: {
-			name: 'account',
-			href: '/account',
-			page: '',
-			disabled: false
+	function handleClick(event: MouseEvent) {
+		if (open && !(event.target as HTMLElement).closest('.hamburger')) {
+			open = false;
 		}
-	};
-
-	function hideNav() {
-		open = false;
 	}
 
-	let bulb = 'lightbulb';
-	let logo = noname_dark;
-
 	onMount(() => {
-		const colorScheme = localStorage.getItem('colorScheme') || 'dark';
+		colorScheme = localStorage.getItem('colorScheme') || 'dark';
 
 		if (colorScheme === 'dark') {
 			document.documentElement.dataset.colorScheme = 'dark';
 			logo = noname_light;
+			bulb = 'lightbulb';
 		} else {
 			document.documentElement.dataset.colorScheme = 'light';
 			logo = noname_dark;
@@ -79,106 +40,42 @@
 		$options.currentLang = localStorage.getItem('langPref') || 'en';
 	});
 
-	function toggleThemeMode() {
-		const currentColorScheme = document.documentElement.dataset.colorScheme;
-
-		if (currentColorScheme === 'dark') {
-			document.documentElement.dataset.colorScheme = 'light';
-			bulb = 'light_off';
-			logo = noname_dark;
-			localStorage.setItem('colorScheme', 'light');
-		} else {
-			document.documentElement.dataset.colorScheme = 'dark';
-			bulb = 'lightbulb';
-			logo = noname_light;
-			localStorage.setItem('colorScheme', 'dark');
-		}
-	}
-
-	function changeLang(lang: string) {
-		$options.currentLang = lang;
-		localStorage.setItem('langPref', lang);
-	}
-
-	let scrollHeight: number;
-	$: showToggleButtons = scrollHeight == 0;
+	let innerWidth: number;
 </script>
 
-<svelte:window bind:innerWidth bind:scrollY={scrollHeight} />
+<svelte:window bind:innerWidth />
+<svelte:body on:click={handleClick} />
 
 {#if innerWidth <= $M}
 	<div class="nav-burger">
 		<a href="/" title="NoName" class="nav-burger-logo"
-			><img src={logo} alt="NoName logo" width="48" height="48" /></a
+			><img src={logo} alt="NoName" width="48" height="48" /></a
 		>
-		<div title={open ? $t('close_menu') : $t('open_menu')}>
-			<Hamburger bind:open --color="var(--text-color-1)" />
+		<AccountButtons bind:colorScheme bind:logo bind:bulb />
+		<div title={open ? $t('close_menu') : $t('open_menu')} class="hamburger">
+			<Hamburger bind:open --color="var(--text-color-1)" --padding="10px" />
 		</div>
 	</div>
 	{#if open}
 		<div class="bar">
 			<nav transition:slide={{ duration: 200, easing: cubicInOut }}>
-				<NavLinks {navLinks} {hideNav} />
+				<NavLinks />
 			</nav>
 		</div>
 	{/if}
 {:else}
 	<div class="bar">
 		<a href="/" title="NoName" class="nav-logo"
-			><img src={logo} alt="NoName logo" width="48" height="48" /></a
+			><img src={logo} alt="NoName" width="48" height="48" /></a
 		>
 		<nav>
-			<NavLinks {navLinks} {hideNav} />
+			<NavLinks />
 		</nav>
 	</div>
-{/if}
-
-{#if showToggleButtons}
-	<button
-		transition:scale={{ duration: 200, easing: cubicInOut }}
-		on:click={toggleThemeMode}
-		class="toggle-mode theme-btn tooltip"
-	>
-		<i class="symbol">{bulb}</i>
-		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_theme" /></span>{/if}
-	</button>
-{/if}
-{#if showToggleButtons && $options.currentLang === 'en'}
-	<button
-		transition:scale={{ duration: 200, easing: cubicInOut }}
-		on:click={() => changeLang('pl')}
-		class="toggle-mode lang-btn tooltip"
-	>
-		PL
-		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_lang" /></span>{/if}
-	</button>
-{:else if showToggleButtons && $options.currentLang === 'pl'}
-	<button
-		transition:scale={{ duration: 200, easing: cubicInOut }}
-		on:click={() => changeLang('en')}
-		class="toggle-mode lang-btn tooltip"
-	>
-		EN
-		{#if innerWidth > $M}<span class="tooltip-text left"><Tx text="toggle_lang" /></span>{/if}
-	</button>
+	<AccountButtons bind:colorScheme bind:logo bind:bulb />
 {/if}
 
 <style>
-	.bar .tooltip .tooltip-text {
-		font-size: 0.8em;
-		font-weight: normal;
-		background-color: var(--primary-dark-color);
-	}
-
-	.toggle-mode.tooltip .tooltip-text {
-		font-size: 0.8em;
-		background-color: var(--primary-color-2);
-	}
-
-	.toggle-mode.tooltip .tooltip-text.left::after {
-		border-color: transparent transparent transparent var(--primary-color-2);
-	}
-
 	nav {
 		display: flex;
 		flex-flow: row;
@@ -215,46 +112,6 @@
 			outline 0s;
 	}
 
-	.toggle-mode {
-		position: fixed;
-		justify-content: center;
-		top: 0.25em;
-		right: 0.25em;
-		background-color: var(--primary-color-1);
-		border: none;
-		box-shadow: none;
-		width: 1.667em;
-		height: 1.667em;
-		font-size: 1.5em;
-		z-index: 1;
-		cursor: pointer;
-		transition:
-			0.2s,
-			outline 0s;
-	}
-
-	.theme-btn {
-		--tooltip-width: 7em;
-		top: 0.25em;
-		right: 0.25em;
-		z-index: 2;
-	}
-
-	.lang-btn {
-		--tooltip-width: 8em;
-		top: 0.25em;
-		right: 2.25em;
-		font-weight: 700 !important;
-	}
-
-	.toggle-mode:hover {
-		transform: scale(110%);
-	}
-
-	.toggle-mode:active {
-		background-color: var(--border-color-1);
-	}
-
 	.nav-burger-logo {
 		display: flex;
 		text-decoration: none;
@@ -281,27 +138,16 @@
 	.nav-burger-logo:active,
 	.nav-logo:hover,
 	.nav-logo:active {
-		opacity: 0.7;
-	}
-
-	@media screen and (max-width: 980px) {
-		.toggle-mode {
-			top: 2.5em;
-		}
+		opacity: 0.75;
 	}
 
 	@media screen and (max-width: 900px) {
-		.nav-logo {
-			visibility: hidden;
-			opacity: 0 !important;
+		nav {
+			min-width: 638px;
 		}
 	}
 
 	@media screen and (max-width: 768px) {
-		.tooltip .tooltip-text {
-			font-size: 0.6em;
-		}
-
 		nav {
 			flex-flow: column;
 			border-left: none;
@@ -311,18 +157,6 @@
 
 		.bar {
 			border-bottom: none;
-		}
-
-		.toggle-mode {
-			top: 0.6em;
-			right: 3em;
-			width: 1.75em;
-			height: 1.75em;
-			font-size: 1.75em;
-		}
-
-		.lang-btn {
-			right: 5em;
 		}
 	}
 </style>

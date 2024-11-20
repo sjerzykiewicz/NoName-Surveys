@@ -1,24 +1,10 @@
 <script lang="ts">
+	import { signOut } from '$lib/utils/signOut';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
-
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
-
-	async function signOut() {
-		try {
-			await fetch('/api/oauth/sign-out', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-			location.reload();
-		} catch (error) {
-			console.error('OAuth sign-out failed:', error);
-		}
-	}
 </script>
 
 <div class="sign-buttons">

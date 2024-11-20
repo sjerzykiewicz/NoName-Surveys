@@ -1,35 +1,11 @@
 <script lang="ts">
+	import amu from '$lib/assets/amu.png';
+	import { startOAuth } from '$lib/utils/startOAuth';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
-
-	import amu from '$lib/assets/amu.png';
-
-	async function startOAuth() {
-		try {
-			const response = await fetch('/api/oauth/request-token', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			const data = await response.json();
-
-			const expires = new Date(Date.now() + 3 * 60 * 1000).toUTCString();
-			document.cookie = `oauth_token_secret=${data.oauth_token_secret}; path=/; secure; expires=${expires}`;
-
-			if (data.oauth_token) {
-				window.location.href = `/auth/redirect?oauth_token=${data.oauth_token}`;
-			} else {
-				console.error('Failed to get OAuth token');
-			}
-		} catch (error) {
-			console.error('OAuth request failed:', error);
-		}
-	}
 </script>
 
 <h1><Tx text="account_sign_in" /></h1>

@@ -57,8 +57,6 @@
 	}
 
 	i {
-		font-size: 1em;
-		margin-right: 0.25em;
-		margin-left: 0.1em;
+		margin-right: 0.15em;
 	}
 </style>

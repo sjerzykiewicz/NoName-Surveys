@@ -14,6 +14,8 @@
 
 	export let form: ActionData;
 
+	const githubLink = 'https://github.com/sjerzykiewicz/NoName-Surveys';
+
 	let innerWidth: number;
 </script>
 
@@ -23,14 +25,15 @@
 	<h1>NoName Anonymous Surveys</h1>
 	<div class="code-text">
 		<span><Tx text="code_info" /></span>
-		<div title="" class="tooltip">
-			<i class="symbol">info</i>
+		<!-- TODO: better link -->
+		<a href={githubLink} target="_blank" class="tooltip clickable">
+			<i class="symbol">help</i>
 			<span
 				class="tooltip-text {innerWidth <= $M ? (innerWidth <= $M ? 'top' : 'left') : 'bottom'}"
 			>
 				<Tx text="code_tooltip" />
 			</span>
-		</div>
+		</a>
 	</div>
 	<form method="POST" use:enhance>
 		<label title={$t('code_info')} for="code-input">
@@ -64,6 +67,10 @@
 		{#if $page.data.session}<a href="/create" title={$t('create')}><Tx text="create" /></a>.
 		{:else}<a href="/account" title={$t('account')}><Tx text="account" /></a>.
 		{/if}
+	</p>
+	<p class="open-source-info">
+		<Tx text="open_source_info" />
+		<a href={githubLink} target="_blank" title="GitHub">GitHub</a>.
 	</p>
 </Content>
 
@@ -151,11 +158,12 @@
 	}
 
 	.tooltip {
-		margin-left: 0.25em;
+		margin-left: 0.5em;
 		font-size: 0.8em;
 	}
 
 	.tooltip .tooltip-text {
+		text-align: left;
 		font-size: 0.7em;
 		font-weight: 400 !important;
 	}
@@ -171,8 +179,20 @@
 			outline 0s;
 	}
 
-	.home-info a {
+	.home-info a,
+	.open-source-info a {
 		font-weight: 700 !important;
+	}
+
+	.open-source-info {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		text-align: center;
+		font-size: 1.25em;
+		color: var(--text-color-1);
+		cursor: default;
 	}
 
 	@media screen and (max-width: 768px) {

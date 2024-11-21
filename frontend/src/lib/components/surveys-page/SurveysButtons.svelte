@@ -33,38 +33,42 @@
 			.filter((s) => !s.is_owned_by_user)
 			.map((s) => s.survey_code);
 
-		const deleteResponse = await fetch('/api/surveys/delete', {
-			method: 'POST',
-			body: JSON.stringify({
-				survey_codes: ownedSurveyCodes
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
+		if (ownedSurveyCodes.length > 0) {
+			const deleteResponse = await fetch('/api/surveys/delete', {
+				method: 'POST',
+				body: JSON.stringify({
+					survey_codes: ownedSurveyCodes
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
 
-		if (!deleteResponse.ok) {
-			const body = await deleteResponse.json();
-			$errorModalContent = getErrorMessage(body.detail);
-			$isErrorModalHidden = false;
-			return;
+			if (!deleteResponse.ok) {
+				const body = await deleteResponse.json();
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
+				return;
+			}
 		}
 
-		const rejectResponse = await fetch('/api/surveys/reject-access', {
-			method: 'POST',
-			body: JSON.stringify({
-				survey_codes: sharedSurveyCodes
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
+		if (sharedSurveyCodes.length > 0) {
+			const rejectResponse = await fetch('/api/surveys/reject-access', {
+				method: 'POST',
+				body: JSON.stringify({
+					survey_codes: sharedSurveyCodes
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
 
-		if (!rejectResponse.ok) {
-			const body = await rejectResponse.json();
-			$errorModalContent = getErrorMessage(body.detail);
-			$isErrorModalHidden = false;
-			return;
+			if (!rejectResponse.ok) {
+				const body = await rejectResponse.json();
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
+				return;
+			}
 		}
 
 		const currentPage = parseInt($page.params.surveysPage);

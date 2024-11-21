@@ -69,6 +69,8 @@ export const data = {
 		rename: 'Rename',
 		close_menu: 'Close menu',
 		open_menu: 'Open menu',
+		read_more: 'Read more',
+		open_source_info: 'Our project is open source. You can find the source code on ',
 		hotkeys_info: `You can create surveys faster by using hotkeys.<br />
 			Hold <span class="accent">[ LeftAlt ]</span> and press:<br />
 			\t<span class="accent">[ 1 ]</span> - Add {one} question<br />
@@ -380,7 +382,7 @@ export const data = {
 			provide these keys to your browser for digital signature.`,
 		account_last_key_update: 'Last key update',
 		account_key_update_info:
-			'In order to increase security, we recommend to generate a new key pair every year.',
+			'In order to increase security, we recommend generating a new key pair every year.',
 		account_expiration_warning: 'Key expiration warning',
 		account_expiration_critical: 'Key expiration critical warning',
 		account_keys_expire_soon:
@@ -505,6 +507,8 @@ export const data = {
 		rename: 'Zmień nazwę',
 		close_menu: 'Zamknij menu',
 		open_menu: 'Otwórz menu',
+		read_more: 'Czytaj więcej',
+		open_source_info: 'Nasz projekt jest open source. Kod źródłowy znajdziesz na ',
 		hotkeys_info: `Możesz szybciej tworzyć ankiety używając skrótów klawiszowych.<br />
 			Przytrzymaj <span class="accent">[ LeftAlt ]</span> i naciśnij:<br />
 			\t<span class="accent">[ 1 ]</span> - Dodaj pytanie {one}<br />

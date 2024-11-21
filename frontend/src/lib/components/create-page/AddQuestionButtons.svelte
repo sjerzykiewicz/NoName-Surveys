@@ -43,11 +43,11 @@
 	let isPanelVisible: boolean = false;
 	let questionTypes: Array<ComponentType> = [
 		Text,
+		Number,
 		Single,
 		Multi,
-		Scale,
 		Binary,
-		Number,
+		Scale,
 		Slider,
 		List,
 		Rank

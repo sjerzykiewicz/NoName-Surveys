@@ -106,7 +106,7 @@
 
 	<Header>
 		<div title={$t('account_your')} class="title">
-			<Tx text="welcome" />, {$page.data.session.user?.email}
+			<Tx text="welcome" />, {$page.data.session.user?.email.split('@')[0]}!
 		</div>
 	</Header>
 

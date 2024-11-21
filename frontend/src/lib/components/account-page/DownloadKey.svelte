@@ -94,6 +94,7 @@
 	}
 
 	.download-key .tooltip .tooltip-text {
+		text-align: left;
 		font-size: 0.7em;
 	}
 
@@ -126,6 +127,7 @@
 	}
 
 	.last-update-container .tooltip .tooltip-text {
+		text-align: left;
 		font-size: 0.8em;
 	}
 

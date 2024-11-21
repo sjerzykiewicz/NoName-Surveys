@@ -28,27 +28,23 @@
 	.box {
 		display: flex;
 		flex-flow: column;
-		height: auto;
-		min-height: calc(100% - 4.875em);
+		min-height: calc(100vh - 4.875em);
 		width: 50%;
 		min-width: 768px;
-		margin: auto;
-		margin-top: 1.5em;
+		margin: 1.5em auto auto;
 		border: 1px solid var(--border-color-1);
 		border-bottom: none;
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		background-color: var(--secondary-color-1);
-		transition:
-			0.2s,
-			outline 0s;
+		transition: 0.2s;
 	}
 
 	@media screen and (max-width: 768px) {
 		.box {
 			width: 100%;
 			min-width: 0px;
-			min-height: calc(100% - 5.175em);
-			margin-top: 0px;
+			min-height: calc(100vh - 4.5625em);
+			margin-top: 0em;
 			border-left: none;
 			border-right: none;
 		}

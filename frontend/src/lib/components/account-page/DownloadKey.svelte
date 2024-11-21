@@ -13,10 +13,10 @@
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
 
-	$: timeDiff = lastTime !== null ? secondsToDays(Date.now() - Date.parse(lastTime)) : 0;
+	$: timeDiff = lastTime !== null ? milisecondsToDays(Date.now() - Date.parse(lastTime)) : 0;
 
-	function secondsToDays(seconds: number) {
-		return parseInt((seconds / 3600 / 24).toFixed(0));
+	function milisecondsToDays(miliseconds: number) {
+		return parseInt((miliseconds / 1000 / 3600 / 24).toFixed(0));
 	}
 
 	let innerWidth: number;

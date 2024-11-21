@@ -540,7 +540,10 @@
 	{/if}
 </div>
 {#if innerWidth > $M}
-	<div class="tooltip hotkeys-info">
+	<div
+		class="tooltip hotkeys-info"
+		style="--tooltip-width: {currentLang === 'en' ? '28em' : '31em'}"
+	>
 		<i class="symbol">bolt</i>
 		<span class="tooltip-text right">
 			<Tx
@@ -615,7 +618,7 @@
 		width: var(--width, 7.5em);
 		height: auto;
 		position: absolute;
-		z-index: 1;
+		z-index: 2;
 	}
 
 	.add-question.clicked .add {
@@ -637,13 +640,12 @@
 	}
 
 	.hotkeys-info.tooltip {
-		--tooltip-width: 35em;
 		font-size: 1.5em;
 	}
 
 	.hotkeys-info.tooltip .tooltip-text {
 		text-align: left;
-		font-size: 0.67em;
+		font-size: 0.6em;
 		z-index: 2;
 	}
 
@@ -652,7 +654,7 @@
 	}
 
 	.hotkeys-info.tooltip .tooltip-text.right::after {
-		top: 27.5%;
+		top: 7.5%;
 	}
 
 	.tooltip i {
@@ -661,16 +663,6 @@
 		transition:
 			0.2s,
 			outline 0s;
-	}
-
-	@media screen and (max-width: 1145px) {
-		.hotkeys-info.tooltip {
-			--tooltip-width: 28.1em;
-		}
-
-		.hotkeys-info.tooltip .tooltip-text {
-			font-size: 0.6em;
-		}
 	}
 
 	@media screen and (max-width: 768px) {

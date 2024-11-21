@@ -1314,7 +1314,7 @@ th .checkbox-entry {
 
 .tooltip.clickable {
 	cursor: pointer;
-	text-decoration: underline dotted;
+	text-decoration: none !important;
 	color: var(--text-color-1);
 }
 

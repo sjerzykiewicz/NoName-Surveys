@@ -9,6 +9,8 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import Footer from '../global/Footer.svelte';
+	import Header from '../global/Header.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -21,16 +23,18 @@
 
 <svelte:window bind:innerWidth />
 
-<Content>
+<Header>
 	<h1>NoName Anonymous Surveys</h1>
+	<div class="subtitle"><Tx text="slogan" /></div>
+</Header>
+
+<Content>
 	<div class="code-text">
 		<span><Tx text="code_info" /></span>
 		<!-- TODO: better link -->
 		<a href={githubLink} target="_blank" class="tooltip clickable">
 			<i class="symbol">help</i>
-			<span
-				class="tooltip-text {innerWidth <= $M ? (innerWidth <= $M ? 'top' : 'left') : 'bottom'}"
-			>
+			<span class="tooltip-text {innerWidth <= $M ? 'top' : 'bottom'}">
 				<Tx text="code_tooltip" />
 			</span>
 		</a>
@@ -68,26 +72,38 @@
 		{:else}<a href="/account" title={$t('account')}><Tx text="account" /></a>.
 		{/if}
 	</p>
-	<p class="open-source-info">
+</Content>
+
+<Footer>
+	<div class="open-source-info">
 		<Tx text="open_source_info" />
 		<a href={githubLink} target="_blank" title="GitHub">GitHub</a>.
-	</p>
-</Content>
+	</div>
+</Footer>
 
 <style>
 	h1 {
 		color: var(--text-color-1);
 		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		margin: 0em;
-		padding: 0.25em 0em 0.5em;
 		font-size: 3em;
 		font-weight: 700 !important;
+		margin: 0em;
+		padding-bottom: 0.25em;
 		cursor: default;
-		border-bottom: 1px solid var(--border-color-1);
-		transition:
-			0.2s,
-			outline 0s;
+		transition: 0.2s;
+	}
+
+	.subtitle {
+		color: var(--text-color-1);
+		text-align: center;
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		font-size: 1.25em;
+		font-weight: 700 !important;
+		padding-top: 0.5em;
+		border-top: 1px solid var(--border-color-1);
+		cursor: default;
+		transition: 0.2s;
 	}
 
 	.code-text {
@@ -100,7 +116,7 @@
 		font-weight: 700 !important;
 		font-size: 2em;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		padding-top: 0.75em;
+		padding-top: 0.5em;
 		cursor: default;
 		transition:
 			0.2s,
@@ -114,17 +130,7 @@
 	label {
 		display: flex;
 		flex-flow: column;
-	}
-
-	form {
-		text-align: center;
-		color: var(--text-color-1);
-		font-weight: 700 !important;
 		font-size: 2em;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		transition:
-			0.2s,
-			outline 0s;
 	}
 
 	input {
@@ -185,19 +191,28 @@
 	}
 
 	.open-source-info {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
+		width: 100%;
 		text-align: center;
-		font-size: 1.25em;
+		font-size: 1.2em;
 		color: var(--text-color-1);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	@media screen and (max-width: 768px) {
 		h1 {
 			font-size: 2.5em;
+		}
+
+		.subtitle {
+			font-size: 1em;
+		}
+
+		.code-text {
+			font-size: 1.75em;
 		}
 
 		.error {
@@ -211,6 +226,11 @@
 
 		.code-text {
 			flex-flow: column;
+		}
+
+		.home-info,
+		.open-source-info {
+			font-size: 1em;
 		}
 	}
 </style>

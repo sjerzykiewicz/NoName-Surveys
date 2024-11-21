@@ -305,6 +305,7 @@
 	.create-info.tooltip .tooltip-text {
 		text-align: left;
 		font-size: 0.8em;
+		z-index: 2;
 	}
 
 	.button-row {

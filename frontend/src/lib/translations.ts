@@ -70,28 +70,21 @@ export const data = {
 		close_menu: 'Close menu',
 		open_menu: 'Open menu',
 		read_more: 'Read more',
+		slogan: 'Unlock true anonymity with the power of ring signatures!',
 		open_source_info: 'Our project is open source. You can find the source code on ',
 		hotkeys_info: `You can create surveys faster by using hotkeys.<br />
 			Hold <span class="accent">[ LeftAlt ]</span> and press:<br />
-			\t<span class="accent">[ 1 ]</span> - Add {one} question<br />
-			\t<span class="accent">[ 2 ]</span> - Add {two} question<br />
-			\t<span class="accent">[ 3 ]</span> - Add {three} question<br />
-			\t<span class="accent">[ 4 ]</span> - Add {four} question<br />
-			\t<span class="accent">[ 5 ]</span> - Add {five} question<br />
-			\t<span class="accent">[ 6 ]</span> - Add {six} question<br />
-			\t<span class="accent">[ 7 ]</span> - Add {seven} question<br />
-			\t<span class="accent">[ 8 ]</span> - Add {eight} question<br />
-			\t<span class="accent">[ 9 ]</span> - Add {nine} question<br />
-			\t<span class="accent">[ 0 ]</span> - Add previous question<br />
-			\t<span class="accent">[ Enter ]</span> / <span class="accent">[ Insert ]</span> - Add choice to selected question<br />
-			\t<span class="accent">[ Backspace ]</span> / <span class="accent">[ Delete ]</span> - Remove selected question or choice<br />
-			\t<span class="accent">[ PageUp ]</span> / <span class="accent">[ PageDown ]</span> - Move selected question up or down<br />
-			\t<span class="accent">[ ~ ]</span> / <span class="accent">[ \\ ]</span> - Toggle requirement for selected question<br />
-			\t<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Select previous or next input<br />
-			\t<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Select previous or next question<br />
-			\t<span class="accent">[ Home ]</span> - Select Survey Title<br />
-			\t<span class="accent">[ End ]</span> - Select Create button<br />
-			Besides that, you can still use <span class="accent">[ Tab ]</span> and <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span> to navigate.`,
+			<span class="accent">[ 1 - 9 ]</span> - Add various question types<br />
+			<span class="accent">[ 0 ]</span> - Add previous question type<br />
+			<span class="accent">[ Enter ]</span> / <span class="accent">[ Ins ]</span> - Add choice to selected question<br />
+			<span class="accent">[ Bksp ]</span> / <span class="accent">[ Del ]</span> - Remove selected question or choice<br />
+			<span class="accent">[ PgUp ]</span> / <span class="accent">[ PgDn ]</span> - Move selected question up or down<br />
+			<span class="accent">[ ~ ]</span> / <span class="accent">[ \\ ]</span> - Toggle requirement for selected question<br />
+			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Select previous or next input<br />
+			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Select previous or next question<br />
+			<span class="accent">[ Home ]</span> - Select Survey Title<br />
+			<span class="accent">[ End ]</span> - Select Create button<br />
+			Besides that, you can still use <span class="accent">[ Tab ]</span> and <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span>.`,
 
 		// questions
 
@@ -508,28 +501,21 @@ export const data = {
 		close_menu: 'Zamknij menu',
 		open_menu: 'Otwórz menu',
 		read_more: 'Czytaj więcej',
+		slogan: 'Zyskaj pełną anonimowość dzięki potędze podpisów pierścieniowych!',
 		open_source_info: 'Nasz projekt jest open source. Kod źródłowy znajdziesz na ',
-		hotkeys_info: `Możesz szybciej tworzyć ankiety używając skrótów klawiszowych.<br />
+		hotkeys_info: `Możesz tworzyć ankiety szybciej używając skrótów klawiszowych.<br />
 			Przytrzymaj <span class="accent">[ LeftAlt ]</span> i naciśnij:<br />
-			\t<span class="accent">[ 1 ]</span> - Dodaj pytanie {one}<br />
-			\t<span class="accent">[ 2 ]</span> - Dodaj pytanie {two}<br />
-			\t<span class="accent">[ 3 ]</span> - Dodaj pytanie {three}<br />
-			\t<span class="accent">[ 4 ]</span> - Dodaj pytanie {four}<br />
-			\t<span class="accent">[ 5 ]</span> - Dodaj pytanie {five}<br />
-			\t<span class="accent">[ 6 ]</span> - Dodaj pytanie {six}<br />
-			\t<span class="accent">[ 7 ]</span> - Dodaj pytanie {seven}<br />
-			\t<span class="accent">[ 8 ]</span> - Dodaj pytanie {eight}<br />
-			\t<span class="accent">[ 9 ]</span> - Dodaj pytanie {nine}<br />
-			\t<span class="accent">[ 0 ]</span> - Dodaj poprzednie pytanie<br />
-			\t<span class="accent">[ Enter ]</span> / <span class="accent">[ Insert ]</span> - Dodaj wybór do zaznaczonego pytania<br />
-			\t<span class="accent">[ Backspace ]</span> / <span class="accent">[ Delete ]</span> - Usuń zaznaczone pytanie lub wybór<br />
-			\t<span class="accent">[ PageUp ]</span> / <span class="accent">[ PageDown ]</span> - Przesuń zaznaczone pytanie w górę lub w dół<br />
-			\t<span class="accent">[ ~ ]</span> / <span class="accent">[ \\ ]</span> - Przełącz wymaganie dla zaznaczonego pytania<br />
-			\t<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Zaznacz poprzednie lub następne pole<br />
-			\t<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Zaznacz poprzednie lub następne pytanie<br />
-			\t<span class="accent">[ Home ]</span> - Zaznacz Tytuł ankiety<br />
-			\t<span class="accent">[ End ]</span> - Zaznacz przycisk Utwórz<br />
-			Ponadto, nadal możesz używać <span class="accent">[ Tab ]</span> i <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span> do nawigacji.`,
+			<span class="accent">[ 1 - 9 ]</span> - Dodaj różne typy pytań<br />
+			<span class="accent">[ 0 ]</span> - Dodaj poprzedni typ pytania<br />
+			<span class="accent">[ Enter ]</span> / <span class="accent">[ Ins ]</span> - Dodaj wybór do zaznaczonego pytania<br />
+			<span class="accent">[ Bksp ]</span> / <span class="accent">[ Del ]</span> - Usuń zaznaczone pytanie lub wybór<br />
+			<span class="accent">[ PgUp ]</span> / <span class="accent">[ PgDn ]</span> - Przesuń zaznaczone pytanie w górę lub w dół<br />
+			<span class="accent">[ ~ ]</span> / <span class="accent">[ \\ ]</span> - Przełącz wymaganie dla zaznaczonego pytania<br />
+			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Zaznacz poprzednie lub następne pole<br />
+			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Zaznacz poprzednie lub następne pytanie<br />
+			<span class="accent">[ Home ]</span> - Zaznacz Tytuł ankiety<br />
+			<span class="accent">[ End ]</span> - Zaznacz przycisk Utwórz<br />
+			Poza tym, nadal możesz używać <span class="accent">[ Tab ]</span> i <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span>.`,
 
 		// questions
 

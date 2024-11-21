@@ -174,12 +174,11 @@
 		position: absolute;
 		top: 2.65em;
 		right: 0;
-		width: 9.2em;
 		border-bottom-left-radius: 5px;
 		border-left: 1px solid var(--border-color-1);
 		border-bottom: 1px solid var(--border-color-1);
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
-		z-index: 1;
+		z-index: 2;
 	}
 
 	.nav-button-panel button:last-child {
@@ -187,10 +186,11 @@
 	}
 
 	.nav-button {
-		width: 9.2em;
+		width: 9em;
 		border-radius: 0px;
 		box-shadow: none;
 		border: none;
+		font-size: 1.1em;
 	}
 
 	.nav-button i,
@@ -210,6 +210,7 @@
 		}
 
 		.nav-button-panel {
+			flex-flow: row-reverse;
 			top: 4.55em;
 			width: 100%;
 			border-radius: 0px;
@@ -222,8 +223,19 @@
 		}
 
 		.nav-button {
+			height: 3em;
 			width: 100%;
 			justify-content: center;
+		}
+	}
+
+	@media screen and (max-width: 375px) {
+		.nav-button-panel {
+			flex-flow: column;
+		}
+
+		.nav-button {
+			height: 2em;
 		}
 	}
 </style>

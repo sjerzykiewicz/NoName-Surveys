@@ -36,7 +36,7 @@
 		border-bottom: none;
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		background-color: var(--secondary-color-1);
-		transition: 0.2s;
+		transition: background-color 0.2s;
 	}
 
 	@media screen and (max-width: 768px) {

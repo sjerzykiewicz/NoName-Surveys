@@ -6,6 +6,18 @@
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
+
+	let checked: number;
+
+	function updateAnswers(choiceIndex: number) {
+		if (checked === choiceIndex) {
+			$answers[questionIndex].choices = [];
+			checked = NaN;
+		} else {
+			$answers[questionIndex].choices[0] = $questions[questionIndex].choices[choiceIndex];
+			checked = choiceIndex;
+		}
+	}
 </script>
 
 <div class="choice-area display binary">
@@ -17,8 +29,9 @@
 			<input
 				type="radio"
 				name={questionIndex.toString()}
-				on:change={() => {
-					$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
+				checked={checked === 0}
+				on:click={() => {
+					updateAnswers(0);
 				}}
 			/>
 			<i class="symbol">thumb_up</i>
@@ -35,8 +48,9 @@
 			<input
 				type="radio"
 				name={questionIndex.toString()}
-				on:change={() => {
-					$answers[questionIndex].choices[0] = $questions[questionIndex].choices[1];
+				checked={checked === 1}
+				on:click={() => {
+					updateAnswers(1);
 				}}
 			/>
 			<i class="symbol">thumb_down</i>

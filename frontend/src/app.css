@@ -1568,3 +1568,10 @@ button.popup {
 .account-icon {
 	margin-right: 0.5em;
 }
+
+.clear_answer {
+	display: flex;
+	justify-content: flex-end;
+	width: 90%;
+	padding-top: 0.5em;
+}

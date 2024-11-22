@@ -326,6 +326,8 @@ export const data = {
 		selected_answer: 'Selected answer',
 		click_to_get_answers: 'Click to display all answers',
 		view_individual_answers: 'View individual answers',
+		clear_answer_title: 'Clear the answer',
+		clear_answer: 'Clear',
 
 		// pages
 
@@ -759,7 +761,8 @@ export const data = {
 		selected_answer: 'Wybrana odpowiedź',
 		click_to_get_answers: 'Kliknij, aby wyświetlić wszystkie odpowiedzi',
 		view_individual_answers: 'Wyświetl indywidualne odpowiedzi',
-
+		clear_answer_title: 'Wyczyść odpowiedź',
+		clear_answer: 'Wyczyść',
 		// pages
 
 		first_page: 'Pierwsza strona',

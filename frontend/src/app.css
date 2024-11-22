@@ -48,8 +48,8 @@
 	--gradient-color-1: #e0e0e3;
 	--gradient-color-2: #e8e8eb;
 
-	--warning-color-1: #cc7a00;
-	--warning-color-2: #995c00;
+	--warning-color-1: #ff6600;
+	--warning-color-2: #cc5200;
 }
 
 @font-face {
@@ -100,7 +100,7 @@ body {
 body {
 	overflow-x: hidden;
 	overflow-y: auto;
-	background: var(--secondary-color-1);
+	background: var(--gradient-color-2);
 	background: -moz-linear-gradient(0deg, var(--gradient-color-1) 0%, var(--gradient-color-2) 100%);
 	background: -webkit-linear-gradient(
 		0deg,
@@ -231,7 +231,7 @@ body {
 .sign-in {
 	justify-content: center;
 	font-size: 3em;
-	font-weight: 700 !important;
+	font-weight: 700;
 	padding: 0.3em;
 	background-color: var(--amu-color-1);
 	color: var(--text-color-2);
@@ -543,7 +543,7 @@ input[type='file'] {
 .index {
 	margin-right: 0.5em;
 	width: 1.75em;
-	font-weight: 700 !important;
+	font-weight: 700;
 	text-align: right;
 	color: var(--text-color-1);
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
@@ -570,7 +570,7 @@ input[type='file'] {
 
 .question-area.display {
 	align-items: flex-start;
-	font-weight: 700 !important;
+	font-weight: 700;
 	cursor: default;
 	width: calc(100% - 4.5em);
 	margin-left: 2.25em;
@@ -603,7 +603,7 @@ input[type='file'] {
 }
 
 .question-label .tooltip .tooltip-text {
-	font-weight: 400 !important;
+	font-weight: 400;
 }
 
 .type {
@@ -812,7 +812,7 @@ input[type='file'] {
 
 .choice-percentage {
 	margin-left: 0.5em;
-	font-weight: 700 !important;
+	font-weight: 700;
 	color: var(--accent-color-1);
 	cursor: default;
 	transition:
@@ -826,7 +826,7 @@ input[type='file'] {
 
 .title-container .input {
 	font-size: 1.2em !important;
-	font-weight: 700 !important;
+	font-weight: 700;
 	width: calc(100% - 0.5em) !important;
 }
 
@@ -848,7 +848,7 @@ input[type='file'] {
 
 .limit {
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
-	font-weight: 700 !important;
+	font-weight: 700;
 	color: var(--text-color-1);
 	cursor: default;
 	transition:
@@ -943,7 +943,7 @@ input[type='radio']:disabled {
 	display: flex;
 	align-items: center;
 	color: var(--error-color-1);
-	font-weight: 700 !important;
+	font-weight: 700;
 	font-size: 1em;
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
 	cursor: default;
@@ -961,7 +961,7 @@ input[type='radio']:disabled {
 	flex: 1;
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
 	font-size: 1.5em;
-	font-weight: 700 !important;
+	font-weight: 700;
 	color: var(--text-color-1);
 	cursor: default;
 	max-width: 100%;
@@ -973,6 +973,16 @@ input[type='radio']:disabled {
 	transition:
 		0.2s,
 		outline 0s;
+}
+
+.title.static {
+	display: flex;
+	justify-content: space-between;
+	overflow-wrap: unset;
+	overflow: unset;
+	padding-bottom: 0em;
+	margin-bottom: 0em;
+	white-space: normal !important;
 }
 
 .title.empty,
@@ -1139,7 +1149,7 @@ td {
 
 th {
 	background-color: var(--shadow-color-1);
-	font-weight: 700 !important;
+	font-weight: 700;
 	cursor: default;
 	overflow-wrap: break-word;
 	transition:
@@ -1350,7 +1360,7 @@ th .checkbox-entry {
 	box-shadow: 0px 4px 4px var(--shadow-color-1);
 	color: var(--text-color-1);
 	text-align: center;
-	font-weight: 400 !important;
+	font-weight: 400;
 
 	pointer-events: none;
 	visibility: hidden;
@@ -1474,6 +1484,38 @@ button.popup {
 	opacity: 1;
 }
 
+/* account */
+
+.accent {
+	display: inline-flex;
+	align-items: flex-end;
+}
+
+.account-accent,
+.accent {
+	color: var(--accent-color-1);
+	font-weight: 700;
+}
+
+.account-ul {
+	list-style-type: none;
+	margin-top: 0.25em;
+	padding-left: 0em;
+	font-weight: 500;
+}
+
+.account-li {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding-top: 0.75em;
+}
+
+.account-icon {
+	margin-right: 0.5em;
+}
+
 @media screen and (max-width: 768px) {
 	html {
 		background: var(--secondary-color-1);
@@ -1517,7 +1559,7 @@ button.popup {
 	}
 
 	.sign-in {
-		font-size: 2.5em;
+		font-size: 2.25em;
 	}
 
 	.choice-area.binary {
@@ -1561,33 +1603,4 @@ button.popup {
 	.select-list *:where(div.multiselect > ul.selected) {
 		max-height: 15.5em;
 	}
-}
-
-.accent {
-	display: inline-flex;
-	align-items: flex-end;
-}
-
-.account-accent,
-.accent {
-	color: var(--accent-color-1);
-	font-weight: 700;
-}
-
-.account-ul {
-	list-style-type: none;
-	margin-top: 0.25em;
-	padding-left: 1.5em;
-}
-
-.account-li {
-	display: flex;
-	flex-flow: row nowrap;
-	justify-content: flex-start;
-	align-items: flex-start;
-	padding-top: 0.75em;
-}
-
-.account-icon {
-	margin-right: 0.5em;
 }

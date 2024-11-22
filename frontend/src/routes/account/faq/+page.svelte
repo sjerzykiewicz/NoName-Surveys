@@ -12,7 +12,7 @@
 </script>
 
 <Header>
-	<div title={$t('faq_title')} class="title">
+	<div title={$t('faq_title')} class="title static">
 		<Tx text="faq_title" />
 	</div>
 </Header>

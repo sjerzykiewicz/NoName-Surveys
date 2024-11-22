@@ -3,27 +3,24 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { M } from '$lib/stores/global';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
-	import { getContext } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import { page } from '$app/stores';
 	import { signOut } from '$lib/utils/signOut';
 	import { startOAuth } from '$lib/utils/startOAuth';
-	import noname_dark from '$lib/assets/noname_dark.png';
-	import noname_light from '$lib/assets/noname_light.png';
 	import { goto } from '$app/navigation';
+	import { toggleTheme } from '$lib/utils/toggleTheme';
+	import { colorScheme } from '$lib/stores/global';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
-
-	export let colorScheme: string;
-	export let logo: string;
-	export let bulb: string;
 
 	let isPanelVisible: boolean = false;
 
 	const ACCOUNT_BUTTON_BREAKPOINT = 1155;
 
 	$: otherLang = $options.currentLang === 'en' ? 'pl' : 'en';
+	$: bulb = $colorScheme === 'dark' ? 'lightbulb' : 'light_off';
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -34,27 +31,15 @@
 		localStorage.setItem('langPref', lang);
 	}
 
-	function toggleThemeMode() {
-		if (colorScheme === 'dark') {
-			document.documentElement.dataset.colorScheme = 'light';
-			logo = noname_dark;
-			bulb = 'light_off';
-			localStorage.setItem('colorScheme', 'light');
-		} else {
-			document.documentElement.dataset.colorScheme = 'dark';
-			logo = noname_light;
-			bulb = 'lightbulb';
-			localStorage.setItem('colorScheme', 'dark');
-		}
-
-		colorScheme = document.documentElement.dataset.colorScheme;
-	}
-
 	function handleClick(event: MouseEvent) {
 		if (isPanelVisible && !(event.target as HTMLElement).closest('.button-group')) {
 			isPanelVisible = false;
 		}
 	}
+
+	onMount(() => {
+		$options.currentLang = localStorage.getItem('langPref') || 'en';
+	});
 
 	let innerWidth: number;
 </script>
@@ -82,10 +67,14 @@
 	</button>
 	{#if isPanelVisible}
 		<div class="nav-button-panel" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<button title={$t('toggle_theme')} class="nav-button" on:click={toggleThemeMode}>
+			<button
+				title={$t('toggle_theme')}
+				class="nav-button"
+				on:click={() => ($colorScheme = toggleTheme($colorScheme))}
+			>
 				<i class="symbol">{bulb}</i>
 				{#key $t}
-					{#if colorScheme === 'dark'}
+					{#if $colorScheme === 'dark'}
 						<Tx text="light_theme" />
 					{:else}
 						<Tx text="dark_theme" />

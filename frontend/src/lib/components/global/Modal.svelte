@@ -126,7 +126,7 @@
 
 	.caption {
 		align-items: center;
-		font-weight: 700 !important;
+		font-weight: 700;
 		font-size: 1.2em;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
@@ -142,7 +142,7 @@
 		align-items: center;
 		padding: 1em;
 		color: var(--text-color-1);
-		text-align: center;
+		text-align: justify;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
 	}

@@ -298,13 +298,13 @@
 
 <style>
 	.create-info.tooltip {
-		--tooltip-width: 17em;
+		--tooltip-width: 20em;
 		font-size: 1.5em;
 	}
 
 	.create-info.tooltip .tooltip-text {
 		text-align: left;
-		font-size: 0.8em;
+		font-size: 0.67em;
 		z-index: 2;
 	}
 
@@ -366,7 +366,7 @@
 
 	@media screen and (max-width: 768px) {
 		.create-info.tooltip {
-			--tooltip-width: 10em;
+			--tooltip-width: 12em;
 			font-size: 1.25em;
 		}
 
@@ -375,7 +375,7 @@
 		}
 
 		.create-info.tooltip .tooltip-text.bottom::after {
-			left: 80%;
+			left: 85%;
 		}
 
 		.import {

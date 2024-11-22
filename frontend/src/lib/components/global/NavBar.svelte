@@ -4,41 +4,24 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { M } from '$lib/stores/global';
 	import NavLinks from './NavLinks.svelte';
-	import { getContext, onMount } from 'svelte';
+	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import AccountButtons from './AccountButtons.svelte';
 	import noname_dark from '$lib/assets/noname_dark.png';
 	import noname_light from '$lib/assets/noname_light.png';
+	import { colorScheme } from '$lib/stores/global';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
-	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	let colorScheme: string;
-	let logo: string = noname_light;
-	let bulb: string = 'lightbulb';
 	let open: boolean = false;
+
+	$: logo = $colorScheme === 'dark' ? noname_light : noname_dark;
 
 	function handleClick(event: MouseEvent) {
 		if (open && !(event.target as HTMLElement).closest('.hamburger')) {
 			open = false;
 		}
 	}
-
-	onMount(() => {
-		colorScheme = localStorage.getItem('colorScheme') || 'dark';
-
-		if (colorScheme === 'dark') {
-			document.documentElement.dataset.colorScheme = 'dark';
-			logo = noname_light;
-			bulb = 'lightbulb';
-		} else {
-			document.documentElement.dataset.colorScheme = 'light';
-			logo = noname_dark;
-			bulb = 'light_off';
-		}
-
-		$options.currentLang = localStorage.getItem('langPref') || 'en';
-	});
 
 	let innerWidth: number;
 </script>
@@ -51,7 +34,7 @@
 		<a href="/" title="NoName" class="nav-burger-logo"
 			><img src={logo} alt="NoName" width="48" height="48" /></a
 		>
-		<AccountButtons bind:colorScheme bind:logo bind:bulb />
+		<AccountButtons />
 		<div title={open ? $t('close_menu') : $t('open_menu')} class="hamburger">
 			<Hamburger bind:open --color="var(--text-color-1)" --padding="10px" />
 		</div>
@@ -72,7 +55,7 @@
 			<NavLinks />
 		</nav>
 	</div>
-	<AccountButtons bind:colorScheme bind:logo bind:bulb />
+	<AccountButtons />
 {/if}
 
 <style>

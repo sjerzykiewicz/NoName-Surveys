@@ -96,7 +96,7 @@
 		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		font-size: 3em;
-		font-weight: 700 !important;
+		font-weight: 700;
 		margin: 0em;
 		padding-bottom: 0.25em;
 		cursor: default;
@@ -108,7 +108,7 @@
 		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		font-size: 1.25em;
-		font-weight: 700 !important;
+		font-weight: 700;
 		padding-top: 0.5em;
 		border-top: 1px solid var(--border-color-1);
 		cursor: default;
@@ -122,10 +122,10 @@
 		justify-content: center;
 		text-align: center;
 		color: var(--text-color-1);
-		font-weight: 700 !important;
+		font-weight: 700;
 		font-size: 2em;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		padding-top: 0.5em;
+		padding-top: 0.25em;
 		cursor: default;
 		transition:
 			0.2s,
@@ -150,7 +150,7 @@
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		color: var(--text-color-1);
-		font-weight: 700 !important;
+		font-weight: 700;
 		font-size: 1.5em;
 		width: 4.25em;
 		margin-top: 0.5em;
@@ -180,7 +180,7 @@
 	.tooltip .tooltip-text {
 		text-align: left;
 		font-size: 0.7em;
-		font-weight: 400 !important;
+		font-weight: 400;
 	}
 
 	.home-info {
@@ -195,7 +195,7 @@
 	}
 
 	.home-info a {
-		font-weight: 700 !important;
+		font-weight: 700;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -209,6 +209,7 @@
 
 		.code-text {
 			font-size: 1.75em;
+			padding-top: 0em;
 		}
 
 		.error {

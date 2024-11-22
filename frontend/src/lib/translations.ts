@@ -182,7 +182,7 @@ export const data = {
 			'Enter the code provided to you by the survey creator. Your answers are completely anonymous.',
 		submit_code: 'Submit the code',
 		home_keys_info: `To fill out a secure survey, you must have generated keys.<br />
-			If you don't have keys, authorize yourself and generate them in `,
+			If you do not have keys, authorize yourself and generate them in `,
 		home_redirect: 'If you want to create your own survey,',
 		home_redirect_account: 'first authorize yourself in ',
 		home_redirect_create: 'go to ',
@@ -345,8 +345,8 @@ export const data = {
 		import_users_label: 'Or import users from a .csv file',
 		import_members_title: 'Import group members from a .csv file',
 		import_members_label: 'Or import group members from a .csv file',
-		some_users_not_registered: `they haven't registered yet`,
-		some_users_without_keys: `they haven't generated keys yet`,
+		some_users_not_registered: `they have not registered yet`,
+		some_users_without_keys: `they have not generated keys yet`,
 		could_not_import_emails: `Could not import {number} users, because {reason}.
 			You can export the list of invalid users if you want.`,
 		warning_no_file: 'No file selected.',
@@ -370,18 +370,18 @@ export const data = {
 		// account
 
 		account: 'Account',
-		account_your: 'Your account',
-		account_info_title: 'Account information',
+		your_account: 'Your account',
 		account_sign_in: 'Authorize yourself with AMU USOS:',
-		account_info: `We do not recommend signing in if you only wish to fill out a survey. For secure surveys, if you
-		have already generated your digital signature keys, signing in is also not necessary.`,
+		account_info: `We do not recommend signing in if you only wish to fill out a public survey. For secure surveys, if you
+			have already generated your digital signature keys, signing in is also not necessary.`,
+		keys_generated: 'You have already generated your keys.',
+		keys_not_generated: 'You have not generated your keys yet.',
 		account_generating_keys: 'Generating Keys',
-		account_new_key_alert:
-			'Are you sure you want to generate new keys? Doing so will take away your ability to answer existing secure surveys.',
+		account_new_key_alert: `Generating new keys will take away your ability to answer existing secure surveys.
+			Make sure you have answered all the surveys you wanted before generating new keys.`,
 		account_new_key: 'Generate New Keys',
-		account_keys_info: `These keys allow you to participate in secure surveys. Once they are generated, it is your
-			responsibility to keep them safe. When submitting a secure survey, you will be asked to
-			provide these keys to your browser for digital signature.`,
+		account_generate_info:
+			'Generated file contains your public and private keys. Do not share this file with anyone. It is your responsibility to keep it safe.',
 		account_last_key_update: 'Last key update',
 		account_key_update_info:
 			'In order to increase security, we recommend generating a new key pair every year.',
@@ -391,8 +391,8 @@ export const data = {
 			'Your keys have been generated {number} days ago.<br />We recommend generating a new pair soon.',
 		account_keys_expired:
 			'Your keys have been generated {number} days ago.<br />Please generate a new pair for increased security.',
-		account_authorization_info: `
-			Authorizing yourself will enable you to:
+		account_info_title: 'Account information',
+		account_authorization_info: `Authorizing yourself will enable you to:
 			<ul class="account-ul">
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">article</i></div>
@@ -435,8 +435,42 @@ export const data = {
 						<span class="account-accent">secure surveys</span> without the need to sign in each time.
 					</div>
 				</li>
-			</ul>
-		`
+			</ul>`,
+		account_keys_info_title: 'Digital signature keys information',
+		account_keys_info: `Important information about digital signature keys:
+			<ul class="account-ul">
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">encrypted</i></div>
+					<div>
+						Generating them allows you to participate in <span class="account-accent">secure surveys</span> and remain fully anonymous,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">graph_6</i></div>
+					<div>
+						They are being utilized in <span class="account-accent">ring signatures</span>,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">contract_edit</i></div>
+					<div>
+						When answering a secure survey, you will have to provide these keys to your browser for a
+						<span class="account-accent">digital signature</span>,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">account_circle_off</i></div>
+					<div>
+						After generating them, you do not need to be signed in to participate in secure surveys,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">priority_high</i></div>
+					<div>
+						If you are not going to take part in secure surveys, there is no need to generate them.
+					</div>
+				</li>
+			</ul>`
 	},
 
 	pl: {
@@ -806,18 +840,18 @@ export const data = {
 		// account
 
 		account: 'Konto',
-		account_your: 'Twoje konto',
-		account_info_title: 'Informacje o koncie',
+		your_account: 'Twoje konto',
 		account_sign_in: 'Zautoryzuj się za pomocą USOS UAM:',
-		account_info: `Nie zalecamy logowania się, jeśli chcesz jedynie wypełnić ankietę. W przypadku bezpiecznych ankiet, jeśli
-		już wygenerowałeś klucze podpisu cyfrowego, logowanie się również nie jest konieczne.`,
+		account_info: `Nie zalecamy logowania się, jeśli chcesz jedynie wypełnić publiczną ankietę. W przypadku bezpiecznych ankiet, jeśli
+			wygenerowałeś już klucze podpisu cyfrowego, logowanie się również nie jest konieczne.`,
+		keys_generated: 'Klucze zostały już wygenerowane.',
+		keys_not_generated: 'Nie wygenerowałeś jeszcze kluczy.',
 		account_generating_keys: 'Generowanie kluczy',
-		account_new_key_alert:
-			'Czy na pewno chcesz wygenerować nowe klucze? Spowoduje to utratę możliwości odpowiedzi na istniejące bezpieczne ankiety.',
+		account_new_key_alert: `Wygenerowanie nowych kluczy spowoduje utratę możliwości odpowiedzi na istniejące bezpieczne ankiety.
+			Upewnij się, że wypełniłeś wszystkie ankiety, które chciałeś, zanim wygenerujesz nowe klucze.`,
 		account_new_key: 'Wygeneruj nowe klucze',
-		account_keys_info: `Te klucze pozwalają na uczestniczenie w bezpiecznych ankietach. Po ich wygenerowaniu, należy
-			je zabezpieczyć. Podczas wypełniania bezpiecznej ankiety, zostaniesz poproszony o podanie
-			tych kluczy przeglądarce do podpisu cyfrowego.`,
+		account_generate_info:
+			'Wygenerowany plik zawiera Twój publiczny i prywatny klucz. Nie udostępniaj nikomu tego pliku. Twoim obowiązkiem jest bezpieczne przechowanie go.',
 		account_last_key_update: 'Ostatnia aktualizacja kluczy',
 		account_key_update_info:
 			'Aby zwiększyć bezpieczeństwo, zalecamy wygenerowanie nowej pary kluczy raz na rok.',
@@ -827,8 +861,8 @@ export const data = {
 			'Twoje klucze zostały wygenerowane {number} dni temu.<br />Zalecamy wygenerowanie nowej pary.',
 		account_keys_expired:
 			'Twoje klucze zostały wygenerowane {number} dni temu.<br />Proszę wygenerować nową parę dla większego bezpieczeństwa.',
-		account_authorization_info: `
-			Zautoryzowanie się pozwoli Ci na:
+		account_info_title: 'Informacje o koncie',
+		account_authorization_info: `Zautoryzowanie się pozwoli Ci na:
 			<ul class="account-ul">
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">article</i></div>
@@ -865,7 +899,41 @@ export const data = {
 						w <span class="account-accent">bezpiecznych ankietach</span> bez konieczności logowania się za każdym razem.
 					</div>
 				</li>
-			</ul>
-		`
+			</ul>`,
+		account_keys_info_title: 'Informacje o kluczach podpisu cyfrowego',
+		account_keys_info: `Ważne informacje o kluczach podpisu cyfrowego:
+			<ul class="account-ul">
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">encrypted</i></div>
+					<div>
+						Wygenerowanie ich pozwala na uczestnictwo w <span class="account-accent">bezpiecznych ankietach</span> i pozostanie w pełni anonimowym,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">graph_6</i></div>
+					<div>
+						Wykorzystywane są w <span class="account-accent">podpisach pierścieniowych</span>,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">contract_edit</i></div>
+					<div>
+						Przy odpowiadaniu na bezpieczną ankietę, będziesz musiał podać te klucze swojej przeglądarce do
+						<span class="account-accent">podpisu cyfrowego</span>,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">account_circle_off</i></div>
+					<div>
+						Po ich wygenerowaniu, nie musisz być zalogowany, aby uczestniczyć w bezpiecznych ankietach,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">priority_high</i></div>
+					<div>
+						Jeśli nie zamierzasz korzystać z bezpiecznych ankiet, nie ma potrzeby ich generować.
+					</div>
+				</li>
+			</ul>`
 	}
 };

@@ -2,6 +2,8 @@
 	import { page } from '$app/stores';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
+	import Footer from '$lib/components/global/Footer.svelte';
+	import OpenSourceInfo from '$lib/components/global/OpenSourceInfo.svelte';
 	import SignIn from '$lib/components/account-page/SignIn.svelte';
 	import SignOut from '$lib/components/account-page/SignOut.svelte';
 	import DownloadKey from '$lib/components/account-page/DownloadKey.svelte';
@@ -12,14 +14,14 @@
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { downloadFile } from '$lib/utils/downloadFile';
-	import type { PageServerData } from './$types';
 	import { invalidateAll } from '$app/navigation';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import AccountButtons from '$lib/components/account-page/AccountButtons.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let data: PageServerData;
+	export let data;
 	export let isModalHidden: boolean = true;
 
 	onMount(async () => {
@@ -86,7 +88,7 @@
 		icon="encrypted"
 		title={$t('account_generating_keys')}
 		bind:isHidden={isModalHidden}
-		--width={innerWidth <= $M ? '18em' : '22em'}
+		--width={innerWidth <= $M ? '20em' : '22em'}
 	>
 		<span slot="content"><Tx text="account_new_key_alert" /></span>
 		<button
@@ -105,13 +107,29 @@
 	</Modal>
 
 	<Header>
-		<div title={$t('account_your')} class="title">
+		<div title={$t('your_account')} class="title static">
 			<Tx text="welcome" />, {$page.data.session.user?.email.split('@')[0]}!
+			{#if data.hasKey}
+				<span title="" class="tooltip">
+					<i class="symbol generated">key</i>
+					<span class="tooltip-text left">
+						<Tx text="keys_generated" />
+					</span>
+				</span>
+			{:else}
+				<span title="" class="tooltip">
+					<i class="symbol">key_off</i>
+					<span class="tooltip-text left">
+						<Tx text="keys_not_generated" />
+					</span>
+				</span>
+			{/if}
 		</div>
 	</Header>
 
 	<Content>
-		<DownloadKey bind:isModalHidden lastTime={data.key_creation_date} />
+		<DownloadKey bind:isModalHidden lastTime={data.keyCreationDate} />
+		<AccountButtons />
 		<SignOut />
 	</Content>
 {:else}
@@ -119,3 +137,16 @@
 		<SignIn />
 	</Content>
 {/if}
+<Footer>
+	<OpenSourceInfo />
+</Footer>
+
+<style>
+	.tooltip .tooltip-text {
+		font-size: 0.8em;
+	}
+
+	.generated {
+		color: var(--accent-color-1);
+	}
+</style>

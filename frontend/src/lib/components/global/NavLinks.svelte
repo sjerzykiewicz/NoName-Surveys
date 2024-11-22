@@ -81,7 +81,7 @@
 	.tooltip .tooltip-text {
 		margin-top: 0em;
 		font-size: 0.8em;
-		font-weight: 400 !important;
+		font-weight: 400;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		background-color: var(--primary-color-2);
 		cursor: default;
@@ -125,7 +125,7 @@
 	.nav-link a {
 		padding: 0.5em 0em;
 		width: 100%;
-		font-weight: 700 !important;
+		font-weight: 700;
 		color: inherit;
 		text-decoration: none;
 		cursor: inherit;

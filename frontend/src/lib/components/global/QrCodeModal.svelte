@@ -99,7 +99,7 @@
 		width: 7em;
 		padding-bottom: 0.25em;
 		font-size: 4em;
-		font-weight: 700 !important;
+		font-weight: 700;
 		cursor: text;
 	}
 

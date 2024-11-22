@@ -654,7 +654,7 @@
 	}
 
 	.hotkeys-info.tooltip .tooltip-text.right::after {
-		top: 7.5%;
+		top: 9.5%;
 	}
 
 	.tooltip i {

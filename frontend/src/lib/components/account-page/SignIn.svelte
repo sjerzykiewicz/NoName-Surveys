@@ -20,7 +20,7 @@
 	</div>
 </div>
 <div title={$t('account_info_title')} class="info">
-	<div class="text">
+	<div class="text bottom">
 		<Tx text="account_info" />
 	</div>
 </div>
@@ -31,7 +31,7 @@
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		color: var(--text-color-1);
 		font-size: 2.75em;
-		font-weight: 700 !important;
+		font-weight: 700;
 		cursor: default;
 		margin: 0;
 		padding: 0.25em 0 0.5em;
@@ -60,13 +60,16 @@
 		overflow-wrap: break-word;
 		color: var(--text-color-1);
 		font-size: 1.25em;
-		transition:
-			0.2s,
-			outline 0s;
+		transition: 0.2s;
 	}
 
 	.text {
-		text-align: justify;
+		font-weight: 700;
+		text-align: left;
+	}
+
+	.text.bottom {
+		font-weight: 500;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -75,7 +78,7 @@
 		}
 
 		.info {
-			font-size: 1em;
+			font-size: 0.8em;
 			padding-left: 0em;
 			padding-right: 0em;
 		}

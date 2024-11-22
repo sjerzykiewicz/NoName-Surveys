@@ -5,13 +5,19 @@
 	import ErrorModal from '$lib/components/global/ErrorModal.svelte';
 	import Translate from 'sveltekit-translate/translate/Translate.svelte';
 	import type { TranslateOptions } from 'sveltekit-translate/translate/translateStore';
-
+	import { onMount } from 'svelte';
 	import { data } from '$lib/translations';
+	import { colorScheme } from '$lib/stores/global';
+	import { setTheme } from '$lib/utils/setTheme';
 
 	let opts: TranslateOptions = {
 		defaultLang: 'en',
 		currentLang: 'en'
 	};
+
+	onMount(() => {
+		$colorScheme = setTheme();
+	});
 </script>
 
 <Translate {opts} {data}>

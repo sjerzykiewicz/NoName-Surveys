@@ -11,7 +11,7 @@
 
 <style>
 	.open-source-info a {
-		font-weight: 700 !important;
+		font-weight: 700;
 	}
 
 	.open-source-info {

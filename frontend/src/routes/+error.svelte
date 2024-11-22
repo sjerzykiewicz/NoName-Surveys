@@ -32,7 +32,7 @@
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		font-weight: 700 !important;
+		font-weight: 700;
 		cursor: default;
 		transition:
 			0.2s,

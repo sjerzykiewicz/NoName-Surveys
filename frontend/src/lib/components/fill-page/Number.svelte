@@ -47,7 +47,7 @@
 		<div title={$t('minimum_value')} class="limit">{$questions[questionIndex].choices[0]}</div>
 		<div title={$t('maximum_value')} class="limit">{$questions[questionIndex].choices[1]}</div>
 	</div>
-	{#if value !== undefined}
+	{#if !isNaN(value)}
 		<div class="clear_answer">
 			<button title={$t('clear_answer_title')} on:click={handleClear}
 				><Tx text="clear_answer" /></button

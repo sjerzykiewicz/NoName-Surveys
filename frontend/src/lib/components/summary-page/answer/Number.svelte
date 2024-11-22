@@ -5,17 +5,17 @@
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data: { answer: number; min_value: number; max_value: number };
+
+	let answer = data.answer !== null ? data.answer.toFixed(2) : $t('question_not_answered');
 </script>
 
 <div class="choice-area display slider">
 	<div title={$t('answer')} class="choice slider">
-		<input
-			class="limit-input"
-			type="number"
-			autocomplete="off"
-			value={data.answer.toFixed(2)}
-			disabled
-		/>
+		{#if data.answer === null}
+			{answer}
+		{:else}
+			<input class="limit-input" type="number" autocomplete="off" value={answer} disabled />
+		{/if}
 	</div>
 	<div class="limits">
 		<div title={$t('minimum_value')} class="limit">{data.min_value}</div>

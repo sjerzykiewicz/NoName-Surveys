@@ -6,7 +6,12 @@
 
 	export let data: { answers: number[]; min_value: number; max_value: number };
 
-	let avg = (data.answers.reduce((a, b) => a + b, 0) / data.answers.length).toFixed(2);
+	let existingAnswers = data.answers.filter((x) => x !== null);
+
+	let avg =
+		existingAnswers.length !== 0
+			? (existingAnswers.reduce((a, b) => a + b, 0) / existingAnswers.length).toFixed(2)
+			: $t('no_answers_to_question');
 </script>
 
 <div class="choice-area display slider">

@@ -1314,18 +1314,28 @@ th .checkbox-entry {
 
 .tooltip.clickable {
 	cursor: pointer;
-	text-decoration: none !important;
-	color: var(--text-color-1);
 }
 
 .tooltip.clickable i {
+	color: var(--accent-color-1);
+}
+
+.tooltip.clickable:hover i {
+	color: var(--accent-color-2);
+	transform: scale(120%);
+}
+
+.tooltip.hoverable i {
 	opacity: 1;
 	color: var(--text-color-1);
 }
 
-.tooltip.clickable:hover i {
+.tooltip.hoverable:hover i {
 	opacity: 0.75;
-	transform: scale(120%);
+}
+
+.tooltip.hoverable .tooltip-text {
+	pointer-events: all;
 }
 
 .tooltip .tooltip-text,
@@ -1356,7 +1366,7 @@ th .checkbox-entry {
 	margin-left: calc((var(--tooltip-width) + 1em) / -2);
 
 	bottom: 100%;
-	margin-bottom: 0.5em;
+	margin-bottom: 0.25em;
 }
 
 .tooltip .tooltip-text.right,
@@ -1365,7 +1375,7 @@ th .checkbox-entry {
 	transform: translateY(-50%);
 
 	left: 100%;
-	margin-left: 0.5em;
+	margin-left: 0.25em;
 }
 
 .tooltip .tooltip-text.bottom,
@@ -1374,7 +1384,7 @@ th .checkbox-entry {
 	margin-left: calc((var(--tooltip-width) + 1em) / -2);
 
 	top: 100%;
-	margin-top: 0.5em;
+	margin-top: 0.25em;
 }
 
 .tooltip .tooltip-text.left,
@@ -1383,7 +1393,7 @@ th .checkbox-entry {
 	transform: translateY(-50%);
 
 	right: 100%;
-	margin-right: 0.5em;
+	margin-right: 0.25em;
 }
 
 .tooltip .tooltip-text::after,

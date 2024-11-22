@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
+	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
+	import Footer from '$lib/components/global/Footer.svelte';
+	import OpenSourceInfo from '$lib/components/global/OpenSourceInfo.svelte';
 	import { M } from '$lib/stores/global';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
@@ -9,8 +12,6 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
-	import Footer from '../global/Footer.svelte';
-	import Header from '../global/Header.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -31,13 +32,15 @@
 <Content>
 	<div class="code-text">
 		<span><Tx text="code_info" /></span>
-		<!-- TODO: better link -->
-		<a href={githubLink} target="_blank" class="tooltip clickable">
+		<div class="tooltip hoverable">
 			<i class="symbol">help</i>
 			<span class="tooltip-text {innerWidth <= $M ? 'top' : 'bottom'}">
-				<Tx text="code_tooltip" />
+				<!-- TODO: better link -->
+				<Tx text="code_tooltip" /><br /><a href={githubLink} target="_blank"
+					><Tx text="read_more" /></a
+				>
 			</span>
-		</a>
+		</div>
 	</div>
 	<form method="POST" use:enhance>
 		<label title={$t('code_info')} for="code-input">
@@ -67,18 +70,24 @@
 		</label>
 	</form>
 	<p class="home-info">
+		<Tx html="home_keys_info" /><a href="/account" title={$t('account')}><Tx text="account" /></a>.
+	</p>
+	<p class="home-info">
 		<Tx text="home_redirect" />
-		{#if $page.data.session}<a href="/create" title={$t('create')}><Tx text="create" /></a>.
-		{:else}<a href="/account" title={$t('account')}><Tx text="account" /></a>.
+		{#if $page.data.session}
+			<Tx text="home_redirect_create" /><a href="/create" title={$t('create')}
+				><Tx text="create" /></a
+			>.
+		{:else}
+			<Tx text="home_redirect_account" /><a href="/account" title={$t('account')}
+				><Tx text="account" /></a
+			>.
 		{/if}
 	</p>
 </Content>
 
 <Footer>
-	<div class="open-source-info">
-		<Tx text="open_source_info" />
-		<a href={githubLink} target="_blank" title="GitHub">GitHub</a>.
-	</div>
+	<OpenSourceInfo />
 </Footer>
 
 <style>
@@ -185,21 +194,8 @@
 			outline 0s;
 	}
 
-	.home-info a,
-	.open-source-info a {
+	.home-info a {
 		font-weight: 700 !important;
-	}
-
-	.open-source-info {
-		width: 100%;
-		text-align: center;
-		font-size: 1.2em;
-		color: var(--text-color-1);
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		cursor: default;
-		transition:
-			0.2s,
-			outline 0s;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -228,8 +224,7 @@
 			flex-flow: column;
 		}
 
-		.home-info,
-		.open-source-info {
+		.home-info {
 			font-size: 1em;
 		}
 	}

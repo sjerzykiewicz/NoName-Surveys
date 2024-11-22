@@ -48,10 +48,10 @@
 		border: none;
 		font-size: 1.5em;
 		z-index: 1;
+		cursor: pointer;
 		transition:
 			0.2s,
 			outline 0s;
-		cursor: pointer;
 	}
 
 	.scroll-to-top:hover {
@@ -67,17 +67,9 @@
 			left: 0.5em;
 			bottom: 0.5em;
 		}
-	}
 
-	@media screen and (max-width: 362px) {
 		.scroll-to-top.create-page {
 			bottom: 2.5em;
-		}
-	}
-
-	@media screen and (max-width: 327px) {
-		.scroll-to-top.create-page {
-			bottom: 0.25em;
 		}
 	}
 </style>

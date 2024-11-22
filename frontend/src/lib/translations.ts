@@ -32,6 +32,7 @@ export const data = {
 		cancel: 'Cancel',
 		delete: 'Delete',
 		sign_in: 'Sign In',
+		sign_in_lower: 'Sign in',
 		sign_out: 'Sign Out',
 		public: 'Public',
 		secure: 'Secure',
@@ -61,7 +62,7 @@ export const data = {
 		other_lang: 'Polish',
 		scroll_to_top: 'Scroll to the top',
 		signed_out: 'Signed Out',
-		sign_in_info: 'Sign in to access ',
+		sign_in_info: 'to access ',
 		and: 'and',
 		or: 'Or',
 		select: 'Select',
@@ -69,7 +70,7 @@ export const data = {
 		rename: 'Rename',
 		close_menu: 'Close menu',
 		open_menu: 'Open menu',
-		read_more: 'Read more',
+		read_more: 'Read more...',
 		slogan: 'Unlock true anonymity with the power of ring signatures!',
 		open_source_info: 'Our project is open source. You can find the source code on ',
 		hotkeys_info: `You can create surveys faster by using hotkeys.<br />
@@ -180,7 +181,11 @@ export const data = {
 		code_tooltip:
 			'Enter the code provided to you by the survey creator. Your answers are completely anonymous.',
 		submit_code: 'Submit the code',
-		home_redirect: 'If you want to create your own survey, go to',
+		home_keys_info: `To fill out a secure survey, you must have generated keys.<br />
+			If you don't have keys, authorize yourself and generate them in `,
+		home_redirect: 'If you want to create your own survey,',
+		home_redirect_account: 'first authorize yourself in ',
+		home_redirect_create: 'go to ',
 		survey_info: 'Survey Information',
 		survey_title: 'Survey Title',
 		survey_title_title: 'Enter a survey title',
@@ -358,6 +363,10 @@ export const data = {
 		default_filename: 'Default filename',
 		no_file_selected: 'No file selected',
 
+		// faq
+
+		faq_title: 'Frequently Asked Questions',
+
 		// account
 
 		account: 'Account',
@@ -463,6 +472,7 @@ export const data = {
 		cancel: 'Anuluj',
 		delete: 'Usuń',
 		sign_in: 'Zaloguj się',
+		sign_in_lower: 'Zaloguj się',
 		sign_out: 'Wyloguj się',
 		public: 'Publiczna',
 		secure: 'Bezpieczna',
@@ -492,7 +502,7 @@ export const data = {
 		other_lang: 'Angielski',
 		scroll_to_top: 'Przewiń na samą górę',
 		signed_out: 'Wylogowany',
-		sign_in_info: 'Zaloguj się, aby uzyskać dostęp do ',
+		sign_in_info: 'aby uzyskać dostęp do ',
 		and: 'i',
 		or: 'Lub',
 		select: 'Wybierz',
@@ -500,7 +510,7 @@ export const data = {
 		rename: 'Zmień nazwę',
 		close_menu: 'Zamknij menu',
 		open_menu: 'Otwórz menu',
-		read_more: 'Czytaj więcej',
+		read_more: 'Czytaj więcej...',
 		slogan: 'Zyskaj pełną anonimowość dzięki potędze podpisów pierścieniowych!',
 		open_source_info: 'Nasz projekt jest open source. Kod źródłowy znajdziesz na ',
 		hotkeys_info: `Możesz tworzyć ankiety szybciej używając skrótów klawiszowych.<br />
@@ -609,7 +619,11 @@ export const data = {
 		code_tooltip:
 			'Wprowadź kod podany przez twórcę ankiety. Twoje odpowiedzi są w pełni anonimowe.',
 		submit_code: 'Wyślij kod',
-		home_redirect: 'Jeśli chcesz utworzyć własną ankietę, przejdź do',
+		home_keys_info: `By odpowiedzieć na bezpieczną ankietę, musisz mieć wygenerowane klucze.<br />
+			Jeśli nie masz kluczy, zautoryzuj się i wygeneruj je w `,
+		home_redirect: 'Jeśli chcesz utworzyć własną ankietę,',
+		home_redirect_account: 'najpierw zautoryzuj się w ',
+		home_redirect_create: 'przejdź do ',
 		survey_info: 'Informacje o ankiecie',
 		survey_title: 'Tytuł ankiety',
 		survey_title_title: 'Wprowadź tytuł ankiety',
@@ -784,6 +798,10 @@ export const data = {
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
 		default_filename: 'Domyślna nazwa pliku',
 		no_file_selected: 'Nie wybrano pliku',
+
+		// faq
+
+		faq_title: 'Często zadawane pytania',
 
 		// account
 

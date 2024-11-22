@@ -371,11 +371,11 @@
 		}
 
 		.create-info.tooltip .tooltip-text.bottom {
-			left: -250%;
+			left: -175%;
 		}
 
 		.create-info.tooltip .tooltip-text.bottom::after {
-			left: 90%;
+			left: 80%;
 		}
 
 		.import {

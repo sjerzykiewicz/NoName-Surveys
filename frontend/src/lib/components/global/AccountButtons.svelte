@@ -10,6 +10,7 @@
 	import { startOAuth } from '$lib/utils/startOAuth';
 	import noname_dark from '$lib/assets/noname_dark.png';
 	import noname_light from '$lib/assets/noname_light.png';
+	import { goto } from '$app/navigation';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
@@ -81,18 +82,6 @@
 	</button>
 	{#if isPanelVisible}
 		<div class="nav-button-panel" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			{#if $page.data.session}
-				<button title={$t('sign_out')} class="nav-button" on:click={signOut}
-					><i class="symbol">logout</i><Tx text="sign_out" />
-				</button>
-			{:else}
-				<button title={$t('sign_in')} class="nav-button" on:click={startOAuth}
-					><i class="symbol">login</i><Tx text="sign_in" /></button
-				>
-			{/if}
-			<button title={$t('toggle_lang')} class="nav-button" on:click={() => changeLang(otherLang)}
-				><i class="symbol">language</i><Tx text="other_lang" />
-			</button>
 			<button title={$t('toggle_theme')} class="nav-button" on:click={toggleThemeMode}>
 				<i class="symbol">{bulb}</i>
 				{#key $t}
@@ -103,6 +92,21 @@
 					{/if}
 				{/key}
 			</button>
+			<button title={$t('toggle_lang')} class="nav-button" on:click={() => changeLang(otherLang)}
+				><i class="symbol">language</i><Tx text="other_lang" />
+			</button>
+			<button title={$t('faq_title')} class="nav-button" on:click={() => goto('/account/faq')}
+				><i class="symbol">question_mark</i>FAQ
+			</button>
+			{#if $page.data.session}
+				<button title={$t('sign_out')} class="nav-button" on:click={signOut}
+					><i class="symbol">logout</i><Tx text="sign_out" />
+				</button>
+			{:else}
+				<button title={$t('sign_in')} class="nav-button" on:click={startOAuth}
+					><i class="symbol">login</i><Tx text="sign_in" /></button
+				>
+			{/if}
 		</div>
 	{/if}
 </div>
@@ -185,6 +189,10 @@
 		border-bottom-left-radius: 5px;
 	}
 
+	.nav-button-panel button:not(:last-child) {
+		border-bottom: 1px solid var(--text-color-3);
+	}
+
 	.nav-button {
 		width: 9em;
 		border-radius: 0px;
@@ -210,7 +218,7 @@
 		}
 
 		.nav-button-panel {
-			flex-flow: row-reverse;
+			flex-flow: row;
 			top: 4.55em;
 			width: 100%;
 			border-radius: 0px;
@@ -220,6 +228,11 @@
 
 		.nav-button-panel button:last-child {
 			border-bottom-left-radius: 0px;
+		}
+
+		.nav-button-panel button:not(:last-child) {
+			border-bottom: none;
+			border-right: 1px solid var(--text-color-3);
 		}
 
 		.nav-button {
@@ -232,6 +245,11 @@
 	@media screen and (max-width: 375px) {
 		.nav-button-panel {
 			flex-flow: column;
+		}
+
+		.nav-button-panel button:not(:last-child) {
+			border-bottom: 1px solid var(--text-color-3);
+			border-right: none;
 		}
 
 		.nav-button {

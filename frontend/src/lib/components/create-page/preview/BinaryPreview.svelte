@@ -10,16 +10,24 @@
 	export let questionIndex: number;
 
 	let checked: number;
+	function updateAnswers(choiceIndex: number) {
+		if (checked === choiceIndex) {
+			checked = NaN;
+		} else {
+			checked = choiceIndex;
+		}
+	}
 </script>
 
 <div class="choice-area display binary" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<label title={$t('select_answer')} class="choice binary" class:selected={checked === 0}
 		><div class="icon">
 			<input
-				type="radio"
+				type="checkbox"
 				name={questionIndex.toString()}
+				checked={checked === 0}
 				on:change={() => {
-					checked = 0;
+					updateAnswers(0);
 				}}
 			/>
 			<i class="symbol">thumb_up</i>
@@ -31,10 +39,11 @@
 	<label title={$t('select_answer')} class="choice binary" class:selected={checked === 1}
 		><div class="icon">
 			<input
-				type="radio"
+				type="checkbox"
 				name={questionIndex.toString()}
+				checked={checked === 1}
 				on:change={() => {
-					checked = 1;
+					updateAnswers(1);
 				}}
 			/>
 			<i class="symbol">thumb_down</i>

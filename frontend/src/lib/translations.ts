@@ -150,6 +150,7 @@ export const data = {
 		average: 'Average',
 		selected_value: 'Selected value',
 		ordered_by_average_place: 'Ordered by average place',
+		average_choice_ranking: 'Average ranking',
 
 		// drafts
 
@@ -590,6 +591,7 @@ export const data = {
 		average: 'Średnia',
 		selected_value: 'Wybrana wartość',
 		ordered_by_average_place: 'Uporządkowane według średniej pozycji',
+		average_choice_ranking: 'Średnia pozycja',
 
 		// drafts
 

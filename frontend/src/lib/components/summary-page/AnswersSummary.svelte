@@ -28,7 +28,6 @@
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let surveyAnswers: Array<SurveySummary>;
-
 	const componentTypeMap: { [id: string]: ComponentType } = {
 		text: TextSummary,
 		single: SingleSummary,
@@ -93,7 +92,7 @@
 					max_value = (question as SliderQuestionAnswered).max_value;
 					break;
 				case 'rank':
-					answers = (question as RankQuestionAnswered).answer;
+					multi_answers = [(question as RankQuestionAnswered).answer];
 					choices = (question as RankQuestionAnswered).choices;
 					break;
 				case 'list':

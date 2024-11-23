@@ -411,9 +411,9 @@ button:active,
 
 button:disabled,
 .footer-button:disabled {
-	background-color: var(--secondary-color-1);
-	color: var(--text-color-3);
-	cursor: not-allowed;
+	background-color: var(--secondary-color-1) !important;
+	color: var(--text-color-3) !important;
+	cursor: not-allowed !important;
 }
 
 .button-row {

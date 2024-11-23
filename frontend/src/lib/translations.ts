@@ -360,7 +360,7 @@ export const data = {
 		key_file_label: `Please load the file which you have previously generated on this application. The file
 			contains your keys, necessary for cryptographic calculations which are needed for validating
 			your right to fill out this survey.`,
-		default_filename: 'Default filename',
+		default_filename: 'Default filename: ',
 		no_file_selected: 'No file selected',
 
 		// faq
@@ -830,7 +830,7 @@ export const data = {
 		submit_keys: 'Załaduj klucze',
 		key_file_label: `Załaduj plik, który wcześniej wygenerowałeś w tej aplikacji. Plik zawiera Twoje klucze, które są
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
-		default_filename: 'Domyślna nazwa pliku',
+		default_filename: 'Domyślna nazwa pliku: ',
 		no_file_selected: 'Nie wybrano pliku',
 
 		// faq

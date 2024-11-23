@@ -92,7 +92,6 @@
 		flex-flow: inherit;
 		justify-content: inherit;
 		align-items: inherit;
-		text-align: center;
 	}
 
 	.survey-code {

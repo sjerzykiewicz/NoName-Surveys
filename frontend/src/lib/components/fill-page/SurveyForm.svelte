@@ -66,6 +66,7 @@
 
 	let innerWidth: number;
 	let isKeysModalHidden: boolean = true;
+	let isSubmitButtonDisabled: boolean = false;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -209,7 +210,9 @@
 				if ($answers[i].choices.length === 0) {
 					unansweredRequired.add(i);
 				} else if (
-					$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0)
+					$answers[i].choices.some(
+						(c) => c === null || c === undefined || c.toString().trim().length === 0
+					)
 				) {
 					unansweredRequired.add(i);
 				}
@@ -249,7 +252,11 @@
 	}
 
 	async function processCrypto() {
-		if (!checkFileCorrectness()) return;
+		isSubmitButtonDisabled = true;
+		if (!checkFileCorrectness()) {
+			isSubmitButtonDisabled = false;
+			return;
+		}
 
 		const text = await readFile(fileElement).then(
 			(resolve) => {
@@ -267,6 +274,7 @@
 		if (!keys.includes(keyPair.publicKey)) {
 			$errorModalContent = $t('public_key_not_on_list');
 			$isErrorModalHidden = false;
+			isSubmitButtonDisabled = false;
 			return;
 		}
 
@@ -298,6 +306,7 @@
 			} catch (e) {
 				$errorModalContent = e as string;
 				$isErrorModalHidden = false;
+				isSubmitButtonDisabled = false;
 				return;
 			}
 		}
@@ -316,18 +325,29 @@
 			const body = await response.json();
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
+			isSubmitButtonDisabled = false;
 			return;
 		}
 
+		isSubmitButtonDisabled = true;
 		isKeysModalHidden = true;
 		$successModalContent = $t('answer_submit_success');
 		$isSuccessModalHidden = false;
 	}
 
 	async function submitSurvey() {
-		if (!(await checkAnswerCorrectness())) return;
-		if (uses_crypto) isKeysModalHidden = false;
-		else processForm(undefined);
+		isSubmitButtonDisabled = true;
+		if (!(await checkAnswerCorrectness())) {
+			isSubmitButtonDisabled = false;
+			return;
+		}
+
+		if (uses_crypto) {
+			isSubmitButtonDisabled = false;
+			isKeysModalHidden = false;
+		} else {
+			processForm(undefined);
+		}
 	}
 
 	async function hideSuccessModal() {
@@ -337,7 +357,7 @@
 
 	onMount(() => {
 		function handleEnter(event: KeyboardEvent) {
-			if (!isKeysModalHidden && event.key === 'Enter') {
+			if (!isKeysModalHidden && !isSubmitButtonDisabled && event.key === 'Enter') {
 				event.preventDefault();
 				processCrypto();
 				event.stopImmediatePropagation();
@@ -364,7 +384,8 @@
 >
 	<div slot="content" title={$t('load_keys')} class="file-div">
 		<span class="file-label"
-			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.pem"</span
+			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" /><br
+			/>"noname-keys.pem"</span
 		>
 		<label>
 			<div class="file-input">
@@ -375,8 +396,11 @@
 		</label>
 		<KeysError error={fileError} element={fileElement} />
 	</div>
-	<button title={$t('submit_keys')} class="save" on:click={processCrypto}
-		><i class="symbol">done</i><Tx text="submit" /></button
+	<button
+		title={$t('submit_keys')}
+		class="save"
+		disabled={isSubmitButtonDisabled}
+		on:click={processCrypto}><i class="symbol">done</i><Tx text="submit" /></button
 	>
 </Modal>
 
@@ -404,13 +428,18 @@
 		<AnswerError
 			{unansweredRequired}
 			{questionIndex}
-			--margin-top={question.type === 'text' ? '-2.5em' : ''}
+			--margin-top={question.type === 'text' ? '-2em' : ''}
 		/>
 	{/each}
 </Content>
 
 <Footer>
-	<button title={$t('submit_survey')} class="footer-button done" on:click={submitSurvey}>
+	<button
+		title={$t('submit_survey')}
+		class="footer-button done"
+		disabled={uses_crypto ? false : isSubmitButtonDisabled}
+		on:click={submitSurvey}
+	>
 		<i class="symbol">done</i><Tx text="submit" />
 	</button>
 </Footer>

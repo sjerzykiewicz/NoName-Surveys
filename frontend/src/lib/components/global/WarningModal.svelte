@@ -58,4 +58,8 @@
 	.export i {
 		margin-right: 0.15em;
 	}
+
+	.content {
+		text-align: justify;
+	}
 </style>

@@ -90,7 +90,7 @@
 		bind:isHidden={isModalHidden}
 		--width={innerWidth <= $M ? '20em' : '22em'}
 	>
-		<span slot="content"><Tx text="account_new_key_alert" /></span>
+		<span slot="content" class="content"><Tx text="account_new_key_alert" /></span>
 		<button
 			title={$t('generate')}
 			class="done"
@@ -148,5 +148,9 @@
 
 	.generated {
 		color: var(--accent-color-1);
+	}
+
+	.content {
+		text-align: justify;
 	}
 </style>

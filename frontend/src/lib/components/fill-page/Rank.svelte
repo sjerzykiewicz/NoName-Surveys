@@ -5,6 +5,7 @@
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let questionIndex: number;
 
@@ -65,7 +66,7 @@
 		</div>
 	{/each}
 	{#if !$questions[questionIndex].required}
-		<label title="" class="dont_answer">
+		<label title={$t('dont_answer')} class="dont_answer">
 			<div class="checkbox">
 				<input
 					type="checkbox"
@@ -73,7 +74,9 @@
 					name="dont_answer"
 					on:click={toggleDontAnswer}
 				/>
-				<div class="choice-input display" class:selected={dontAnswer}>Don't answer</div>
+				<div class="choice-input display" class:selected={dontAnswer}>
+					<Tx text="dont_answer" />
+				</div>
 			</div>
 		</label>
 	{/if}

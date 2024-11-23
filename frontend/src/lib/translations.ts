@@ -330,6 +330,7 @@ export const data = {
 		view_individual_answers: 'View individual answers',
 		clear_answer_title: 'Clear the answer',
 		clear_answer: 'Clear',
+		dont_answer: "Don't answer",
 
 		// pages
 
@@ -757,7 +758,7 @@ export const data = {
 		no_answers_yet: 'Brak odpowiedzi!',
 		no_answer_yet: 'Brak odpowiedzi nr {index}!',
 		no_answers_to_question: 'Brak odpowiedzi na to pytanie',
-		question_not_answered: 'Respondent nie odpowiedział na to pytanie',
+		question_not_answered: 'Respondent nie udzielił odpowiedzi na to pytanie',
 		number_of_answers: 'Liczba odpowiedzi: {number}',
 		number_of_answers_title: 'Liczba odpowiedzi',
 		answer_no: 'Odpowiedź nr {index}',
@@ -767,6 +768,7 @@ export const data = {
 		view_individual_answers: 'Wyświetl indywidualne odpowiedzi',
 		clear_answer_title: 'Wyczyść odpowiedź',
 		clear_answer: 'Wyczyść',
+		dont_answer: 'Nie udzielaj odpowiedzi',
 		// pages
 
 		first_page: 'Pierwsza strona',

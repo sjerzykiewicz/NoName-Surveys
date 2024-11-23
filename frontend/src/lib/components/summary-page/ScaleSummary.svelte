@@ -24,7 +24,8 @@
 				</div>
 				<div class="choice-percentage" title={$t('average')}>
 					{(
-						(data.answers.filter((answer) => answer === choice).length / data.answers.length) *
+						(existingAnswers.filter((answer) => answer === choice).length /
+							existingAnswers.length) *
 						100
 					).toFixed(2)}%
 				</div>

@@ -10,8 +10,8 @@
 	let existingAnswers = data.multi_answers.filter((x) => x.length !== 0);
 
 	function calculatePercentage(choice: string) {
-		const count = data.multi_answers.filter((answer) => answer.includes(choice)).length;
-		const percentage = (count / data.multi_answers.length) * 100;
+		const count = existingAnswers.filter((answer) => answer.includes(choice)).length;
+		const percentage = (count / existingAnswers.length) * 100;
 		return percentage.toFixed(2) + '%';
 	}
 </script>

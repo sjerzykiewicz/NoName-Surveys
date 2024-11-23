@@ -24,6 +24,15 @@
 			</option>
 		{/each}
 	</select>
+	{#if $answers[questionIndex].choices[0] !== ''}
+		<div class="clear-answer">
+			<button
+				title={$t('clear-answer_title')}
+				on:click={() => ($answers[questionIndex].choices[0] = '')}
+				><Tx text="clear-answer" /></button
+			>
+		</div>
+	{/if}
 </div>
 
 <style>
@@ -36,5 +45,9 @@
 		max-width: calc(100% - 2.25em);
 		overflow-wrap: break-word;
 		text-overflow: ellipsis;
+	}
+
+	.clear-answer {
+		justify-content: flex-start;
 	}
 </style>

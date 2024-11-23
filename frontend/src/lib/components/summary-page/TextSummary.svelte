@@ -3,30 +3,39 @@
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let data: { answers: string[]; details: string };
+
+	const existingData = data.answers.filter((x) => x !== '');
 </script>
 
-<div class="choice-area text display">
-	{#if data.details}
-		<div title={$t('question_details')} class="details">
-			{data.details}
-		</div>
-	{/if}
-	<div class="text-answers">
-		{#each data.answers as answer, i}
-			{#if answer}
-				<a
-					href="{$page.url.pathname}/answers/0/{i}"
-					title={$t('click_to_get_answers')}
-					class="text-input display"
-				>
-					{answer}
-				</a>
-			{/if}
-		{/each}
+{#if existingData.length === 0}
+	<div title={$t('no_answers_to_question')} class="summary-no-answers">
+		<Tx text="no_answers_to_question" />
 	</div>
-</div>
+{:else}
+	<div class="choice-area text display">
+		{#if data.details}
+			<div title={$t('question_details')} class="details">
+				{data.details}
+			</div>
+		{/if}
+		<div class="text-answers">
+			{#each data.answers as answer, i}
+				{#if answer}
+					<a
+						href="{$page.url.pathname}/answers/0/{i}"
+						title={$t('click_to_get_answers')}
+						class="text-input display"
+					>
+						{answer}
+					</a>
+				{/if}
+			{/each}
+		</div>
+	</div>
+{/if}
 
 <style>
 	.text-answers {

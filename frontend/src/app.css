@@ -1516,6 +1516,21 @@ button.popup {
 	margin-right: 0.5em;
 }
 
+.clear-answer {
+	display: flex;
+	justify-content: flex-end;
+	width: 90%;
+	padding-top: 0.5em;
+}
+
+.summary-no-answers {
+	display: flex;
+	justify-content: center;
+	color: var(--accent-color-1);
+	font-weight: bold;
+	font-size: 1.25em;
+}
+
 @media screen and (max-width: 768px) {
 	html {
 		background: var(--secondary-color-1);
@@ -1541,7 +1556,8 @@ button.popup {
 	.text-input,
 	.dropdown,
 	.arrows,
-	.button-row {
+	.button-row,
+	.summary-no-answers {
 		font-size: 1em;
 	}
 

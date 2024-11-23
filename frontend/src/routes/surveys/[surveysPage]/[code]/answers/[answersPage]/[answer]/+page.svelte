@@ -14,7 +14,6 @@
 
 	export let data;
 	export let isModalHidden: boolean = true;
-
 	let id: number = parseInt($page.params.answer);
 </script>
 

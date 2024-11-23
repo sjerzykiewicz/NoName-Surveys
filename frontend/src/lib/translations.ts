@@ -319,6 +319,8 @@ export const data = {
 		answer_submit_success: 'Your answer has been submitted successfully.',
 		no_answers_yet: 'No answers yet!',
 		no_answer_yet: 'No {index}. answer yet!',
+		no_answers_to_question: 'No answers to this question yet',
+		question_not_answered: 'The respondent has not answered this question',
 		number_of_answers: 'Number of answers: {number}',
 		number_of_answers_title: 'Number of answers',
 		answer_no: 'Answer no. {index}',
@@ -326,6 +328,9 @@ export const data = {
 		selected_answer: 'Selected answer',
 		click_to_get_answers: 'Click to display all answers',
 		view_individual_answers: 'View individual answers',
+		clear_answer_title: 'Clear the answer',
+		clear_answer: 'Clear',
+		dont_answer: "Don't answer",
 
 		// pages
 
@@ -790,6 +795,8 @@ export const data = {
 		answer_submit_success: 'Twoja odpowiedź została przesłana pomyślnie.',
 		no_answers_yet: 'Brak odpowiedzi!',
 		no_answer_yet: 'Brak odpowiedzi nr {index}!',
+		no_answers_to_question: 'Brak odpowiedzi na to pytanie',
+		question_not_answered: 'Respondent nie udzielił odpowiedzi na to pytanie',
 		number_of_answers: 'Liczba odpowiedzi: {number}',
 		number_of_answers_title: 'Liczba odpowiedzi',
 		answer_no: 'Odpowiedź nr {index}',
@@ -797,7 +804,9 @@ export const data = {
 		selected_answer: 'Wybrana odpowiedź',
 		click_to_get_answers: 'Kliknij, aby wyświetlić wszystkie odpowiedzi',
 		view_individual_answers: 'Wyświetl indywidualne odpowiedzi',
-
+		clear_answer_title: 'Wyczyść odpowiedź',
+		clear_answer: 'Wyczyść',
+		dont_answer: 'Nie udzielaj odpowiedzi',
 		// pages
 
 		first_page: 'Pierwsza strona',

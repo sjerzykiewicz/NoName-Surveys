@@ -5,21 +5,15 @@
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	export let questionIndex: number;
 
-	let value: number = parseFloat(
-		(
-			Math.round(
-				Math.round(
-					(parseFloat($questions[questionIndex].choices[0]) +
-						parseFloat($questions[questionIndex].choices[1])) /
-						2
-				) / parseFloat($questions[questionIndex].choices[2])
-			) * parseFloat($questions[questionIndex].choices[2])
-		).toFixed(3)
-	);
+	let value: number;
 
-	$answers[questionIndex].choices[0] = value.toString();
+	function handleClear() {
+		value = NaN;
+		$answers[questionIndex].choices = [];
+	}
 
 	function handleChange() {
 		if (value !== null) {
@@ -69,6 +63,13 @@
 		<div title={$t('minimum_value')} class="limit">{$questions[questionIndex].choices[0]}</div>
 		<div title={$t('maximum_value')} class="limit">{$questions[questionIndex].choices[1]}</div>
 	</div>
+	{#if !isNaN(value)}
+		<div class="clear-answer">
+			<button title={$t('clear-answer_title')} on:click={handleClear}
+				><Tx text="clear-answer" /></button
+			>
+		</div>
+	{/if}
 </div>
 
 <style>

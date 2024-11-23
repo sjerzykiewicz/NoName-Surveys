@@ -10,6 +10,13 @@
 	export let questionIndex: number;
 
 	let checked: number;
+	function updateAnswers(choice: string, choiceIndex: number) {
+		if (checked === choiceIndex) {
+			checked = NaN;
+		} else {
+			checked = choiceIndex;
+		}
+	}
 </script>
 
 <div class="choice-area display scale" transition:slide={{ duration: 200, easing: cubicInOut }}>
@@ -18,8 +25,9 @@
 			<input
 				type="radio"
 				name={questionIndex.toString()}
-				on:change={() => {
-					checked = choiceIndex;
+				checked={checked === choiceIndex}
+				on:click={() => {
+					updateAnswers(choice, choiceIndex);
 				}}
 			/>
 			<div class="choice-input display scale" class:selected={checked === choiceIndex}>

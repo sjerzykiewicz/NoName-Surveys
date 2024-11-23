@@ -56,7 +56,6 @@
 	surveyAnswers.forEach((surveyAnswer) => {
 		surveyAnswer.questions.forEach((question, id: number) => {
 			let details = '';
-			let answer: string | number = '';
 			let answers: (string | number)[] = [];
 			let multi_answers: string[][] = [];
 			let choices: string[] = [];
@@ -65,10 +64,10 @@
 			switch (question.question_type) {
 				case 'text':
 					details = (question as TextQuestionAnswered).details;
-					answer = (question as TextQuestionAnswered).answer;
+					answers = [(question as TextQuestionAnswered).answer];
 					break;
 				case 'single':
-					answer = (question as SingleQuestionAnswered).answer;
+					answers = [(question as SingleQuestionAnswered).answer];
 					choices = (question as SingleQuestionAnswered).choices;
 					break;
 				case 'multi':
@@ -77,19 +76,19 @@
 					multi_answers = [(question as MultiQuestionAnswered).answer];
 					break;
 				case 'scale':
-					answer = (question as ScaleQuestionAnswered).answer;
+					answers = [(question as ScaleQuestionAnswered).answer];
 					break;
 				case 'binary':
-					answer = (question as BinaryQuestionAnswered).answer;
+					answers = [(question as BinaryQuestionAnswered).answer];
 					choices = (question as BinaryQuestionAnswered).choices;
 					break;
 				case 'number':
-					answer = (question as NumberQuestionAnswered).answer;
+					answers = [(question as NumberQuestionAnswered).answer];
 					min_value = (question as NumberQuestionAnswered).min_value;
 					max_value = (question as NumberQuestionAnswered).max_value;
 					break;
 				case 'slider':
-					answer = (question as SliderQuestionAnswered).answer;
+					answers = [(question as SliderQuestionAnswered).answer];
 					min_value = (question as SliderQuestionAnswered).min_value;
 					max_value = (question as SliderQuestionAnswered).max_value;
 					break;
@@ -98,15 +97,10 @@
 					choices = (question as RankQuestionAnswered).choices;
 					break;
 				case 'list':
-					answer = (question as ListQuestionAnswered).answer;
+					answers = [(question as ListQuestionAnswered).answer];
 					choices = (question as ListQuestionAnswered).choices;
 					break;
 			}
-
-			// this fixes the issue with indexes on text summary, but might break something else
-			// if (answer != '') {
-			answers = [answer];
-			// }
 
 			if (groupedAnswers.length <= id) {
 				groupedAnswers.push({

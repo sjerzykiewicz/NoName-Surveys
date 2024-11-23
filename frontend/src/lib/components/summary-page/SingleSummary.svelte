@@ -2,30 +2,39 @@
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data: { answers: string[]; choices: string[] };
+
+	let existingAnswers = data.answers.filter((x) => x !== null);
 
 	function calculatePercentage(answer: string, answers: string[]) {
 		return ((answers.filter((a) => a === answer).length / answers.length) * 100).toFixed(2);
 	}
 </script>
 
-<div class="choice-area display">
-	{#each data.choices as choice}
-		<div title={$t('choice')} class="choice">
-			<div class="radio">
-				<input type="radio" disabled />
+{#if existingAnswers.length === 0}
+	<div title={$t('no_answers_to_question')} class="summary-no-answers">
+		<Tx text="no_answers_to_question" />
+	</div>
+{:else}
+	<div class="choice-area display">
+		{#each data.choices as choice}
+			<div title={$t('choice')} class="choice">
+				<div class="radio">
+					<input type="radio" disabled />
+				</div>
+				<div class="choice-input display">
+					{choice}
+				</div>
+				<div title={$t('average')} class="choice-percentage">
+					{calculatePercentage(choice, existingAnswers)}%
+				</div>
 			</div>
-			<div class="choice-input display">
-				{choice}
-			</div>
-			<div title={$t('average')} class="choice-percentage">
-				{calculatePercentage(choice, data.answers)}%
-			</div>
-		</div>
-	{/each}
-</div>
+		{/each}
+	</div>
+{/if}
 
 <style>
 	.choice {

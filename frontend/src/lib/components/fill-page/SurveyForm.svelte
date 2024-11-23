@@ -32,7 +32,7 @@
 	import { goto } from '$app/navigation';
 	import KeyPair from '$lib/entities/KeyPair';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 	import init, { linkable_ring_signature } from 'wasm';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import Modal from '$lib/components/global/Modal.svelte';
@@ -53,10 +53,6 @@
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
-
-	onMount(async () => {
-		await init();
-	});
 
 	export let survey_title: string;
 	export let survey: Survey;
@@ -203,7 +199,7 @@
 
 	let unansweredRequired: Set<number> = new Set();
 
-	async function checkAnswerCorrectness() {
+	function checkAnswerCorrectness() {
 		unansweredRequired = new Set();
 		for (let i = 0; i < numQuestions; i++) {
 			if ($questions[i].required) {
@@ -220,7 +216,6 @@
 		}
 
 		if (unansweredRequired.size > 0) {
-			await tick();
 			const [first] = unansweredRequired;
 			scrollToElementById(first.toString());
 			return false;
@@ -337,7 +332,7 @@
 
 	async function submitSurvey() {
 		isSubmitButtonDisabled = true;
-		if (!(await checkAnswerCorrectness())) {
+		if (!checkAnswerCorrectness()) {
 			isSubmitButtonDisabled = false;
 			return;
 		}
@@ -355,24 +350,21 @@
 		await goto('/', { replaceState: true, invalidateAll: true });
 	}
 
-	onMount(() => {
-		function handleEnter(event: KeyboardEvent) {
-			if (!isKeysModalHidden && !isSubmitButtonDisabled && event.key === 'Enter') {
-				event.preventDefault();
-				processCrypto();
-				event.stopImmediatePropagation();
-			}
+	function handleEnter(event: KeyboardEvent) {
+		if (!isKeysModalHidden && !isSubmitButtonDisabled && event.key === 'Enter') {
+			event.preventDefault();
+			processCrypto();
+			event.stopImmediatePropagation();
 		}
+	}
 
-		document.body.addEventListener('keydown', handleEnter);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEnter);
-		};
+	onMount(async () => {
+		await init();
 	});
 </script>
 
 <svelte:window bind:innerWidth />
+<svelte:body on:keydown={handleEnter} />
 
 <SuccessModal hide={hideSuccessModal} />
 

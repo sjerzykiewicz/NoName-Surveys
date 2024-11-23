@@ -30,7 +30,6 @@
 	import SelectUsers from './SelectUsers.svelte';
 	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import { onMount } from 'svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 	import { invalidateAll } from '$app/navigation';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
@@ -161,34 +160,25 @@
 
 	$: isCryptoDisabled = !useCrypto;
 
-	onMount(() => {
-		function handleEnterRespondent(event: KeyboardEvent) {
-			if (!isRespondentModalHidden && event.key === 'Enter') {
-				event.preventDefault();
-				createSurvey();
-				event.stopImmediatePropagation();
-			}
+	function handleEnterRespondent(event: KeyboardEvent) {
+		if (!isRespondentModalHidden && event.key === 'Enter') {
+			event.preventDefault();
+			createSurvey();
+			event.stopImmediatePropagation();
 		}
+	}
 
-		function handleEnterDraft(event: KeyboardEvent) {
-			if (!isDraftModalHidden && event.key === 'Enter') {
-				event.preventDefault();
-				saveDraft(false);
-				event.stopImmediatePropagation();
-			}
+	function handleEnterDraft(event: KeyboardEvent) {
+		if (!isDraftModalHidden && event.key === 'Enter') {
+			event.preventDefault();
+			saveDraft(false);
+			event.stopImmediatePropagation();
 		}
-
-		document.body.addEventListener('keydown', handleEnterRespondent);
-		document.body.addEventListener('keydown', handleEnterDraft);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEnterRespondent);
-			document.body.removeEventListener('keydown', handleEnterDraft);
-		};
-	});
+	}
 </script>
 
 <svelte:window bind:innerWidth />
+<svelte:body on:keydown={handleEnterRespondent} on:keydown={handleEnterDraft} />
 
 <Modal
 	icon="save"

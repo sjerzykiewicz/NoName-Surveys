@@ -164,6 +164,7 @@
 			border-top: 1px solid var(--border-color-1);
 			border-right: none;
 			border-bottom: none;
+			padding: 0.33em 0em;
 		}
 	}
 </style>

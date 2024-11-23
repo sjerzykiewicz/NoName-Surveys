@@ -58,31 +58,24 @@
 		}
 	}
 
+	function handleEnter(event: KeyboardEvent) {
+		if (!isModalHidden && event.key === 'Enter') {
+			event.preventDefault();
+			isModalHidden = true;
+			generateKeyPair();
+			event.stopImmediatePropagation();
+		}
+	}
+
 	onMount(async () => {
 		await init();
-	});
-
-	onMount(() => {
-		function handleEnter(event: KeyboardEvent) {
-			if (!isModalHidden && event.key === 'Enter') {
-				event.preventDefault();
-				isModalHidden = true;
-				generateKeyPair();
-				event.stopImmediatePropagation();
-			}
-		}
-
-		document.body.addEventListener('keydown', handleEnter);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEnter);
-		};
 	});
 
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
+<svelte:body on:keydown={handleEnter} />
 
 <Modal
 	icon="encrypted"

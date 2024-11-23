@@ -136,6 +136,10 @@
 			border-left: none;
 			width: 100%;
 			min-width: 0px;
+			position: absolute;
+			border-bottom: 1px solid var(--border-color-1);
+			box-shadow: 0px 4px 4px var(--shadow-color-1);
+			z-index: 8;
 		}
 
 		.bar {

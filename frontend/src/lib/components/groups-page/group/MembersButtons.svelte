@@ -6,7 +6,6 @@
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
-	import { tick } from 'svelte';
 	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
@@ -42,7 +41,7 @@
 		membersError = GroupError.NoError;
 	}
 
-	async function checkCorrectness(members: string[]) {
+	function checkCorrectness(members: string[]) {
 		membersError = GroupError.NoError;
 		const m = members;
 		if (m === null || m === undefined || m.length === 0) {
@@ -50,7 +49,6 @@
 		}
 
 		if (membersError !== GroupError.NoError) {
-			await tick();
 			scrollToElement('.select-list');
 			return false;
 		}
@@ -59,7 +57,7 @@
 	}
 
 	async function addMembers() {
-		if (!(await checkCorrectness(selectedMembersToAdd))) return;
+		if (!checkCorrectness(selectedMembersToAdd)) return;
 
 		const response = await fetch('/api/groups/add-users', {
 			method: 'POST',

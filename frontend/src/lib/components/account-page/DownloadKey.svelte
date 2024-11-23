@@ -1,14 +1,20 @@
 <script lang="ts">
-	import { L } from '$lib/stores/global';
-	import Tx from 'sveltekit-translate/translate/tx.svelte';
-	import { getContext } from 'svelte';
-	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import { L, M, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { formatDate } from '$lib/utils/formatDate';
+	import Modal from '$lib/components/global/Modal.svelte';
+	import init, { get_keypair } from 'wasm';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { downloadFile } from '$lib/utils/downloadFile';
+	import { invalidateAll } from '$app/navigation';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext, onMount } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let isModalHidden: boolean = true;
 	export let lastTime: string;
+
+	let isModalHidden: boolean = true;
 
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
@@ -19,10 +25,86 @@
 		return parseInt((miliseconds / 1000 / 3600 / 24).toFixed(0));
 	}
 
+	async function generateKeyPair() {
+		try {
+			const keyPair = get_keypair();
+			const publicKey = keyPair.get_public_key();
+			const privateKey = keyPair.get_private_key();
+			const fingerprint = keyPair.get_fingerprint();
+			const response = await fetch('/api/users/update-public-key', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					public_key: publicKey,
+					fingerprint: fingerprint
+				})
+			});
+
+			if (!response.ok) {
+				const body = await response.json();
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
+				return;
+			}
+
+			downloadFile('noname-keys.pem', publicKey + '\n\n' + privateKey);
+			await invalidateAll();
+		} catch (e) {
+			$errorModalContent = e as string;
+			$isErrorModalHidden = false;
+			return;
+		}
+	}
+
+	onMount(async () => {
+		await init();
+	});
+
+	onMount(() => {
+		function handleEnter(event: KeyboardEvent) {
+			if (!isModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				isModalHidden = true;
+				generateKeyPair();
+				event.stopImmediatePropagation();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnter);
+
+		return () => {
+			document.body.removeEventListener('keydown', handleEnter);
+		};
+	});
+
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
+
+<Modal
+	icon="encrypted"
+	title={$t('account_generating_keys')}
+	bind:isHidden={isModalHidden}
+	--width={innerWidth <= $M ? '20em' : '28em'}
+>
+	<span slot="content" class="content"><Tx text="account_new_key_alert" /></span>
+	<button
+		title={$t('generate')}
+		class="done"
+		on:click={() => {
+			isModalHidden = true;
+			generateKeyPair();
+		}}
+	>
+		<i class="symbol">done</i><Tx text="generate" />
+	</button>
+	<button title={$t('cancel')} class="not" on:click={() => (isModalHidden = true)}>
+		<i class="symbol">close</i><Tx text="cancel" />
+	</button>
+</Modal>
 
 <div title={$t('account_keys_info_title')} class="info">
 	<div class="text">
@@ -76,6 +158,10 @@
 </div>
 
 <style>
+	.content {
+		text-align: justify;
+	}
+
 	.tooltip i {
 		font-size: 1.25em;
 	}

@@ -44,13 +44,13 @@
 <style>
 	.account-buttons {
 		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
+		flex-flow: row wrap;
+		align-items: center;
+		justify-content: flex-start;
 		gap: 0.5em;
 		font-size: 1.5em;
 		padding-top: 0.5em;
 		padding-bottom: 0.5em;
-		border-bottom: 1px solid var(--border-color-1);
 	}
 
 	i {

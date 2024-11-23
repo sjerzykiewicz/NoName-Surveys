@@ -6,7 +6,7 @@
 	import NavLinks from './NavLinks.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
-	import AccountButtons from './AccountButtons.svelte';
+	import NavButtons from './NavButtons.svelte';
 	import noname_dark from '$lib/assets/noname_dark.png';
 	import noname_light from '$lib/assets/noname_light.png';
 	import { colorScheme } from '$lib/stores/global';
@@ -34,7 +34,7 @@
 		<a href="/" title="NoName" class="nav-burger-logo"
 			><img src={logo} alt="NoName" width="48" height="48" /></a
 		>
-		<AccountButtons />
+		<NavButtons />
 		<div title={open ? $t('close_menu') : $t('open_menu')} class="hamburger">
 			<Hamburger bind:open --color="var(--text-color-1)" --padding="10px" />
 		</div>
@@ -55,7 +55,7 @@
 			<NavLinks />
 		</nav>
 	</div>
-	<AccountButtons />
+	<NavButtons />
 {/if}
 
 <style>

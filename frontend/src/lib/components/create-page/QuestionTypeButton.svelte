@@ -40,6 +40,7 @@
 		border-radius: 0px;
 		border-left: 1px solid var(--border-color-1);
 		border-right: 1px solid var(--border-color-1);
+		border-bottom: 1px solid var(--text-color-3);
 		box-shadow: none;
 	}
 

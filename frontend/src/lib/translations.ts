@@ -395,6 +395,14 @@ export const data = {
 		account_authorization_info: `Authorizing yourself will enable you to:
 			<ul class="account-ul">
 				<li class="account-li">
+					<div class="account-icon"><i class="symbol">encrypted</i></div>
+					<div>
+						Generate <span class="account-accent">digital signature keys</span> that allow you to participate
+						in
+						<span class="account-accent">secure surveys</span> without the need to sign in each time,
+					</div>
+				</li>
+				<li class="account-li">
 					<div class="account-icon"><i class="symbol">article</i></div>
 					<div>
 						Create both
@@ -424,15 +432,7 @@ export const data = {
 					<div class="account-icon"><i class="symbol">group</i></div>
 					<div>
 						Create and manage
-						<span class="account-accent">user groups</span>,
-					</div>
-				</li>
-				<li class="account-li">
-					<div class="account-icon"><i class="symbol">encrypted</i></div>
-					<div>
-						Generate <span class="account-accent">digital signature keys</span> that allow you to participate
-						in
-						<span class="account-accent">secure surveys</span> without the need to sign in each time.
+						<span class="account-accent">user groups</span>.
 					</div>
 				</li>
 			</ul>`,
@@ -461,13 +461,13 @@ export const data = {
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">account_circle_off</i></div>
 					<div>
-						After generating them, you do not need to be signed in to participate in secure surveys,
+						After generating them, you do not need to be signed in to participate in <span class="account-accent">secure surveys</span>,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">priority_high</i></div>
 					<div>
-						If you are not going to take part in secure surveys, there is no need to generate them.
+						If you are not going to take part in <span class="account-accent">secure surveys</span>, there is no need to generate them.
 					</div>
 				</li>
 			</ul>`
@@ -865,6 +865,13 @@ export const data = {
 		account_authorization_info: `Zautoryzowanie się pozwoli Ci na:
 			<ul class="account-ul">
 				<li class="account-li">
+					<div class="account-icon"><i class="symbol">encrypted</i></div>
+					<div>
+						Generowanie <span class="account-accent">kluczy podpisu cyfrowego</span>, które pozwalają na uczestniczenie
+						w <span class="account-accent">bezpiecznych ankietach</span> bez konieczności logowania się za każdym razem,
+					</div>
+				</li>
+				<li class="account-li">
 					<div class="account-icon"><i class="symbol">article</i></div>
 					<div>
 						Tworzenie zarówno <span class="account-accent">publicznych</span>, jak i <span class="account-accent">bezpiecznych</span> ankiet,
@@ -889,14 +896,7 @@ export const data = {
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">group</i></div>
 					<div>
-						Tworzenie i zarządzanie <span class="account-accent">grupami użytkowników</span>,
-					</div>
-				</li>
-				<li class="account-li">
-					<div class="account-icon"><i class="symbol">encrypted</i></div>
-					<div>
-						Generowanie <span class="account-accent">kluczy podpisu cyfrowego</span>, które pozwalają na uczestniczenie
-						w <span class="account-accent">bezpiecznych ankietach</span> bez konieczności logowania się za każdym razem.
+						Tworzenie i zarządzanie <span class="account-accent">grupami użytkowników</span>.
 					</div>
 				</li>
 			</ul>`,
@@ -925,13 +925,13 @@ export const data = {
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">account_circle_off</i></div>
 					<div>
-						Po ich wygenerowaniu, nie musisz być zalogowany, aby uczestniczyć w bezpiecznych ankietach,
+						Po ich wygenerowaniu, nie musisz być zalogowany, aby uczestniczyć w <span class="account-accent">bezpiecznych ankietach</span>,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">priority_high</i></div>
 					<div>
-						Jeśli nie zamierzasz korzystać z bezpiecznych ankiet, nie ma potrzeby ich generować.
+						Jeśli nie zamierzasz korzystać z <span class="account-accent">bezpiecznych ankiet</span>, nie ma potrzeby ich generować.
 					</div>
 				</li>
 			</ul>`

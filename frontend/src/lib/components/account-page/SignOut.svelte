@@ -20,6 +20,7 @@
 		padding-top: 0.5em;
 		padding-bottom: 0.5em;
 		font-size: 1.5em;
+		border-top: 1px solid var(--border-color-1);
 	}
 
 	@media screen and (max-width: 768px) {

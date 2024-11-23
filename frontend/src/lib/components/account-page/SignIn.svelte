@@ -19,8 +19,8 @@
 		<Tx html="account_authorization_info" />
 	</div>
 </div>
-<div title={$t('account_info_title')} class="info">
-	<div class="text bottom">
+<div title={$t('account_info_title')} class="info bottom">
+	<div class="text">
 		<Tx text="account_info" />
 	</div>
 </div>
@@ -63,12 +63,17 @@
 		transition: 0.2s;
 	}
 
+	.info.bottom {
+		padding: 0.5em;
+		border-bottom: 1px solid var(--border-color-1);
+	}
+
 	.text {
 		font-weight: 700;
 		text-align: left;
 	}
 
-	.text.bottom {
+	.info.bottom .text {
 		font-weight: 500;
 	}
 

@@ -18,7 +18,7 @@
 	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
 	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
 	import { questions } from '$lib/stores/create-page';
-	import { type ComponentType, onMount, tick } from 'svelte';
+	import { type ComponentType, tick } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import QuestionTypeButton from './QuestionTypeButton.svelte';
@@ -468,34 +468,23 @@
 		}
 	}
 
-	onMount(() => {
-		function handleEscape(event: KeyboardEvent) {
-			if (isPanelVisible && event.key === 'Escape') {
-				isPanelVisible = false;
-				event.stopImmediatePropagation();
-			}
+	function handleEscape(event: KeyboardEvent) {
+		if (isPanelVisible && event.key === 'Escape') {
+			isPanelVisible = false;
 		}
+	}
 
-		function handleClick(event: MouseEvent) {
-			if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
-				isPanelVisible = false;
-			}
+	function handleClick(event: MouseEvent) {
+		if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
+			isPanelVisible = false;
 		}
-
-		document.body.addEventListener('keydown', handleEscape);
-		document.body.addEventListener('click', handleClick);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEscape);
-			document.body.removeEventListener('click', handleClick);
-		};
-	});
+	}
 
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
-<svelte:body on:keydown|capture={handleHotkeys} />
+<svelte:body on:keydown|capture={handleHotkeys} on:keydown={handleEscape} on:click={handleClick} />
 
 <div class="button-group" style="--width: {currentLang === 'en' ? '7.5em' : '8em'}">
 	<div class="add-buttons">

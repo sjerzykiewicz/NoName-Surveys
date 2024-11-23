@@ -31,6 +31,12 @@
 		localStorage.setItem('langPref', lang);
 	}
 
+	function handleEscape(event: KeyboardEvent) {
+		if (isPanelVisible && event.key === 'Escape') {
+			isPanelVisible = false;
+		}
+	}
+
 	function handleClick(event: MouseEvent) {
 		if (isPanelVisible && !(event.target as HTMLElement).closest('.button-group')) {
 			isPanelVisible = false;
@@ -45,7 +51,7 @@
 </script>
 
 <svelte:window bind:innerWidth />
-<svelte:body on:click={handleClick} />
+<svelte:body on:keydown={handleEscape} on:click={handleClick} />
 
 <div class="button-group">
 	<button

@@ -8,21 +8,26 @@
 	export let questionIndex: number;
 
 	let checked: number;
-
 	function updateAnswers(choice: string, choiceIndex: number) {
-		$answers[questionIndex].choices[0] = choice;
-		checked = choiceIndex;
+		if (checked === choiceIndex) {
+			$answers[questionIndex].choices = [];
+			checked = NaN;
+		} else {
+			$answers[questionIndex].choices[0] = choice;
+			checked = choiceIndex;
+		}
 	}
 </script>
 
 <div class="choice-area display">
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<label title={$t('select_answer')} class="choice">
-			<div class="radio">
+			<div class="checkbox">
 				<input
 					type="radio"
+					checked={checked === choiceIndex}
 					name={questionIndex.toString()}
-					on:change={() => {
+					on:click={() => {
 						updateAnswers(choice, choiceIndex);
 					}}
 				/>

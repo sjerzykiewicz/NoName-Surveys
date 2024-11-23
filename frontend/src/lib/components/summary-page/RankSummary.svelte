@@ -2,12 +2,15 @@
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let data: { answers: string[][]; choices: string[] };
 
+	const existingAnswers = data.answers.filter((x) => x.length !== 0);
+
 	function calculateAvgPlace(choice: string) {
-		const totalAnswers = data.answers.length;
-		const choiceCount = data.answers
+		const totalAnswers = existingAnswers.length;
+		const choiceCount = existingAnswers
 			.map((answers) => answers.indexOf(choice))
 			.reduce((acc, curr) => acc + curr, 0);
 		const avgPlace = choiceCount / totalAnswers;
@@ -15,16 +18,22 @@
 	}
 </script>
 
-<div title={$t('ordered_by_average_place')} class="choice-area display">
-	{#each data.choices.sort((a, b) => parseFloat(calculateAvgPlace(a)) - parseFloat(calculateAvgPlace(b))) as choice, answerIndex}
-		<div class="choice">
-			<div class="rank">{answerIndex + 1}.</div>
-			<div class="choice-input display">
-				{choice}
+{#if existingAnswers.length === 0}
+	<div title={$t('no_answers_to_question')} class="summary_no_answers">
+		<Tx text="no_answers_to_question" />
+	</div>
+{:else}
+	<div title={$t('ordered_by_average_place')} class="choice-area display">
+		{#each data.choices.sort((a, b) => parseFloat(calculateAvgPlace(a)) - parseFloat(calculateAvgPlace(b))) as choice, answerIndex}
+			<div class="choice">
+				<div class="rank">{answerIndex + 1}.</div>
+				<div class="choice-input display">
+					{choice}
+				</div>
 			</div>
-		</div>
-	{/each}
-</div>
+		{/each}
+	</div>
+{/if}
 
 <style>
 	.choice-input,

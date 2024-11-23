@@ -94,6 +94,7 @@
 	.tooltip .tooltip-text a:link,
 	.tooltip .tooltip-text a:visited {
 		color: var(--accent-color-1);
+		font-weight: 400;
 		text-decoration: underline;
 		cursor: pointer;
 		transition:

@@ -10,10 +10,6 @@
 </div>
 
 <style>
-	.open-source-info a {
-		font-weight: 700;
-	}
-
 	.open-source-info {
 		width: 100%;
 		text-align: center;

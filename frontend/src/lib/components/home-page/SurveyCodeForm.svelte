@@ -194,10 +194,6 @@
 			outline 0s;
 	}
 
-	.home-info a {
-		font-weight: 700;
-	}
-
 	@media screen and (max-width: 768px) {
 		h1 {
 			font-size: 2.5em;

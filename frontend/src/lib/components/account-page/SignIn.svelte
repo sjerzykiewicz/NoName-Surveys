@@ -53,13 +53,13 @@
 		flex-flow: row;
 		align-items: center;
 		justify-content: center;
-		padding: 1.25em 0.5em 0em;
+		padding: 0.5em 0.5em 0em;
 		border-top: 1px solid var(--border-color-1);
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
 		overflow-wrap: break-word;
 		color: var(--text-color-1);
-		font-size: 1.25em;
+		font-size: 1.1em;
 		transition: 0.2s;
 	}
 

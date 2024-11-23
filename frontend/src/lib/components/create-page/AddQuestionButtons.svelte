@@ -53,10 +53,6 @@
 		Rank
 	];
 
-	$: questionsInfo = questionTypes.map((questionType) =>
-		$t(getQuestionTypeData(questionType).text)
-	);
-
 	function getPreviewComponent(component: ComponentType) {
 		switch (component) {
 			case Single:
@@ -546,20 +542,7 @@
 	>
 		<i class="symbol">bolt</i>
 		<span class="tooltip-text right">
-			<Tx
-				html="hotkeys_info"
-				params={{
-					one: questionsInfo[0],
-					two: questionsInfo[1],
-					three: questionsInfo[2],
-					four: questionsInfo[3],
-					five: questionsInfo[4],
-					six: questionsInfo[5],
-					seven: questionsInfo[6],
-					eight: questionsInfo[7],
-					nine: questionsInfo[8]
-				}}
-			/>
+			<Tx html="hotkeys_info" />
 		</span>
 	</div>
 {/if}

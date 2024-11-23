@@ -90,7 +90,7 @@
 		cursor: default;
 		overflow-wrap: break-word;
 		color: var(--text-color-1);
-		font-size: 1em;
+		font-size: 1.1em;
 		transition: 0.2s;
 	}
 

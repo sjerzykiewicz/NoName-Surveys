@@ -50,7 +50,7 @@
 				return;
 			}
 
-			downloadFile('noname-keys.pem', publicKey + '\n\n' + privateKey);
+			downloadFile('noname-keys.pem', 'application/x-pem-file', publicKey + '\n\n' + privateKey);
 			await invalidateAll();
 		} catch (e) {
 			$errorModalContent = e as string;

@@ -2,19 +2,26 @@
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data: { answer: number; min_value: number; max_value: number };
-
-	let answer = data.answer !== null ? data.answer.toFixed(2) : $t('question_not_answered');
 </script>
 
-<div class="choice-area display slider">
-	{#if data.answer === null}
-		{answer}
-	{:else}
+{#if data.answer === null}
+	<div title={$t('question_not_answered')} class="summary_no_answers">
+		<Tx text="question_not_answered" />
+	</div>
+{:else}
+	<div class="choice-area display slider">
 		<div title={$t('answer')} class="choice slider">
-			<input class="limit-input" type="number" autocomplete="off" value={answer} disabled />
+			<input
+				class="limit-input"
+				type="number"
+				autocomplete="off"
+				value={data.answer.toFixed(2)}
+				disabled
+			/>
 		</div>
 		<div title={$t('answer')} class="slider-area">
 			<input
@@ -23,16 +30,16 @@
 				step="1"
 				min={data.min_value}
 				max={data.max_value}
-				value={answer}
+				value={data.answer}
 				disabled
 			/>
 		</div>
-	{/if}
-	<div class="limits">
-		<div title={$t('minimum_value')} class="limit">{data.min_value}</div>
-		<div title={$t('maximum_value')} class="limit">{data.max_value}</div>
+		<div class="limits">
+			<div title={$t('minimum_value')} class="limit">{data.min_value}</div>
+			<div title={$t('maximum_value')} class="limit">{data.max_value}</div>
+		</div>
 	</div>
-</div>
+{/if}
 
 <style>
 	.limit-input {

@@ -320,7 +320,7 @@ export const data = {
 		no_answers_yet: 'No answers yet!',
 		no_answer_yet: 'No {index}. answer yet!',
 		no_answers_to_question: 'No answers to this question yet',
-		question_not_answered: 'Respondent has not answered this question',
+		question_not_answered: 'The respondent has not answered this question',
 		number_of_answers: 'Number of answers: {number}',
 		number_of_answers_title: 'Number of answers',
 		answer_no: 'Answer no. {index}',

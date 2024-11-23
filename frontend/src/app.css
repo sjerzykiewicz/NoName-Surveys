@@ -1575,3 +1575,17 @@ button.popup {
 	width: 90%;
 	padding-top: 0.5em;
 }
+
+.summary_no_answers {
+	display: flex;
+	justify-content: center;
+	color: var(--accent-color-1);
+	font-weight: bold;
+	font-size: 1.25em;
+}
+
+@media screen and (max-width: 768px) {
+	.summary_no_answers {
+		font-size: 1em;
+	}
+}

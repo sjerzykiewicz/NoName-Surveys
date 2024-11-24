@@ -56,6 +56,8 @@
 	}
 
 	let innerWidth: number;
+
+	let from = $page.route.id;
 </script>
 
 <svelte:window bind:innerWidth />
@@ -86,7 +88,7 @@
 					><i class="symbol">logout</i><Tx text="sign_out" />
 				</button>
 			{:else}
-				<button title={$t('sign_in')} class="nav-button" on:click={startOAuth}
+				<button title={$t('sign_in')} class="nav-button" on:click={() => startOAuth(from)}
 					><i class="symbol">login</i><Tx text="sign_in" /></button
 				>
 			{/if}

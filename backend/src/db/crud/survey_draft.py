@@ -8,9 +8,10 @@ from src.db.models.survey_draft import SurveyDraft, SurveyDraftBase
 def get_count_of_not_deleted_survey_drafts_for_user(
     user_id: int, session: Session
 ) -> int:
-    statement = select(func.count(SurveyDraft.id)).where(
-        (SurveyDraft.creator_id == user_id)
-        & (SurveyDraft.is_deleted == False)  # noqa: E712
+    statement = (
+        select(func.count(SurveyDraft.id))
+        .where(SurveyDraft.creator_id == user_id)
+        .where(SurveyDraft.is_deleted == False)  # noqa: E712
     )
     return session.exec(statement).one()
 
@@ -20,24 +21,22 @@ def get_not_deleted_survey_drafts_for_user(
 ) -> list[SurveyDraft]:
     statement = (
         select(SurveyDraft)
-        .where(
-            (SurveyDraft.creator_id == user_id)
-            & (SurveyDraft.is_deleted == False)  # noqa: E712
-        )
+        .where(SurveyDraft.creator_id == user_id)
+        .where(SurveyDraft.is_deleted == False)  # noqa: E712
         .order_by(SurveyDraft.id.desc())
         .offset(offset)
         .limit(limit)
     )
-    drafts = session.exec(statement).all()
-    return [draft for draft in drafts]
+    return session.exec(statement).all()
 
 
 def get_not_deleted_survey_draft_by_id(
     survey_draft_id: int, session: Session
 ) -> SurveyDraft:
-    statement = select(SurveyDraft).where(
-        (SurveyDraft.id == survey_draft_id)
-        & (SurveyDraft.is_deleted == False)  # noqa: E712
+    statement = (
+        select(SurveyDraft)
+        .where(SurveyDraft.id == survey_draft_id)
+        .where(SurveyDraft.is_deleted == False)  # noqa: E712
     )
     survey_draft = session.exec(statement).first()
     return survey_draft
@@ -52,10 +51,11 @@ def get_survey_draft_by_id(survey_draft_id: int, session: Session) -> SurveyDraf
 def delete_survey_drafts(
     user_id: int, survey_draft_ids: list[int], session: Session
 ) -> list[SurveyDraft]:
-    statement = select(SurveyDraft).where(
-        (SurveyDraft.creator_id == user_id)
-        & (SurveyDraft.id.in_(survey_draft_ids))
-        & (SurveyDraft.is_deleted == False)  # noqa: E712
+    statement = (
+        select(SurveyDraft)
+        .where(SurveyDraft.creator_id == user_id)
+        .where(SurveyDraft.id.in_(survey_draft_ids))
+        .where(SurveyDraft.is_deleted == False)  # noqa: E712
     )
     drafts = session.exec(statement).all()
     for draft in drafts:

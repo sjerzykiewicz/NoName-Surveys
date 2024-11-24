@@ -1,8 +1,8 @@
 import getKeyMaterial from './getKeyMaterial';
 import keyFromMaterial from './keyFromMaterial';
 
-export default async function encryptKeys(contents: string, password: string) {
-	const keyMaterial = await getKeyMaterial(password);
+export default async function encryptKeys(contents: string, passphrase: string) {
+	const keyMaterial = await getKeyMaterial(passphrase);
 	const salt = crypto.getRandomValues(new Uint8Array(16));
 	const key = await keyFromMaterial(keyMaterial, salt);
 

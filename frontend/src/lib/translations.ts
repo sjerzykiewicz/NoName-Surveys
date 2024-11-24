@@ -377,7 +377,10 @@ export const data = {
 			your right to fill out this survey.`,
 		default_filename: 'Default filename',
 		no_file_selected: 'No file selected',
-		incorrect_password: 'Incorrect password',
+		incorrect_passphrase: 'Incorrect passphrase',
+		error_empty_passphrase: 'Passphrase cannot be empty',
+		provide_passphrase: 'Please provide a passphrase to protect your keys on your device',
+		enter_passphrase: 'Enter passphrase to the file',
 
 		// account
 
@@ -825,7 +828,10 @@ export const data = {
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
 		default_filename: 'Domyślna nazwa pliku',
 		no_file_selected: 'Nie wybrano pliku',
-		incorrect_password: 'Niepoprawne hasło',
+		incorrect_passphrase: 'Niepoprawne hasło',
+		error_empty_passphrase: 'Hasło nie może być puste',
+		provide_passphrase: 'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu',
+		enter_passphrase: 'Podaj hasło do pliku',
 
 		// account
 

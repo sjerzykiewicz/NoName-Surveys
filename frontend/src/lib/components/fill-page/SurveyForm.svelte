@@ -67,7 +67,7 @@
 
 	let innerWidth: number;
 	let isKeysModalHidden: boolean = true;
-	let password = '';
+	let passphrase = '';
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -266,7 +266,7 @@
 
 		let keyPair = await getKeys(text);
 		if (keyPair === null) {
-			$errorModalContent = $t('incorrect_password');
+			$errorModalContent = $t('incorrect_passphrase');
 			$isErrorModalHidden = false;
 			return;
 		}
@@ -287,7 +287,7 @@
 		const ciphertext = new Uint8Array([...data.ciphertext].map((char) => char.charCodeAt(0)));
 
 		try {
-			const decrypted = await decryptKeys(ciphertext, password, salt, iv);
+			const decrypted = await decryptKeys(ciphertext, passphrase, salt, iv);
 			const decoder = new TextDecoder();
 			const pemKeys = decoder.decode(decrypted);
 
@@ -392,7 +392,10 @@
 				<span class="file-name">{fileName}</span>
 			</div>
 			<input type="file" bind:this={fileElement} on:change={handleFileChange} />
-			<input type="password" bind:value={password} />
+			<div title={$t('enter_passphrase')}>
+				<Tx text="enter_passphrase" />:
+				<input type="password" bind:value={passphrase} class="passphrase_input" />
+			</div>
 		</label>
 		<KeysError error={fileError} element={fileElement} />
 	</div>

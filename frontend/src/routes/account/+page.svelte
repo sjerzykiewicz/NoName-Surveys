@@ -16,11 +16,14 @@
 	import { invalidateAll } from '$app/navigation';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import encryptKeys from '$lib/utils/encryptKeys';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data: PageServerData;
 	export let isModalHidden: boolean = true;
+
+	let password = '';
 
 	onMount(async () => {
 		await init();
@@ -50,7 +53,18 @@
 				return;
 			}
 
-			downloadFile('noname-keys.pem', 'application/octet-stream', publicKey + '\n\n' + privateKey);
+			const pemData = publicKey + '\n\n' + privateKey;
+			const { salt, iv, data } = await encryptKeys(pemData, password);
+			const decoder = new TextDecoder();
+			const saltString = decoder.decode(salt);
+			const ivString = decoder.decode(iv);
+			const dataString = decoder.decode(data);
+
+			downloadFile(
+				'noname-keys.key',
+				'application/octet-stream',
+				saltString + '\n' + ivString + '\n' + dataString
+			);
 			await invalidateAll();
 		} catch (e) {
 			$errorModalContent = e as string;
@@ -89,6 +103,7 @@
 		--width={innerWidth <= $M ? '18em' : '22em'}
 	>
 		<span slot="content"><Tx text="account_new_key_alert" /></span>
+		<input type="password" bind:value={password} />
 		<button
 			title={$t('generate')}
 			class="done"

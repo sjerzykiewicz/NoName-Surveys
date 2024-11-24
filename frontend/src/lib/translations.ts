@@ -398,6 +398,75 @@ export const data = {
 		// faq
 
 		faq_title: 'Frequently Asked Questions',
+		faq_public_survey_q: 'What is a public survey?',
+		faq_public_survey_a: `A public survey is a survey that can be filled out multiple times by anyone with an access code.
+			It is as safe as a secure survey. You do not need to authorize or generate keys to fill out a public survey.`,
+		faq_secure_survey_q: 'What is a secure survey?',
+		faq_secure_survey_a: `A secure survey is a survey that can be filled out only once by a selected group of respondents.
+			You need to authorize at least once and generate keys which are needed to fill out a secure survey.
+			After generating keys, you do not need to authorize again.`,
+		faq_keys_q: 'What are digital signature keys?',
+		faq_keys_a: `Digital signature keys are a pair of cryptographic, asymmetric keys that are used to sign and verify digital information.
+			They are used in secure surveys to ensure the anonymity of the respondents and their right to answer a given survey.
+			You can generate your keys in the "Account" tab after authorizing yourself. You will be asked to provide a passphrase to protect your keys.
+			Make sure to generate new keys every year for increased security.`,
+		faq_authorize_q: 'Why can I not sign in?',
+		faq_authorize_a: `Only AMU employees and students are allowed to authorize in this instance of our application.
+			If you are from AMU and are still having trouble signing in, it may be due to a problem with the AMU USOS authorization system.
+			You can try clearing your cookies or contacting an administrator.`,
+		faq_personal_q: 'Can other users see my personal data?',
+		faq_personal_a: `No, other users cannot see your personal data. If you choose to authorize yourself,
+			then the only information that is visible to other authorized users is your email address.`,
+		faq_code_q: 'What is an access code?',
+		faq_code_a: `An access code is a unique 6-digit code that is generated when you create a survey.
+			It is used to start filling out a survey. You can share this code with others to allow them to fill out your survey.`,
+		faq_create_q: 'How do I create a survey?',
+		faq_create_a: `To create a survey, click on the "Create" tab at the top of the page. You will be asked to provide a title for your survey
+			and then you can start adding questions. You can choose from a variety of question types. You can toggle the requirement of answer to each question.
+			You can also preview your survey and save it as a draft for later editing. When you are ready,
+			you can finish creating your survey by clicking the "Create" button. Then you will have to choose between making your survey public or secure.
+			In case of a secure survey, you will have to define a group of possible respondents.`,
+		faq_draft_q: 'What is a draft?',
+		faq_draft_a: `A draft is a survey that you have started creating but have not yet finished. You can save your progress as a draft
+			and come back to it later. You can also use the draft to create multiple surveys of the same structure.
+			All your saved drafts can be accessed in the "Drafts" tab.`,
+		faq_group_q: 'What is a group?',
+		faq_group_a: `A group is a set of users that you can use in secure surveys. You can define a group of possible respondents
+			and use it in multiple secure surveys. You can create a group in the "Groups" tab. You can also import users from a .csv file.`,
+		faq_import_users_q: 'Why can I not import users?',
+		faq_import_users_a: `You can only import users who have already registered. If you are trying to import users who have not registered yet,
+			you will not be able to do so. If you are sure that the users have registered, then the problem may be with the file format.
+			Make sure that you are importing a valid .csv file. A valid .csv file should not contain a headline.
+			Each email should be placed in a new line and separated by a comma or a semicolon.<br /><br />
+			Example:<br />
+			user1@st.amu.edu.pl,<br />
+			user2@st.amu.edu.pl;<br />
+			user3@amu.edu.pl`,
+		faq_secure_group_q: 'Why can I not create a secure survey for a group I have created?',
+		faq_secure_group_a: `You cannot create a secure survey for a group if not all users in this group have generated their keys.
+			You can check the status of the users' keys in the "Groups" tab by clicking the group name.`,
+		faq_limit_answers_q: 'Can I limit the number of answers a user can submit to a public survey?',
+		faq_limit_answers_a: `No, you cannot limit the number of answers a user can submit to a public survey.
+			This is only possible in secure surveys. In a public survey, anyone can submit an answer multiple times.`,
+		faq_survey_time_q: 'Can I set a start and end time for a survey?',
+		faq_survey_time_a: `No, you cannot set a start and end time for a survey. However, it is your choice when you share the access code with other users.
+			If you want to limit the time when the survey is available, you can export the survey summary into a file and delete the survey.`,
+		faq_summary_q: 'What is a survey summary?',
+		faq_summary_a: `A survey summary is a collection of all the answers to a survey. You can view the averages of the answers to each question,
+			as well as each individual answer. To access the survey summary, click on the "Surveys" tab at the top of the page and then click on the survey title.
+			You can also share the results with others and export the summary to a .json file. In case of secure surveys you can view the possible respondents.`,
+		faq_import_summary_q: 'How do I import a survey summary?',
+		faq_import_summary_a: `To import a survey summary, click on the "Surveys" tab at the top of the page and then click on the "Import" button.
+			You will be asked to select a file. The file must be in .json format. You can import a survey summary that you have previously exported.
+			Make sure that the survey summary was exported from this application.`,
+		faq_limit_items_q:
+			'Is there a limit to the number of drafts, surveys, and groups I can create?',
+		faq_limit_items_a: `Yes, there is a limit to the number of drafts, surveys, and groups you can create. You can check the number of items you have created on the "Drafts",
+			"Surveys", and "Groups" pages in the top right corner. If you have reached the limit, you will have to delete some items to create new ones.`,
+		faq_anonymous_q: 'Are the answers to surveys actually anonymous?',
+		faq_anonymous_a: `Yes, the answers to surveys are fully anonymous. We do not store any data that could be used to identify the respondent. The answers are stored in a way
+			that makes it impossible to link them to the respondent. This is possible thanks to the use of digital signature keys and ring signatures.
+			If you still have doubts, you can check the source code of our application. Click on the GitHub link at the bottom of the page.`,
 
 		// account
 

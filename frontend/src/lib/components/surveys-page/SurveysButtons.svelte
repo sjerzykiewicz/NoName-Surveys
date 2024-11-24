@@ -9,6 +9,7 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import ImportSummaryButton from '$lib/components/global/ImportSummaryButton.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -107,8 +108,15 @@
 	</div>
 	<PageButtons numEntries={numSurveys} />
 </div>
+<div class="button-row bottom">
+	<ImportSummaryButton />
+</div>
 
 <style>
+	.bottom {
+		font-size: 1em !important;
+	}
+
 	@media screen and (max-width: 768px) {
 		.button-row {
 			font-size: 0.9em;

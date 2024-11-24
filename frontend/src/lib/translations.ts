@@ -232,6 +232,7 @@ export const data = {
 		preview_title: 'Preview survey',
 		create: 'Create',
 		create_title: 'Finish survey creation',
+		invalid_summary: 'Invalid survey summary',
 
 		// groups
 
@@ -347,10 +348,16 @@ export const data = {
 
 		export: 'Export',
 		export_invalid_emails: 'Export invalid emails',
+		export_survey_summary: 'Export survey summary',
+		import: 'Import',
+		import_survey_summary: 'Import survey summary',
 		import_users_title: 'Import users from a .csv file',
 		import_users_label: 'Or import users from a .csv file',
 		import_members_title: 'Import group members from a .csv file',
 		import_members_label: 'Or import group members from a .csv file',
+		import_summary_title: 'Import survey summary from a .json file',
+		importing_summary: 'Importing Summary',
+		importing_summary_alert: 'Select an earlier exported survey summary file in .json format.',
 		some_users_not_registered: `they haven't registered yet`,
 		some_users_without_keys: `they haven't generated keys yet`,
 		could_not_import_emails: `Could not import {number} users, because {reason}.
@@ -358,11 +365,13 @@ export const data = {
 		warning_no_file: 'No file selected.',
 		warning_file_not_csv: 'File must be in .csv format.',
 		error_no_file: 'Please select a file.',
-		error_invalid_file: 'Please select a .pem file.',
+		error_file_not_pem: 'Please select a .pem file.',
+		error_file_not_json: 'Please select a .json file.',
 		select_file: 'Select File',
 		load_keys_title: 'Load your keys',
 		load_keys: 'Load your digital signature keys',
 		submit_keys: 'Submit keys',
+		submit_file: 'Submit file',
 		key_file_label: `Please load the file which you have previously generated on this application. The file
 			contains your keys, necessary for cryptographic calculations which are needed for validating
 			your right to fill out this survey.`,
@@ -672,6 +681,7 @@ export const data = {
 		preview_title: 'Podgląd ankiety',
 		create: 'Utwórz',
 		create_title: 'Zakończ tworzenie ankiety',
+		invalid_summary: 'Niewłaściwe podsumowanie ankiety',
 
 		// groups
 
@@ -785,10 +795,17 @@ export const data = {
 
 		export: 'Eksportuj',
 		export_invalid_emails: 'Eksportuj niepoprawne emaile',
+		export_survey_summary: 'Eksportuj podsumowanie ankiety',
+		import: 'Importuj',
+		import_survey_summary: 'Importuj podsumowanie ankiety',
 		import_users_title: 'Importuj użytkowników z pliku .csv',
 		import_users_label: 'Lub importuj użytkowników z pliku .csv',
 		import_members_title: 'Importuj członków grupy z pliku .csv',
 		import_members_label: 'Lub importuj członków grupy z pliku .csv',
+		import_summary_title: 'Importuj podsumowanie ankiety z pliku .json',
+		importing_summary: 'Importowanie podsumowania',
+		importing_summary_alert:
+			'Wybierz wcześniej wyeksportowany plik podsumowania ankiety w formacie .json.',
 		some_users_not_registered: 'nie są zarejestrowani',
 		some_users_without_keys: 'nie mają kluczy',
 		could_not_import_emails: `Nie udało się zaimportować {number} użytkowników, ponieważ {reason}.
@@ -796,11 +813,13 @@ export const data = {
 		warning_no_file: 'Nie wybrano pliku.',
 		warning_file_not_csv: 'Plik musi być w formacie .csv.',
 		error_no_file: 'Proszę wybrać plik.',
-		error_invalid_file: 'Proszę wybrać plik .pem.',
+		error_file_not_pem: 'Proszę wybrać plik .pem.',
+		error_file_not_json: 'Proszę wybrać plik .json.',
 		select_file: 'Wybierz plik',
 		load_keys_title: 'Załaduj swoje klucze',
 		load_keys: 'Załaduj swoje klucze podpisu cyfrowego',
 		submit_keys: 'Załaduj klucze',
+		submit_file: 'Załaduj plik',
 		key_file_label: `Załaduj plik, który wcześniej wygenerowałeś w tej aplikacji. Plik zawiera Twoje klucze, które są
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
 		default_filename: 'Domyślna nazwa pliku',

@@ -1,9 +1,8 @@
 export function getErrorMessage(detail: string | { msg: string }[]): string {
-	return typeof detail === 'string'
-		? detail
-		: typeof detail === 'undefined'
-			? 'Something went wrong'
-			: typeof detail[0].msg === 'string'
-				? detail[0].msg
-				: 'Something went wrong';
+	if (typeof detail === 'string') return detail;
+	if (Array.isArray(detail) && detail.length > 0) {
+		if (typeof detail[0] === 'string') return detail[0];
+		if (detail[0] && typeof detail[0].msg === 'string') return detail[0].msg;
+	}
+	return 'Something went wrong';
 }

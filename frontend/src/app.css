@@ -1585,3 +1585,8 @@ button.popup {
 		font-size: 1em;
 	}
 }
+
+.passphrase_input {
+	border-radius: 5px;
+	margin-top: 1em;
+}

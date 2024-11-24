@@ -51,6 +51,7 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import decryptKeys from '$lib/utils/decryptKeys';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -66,6 +67,7 @@
 
 	let innerWidth: number;
 	let isKeysModalHidden: boolean = true;
+	let passphrase = '';
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -240,7 +242,7 @@
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
 			return false;
-		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'pem') {
+		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'key') {
 			fileError = FileError.FileInvalid;
 			return false;
 		}
@@ -262,7 +264,12 @@
 			}
 		);
 
-		let keyPair: KeyPair = getKeys(text);
+		let keyPair = await getKeys(text);
+		if (keyPair === null) {
+			$errorModalContent = $t('incorrect_passphrase');
+			$isErrorModalHidden = false;
+			return;
+		}
 
 		if (!keys.includes(keyPair.publicKey)) {
 			$errorModalContent = $t('public_key_not_on_list');
@@ -273,13 +280,26 @@
 		processForm(keyPair);
 	}
 
-	function getKeys(text: string): KeyPair {
-		const words = text.split('\n\n');
+	async function getKeys(text: string): Promise<KeyPair | null> {
+		const data = JSON.parse(text);
+		const salt = new Uint8Array([...data.salt].map((char) => char.charCodeAt(0)));
+		const iv = new Uint8Array([...data.iv].map((char) => char.charCodeAt(0)));
+		const ciphertext = new Uint8Array([...data.ciphertext].map((char) => char.charCodeAt(0)));
 
-		let publicKey = words[0] + '\n';
-		let privateKey = words[1];
+		try {
+			const decrypted = await decryptKeys(ciphertext, passphrase, salt, iv);
+			const decoder = new TextDecoder();
+			const pemKeys = decoder.decode(decrypted);
 
-		return new KeyPair(privateKey, publicKey);
+			const words = pemKeys.split('\n\n');
+
+			let publicKey = words[0] + '\n';
+			let privateKey = words[1];
+
+			return new KeyPair(privateKey, publicKey);
+		} catch (e) {
+			return null;
+		}
 	}
 
 	async function processForm(keyPair: KeyPair | undefined) {
@@ -364,7 +384,7 @@
 >
 	<div slot="content" title={$t('load_keys')} class="file-div">
 		<span class="file-label"
-			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.pem"</span
+			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname.key"</span
 		>
 		<label>
 			<div class="file-input">
@@ -372,6 +392,10 @@
 				<span class="file-name">{fileName}</span>
 			</div>
 			<input type="file" bind:this={fileElement} on:change={handleFileChange} />
+			<div title={$t('enter_passphrase')}>
+				<Tx text="enter_passphrase" />:
+				<input type="password" bind:value={passphrase} class="passphrase_input" />
+			</div>
 		</label>
 		<KeysError error={fileError} element={fileElement} />
 	</div>

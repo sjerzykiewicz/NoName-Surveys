@@ -16,22 +16,39 @@
 	import { invalidateAll } from '$app/navigation';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import encryptKeys from '$lib/utils/encryptKeys';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data: PageServerData;
 	export let isModalHidden: boolean = true;
 
+	let passphrase = '';
+
 	onMount(async () => {
 		await init();
 	});
 
 	async function generateKeyPair() {
+		if (passphrase === '') {
+			$errorModalContent = $t('error_empty_passphrase');
+			$isErrorModalHidden = false;
+			return;
+		}
 		try {
 			const keyPair = get_keypair();
 			const publicKey = keyPair.get_public_key();
 			const privateKey = keyPair.get_private_key();
 			const fingerprint = keyPair.get_fingerprint();
+
+			const pemData = publicKey + '\n\n' + privateKey;
+			const { salt, iv, ciphertext } = await encryptKeys(pemData, passphrase);
+			const decoded = {
+				salt: Array.from(salt, (byte) => String.fromCharCode(byte)).join(''),
+				iv: Array.from(iv, (byte) => String.fromCharCode(byte)).join(''),
+				ciphertext: Array.from(ciphertext, (byte) => String.fromCharCode(byte)).join('')
+			};
+
 			const response = await fetch('/api/users/update-public-key', {
 				method: 'POST',
 				headers: {
@@ -50,7 +67,7 @@
 				return;
 			}
 
-			downloadFile('noname-keys.pem', 'application/octet-stream', publicKey + '\n\n' + privateKey);
+			downloadFile('noname.key', 'application/octet-stream', JSON.stringify(decoded));
 			await invalidateAll();
 		} catch (e) {
 			$errorModalContent = e as string;
@@ -88,7 +105,12 @@
 		bind:isHidden={isModalHidden}
 		--width={innerWidth <= $M ? '18em' : '22em'}
 	>
-		<span slot="content"><Tx text="account_new_key_alert" /></span>
+		<span slot="content">
+			<Tx text="account_new_key_alert" />
+			<br />
+			<Tx text="provide_passphrase" />:
+			<input type="password" bind:value={passphrase} class="passphrase_input" />
+		</span>
 		<button
 			title={$t('generate')}
 			class="done"
@@ -99,7 +121,14 @@
 		>
 			<i class="symbol">done</i><Tx text="generate" />
 		</button>
-		<button title={$t('cancel')} class="not" on:click={() => (isModalHidden = true)}>
+		<button
+			title={$t('cancel')}
+			class="not"
+			on:click={() => {
+				isModalHidden = true;
+				passphrase = '';
+			}}
+		>
 			<i class="symbol">close</i><Tx text="cancel" />
 		</button>
 	</Modal>

@@ -15,7 +15,7 @@
 			case FileError.FileRequired:
 				return $t('error_no_file');
 			case FileError.FileInvalid:
-				return $t('error_file_not_pem');
+				return $t('error_file_not_key');
 		}
 	}
 

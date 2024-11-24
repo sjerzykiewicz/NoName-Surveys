@@ -365,7 +365,7 @@ export const data = {
 		warning_no_file: 'No file selected.',
 		warning_file_not_csv: 'File must be in .csv format.',
 		error_no_file: 'Please select a file.',
-		error_file_not_pem: 'Please select a .pem file.',
+		error_file_not_key: 'Please select a .key file.',
 		error_file_not_json: 'Please select a .json file.',
 		select_file: 'Select File',
 		load_keys_title: 'Load your keys',
@@ -377,6 +377,10 @@ export const data = {
 			your right to fill out this survey.`,
 		default_filename: 'Default filename',
 		no_file_selected: 'No file selected',
+		incorrect_passphrase: 'Incorrect passphrase',
+		error_empty_passphrase: 'Passphrase cannot be empty',
+		provide_passphrase: 'Please provide a passphrase to protect your keys on your device',
+		enter_passphrase: 'Enter passphrase to the file',
 
 		// account
 
@@ -813,7 +817,7 @@ export const data = {
 		warning_no_file: 'Nie wybrano pliku.',
 		warning_file_not_csv: 'Plik musi być w formacie .csv.',
 		error_no_file: 'Proszę wybrać plik.',
-		error_file_not_pem: 'Proszę wybrać plik .pem.',
+		error_file_not_key: 'Proszę wybrać plik .key.',
 		error_file_not_json: 'Proszę wybrać plik .json.',
 		select_file: 'Wybierz plik',
 		load_keys_title: 'Załaduj swoje klucze',
@@ -824,6 +828,10 @@ export const data = {
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
 		default_filename: 'Domyślna nazwa pliku',
 		no_file_selected: 'Nie wybrano pliku',
+		incorrect_passphrase: 'Niepoprawne hasło',
+		error_empty_passphrase: 'Hasło nie może być puste',
+		provide_passphrase: 'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu',
+		enter_passphrase: 'Podaj hasło do pliku',
 
 		// account
 

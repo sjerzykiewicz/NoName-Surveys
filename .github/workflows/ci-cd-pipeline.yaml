@@ -135,8 +135,8 @@ jobs:
       
       - name: Copy deployment YAML files to the cluster
         run: |
-          scp -p 443 -o StrictHostKeyChecking=no k8s/frontend-deployment.yaml ${{ secrets.SSH_USER }}@${{ secrets.SSH_ADDRESS }}:/tmp/frontend-deployment.yaml
-          scp -p 443 -o StrictHostKeyChecking=no k8s/backend-deployment.yaml ${{ secrets.SSH_USER }}@${{ secrets.SSH_ADDRESS }}:/tmp/backend-deployment.yaml
+          scp -P 443 -o StrictHostKeyChecking=no k8s/frontend-deployment.yaml ${{ secrets.SSH_USER }}@${{ secrets.SSH_ADDRESS }}:/tmp/frontend-deployment.yaml
+          scp -P 443 -o StrictHostKeyChecking=no k8s/backend-deployment.yaml ${{ secrets.SSH_USER }}@${{ secrets.SSH_ADDRESS }}:/tmp/backend-deployment.yaml
 
       - name: Deploy to Minikube via kubectl
         run: |

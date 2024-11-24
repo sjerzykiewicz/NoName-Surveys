@@ -366,6 +366,7 @@ button:active,
 .footer-button i,
 .error i,
 .warning i,
+.survey-info i,
 .save i,
 .done i,
 .not i,
@@ -944,9 +945,7 @@ input[type='radio']:disabled {
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
 	cursor: default;
 	margin: 0.5em 0em 0em 0em;
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .warning {
@@ -1560,6 +1559,7 @@ button.popup {
 
 	.error,
 	.warning,
+	.survey-info,
 	.tooltip-text,
 	.popup-text,
 	.select-list,

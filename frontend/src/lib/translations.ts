@@ -214,6 +214,12 @@ export const data = {
 		deleting_surveys: 'Deleting Surveys',
 		create_survey: 'Create a survey',
 		delete_selected_surveys: 'Delete selected surveys',
+		survey_public_title: 'Public survey',
+		survey_public_info:
+			'This survey is public. Anyone can respond to it multiple times. You will not have to provide your keys.',
+		survey_secure_title: 'Secure survey',
+		survey_secure_info:
+			'This survey is secure. Selected users can respond to it only once. You will have to provide your keys when submitting this survey.',
 		survey_not_secure_title: 'Survey not secure',
 		survey_not_secure: 'This survey is not secure.',
 		only_respondent: ' You are the only person who can respond to this survey.',
@@ -711,6 +717,12 @@ export const data = {
 		deleting_surveys: 'Usuwanie ankiet',
 		create_survey: 'Stwórz ankietę',
 		delete_selected_surveys: 'Usuń wybrane ankiety',
+		survey_public_title: 'Ankieta publiczna',
+		survey_public_info:
+			'Ta ankieta jest publiczna. Każdy może odpowiedzieć na nią wielokrotnie. Nie będziesz musiał podawać swoich kluczy.',
+		survey_secure_title: 'Ankieta bezpieczna',
+		survey_secure_info:
+			'Ta ankieta jest bezpieczna. Wybrani użytkownicy mogą odpowiedzieć na nią tylko raz. Będziesz musiał podać swoje klucze przy przesyłaniu tej ankiety.',
 		survey_not_secure_title: 'Ankieta niebezpieczna',
 		survey_not_secure: 'Ta ankieta nie jest bezpieczna.',
 		only_respondent: ' Jesteś jedyną osobą, która może wypełnić tę ankietę.',

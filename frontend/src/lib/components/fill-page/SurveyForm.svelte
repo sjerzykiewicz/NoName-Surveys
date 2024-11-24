@@ -427,6 +427,15 @@
 </Header>
 
 <Content>
+	{#if uses_crypto}
+		<p title={$t('survey_secure_title')} class="survey-info">
+			<i class="symbol">encrypted</i><Tx text="survey_secure_info" />
+		</p>
+	{:else}
+		<p title={$t('survey_public_title')} class="survey-info">
+			<i class="symbol">public</i><Tx text="survey_public_info" />
+		</p>
+	{/if}
 	{#if keys.length === 1 || keys.length === 2}
 		<p title={$t('survey_not_secure_title')} class="warning">
 			<i class="symbol">warning</i><Tx text="survey_not_secure" />
@@ -465,7 +474,19 @@
 		width: 100%;
 	}
 
-	.warning {
+	.survey-info {
+		display: flex;
+		align-items: center;
+		color: var(--text-color-1);
+		font-weight: 700;
+		font-size: 1em;
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		cursor: default;
+		transition: 0.2s;
+	}
+
+	.warning,
+	.survey-info {
 		margin: 0em 0em 0.5em 0em;
 	}
 

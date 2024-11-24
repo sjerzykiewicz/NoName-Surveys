@@ -358,7 +358,7 @@ export const data = {
 		warning_no_file: 'No file selected.',
 		warning_file_not_csv: 'File must be in .csv format.',
 		error_no_file: 'Please select a file.',
-		error_invalid_file: 'Please select a .pem file.',
+		error_invalid_file: 'Please select a .key file.',
 		select_file: 'Select File',
 		load_keys_title: 'Load your keys',
 		load_keys: 'Load your digital signature keys',
@@ -368,6 +368,7 @@ export const data = {
 			your right to fill out this survey.`,
 		default_filename: 'Default filename',
 		no_file_selected: 'No file selected',
+		incorrect_password: 'Incorrect password',
 
 		// account
 
@@ -796,7 +797,7 @@ export const data = {
 		warning_no_file: 'Nie wybrano pliku.',
 		warning_file_not_csv: 'Plik musi być w formacie .csv.',
 		error_no_file: 'Proszę wybrać plik.',
-		error_invalid_file: 'Proszę wybrać plik .pem.',
+		error_invalid_file: 'Proszę wybrać plik .key.',
 		select_file: 'Wybierz plik',
 		load_keys_title: 'Załaduj swoje klucze',
 		load_keys: 'Załaduj swoje klucze podpisu cyfrowego',
@@ -805,6 +806,7 @@ export const data = {
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
 		default_filename: 'Domyślna nazwa pliku',
 		no_file_selected: 'Nie wybrano pliku',
+		incorrect_password: 'Niepoprawne hasło',
 
 		// account
 

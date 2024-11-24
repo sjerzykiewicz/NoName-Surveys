@@ -264,7 +264,12 @@
 			}
 		);
 
-		let keyPair: KeyPair = await getKeys(text);
+		let keyPair = await getKeys(text);
+		if (keyPair === null) {
+			$errorModalContent = $t('incorrect_password');
+			$isErrorModalHidden = false;
+			return;
+		}
 
 		if (!keys.includes(keyPair.publicKey)) {
 			$errorModalContent = $t('public_key_not_on_list');
@@ -275,24 +280,26 @@
 		processForm(keyPair);
 	}
 
-	async function getKeys(text: string): Promise<KeyPair> {
+	async function getKeys(text: string): Promise<KeyPair | null> {
 		const data = JSON.parse(text);
-		const encoder = new TextEncoder();
-		const salt = encoder.encode(data.salt);
-		const iv = encoder.encode(data.iv);
-		const ciphertext = encoder.encode(data.data);
+		const salt = new Uint8Array([...data.salt].map((char) => char.charCodeAt(0)));
+		const iv = new Uint8Array([...data.iv].map((char) => char.charCodeAt(0)));
+		const ciphertext = new Uint8Array([...data.ciphertext].map((char) => char.charCodeAt(0)));
 
-		const decrypted = await decryptKeys(ciphertext, password, salt, iv);
+		try {
+			const decrypted = await decryptKeys(ciphertext, password, salt, iv);
+			const decoder = new TextDecoder();
+			const pemKeys = decoder.decode(decrypted);
 
-		const decoder = new TextDecoder();
-		const pemKeys = decoder.decode(decrypted);
+			const words = pemKeys.split('\n\n');
 
-		const words = pemKeys.split('\n\n');
+			let publicKey = words[0] + '\n';
+			let privateKey = words[1];
 
-		let publicKey = words[0] + '\n';
-		let privateKey = words[1];
-
-		return new KeyPair(privateKey, publicKey);
+			return new KeyPair(privateKey, publicKey);
+		} catch (e) {
+			return null;
+		}
 	}
 
 	async function processForm(keyPair: KeyPair | undefined) {
@@ -377,7 +384,7 @@
 >
 	<div slot="content" title={$t('load_keys')} class="file-div">
 		<span class="file-label"
-			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.pem"</span
+			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname.key"</span
 		>
 		<label>
 			<div class="file-input">

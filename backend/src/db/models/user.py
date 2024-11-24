@@ -14,7 +14,7 @@ class UserBase(SQLModel):
 
 class UserWithKey(UserBase):
     public_key: str = Field(default="")
-    key_creation_date: datetime = Field(
+    key_creation_date: Optional[datetime] = Field(
         sa_column=Field(TIMESTAMP(timezone=True), nullable=True),
         default=None,
     )

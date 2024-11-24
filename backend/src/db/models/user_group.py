@@ -4,8 +4,8 @@ from sqlmodel import Field, SQLModel
 
 
 class UserGroupBase(SQLModel):
-    creator_id: Optional[int] = Field(default=None, foreign_key="user.id")
-    name: str
+    creator_id: Optional[int] = Field(foreign_key="user.id", nullable=False, index=True)
+    name: str = Field(nullable=False, index=True)
 
 
 class UserGroup(UserGroupBase, table=True):

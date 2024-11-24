@@ -4,8 +4,8 @@ from sqlmodel import Field, SQLModel
 
 
 class RingMemberBase(SQLModel):
-    survey_id: Optional[int] = Field(default=None, foreign_key="survey.id")
-    user_email: str = Field(default=None, foreign_key="user.email")
+    survey_id: int = Field(foreign_key="survey.id", nullable=False, index=True)
+    user_email: str = Field(foreign_key="user.email", nullable=False)
     public_key: str = Field(default=None)
 
 

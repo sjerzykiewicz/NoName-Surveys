@@ -9,7 +9,7 @@ tz = pytz.timezone("Europe/Warsaw")
 
 
 class UserBase(SQLModel):
-    email: str = Field(unique=True)
+    email: str = Field(unique=True, nullable=False, index=True)
 
 
 class UserWithKey(UserBase):

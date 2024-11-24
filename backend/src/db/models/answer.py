@@ -5,7 +5,7 @@ from sqlmodel import Column, Field, SQLModel
 
 
 class AnswerBase(SQLModel):
-    survey_id: int = Field(foreign_key="survey.id")
+    survey_id: int = Field(foreign_key="survey.id", nullable=False, index=True)
     answer: str = Field(sa_column=Column(TEXT))
     y0: str = Field(default="")
 

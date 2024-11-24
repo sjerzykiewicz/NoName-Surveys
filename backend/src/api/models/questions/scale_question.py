@@ -1,6 +1,6 @@
 from typing import Literal, Optional
 
-from pydantic import ValidationInfo, field_validator
+from pydantic import field_validator
 
 from src.api.models.questions.question_base import Question
 
@@ -10,7 +10,7 @@ class ScaleQuestion(Question):
     answer: Optional[int] = None
 
     @field_validator("answer")
-    def validate_answer(cls, v, info: ValidationInfo) -> Optional[float]:
+    def validate_answer(cls, v) -> Optional[float]:
         if v is None:
             return v
         if not 1 <= v <= 5:
@@ -25,5 +25,5 @@ class ScaleQuestion(Question):
         ):
             raise ValueError("Invalid answer!")
 
-    class Config:
-        extra = "forbid"
+    def get_answer(self):
+        return str(self.answer) if self.answer is not None else ""

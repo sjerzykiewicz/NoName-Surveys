@@ -1,11 +1,16 @@
 <script lang="ts">
-	import { signOut } from '@auth/sveltekit/client';
+	import { signOut } from '$lib/utils/signOut';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 </script>
 
 <div class="sign-buttons">
-	<button title="Sign out" class="sign-out" on:click={() => signOut()}
-		><i class="material-symbols-rounded">logout</i>Sign Out</button
-	>
+	<button title={$t('sign_out')} class="sign-out" on:click={signOut}
+		><i class="symbol">logout</i><Tx text="sign_out" />
+	</button>
 </div>
 
 <style>
@@ -16,10 +21,10 @@
 		justify-content: center;
 		padding-top: 1.5em;
 		padding-bottom: 1.5em;
-		font-size: 1.5em;
+		font-size: 1.75em;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.sign-buttons {
 			font-size: 1.25em;
 		}

@@ -1,12 +1,5 @@
 <script lang="ts">
-	import {
-		questions,
-		title,
-		isDraftModalHidden,
-		isDraftPopupVisible,
-		currentDraftId,
-		draft
-	} from '$lib/stores/create-page';
+	import { questions, title, currentDraftId, draftStructure } from '$lib/stores/create-page';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import QuestionError from './QuestionError.svelte';
@@ -15,41 +8,101 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
-	import CryptoButtons from './CryptoButtons.svelte';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
-	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 	import Survey from '$lib/entities/surveys/Survey';
+	import SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
-	import { error } from '@sveltejs/kit';
-	import { delay } from '$lib/utils/delay';
 	import { getDraft } from '$lib/utils/getDraft';
+	import Modal from '$lib/components/global/Modal.svelte';
+	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
+	import { popup } from '$lib/utils/popup';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		S,
+		M,
+		LIMIT_OF_DRAFTS,
+		warningModalContent,
+		isWarningModalHidden
+	} from '$lib/stores/global';
+	import SelectGroup from './SelectGroup.svelte';
+	import SelectUsers from './SelectUsers.svelte';
+	import CryptoError from './CryptoError.svelte';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { onMount } from 'svelte';
+	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
+	import { invalidateAll } from '$app/navigation';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let users: string[];
 	export let groups: string[];
+	export let numDrafts: number;
 	export let isPreview: boolean;
-	export let cryptoError: boolean;
+	export let isDraftModalHidden: boolean = true;
+	export let isRespondentModalHidden: boolean = true;
+	export let invalidEmails: string[] = [];
+	export let isExportButtonVisible: boolean = false;
+	export let ringMembers: string[] = [];
+	export let selectedGroups: string[] = [];
+	export let useCrypto: boolean = false;
 
+	let cryptoError: boolean = false;
 	let questionInput: HTMLDivElement;
+	let isSurveyModalHidden: boolean = true;
+	let surveyCode: string;
+
+	function checkCorrectness() {
+		cryptoError = false;
+		const g = selectedGroups;
+		const r = ringMembers;
+		if (
+			useCrypto &&
+			(g === null || g === undefined || g.length === 0) &&
+			(r === null || r === undefined || r.length === 0)
+		) {
+			cryptoError = true;
+			return false;
+		}
+		return true;
+	}
 
 	async function saveDraft(overwrite: boolean) {
-		const parsedSurvey = new Survey($title, constructQuestionList($questions));
-		const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
+		isDraftModalHidden = true;
+
+		if (
+			(overwrite && numDrafts > $LIMIT_OF_DRAFTS) ||
+			(!overwrite && numDrafts >= $LIMIT_OF_DRAFTS)
+		) {
+			isExportButtonVisible = false;
+			$warningModalContent = $t('limit_reached', { items: $t('drafts_genitive') });
+			$isWarningModalHidden = false;
+			return;
+		}
 
 		if (overwrite) {
 			const deleteResponse = await fetch('/api/surveys/drafts/delete', {
 				method: 'POST',
-				body: JSON.stringify({ user_email: $page.data.session?.user?.email, id: $currentDraftId }),
+				body: JSON.stringify({ ids: [$currentDraftId] }),
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			});
 
 			if (!deleteResponse.ok) {
-				error(deleteResponse.status, { message: await deleteResponse.json() });
+				const body = await deleteResponse.json();
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
+				return;
 			}
 		}
+
+		const parsedSurvey = new Survey(constructQuestionList($questions));
+		const draftInfo = new DraftCreateInfo($title.title, parsedSurvey);
 
 		const createResponse = await fetch('/api/surveys/drafts/create', {
 			method: 'POST',
@@ -60,79 +113,154 @@
 		});
 
 		if (!createResponse.ok) {
-			error(createResponse.status, { message: await createResponse.json() });
-		} else {
-			const allResponse = await fetch('/api/surveys/drafts/all', {
-				method: 'POST',
-				body: JSON.stringify({ user_email: $page.data.session?.user?.email }),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-			if (!allResponse.ok) {
-				error(allResponse.status, { message: await allResponse.json() });
-			} else {
-				const body = await allResponse.json();
-				$currentDraftId = body[body.length - 1].id;
-				$draft = getDraft($title, $questions);
-				$isDraftPopupVisible = true;
-				await delay(2000);
-				$isDraftPopupVisible = false;
-			}
+			const body = await createResponse.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
 		}
+
+		$currentDraftId = await createResponse.json();
+		$draftStructure = getDraft($title.title, $questions);
+		popup('draft-popup');
+		await invalidateAll();
 	}
 
+	async function createSurvey() {
+		if (!checkCorrectness()) return;
+
+		isRespondentModalHidden = true;
+
+		const parsedSurvey = new Survey(constructQuestionList($questions));
+		const surveyInfo = new SurveyCreateInfo($title.title, parsedSurvey, useCrypto, ringMembers);
+
+		const response = await fetch('/api/surveys/create', {
+			method: 'POST',
+			body: JSON.stringify(surveyInfo),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		const body = await response.json();
+		useCrypto = false;
+		ringMembers = [];
+		selectedGroups = [];
+		surveyCode = body.survey_code;
+		isSurveyModalHidden = false;
+		await invalidateAll();
+	}
+
+	let innerWidth: number;
+
+	$: isCryptoDisabled = !useCrypto;
+
 	onMount(() => {
-		function handleEscape(event: KeyboardEvent) {
-			if (!$isDraftModalHidden && event.key === 'Escape') {
-				$isDraftModalHidden = true;
+		function handleEnterRespondent(event: KeyboardEvent) {
+			if (!isRespondentModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				createSurvey();
+				event.stopImmediatePropagation();
 			}
 		}
 
-		document.body.addEventListener('keydown', handleEscape);
+		function handleEnterDraft(event: KeyboardEvent) {
+			if (!isDraftModalHidden && event.key === 'Enter') {
+				event.preventDefault();
+				saveDraft(false);
+				event.stopImmediatePropagation();
+			}
+		}
+
+		document.body.addEventListener('keydown', handleEnterRespondent);
+		document.body.addEventListener('keydown', handleEnterDraft);
 
 		return () => {
-			document.body.removeEventListener('keydown', handleEscape);
+			document.body.removeEventListener('keydown', handleEnterRespondent);
+			document.body.removeEventListener('keydown', handleEnterDraft);
 		};
 	});
 </script>
 
-<section class="overlay" class:hidden={$isDraftModalHidden}>
-	<div class="modal">
-		<div class="top">
-			<div class="caption">
-				<i class="material-symbols-rounded">help</i>Save Draft
-			</div>
-			<button title="Cancel" on:click={() => ($isDraftModalHidden = true)}>
-				<i class="material-symbols-rounded">close</i>
+<svelte:window bind:innerWidth />
+
+<Modal
+	icon="save"
+	title={$t('saving_draft')}
+	bind:isHidden={isDraftModalHidden}
+	--width={innerWidth <= $M ? '20em' : '24em'}
+>
+	<span slot="content"><Tx text="saving_draft_alert" /></span>
+	<button title={$t('overwrite_draft')} class="save" on:click={() => saveDraft(true)}
+		><i class="symbol">save_as</i><Tx text="overwrite_draft" /></button
+	>
+	<button title={$t('save_new_draft')} class="save" on:click={() => saveDraft(false)}
+		><i class="symbol">save</i><Tx text="save_new_draft" /></button
+	>
+</Modal>
+
+<Modal
+	icon="group"
+	title={$t('define_respondent_group')}
+	bind:isHidden={isRespondentModalHidden}
+	--width={innerWidth <= $M ? '20em' : '26em'}
+>
+	<div slot="content">
+		<span><Tx text="define_respondent_group_alert" /></span>
+		<div class="crypto-buttons">
+			<button
+				title={$t('public')}
+				class="access-button"
+				class:save={!useCrypto}
+				on:click={() => (useCrypto = false)}
+			>
+				<i class="symbol">public</i><Tx text="public" />
+			</button>
+			<button
+				title={$t('secure')}
+				class="access-button"
+				class:save={useCrypto}
+				on:click={() => (useCrypto = true)}
+			>
+				<i class="symbol">encrypted</i><Tx text="secure" />
 			</button>
 		</div>
-		<div class="text">Do you wish to overwrite the draft or save a new draft?</div>
-		<div class="buttons">
-			<button
-				title="Overwrite draft"
-				class="save"
-				on:click={() => {
-					saveDraft(true);
-					$isDraftModalHidden = true;
-				}}>Overwrite Draft</button
-			>
-			<button
-				title="Save new draft"
-				class="save"
-				on:click={() => {
-					saveDraft(false);
-					$isDraftModalHidden = true;
-				}}>Save New Draft</button
-			>
+		<div class="select-box" transition:slide={{ duration: 0.2, easing: cubicInOut }}>
+			<SelectGroup {groups} bind:ringMembers bind:selectedGroups disabled={isCryptoDisabled} />
+			<div id="or" class:disabled={isCryptoDisabled}><Tx text="or" /></div>
+			<SelectUsers {users} bind:ringMembers disabled={isCryptoDisabled} />
+			<CryptoError error={cryptoError} bind:ringMembers bind:selectedGroups bind:useCrypto />
+			<div class="import">
+				<ImportEmails
+					bind:users={ringMembers}
+					title={$t('import_users_title')}
+					label={$t('import_users_label')}
+					checkKeys={true}
+					--width="100%"
+					disabled={isCryptoDisabled}
+					bind:invalidEmails
+					bind:isExportButtonVisible
+				/>
+			</div>
 		</div>
 	</div>
-</section>
+	<button title={$t('define_respondent_group')} class="done" on:click={createSurvey}
+		><i class="symbol">done</i><Tx text="create" /></button
+	>
+</Modal>
+
+<QrCodeModal bind:isHidden={isSurveyModalHidden} title={$t('survey_success')} {surveyCode} />
 
 {#each $questions as question, questionIndex (question)}
 	<div
 		class="question"
+		id={`q${questionIndex}`}
 		in:slide={{ duration: 200, easing: cubicInOut }}
 		on:introend={() => scrollToElement('.add-question')}
 	>
@@ -155,109 +283,97 @@
 	</div>
 {/each}
 {#if !isPreview}
-	<div
-		class="button-row"
-		in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-		out:slide={{ duration: 200, easing: cubicInOut }}
-	>
-		<AddQuestionButtons {questionInput} />
-		<CryptoButtons {users} {groups} {cryptoError} />
+	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<div class="button-sub-row">
+			<AddQuestionButtons {questionInput} />
+			<div class="tooltip create-info">
+				<i class="symbol">info</i>
+				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
+					><Tx text="groups_info" /></span
+				>
+			</div>
+		</div>
 	</div>
 {/if}
 
 <style>
-	.overlay {
-		display: flex;
-		justify-content: center;
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		width: 100%;
-		height: 100%;
-		background: rgba(0, 0, 0, 0.5);
-		backdrop-filter: blur(2px);
-		z-index: 2;
-		opacity: 1;
-		transition: opacity 0.2s;
+	.create-info.tooltip {
+		--tooltip-width: 17em;
+		font-size: 1.5em;
 	}
 
-	.overlay.hidden {
-		visibility: hidden;
-		opacity: 0;
-	}
-
-	.modal {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		top: 10%;
-		width: 20em;
-		position: absolute;
-		background-color: var(--secondary-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		font-size: 1.25em;
-		color: var(--text-color);
-		z-index: 3;
-	}
-
-	.modal div {
-		display: flex;
-	}
-
-	.modal .top {
-		align-items: center;
-		justify-content: space-between;
-		background-color: var(--secondary-dark-color);
-		border-bottom: 1px solid var(--border-color);
-		border-top-left-radius: 5px;
-		border-top-right-radius: 5px;
-		padding: 0.5em;
-	}
-
-	.modal .top .caption {
-		align-items: center;
-		font-weight: bold;
-		font-size: 1.25em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		cursor: default;
-	}
-
-	.modal .top .caption i {
-		margin-right: 0.15em;
-	}
-
-	.modal .top button i {
-		font-variation-settings: 'wght' 700;
-	}
-
-	.modal .text {
-		justify-content: center;
-		padding: 1em;
-		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		cursor: default;
-	}
-
-	.modal .buttons {
-		flex-flow: row;
-		justify-content: space-around;
-		padding-bottom: 1em;
-	}
-
-	.modal .buttons button {
-		width: 8em;
-		justify-content: center;
+	.create-info.tooltip .tooltip-text {
+		font-size: 0.8em;
 	}
 
 	.button-row {
+		align-items: center;
+		font-size: 1em;
+		margin-top: 0em;
+	}
+
+	.crypto-buttons {
 		display: flex;
-		flex-flow: row wrap;
+		flex-flow: row;
+		justify-content: space-around;
+		padding-top: 1em;
+		padding-bottom: 1em;
+	}
+
+	.access-button {
+		width: fit-content;
+		justify-content: center;
+		margin-right: 0.5em;
+		margin-bottom: 0.5em;
+	}
+
+	.access-button i {
+		margin-right: 0.15em;
+	}
+
+	.select-box {
+		text-align: left;
+	}
+
+	#or {
+		display: flex;
+		flex-flow: row;
 		align-items: flex-start;
 		justify-content: flex-start;
-		align-content: space-between;
+		margin-bottom: 0.5em;
+		font-size: 0.8em;
+		color: var(--text-color-1);
+		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
+	}
+
+	#or.disabled {
+		color: var(--text-color-3) !important;
+		cursor: not-allowed !important;
+	}
+
+	.import {
+		font-size: 0.8em;
+	}
+
+	@media screen and (max-width: 768px) {
+		.create-info.tooltip {
+			--tooltip-width: 10em;
+			font-size: 1.25em;
+		}
+
+		.create-info.tooltip .tooltip-text.bottom {
+			left: -250%;
+		}
+
+		.create-info.tooltip .tooltip-text.bottom::after {
+			left: 90%;
+		}
+
+		.import {
+			font-size: 1em;
+		}
 	}
 </style>

@@ -31,6 +31,10 @@ import TextCreate from '$lib/components/create-page/Text.svelte';
 import TextFill from '$lib/components/fill-page/Text.svelte';
 import TextAnswer from '$lib/components/summary-page/answer/Text.svelte';
 import TextSummary from '$lib/components/summary-page/TextSummary.svelte';
+import NumberCreate from '$lib/components/create-page/Number.svelte';
+import NumberFill from '$lib/components/fill-page/Number.svelte';
+import NumberAnswer from '$lib/components/summary-page/answer/Number.svelte';
+import NumberSummary from '$lib/components/summary-page/NumberSummary.svelte';
 
 export function getQuestionTypeData(questionType: ComponentType) {
 	switch (questionType) {
@@ -38,46 +42,51 @@ export function getQuestionTypeData(questionType: ComponentType) {
 		case SingleFill:
 		case SingleAnswer:
 		case SingleSummary:
-			return { title: 'Single choice', icon: 'radio_button_checked', text: 'Single' };
+			return { title: 'single_title', icon: 'radio_button_checked', text: 'single_text' };
 		case MultiCreate:
 		case MultiFill:
 		case MultiAnswer:
 		case MultiSummary:
-			return { title: 'Multiple choice', icon: 'check_box', text: 'Multi' };
+			return { title: 'multi_title', icon: 'check_box', text: 'multi_text' };
 		case ScaleCreate:
 		case ScaleFill:
 		case ScaleAnswer:
 		case ScaleSummary:
-			return { title: '1-5 choice', icon: 'star', text: 'Scale' };
+			return { title: 'scale_title', icon: 'star', text: 'scale_text' };
 		case SliderCreate:
 		case SliderFill:
 		case SliderAnswer:
 		case SliderSummary:
-			return { title: 'Range of values', icon: 'sliders', text: 'Slider' };
+			return { title: 'slider_title', icon: 'sliders', text: 'slider_text' };
 		case ListCreate:
 		case ListFill:
 		case ListAnswer:
 		case ListSummary:
 			return {
-				title: 'Dropdown menu choice',
+				title: 'list_title',
 				icon: 'expand_circle_down',
-				text: 'List'
+				text: 'list_text'
 			};
 		case RankCreate:
 		case RankFill:
 		case RankAnswer:
 		case RankSummary:
-			return { title: 'Ranking choice', icon: 'numbers', text: 'Rank' };
+			return { title: 'rank_title', icon: 'leaderboard', text: 'rank_text' };
 		case BinaryCreate:
 		case BinaryFill:
 		case BinaryAnswer:
 		case BinarySummary:
-			return { title: 'Yes/No choice', icon: 'thumbs_up_down', text: 'Binary' };
+			return { title: 'binary_title', icon: 'thumbs_up_down', text: 'binary_text' };
 		case TextCreate:
 		case TextFill:
 		case TextAnswer:
 		case TextSummary:
-			return { title: 'Open question', icon: 'text_fields', text: 'Text' };
+			return { title: 'text_title', icon: 'text_fields', text: 'text_text' };
+		case NumberCreate:
+		case NumberFill:
+		case NumberAnswer:
+		case NumberSummary:
+			return { title: 'number_title', icon: 'numbers', text: 'number_text' };
 		default:
 			return { title: '', icon: '', text: '' };
 	}

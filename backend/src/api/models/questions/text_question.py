@@ -27,5 +27,5 @@ class TextQuestion(Question):
         ):
             raise ValueError("Invalid answer!")
 
-    class Config:
-        extra = "forbid"
+    def get_answer(self):
+        return self.answer if self.answer is not None else ""

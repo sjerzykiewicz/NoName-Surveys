@@ -14,4 +14,8 @@ export class TextQuestionAnswered extends TextQuestion {
 		super(required, question, details);
 		this.answer = answer;
 	}
+
+	getAnswer(): string {
+		return this.answer ? this.answer : '';
+	}
 }

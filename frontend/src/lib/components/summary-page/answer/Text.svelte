@@ -1,21 +1,35 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let data: { answer: string; details: string };
 </script>
 
-<div class="choice-area display">
-	<div title="Question details" class="details">
-		{data.details}
+{#if data.answer === ''}
+	<div title={$t('question_not_answered')} class="summary_no_answers">
+		<Tx text="question_not_answered" />
 	</div>
-	<div title="Answer" class="text-area display">
-		{data.answer}
+{:else}
+	<div class="choice-area text display">
+		<div title={$t('question_details')} class="details">
+			{data.details}
+		</div>
+		<div title={$t('answer')} class="text-input display">
+			{data.answer}
+		</div>
 	</div>
-</div>
+{/if}
 
 <style>
-	.text-area {
-		border: 1px solid var(--accent-color);
-		background-color: var(--secondary-dark-color);
-		color: var(--accent-color);
-		min-height: 1.15em;
+	.text-input {
+		border: 1px solid var(--accent-color-1);
+		background-color: var(--secondary-color-2);
+		color: var(--accent-color-1);
+		transition:
+			0.2s,
+			outline 0s;
 	}
 </style>

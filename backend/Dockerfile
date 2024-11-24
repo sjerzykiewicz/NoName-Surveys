@@ -1,11 +1,11 @@
-FROM python:3.10 as python-base
+FROM python:3.10 AS python-base
 
 WORKDIR /app
 
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python3 -
 ENV PATH="/opt/poetry/bin:$PATH"
 
-COPY ./pyproject.toml ./poetry.lock* /app/
+COPY ./pyproject.toml ./poetry.lock /app/
 
 COPY . .
 

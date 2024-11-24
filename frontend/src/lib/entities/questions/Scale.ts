@@ -12,4 +12,8 @@ export class ScaleQuestionAnswered extends ScaleQuestion {
 		super(required, question);
 		this.answer = answer;
 	}
+
+	getAnswer(): string {
+		return this.answer ? this.answer.toString() : '';
+	}
 }

@@ -1,9 +1,9 @@
 from typing import Any
 
-from pydantic import BaseModel
+from src.api.models.base import Base
 
 
-class Question(BaseModel):
+class Question(Base):
     required: bool
     question: str
     answer: Any
@@ -18,3 +18,6 @@ class Question(BaseModel):
 
     def validate_structure_against(self, answer) -> None:
         pass
+
+    def get_answer(self):
+        return self.answer

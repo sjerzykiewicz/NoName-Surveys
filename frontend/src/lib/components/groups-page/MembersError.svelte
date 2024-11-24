@@ -2,12 +2,16 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { GroupError } from '$lib/entities/GroupError';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let members: string[];
 	export let error: GroupError;
 
 	function errorMessage() {
-		return 'Please select group members.';
+		return $t('members_error');
 	}
 
 	$: checkMembersError = () => {
@@ -18,13 +22,17 @@
 	};
 </script>
 
-<div
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
-	{#if checkMembersError()}
-		<p title="Error" class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			<i class="material-symbols-rounded">error</i>{errorMessage()}
-		</p>
-	{/if}
-</div>
+{#if checkMembersError()}
+	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<i class="symbol">error</i>
+		{#key $t}
+			{errorMessage()}
+		{/key}
+	</p>
+{/if}
+
+<style>
+	.error {
+		margin: 0em;
+	}
+</style>

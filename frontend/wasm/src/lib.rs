@@ -1,10 +1,11 @@
-/*
-    First attempt at LRS implementation. This implementation is not confirmed to be secure and is only for testing and demonstration purposes.
-*/
-
+use getrandom::Error;
 use num_bigint::{BigUint, RandBigInt};
 use num_traits::{One, Zero};
-use sha2::Digest;
+use pem::{encode, parse, Pem};
+use sha3::{
+    digest::{ExtendableOutput, Update, XofReader},
+    Digest, Sha3_256, Sha3_384, Shake256,
+};
 use wasm_bindgen::prelude::*;
 
 // cyclic group parameters
@@ -31,6 +32,34 @@ const Q_HEX: &[u8; 64] = b"8CF83642A709A097\
                             B447997640129DA2\
                             99B1A47D1EB3750B\
                             A308B0FE64F5FBD3";
+const R_HEX: &[u8; 448] = b"F65B7EA7706034A2\
+                            8A29B9436AF161BB\
+                            F3632483671C60AE\
+                            E9B1A6A496FFF904\
+                            FCB09731B6C6E16B\
+                            551CEC2C063910B0\
+                            4E40795D4BEB474D\
+                            B762E28CC923AE40\
+                            FDBAF05BF7501D03\
+                            14C3CBE4BAD7329D\
+                            D473BDF441E7B8B3\
+                            87B402CD0BE7DC53\
+                            4FA6D3C039BDAD13\
+                            3F59DC899FD570A6\
+                            67C453D08150A35C\
+                            F5E845087BD9ACFA\
+                            8333343375E8EE52\
+                            965A84C699C59DFE\
+                            F852EFB96023BEF0\
+                            FFB2F99C53AC2D94\
+                            CD2969764698B8DD\
+                            E401DA6AA6BDB3B0\
+                            3B5506D287090F8E\
+                            852C05EC0BDB3C0C\
+                            4FBEC1A4AB9FE141\
+                            E8A7C9EADB17D335\
+                            921B673615A7FC0C\
+                            92384946B9AB6452";
 const G_HEX: &[u8; 512] = b"3FB32C9B73134D0B2E77506660EDBD48\
                             4CA7B18F21EF205407F4793A1A0BA125\
                             10DBC15077BE463FFF4FED4AAC0BB555\
@@ -52,6 +81,7 @@ const G_HEX: &[u8; 512] = b"3FB32C9B73134D0B2E77506660EDBD48\
 pub struct KeyPair {
     private_key: String,
     public_key: String,
+    fingerprint: String,
 }
 
 #[wasm_bindgen]
@@ -62,6 +92,10 @@ impl KeyPair {
 
     pub fn get_private_key(&self) -> String {
         self.private_key.clone()
+    }
+
+    pub fn get_fingerprint(&self) -> String {
+        self.fingerprint.clone()
     }
 }
 
@@ -75,34 +109,55 @@ pub fn get_keypair() -> KeyPair {
     let priv_key = rng.gen_biguint_below(&order);
     let pub_key = generator.modpow(&priv_key, &prime);
 
+    let private_pem = encode(&Pem::new("PRIVATE KEY", priv_key.to_string().as_bytes()));
+    let public_pem = encode(&Pem::new("PUBLIC KEY", pub_key.to_string().as_bytes()));
+
+    let mut hasher = Sha3_256::new();
+    Digest::update(&mut hasher, public_pem.to_string().as_bytes());
+    let h = hasher.finalize();
+    let print = format!("{:x}", h);
+
     KeyPair {
-        private_key: priv_key.to_string(),
-        public_key: pub_key.to_string(),
+        private_key: private_pem,
+        public_key: public_pem,
+        fingerprint: print,
     }
 }
 
-// h1 : {0,1}* -> Zq
-// k = 384 >= log2(q) + 128
-// hash to {0,1}^k, reduce mod q
-// TODO - first version, might change in future
+// h1 : {0,1}* -> Zq/Z
 fn h1(x: &String) -> BigUint {
-    let mut hasher = sha2::Sha384::new();
-    hasher.update(x.as_bytes());
+    // hash to {0,1}^384
+    let mut hasher = Sha3_384::new();
+    Digest::update(&mut hasher, x.as_bytes());
     let h = hasher.finalize();
     let int = BigUint::from_bytes_be(&h);
 
     let q: BigUint = BigUint::parse_bytes(Q_HEX, 16).unwrap();
 
+    // reduce mod q
     int.modpow(&BigUint::one(), &q)
 }
 
 // h2 : {0,1}* -> <g>
-// TODO - this is a naive version and will be replaced by a different hash
 fn h2(x: &String) -> BigUint {
-    let p: BigUint = BigUint::parse_bytes(P_HEX, 16).unwrap();
-    let g: BigUint = BigUint::parse_bytes(G_HEX, 16).unwrap();
+    // hash to {0,1}^2176
+    let mut hasher = Shake256::default();
+    hasher.update(x.as_bytes());
+    let mut reader = hasher.finalize_xof();
+    let mut result = [0u8; 2176];
+    reader.read(&mut result);
+    let int = BigUint::from_bytes_be(&result);
 
-    g.modpow(&h1(x), &p)
+    // reduce mod (p-1) -> element of Z(p-1)/Z
+    let p: BigUint = BigUint::parse_bytes(P_HEX, 16).unwrap();
+    let int = int % (&p - BigUint::one());
+
+    // add 1 -> element of Z*p
+    let int: BigUint = int + BigUint::one();
+
+    // i^r is an element of <g>
+    let r: BigUint = BigUint::parse_bytes(R_HEX, 16).unwrap();
+    int.modpow(&r, &p)
 }
 
 #[wasm_bindgen]
@@ -117,9 +172,33 @@ pub fn linkable_ring_signature(
     let q: BigUint = BigUint::parse_bytes(Q_HEX, 16).unwrap();
     let g: BigUint = BigUint::parse_bytes(G_HEX, 16).unwrap();
 
+    let pub_keys: Vec<Pem> = match pub_keys.iter().map(|k| parse(k)).collect() {
+        Ok(pk) => pk,
+        Err(_) => return Err(JsValue::from_str("Could not convert public key pem")),
+    };
+
+    let pub_keys: Vec<String> = match pub_keys
+        .iter()
+        .map(|k| String::from_utf8(k.contents().to_vec()))
+        .collect()
+    {
+        Ok(pk) => pk,
+        Err(_) => return Err(JsValue::from_str("Could not convert pem data to string")),
+    };
+
     let y: Vec<BigUint> = match pub_keys.iter().map(|k| k.parse::<BigUint>()).collect() {
         Ok(y) => y,
         Err(_) => return Err(JsValue::from_str("Invalid public key format")),
+    };
+
+    let priv_key = match parse(priv_key) {
+        Ok(k) => k,
+        Err(_) => return Err(JsValue::from_str("Could not convert private key pem")),
+    };
+
+    let priv_key = match String::from_utf8(priv_key.contents().to_vec()) {
+        Ok(k) => k,
+        Err(_) => return Err(JsValue::from_str("Could not convert pem data to string")),
     };
 
     let pk: BigUint = match priv_key.parse::<BigUint>() {
@@ -127,7 +206,6 @@ pub fn linkable_ring_signature(
         Err(_) => return Err(JsValue::from_str("Invalid private key format")),
     };
 
-    // TODO - concatenation of keys is not an ideal method, some encoding will be used in future
     let keys_concatenated = pub_keys.join("");
 
     let h = h2(&keys_concatenated);

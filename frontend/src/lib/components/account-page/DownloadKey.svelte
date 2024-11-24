@@ -1,130 +1,190 @@
 <script lang="ts">
-	import type { PageServerData } from '../../../routes/account/$types';
-	import init, { get_keypair } from 'wasm';
-	import { onMount } from 'svelte';
+	import { L } from '$lib/stores/global';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import { formatDate } from '$lib/utils/formatDate';
 
-	export let data: PageServerData;
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
+	export let isModalHidden: boolean = true;
+	export let lastTime: string | null;
+
+	const ERROR_THRESHOLD = 365;
+	const WARNING_THRESHOLD = 335;
+
+	$: timeDiff = lastTime !== null ? milisecondsToDays(Date.now() - Date.parse(lastTime)) : 0;
+
+	function milisecondsToDays(miliseconds: number) {
+		return parseInt((miliseconds / 1000 / 3600 / 24).toFixed(0));
+	}
 
 	let innerWidth: number;
-
-	onMount(async () => {
-		await init();
-	});
-
-	function download(filename: string, text: string) {
-		var element = document.createElement('a');
-		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-		element.setAttribute('download', filename);
-
-		element.style.display = 'none';
-		document.body.appendChild(element);
-
-		element.click();
-
-		document.body.removeChild(element);
-	}
-
-	async function generateKeyPair() {
-		if (!confirm('Are you sure you want to generate new keys?')) {
-			return;
-		}
-
-		const keyPair = get_keypair();
-		const publicKey = keyPair.get_public_key();
-		const privateKey = keyPair.get_private_key();
-		fetch('/api/users/update-public-key', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				email: data.session?.user?.email,
-				public_key: publicKey
-			})
-		}).then((res) => {
-			if (res.ok) {
-				download('noname-keys.txt', publicKey + '\n' + privateKey);
-			}
-		});
-	}
 </script>
 
 <svelte:window bind:innerWidth />
 
-<div class="download-key">
-	<button title="Generate new key pair" class="save" on:click={generateKeyPair}>
-		<i class="material-symbols-rounded">encrypted</i>Generate new key pair
-	</button>
-	<div class="tooltip">
-		<i class="material-symbols-rounded">info</i>
-		<span class="tooltip-text {innerWidth <= 633 ? 'bottom' : 'right'}">
-			These keys allow you to participate in secure surveys. Once they are generated, it is your
-			responsibility to keep them safe. When submitting a secure survey, you will be asked to
-			provide these keys to your browser for digital signature.
-		</span>
+<div class="key-container">
+	<div class="download-key">
+		<button title={$t('account_new_key')} class="save" on:click={() => (isModalHidden = false)}>
+			<i class="symbol">encrypted</i><Tx text="account_new_key" />
+		</button>
+		<div class="tooltip">
+			<i class="symbol">info</i>
+			<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
+				<Tx html="account_keys_info" />
+			</span>
+		</div>
 	</div>
+	{#if lastTime}
+		<div class="last-update-container">
+			<div title={$t('account_last_key_update')} class="last-update-info">
+				<Tx text="account_last_key_update" />: {formatDate(lastTime)}
+			</div>
+			<div class="tooltip">
+				<i class="symbol">info</i>
+				<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
+					<Tx html="account_key_update_info" />
+				</span>
+			</div>
+		</div>
+		<div class="warning-div">
+			{#if timeDiff >= ERROR_THRESHOLD}
+				<p title={$t('account_expiration_critical')} class="error">
+					<i class="symbol">error</i><Tx
+						html="account_keys_expired"
+						params={{ number: timeDiff }}
+					/>
+				</p>
+			{:else if timeDiff >= WARNING_THRESHOLD}
+				<p title={$t('account_expiration_warning')} class="warning">
+					<i class="symbol">warning</i><Tx
+						html="account_keys_expire_soon"
+						params={{ number: timeDiff }}
+					/>
+				</p>
+			{/if}
+		</div>
+	{/if}
 </div>
 
 <style>
-	.tooltip {
-		--tooltip-width: 29em;
-	}
-
 	.tooltip i {
 		font-size: 1.25em;
+	}
+
+	.key-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		color: var(--text-color-1);
+		width: fit-content;
+		margin-inline: auto;
+		padding-top: 1em;
+		padding-bottom: 0.5em;
+		font-size: 1.75em;
+		border-bottom: 1px solid var(--border-color-1);
+		transition:
+			0.2s,
+			outline 0s;
+	}
+
+	.download-key .tooltip {
+		--tooltip-width: 25em;
+	}
+
+	.download-key .tooltip .tooltip-text {
+		font-size: 0.7em;
 	}
 
 	.download-key {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		color: var(--text-color);
-		font-size: 1.5em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		width: fit-content;
+		justify-content: flex-start;
+		width: 100%;
 		margin-inline: auto;
-		padding-top: 1em;
-		padding-bottom: 1.5em;
-		border-bottom: 1px solid var(--border-color);
+		padding-bottom: 0.5em;
 	}
 
 	.download-key button {
 		margin-right: 0.5em;
 	}
 
-	@media screen and (max-width: 1512px) {
-		.tooltip {
+	.last-update-container {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+		width: 100%;
+		font-size: 0.8em;
+		cursor: default;
+	}
+
+	.last-update-container .tooltip {
+		--tooltip-width: 14em;
+	}
+
+	.last-update-container .tooltip .tooltip-text {
+		font-size: 0.8em;
+	}
+
+	.last-update-info {
+		margin-right: 0.5em;
+		font-size: 0.8em;
+	}
+
+	.warning-div {
+		display: flex;
+		justify-content: flex-start;
+		width: 100%;
+	}
+
+	.warning,
+	.error {
+		font-size: 0.5em;
+	}
+
+	.warning i,
+	.error i {
+		margin-right: 0.5em;
+	}
+
+	@media screen and (max-width: 1440px) {
+		.download-key .tooltip {
+			--tooltip-width: 14.5em;
+		}
+	}
+
+	@media screen and (max-width: 1024px) {
+		.download-key .tooltip {
 			--tooltip-width: 17em;
 		}
 	}
 
-	@media screen and (max-width: 1048px) {
-		.tooltip {
-			--tooltip-width: 9.5em;
-		}
-	}
-
-	@media screen and (max-width: 767px) {
-		.download-key {
+	@media screen and (max-width: 768px) {
+		.key-container {
 			font-size: 1.25em;
 		}
-	}
 
-	@media screen and (max-width: 633px) {
-		.tooltip {
+		.download-key .tooltip {
 			--tooltip-width: 19em;
 		}
 
-		.tooltip .tooltip-text.bottom {
-			left: unset;
-			right: -25%;
-			margin-left: 0em;
-			margin-right: -0.75em;
+		.download-key .tooltip .tooltip-text.bottom {
+			left: -425%;
 		}
 
-		.tooltip .tooltip-text.bottom::after {
-			left: 92%;
-			margin-left: -0.75em;
+		.download-key .tooltip .tooltip-text.bottom::after {
+			left: 92.5%;
+		}
+
+		.last-update-container .tooltip .tooltip-text.bottom {
+			left: -200%;
+		}
+
+		.last-update-container .tooltip .tooltip-text.bottom::after {
+			left: 76%;
 		}
 	}
 </style>

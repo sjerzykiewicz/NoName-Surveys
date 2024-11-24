@@ -1,43 +1,46 @@
 <script lang="ts">
 	import { title } from '$lib/stores/create-page';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
+	import { M } from '$lib/stores/global';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { onMount } from 'svelte';
+	import Input from '$lib/components/global/Input.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
+	let titleInput: HTMLDivElement;
+	let innerWidth: number;
+
+	onMount(() => {
+		if (innerWidth > $M && $title.title.length === 0) titleInput.focus();
+	});
 </script>
 
-<!-- svelte-ignore a11y-autofocus -->
-<div
-	title="Enter survey title"
-	class="title-input"
-	id="title"
-	contenteditable
-	bind:textContent={$title}
-	autofocus
-	role="textbox"
-	tabindex="0"
-	on:keydown={handleNewLine}
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
-	{$title}
+<svelte:window bind:innerWidth />
+
+<div class="title-container" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<Input
+		bind:text={$title.title}
+		label={$t('survey_title')}
+		title={$t('survey_title_title')}
+		bind:element={titleInput}
+		--margin-right="0em"
+		--char-count-left="7em"
+	/>
 </div>
 
 <style>
-	.title-input {
-		font-size: 1.5em;
-		font-weight: bold;
-		margin: 0em;
-		width: calc(100% - 0.5em);
+	.title-container {
+		font-size: 1.25em;
+		padding: 0.8em 0.2em;
+		margin: -0.8em -0.2em;
 	}
 
-	.title-input[contenteditable]:empty::before {
-		content: 'Enter survey title...';
-		color: var(--text-dark-color);
-	}
-
-	@media screen and (max-width: 767px) {
-		.title-input {
-			font-size: 1.25em;
+	@media screen and (max-width: 768px) {
+		.title-container {
+			font-size: 1em;
 		}
 	}
 </style>

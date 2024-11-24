@@ -2,13 +2,17 @@
 	import { title } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 </script>
 
 <div
-	title="Survey title"
+	title={$t('survey_title')}
 	class="title"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
+	transition:slide={{ duration: 200, easing: cubicInOut }}
 >
-	{$title}
+	{$title.title}
 </div>

@@ -14,7 +14,7 @@ class MultiQuestion(Question):
     answer: Optional[list[str]] = None
 
     @field_validator("choices")
-    def validate_choices(cls, v, info: ValidationInfo) -> list[str]:
+    def validate_choices(cls, v) -> list[str]:
         if len(set(v)) != len(v):
             raise ValueError("all choices must be unique")
         return v
@@ -38,5 +38,5 @@ class MultiQuestion(Question):
         ):
             raise ValueError("Invalid answer!")
 
-    class Config:
-        extra = "forbid"
+    def get_answer(self):
+        return "".join(self.answer) if self.answer else ""

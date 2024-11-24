@@ -1,33 +1,32 @@
-import re
+from pydantic import field_validator
 
-from pydantic import BaseModel, ValidationInfo, field_validator
+from src.api.models.base import Base
 
 
-class User(BaseModel):
+class User(Base):
     user_email: str
 
     @field_validator("user_email")
-    def validate_user_email(cls, v, info: ValidationInfo) -> str:
-        if v is None:
-            raise ValueError("email must be provided")
-        if not re.match(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", v):
-            raise ValueError("invalid email format")
-        return v
+    def validate_user_email(cls, v) -> str:
+        return Base.validate_email(v)
 
-    class Config:
-        extra = "forbid"
+
+class UserFilterOthers(Base):
+    emails: list[str]
+
+    @field_validator("emails")
+    def validate_users(cls, v) -> list[str]:
+        return Base.validate_emails(v)
 
 
 class UserUpdatePublicKey(User):
     public_key: str
+    fingerprint: str
 
     @field_validator("public_key")
-    def validate_user_public_key(cls, v, info: ValidationInfo) -> str:
-        if v is None or v == "":
-            raise ValueError("public key must be provided")
-        if not re.match(r"^[1-9][0-9]*$", v):
-            raise ValueError("invalid public key format")
-        return v
+    def validate_user_public_key(cls, v) -> str:
+        return Base.validate_pem_key(v)
 
-    class Config:
-        extra = "forbid"
+    @field_validator("fingerprint")
+    def validate_fingerprint(cls, v) -> str:
+        return Base.validate_fingerprint(v)

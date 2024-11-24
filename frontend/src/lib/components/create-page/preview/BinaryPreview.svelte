@@ -2,42 +2,51 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 
 	let checked: number;
+	function updateAnswers(choiceIndex: number) {
+		if (checked === choiceIndex) {
+			checked = NaN;
+		} else {
+			checked = choiceIndex;
+		}
+	}
 </script>
 
-<div
-	class="choice-area display binary"
-	in:slide={{ duration: 200, easing: cubicInOut }}
-	out:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
->
-	<label title="Select your answer" class="choice binary" class:selected={checked === 0}
+<div class="choice-area display binary" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<label title={$t('select_answer')} class="choice binary" class:selected={checked === 0}
 		><div class="icon">
 			<input
-				type="radio"
+				type="checkbox"
 				name={questionIndex.toString()}
+				checked={checked === 0}
 				on:change={() => {
-					checked = 0;
+					updateAnswers(0);
 				}}
 			/>
-			<i class="material-symbols-rounded">thumb_up</i>
+			<i class="symbol">thumb_up</i>
 		</div>
 		<div class="choice-input display binary">
 			{$questions[questionIndex].choices[0]}
 		</div>
 	</label>
-	<label title="Select your answer" class="choice binary" class:selected={checked === 1}
+	<label title={$t('select_answer')} class="choice binary" class:selected={checked === 1}
 		><div class="icon">
 			<input
-				type="radio"
+				type="checkbox"
 				name={questionIndex.toString()}
+				checked={checked === 1}
 				on:change={() => {
-					checked = 1;
+					updateAnswers(1);
 				}}
 			/>
-			<i class="material-symbols-rounded">thumb_down</i>
+			<i class="symbol">thumb_down</i>
 		</div>
 		<div class="choice-input display binary">
 			{$questions[questionIndex].choices[1]}
@@ -50,14 +59,25 @@
 		cursor: pointer;
 	}
 
+	.choice-input {
+		margin-top: 0.5em;
+	}
+
 	i {
-		font-size: 1em;
+		font-size: 1.25em;
 	}
 
 	.selected i {
-		color: var(--accent-color);
-		font-variation-settings:
-			'FILL' 1,
-			'GRAD' 200;
+		color: var(--accent-color-1);
+		font-variation-settings: 'FILL' 1;
+		transition:
+			0.2s,
+			outline 0s;
+	}
+
+	@media screen and (max-width: 768px) {
+		.choice-input {
+			margin-top: 0em;
+		}
 	}
 </style>

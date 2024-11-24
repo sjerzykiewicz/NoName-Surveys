@@ -7,4 +7,9 @@ export default class Question {
 		this.question = question;
 		this.question_type = question_type;
 	}
+
+	// Default implementation that is to be overridden by subclasses
+	getAnswer(): string {
+		return '';
+	}
 }

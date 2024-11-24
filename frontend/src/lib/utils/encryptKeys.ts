@@ -11,7 +11,7 @@ export default async function encryptKeys(contents: string, password: string) {
 
 	const iv = crypto.getRandomValues(new Uint8Array(12));
 	const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoded);
-	const data = new Uint8Array(encrypted);
+	const ciphertext = new Uint8Array(encrypted);
 
-	return { salt, iv, data };
+	return { salt, iv, ciphertext };
 }

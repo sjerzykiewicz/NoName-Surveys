@@ -428,7 +428,8 @@ export const getKeyCreationDate = (user_email: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };

@@ -276,14 +276,11 @@
 	}
 
 	async function getKeys(text: string): Promise<KeyPair> {
-		const chunks = text.split('\n');
-		if (chunks.length !== 3) {
-			throw 'Invalid key data';
-		}
+		const data = JSON.parse(text);
 		const encoder = new TextEncoder();
-		const salt = encoder.encode(chunks[0]);
-		const iv = encoder.encode(chunks[1]);
-		const ciphertext = encoder.encode(chunks[2]);
+		const salt = encoder.encode(data.salt);
+		const iv = encoder.encode(data.iv);
+		const ciphertext = encoder.encode(data.data);
 
 		const decrypted = await decryptKeys(ciphertext, password, salt, iv);
 

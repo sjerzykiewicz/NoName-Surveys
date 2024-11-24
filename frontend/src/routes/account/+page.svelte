@@ -56,15 +56,13 @@
 			const pemData = publicKey + '\n\n' + privateKey;
 			const { salt, iv, data } = await encryptKeys(pemData, password);
 			const decoder = new TextDecoder();
-			const saltString = decoder.decode(salt);
-			const ivString = decoder.decode(iv);
-			const dataString = decoder.decode(data);
+			const decoded = {
+				salt: decoder.decode(salt),
+				iv: decoder.decode(iv),
+				data: decoder.decode(data)
+			};
 
-			downloadFile(
-				'noname-keys.key',
-				'application/octet-stream',
-				saltString + '\n' + ivString + '\n' + dataString
-			);
+			downloadFile('noname-keys.key', 'application/octet-stream', JSON.stringify(decoded));
 			await invalidateAll();
 		} catch (e) {
 			$errorModalContent = e as string;

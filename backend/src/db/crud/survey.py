@@ -8,15 +8,19 @@ from src.db.models.user import User
 
 
 def get_count_of_not_deleted_surveys_for_user(user_id: int, session: Session) -> int:
-    statement = select(func.count(Survey.id)).where(
-        (Survey.creator_id == user_id) & (Survey.is_deleted == False)  # noqa: E712
+    statement = (
+        select(func.count(Survey.id))
+        .where(Survey.creator_id == user_id)
+        .where(Survey.is_deleted == False)  # noqa: E712
     )
     return session.exec(statement).one()
 
 
 def get_survey_by_code(survey_code: str, session: Session) -> Survey:
-    statement = select(Survey).where(
-        (Survey.survey_code == survey_code) & (Survey.is_deleted == False)  # noqa: E712
+    statement = (
+        select(Survey)
+        .where(Survey.survey_code == survey_code)
+        .where(Survey.is_deleted == False)  # noqa: E712
     )
     return session.exec(statement).first()
 
@@ -24,10 +28,11 @@ def get_survey_by_code(survey_code: str, session: Session) -> Survey:
 def delete_surveys(
     user_id: int, survey_codes: list[str], session: Session
 ) -> list[Survey]:
-    statement = select(Survey).where(
-        (Survey.creator_id == user_id)
-        & (Survey.survey_code.in_(survey_codes))
-        & (Survey.is_deleted == False)  # noqa: E712
+    statement = (
+        select(Survey)
+        .where(Survey.creator_id == user_id)
+        .where(Survey.survey_code.in_(survey_codes))
+        .where(Survey.is_deleted == False)  # noqa: E712
     )
     surveys = session.exec(statement).all()
     for survey in surveys:
@@ -41,24 +46,27 @@ def get_all_surveys_user_has_ownership_over(
 ) -> list[Survey]:
     statement = (
         select(Survey)
-        .where(
-            (Survey.creator_id == user_id) & (Survey.is_deleted == False)  # noqa: E712
-        )
+        .where(Survey.creator_id == user_id)
+        .where(Survey.is_deleted == False)  # noqa: E712
         .order_by(Survey.id.desc())
     )
-    return [survey for survey in session.exec(statement).all()]
+    return session.exec(statement).all()
 
 
 def get_count_of_active_surveys_of_user(user_id: int, session: Session) -> int:
-    statement = select(Survey).where(
-        (Survey.creator_id == user_id) & (Survey.is_deleted == False)  # noqa: E712
+    statement = (
+        select(func.count(Survey.id))
+        .where(Survey.creator_id == user_id)
+        .where(Survey.is_deleted == False)  # noqa: E712
     )
-    return len(session.exec(statement).all())
+    return session.exec(statement).one()
 
 
 def survey_code_taken(survey_code: str, session: Session) -> bool:
-    statement = select(Survey).where(
-        (Survey.survey_code == survey_code) & (Survey.is_deleted == False)  # noqa: E712
+    statement = (
+        select(Survey)
+        .where(Survey.survey_code == survey_code)
+        .where(Survey.is_deleted == False)  # noqa: E712
     )
     return session.exec(statement).first() is not None
 
@@ -85,10 +93,9 @@ def create_survey(
 
 def give_survey_access(survey_id: int, user_id: int, session: Session) -> None:
     survey_access = session.exec(
-        select(AccessToViewResults).where(
-            (AccessToViewResults.survey_id == survey_id)
-            & (AccessToViewResults.user_id == user_id)
-        )
+        select(AccessToViewResults)
+        .where(AccessToViewResults.survey_id == survey_id)
+        .where(AccessToViewResults.user_id == user_id)
     ).first()
 
     if survey_access:
@@ -107,11 +114,12 @@ def give_survey_access(survey_id: int, user_id: int, session: Session) -> None:
 def take_away_survey_access(
     owner: int, survey_id: int, users_ids: list[int], session: Session
 ) -> list[AccessToViewResults]:
-    statement = select(AccessToViewResults).where(
-        (AccessToViewResults.user_id != owner)
-        & (AccessToViewResults.survey_id == survey_id)
-        & (AccessToViewResults.user_id.in_(users_ids))
-        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    statement = (
+        select(AccessToViewResults)
+        .where(AccessToViewResults.user_id != owner)
+        .where(AccessToViewResults.survey_id == survey_id)
+        .where(AccessToViewResults.user_id.in_(users_ids))
+        .where(AccessToViewResults.is_deleted == False)  # noqa: E712
     )
     accesses = session.exec(statement).all()
     for access in accesses:
@@ -126,13 +134,11 @@ def reject_access_to_surveys(
     statement = (
         select(AccessToViewResults)
         .join(Survey)
-        .where(
-            (AccessToViewResults.user_id == user_id)
-            & (AccessToViewResults.survey_id == Survey.id)
-            & (Survey.survey_code.in_(survey_codes))
-            & (Survey.creator_id != user_id)
-            & (AccessToViewResults.is_deleted == False)  # noqa: E712
-        )
+        .where(AccessToViewResults.user_id == user_id)
+        .where(AccessToViewResults.survey_id == Survey.id)
+        .where(Survey.survey_code.in_(survey_codes))
+        .where(Survey.creator_id != user_id)
+        .where(AccessToViewResults.is_deleted == False)  # noqa: E712
     )
     accesses = session.exec(statement).all()
     for access in accesses:
@@ -144,18 +150,17 @@ def reject_access_to_surveys(
 def get_all_surveys_user_can_view(
     user_id: int, offset: int, limit: int, session: Session
 ) -> list[tuple[Survey, bool]]:
-    statement = select(AccessToViewResults).where(
-        (AccessToViewResults.user_id == user_id)
-        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    statement = (
+        select(AccessToViewResults.survey_id)
+        .where(AccessToViewResults.user_id == user_id)
+        .where(AccessToViewResults.is_deleted == False)  # noqa: E712
     )
-    survey_accesses_ids = [access.survey_id for access in session.exec(statement).all()]
+    survey_accesses_ids = session.exec(statement).all()
 
     surveys = session.exec(
         select(Survey)
-        .where(
-            (Survey.id.in_(survey_accesses_ids))
-            & (Survey.is_deleted == False)  # noqa: E712
-        )
+        .where(Survey.id.in_(survey_accesses_ids))
+        .where(Survey.is_deleted == False)  # noqa: E712
         .order_by(Survey.id.desc())
         .offset(offset)
         .limit(limit)
@@ -165,9 +170,10 @@ def get_all_surveys_user_can_view(
 
 
 def get_all_users_with_access_to_survey_count(survey_id: int, session: Session) -> int:
-    statement = select(func.count(AccessToViewResults.id)).where(
-        (AccessToViewResults.survey_id == survey_id)
-        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    statement = (
+        select(func.count(AccessToViewResults.id))
+        .where(AccessToViewResults.survey_id == survey_id)
+        .where(AccessToViewResults.is_deleted == False)  # noqa: E712
     )
     return session.exec(statement).one()
 
@@ -178,14 +184,12 @@ def get_all_users_with_no_access_to_survey(
     statement = select(User).where(
         User.id.notin_(
             select(AccessToViewResults.user_id)
-            .where(
-                (AccessToViewResults.survey_id == survey_id)
-                & (AccessToViewResults.is_deleted == False)  # noqa: E712
-            )
+            .where(AccessToViewResults.survey_id == survey_id)
+            .where(AccessToViewResults.is_deleted == False)  # noqa: E712
             .distinct()
         )
     )
-    return [user for user in session.exec(statement).all()]
+    return session.exec(statement).all()
 
 
 def get_all_users_with_access_to_survey(
@@ -194,21 +198,20 @@ def get_all_users_with_access_to_survey(
     statement = (
         select(AccessToViewResults)
         .join(User, AccessToViewResults.user_id == User.id)
-        .where(
-            (AccessToViewResults.survey_id == survey_id)
-            & (AccessToViewResults.is_deleted == False)  # noqa: E712
-        )
+        .where(AccessToViewResults.survey_id == survey_id)
+        .where(AccessToViewResults.is_deleted == False)  # noqa: E712
         .order_by(User.email.asc())
         .offset(offset)
         .limit(limit)
     )
-    return [access for access in session.exec(statement).all()]
+    return session.exec(statement).all()
 
 
 def user_has_access_to_survey(user_id: int, survey_id: int, session: Session) -> bool:
-    statement = select(AccessToViewResults).where(
-        (AccessToViewResults.user_id == user_id)
-        & (AccessToViewResults.survey_id == survey_id)
-        & (AccessToViewResults.is_deleted == False)  # noqa: E712
+    statement = (
+        select(AccessToViewResults)
+        .where(AccessToViewResults.user_id == user_id)
+        .where(AccessToViewResults.survey_id == survey_id)
+        .where(AccessToViewResults.is_deleted == False)  # noqa: E712
     )
     return session.exec(statement).first() is not None

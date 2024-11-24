@@ -1,74 +1,68 @@
 from datetime import datetime
 
 import pytz
+from sqlalchemy.sql import func
 from sqlmodel import select
 
 from src.db.base import Session
-from src.db.models.user import User, UserBase, UserWithKey
+from src.db.models.user import User, UserBase
 
 tz = pytz.timezone("Europe/Warsaw")
 
 
 def get_all_users(session: Session) -> list[User]:
-    users = session.exec(select(User)).all()
-    return [user for user in users]
+    return session.exec(select(User)).all()
 
 
 def get_all_users_with_public_keys(session: Session) -> list[User]:
-    users = session.exec(select(User).filter(User.public_key != "")).all()
-    return [user for user in users]
+    return session.exec(select(User).where(User.public_key != "")).all()
 
 
 def get_users_by_id(user_id: list[int], session: Session) -> User:
-    users = session.exec(select(User).filter(User.id.in_(user_id))).all()
-    return [user for user in users]
+    return session.exec(select(User).where(User.id.in_(user_id))).all()
 
 
 def get_user_by_id(user_id: int, session: Session) -> User:
-    user = session.exec(select(User).filter(User.id == user_id)).first()
-    return user
+    return session.exec(select(User).where(User.id == user_id)).first()
 
 
 def get_user_by_email(email: str, session: Session) -> User:
-    user = session.exec(select(User).filter(User.email == email)).first()
-    return user
+    return session.exec(select(User).where(User.email == email)).first()
 
 
 def get_users_by_emails(emails: list[str], session: Session) -> list[User]:
-    users = session.exec(select(User).filter(User.email.in_(emails))).all()
-    return [user for user in users]
+    return session.exec(select(User).where(User.email.in_(emails))).all()
 
 
 def get_users_with_public_keys_by_emails(
     emails: list[str], session: Session
 ) -> list[User]:
-    users = session.exec(
-        select(User).filter(User.email.in_(emails), User.public_key != "")
+    return session.exec(
+        select(User).where(User.email.in_(emails)).where(User.public_key != "")
     ).all()
-    return [user for user in users]
 
 
 def all_users_exist(users_emails: list[str], session: Session) -> bool:
-    users = session.exec(select(User).filter(User.email.in_(users_emails))).all()
-    return len(users) == len(users_emails)
+    count = session.exec(select(func.count()).where(User.email.in_(users_emails))).one()
+    return count == len(users_emails)
 
 
 def all_users_exist_and_have_public_keys(
     users_emails: list[str], session: Session
 ) -> bool:
-    users = session.exec(
-        select(User).filter(User.email.in_(users_emails), User.public_key != "")
-    ).all()
-
-    return len(users) == len(users_emails)
+    count = session.exec(
+        select(func.count())
+        .where(User.email.in_(users_emails))
+        .where(User.public_key != "")
+    ).one()
+    return count == len(users_emails)
 
 
 def all_users_have_public_keys(user_ids: list[int], session: Session) -> bool:
-    users = session.exec(
-        select(User).filter(User.id.in_(user_ids), User.public_key != "")
-    ).all()
-
-    return len(users) == len(user_ids)
+    count = session.exec(
+        select(func.count()).where(User.id.in_(user_ids)).where(User.public_key != "")
+    ).one()
+    return count == len(user_ids)
 
 
 def create_user(email: str, session: Session) -> User:
@@ -80,15 +74,12 @@ def create_user(email: str, session: Session) -> User:
     return user
 
 
-def update_user_public_key(email: str, public_key: str, session: Session) -> User:
-    user_update_key = UserWithKey(
-        email=email, public_key=public_key, key_creation_date=datetime.now(tz)
-    )
-    user = session.exec(
-        select(User).filter(User.email == user_update_key.email)
-    ).first()
-    user.public_key = user_update_key.public_key
-    user.key_creation_date = user_update_key.key_creation_date
+def update_user_public_key(user_id: int, public_key: str, session: Session) -> User:
+    user = session.exec(select(User).where(User.id == user_id)).one()
+
+    user.public_key = public_key
+    user.key_creation_date = datetime.now(tz)
+
     session.add(user)
     session.commit()
     session.refresh(user)

@@ -89,7 +89,8 @@ async def update_user_public_key(
     update_user_public_key: UserUpdatePublicKey,
     session: Session = Depends(get_session),
 ):
-    if user_crud.get_user_by_email(update_user_public_key.user_email, session) is None:
+    user = user_crud.get_user_by_email(update_user_public_key.user_email, session)
+    if user is None:
         raise HTTPException(status_code=400, detail="User not registered")
 
     if not verify(
@@ -100,8 +101,9 @@ async def update_user_public_key(
         )
 
     user_crud.update_user_public_key(
-        update_user_public_key.user_email, update_user_public_key.public_key, session
+        user.id, update_user_public_key.public_key, session
     )
+
     return {"message": "User's public key updated successfully"}
 
 

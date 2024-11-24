@@ -16,7 +16,8 @@ export const getSurveyAnswers = (user_email: string, survey_code: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_code }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -26,7 +27,8 @@ export const saveSurveyAnswer = (answer: SurveyAnswer) => {
 		method: 'POST',
 		body: JSON.stringify(answer),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -38,7 +40,8 @@ export const getSurveyDrafts = (user_email: string, page: number) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -48,7 +51,8 @@ export const getSurveyDraft = (user_email: string, id: number) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email, id }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -58,7 +62,8 @@ export const deleteSurveyDrafts = (user_email: string, ids: number[]) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email, ids }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -68,7 +73,8 @@ export const createSurveyDraft = (info: DraftCreateInfo) => {
 		method: 'POST',
 		body: JSON.stringify(info),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -78,7 +84,8 @@ export const countSurveyDrafts = (user_email: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -90,7 +97,8 @@ export const countSurveys = (user_email: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -100,7 +108,8 @@ export const getSurveys = (user_email: string, page: number) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -110,7 +119,8 @@ export const getSurvey = (survey_code: string) => {
 		method: 'POST',
 		body: JSON.stringify({ survey_code }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -120,7 +130,8 @@ export const countSurveyRespondents = (survey_code: string) => {
 		method: 'POST',
 		body: JSON.stringify({ survey_code }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -130,7 +141,8 @@ export const getSurveyRespondents = (survey_code: string, page: number) => {
 		method: 'POST',
 		body: JSON.stringify({ survey_code }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -140,7 +152,8 @@ export const deleteSurveys = (user_email: string, survey_codes: string[]) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_codes }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -150,7 +163,8 @@ export const createSurvey = (info: SurveyCreateInfo) => {
 		method: 'POST',
 		body: JSON.stringify(info),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -164,7 +178,8 @@ export const giveAccessToSurvey = (
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_code, user_emails }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -178,7 +193,8 @@ export const takeAwayAccessToSurvey = (
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_code, user_emails }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -188,7 +204,8 @@ export const rejectAccessToSurveys = (user_email: string, survey_codes: string[]
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_codes }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -198,7 +215,8 @@ export const countUsersWithAccess = (user_email: string, survey_code: string) =>
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_code }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -208,7 +226,8 @@ export const getAllUsersWithoutAccess = (user_email: string, survey_code: string
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_code }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -218,7 +237,8 @@ export const checkAccessToSurvey = (user_email: string, survey_code: string, pag
 		method: 'POST',
 		body: JSON.stringify({ user_email, survey_code }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -230,7 +250,8 @@ export const countUserGroups = (user_email: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -240,7 +261,8 @@ export const getUserGroups = (user_email: string, page: number) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -250,7 +272,8 @@ export const getUserGroupsWithKeys = (user_email: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -260,7 +283,8 @@ export const countUserGroupMembers = (user_email: string, name: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email, name }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -270,7 +294,8 @@ export const getAllUsersWhoAreNotMembers = (user_email: string, name: string) =>
 		method: 'POST',
 		body: JSON.stringify({ user_email, name }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -280,7 +305,8 @@ export const getWholeUserGroup = (user_email: string, name: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email, name }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -290,7 +316,8 @@ export const getUserGroup = (user_email: string, name: string, page: number) => 
 		method: 'POST',
 		body: JSON.stringify({ user_email, name }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -304,7 +331,8 @@ export const createUserGroup = (
 		method: 'POST',
 		body: JSON.stringify({ user_email, user_group_name, user_group_members }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -314,7 +342,8 @@ export const renameUserGroup = (user_email: string, name: string, new_name: stri
 		method: 'POST',
 		body: JSON.stringify({ user_email, name, new_name }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -324,7 +353,8 @@ export const deleteUserGroups = (user_email: string, names: string[]) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email, names }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -334,7 +364,8 @@ export const addUsersToGroup = (user_email: string, name: string, users: string[
 		method: 'POST',
 		body: JSON.stringify({ user_email, name, users }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -344,7 +375,8 @@ export const removeUsersFromGroup = (user_email: string, name: string, users: st
 		method: 'POST',
 		body: JSON.stringify({ user_email, name, users }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -352,11 +384,21 @@ export const removeUsersFromGroup = (user_email: string, name: string, users: st
 // users
 
 export const getUsers = () => {
-	return fetch(`${host}/users/all`, { method: 'GET' });
+	return fetch(`${host}/users/all`, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
+		}
+	});
 };
 
 export const getUsersWithKeys = () => {
-	return fetch(`${host}/users/all-with-public-keys`, { method: 'GET' });
+	return fetch(`${host}/users/all-with-public-keys`, {
+		method: 'GET',
+		headers: {
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
+		}
+	});
 };
 
 export const validateUser = (user_email: string) => {
@@ -364,7 +406,8 @@ export const validateUser = (user_email: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -374,7 +417,8 @@ export const hasPublicKey = (user_email: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -394,7 +438,8 @@ export const createUser = (user_email: string) => {
 		method: 'POST',
 		body: JSON.stringify({ user_email }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -404,7 +449,8 @@ export const updatePublicKey = (user_email: string, public_key: string, fingerpr
 		method: 'POST',
 		body: JSON.stringify({ user_email, public_key, fingerprint }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -414,7 +460,8 @@ export const filterUnregisteredUsers = (emails: string[]) => {
 		method: 'POST',
 		body: JSON.stringify({ emails }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };
@@ -424,7 +471,8 @@ export const filterUsersWithNoPublicKey = (emails: string[]) => {
 		method: 'POST',
 		body: JSON.stringify({ emails }),
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
 		}
 	});
 };

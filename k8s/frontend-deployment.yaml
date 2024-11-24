@@ -49,6 +49,11 @@ spec:
                 secretKeyRef:
                   name: frontend
                   key: AUTH_USOS_BASE_URL
+            - name: BEARER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: frontend
+                  key: BEARER_TOKEN
           resources: {}
       restartPolicy: Always
 status: {}

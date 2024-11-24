@@ -5,7 +5,7 @@ from sqlalchemy.sql import func
 from sqlmodel import select
 
 from src.db.base import Session
-from src.db.models.user import User, UserBase, UserWithKey
+from src.db.models.user import User, UserBase
 
 tz = pytz.timezone("Europe/Warsaw")
 
@@ -74,15 +74,12 @@ def create_user(email: str, session: Session) -> User:
     return user
 
 
-def update_user_public_key(email: str, public_key: str, session: Session) -> User:
-    user_update_key = UserWithKey(
-        email=email, public_key=public_key, key_creation_date=datetime.now(tz)
-    )
-    user = session.exec(
-        select(User).filter(User.email == user_update_key.email)
-    ).first()
-    user.public_key = user_update_key.public_key
-    user.key_creation_date = user_update_key.key_creation_date
+def update_user_public_key(user_id: int, public_key: str, session: Session) -> User:
+    user = session.exec(select(User).where(User.id == user_id)).one()
+
+    user.public_key = public_key
+    user.key_creation_date = datetime.now(tz)
+
     session.add(user)
     session.commit()
     session.refresh(user)

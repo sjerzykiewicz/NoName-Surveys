@@ -5,6 +5,7 @@ import Crypto.Hash.SHA3_256 as SHA256
 TEST_VALID_USER_EMAIL_1 = "user1@st.amu.edu.pl"
 TEST_VALID_USER_EMAIL_2 = "user2@st.amu.edu.pl"
 TEST_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\n3\n-----END PUBLIC KEY-----"
+TEST_PUBLIC_KEY_2 = "-----BEGIN PUBLIC KEY-----\n7\n-----END PUBLIC KEY-----"
 
 
 def create_user(client: TestClient, email: str):
@@ -138,8 +139,18 @@ def test_check_if_user_has_public_key_when_user_has_no_public_key(client: TestCl
 
 
 def test_update_public_key_happy_path(client: TestClient):
-    # given & when
+    # given
     response = create_user_with_public_key(client, TEST_VALID_USER_EMAIL_1)
+
+    # when
+    response = client.post(
+        "/users/update-public-key",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "public_key": TEST_PUBLIC_KEY_2,
+            "fingerprint": SHA256.new(TEST_PUBLIC_KEY_2.encode()).hexdigest(),
+        },
+    )
 
     # then
     assert response.status_code == 200

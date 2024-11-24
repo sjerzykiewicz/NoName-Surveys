@@ -51,6 +51,7 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import decryptKeys from '$lib/utils/decryptKeys';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -66,6 +67,7 @@
 
 	let innerWidth: number;
 	let isKeysModalHidden: boolean = true;
+	let password = '';
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -240,7 +242,7 @@
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
 			return false;
-		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'pem') {
+		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'key') {
 			fileError = FileError.FileInvalid;
 			return false;
 		}
@@ -262,7 +264,7 @@
 			}
 		);
 
-		let keyPair: KeyPair = getKeys(text);
+		let keyPair: KeyPair = await getKeys(text);
 
 		if (!keys.includes(keyPair.publicKey)) {
 			$errorModalContent = $t('public_key_not_on_list');
@@ -273,8 +275,22 @@
 		processForm(keyPair);
 	}
 
-	function getKeys(text: string): KeyPair {
-		const words = text.split('\n\n');
+	async function getKeys(text: string): Promise<KeyPair> {
+		const chunks = text.split('\n');
+		if (chunks.length !== 3) {
+			throw 'Invalid key data';
+		}
+		const encoder = new TextEncoder();
+		const salt = encoder.encode(chunks[0]);
+		const iv = encoder.encode(chunks[1]);
+		const ciphertext = encoder.encode(chunks[2]);
+
+		const decrypted = await decryptKeys(ciphertext, password, salt, iv);
+
+		const decoder = new TextDecoder();
+		const pemKeys = decoder.decode(decrypted);
+
+		const words = pemKeys.split('\n\n');
 
 		let publicKey = words[0] + '\n';
 		let privateKey = words[1];
@@ -372,6 +388,7 @@
 				<span class="file-name">{fileName}</span>
 			</div>
 			<input type="file" bind:this={fileElement} on:change={handleFileChange} />
+			<input type="password" bind:value={password} />
 		</label>
 		<KeysError error={fileError} element={fileElement} />
 	</div>

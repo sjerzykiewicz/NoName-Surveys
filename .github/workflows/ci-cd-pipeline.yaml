@@ -133,11 +133,18 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       
+      - name: Copy deployment YAML files to the cluster
+        run: |
+          scp -P 443 -o StrictHostKeyChecking=no k8s/frontend-deployment.yaml ${{ secrets.SSH_USER }}@${{ secrets.SSH_ADDRESS }}:/tmp/frontend-deployment.yaml
+          scp -P 443 -o StrictHostKeyChecking=no k8s/backend-deployment.yaml ${{ secrets.SSH_USER }}@${{ secrets.SSH_ADDRESS }}:/tmp/backend-deployment.yaml
+
       - name: Deploy to Minikube via kubectl
         run: |
           ssh -p 443 -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_ADDRESS }} <<EOF
+            kubectl apply -f /tmp/frontend-deployment.yaml --namespace=default
+            kubectl apply -f /tmp/backend-deployment.yaml --namespace=default
             kubectl set image deployment/frontend frontend=${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-frontend:${{ env.FRONTEND_TAG }} --namespace=default
             kubectl set image deployment/backend backend=${{ secrets.DOCKERHUB_USERNAME }}/noname-surveys-backend:${{ env.BACKEND_TAG }} --namespace=default
-            kubectl rollout restart deployment/frontend
-            kubectl rollout restart deployment/backend
+            kubectl rollout restart deployment/frontend --namespace=default
+            kubectl rollout restart deployment/backend --namespace=default
           EOF

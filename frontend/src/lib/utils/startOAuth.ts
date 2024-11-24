@@ -1,4 +1,4 @@
-export async function startOAuth() {
+export async function startOAuth(from: string) {
 	try {
 		const response = await fetch('/api/oauth/request-token', {
 			method: 'POST',
@@ -11,6 +11,7 @@ export async function startOAuth() {
 
 		const expires = new Date(Date.now() + 3 * 60 * 1000).toUTCString();
 		document.cookie = `oauth_token_secret=${data.oauth_token_secret}; path=/; secure; expires=${expires}`;
+		document.cookie = `from=${from}; path=/; secure; expires=${expires}`;
 
 		if (data.oauth_token) {
 			window.location.href = `/auth/redirect?oauth_token=${data.oauth_token}`;

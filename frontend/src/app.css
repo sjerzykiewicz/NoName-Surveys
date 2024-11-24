@@ -1523,6 +1523,11 @@ button.popup {
 	cursor: default;
 }
 
+.passphrase_input {
+	border-radius: 5px;
+	margin-top: 1em;
+}
+
 @media screen and (max-width: 768px) {
 	html {
 		background: var(--secondary-color-1);

@@ -6,6 +6,7 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { downloadFile } from '$lib/utils/downloadFile';
 	import { invalidateAll } from '$app/navigation';
+	import encryptKeys from '$lib/utils/encryptKeys';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -15,6 +16,7 @@
 	export let lastTime: string;
 
 	let isModalHidden: boolean = true;
+	let passphrase = '';
 
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
@@ -26,11 +28,25 @@
 	}
 
 	async function generateKeyPair() {
+		if (passphrase === '') {
+			$errorModalContent = $t('error_empty_passphrase');
+			$isErrorModalHidden = false;
+			return;
+		}
 		try {
 			const keyPair = get_keypair();
 			const publicKey = keyPair.get_public_key();
 			const privateKey = keyPair.get_private_key();
 			const fingerprint = keyPair.get_fingerprint();
+
+			const pemData = publicKey + '\n\n' + privateKey;
+			const { salt, iv, ciphertext } = await encryptKeys(pemData, passphrase);
+			const decoded = {
+				salt: Array.from(salt, (byte) => String.fromCharCode(byte)).join(''),
+				iv: Array.from(iv, (byte) => String.fromCharCode(byte)).join(''),
+				ciphertext: Array.from(ciphertext, (byte) => String.fromCharCode(byte)).join('')
+			};
+
 			const response = await fetch('/api/users/update-public-key', {
 				method: 'POST',
 				headers: {
@@ -49,7 +65,7 @@
 				return;
 			}
 
-			downloadFile('noname-keys.pem', 'application/x-pem-file', publicKey + '\n\n' + privateKey);
+			downloadFile('noname.key', 'application/octet-stream', JSON.stringify(decoded));
 			await invalidateAll();
 		} catch (e) {
 			$errorModalContent = e as string;
@@ -83,7 +99,12 @@
 	bind:isHidden={isModalHidden}
 	--width={innerWidth <= $M ? '20em' : '28em'}
 >
-	<span slot="content" class="content"><Tx text="account_new_key_alert" /></span>
+	<span slot="content" class="content">
+		<Tx text="account_new_key_alert" />
+		<br />
+		<Tx text="provide_passphrase" />:
+		<input type="password" bind:value={passphrase} class="passphrase_input" />
+	</span>
 	<button
 		title={$t('generate')}
 		class="done"
@@ -94,7 +115,14 @@
 	>
 		<i class="symbol">done</i><Tx text="generate" />
 	</button>
-	<button title={$t('cancel')} class="not" on:click={() => (isModalHidden = true)}>
+	<button
+		title={$t('cancel')}
+		class="not"
+		on:click={() => {
+			isModalHidden = true;
+			passphrase = '';
+		}}
+	>
 		<i class="symbol">close</i><Tx text="cancel" />
 	</button>
 </Modal>

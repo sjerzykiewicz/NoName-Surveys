@@ -9,7 +9,7 @@ tz = pytz.timezone("Europe/Warsaw")
 
 
 class SurveyDraftBase(SQLModel):
-    creator_id: int = Field(foreign_key="user.id", nullable=False)
+    creator_id: int = Field(foreign_key="user.id", nullable=False, index=True)
     survey_structure: str = Field(sa_column=Column(TEXT))
     title: str = Field(nullable=False)
     is_deleted: bool

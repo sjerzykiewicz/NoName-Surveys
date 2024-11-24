@@ -304,10 +304,6 @@
 		margin-top: 0em;
 	}
 
-	.button-sub-row {
-		gap: 0.5em;
-	}
-
 	.crypto-buttons {
 		display: flex;
 		flex-flow: row;

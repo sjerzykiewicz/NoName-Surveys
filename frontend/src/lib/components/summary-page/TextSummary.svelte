@@ -24,13 +24,19 @@
 		<div class="text-answers">
 			{#each data.answers as answer, i}
 				{#if answer}
-					<a
-						href="{$page.url.pathname}/answers/0/{i}"
-						title={$t('click_to_get_answers')}
-						class="text-input display"
-					>
-						{answer}
-					</a>
+					{#if $page.url.pathname.includes('imported')}
+						<div title={$t('selected_answer')} class="text-input display imported">
+							{answer}
+						</div>
+					{:else}
+						<a
+							href="{$page.url.pathname}/answers/0/{i}"
+							title={$t('click_to_get_answers')}
+							class="text-input display"
+						>
+							{answer}
+						</a>
+					{/if}
 				{/if}
 			{/each}
 		</div>
@@ -71,5 +77,10 @@
 
 	.text-input:last-of-type {
 		margin-bottom: 0em;
+	}
+
+	.imported {
+		background-color: var(--primary-color-2) !important;
+		cursor: default !important;
 	}
 </style>

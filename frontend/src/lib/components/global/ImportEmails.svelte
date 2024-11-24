@@ -93,7 +93,7 @@
 		return await readFile(fileElement).then(
 			(resolve) => {
 				return resolve
-					.split(';')
+					.split(/[;,]+/)
 					.map((e) => e.trim())
 					.filter((e) => e.length > 0);
 			},

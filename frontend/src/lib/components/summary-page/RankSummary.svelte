@@ -4,18 +4,22 @@
 
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
-	export let data: { answers: string[][]; choices: string[] };
-
-	const existingAnswers = data.answers.filter((x) => x.length !== 0);
-
-	function calculateAvgPlace(choice: string) {
+	export let data: { multi_answers: string[][]; choices: string[] };
+	const existingAnswers = data.multi_answers.filter((x) => x.length !== 0);
+	function calculateAvgRank(choice: string): number {
 		const totalAnswers = existingAnswers.length;
-		const choiceCount = existingAnswers
-			.map((answers) => answers.indexOf(choice))
+		const rankSum = existingAnswers
+			.map((answers) => answers.indexOf(choice) + 1)
 			.reduce((acc, curr) => acc + curr, 0);
-		const avgPlace = choiceCount / totalAnswers;
-		return avgPlace.toFixed(2);
+		const avgRank = rankSum / totalAnswers;
+		return parseFloat(avgRank.toFixed(2));
 	}
+
+	let rankedChoices: { choice: string; avgRank: number }[] = [];
+	data.choices.forEach((c) => {
+		rankedChoices.push({ choice: c, avgRank: calculateAvgRank(c) });
+	});
+	rankedChoices.sort((a, b) => a.avgRank - b.avgRank);
 </script>
 
 {#if existingAnswers.length === 0}
@@ -24,11 +28,14 @@
 	</div>
 {:else}
 	<div title={$t('ordered_by_average_place')} class="choice-area display">
-		{#each data.choices.sort((a, b) => parseFloat(calculateAvgPlace(a)) - parseFloat(calculateAvgPlace(b))) as choice, answerIndex}
+		{#each rankedChoices as choice, answerIndex}
 			<div class="choice">
 				<div class="rank">{answerIndex + 1}.</div>
 				<div class="choice-input display">
-					{choice}
+					{choice.choice}
+				</div>
+				<div class="choice-percentage" title={$t('average')}>
+					<Tx text="average_choice_ranking" />: {choice.avgRank}
 				</div>
 			</div>
 		{/each}

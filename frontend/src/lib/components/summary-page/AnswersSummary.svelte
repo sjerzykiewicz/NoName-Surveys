@@ -24,10 +24,12 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import { downloadFile } from '$lib/utils/downloadFile';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let surveyAnswers: Array<SurveySummary>;
+	export let isImported: boolean = false;
 
 	const componentTypeMap: { [id: string]: ComponentType } = {
 		text: TextSummary,
@@ -54,61 +56,61 @@
 	}[] = [];
 
 	surveyAnswers.forEach((surveyAnswer) => {
-		surveyAnswer.questions.forEach((question, id: number) => {
+		surveyAnswer?.questions.forEach((question, id: number) => {
 			let details = '';
 			let answers: (string | number)[] = [];
 			let multi_answers: string[][] = [];
 			let choices: string[] = [];
 			let min_value = 0;
 			let max_value = 0;
-			switch (question.question_type) {
+			switch (question?.question_type) {
 				case 'text':
-					details = (question as TextQuestionAnswered).details;
-					answers = [(question as TextQuestionAnswered).answer];
+					details = (question as TextQuestionAnswered)?.details;
+					answers = [(question as TextQuestionAnswered)?.answer];
 					break;
 				case 'single':
-					answers = [(question as SingleQuestionAnswered).answer];
-					choices = (question as SingleQuestionAnswered).choices;
+					answers = [(question as SingleQuestionAnswered)?.answer];
+					choices = (question as SingleQuestionAnswered)?.choices;
 					break;
 				case 'multi':
-					answers = (question as MultiQuestionAnswered).answer;
-					choices = (question as MultiQuestionAnswered).choices;
-					multi_answers = [(question as MultiQuestionAnswered).answer];
+					answers = (question as MultiQuestionAnswered)?.answer;
+					choices = (question as MultiQuestionAnswered)?.choices;
+					multi_answers = [(question as MultiQuestionAnswered)?.answer];
 					break;
 				case 'scale':
-					answers = [(question as ScaleQuestionAnswered).answer];
+					answers = [(question as ScaleQuestionAnswered)?.answer];
 					break;
 				case 'binary':
-					answers = [(question as BinaryQuestionAnswered).answer];
-					choices = (question as BinaryQuestionAnswered).choices;
+					answers = [(question as BinaryQuestionAnswered)?.answer];
+					choices = (question as BinaryQuestionAnswered)?.choices;
 					break;
 				case 'number':
-					answers = [(question as NumberQuestionAnswered).answer];
-					min_value = (question as NumberQuestionAnswered).min_value;
-					max_value = (question as NumberQuestionAnswered).max_value;
+					answers = [(question as NumberQuestionAnswered)?.answer];
+					min_value = (question as NumberQuestionAnswered)?.min_value;
+					max_value = (question as NumberQuestionAnswered)?.max_value;
 					break;
 				case 'slider':
-					answers = [(question as SliderQuestionAnswered).answer];
-					min_value = (question as SliderQuestionAnswered).min_value;
-					max_value = (question as SliderQuestionAnswered).max_value;
+					answers = [(question as SliderQuestionAnswered)?.answer];
+					min_value = (question as SliderQuestionAnswered)?.min_value;
+					max_value = (question as SliderQuestionAnswered)?.max_value;
 					break;
 				case 'rank':
-					answers = (question as RankQuestionAnswered).answer;
-					choices = (question as RankQuestionAnswered).choices;
+					multi_answers = [(question as RankQuestionAnswered)?.answer];
+					choices = (question as RankQuestionAnswered)?.choices;
 					break;
 				case 'list':
-					answers = [(question as ListQuestionAnswered).answer];
-					choices = (question as ListQuestionAnswered).choices;
+					answers = [(question as ListQuestionAnswered)?.answer];
+					choices = (question as ListQuestionAnswered)?.choices;
 					break;
 			}
 
 			if (groupedAnswers.length <= id) {
 				groupedAnswers.push({
-					required: question.required,
-					question: question.question,
+					required: question?.required,
+					question: question?.question,
 					answers: answers,
 					multi_answers: multi_answers,
-					question_type: question.question_type,
+					question_type: question?.question_type,
 					choices: choices,
 					details: details,
 					min_value: min_value,
@@ -116,11 +118,11 @@
 				});
 			} else {
 				groupedAnswers[id] = {
-					required: question.required,
-					question: question.question,
+					required: question?.required,
+					question: question?.question,
 					answers: [...groupedAnswers[id].answers, ...answers],
 					multi_answers: [...groupedAnswers[id].multi_answers, ...multi_answers],
-					question_type: question.question_type,
+					question_type: question?.question_type,
 					choices: choices,
 					details: details,
 					min_value: min_value,
@@ -134,18 +136,44 @@
 {#if surveyAnswers.length === 0}
 	<div title={$t('number_of_answers_title')} class="title empty"><Tx text="no_answers_yet" /></div>
 {:else}
-	<div title={$t('number_of_answers_title')} class="title answers">
+	<div title={$t('number_of_answers_title')} class="title answers static">
 		<Tx text="number_of_answers" params={{ number: surveyAnswers.length }} />
+		{#if !isImported}
+			<button
+				title={$t('export_survey_summary')}
+				class="import-export-button"
+				on:click={() =>
+					downloadFile(
+						`${surveyAnswers[0].title}.json`,
+						'application/json',
+						JSON.stringify(surveyAnswers)
+					)}><i class="symbol">file_save</i><Tx text="export" /></button
+			>
+		{/if}
 	</div>
 	{#each groupedAnswers as question, questionIndex}
-		<div class="question">
-			<QuestionTitle
-				question={question.question}
-				{questionIndex}
-				questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
-				required={question.required}
-			/>
-			<svelte:component this={componentTypeMap[question.question_type]} data={question} />
-		</div>
+		{#if question?.question && question?.question_type && typeof question?.required === 'boolean'}
+			<div class="question">
+				<QuestionTitle
+					question={question?.question}
+					{questionIndex}
+					questionTypeData={getQuestionTypeData(componentTypeMap[question?.question_type])}
+					required={question?.required}
+				/>
+				<svelte:component this={componentTypeMap[question?.question_type]} data={question} />
+			</div>
+		{/if}
 	{/each}
 {/if}
+
+<style>
+	.static {
+		display: flex;
+		justify-content: space-between;
+		white-space: normal !important;
+	}
+
+	.import-export-button {
+		font-size: 0.8em;
+	}
+</style>

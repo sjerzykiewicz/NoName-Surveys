@@ -21,7 +21,6 @@
 			<div class="checkbox">
 				<input
 					type="checkbox"
-					name={questionIndex.toString()}
 					on:change={() => {
 						selected[choiceIndex] = !selected[choiceIndex];
 					}}

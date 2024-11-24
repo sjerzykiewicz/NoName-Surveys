@@ -12,7 +12,7 @@
 	function calculatePercentage(choice: string) {
 		const count = existingAnswers.filter((answer) => answer.includes(choice)).length;
 		const percentage = (count / existingAnswers.length) * 100;
-		return percentage.toFixed(2) + '%';
+		return percentage.toFixed(2);
 	}
 </script>
 
@@ -31,7 +31,7 @@
 					{choice}
 				</div>
 				<div title={$t('average')} class="choice-percentage">
-					{calculatePercentage(choice)}
+					{calculatePercentage(choice)}%
 				</div>
 			</label>
 		{/each}

@@ -30,7 +30,7 @@
 
 <div class="choice-area slider" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="slider-area">
-		<input class="range" type="range" name={questionIndex.toString()} disabled />
+		<input class="range" type="range" disabled />
 	</div>
 	<div class="limits">
 		<label class="min choice" id={`q${questionIndex}c0`}>
@@ -41,7 +41,6 @@
 				type="number"
 				{min}
 				{max}
-				name={questionIndex.toString()}
 				autocomplete="off"
 				placeholder={innerWidth <= $M
 					? $t('number_min_placeholder_short')
@@ -60,7 +59,6 @@
 				type="number"
 				min="0"
 				{max}
-				name={questionIndex.toString()}
 				autocomplete="off"
 				placeholder={innerWidth <= $M
 					? $t('slider_precision_placeholder_short')
@@ -79,7 +77,6 @@
 				type="number"
 				{min}
 				{max}
-				name={questionIndex.toString()}
 				autocomplete="off"
 				placeholder={innerWidth <= $M
 					? $t('number_max_placeholder_short')

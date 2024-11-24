@@ -24,7 +24,6 @@
 		<label title={$t('select_answer')} class="choice scale">
 			<input
 				type="radio"
-				name={questionIndex.toString()}
 				checked={checked === choiceIndex}
 				on:click={() => {
 					updateAnswers(choice, choiceIndex);

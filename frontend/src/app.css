@@ -705,7 +705,9 @@ input[type='file'] {
 		outline 0s;
 }
 
-.choice-input.display:hover {
+.choice-input.display:hover,
+.choice-input.selected:hover,
+.selected .choice-input:hover {
 	background-color: var(--secondary-color-1);
 }
 
@@ -795,9 +797,7 @@ input[type='file'] {
 }
 
 .choice-input.selected,
-.choice-input.selected:hover,
-.selected .choice-input,
-.selected .choice-input:hover {
+.selected .choice-input {
 	background-color: var(--secondary-color-2);
 	border: 1px solid var(--accent-color-1);
 	color: var(--accent-color-1);
@@ -974,6 +974,7 @@ input[type='radio']:disabled {
 .title.static {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	overflow-wrap: unset;
 	overflow: unset;
 	padding-bottom: 0em;
@@ -1512,19 +1513,13 @@ button.popup {
 	margin-right: 0.5em;
 }
 
-.clear-answer {
-	display: flex;
-	justify-content: flex-end;
-	width: 90%;
-	padding-top: 0.5em;
-}
-
 .summary-no-answers {
 	display: flex;
 	justify-content: center;
 	color: var(--accent-color-1);
-	font-weight: bold;
+	font-weight: 700;
 	font-size: 1.25em;
+	cursor: default;
 }
 
 @media screen and (max-width: 768px) {

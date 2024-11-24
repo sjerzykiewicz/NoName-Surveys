@@ -33,6 +33,7 @@
 
 <style>
 	.choice .limit {
+		font-size: 1em;
 		color: var(--accent-color-1);
 		transition:
 			0.2s,

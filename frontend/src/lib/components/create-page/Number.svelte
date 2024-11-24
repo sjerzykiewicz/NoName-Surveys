@@ -38,7 +38,6 @@
 				type="number"
 				{min}
 				{max}
-				name={questionIndex.toString()}
 				autocomplete="off"
 				placeholder={innerWidth <= $M
 					? $t('number_min_placeholder_short')
@@ -56,7 +55,6 @@
 				type="number"
 				{min}
 				{max}
-				name={questionIndex.toString()}
 				autocomplete="off"
 				placeholder={innerWidth <= $M
 					? $t('number_max_placeholder_short')

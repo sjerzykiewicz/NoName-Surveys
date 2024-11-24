@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
-
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
+
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let data: { multi_answers: string[][]; choices: string[] };
+
 	const existingAnswers = data.multi_answers.filter((x) => x.length !== 0);
+
 	function calculateAvgRank(choice: string): number {
 		const totalAnswers = existingAnswers.length;
 		const rankSum = existingAnswers
@@ -16,6 +19,7 @@
 	}
 
 	let rankedChoices: { choice: string; avgRank: number }[] = [];
+
 	data.choices.forEach((c) => {
 		rankedChoices.push({ choice: c, avgRank: calculateAvgRank(c) });
 	});

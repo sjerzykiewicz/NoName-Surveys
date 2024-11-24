@@ -5,18 +5,12 @@
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	export let questionIndex: number;
 
 	let value: number;
 
-	function handleClear() {
-		value = NaN;
-		$answers[questionIndex].choices = [];
-	}
-
 	function handleChange() {
-		if (value !== null) {
+		if (value !== null && !isNaN(value)) {
 			if (value < parseFloat($questions[questionIndex].choices[0])) {
 				value = parseFloat($questions[questionIndex].choices[0]);
 			} else if (value > parseFloat($questions[questionIndex].choices[1])) {
@@ -25,6 +19,9 @@
 				value = Math.round(value);
 			}
 			$answers[questionIndex].choices[0] = value.toString();
+		} else {
+			value = NaN;
+			$answers[questionIndex].choices = [];
 		}
 	}
 </script>
@@ -38,22 +35,14 @@
 			autocomplete="off"
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
-			name={questionIndex.toString()}
 			bind:value
-			on:change={handleChange}
+			on:input={handleChange}
 		/>
 	</div>
 	<div class="limits">
 		<div title={$t('minimum_value')} class="limit">{$questions[questionIndex].choices[0]}</div>
 		<div title={$t('maximum_value')} class="limit">{$questions[questionIndex].choices[1]}</div>
 	</div>
-	{#if !isNaN(value)}
-		<div class="clear-answer">
-			<button title={$t('clear-answer_title')} on:click={handleClear}
-				><Tx text="clear-answer" /></button
-			>
-		</div>
-	{/if}
 </div>
 
 <style>

@@ -240,6 +240,7 @@
 	.last-update-info {
 		margin-right: 0.5em;
 		font-size: 0.8em;
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 	}
 
 	.warning-div {

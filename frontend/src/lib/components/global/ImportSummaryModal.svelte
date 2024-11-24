@@ -13,7 +13,8 @@
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	let isModalHidden: boolean = true;
+	export let isHidden: boolean = true;
+
 	let fileElement: HTMLInputElement | null = null;
 	let fileName: string = $t('no_file_selected');
 	let fileError: FileError = FileError.NoError;
@@ -62,7 +63,7 @@
 			return;
 		}
 
-		isModalHidden = true;
+		isHidden = true;
 		if ($page.url.pathname === '/surveys/' + $page.params.surveysPage + '/imported') {
 			window.location.reload();
 		} else {
@@ -78,7 +79,7 @@
 <Modal
 	icon="upload_file"
 	title={$t('importing_summary')}
-	bind:isHidden={isModalHidden}
+	bind:isHidden
 	--width={innerWidth <= $M ? '20em' : '26em'}
 >
 	<div slot="content">
@@ -103,14 +104,6 @@
 	>
 </Modal>
 
-<button
-	title={$t('import_survey_summary')}
-	class="import-export-button"
-	on:click={() => (isModalHidden = false)}
->
-	<i class="symbol">upload_file</i><Tx text="import" />
-</button>
-
 <style>
 	.import {
 		font-size: 0.8em;
@@ -118,10 +111,6 @@
 
 	.file-div {
 		width: 100%;
-	}
-
-	.import-export-button {
-		font-size: 1.25em;
 	}
 
 	@media screen and (max-width: 768px) {

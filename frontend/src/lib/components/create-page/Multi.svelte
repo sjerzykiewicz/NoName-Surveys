@@ -48,7 +48,7 @@
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice" id={`q${questionIndex}c${choiceIndex}`}>
 			<div class="checkbox">
-				<input type="checkbox" disabled name={questionIndex.toString()} />
+				<input type="checkbox" disabled />
 			</div>
 			<Input
 				bind:text={choice}

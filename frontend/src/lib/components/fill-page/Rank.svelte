@@ -66,17 +66,12 @@
 		</div>
 	{/each}
 	{#if !$questions[questionIndex].required}
-		<label title={$t('dont_answer')} class="dont_answer">
+		<label title={$t('dont_answer')} class="choice dont-answer">
 			<div class="checkbox">
-				<input
-					type="checkbox"
-					checked={dontAnswer}
-					name="dont_answer"
-					on:click={toggleDontAnswer}
-				/>
-				<div class="choice-input display" class:selected={dontAnswer}>
-					<Tx text="dont_answer" />
-				</div>
+				<input type="checkbox" checked={dontAnswer} on:click={toggleDontAnswer} />
+			</div>
+			<div class="choice-input display" class:selected={dontAnswer}>
+				<Tx text="dont_answer" />
 			</div>
 		</label>
 	{/if}
@@ -88,17 +83,24 @@
 		background-color: var(--primary-color-2);
 		cursor: default;
 	}
-	.checkbox {
-		padding-left: 0.9em;
-		width: auto;
-		display: flex;
+
+	.dont-answer {
+		cursor: pointer;
 	}
-	.checkbox .choice-input {
-		margin-left: 0.6em;
+
+	.dont-answer .choice-input {
+		background-color: var(--primary-color-1);
+		cursor: pointer;
 	}
-	@media screen and (max-width: 768px) {
-		.checkbox .choice-input {
-			margin-left: 0.5em;
-		}
+
+	.dont-answer .choice-input:hover,
+	.dont-answer .choice-input.selected:hover {
+		background-color: var(--secondary-color-1);
+	}
+
+	.dont-answer .choice-input.selected {
+		background-color: var(--secondary-color-2);
+		border: 1px solid var(--accent-color-1);
+		color: var(--accent-color-1);
 	}
 </style>

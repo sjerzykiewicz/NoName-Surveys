@@ -382,12 +382,14 @@ export const data = {
 		key_file_label: `Please load the file which you have previously generated on this application. The file
 			contains your keys, necessary for cryptographic calculations which are needed for validating
 			your right to fill out this survey.`,
-		default_filename: 'Default filename: ',
+		default_filename: 'Default filename',
 		no_file_selected: 'No file selected',
-		incorrect_passphrase: 'Incorrect passphrase',
-		error_empty_passphrase: 'Passphrase cannot be empty',
-		provide_passphrase: 'Please provide a passphrase to protect your keys on your device',
-		enter_passphrase: 'Enter passphrase to the file',
+		passphrase_title: 'Enter a passphrase',
+		passphrase_label: 'Passphrase',
+		incorrect_passphrase: 'Incorrect passphrase.',
+		error_empty_passphrase: 'Passphrase cannot be empty.',
+		provide_passphrase: 'Please provide a passphrase to protect your keys on your device.',
+		enter_passphrase: 'Enter passphrase to the file.',
 		example_csv: `A valid .csv file should not contain a headline. Each email should be placed in a new line and separated by a comma or a semicolon.<br /><br />
 			Example:<br />
 			user1@st.amu.edu.pl,<br />
@@ -886,10 +888,12 @@ export const data = {
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
 		default_filename: 'Domyślna nazwa pliku: ',
 		no_file_selected: 'Nie wybrano pliku',
-		incorrect_passphrase: 'Niepoprawne hasło',
-		error_empty_passphrase: 'Hasło nie może być puste',
-		provide_passphrase: 'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu',
-		enter_passphrase: 'Podaj hasło do pliku',
+		passphrase_title: 'Wprowadź hasło do pliku',
+		passphrase_label: 'Hasło',
+		incorrect_passphrase: 'Niepoprawne hasło.',
+		error_empty_passphrase: 'Hasło nie może być puste.',
+		provide_passphrase: 'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu.',
+		enter_passphrase: 'Podaj hasło do pliku.',
 		example_csv: `Poprawny plik .csv nie powinien zawierać nagłówka. Każdy email powinien być w osobnej linii oraz oddzielony przecinkiem lub średnikiem.<br /><br />
 			Przykład:<br />
 			user1@st.amu.edu.pl,<br />

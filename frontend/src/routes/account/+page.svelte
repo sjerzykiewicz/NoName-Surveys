@@ -40,7 +40,7 @@
 	</Header>
 
 	<Content>
-		<DownloadKey lastTime={data.keyCreationDate} />
+		<DownloadKey lastTime={data.keyCreationDate} hasKey={data.hasKey} />
 		<AccountButtons />
 		<SignOut />
 	</Content>

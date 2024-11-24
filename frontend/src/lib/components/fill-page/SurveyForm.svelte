@@ -52,6 +52,7 @@
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import decryptKeys from '$lib/utils/decryptKeys';
+	import PassphraseError from './PassphraseError.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -64,7 +65,9 @@
 	let innerWidth: number;
 	let isKeysModalHidden: boolean = true;
 	let isSubmitButtonDisabled: boolean = false;
-	let passphrase = '';
+	let passphrase: string = '';
+	let passphraseError: boolean = false;
+	let keyPair: KeyPair | null = null;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -248,6 +251,17 @@
 		return true;
 	}
 
+	function checkPassphraseCorrectness(keyPair: KeyPair | null) {
+		passphraseError = false;
+
+		if (keyPair === null) {
+			passphraseError = true;
+			return false;
+		}
+
+		return true;
+	}
+
 	async function processCrypto() {
 		isSubmitButtonDisabled = true;
 		if (!checkFileCorrectness()) {
@@ -266,21 +280,21 @@
 			}
 		);
 
-		let keyPair = await getKeys(text);
-		if (keyPair === null) {
-			$errorModalContent = $t('incorrect_passphrase');
-			$isErrorModalHidden = false;
+		keyPair = await getKeys(text);
+
+		if (!checkPassphraseCorrectness(keyPair)) {
+			isSubmitButtonDisabled = false;
 			return;
 		}
 
-		if (!keys.includes(keyPair.publicKey)) {
+		if (!keys.includes(keyPair!.publicKey)) {
 			$errorModalContent = $t('public_key_not_on_list');
 			$isErrorModalHidden = false;
 			isSubmitButtonDisabled = false;
 			return;
 		}
 
-		processForm(keyPair);
+		processForm(keyPair!);
 	}
 
 	async function getKeys(text: string): Promise<KeyPair | null> {
@@ -396,8 +410,7 @@
 >
 	<div slot="content" title={$t('load_keys')} class="file-div">
 		<span class="file-label"
-			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" /><br
-			/>"noname.key"</span
+			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname.key"</span
 		>
 		<label>
 			<div class="file-input">
@@ -405,12 +418,25 @@
 				<span class="file-name">{fileName}</span>
 			</div>
 			<input type="file" bind:this={fileElement} on:change={handleFileChange} />
-			<div title={$t('enter_passphrase')}>
-				<Tx text="enter_passphrase" />:
-				<input type="password" bind:value={passphrase} class="passphrase_input" />
-			</div>
 		</label>
 		<KeysError error={fileError} element={fileElement} />
+		<div title={$t('enter_passphrase')}>
+			<br />
+			<Tx text="enter_passphrase" />
+			<br />
+			<br />
+			<label class="passphrase-label">
+				<Tx text="passphrase_label" />
+				<input
+					type="password"
+					title={$t('passphrase_title')}
+					class="passphrase-input"
+					placeholder="{$t('passphrase_title')}..."
+					bind:value={passphrase}
+				/></label
+			>
+			<PassphraseError error={passphraseError} {keyPair} />
+		</div>
 	</div>
 	<button
 		title={$t('submit_keys')}

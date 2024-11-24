@@ -10,13 +10,16 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import PassphraseError from './PassphraseError.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let lastTime: string;
+	export let hasKey: boolean;
 
 	let isModalHidden: boolean = true;
-	let passphrase = '';
+	let passphrase: string = '';
+	let passphraseError: boolean = false;
 
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
@@ -27,12 +30,20 @@
 		return parseInt((miliseconds / 1000 / 3600 / 24).toFixed(0));
 	}
 
-	async function generateKeyPair() {
+	function checkPassphraseCorrectness() {
+		passphraseError = false;
+
 		if (passphrase === '') {
-			$errorModalContent = $t('error_empty_passphrase');
-			$isErrorModalHidden = false;
-			return;
+			passphraseError = true;
+			return false;
 		}
+
+		return true;
+	}
+
+	async function generateKeyPair() {
+		if (!checkPassphraseCorrectness()) return;
+
 		try {
 			const keyPair = get_keypair();
 			const publicKey = keyPair.get_public_key();
@@ -65,6 +76,8 @@
 				return;
 			}
 
+			isModalHidden = true;
+			passphrase = '';
 			downloadFile('noname.key', 'application/octet-stream', JSON.stringify(decoded));
 			await invalidateAll();
 		} catch (e) {
@@ -77,7 +90,6 @@
 	function handleEnter(event: KeyboardEvent) {
 		if (!isModalHidden && event.key === 'Enter') {
 			event.preventDefault();
-			isModalHidden = true;
 			generateKeyPair();
 			event.stopImmediatePropagation();
 		}
@@ -97,22 +109,34 @@
 	icon="encrypted"
 	title={$t('account_generating_keys')}
 	bind:isHidden={isModalHidden}
+	hide={() => {
+		isModalHidden = true;
+		passphrase = '';
+	}}
 	--width={innerWidth <= $M ? '20em' : '28em'}
 >
 	<span slot="content" class="content">
-		<Tx text="account_new_key_alert" />
+		{#if hasKey}
+			<Tx text="account_new_key_alert" />
+			<br />
+			<br />
+		{/if}
+		<Tx text="provide_passphrase" />
 		<br />
-		<Tx text="provide_passphrase" />:
-		<input type="password" bind:value={passphrase} class="passphrase_input" />
+		<br />
+		<label class="passphrase-label">
+			<Tx text="passphrase_label" />
+			<input
+				type="password"
+				title={$t('passphrase_title')}
+				class="passphrase-input"
+				placeholder="{$t('passphrase_title')}..."
+				bind:value={passphrase}
+			/></label
+		>
+		<PassphraseError error={passphraseError} {passphrase} />
 	</span>
-	<button
-		title={$t('generate')}
-		class="done"
-		on:click={() => {
-			isModalHidden = true;
-			generateKeyPair();
-		}}
-	>
+	<button title={$t('generate')} class="done" on:click={generateKeyPair}>
 		<i class="symbol">done</i><Tx text="generate" />
 	</button>
 	<button

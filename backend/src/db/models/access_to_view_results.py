@@ -4,8 +4,8 @@ from sqlmodel import Field, SQLModel
 
 
 class AccessToViewResultsBase(SQLModel):
-    survey_id: Optional[int] = Field(default=None, foreign_key="survey.id")
-    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+    survey_id: int = Field(foreign_key="survey.id", nullable=False, index=True)
+    user_id: int = Field(foreign_key="user.id", nullable=False, index=True)
 
 
 class AccessToViewResults(AccessToViewResultsBase, table=True):

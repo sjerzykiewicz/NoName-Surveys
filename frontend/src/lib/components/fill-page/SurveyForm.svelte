@@ -243,7 +243,7 @@
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
 			return false;
-		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'key') {
+		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'txt') {
 			fileError = FileError.FileInvalid;
 			return false;
 		}
@@ -406,11 +406,18 @@
 	icon="encrypted"
 	title={$t('load_keys_title')}
 	bind:isHidden={isKeysModalHidden}
+	hide={() => {
+		isKeysModalHidden = true;
+		passphrase = '';
+		passphraseError = false;
+		fileName = $t('no_file_selected');
+		fileError = FileError.NoError;
+	}}
 	--width={innerWidth <= $M ? '20em' : '38em'}
 >
 	<div slot="content" title={$t('load_keys')} class="file-div">
 		<span class="file-label"
-			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname.key"</span
+			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.txt"</span
 		>
 		<label>
 			<div class="file-input">
@@ -426,7 +433,6 @@
 			<br />
 			<br />
 			<label class="passphrase-label">
-				<Tx text="passphrase_label" />
 				<input
 					type="password"
 					title={$t('passphrase_title')}

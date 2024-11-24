@@ -16,6 +16,7 @@
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	let isPanelVisible: boolean = false;
+	let from: string = $page.route.id!;
 
 	const ACCOUNT_BUTTON_BREAKPOINT = 1155;
 
@@ -48,8 +49,6 @@
 	});
 
 	let innerWidth: number;
-
-	let from = $page.route.id;
 </script>
 
 <svelte:window bind:innerWidth />

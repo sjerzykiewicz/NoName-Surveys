@@ -65,7 +65,9 @@
 		<a href={data.disabled ? '' : data.href + data.page}>{$t(data.name)}</a>
 		{#if innerWidth > $M && data.disabled}
 			<span class="tooltip-text bottom">
-				<a href="#top" on:click={startOAuth}><Tx text="sign_in_lower" /></a>
+				<a href="#top" on:click={() => startOAuth(data.href + data.page)}
+					><Tx text="sign_in_lower" /></a
+				>
 				<Tx text="sign_in_info" />
 				<Tx text={data.name} />
 			</span>

@@ -78,7 +78,7 @@
 
 			isModalHidden = true;
 			passphrase = '';
-			downloadFile('noname.key', 'application/octet-stream', JSON.stringify(decoded));
+			downloadFile('noname-keys.txt', 'text/plain', JSON.stringify(decoded));
 			await invalidateAll();
 		} catch (e) {
 			$errorModalContent = e as string;
@@ -112,6 +112,7 @@
 	hide={() => {
 		isModalHidden = true;
 		passphrase = '';
+		passphraseError = false;
 	}}
 	--width={innerWidth <= $M ? '20em' : '28em'}
 >
@@ -125,7 +126,6 @@
 		<br />
 		<br />
 		<label class="passphrase-label">
-			<Tx text="passphrase_label" />
 			<input
 				type="password"
 				title={$t('passphrase_title')}

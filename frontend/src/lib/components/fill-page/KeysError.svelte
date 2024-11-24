@@ -15,7 +15,7 @@
 			case FileError.FileRequired:
 				return $t('error_no_file');
 			case FileError.FileInvalid:
-				return $t('error_file_not_key');
+				return $t('error_file_not_txt');
 		}
 	}
 
@@ -24,7 +24,7 @@
 			case FileError.FileRequired:
 				return element?.files?.length === 0;
 			case FileError.FileInvalid:
-				return element?.files?.[0]?.name.split('.').pop() !== 'key';
+				return element?.files?.[0]?.name.split('.').pop() !== 'txt';
 		}
 	};
 </script>

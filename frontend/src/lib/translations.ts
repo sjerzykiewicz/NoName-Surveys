@@ -378,6 +378,11 @@ export const data = {
 			your right to fill out this survey.`,
 		default_filename: 'Default filename: ',
 		no_file_selected: 'No file selected',
+		example_csv: `A valid .csv file should not contain a headline. Each email should be placed in a new line and separated by a comma or a semicolon.<br /><br />
+			Example:<br />
+			user1@st.amu.edu.pl,<br />
+			user2@st.amu.edu.pl;<br />
+			user3@amu.edu.pl`,
 
 		// faq
 
@@ -821,6 +826,7 @@ export const data = {
 		clear_answer_title: 'Wyczyść odpowiedź',
 		clear_answer: 'Wyczyść',
 		dont_answer: 'Nie udzielaj odpowiedzi',
+
 		// pages
 
 		first_page: 'Pierwsza strona',
@@ -864,6 +870,11 @@ export const data = {
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
 		default_filename: 'Domyślna nazwa pliku: ',
 		no_file_selected: 'Nie wybrano pliku',
+		example_csv: `Poprawny plik .csv nie powinien zawierać nagłówka. Każdy email powinien być w osobnej linii oraz oddzielony przecinkiem lub średnikiem.<br /><br />
+			Przykład:<br />
+			user1@st.amu.edu.pl,<br />
+			user2@st.amu.edu.pl;<br />
+			user3@amu.edu.pl`,
 
 		// faq
 

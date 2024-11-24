@@ -1012,7 +1012,8 @@ input[type='radio']:disabled {
 .last-update-container .tooltip i,
 .crypto-row .tooltip i,
 .load-text .tooltip i,
-.code-text .tooltip i {
+.code-text .tooltip i,
+.label-container .tooltip i {
 	color: var(--border-color-1);
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
 	transition:

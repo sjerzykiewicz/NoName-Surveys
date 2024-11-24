@@ -70,6 +70,11 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 			maxAge: 60 * 60 * 2 // 2 hours
 		});
 
+		const from = cookies.get('from');
+		if (from) {
+			throw redirect(303, from);
+		}
+
 		throw redirect(303, env.ORIGIN + '/account');
 	} catch (err) {
 		if (err instanceof Error) {

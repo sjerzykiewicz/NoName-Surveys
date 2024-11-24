@@ -44,7 +44,7 @@
 	{#if isExportButtonVisible}
 		<button
 			title={$t('export_invalid_emails')}
-			class="export"
+			class="import-export-button"
 			on:click={() => downloadFile('invalid-emails.csv', 'text/csv', emails.join(';\n'))}
 			><i class="symbol">file_save</i><Tx text="export" /></button
 		>
@@ -53,9 +53,3 @@
 		><i class="symbol">done</i>OK</button
 	>
 </Modal>
-
-<style>
-	.export i {
-		margin-right: 0.15em;
-	}
-</style>

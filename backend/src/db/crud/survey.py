@@ -119,8 +119,8 @@ def take_away_survey_access(
         .where(AccessToViewResults.user_id != owner)
         .where(AccessToViewResults.survey_id == survey_id)
         .where(AccessToViewResults.user_id.in_(users_ids))
-        .where(AccessToViewResults.is_deleted is False)
-    )  # noqa: E712
+        .where(AccessToViewResults.is_deleted == False)  # noqa: E712
+    )
     accesses = session.exec(statement).all()
     for access in accesses:
         access.is_deleted = True

@@ -5,7 +5,7 @@ WORKDIR /app
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python3 -
 ENV PATH="/opt/poetry/bin:$PATH"
 
-COPY ./pyproject.toml ./poetry.lock* /app/
+COPY ./pyproject.toml /app/
 
 COPY . .
 

@@ -5,7 +5,6 @@
 	import init, { get_keypair } from 'wasm';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { downloadFile } from '$lib/utils/downloadFile';
-	import { invalidateAll } from '$app/navigation';
 	import encryptKeys from '$lib/utils/encryptKeys';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
@@ -39,6 +38,17 @@
 		}
 
 		return true;
+	}
+
+	async function reloadCreationDate() {
+		const response = await fetch('/api/users/get-key-creation-date');
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+		lastTime = await response.json();
 	}
 
 	async function generateKeyPair() {
@@ -79,7 +89,7 @@
 			isModalHidden = true;
 			passphrase = '';
 			downloadFile('noname-keys.txt', 'text/plain', JSON.stringify(decoded));
-			await invalidateAll();
+			reloadCreationDate();
 		} catch (e) {
 			$errorModalContent = e as string;
 			$isErrorModalHidden = false;

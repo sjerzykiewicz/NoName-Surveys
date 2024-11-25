@@ -1,21 +1,24 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
-	$: errorMessage =
-		typeof $page.error!.message === 'string'
-			? $page.error!.message
-			: typeof $page.error!.message === 'undefined'
-				? 'Unknown error' // @ts-expect-error message is not necessarily a string
-				: typeof $page.error!.message.detail === 'string' // @ts-expect-error message is not necessarily a string
-					? $page.error!.message.detail
-					: 'Unknown error';
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
+	$: errorMessage = (() => {
+		const { error } = $page;
+		if (!error) return $t('unknown_error');
+		if (typeof error.message === 'string') return error.message; // @ts-expect-error message is not necessarily a string
+		if (error.message && typeof error.message.detail === 'string') return error.message.detail;
+		return $t('unknown_error');
+	})();
 </script>
 
 {#if $page.error}
 	<div>
 		<h1><Tx text="error" />: <span>{$page.status}</span></h1>
-		<h2><Tx text="Message" />: <span>{errorMessage}</span></h2>
+		<h2><Tx text="message" />: <span>{errorMessage}</span></h2>
 		<p><Tx text="error_message" /></p>
 	</div>
 {/if}
@@ -34,9 +37,7 @@
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		font-weight: 700;
 		cursor: default;
-		transition:
-			0.2s,
-			outline 0s;
+		transition: 0.2s;
 	}
 
 	span {

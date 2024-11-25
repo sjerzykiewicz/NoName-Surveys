@@ -25,6 +25,8 @@ export const data = {
 
 		submit: 'Submit',
 		error: 'Error',
+		unknown_error: 'Unknown error',
+		something_went_wrong: 'Something went wrong',
 		warning: 'Warning',
 		success: 'Success',
 		welcome: 'Welcome',
@@ -52,6 +54,7 @@ export const data = {
 		info_about_leaving:
 			'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.',
 		info_about_deleting: 'Are you sure you want to delete selected entries?',
+		message: 'Message',
 		error_message: 'Something went wrong, please contact the administrator.',
 		show_account_options: 'Show account options',
 		hide_account_options: 'Hide account options',
@@ -413,7 +416,7 @@ export const data = {
 		faq_authorize_q: 'Why can I not sign in?',
 		faq_authorize_a: `Only AMU employees and students are allowed to authorize in this instance of our application.
 			If you are from AMU and are still having trouble signing in, it may be due to a problem with the AMU USOS authorization system.
-			You can try clearing your cookies or contacting an administrator.`,
+			You can try clearing your cookies or contacting an administrator. You can also try again later.`,
 		faq_personal_q: 'Can other users see my personal data?',
 		faq_personal_a: `No, other users cannot see your personal data. If you choose to authorize yourself,
 			then the only information that is visible to other authorized users is your email address.`,
@@ -600,6 +603,8 @@ export const data = {
 
 		submit: 'Zatwierdź',
 		error: 'Błąd',
+		unknown_error: 'Nieznany błąd',
+		something_went_wrong: 'Coś poszło nie tak',
 		warning: 'Ostrzeżenie',
 		success: 'Sukces',
 		welcome: 'Witaj',
@@ -627,6 +632,7 @@ export const data = {
 		info_about_leaving:
 			'Czy na pewno chcesz opuścić tę stronę?\nOpuszczenie spowoduje utratę wszystkich niezapisanych zmian.',
 		info_about_deleting: 'Czy na pewno chcesz usunąć wybrane wpisy?',
+		message: 'Wiadomość',
 		error_message: 'Coś poszło nie tak, skontaktuj się z administratorem.',
 		show_account_options: 'Pokaż opcje konta',
 		hide_account_options: 'Ukryj opcje konta',
@@ -970,6 +976,76 @@ export const data = {
 		// faq
 
 		faq_title: 'Często zadawane pytania',
+		faq_public_survey_q: 'Czym jest publiczna ankieta?',
+		faq_public_survey_a: `Publiczna ankieta jest ankietą, na którą może wielokrotnie odpowiedzieć każdy, kto zna jej kod dostępu.
+			Jest tak samo anonimowa jak bezpieczna ankieta. Nie musisz się autoryzować lub generować kluczy, aby odpowiedzieć na publiczną ankietę.`,
+		faq_secure_survey_q: 'Czym jest bezpieczna ankieta?',
+		faq_secure_survey_a: `Bezpieczna ankieta jest ankietą, na którą może jednokrotnie odpowiedzieć wybrana grupa respondentów.
+			Musisz się zautoryzować przynajmniej raz i wygenerować klucze, które są potrzebne do wypełnienia bezpiecznej ankiety.
+			Po wygenerowaniu kluczy, nie musisz się autoryzować ponownie.`,
+		faq_keys_q: 'Czym są klucze podpisu cyfrowego?',
+		faq_keys_a: `Klucze podpisu cyfrowego są parą kryptograficznych, asymetrycznych kluczy, które są używane do podpisywania i weryfikacji cyfrowych informacji.
+			Wykorzystywane są w bezpiecznych ankietach, aby zapewnić anonimowość respondentów i zweryfikować ich prawo do wypełnienia danej ankiety.
+			Możesz wygenerować swoje klucze w zakładce "Konto" po zautoryzowaniu się. Będziesz poproszony o podanie hasła, które zabezpieczy Twoje klucze.
+			Pamiętaj, by generować nowe klucze co roku, aby zwiększyć bezpieczeństwo.`,
+		faq_authorize_q: 'Czemu nie mogę się zautoryzować?',
+		faq_authorize_a: `Tylko pracownicy i studenci UAM mogą zautoryzować się w tej instancji naszej aplikacji.
+			Jeśli jesteś z UAM i nadal nie możesz się zautoryzować, może być to spowodowane problemami z systemem autoryzacyjnym USOS UAM.
+			Możesz spróbować wyczyścić ciasteczka lub skontaktować się z administratorem. Możesz też spróbować ponownie później.`,
+		faq_personal_q: 'Czy inni użytkownicy mogą zobaczyć moje dane osobowe?',
+		faq_personal_a: `Nie, inni użytkownicy nie mogą zobaczyć twoich danych osobowych. Jeśli zdecydujesz się zautoryzować,
+			wtedy jedyną informacją, która będzie widoczna dla innych zautoryzowanych użytkowników jest twój adres email.`,
+		faq_code_q: 'Czym jest kod dostępu?',
+		faq_code_a: `Kod dostępu to unikalny 6-cyfrowy kod, który jest generowany kiedy tworzysz ankietę.
+			Jest on używany do wypełnienia ankiety. Możesz go udostępnić innym, aby mogli odpowiedzieć na twoją ankietę.`,
+		faq_create_q: 'Jak mogę stworzyć ankietę?',
+		faq_create_a: `Aby stworzyć ankietę, kliknij w zakładkę "Utwórz" na górze strony. Będziesz poproszony o podanie tytułu ankiety
+			oraz pytań, które chcesz w niej zawrzeć. Możesz wybrać różnorodne typy pytań. Możesz przełączać wymaganie odpowiedzi dla każdego pytania.
+			Możesz również zobaczyć podgląd swojej ankiety i zapisać ją jako szkic do późniejszej edycji. Kiedy będziesz gotowy,
+			możesz zakończyć tworzenie ankiety klikając w przycisk "Utwórz". Wtedy będziesz musiał wybrać między ankietą publiczną i bezpieczną.
+			W przypadku bezpiecznej ankiety, będziesz musiał wybrać grupę respondentów, którzy będą mogli na nią odpowiedzieć.`,
+		faq_draft_q: 'Czym jest szkic?',
+		faq_draft_a: `Szkic to ankieta, którą zacząłeś tworzyć, ale jej jeszcze nie ukończyłeś. Możesz zapisać swoje postępy jako szkic
+			i wrócić do niegp później. Możesz także używać szkiców jako szablonów do tworzenia wielu ankiet o tej samej strukturze.
+			Wszystkie zapisane szkice będą dostępne w zakładce "Szkice".`,
+		faq_group_q: 'Czym jest grupa?',
+		faq_group_a: `Grupa to zbiór użytkowników, którzy mogą być wykorzystani w bezpiecznych ankietach. Możesz zdefiniować grupę możliwych respondentów
+			i używać ją w wielu ankietach. Możesz stworzyć grupę w zakładce "Grupy". Możesz również zaimportować użytkowników z pliku .csv.`,
+		faq_import_users_q: 'Czemu nie mogę zaimportować użytkowników?',
+		faq_import_users_a: `Możesz zaimportować jedynie użytkowników, którzy się już wcześniej zarejestrowali. Jeśli próbujesz zaimportować użytkowników, którzy się jeszcze nie zarejestrowali,
+			nie będziesz mógł tego zrobić. Jeśli jesteś pewien, że użytkownicy są zarejestrowani, wtedy problemem może być format pliku.
+			Upewnij się, że importujesz właściwy plik .csv. Właściwy plik .csv nie powinien zawierać nagłówka.
+			Każdy email powinien być w osobnej linii oraz oddzielony przecinkiem lub średnikiem.<br /><br />
+			Przykład:<br />
+			user1@st.amu.edu.pl,<br />
+			user2@st.amu.edu.pl;<br />
+			user3@amu.edu.pl`,
+		faq_secure_group_q:
+			'Czemu nie mogę stworzyć bezpiecznej ankiety dla utworzonej wcześniej grupy?',
+		faq_secure_group_a: `Nie możesz stworzyć bezpiecznej ankiety dla grupy, jeśli nie wszyscy członkowie tej grupy wygenerowali klucze.
+			Możesz sprawdzić status kluczy członków grupy w zakładce "Grupy" poprzez kliknięcie w nazwę grupy.`,
+		faq_limit_answers_q:
+			'Czy mogę ograniczyć liczbę odpowiedzi jaką użytkownik może wysłać na publiczną ankietę?',
+		faq_limit_answers_a: `Nie, nie możesz ograniczyć liczby odpowiedzi, jaką użytkownik może wysłać na publiczną ankietę.
+			To jest możliwe jedynie w bezpiecznych ankietach. W publicznych ankietach każdy może odpowiedzieć wielokrotnie.`,
+		faq_survey_time_q: 'Czy mogę ustawić czas, w którym ankieta będzie dostępna?',
+		faq_survey_time_a: `Nie, nie możesz ustawić czasu, w którym ankieta będzie dostępna. Natomiast, do twojego wyboru należy kiedy udostępnisz jej kod dostępu innym użytkownikom.
+			Jeśli chcesz ograniczyć czas, w którym ankieta jest dostępna, możesz wyeksportować podsumowanie ankiety do pliku i usunąć ankietę.`,
+		faq_summary_q: 'Czym jest podsumowanie ankiety?',
+		faq_summary_a: `Podsumowanie ankiety to kolekcja wszystkich odpowiedzi na daną ankietę. Możesz przeglądać średnie odpowiedzi do każdego pytania,
+			jak i wszystkie indywidualne odpowiedzi. By sprawdzić podsumowanie ankiety, kliknij w zakładkę "Ankiety" na górze strony i kliknij w tytuł ankiety.
+			Możesz też udostępnić wyniki ankiety innym użytkownikom i wyeksportować podsumowanie do pliku .json. W przypadku bezpiecznych ankiet, możesz też zobaczyć możliwych respondentów.`,
+		faq_import_summary_q: 'Jak mogę zaimportować podsumowanie ankiety?',
+		faq_import_summary_a: `By zaimportować podsumowanie ankiety, kliknij w zakładkę "Ankiety" na górze strony, a następnie kliknij przycisk "Importuj".
+			Będziesz poproszony o wybranie pliku. Plik musi być w formacie .json. Możesz zaimportować podsumowanie ankiety, które wcześniej wyeksportowałeś.
+			Upewnij się, że podsumowanie ankiety zostało wyeksportowane z tej aplikacji.`,
+		faq_limit_items_q: 'Czy istnieje limit na liczbę szkiców, ankiet i grup, które mogę utworzyć?',
+		faq_limit_items_a: `Tak, istnieje limit na liczbę szkiców, ankiet i grup, które możesz utworzyć. Możesz sprawdzić liczbę utworzonych pozycji w prawym górnym rogu strony
+			w zakładkach "Szkice", "Ankiety" i "Grupy". Jeśli osiągniesz limit, nie będziesz mógł utworzyć nowych pozycji, dopóki nie usuniesz którejś z istniejących.`,
+		faq_anonymous_q: 'Czy odpowiedzi na ankiety są naprawdę anonimowe?',
+		faq_anonymous_a: `Tak, odpowiedzi na ankiety są w pełni anonimowe. Nie przechowujemy żadnych informacji, które mogłyby zostać użyte do zidentyfikowania respondenta. Odpowiedzi są przechowywane w taki sposób,
+			że niemożliwe jest powiązanie ich z konkretnym użytkownikiem. Jest to możliwe dzięki użyciu kluczy podpisu cyfrowego i podpisów pierścieniowych.
+			Jeśli wciąż masz wątpliwości, możesz sprawdzić kod źródłowy tej aplikacji. Kliknij w link do GitHuba na dole strony.`,
 
 		// account
 

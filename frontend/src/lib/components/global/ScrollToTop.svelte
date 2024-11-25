@@ -51,7 +51,7 @@
 
 	@media screen and (max-width: 768px) {
 		.scroll-to-top {
-			bottom: 2.5em;
+			bottom: 2.75em;
 			left: 0;
 			right: 0;
 			width: fit-content;

@@ -33,6 +33,6 @@ export class SliderQuestionAnswered extends SliderQuestion {
 	}
 
 	getAnswer(): string {
-		return this.answer ? this.answer.toString() : '';
+		return !isNaN(this.answer) ? this.answer.toString() : '';
 	}
 }

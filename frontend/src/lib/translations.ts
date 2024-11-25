@@ -25,6 +25,8 @@ export const data = {
 
 		submit: 'Submit',
 		error: 'Error',
+		unknown_error: 'Unknown error',
+		something_went_wrong: 'Something went wrong',
 		warning: 'Warning',
 		success: 'Success',
 		welcome: 'Welcome',
@@ -32,6 +34,7 @@ export const data = {
 		cancel: 'Cancel',
 		delete: 'Delete',
 		sign_in: 'Sign In',
+		sign_in_lower: 'Sign in',
 		sign_out: 'Sign Out',
 		public: 'Public',
 		secure: 'Secure',
@@ -51,6 +54,7 @@ export const data = {
 		info_about_leaving:
 			'Are you sure you want to leave this page?\nLeaving will discard all unsaved changes.',
 		info_about_deleting: 'Are you sure you want to delete selected entries?',
+		message: 'Message',
 		error_message: 'Something went wrong, please contact the administrator.',
 		show_account_options: 'Show account options',
 		hide_account_options: 'Hide account options',
@@ -61,7 +65,7 @@ export const data = {
 		other_lang: 'Polish',
 		scroll_to_top: 'Scroll to the top',
 		signed_out: 'Signed Out',
-		sign_in_info: 'Sign in to access ',
+		sign_in_info: 'to access ',
 		and: 'and',
 		or: 'Or',
 		select: 'Select',
@@ -69,27 +73,22 @@ export const data = {
 		rename: 'Rename',
 		close_menu: 'Close menu',
 		open_menu: 'Open menu',
+		read_more: 'Read more...',
+		slogan: 'Unlock true anonymity with the power of ring signatures!',
+		open_source_info: 'Our project is open source. You can find the source code on ',
 		hotkeys_info: `You can create surveys faster by using hotkeys.<br />
 			Hold <span class="accent">[ LeftAlt ]</span> and press:<br />
-			\t<span class="accent">[ 1 ]</span> - Add {one} question<br />
-			\t<span class="accent">[ 2 ]</span> - Add {two} question<br />
-			\t<span class="accent">[ 3 ]</span> - Add {three} question<br />
-			\t<span class="accent">[ 4 ]</span> - Add {four} question<br />
-			\t<span class="accent">[ 5 ]</span> - Add {five} question<br />
-			\t<span class="accent">[ 6 ]</span> - Add {six} question<br />
-			\t<span class="accent">[ 7 ]</span> - Add {seven} question<br />
-			\t<span class="accent">[ 8 ]</span> - Add {eight} question<br />
-			\t<span class="accent">[ 9 ]</span> - Add {nine} question<br />
-			\t<span class="accent">[ 0 ]</span> - Add previous question<br />
-			\t<span class="accent">[ Enter ]</span> / <span class="accent">[ Insert ]</span> - Add choice to selected question<br />
-			\t<span class="accent">[ Backspace ]</span> / <span class="accent">[ Delete ]</span> - Remove selected question or choice<br />
-			\t<span class="accent">[ PageUp ]</span> / <span class="accent">[ PageDown ]</span> - Move selected question up or down<br />
-			\t<span class="accent">[ ~ ]</span> / <span class="accent">[ \\ ]</span> - Toggle requirement for selected question<br />
-			\t<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Select previous or next input<br />
-			\t<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Select previous or next question<br />
-			\t<span class="accent">[ Home ]</span> - Select Survey Title<br />
-			\t<span class="accent">[ End ]</span> - Select Create button<br />
-			Besides that, you can still use <span class="accent">[ Tab ]</span> and <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span> to navigate.`,
+			<span class="accent">[ 1 - 9 ]</span> - Add various question types<br />
+			<span class="accent">[ 0 ]</span> - Add previous question type<br />
+			<span class="accent">[ Enter ]</span> / <span class="accent">[ Ins ]</span> - Add choice to selected question<br />
+			<span class="accent">[ Bksp ]</span> / <span class="accent">[ Del ]</span> - Remove selected question or choice<br />
+			<span class="accent">[ PgUp ]</span> / <span class="accent">[ PgDn ]</span> - Move selected question up or down<br />
+			<span class="accent">[ ~ ]</span> / <span class="accent">[ \\ ]</span> - Toggle requirement for selected question<br />
+			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Select previous or next input<br />
+			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Select previous or next question<br />
+			<span class="accent">[ Home ]</span> - Select Survey Title<br />
+			<span class="accent">[ End ]</span> - Select Create button<br />
+			Besides that, you can still use <span class="accent">[ Tab ]</span> and <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span>.`,
 
 		// questions
 
@@ -186,7 +185,11 @@ export const data = {
 		code_tooltip:
 			'Enter the code provided to you by the survey creator. Your answers are completely anonymous.',
 		submit_code: 'Submit the code',
-		home_redirect: 'If you want to create your own survey, go to',
+		home_keys_info: `To fill out a secure survey, you must have generated keys.<br />
+			If you do not have keys, authorize yourself and generate them in `,
+		home_redirect: 'If you want to create your own survey,',
+		home_redirect_account: 'first authorize yourself in ',
+		home_redirect_create: 'go to ',
 		survey_info: 'Survey Information',
 		survey_title: 'Survey Title',
 		survey_title_title: 'Enter a survey title',
@@ -214,6 +217,12 @@ export const data = {
 		deleting_surveys: 'Deleting Surveys',
 		create_survey: 'Create a survey',
 		delete_selected_surveys: 'Delete selected surveys',
+		survey_public_title: 'Public survey',
+		survey_public_info:
+			'This survey is public. Anyone can respond to it multiple times. You will not have to provide your keys.',
+		survey_secure_title: 'Secure survey',
+		survey_secure_info:
+			'This survey is secure. Selected users can respond to it only once. You will have to provide your keys when submitting this survey.',
 		survey_not_secure_title: 'Survey not secure',
 		survey_not_secure: 'This survey is not secure.',
 		only_respondent: ' You are the only person who can respond to this survey.',
@@ -314,6 +323,7 @@ export const data = {
 		answer: 'Answer',
 		answers: 'Answers',
 		select_answer: 'Select your answer',
+		select_no_answer: 'Not answered',
 		enter_answer: 'Enter your answer',
 		answer_question_no: 'Please answer question no. {index}.',
 		move_answer_up: 'Move answer up',
@@ -321,8 +331,8 @@ export const data = {
 		answer_submit_success: 'Your answer has been submitted successfully.',
 		no_answers_yet: 'No answers yet!',
 		no_answer_yet: 'No {index}. answer yet!',
-		no_answers_to_question: 'No answers to this question yet',
-		question_not_answered: 'The respondent has not answered this question',
+		no_answers_to_question: 'No answers to this question yet.',
+		question_not_answered: 'The respondent has not answered this question.',
 		number_of_answers: 'Number of answers: {number}',
 		number_of_answers_title: 'Number of answers',
 		answer_no: 'Answer no. {index}',
@@ -332,7 +342,7 @@ export const data = {
 		view_individual_answers: 'View individual answers',
 		clear_answer_title: 'Clear the answer',
 		clear_answer: 'Clear',
-		dont_answer: "Don't answer",
+		dont_answer: 'Do not answer',
 
 		// pages
 
@@ -358,14 +368,14 @@ export const data = {
 		import_summary_title: 'Import survey summary from a .json file',
 		importing_summary: 'Importing Summary',
 		importing_summary_alert: 'Select an earlier exported survey summary file in .json format.',
-		some_users_not_registered: `they haven't registered yet`,
-		some_users_without_keys: `they haven't generated keys yet`,
+		some_users_not_registered: `they have not registered yet`,
+		some_users_without_keys: `they have not generated keys yet`,
 		could_not_import_emails: `Could not import {number} users, because {reason}.
 			You can export the list of invalid users if you want.`,
 		warning_no_file: 'No file selected.',
 		warning_file_not_csv: 'File must be in .csv format.',
 		error_no_file: 'Please select a file.',
-		error_file_not_key: 'Please select a .key file.',
+		error_file_not_txt: 'Please select a .txt file.',
 		error_file_not_json: 'Please select a .json file.',
 		select_file: 'Select File',
 		load_keys_title: 'Load your keys',
@@ -377,38 +387,125 @@ export const data = {
 			your right to fill out this survey.`,
 		default_filename: 'Default filename',
 		no_file_selected: 'No file selected',
-		incorrect_passphrase: 'Incorrect passphrase',
-		error_empty_passphrase: 'Passphrase cannot be empty',
-		provide_passphrase: 'Please provide a passphrase to protect your keys on your device',
-		enter_passphrase: 'Enter passphrase to the file',
+		passphrase_title: 'Enter a passphrase',
+		incorrect_passphrase: 'Incorrect passphrase.',
+		error_empty_passphrase: 'Passphrase cannot be empty.',
+		provide_passphrase: 'Please provide a passphrase to protect your keys on your device.',
+		enter_passphrase: 'Enter passphrase to the file.',
+		example_csv: `A valid .csv file should not contain a headline. Each email should be placed in a new line and separated by a comma or a semicolon.<br /><br />
+			Example:<br />
+			user1@st.amu.edu.pl,<br />
+			user2@st.amu.edu.pl;<br />
+			user3@amu.edu.pl`,
+
+		// faq
+
+		faq_title: 'Frequently Asked Questions',
+		faq_public_survey_q: 'What is a public survey?',
+		faq_public_survey_a: `A public survey is a survey that can be filled out multiple times by anyone with an access code.
+			It is as safe as a secure survey. You do not need to authorize or generate keys to fill out a public survey.`,
+		faq_secure_survey_q: 'What is a secure survey?',
+		faq_secure_survey_a: `A secure survey is a survey that can be filled out only once by a selected group of respondents.
+			You need to authorize at least once and generate keys which are needed to fill out a secure survey.
+			After generating keys, you do not need to authorize again.`,
+		faq_keys_q: 'What are digital signature keys?',
+		faq_keys_a: `Digital signature keys are a pair of cryptographic, asymmetric keys that are used to sign and verify digital information.
+			They are used in secure surveys to ensure the anonymity of the respondents and their right to answer a given survey.
+			You can generate your keys in the "Account" tab after authorizing yourself. You will be asked to provide a passphrase to protect your keys.
+			Make sure to generate new keys every year for increased security.`,
+		faq_authorize_q: 'Why can I not sign in?',
+		faq_authorize_a: `Only AMU employees and students are allowed to authorize in this instance of our application.
+			If you are from AMU and are still having trouble signing in, it may be due to a problem with the AMU USOS authorization system.
+			You can try clearing your cookies or contacting an administrator. You can also try again later.`,
+		faq_personal_q: 'Can other users see my personal data?',
+		faq_personal_a: `No, other users cannot see your personal data. If you choose to authorize yourself,
+			then the only information that is visible to other authorized users is your email address.`,
+		faq_code_q: 'What is an access code?',
+		faq_code_a: `An access code is a unique 6-digit code that is generated when you create a survey.
+			It is used to start filling out a survey. You can share this code with others to allow them to fill out your survey.`,
+		faq_create_q: 'How do I create a survey?',
+		faq_create_a: `To create a survey, click on the "Create" tab at the top of the page. You will be asked to provide a title for your survey
+			and then you can start adding questions. You can choose from a variety of question types. You can toggle the requirement of answer to each question.
+			You can also preview your survey and save it as a draft for later editing. When you are ready,
+			you can finish creating your survey by clicking the "Create" button. Then you will have to choose between making your survey public or secure.
+			In case of a secure survey, you will have to define a group of possible respondents.`,
+		faq_draft_q: 'What is a draft?',
+		faq_draft_a: `A draft is a survey that you have started creating but have not yet finished. You can save your progress as a draft
+			and come back to it later. You can also use the draft to create multiple surveys of the same structure.
+			All your saved drafts can be accessed in the "Drafts" tab.`,
+		faq_group_q: 'What is a group?',
+		faq_group_a: `A group is a set of users that you can use in secure surveys. You can define a group of possible respondents
+			and use it in multiple secure surveys. You can create a group in the "Groups" tab. You can also import users from a .csv file.`,
+		faq_import_users_q: 'Why can I not import users?',
+		faq_import_users_a: `You can only import users who have already registered. If you are trying to import users who have not registered yet,
+			you will not be able to do so. If you are sure that the users have registered, then the problem may be with the file format.
+			Make sure that you are importing a valid .csv file. A valid .csv file should not contain a headline.
+			Each email should be placed in a new line and separated by a comma or a semicolon.<br /><br />
+			Example:<br />
+			user1@st.amu.edu.pl,<br />
+			user2@st.amu.edu.pl;<br />
+			user3@amu.edu.pl`,
+		faq_secure_group_q: 'Why can I not create a secure survey for a group I have created?',
+		faq_secure_group_a: `You cannot create a secure survey for a group if not all users in this group have generated their keys.
+			You can check the status of the users' keys in the "Groups" tab by clicking the group name.`,
+		faq_limit_answers_q: 'Can I limit the number of answers a user can submit to a public survey?',
+		faq_limit_answers_a: `No, you cannot limit the number of answers a user can submit to a public survey.
+			This is only possible in secure surveys. In a public survey, anyone can submit an answer multiple times.`,
+		faq_survey_time_q: 'Can I set a start and end time for a survey?',
+		faq_survey_time_a: `No, you cannot set a start and end time for a survey. However, it is your choice when you share the access code with other users.
+			If you want to limit the time when the survey is available, you can export the survey summary into a file and delete the survey.`,
+		faq_summary_q: 'What is a survey summary?',
+		faq_summary_a: `A survey summary is a collection of all the answers to a survey. You can view the averages of the answers to each question,
+			as well as each individual answer. To access the survey summary, click on the "Surveys" tab at the top of the page and then click on the survey title.
+			You can also share the results with others and export the summary to a .json file. In case of secure surveys you can view the possible respondents.`,
+		faq_import_summary_q: 'How do I import a survey summary?',
+		faq_import_summary_a: `To import a survey summary, click on the "Surveys" tab at the top of the page and then click on the "Import" button.
+			You will be asked to select a file. The file must be in .json format. You can import a survey summary that you have previously exported.
+			Make sure that the survey summary was exported from this application.`,
+		faq_limit_items_q:
+			'Is there a limit to the number of drafts, surveys, and groups I can create?',
+		faq_limit_items_a: `Yes, there is a limit to the number of drafts, surveys, and groups you can create. You can check the number of items you have created on the "Drafts",
+			"Surveys", and "Groups" pages in the top right corner. If you have reached the limit, you will have to delete some items to create new ones.`,
+		faq_anonymous_q: 'Are the answers to surveys actually anonymous?',
+		faq_anonymous_a: `Yes, the answers to surveys are fully anonymous. We do not store any data that could be used to identify the respondent. The answers are stored in a way
+			that makes it impossible to link them to the respondent. This is possible thanks to the use of digital signature keys and ring signatures.
+			If you still have doubts, you can check the source code of our application. Click on the GitHub link at the bottom of the page.`,
 
 		// account
 
 		account: 'Account',
-		account_your: 'Your account',
-		account_info_title: 'Account information',
+		your_account: 'Your account',
 		account_sign_in: 'Authorize yourself with AMU USOS:',
-		account_info: `We do not recommend signing in if you only wish to fill out a survey. For secure surveys, if you
-		have already generated your digital signature keys, signing in is also not necessary.`,
+		account_info: `We do not recommend signing in if you only wish to fill out a public survey. For secure surveys, if you
+			have already generated your digital signature keys, signing in is also not necessary.`,
+		keys_generated: 'You have already generated your keys.',
+		keys_not_generated: 'You have not generated your keys yet.',
 		account_generating_keys: 'Generating Keys',
-		account_new_key_alert:
-			'Are you sure you want to generate new keys? Doing so will take away your ability to answer existing secure surveys.',
+		account_new_key_alert: `Generating new keys will take away your ability to answer existing secure surveys.
+			Make sure you have answered all the surveys you wanted before generating new keys.`,
 		account_new_key: 'Generate New Keys',
-		account_keys_info: `These keys allow you to participate in secure surveys. Once they are generated, it is your
-			responsibility to keep them safe. When submitting a secure survey, you will be asked to
-			provide these keys to your browser for digital signature.`,
+		account_generate_info:
+			'Generated file contains your public and private keys. Do not share this file with anyone. It is your responsibility to keep it safe.',
 		account_last_key_update: 'Last key update',
 		account_key_update_info:
-			'In order to increase security, we recommend to generate a new key pair every year.',
+			'In order to increase security, we recommend generating a new key pair every year.',
 		account_expiration_warning: 'Key expiration warning',
 		account_expiration_critical: 'Key expiration critical warning',
 		account_keys_expire_soon:
 			'Your keys have been generated {number} days ago.<br />We recommend generating a new pair soon.',
 		account_keys_expired:
 			'Your keys have been generated {number} days ago.<br />Please generate a new pair for increased security.',
-		account_authorization_info: `
-			Authorizing yourself will enable you to:
+		account_info_title: 'Account information',
+		account_authorization_info: `Authorizing yourself will enable you to:
 			<ul class="account-ul">
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">encrypted</i></div>
+					<div>
+						Generate <span class="account-accent">digital signature keys</span> that allow you to participate
+						in
+						<span class="account-accent">secure surveys</span> without the need to sign in each time,
+					</div>
+				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">article</i></div>
 					<div>
@@ -439,19 +536,45 @@ export const data = {
 					<div class="account-icon"><i class="symbol">group</i></div>
 					<div>
 						Create and manage
-						<span class="account-accent">user groups</span>,
+						<span class="account-accent">user groups</span>.
 					</div>
 				</li>
+			</ul>`,
+		account_keys_info_title: 'Digital signature keys information',
+		account_keys_info: `Important information about digital signature keys:
+			<ul class="account-ul">
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">encrypted</i></div>
 					<div>
-						Generate <span class="account-accent">digital signature keys</span> that allow you to participate
-						in
-						<span class="account-accent">secure surveys</span> without the need to sign in each time.
+						Generating them allows you to participate in <span class="account-accent">secure surveys</span> and remain fully anonymous,
 					</div>
 				</li>
-			</ul>
-		`
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">graph_6</i></div>
+					<div>
+						They are being utilized in <span class="account-accent">ring signatures</span>,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">contract_edit</i></div>
+					<div>
+						When answering a secure survey, you will have to provide these keys to your browser for a
+						<span class="account-accent">digital signature</span>,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">account_circle_off</i></div>
+					<div>
+						After generating them, you do not need to be signed in to participate in <span class="account-accent">secure surveys</span>,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">priority_high</i></div>
+					<div>
+						If you are not going to take part in <span class="account-accent">secure surveys</span>, there is no need to generate them.
+					</div>
+				</li>
+			</ul>`
 	},
 
 	pl: {
@@ -480,6 +603,8 @@ export const data = {
 
 		submit: 'Zatwierdź',
 		error: 'Błąd',
+		unknown_error: 'Nieznany błąd',
+		something_went_wrong: 'Coś poszło nie tak',
 		warning: 'Ostrzeżenie',
 		success: 'Sukces',
 		welcome: 'Witaj',
@@ -487,6 +612,7 @@ export const data = {
 		cancel: 'Anuluj',
 		delete: 'Usuń',
 		sign_in: 'Zaloguj się',
+		sign_in_lower: 'Zaloguj się',
 		sign_out: 'Wyloguj się',
 		public: 'Publiczna',
 		secure: 'Bezpieczna',
@@ -506,6 +632,7 @@ export const data = {
 		info_about_leaving:
 			'Czy na pewno chcesz opuścić tę stronę?\nOpuszczenie spowoduje utratę wszystkich niezapisanych zmian.',
 		info_about_deleting: 'Czy na pewno chcesz usunąć wybrane wpisy?',
+		message: 'Wiadomość',
 		error_message: 'Coś poszło nie tak, skontaktuj się z administratorem.',
 		show_account_options: 'Pokaż opcje konta',
 		hide_account_options: 'Ukryj opcje konta',
@@ -516,7 +643,7 @@ export const data = {
 		other_lang: 'Angielski',
 		scroll_to_top: 'Przewiń na samą górę',
 		signed_out: 'Wylogowany',
-		sign_in_info: 'Zaloguj się, aby uzyskać dostęp do ',
+		sign_in_info: 'aby uzyskać dostęp do ',
 		and: 'i',
 		or: 'Lub',
 		select: 'Wybierz',
@@ -524,27 +651,22 @@ export const data = {
 		rename: 'Zmień nazwę',
 		close_menu: 'Zamknij menu',
 		open_menu: 'Otwórz menu',
-		hotkeys_info: `Możesz szybciej tworzyć ankiety używając skrótów klawiszowych.<br />
+		read_more: 'Czytaj więcej...',
+		slogan: 'Zyskaj pełną anonimowość dzięki potędze podpisów pierścieniowych!',
+		open_source_info: 'Nasz projekt jest open source. Kod źródłowy znajdziesz na ',
+		hotkeys_info: `Możesz tworzyć ankiety szybciej używając skrótów klawiszowych.<br />
 			Przytrzymaj <span class="accent">[ LeftAlt ]</span> i naciśnij:<br />
-			\t<span class="accent">[ 1 ]</span> - Dodaj pytanie {one}<br />
-			\t<span class="accent">[ 2 ]</span> - Dodaj pytanie {two}<br />
-			\t<span class="accent">[ 3 ]</span> - Dodaj pytanie {three}<br />
-			\t<span class="accent">[ 4 ]</span> - Dodaj pytanie {four}<br />
-			\t<span class="accent">[ 5 ]</span> - Dodaj pytanie {five}<br />
-			\t<span class="accent">[ 6 ]</span> - Dodaj pytanie {six}<br />
-			\t<span class="accent">[ 7 ]</span> - Dodaj pytanie {seven}<br />
-			\t<span class="accent">[ 8 ]</span> - Dodaj pytanie {eight}<br />
-			\t<span class="accent">[ 9 ]</span> - Dodaj pytanie {nine}<br />
-			\t<span class="accent">[ 0 ]</span> - Dodaj poprzednie pytanie<br />
-			\t<span class="accent">[ Enter ]</span> / <span class="accent">[ Insert ]</span> - Dodaj wybór do zaznaczonego pytania<br />
-			\t<span class="accent">[ Backspace ]</span> / <span class="accent">[ Delete ]</span> - Usuń zaznaczone pytanie lub wybór<br />
-			\t<span class="accent">[ PageUp ]</span> / <span class="accent">[ PageDown ]</span> - Przesuń zaznaczone pytanie w górę lub w dół<br />
-			\t<span class="accent">[ ~ ]</span> / <span class="accent">[ \\ ]</span> - Przełącz wymaganie dla zaznaczonego pytania<br />
-			\t<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Zaznacz poprzednie lub następne pole<br />
-			\t<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Zaznacz poprzednie lub następne pytanie<br />
-			\t<span class="accent">[ Home ]</span> - Zaznacz Tytuł ankiety<br />
-			\t<span class="accent">[ End ]</span> - Zaznacz przycisk Utwórz<br />
-			Ponadto, nadal możesz używać <span class="accent">[ Tab ]</span> i <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span> do nawigacji.`,
+			<span class="accent">[ 1 - 9 ]</span> - Dodaj różne typy pytań<br />
+			<span class="accent">[ 0 ]</span> - Dodaj poprzedni typ pytania<br />
+			<span class="accent">[ Enter ]</span> / <span class="accent">[ Ins ]</span> - Dodaj wybór do zaznaczonego pytania<br />
+			<span class="accent">[ Bksp ]</span> / <span class="accent">[ Del ]</span> - Usuń zaznaczone pytanie lub wybór<br />
+			<span class="accent">[ PgUp ]</span> / <span class="accent">[ PgDn ]</span> - Przesuń zaznaczone pytanie w górę lub w dół<br />
+			<span class="accent">[ ~ ]</span> / <span class="accent">[ \\ ]</span> - Przełącz wymaganie dla zaznaczonego pytania<br />
+			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Zaznacz poprzednie lub następne pole<br />
+			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Zaznacz poprzednie lub następne pytanie<br />
+			<span class="accent">[ Home ]</span> - Zaznacz Tytuł ankiety<br />
+			<span class="accent">[ End ]</span> - Zaznacz przycisk Utwórz<br />
+			Poza tym, nadal możesz używać <span class="accent">[ Tab ]</span> i <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span>.`,
 
 		// questions
 
@@ -639,7 +761,11 @@ export const data = {
 		code_tooltip:
 			'Wprowadź kod podany przez twórcę ankiety. Twoje odpowiedzi są w pełni anonimowe.',
 		submit_code: 'Wyślij kod',
-		home_redirect: 'Jeśli chcesz utworzyć własną ankietę, przejdź do',
+		home_keys_info: `By odpowiedzieć na bezpieczną ankietę, musisz mieć wygenerowane klucze.<br />
+			Jeśli nie masz kluczy, zautoryzuj się i wygeneruj je w `,
+		home_redirect: 'Jeśli chcesz utworzyć własną ankietę,',
+		home_redirect_account: 'najpierw zautoryzuj się w ',
+		home_redirect_create: 'przejdź do ',
 		survey_info: 'Informacje o ankiecie',
 		survey_title: 'Tytuł ankiety',
 		survey_title_title: 'Wprowadź tytuł ankiety',
@@ -667,6 +793,12 @@ export const data = {
 		deleting_surveys: 'Usuwanie ankiet',
 		create_survey: 'Stwórz ankietę',
 		delete_selected_surveys: 'Usuń wybrane ankiety',
+		survey_public_title: 'Ankieta publiczna',
+		survey_public_info:
+			'Ta ankieta jest publiczna. Każdy może odpowiedzieć na nią wielokrotnie. Nie będziesz musiał podawać swoich kluczy.',
+		survey_secure_title: 'Ankieta bezpieczna',
+		survey_secure_info:
+			'Ta ankieta jest bezpieczna. Wybrani użytkownicy mogą odpowiedzieć na nią tylko raz. Będziesz musiał podać swoje klucze przy przesyłaniu tej ankiety.',
 		survey_not_secure_title: 'Ankieta niebezpieczna',
 		survey_not_secure: 'Ta ankieta nie jest bezpieczna.',
 		only_respondent: ' Jesteś jedyną osobą, która może wypełnić tę ankietę.',
@@ -766,6 +898,7 @@ export const data = {
 		answer: 'Odpowiedź',
 		answers: 'Odpowiedzi',
 		select_answer: 'Wybierz swoją odpowiedź',
+		select_no_answer: 'Nie odpowiedziano',
 		enter_answer: 'Wprowadź swoją odpowiedź',
 		answer_question_no: 'Proszę odpowiedzieć na pytanie nr. {index}.',
 		move_answer_up: 'Przenieś odpowiedź w górę',
@@ -773,8 +906,8 @@ export const data = {
 		answer_submit_success: 'Twoja odpowiedź została przesłana pomyślnie.',
 		no_answers_yet: 'Brak odpowiedzi!',
 		no_answer_yet: 'Brak odpowiedzi nr {index}!',
-		no_answers_to_question: 'Brak odpowiedzi na to pytanie',
-		question_not_answered: 'Respondent nie udzielił odpowiedzi na to pytanie',
+		no_answers_to_question: 'Brak odpowiedzi na to pytanie.',
+		question_not_answered: 'Respondent nie udzielił odpowiedzi na to pytanie.',
 		number_of_answers: 'Liczba odpowiedzi: {number}',
 		number_of_answers_title: 'Liczba odpowiedzi',
 		answer_no: 'Odpowiedź nr {index}',
@@ -785,6 +918,7 @@ export const data = {
 		clear_answer_title: 'Wyczyść odpowiedź',
 		clear_answer: 'Wyczyść',
 		dont_answer: 'Nie udzielaj odpowiedzi',
+
 		// pages
 
 		first_page: 'Pierwsza strona',
@@ -817,7 +951,7 @@ export const data = {
 		warning_no_file: 'Nie wybrano pliku.',
 		warning_file_not_csv: 'Plik musi być w formacie .csv.',
 		error_no_file: 'Proszę wybrać plik.',
-		error_file_not_key: 'Proszę wybrać plik .key.',
+		error_file_not_txt: 'Proszę wybrać plik .txt.',
 		error_file_not_json: 'Proszę wybrać plik .json.',
 		select_file: 'Wybierz plik',
 		load_keys_title: 'Załaduj swoje klucze',
@@ -826,28 +960,108 @@ export const data = {
 		submit_file: 'Załaduj plik',
 		key_file_label: `Załaduj plik, który wcześniej wygenerowałeś w tej aplikacji. Plik zawiera Twoje klucze, które są
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
-		default_filename: 'Domyślna nazwa pliku',
+		default_filename: 'Domyślna nazwa pliku: ',
 		no_file_selected: 'Nie wybrano pliku',
-		incorrect_passphrase: 'Niepoprawne hasło',
-		error_empty_passphrase: 'Hasło nie może być puste',
-		provide_passphrase: 'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu',
-		enter_passphrase: 'Podaj hasło do pliku',
+		passphrase_title: 'Wprowadź hasło do pliku',
+		incorrect_passphrase: 'Niepoprawne hasło.',
+		error_empty_passphrase: 'Hasło nie może być puste.',
+		provide_passphrase: 'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu.',
+		enter_passphrase: 'Podaj hasło do pliku.',
+		example_csv: `Poprawny plik .csv nie powinien zawierać nagłówka. Każdy email powinien być w osobnej linii oraz oddzielony przecinkiem lub średnikiem.<br /><br />
+			Przykład:<br />
+			user1@st.amu.edu.pl,<br />
+			user2@st.amu.edu.pl;<br />
+			user3@amu.edu.pl`,
+
+		// faq
+
+		faq_title: 'Często zadawane pytania',
+		faq_public_survey_q: 'Czym jest publiczna ankieta?',
+		faq_public_survey_a: `Publiczna ankieta jest ankietą, na którą może wielokrotnie odpowiedzieć każdy, kto zna jej kod dostępu.
+			Jest tak samo anonimowa jak bezpieczna ankieta. Nie musisz się autoryzować lub generować kluczy, aby odpowiedzieć na publiczną ankietę.`,
+		faq_secure_survey_q: 'Czym jest bezpieczna ankieta?',
+		faq_secure_survey_a: `Bezpieczna ankieta jest ankietą, na którą może jednokrotnie odpowiedzieć wybrana grupa respondentów.
+			Musisz się zautoryzować przynajmniej raz i wygenerować klucze, które są potrzebne do wypełnienia bezpiecznej ankiety.
+			Po wygenerowaniu kluczy, nie musisz się autoryzować ponownie.`,
+		faq_keys_q: 'Czym są klucze podpisu cyfrowego?',
+		faq_keys_a: `Klucze podpisu cyfrowego są parą kryptograficznych, asymetrycznych kluczy, które są używane do podpisywania i weryfikacji cyfrowych informacji.
+			Wykorzystywane są w bezpiecznych ankietach, aby zapewnić anonimowość respondentów i zweryfikować ich prawo do wypełnienia danej ankiety.
+			Możesz wygenerować swoje klucze w zakładce "Konto" po zautoryzowaniu się. Będziesz poproszony o podanie hasła, które zabezpieczy Twoje klucze.
+			Pamiętaj, by generować nowe klucze co roku, aby zwiększyć bezpieczeństwo.`,
+		faq_authorize_q: 'Czemu nie mogę się zautoryzować?',
+		faq_authorize_a: `Tylko pracownicy i studenci UAM mogą zautoryzować się w tej instancji naszej aplikacji.
+			Jeśli jesteś z UAM i nadal nie możesz się zautoryzować, może być to spowodowane problemami z systemem autoryzacyjnym USOS UAM.
+			Możesz spróbować wyczyścić ciasteczka lub skontaktować się z administratorem. Możesz też spróbować ponownie później.`,
+		faq_personal_q: 'Czy inni użytkownicy mogą zobaczyć moje dane osobowe?',
+		faq_personal_a: `Nie, inni użytkownicy nie mogą zobaczyć twoich danych osobowych. Jeśli zdecydujesz się zautoryzować,
+			wtedy jedyną informacją, która będzie widoczna dla innych zautoryzowanych użytkowników jest twój adres email.`,
+		faq_code_q: 'Czym jest kod dostępu?',
+		faq_code_a: `Kod dostępu to unikalny 6-cyfrowy kod, który jest generowany kiedy tworzysz ankietę.
+			Jest on używany do wypełnienia ankiety. Możesz go udostępnić innym, aby mogli odpowiedzieć na twoją ankietę.`,
+		faq_create_q: 'Jak mogę stworzyć ankietę?',
+		faq_create_a: `Aby stworzyć ankietę, kliknij w zakładkę "Utwórz" na górze strony. Będziesz poproszony o podanie tytułu ankiety
+			oraz pytań, które chcesz w niej zawrzeć. Możesz wybrać różnorodne typy pytań. Możesz przełączać wymaganie odpowiedzi dla każdego pytania.
+			Możesz również zobaczyć podgląd swojej ankiety i zapisać ją jako szkic do późniejszej edycji. Kiedy będziesz gotowy,
+			możesz zakończyć tworzenie ankiety klikając w przycisk "Utwórz". Wtedy będziesz musiał wybrać między ankietą publiczną i bezpieczną.
+			W przypadku bezpiecznej ankiety, będziesz musiał wybrać grupę respondentów, którzy będą mogli na nią odpowiedzieć.`,
+		faq_draft_q: 'Czym jest szkic?',
+		faq_draft_a: `Szkic to ankieta, którą zacząłeś tworzyć, ale jej jeszcze nie ukończyłeś. Możesz zapisać swoje postępy jako szkic
+			i wrócić do niegp później. Możesz także używać szkiców jako szablonów do tworzenia wielu ankiet o tej samej strukturze.
+			Wszystkie zapisane szkice będą dostępne w zakładce "Szkice".`,
+		faq_group_q: 'Czym jest grupa?',
+		faq_group_a: `Grupa to zbiór użytkowników, którzy mogą być wykorzystani w bezpiecznych ankietach. Możesz zdefiniować grupę możliwych respondentów
+			i używać ją w wielu ankietach. Możesz stworzyć grupę w zakładce "Grupy". Możesz również zaimportować użytkowników z pliku .csv.`,
+		faq_import_users_q: 'Czemu nie mogę zaimportować użytkowników?',
+		faq_import_users_a: `Możesz zaimportować jedynie użytkowników, którzy się już wcześniej zarejestrowali. Jeśli próbujesz zaimportować użytkowników, którzy się jeszcze nie zarejestrowali,
+			nie będziesz mógł tego zrobić. Jeśli jesteś pewien, że użytkownicy są zarejestrowani, wtedy problemem może być format pliku.
+			Upewnij się, że importujesz właściwy plik .csv. Właściwy plik .csv nie powinien zawierać nagłówka.
+			Każdy email powinien być w osobnej linii oraz oddzielony przecinkiem lub średnikiem.<br /><br />
+			Przykład:<br />
+			user1@st.amu.edu.pl,<br />
+			user2@st.amu.edu.pl;<br />
+			user3@amu.edu.pl`,
+		faq_secure_group_q:
+			'Czemu nie mogę stworzyć bezpiecznej ankiety dla utworzonej wcześniej grupy?',
+		faq_secure_group_a: `Nie możesz stworzyć bezpiecznej ankiety dla grupy, jeśli nie wszyscy członkowie tej grupy wygenerowali klucze.
+			Możesz sprawdzić status kluczy członków grupy w zakładce "Grupy" poprzez kliknięcie w nazwę grupy.`,
+		faq_limit_answers_q:
+			'Czy mogę ograniczyć liczbę odpowiedzi jaką użytkownik może wysłać na publiczną ankietę?',
+		faq_limit_answers_a: `Nie, nie możesz ograniczyć liczby odpowiedzi, jaką użytkownik może wysłać na publiczną ankietę.
+			To jest możliwe jedynie w bezpiecznych ankietach. W publicznych ankietach każdy może odpowiedzieć wielokrotnie.`,
+		faq_survey_time_q: 'Czy mogę ustawić czas, w którym ankieta będzie dostępna?',
+		faq_survey_time_a: `Nie, nie możesz ustawić czasu, w którym ankieta będzie dostępna. Natomiast, do twojego wyboru należy kiedy udostępnisz jej kod dostępu innym użytkownikom.
+			Jeśli chcesz ograniczyć czas, w którym ankieta jest dostępna, możesz wyeksportować podsumowanie ankiety do pliku i usunąć ankietę.`,
+		faq_summary_q: 'Czym jest podsumowanie ankiety?',
+		faq_summary_a: `Podsumowanie ankiety to kolekcja wszystkich odpowiedzi na daną ankietę. Możesz przeglądać średnie odpowiedzi do każdego pytania,
+			jak i wszystkie indywidualne odpowiedzi. By sprawdzić podsumowanie ankiety, kliknij w zakładkę "Ankiety" na górze strony i kliknij w tytuł ankiety.
+			Możesz też udostępnić wyniki ankiety innym użytkownikom i wyeksportować podsumowanie do pliku .json. W przypadku bezpiecznych ankiet, możesz też zobaczyć możliwych respondentów.`,
+		faq_import_summary_q: 'Jak mogę zaimportować podsumowanie ankiety?',
+		faq_import_summary_a: `By zaimportować podsumowanie ankiety, kliknij w zakładkę "Ankiety" na górze strony, a następnie kliknij przycisk "Importuj".
+			Będziesz poproszony o wybranie pliku. Plik musi być w formacie .json. Możesz zaimportować podsumowanie ankiety, które wcześniej wyeksportowałeś.
+			Upewnij się, że podsumowanie ankiety zostało wyeksportowane z tej aplikacji.`,
+		faq_limit_items_q: 'Czy istnieje limit na liczbę szkiców, ankiet i grup, które mogę utworzyć?',
+		faq_limit_items_a: `Tak, istnieje limit na liczbę szkiców, ankiet i grup, które możesz utworzyć. Możesz sprawdzić liczbę utworzonych pozycji w prawym górnym rogu strony
+			w zakładkach "Szkice", "Ankiety" i "Grupy". Jeśli osiągniesz limit, nie będziesz mógł utworzyć nowych pozycji, dopóki nie usuniesz którejś z istniejących.`,
+		faq_anonymous_q: 'Czy odpowiedzi na ankiety są naprawdę anonimowe?',
+		faq_anonymous_a: `Tak, odpowiedzi na ankiety są w pełni anonimowe. Nie przechowujemy żadnych informacji, które mogłyby zostać użyte do zidentyfikowania respondenta. Odpowiedzi są przechowywane w taki sposób,
+			że niemożliwe jest powiązanie ich z konkretnym użytkownikiem. Jest to możliwe dzięki użyciu kluczy podpisu cyfrowego i podpisów pierścieniowych.
+			Jeśli wciąż masz wątpliwości, możesz sprawdzić kod źródłowy tej aplikacji. Kliknij w link do GitHuba na dole strony.`,
 
 		// account
 
 		account: 'Konto',
-		account_your: 'Twoje konto',
-		account_info_title: 'Informacje o koncie',
+		your_account: 'Twoje konto',
 		account_sign_in: 'Zautoryzuj się za pomocą USOS UAM:',
-		account_info: `Nie zalecamy logowania się, jeśli chcesz jedynie wypełnić ankietę. W przypadku bezpiecznych ankiet, jeśli
-		już wygenerowałeś klucze podpisu cyfrowego, logowanie się również nie jest konieczne.`,
+		account_info: `Nie zalecamy logowania się, jeśli chcesz jedynie wypełnić publiczną ankietę. W przypadku bezpiecznych ankiet, jeśli
+			wygenerowałeś już klucze podpisu cyfrowego, logowanie się również nie jest konieczne.`,
+		keys_generated: 'Klucze zostały już wygenerowane.',
+		keys_not_generated: 'Nie wygenerowałeś jeszcze kluczy.',
 		account_generating_keys: 'Generowanie kluczy',
-		account_new_key_alert:
-			'Czy na pewno chcesz wygenerować nowe klucze? Spowoduje to utratę możliwości odpowiedzi na istniejące bezpieczne ankiety.',
+		account_new_key_alert: `Wygenerowanie nowych kluczy spowoduje utratę możliwości odpowiedzi na istniejące bezpieczne ankiety.
+			Upewnij się, że wypełniłeś wszystkie ankiety, które chciałeś, zanim wygenerujesz nowe klucze.`,
 		account_new_key: 'Wygeneruj nowe klucze',
-		account_keys_info: `Te klucze pozwalają na uczestniczenie w bezpiecznych ankietach. Po ich wygenerowaniu, należy
-			je zabezpieczyć. Podczas wypełniania bezpiecznej ankiety, zostaniesz poproszony o podanie
-			tych kluczy przeglądarce do podpisu cyfrowego.`,
+		account_generate_info:
+			'Wygenerowany plik zawiera Twój publiczny i prywatny klucz. Nie udostępniaj nikomu tego pliku. Twoim obowiązkiem jest bezpieczne przechowanie go.',
 		account_last_key_update: 'Ostatnia aktualizacja kluczy',
 		account_key_update_info:
 			'Aby zwiększyć bezpieczeństwo, zalecamy wygenerowanie nowej pary kluczy raz na rok.',
@@ -857,9 +1071,16 @@ export const data = {
 			'Twoje klucze zostały wygenerowane {number} dni temu.<br />Zalecamy wygenerowanie nowej pary.',
 		account_keys_expired:
 			'Twoje klucze zostały wygenerowane {number} dni temu.<br />Proszę wygenerować nową parę dla większego bezpieczeństwa.',
-		account_authorization_info: `
-			Zautoryzowanie się pozwoli Ci na:
+		account_info_title: 'Informacje o koncie',
+		account_authorization_info: `Zautoryzowanie się pozwoli Ci na:
 			<ul class="account-ul">
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">encrypted</i></div>
+					<div>
+						Generowanie <span class="account-accent">kluczy podpisu cyfrowego</span>, które pozwalają na uczestniczenie
+						w <span class="account-accent">bezpiecznych ankietach</span> bez konieczności logowania się za każdym razem,
+					</div>
+				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">article</i></div>
 					<div>
@@ -885,17 +1106,44 @@ export const data = {
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">group</i></div>
 					<div>
-						Tworzenie i zarządzanie <span class="account-accent">grupami użytkowników</span>,
+						Tworzenie i zarządzanie <span class="account-accent">grupami użytkowników</span>.
 					</div>
 				</li>
+			</ul>`,
+		account_keys_info_title: 'Informacje o kluczach podpisu cyfrowego',
+		account_keys_info: `Ważne informacje o kluczach podpisu cyfrowego:
+			<ul class="account-ul">
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">encrypted</i></div>
 					<div>
-						Generowanie <span class="account-accent">kluczy podpisu cyfrowego</span>, które pozwalają na uczestniczenie
-						w <span class="account-accent">bezpiecznych ankietach</span> bez konieczności logowania się za każdym razem.
+						Wygenerowanie ich pozwala na uczestnictwo w <span class="account-accent">bezpiecznych ankietach</span> i pozostanie w pełni anonimowym,
 					</div>
 				</li>
-			</ul>
-		`
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">graph_6</i></div>
+					<div>
+						Wykorzystywane są w <span class="account-accent">podpisach pierścieniowych</span>,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">contract_edit</i></div>
+					<div>
+						Przy odpowiadaniu na bezpieczną ankietę, będziesz musiał podać te klucze swojej przeglądarce do
+						<span class="account-accent">podpisu cyfrowego</span>,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">account_circle_off</i></div>
+					<div>
+						Po ich wygenerowaniu, nie musisz być zalogowany, aby uczestniczyć w <span class="account-accent">bezpiecznych ankietach</span>,
+					</div>
+				</li>
+				<li class="account-li">
+					<div class="account-icon"><i class="symbol">priority_high</i></div>
+					<div>
+						Jeśli nie zamierzasz korzystać z <span class="account-accent">bezpiecznych ankiet</span>, nie ma potrzeby ich generować.
+					</div>
+				</li>
+			</ul>`
 	}
 };

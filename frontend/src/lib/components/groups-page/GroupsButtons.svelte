@@ -3,7 +3,6 @@
 	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { tick } from 'svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
 	import MembersError from '$lib/components/groups-page/MembersError.svelte';
@@ -58,7 +57,7 @@
 		membersError = GroupError.NoError;
 	}
 
-	async function checkCorrectness(name: string, members: string[]) {
+	function checkCorrectness(name: string, members: string[]) {
 		nameError = GroupError.NoError;
 		const n = name;
 		if (n === null || n === undefined || n.length === 0) {
@@ -78,13 +77,11 @@
 		}
 
 		if (nameError !== GroupError.NoError) {
-			await tick();
 			scrollToElement('.group-input');
 			return false;
 		}
 
 		if (membersError !== GroupError.NoError) {
-			await tick();
 			scrollToElement('.select-list');
 			return false;
 		}
@@ -102,7 +99,7 @@
 
 		const name = groupName.trim();
 
-		if (!(await checkCorrectness(name, groupMembers))) return;
+		if (!checkCorrectness(name, groupMembers)) return;
 
 		const response = await fetch('/api/groups/create', {
 			method: 'POST',

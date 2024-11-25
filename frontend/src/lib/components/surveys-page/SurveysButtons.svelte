@@ -9,7 +9,7 @@
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
-	import ImportSummaryButton from '$lib/components/global/ImportSummaryButton.svelte';
+	import ImportSummaryModal from '$lib/components/global/ImportSummaryModal.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -24,7 +24,8 @@
 	export let numSurveys: number;
 	export let selectedSurveysToRemove: typeof surveys = [];
 
-	let isModalHidden: boolean = true;
+	let isDeleteModalHidden: boolean = true;
+	let isImportModalHidden: boolean = true;
 
 	async function deleteSurveys() {
 		const ownedSurveyCodes = selectedSurveysToRemove
@@ -34,38 +35,42 @@
 			.filter((s) => !s.is_owned_by_user)
 			.map((s) => s.survey_code);
 
-		const deleteResponse = await fetch('/api/surveys/delete', {
-			method: 'POST',
-			body: JSON.stringify({
-				survey_codes: ownedSurveyCodes
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
+		if (ownedSurveyCodes.length > 0) {
+			const deleteResponse = await fetch('/api/surveys/delete', {
+				method: 'POST',
+				body: JSON.stringify({
+					survey_codes: ownedSurveyCodes
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
 
-		if (!deleteResponse.ok) {
-			const body = await deleteResponse.json();
-			$errorModalContent = getErrorMessage(body.detail);
-			$isErrorModalHidden = false;
-			return;
+			if (!deleteResponse.ok) {
+				const body = await deleteResponse.json();
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
+				return;
+			}
 		}
 
-		const rejectResponse = await fetch('/api/surveys/reject-access', {
-			method: 'POST',
-			body: JSON.stringify({
-				survey_codes: sharedSurveyCodes
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
+		if (sharedSurveyCodes.length > 0) {
+			const rejectResponse = await fetch('/api/surveys/reject-access', {
+				method: 'POST',
+				body: JSON.stringify({
+					survey_codes: sharedSurveyCodes
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
 
-		if (!rejectResponse.ok) {
-			const body = await rejectResponse.json();
-			$errorModalContent = getErrorMessage(body.detail);
-			$isErrorModalHidden = false;
-			return;
+			if (!rejectResponse.ok) {
+				const body = await rejectResponse.json();
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
+				return;
+			}
 		}
 
 		const currentPage = parseInt($page.params.surveysPage);
@@ -78,15 +83,17 @@
 			await changePage($page.url.pathname, currentPage - 1);
 		}
 
-		isModalHidden = true;
+		isDeleteModalHidden = true;
 		selectedSurveysToRemove = [];
 		await invalidateAll();
 	}
 </script>
 
+<ImportSummaryModal bind:isHidden={isImportModalHidden} />
+
 <DeleteModal
 	title={$t('deleting_surveys')}
-	bind:isHidden={isModalHidden}
+	bind:isHidden={isDeleteModalHidden}
 	deleteEntries={deleteSurveys}
 />
 
@@ -100,7 +107,7 @@
 				title={$t('delete_selected_surveys')}
 				class="delete-survey"
 				disabled={selectedSurveysToRemove.length === 0}
-				on:click={() => (isModalHidden = false)}
+				on:click={() => (isDeleteModalHidden = false)}
 			>
 				<i class="symbol">delete</i><Tx text="delete" />
 			</button>
@@ -108,15 +115,17 @@
 	</div>
 	<PageButtons numEntries={numSurveys} />
 </div>
-<div class="button-row bottom">
-	<ImportSummaryButton />
+<div class="button-row">
+	<button
+		title={$t('import_survey_summary')}
+		class="import-export-button"
+		on:click={() => (isImportModalHidden = false)}
+	>
+		<i class="symbol">upload_file</i><Tx text="import" />
+	</button>
 </div>
 
 <style>
-	.bottom {
-		font-size: 1em !important;
-	}
-
 	@media screen and (max-width: 768px) {
 		.button-row {
 			font-size: 0.9em;

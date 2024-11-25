@@ -30,7 +30,6 @@
 	import SelectUsers from './SelectUsers.svelte';
 	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import { onMount } from 'svelte';
 	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 	import { invalidateAll } from '$app/navigation';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
@@ -161,34 +160,25 @@
 
 	$: isCryptoDisabled = !useCrypto;
 
-	onMount(() => {
-		function handleEnterRespondent(event: KeyboardEvent) {
-			if (!isRespondentModalHidden && event.key === 'Enter') {
-				event.preventDefault();
-				createSurvey();
-				event.stopImmediatePropagation();
-			}
+	function handleEnterRespondent(event: KeyboardEvent) {
+		if (!isRespondentModalHidden && event.key === 'Enter') {
+			event.preventDefault();
+			createSurvey();
+			event.stopImmediatePropagation();
 		}
+	}
 
-		function handleEnterDraft(event: KeyboardEvent) {
-			if (!isDraftModalHidden && event.key === 'Enter') {
-				event.preventDefault();
-				saveDraft(false);
-				event.stopImmediatePropagation();
-			}
+	function handleEnterDraft(event: KeyboardEvent) {
+		if (!isDraftModalHidden && event.key === 'Enter') {
+			event.preventDefault();
+			saveDraft(false);
+			event.stopImmediatePropagation();
 		}
-
-		document.body.addEventListener('keydown', handleEnterRespondent);
-		document.body.addEventListener('keydown', handleEnterDraft);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEnterRespondent);
-			document.body.removeEventListener('keydown', handleEnterDraft);
-		};
-	});
+	}
 </script>
 
 <svelte:window bind:innerWidth />
+<svelte:body on:keydown={handleEnterRespondent} on:keydown={handleEnterDraft} />
 
 <Modal
 	icon="save"
@@ -298,12 +288,14 @@
 
 <style>
 	.create-info.tooltip {
-		--tooltip-width: 17em;
+		--tooltip-width: 20em;
 		font-size: 1.5em;
 	}
 
 	.create-info.tooltip .tooltip-text {
-		font-size: 0.8em;
+		text-align: left;
+		font-size: 0.67em;
+		z-index: 2;
 	}
 
 	.button-row {
@@ -360,16 +352,16 @@
 
 	@media screen and (max-width: 768px) {
 		.create-info.tooltip {
-			--tooltip-width: 10em;
+			--tooltip-width: 12em;
 			font-size: 1.25em;
 		}
 
 		.create-info.tooltip .tooltip-text.bottom {
-			left: -250%;
+			left: -175%;
 		}
 
 		.create-info.tooltip .tooltip-text.bottom::after {
-			left: 90%;
+			left: 85%;
 		}
 
 		.import {

@@ -42,7 +42,7 @@
 	.info-entry {
 		width: 2.3em;
 		text-align: center;
-		font-weight: 700 !important;
+		font-weight: 700;
 	}
 
 	.button-row {

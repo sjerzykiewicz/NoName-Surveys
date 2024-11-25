@@ -1,5 +1,7 @@
 import { readable, type Readable, writable, type Writable } from 'svelte/store';
 
+export const colorScheme: Writable<string> = writable('');
+
 export const XS: Readable<number> = readable(320);
 export const S: Readable<number> = readable(425);
 export const M: Readable<number> = readable(768);

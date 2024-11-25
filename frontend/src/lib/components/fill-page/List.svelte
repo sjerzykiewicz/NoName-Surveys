@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
-	import Tx from 'sveltekit-translate/translate/tx.svelte';
 
 	export let questionIndex: number;
 
@@ -12,27 +12,14 @@
 </script>
 
 <div class="choice-area display">
-	<select
-		title={$t('select_answer')}
-		name={questionIndex.toString()}
-		bind:value={$answers[questionIndex].choices[0]}
-	>
-		<option value="" disabled selected hidden><Tx text="select_answer" /></option>
+	<select title={$t('select_answer')} bind:value={$answers[questionIndex].choices[0]}>
+		<option value="" selected><Tx text="select_no_answer" /></option>
 		{#each $questions[questionIndex].choices as choice}
 			<option value={choice}>
 				{choice}
 			</option>
 		{/each}
 	</select>
-	{#if $answers[questionIndex].choices[0] !== ''}
-		<div class="clear_answer">
-			<button
-				title={$t('clear_answer_title')}
-				on:click={() => ($answers[questionIndex].choices[0] = '')}
-				><Tx text="clear_answer" /></button
-			>
-		</div>
-	{/if}
 </div>
 
 <style>
@@ -45,9 +32,5 @@
 		max-width: calc(100% - 2.25em);
 		overflow-wrap: break-word;
 		text-overflow: ellipsis;
-	}
-
-	.clear_answer {
-		justify-content: flex-start;
 	}
 </style>

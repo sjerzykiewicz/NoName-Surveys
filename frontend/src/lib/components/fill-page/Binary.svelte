@@ -28,7 +28,6 @@
 		><div class="icon">
 			<input
 				type="radio"
-				name={questionIndex.toString()}
 				checked={checked === 0}
 				on:click={() => {
 					updateAnswers(0);
@@ -47,7 +46,6 @@
 		><div class="icon">
 			<input
 				type="radio"
-				name={questionIndex.toString()}
 				checked={checked === 1}
 				on:click={() => {
 					updateAnswers(1);

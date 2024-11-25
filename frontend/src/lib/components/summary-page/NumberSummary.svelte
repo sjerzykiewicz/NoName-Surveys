@@ -16,7 +16,7 @@
 </script>
 
 {#if existingAnswers.length === 0}
-	<div title={$t('no_answers_to_question')} class="summary_no_answers">
+	<div title={$t('no_answers_to_question')} class="summary-no-answers">
 		<Tx text="no_answers_to_question" />
 	</div>
 {:else}
@@ -33,6 +33,7 @@
 
 <style>
 	.choice .limit {
+		font-size: 1em;
 		color: var(--accent-color-1);
 		transition:
 			0.2s,

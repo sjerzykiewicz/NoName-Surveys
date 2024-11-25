@@ -2,149 +2,64 @@
 	import { page } from '$app/stores';
 	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
+	import Footer from '$lib/components/global/Footer.svelte';
+	import OpenSourceInfo from '$lib/components/global/OpenSourceInfo.svelte';
 	import SignIn from '$lib/components/account-page/SignIn.svelte';
 	import SignOut from '$lib/components/account-page/SignOut.svelte';
 	import DownloadKey from '$lib/components/account-page/DownloadKey.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
-	import Modal from '$lib/components/global/Modal.svelte';
-	import init, { get_keypair } from 'wasm';
-	import { onMount } from 'svelte';
-	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
-	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import { downloadFile } from '$lib/utils/downloadFile';
-	import type { PageServerData } from './$types';
-	import { invalidateAll } from '$app/navigation';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
-	import encryptKeys from '$lib/utils/encryptKeys';
+	import AccountButtons from '$lib/components/account-page/AccountButtons.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let data: PageServerData;
-	export let isModalHidden: boolean = true;
-
-	let passphrase = '';
-
-	onMount(async () => {
-		await init();
-	});
-
-	async function generateKeyPair() {
-		if (passphrase === '') {
-			$errorModalContent = $t('error_empty_passphrase');
-			$isErrorModalHidden = false;
-			return;
-		}
-		try {
-			const keyPair = get_keypair();
-			const publicKey = keyPair.get_public_key();
-			const privateKey = keyPair.get_private_key();
-			const fingerprint = keyPair.get_fingerprint();
-
-			const pemData = publicKey + '\n\n' + privateKey;
-			const { salt, iv, ciphertext } = await encryptKeys(pemData, passphrase);
-			const decoded = {
-				salt: Array.from(salt, (byte) => String.fromCharCode(byte)).join(''),
-				iv: Array.from(iv, (byte) => String.fromCharCode(byte)).join(''),
-				ciphertext: Array.from(ciphertext, (byte) => String.fromCharCode(byte)).join('')
-			};
-
-			const response = await fetch('/api/users/update-public-key', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					public_key: publicKey,
-					fingerprint: fingerprint
-				})
-			});
-
-			if (!response.ok) {
-				const body = await response.json();
-				$errorModalContent = getErrorMessage(body.detail);
-				$isErrorModalHidden = false;
-				return;
-			}
-
-			downloadFile('noname.key', 'application/octet-stream', JSON.stringify(decoded));
-			await invalidateAll();
-		} catch (e) {
-			$errorModalContent = e as string;
-			$isErrorModalHidden = false;
-			return;
-		}
-	}
-
-	onMount(() => {
-		function handleEnter(event: KeyboardEvent) {
-			if (!isModalHidden && event.key === 'Enter') {
-				event.preventDefault();
-				isModalHidden = true;
-				generateKeyPair();
-				event.stopImmediatePropagation();
-			}
-		}
-
-		document.body.addEventListener('keydown', handleEnter);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEnter);
-		};
-	});
-
-	let innerWidth: number;
+	export let data;
 </script>
 
-<svelte:window bind:innerWidth />
-
 {#if $page.data.session}
-	<Modal
-		icon="encrypted"
-		title={$t('account_generating_keys')}
-		bind:isHidden={isModalHidden}
-		--width={innerWidth <= $M ? '18em' : '22em'}
-	>
-		<span slot="content">
-			<Tx text="account_new_key_alert" />
-			<br />
-			<Tx text="provide_passphrase" />:
-			<input type="password" bind:value={passphrase} class="passphrase_input" />
-		</span>
-		<button
-			title={$t('generate')}
-			class="done"
-			on:click={() => {
-				isModalHidden = true;
-				generateKeyPair();
-			}}
-		>
-			<i class="symbol">done</i><Tx text="generate" />
-		</button>
-		<button
-			title={$t('cancel')}
-			class="not"
-			on:click={() => {
-				isModalHidden = true;
-				passphrase = '';
-			}}
-		>
-			<i class="symbol">close</i><Tx text="cancel" />
-		</button>
-	</Modal>
-
 	<Header>
-		<div title={$t('account_your')} class="title">
-			<Tx text="welcome" />, {$page.data.session.user?.email}
+		<div title={$t('your_account')} class="title static">
+			<Tx text="welcome" />, {$page.data.session.user?.email.split('@')[0]}!
+			{#if data.hasKey}
+				<span title="" class="tooltip">
+					<i class="symbol generated">key</i>
+					<span class="tooltip-text left">
+						<Tx text="keys_generated" />
+					</span>
+				</span>
+			{:else}
+				<span title="" class="tooltip">
+					<i class="symbol">key_off</i>
+					<span class="tooltip-text left">
+						<Tx text="keys_not_generated" />
+					</span>
+				</span>
+			{/if}
 		</div>
 	</Header>
 
 	<Content>
-		<DownloadKey bind:isModalHidden lastTime={data.key_creation_date} />
+		<DownloadKey lastTime={data.keyCreationDate} hasKey={data.hasKey} />
+		<AccountButtons />
 		<SignOut />
 	</Content>
 {:else}
 	<Content>
 		<SignIn />
+		<AccountButtons />
 	</Content>
 {/if}
+<Footer>
+	<OpenSourceInfo />
+</Footer>
+
+<style>
+	.tooltip .tooltip-text {
+		font-size: 0.8em;
+	}
+
+	.generated {
+		color: var(--accent-color-1);
+	}
+</style>

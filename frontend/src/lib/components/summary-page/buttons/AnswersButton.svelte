@@ -11,7 +11,7 @@
 <button
 	title={$t('view_individual_answers')}
 	class="footer-button"
-	class:save={$page.route.id === '/surveys/[surveysPage]/[code]/answers/[answersPage]'}
+	class:save={$page.url.pathname.includes('answers')}
 	on:click={() =>
 		goto('/surveys/' + $page.params.surveysPage + '/' + $page.params.code + '/answers/0')}
 >

@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData } from '../../../routes/$types';
+	import Header from '$lib/components/global/Header.svelte';
 	import Content from '$lib/components/global/Content.svelte';
+	import Footer from '$lib/components/global/Footer.svelte';
+	import OpenSourceInfo from '$lib/components/global/OpenSourceInfo.svelte';
 	import { M } from '$lib/stores/global';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
@@ -14,21 +17,28 @@
 
 	export let form: ActionData;
 
+	const githubLink = 'https://github.com/sjerzykiewicz/NoName-Surveys';
+
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
 
-<Content>
+<Header>
 	<h1>NoName Anonymous Surveys</h1>
+	<div class="subtitle"><Tx text="slogan" /></div>
+</Header>
+
+<Content>
 	<div class="code-text">
 		<span><Tx text="code_info" /></span>
-		<div title="" class="tooltip">
-			<i class="symbol">info</i>
-			<span
-				class="tooltip-text {innerWidth <= $M ? (innerWidth <= $M ? 'top' : 'left') : 'bottom'}"
-			>
-				<Tx text="code_tooltip" />
+		<div class="tooltip hoverable">
+			<i class="symbol">help</i>
+			<span class="tooltip-text {innerWidth <= $M ? 'top' : 'bottom'}">
+				<!-- TODO: better link -->
+				<Tx text="code_tooltip" /><br /><a href={githubLink} target="_blank"
+					><Tx text="read_more" /></a
+				>
 			</span>
 		</div>
 	</div>
@@ -60,27 +70,49 @@
 		</label>
 	</form>
 	<p class="home-info">
+		<Tx html="home_keys_info" /><a href="/account" title={$t('account')}><Tx text="account" /></a>.
+	</p>
+	<p class="home-info">
 		<Tx text="home_redirect" />
-		{#if $page.data.session}<a href="/create" title={$t('create')}><Tx text="create" /></a>.
-		{:else}<a href="/account" title={$t('account')}><Tx text="account" /></a>.
+		{#if $page.data.session}
+			<Tx text="home_redirect_create" /><a href="/create" title={$t('create')}
+				><Tx text="create" /></a
+			>.
+		{:else}
+			<Tx text="home_redirect_account" /><a href="/account" title={$t('account')}
+				><Tx text="account" /></a
+			>.
 		{/if}
 	</p>
 </Content>
+
+<Footer>
+	<OpenSourceInfo />
+</Footer>
 
 <style>
 	h1 {
 		color: var(--text-color-1);
 		text-align: center;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		margin: 0em;
-		padding: 0.25em 0em 0.5em;
 		font-size: 3em;
-		font-weight: 700 !important;
+		font-weight: 700;
+		margin: 0em;
+		padding-bottom: 0.25em;
 		cursor: default;
-		border-bottom: 1px solid var(--border-color-1);
-		transition:
-			0.2s,
-			outline 0s;
+		transition: 0.2s;
+	}
+
+	.subtitle {
+		color: var(--text-color-1);
+		text-align: center;
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		font-size: 1.25em;
+		font-weight: 700;
+		padding-top: 0.5em;
+		border-top: 1px solid var(--border-color-1);
+		cursor: default;
+		transition: 0.2s;
 	}
 
 	.code-text {
@@ -90,10 +122,10 @@
 		justify-content: center;
 		text-align: center;
 		color: var(--text-color-1);
-		font-weight: 700 !important;
+		font-weight: 700;
 		font-size: 2em;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		padding-top: 0.75em;
+		padding-top: 0.25em;
 		cursor: default;
 		transition:
 			0.2s,
@@ -107,17 +139,7 @@
 	label {
 		display: flex;
 		flex-flow: column;
-	}
-
-	form {
-		text-align: center;
-		color: var(--text-color-1);
-		font-weight: 700 !important;
 		font-size: 2em;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		transition:
-			0.2s,
-			outline 0s;
 	}
 
 	input {
@@ -128,7 +150,7 @@
 		border-radius: 5px;
 		box-shadow: 0px 4px 4px var(--shadow-color-1);
 		color: var(--text-color-1);
-		font-weight: 700 !important;
+		font-weight: 700;
 		font-size: 1.5em;
 		width: 4.25em;
 		margin-top: 0.5em;
@@ -151,13 +173,14 @@
 	}
 
 	.tooltip {
-		margin-left: 0.25em;
+		margin-left: 0.5em;
 		font-size: 0.8em;
 	}
 
 	.tooltip .tooltip-text {
+		text-align: left;
 		font-size: 0.7em;
-		font-weight: 400 !important;
+		font-weight: 400;
 	}
 
 	.home-info {
@@ -171,13 +194,18 @@
 			outline 0s;
 	}
 
-	.home-info a {
-		font-weight: 700 !important;
-	}
-
 	@media screen and (max-width: 768px) {
 		h1 {
 			font-size: 2.5em;
+		}
+
+		.subtitle {
+			font-size: 1em;
+		}
+
+		.code-text {
+			font-size: 1.75em;
+			padding-top: 0em;
 		}
 
 		.error {
@@ -191,6 +219,10 @@
 
 		.code-text {
 			flex-flow: column;
+		}
+
+		.home-info {
+			font-size: 1em;
 		}
 	}
 </style>

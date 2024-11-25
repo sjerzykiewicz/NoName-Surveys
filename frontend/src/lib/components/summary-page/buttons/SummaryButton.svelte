@@ -11,7 +11,7 @@
 <button
 	title={$t('view_summary')}
 	class="footer-button"
-	class:save={$page.route.id === '/surveys/[surveysPage]/[code]'}
+	class:save={$page.url.pathname.endsWith($page.params.code)}
 	on:click={() => goto('/surveys/' + $page.params.surveysPage + '/' + $page.params.code)}
 >
 	<i class="symbol">bar_chart</i><Tx text="summary" />

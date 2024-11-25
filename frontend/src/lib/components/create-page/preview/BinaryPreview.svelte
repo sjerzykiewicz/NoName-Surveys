@@ -24,7 +24,6 @@
 		><div class="icon">
 			<input
 				type="checkbox"
-				name={questionIndex.toString()}
 				checked={checked === 0}
 				on:change={() => {
 					updateAnswers(0);
@@ -40,7 +39,6 @@
 		><div class="icon">
 			<input
 				type="checkbox"
-				name={questionIndex.toString()}
 				checked={checked === 1}
 				on:change={() => {
 					updateAnswers(1);

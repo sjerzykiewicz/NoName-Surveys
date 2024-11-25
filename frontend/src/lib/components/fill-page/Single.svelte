@@ -26,7 +26,6 @@
 				<input
 					type="radio"
 					checked={checked === choiceIndex}
-					name={questionIndex.toString()}
 					on:click={() => {
 						updateAnswers(choice, choiceIndex);
 					}}

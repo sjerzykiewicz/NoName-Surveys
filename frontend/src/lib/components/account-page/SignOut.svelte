@@ -16,12 +16,11 @@
 <style>
 	.sign-buttons {
 		display: flex;
-		flex-flow: row;
-		align-items: center;
-		justify-content: center;
-		padding-top: 1.5em;
-		padding-bottom: 1.5em;
-		font-size: 1.75em;
+		justify-content: flex-start;
+		padding-top: 0.5em;
+		padding-bottom: 0.5em;
+		font-size: 1.5em;
+		border-top: 1px solid var(--border-color-1);
 	}
 
 	@media screen and (max-width: 768px) {

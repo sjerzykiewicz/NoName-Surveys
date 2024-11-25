@@ -15,6 +15,9 @@
 	--entry-color-2: #37373a;
 	--entry-color-3: #28282b;
 
+	--gradient-color-1: #1d1d20;
+	--gradient-color-2: #252528;
+
 	--accent-color-1: #0075ff;
 	--accent-color-2: #005cc8;
 	--error-color-1: #ff3333;
@@ -41,6 +44,12 @@
 	--entry-color-1: #ebebee;
 	--entry-color-2: #dcdcdf;
 	--entry-color-3: #cdcdd0;
+
+	--gradient-color-1: #e0e0e3;
+	--gradient-color-2: #e8e8eb;
+
+	--warning-color-1: #ff6600;
+	--warning-color-2: #cc5200;
 }
 
 @font-face {
@@ -91,18 +100,14 @@ body {
 body {
 	overflow-x: hidden;
 	overflow-y: auto;
-	background: var(--secondary-color-1);
-	background: -moz-linear-gradient(
-		0deg,
-		var(--secondary-color-2) 0%,
-		var(--secondary-color-1) 100%
-	);
+	background: var(--gradient-color-2);
+	background: -moz-linear-gradient(0deg, var(--gradient-color-1) 0%, var(--gradient-color-2) 100%);
 	background: -webkit-linear-gradient(
 		0deg,
-		var(--secondary-color-2) 0%,
-		var(--secondary-color-1) 100%
+		var(--gradient-color-1) 0%,
+		var(--gradient-color-2) 100%
 	);
-	background: linear-gradient(0deg, var(--secondary-color-2) 0%, var(--secondary-color-1) 100%);
+	background: linear-gradient(0deg, var(--gradient-color-1) 0%, var(--gradient-color-2) 100%);
 	background-attachment: fixed;
 	font-weight: 500;
 	transition: 0.2s;
@@ -226,7 +231,7 @@ body {
 .sign-in {
 	justify-content: center;
 	font-size: 3em;
-	font-weight: 700 !important;
+	font-weight: 700;
 	padding: 0.3em;
 	background-color: var(--amu-color-1);
 	color: var(--text-color-2);
@@ -302,15 +307,6 @@ button:hover,
 	background-color: var(--accent-color-2);
 }
 
-.not {
-	background-color: var(--error-color-1);
-	color: var(--text-color-2);
-}
-
-.not:hover {
-	background-color: var(--error-color-2);
-}
-
 button:active,
 .footer-button:active,
 .save:active,
@@ -370,6 +366,7 @@ button:active,
 .footer-button i,
 .error i,
 .warning i,
+.survey-info i,
 .save i,
 .done i,
 .not i,
@@ -410,9 +407,9 @@ button:active,
 
 button:disabled,
 .footer-button:disabled {
-	background-color: var(--secondary-color-1);
-	color: var(--text-color-3);
-	cursor: not-allowed;
+	background-color: var(--secondary-color-1) !important;
+	color: var(--text-color-3) !important;
+	cursor: not-allowed !important;
 }
 
 .button-row {
@@ -543,7 +540,7 @@ input[type='file'] {
 .index {
 	margin-right: 0.5em;
 	width: 1.75em;
-	font-weight: 700 !important;
+	font-weight: 700;
 	text-align: right;
 	color: var(--text-color-1);
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
@@ -570,7 +567,7 @@ input[type='file'] {
 
 .question-area.display {
 	align-items: flex-start;
-	font-weight: 700 !important;
+	font-weight: 700;
 	cursor: default;
 	width: calc(100% - 4.5em);
 	margin-left: 2.25em;
@@ -603,7 +600,7 @@ input[type='file'] {
 }
 
 .question-label .tooltip .tooltip-text {
-	font-weight: 400 !important;
+	font-weight: 400;
 }
 
 .type {
@@ -709,7 +706,9 @@ input[type='file'] {
 		outline 0s;
 }
 
-.choice-input.display:hover {
+.choice-input.display:hover,
+.choice-input.selected:hover,
+.selected .choice-input:hover {
 	background-color: var(--secondary-color-1);
 }
 
@@ -799,9 +798,7 @@ input[type='file'] {
 }
 
 .choice-input.selected,
-.choice-input.selected:hover,
-.selected .choice-input,
-.selected .choice-input:hover {
+.selected .choice-input {
 	background-color: var(--secondary-color-2);
 	border: 1px solid var(--accent-color-1);
 	color: var(--accent-color-1);
@@ -812,7 +809,7 @@ input[type='file'] {
 
 .choice-percentage {
 	margin-left: 0.5em;
-	font-weight: 700 !important;
+	font-weight: 700;
 	color: var(--accent-color-1);
 	cursor: default;
 	transition:
@@ -826,7 +823,7 @@ input[type='file'] {
 
 .title-container .input {
 	font-size: 1.2em !important;
-	font-weight: 700 !important;
+	font-weight: 700;
 	width: calc(100% - 0.5em) !important;
 }
 
@@ -848,7 +845,7 @@ input[type='file'] {
 
 .limit {
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
-	font-weight: 700 !important;
+	font-weight: 700;
 	color: var(--text-color-1);
 	cursor: default;
 	transition:
@@ -943,14 +940,12 @@ input[type='radio']:disabled {
 	display: flex;
 	align-items: center;
 	color: var(--error-color-1);
-	font-weight: 700 !important;
+	font-weight: 700;
 	font-size: 1em;
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
 	cursor: default;
 	margin: 0.5em 0em 0em 0em;
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .warning {
@@ -961,7 +956,7 @@ input[type='radio']:disabled {
 	flex: 1;
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
 	font-size: 1.5em;
-	font-weight: 700 !important;
+	font-weight: 700;
 	color: var(--text-color-1);
 	cursor: default;
 	max-width: 100%;
@@ -973,6 +968,17 @@ input[type='radio']:disabled {
 	transition:
 		0.2s,
 		outline 0s;
+}
+
+.title.static {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	overflow-wrap: unset;
+	overflow: unset;
+	padding-bottom: 0em;
+	margin-bottom: 0em;
+	white-space: normal !important;
 }
 
 .title.empty,
@@ -999,13 +1005,14 @@ input[type='radio']:disabled {
 	font-size: 1.5em;
 }
 
-.create-info .tooltip i,
+.create-info i,
 .info-row .tooltip i,
 .download-key .tooltip i,
 .last-update-container .tooltip i,
 .crypto-row .tooltip i,
 .load-text .tooltip i,
-.code-text .tooltip i {
+.code-text .tooltip i,
+.label-container .tooltip i {
 	color: var(--border-color-1);
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
 	transition:
@@ -1015,6 +1022,7 @@ input[type='radio']:disabled {
 
 .info-row .tooltip .tooltip-text,
 .load-text .tooltip .tooltip-text {
+	text-align: left;
 	font-size: 0.8em;
 }
 
@@ -1138,7 +1146,7 @@ td {
 
 th {
 	background-color: var(--shadow-color-1);
-	font-weight: 700 !important;
+	font-weight: 700;
 	cursor: default;
 	overflow-wrap: break-word;
 	transition:
@@ -1311,6 +1319,32 @@ th .checkbox-entry {
 	cursor: help;
 }
 
+.tooltip.clickable {
+	cursor: pointer;
+}
+
+.tooltip.clickable i {
+	color: var(--accent-color-1);
+}
+
+.tooltip.clickable:hover i {
+	color: var(--accent-color-2);
+	transform: scale(120%);
+}
+
+.tooltip.hoverable i {
+	opacity: 1;
+	color: var(--text-color-1);
+}
+
+.tooltip.hoverable:hover i {
+	opacity: 0.75;
+}
+
+.tooltip.hoverable .tooltip-text {
+	pointer-events: all;
+}
+
 .tooltip .tooltip-text,
 .popup .popup-text {
 	position: absolute;
@@ -1323,7 +1357,7 @@ th .checkbox-entry {
 	box-shadow: 0px 4px 4px var(--shadow-color-1);
 	color: var(--text-color-1);
 	text-align: center;
-	font-weight: 400 !important;
+	font-weight: 400;
 
 	pointer-events: none;
 	visibility: hidden;
@@ -1339,7 +1373,7 @@ th .checkbox-entry {
 	margin-left: calc((var(--tooltip-width) + 1em) / -2);
 
 	bottom: 100%;
-	margin-bottom: 0.5em;
+	margin-bottom: 0.25em;
 }
 
 .tooltip .tooltip-text.right,
@@ -1348,7 +1382,7 @@ th .checkbox-entry {
 	transform: translateY(-50%);
 
 	left: 100%;
-	margin-left: 0.5em;
+	margin-left: 0.25em;
 }
 
 .tooltip .tooltip-text.bottom,
@@ -1357,7 +1391,7 @@ th .checkbox-entry {
 	margin-left: calc((var(--tooltip-width) + 1em) / -2);
 
 	top: 100%;
-	margin-top: 0.5em;
+	margin-top: 0.25em;
 }
 
 .tooltip .tooltip-text.left,
@@ -1366,7 +1400,7 @@ th .checkbox-entry {
 	transform: translateY(-50%);
 
 	right: 100%;
-	margin-right: 0.5em;
+	margin-right: 0.25em;
 }
 
 .tooltip .tooltip-text::after,
@@ -1447,6 +1481,71 @@ button.popup {
 	opacity: 1;
 }
 
+/* account */
+
+.accent {
+	display: inline-flex;
+	align-items: flex-end;
+}
+
+.account-accent,
+.accent {
+	color: var(--accent-color-1);
+	font-weight: 700;
+}
+
+.account-ul {
+	list-style-type: none;
+	margin-top: 0.25em;
+	padding-left: 0em;
+	font-weight: 500;
+}
+
+.account-li {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding-top: 0.75em;
+}
+
+.account-icon {
+	margin-right: 0.5em;
+}
+
+.summary-no-answers {
+	display: flex;
+	justify-content: center;
+	color: var(--accent-color-1);
+	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	font-weight: 700;
+	font-size: 1.25em;
+	cursor: default;
+}
+
+.passphrase-label {
+	display: flex !important;
+	flex-flow: column !important;
+}
+
+.passphrase-input {
+	flex: 1;
+	background-color: var(--secondary-color-2);
+	padding: 0.25em;
+	border: 1px solid var(--border-color-1);
+	border-radius: 5px;
+	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	color: var(--text-color-1);
+	overflow-x: hidden;
+	overflow-wrap: break-word;
+	font-size: 1em;
+	white-space: pre-wrap !important;
+	cursor: text;
+	transition:
+		0.2s,
+		outline 0s;
+}
+
 @media screen and (max-width: 768px) {
 	html {
 		background: var(--secondary-color-1);
@@ -1472,12 +1571,14 @@ button.popup {
 	.text-input,
 	.dropdown,
 	.arrows,
-	.button-row {
+	.button-row,
+	.summary-no-answers {
 		font-size: 1em;
 	}
 
 	.error,
 	.warning,
+	.survey-info,
 	.tooltip-text,
 	.popup-text,
 	.select-list,
@@ -1490,7 +1591,7 @@ button.popup {
 	}
 
 	.sign-in {
-		font-size: 2.5em;
+		font-size: 2.25em;
 	}
 
 	.choice-area.binary {
@@ -1534,59 +1635,4 @@ button.popup {
 	.select-list *:where(div.multiselect > ul.selected) {
 		max-height: 15.5em;
 	}
-}
-
-.accent {
-	display: inline-flex;
-	align-items: flex-end;
-}
-
-.account-accent,
-.accent {
-	color: var(--accent-color-1);
-	font-weight: 700;
-}
-
-.account-ul {
-	list-style-type: none;
-	margin-top: 0.25em;
-	padding-left: 1.5em;
-}
-
-.account-li {
-	display: flex;
-	flex-flow: row nowrap;
-	justify-content: flex-start;
-	align-items: flex-start;
-	padding-top: 0.75em;
-}
-
-.account-icon {
-	margin-right: 0.5em;
-}
-
-.clear_answer {
-	display: flex;
-	justify-content: flex-end;
-	width: 90%;
-	padding-top: 0.5em;
-}
-
-.summary_no_answers {
-	display: flex;
-	justify-content: center;
-	color: var(--accent-color-1);
-	font-weight: bold;
-	font-size: 1.25em;
-}
-
-@media screen and (max-width: 768px) {
-	.summary_no_answers {
-		font-size: 1em;
-	}
-}
-
-.passphrase_input {
-	border-radius: 5px;
-	margin-top: 1em;
 }

@@ -1,99 +1,259 @@
 <script lang="ts">
-	import { L } from '$lib/stores/global';
-	import Tx from 'sveltekit-translate/translate/tx.svelte';
-	import { getContext } from 'svelte';
-	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import { L, M, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { formatDate } from '$lib/utils/formatDate';
+	import Modal from '$lib/components/global/Modal.svelte';
+	import init, { get_keypair } from 'wasm';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { downloadFile } from '$lib/utils/downloadFile';
+	import { invalidateAll } from '$app/navigation';
+	import encryptKeys from '$lib/utils/encryptKeys';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext, onMount } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import PassphraseError from './PassphraseError.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let isModalHidden: boolean = true;
-	export let lastTime: string | null;
+	export let lastTime: string;
+	export let hasKey: boolean;
+
+	let isModalHidden: boolean = true;
+	let passphrase: string = '';
+	let passphraseError: boolean = false;
 
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
 
-	$: timeDiff = lastTime !== null ? milisecondsToDays(Date.now() - Date.parse(lastTime)) : 0;
+	$: timeDiff = lastTime !== '' ? milisecondsToDays(Date.now() - Date.parse(lastTime)) : 0;
 
 	function milisecondsToDays(miliseconds: number) {
 		return parseInt((miliseconds / 1000 / 3600 / 24).toFixed(0));
 	}
 
+	function checkPassphraseCorrectness() {
+		passphraseError = false;
+
+		if (passphrase === '') {
+			passphraseError = true;
+			return false;
+		}
+
+		return true;
+	}
+
+	async function generateKeyPair() {
+		if (!checkPassphraseCorrectness()) return;
+
+		try {
+			const keyPair = get_keypair();
+			const publicKey = keyPair.get_public_key();
+			const privateKey = keyPair.get_private_key();
+			const fingerprint = keyPair.get_fingerprint();
+
+			const pemData = publicKey + '\n\n' + privateKey;
+			const { salt, iv, ciphertext } = await encryptKeys(pemData, passphrase);
+			const decoded = {
+				salt: Array.from(salt, (byte) => String.fromCharCode(byte)).join(''),
+				iv: Array.from(iv, (byte) => String.fromCharCode(byte)).join(''),
+				ciphertext: Array.from(ciphertext, (byte) => String.fromCharCode(byte)).join('')
+			};
+
+			const response = await fetch('/api/users/update-public-key', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					public_key: publicKey,
+					fingerprint: fingerprint
+				})
+			});
+
+			if (!response.ok) {
+				const body = await response.json();
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
+				return;
+			}
+
+			isModalHidden = true;
+			passphrase = '';
+			downloadFile('noname-keys.txt', 'text/plain', JSON.stringify(decoded));
+			await invalidateAll();
+		} catch (e) {
+			$errorModalContent = e as string;
+			$isErrorModalHidden = false;
+			return;
+		}
+	}
+
+	function handleEnter(event: KeyboardEvent) {
+		if (!isModalHidden && event.key === 'Enter') {
+			event.preventDefault();
+			generateKeyPair();
+			event.stopImmediatePropagation();
+		}
+	}
+
+	onMount(async () => {
+		await init();
+	});
+
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
+<svelte:body on:keydown={handleEnter} />
 
-<div class="key-container">
-	<div class="download-key">
-		<button title={$t('account_new_key')} class="save" on:click={() => (isModalHidden = false)}>
-			<i class="symbol">encrypted</i><Tx text="account_new_key" />
-		</button>
-		<div class="tooltip">
-			<i class="symbol">info</i>
-			<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-				<Tx html="account_keys_info" />
-			</span>
-		</div>
+<Modal
+	icon="encrypted"
+	title={$t('account_generating_keys')}
+	bind:isHidden={isModalHidden}
+	hide={() => {
+		isModalHidden = true;
+		passphrase = '';
+		passphraseError = false;
+	}}
+	--width={innerWidth <= $M ? '20em' : '28em'}
+>
+	<span slot="content" class="content">
+		{#if hasKey}
+			<Tx text="account_new_key_alert" />
+			<br />
+			<br />
+		{/if}
+		<Tx text="provide_passphrase" />
+		<br />
+		<br />
+		<label class="passphrase-label">
+			<input
+				type="password"
+				title={$t('passphrase_title')}
+				class="passphrase-input"
+				placeholder="{$t('passphrase_title')}..."
+				bind:value={passphrase}
+			/></label
+		>
+		<PassphraseError error={passphraseError} {passphrase} />
+	</span>
+	<button title={$t('generate')} class="done" on:click={generateKeyPair}>
+		<i class="symbol">done</i><Tx text="generate" />
+	</button>
+	<button
+		title={$t('cancel')}
+		class="not"
+		on:click={() => {
+			isModalHidden = true;
+			passphrase = '';
+		}}
+	>
+		<i class="symbol">close</i><Tx text="cancel" />
+	</button>
+</Modal>
+
+<div title={$t('account_keys_info_title')} class="info">
+	<div class="text">
+		<Tx html="account_keys_info" />
 	</div>
-	{#if lastTime}
-		<div class="last-update-container">
-			<div title={$t('account_last_key_update')} class="last-update-info">
-				<Tx text="account_last_key_update" />: {formatDate(lastTime)}
-			</div>
+</div>
+<div class="key-container">
+	<div class="key-box">
+		<div class="download-key">
+			<button title={$t('account_new_key')} class="save" on:click={() => (isModalHidden = false)}>
+				<i class="symbol">encrypted</i><Tx text="account_new_key" />
+			</button>
 			<div class="tooltip">
 				<i class="symbol">info</i>
 				<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-					<Tx html="account_key_update_info" />
+					<Tx html="account_generate_info" />
 				</span>
 			</div>
 		</div>
-		<div class="warning-div">
-			{#if timeDiff >= ERROR_THRESHOLD}
-				<p title={$t('account_expiration_critical')} class="error">
-					<i class="symbol">error</i><Tx
-						html="account_keys_expired"
-						params={{ number: timeDiff }}
-					/>
-				</p>
-			{:else if timeDiff >= WARNING_THRESHOLD}
-				<p title={$t('account_expiration_warning')} class="warning">
-					<i class="symbol">warning</i><Tx
-						html="account_keys_expire_soon"
-						params={{ number: timeDiff }}
-					/>
-				</p>
-			{/if}
-		</div>
-	{/if}
+		{#if lastTime}
+			<div class="last-update-container">
+				<div title={$t('account_last_key_update')} class="last-update-info">
+					<Tx text="account_last_key_update" />: {formatDate(lastTime)}
+				</div>
+				<div class="tooltip">
+					<i class="symbol">info</i>
+					<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
+						<Tx html="account_key_update_info" />
+					</span>
+				</div>
+			</div>
+			<div class="warning-div">
+				{#if timeDiff >= ERROR_THRESHOLD}
+					<p title={$t('account_expiration_critical')} class="error">
+						<i class="symbol">error</i><Tx
+							html="account_keys_expired"
+							params={{ number: timeDiff }}
+						/>
+					</p>
+				{:else if timeDiff >= WARNING_THRESHOLD}
+					<p title={$t('account_expiration_warning')} class="warning">
+						<i class="symbol">warning</i><Tx
+							html="account_keys_expire_soon"
+							params={{ number: timeDiff }}
+						/>
+					</p>
+				{/if}
+			</div>
+		{/if}
+	</div>
 </div>
 
 <style>
+	.content {
+		text-align: justify;
+	}
+
 	.tooltip i {
 		font-size: 1.25em;
 	}
 
+	.info {
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+		justify-content: center;
+		padding: 0em 0.5em;
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		cursor: default;
+		overflow-wrap: break-word;
+		color: var(--text-color-1);
+		font-size: 1.1em;
+		transition: 0.2s;
+	}
+
+	.text {
+		font-weight: 700;
+		text-align: left;
+	}
+
 	.key-container {
 		display: flex;
-		flex-direction: column;
-		align-items: center;
+		justify-content: flex-start;
 		color: var(--text-color-1);
-		width: fit-content;
-		margin-inline: auto;
-		padding-top: 1em;
+		width: 100%;
 		padding-bottom: 0.5em;
-		font-size: 1.75em;
+		font-size: 1.5em;
 		border-bottom: 1px solid var(--border-color-1);
 		transition:
 			0.2s,
 			outline 0s;
 	}
 
+	.key-box {
+		display: flex;
+		flex-direction: column;
+	}
+
 	.download-key .tooltip {
-		--tooltip-width: 25em;
+		--tooltip-width: 22em;
 	}
 
 	.download-key .tooltip .tooltip-text {
+		text-align: left;
 		font-size: 0.7em;
 	}
 
@@ -103,8 +263,6 @@
 		align-items: center;
 		justify-content: flex-start;
 		width: 100%;
-		margin-inline: auto;
-		padding-bottom: 0.5em;
 	}
 
 	.download-key button {
@@ -117,6 +275,7 @@
 		align-items: center;
 		justify-content: flex-start;
 		width: 100%;
+		padding-top: 0.75em;
 		font-size: 0.8em;
 		cursor: default;
 	}
@@ -126,12 +285,14 @@
 	}
 
 	.last-update-container .tooltip .tooltip-text {
+		text-align: left;
 		font-size: 0.8em;
 	}
 
 	.last-update-info {
 		margin-right: 0.5em;
 		font-size: 0.8em;
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 	}
 
 	.warning-div {
@@ -152,31 +313,25 @@
 
 	@media screen and (max-width: 1440px) {
 		.download-key .tooltip {
-			--tooltip-width: 14.5em;
-		}
-	}
-
-	@media screen and (max-width: 1024px) {
-		.download-key .tooltip {
-			--tooltip-width: 17em;
+			--tooltip-width: 16em;
 		}
 	}
 
 	@media screen and (max-width: 768px) {
+		.info {
+			font-size: 0.8em;
+		}
+
 		.key-container {
 			font-size: 1.25em;
 		}
 
-		.download-key .tooltip {
-			--tooltip-width: 19em;
-		}
-
 		.download-key .tooltip .tooltip-text.bottom {
-			left: -425%;
+			left: -350%;
 		}
 
 		.download-key .tooltip .tooltip-text.bottom::after {
-			left: 92.5%;
+			left: 92%;
 		}
 
 		.last-update-container .tooltip .tooltip-text.bottom {

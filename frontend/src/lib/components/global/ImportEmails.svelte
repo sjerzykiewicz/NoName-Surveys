@@ -7,9 +7,10 @@
 		isErrorModalHidden,
 		errorModalContent,
 		isWarningModalHidden,
-		warningModalContent
+		warningModalContent,
+		M
 	} from '$lib/stores/global';
-
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -104,11 +105,23 @@
 			}
 		);
 	}
+
+	let innerWidth: number;
 </script>
+
+<svelte:window bind:innerWidth />
 
 <div class="button-row">
 	<div {title} class="file-div" class:disabled>
-		<span class="file-label">{label}</span>
+		<div class="label-container">
+			<span class="file-label">{label}</span>
+			<div class="tooltip">
+				<i class="symbol">info</i>
+				<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
+					<Tx html="example_csv" />
+				</span>
+			</div>
+		</div>
 		<label>
 			<div class="file-input">
 				<span class="file-button"><i class="symbol">upload_file</i>{$t('select_file')}</span>
@@ -121,6 +134,23 @@
 <EmailsWarning warning={fileWarning} element={fileElement} {disabled} />
 
 <style>
+	.tooltip {
+		--tooltip-width: 19em;
+	}
+
+	.tooltip .tooltip-text {
+		font-size: 0.8em;
+		text-align: left;
+	}
+
+	.tooltip .tooltip-text.right {
+		top: 350%;
+	}
+
+	.tooltip .tooltip-text.right::after {
+		top: 12%;
+	}
+
 	.button-row {
 		margin-top: 0em;
 	}
@@ -135,5 +165,21 @@
 
 	.file-input {
 		margin-top: 0.625em;
+	}
+
+	.label-container {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+	}
+
+	@media screen and (max-width: 768px) {
+		.tooltip .tooltip-text.bottom {
+			left: -400%;
+		}
+
+		.tooltip .tooltip-text.bottom::after {
+			left: 82.5%;
+		}
 	}
 </style>

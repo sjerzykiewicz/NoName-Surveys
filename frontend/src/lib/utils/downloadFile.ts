@@ -8,9 +8,8 @@ export function downloadFile(filename: string, type: string, content: string) {
 	element.style.display = 'none';
 	document.body.appendChild(element);
 
-	setTimeout(() => {
-		element.click();
-		document.body.removeChild(element);
-		URL.revokeObjectURL(element.href);
-	}, 0);
+	element.click();
+
+	document.body.removeChild(element);
+	URL.revokeObjectURL(element.href);
 }

@@ -11,7 +11,7 @@
 <button
 	title={$t('share_results')}
 	class="footer-button"
-	class:save={$page.route.id === '/surveys/[surveysPage]/[code]/access/[accessPage]'}
+	class:save={$page.url.pathname.includes('access')}
 	on:click={() =>
 		goto('/surveys/' + $page.params.surveysPage + '/' + $page.params.code + '/access/0')}
 >

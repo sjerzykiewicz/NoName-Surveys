@@ -3,7 +3,6 @@
 	import Survey from '$lib/entities/surveys/Survey';
 	import { SurveyError } from '$lib/entities/SurveyError';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
-	import { tick } from 'svelte';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { popup } from '$lib/utils/popup';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
@@ -38,7 +37,7 @@
 		isPreview = !isPreview;
 	}
 
-	async function checkCorrectness() {
+	function checkCorrectness() {
 		const t = $title.title;
 		if (t === null || t === undefined || t.length === 0) {
 			$title.error = SurveyError.TitleRequired;
@@ -55,13 +54,11 @@
 		}
 
 		if ($title.error !== SurveyError.NoError) {
-			await tick();
 			scrollToElementById('header');
 			return false;
 		}
 
 		if (!$questions.every((q) => q.error === SurveyError.NoError)) {
-			await tick();
 			scrollToElementById(
 				`q${$questions.indexOf($questions.find((q) => q.error !== SurveyError.NoError)!).toString()}`
 			);
@@ -76,7 +73,7 @@
 			$title.title = $title.title.trim();
 			$questions = trimQuestions($questions);
 
-			if (!(await checkCorrectness())) return;
+			if (!checkCorrectness()) return;
 
 			isDraftModalHidden = false;
 		} else {
@@ -90,7 +87,7 @@
 			$title.title = $title.title.trim();
 			$questions = trimQuestions($questions);
 
-			if (!(await checkCorrectness())) return;
+			if (!checkCorrectness()) return;
 
 			const parsedSurvey = new Survey(constructQuestionList($questions));
 			const draftInfo = new DraftCreateInfo($title.title, parsedSurvey);
@@ -128,7 +125,7 @@
 		$title.title = $title.title.trim();
 		$questions = trimQuestions($questions);
 
-		if (!(await checkCorrectness())) return;
+		if (!checkCorrectness()) return;
 
 		isRespondentModalHidden = false;
 	}

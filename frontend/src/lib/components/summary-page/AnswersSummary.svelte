@@ -167,12 +167,6 @@
 {/if}
 
 <style>
-	.static {
-		display: flex;
-		justify-content: space-between;
-		white-space: normal !important;
-	}
-
 	.import-export-button {
 		font-size: 0.8em;
 	}

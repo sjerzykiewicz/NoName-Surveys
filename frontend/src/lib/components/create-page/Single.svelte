@@ -48,7 +48,7 @@
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
 		<div class="choice" id={`q${questionIndex}c${choiceIndex}`}>
 			<div class="radio">
-				<input type="radio" disabled name={questionIndex.toString()} />
+				<input type="radio" disabled />
 			</div>
 			<Input
 				bind:text={choice}

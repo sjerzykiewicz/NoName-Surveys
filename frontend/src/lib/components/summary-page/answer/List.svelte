@@ -8,7 +8,7 @@
 </script>
 
 {#if data.answer === ''}
-	<div title={$t('question_not_answered')} class="summary_no_answers">
+	<div title={$t('question_not_answered')} class="summary-no-answers">
 		<Tx text="question_not_answered" />
 	</div>
 {:else}

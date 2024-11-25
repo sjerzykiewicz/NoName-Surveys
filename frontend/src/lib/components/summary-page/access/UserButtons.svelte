@@ -3,7 +3,6 @@
 	import MultiSelect from '$lib/components/global/MultiSelect.svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { tick } from 'svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
 	import UsersError from './UsersError.svelte';
@@ -39,7 +38,7 @@
 		usersError = GroupError.NoError;
 	}
 
-	async function checkCorrectness(users: string[]) {
+	function checkCorrectness(users: string[]) {
 		usersError = GroupError.NoError;
 		const u = users;
 		if (u === null || u === undefined || u.length === 0) {
@@ -47,7 +46,6 @@
 		}
 
 		if (usersError !== GroupError.NoError) {
-			await tick();
 			scrollToElement('.select-list');
 			return false;
 		}
@@ -56,7 +54,7 @@
 	}
 
 	async function addUsers() {
-		if (!(await checkCorrectness(selectedUsersToAdd))) return;
+		if (!checkCorrectness(selectedUsersToAdd)) return;
 
 		const response = await fetch('/api/surveys/give-access', {
 			method: 'POST',

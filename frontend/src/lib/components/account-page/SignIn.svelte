@@ -19,7 +19,7 @@
 		<Tx html="account_authorization_info" />
 	</div>
 </div>
-<div title={$t('account_info_title')} class="info">
+<div title={$t('account_info_title')} class="info bottom">
 	<div class="text">
 		<Tx text="account_info" />
 	</div>
@@ -31,7 +31,7 @@
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		color: var(--text-color-1);
 		font-size: 2.75em;
-		font-weight: 700 !important;
+		font-weight: 700;
 		cursor: default;
 		margin: 0;
 		padding: 0.25em 0 0.5em;
@@ -53,20 +53,28 @@
 		flex-flow: row;
 		align-items: center;
 		justify-content: center;
-		padding: 1.25em 0.5em 0em;
+		padding: 0.5em 0.5em 0em;
 		border-top: 1px solid var(--border-color-1);
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
 		overflow-wrap: break-word;
 		color: var(--text-color-1);
-		font-size: 1.25em;
-		transition:
-			0.2s,
-			outline 0s;
+		font-size: 1.1em;
+		transition: 0.2s;
+	}
+
+	.info.bottom {
+		padding: 0.5em;
+		border-bottom: 1px solid var(--border-color-1);
 	}
 
 	.text {
-		text-align: justify;
+		font-weight: 700;
+		text-align: left;
+	}
+
+	.info.bottom .text {
+		font-weight: 500;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -75,7 +83,7 @@
 		}
 
 		.info {
-			font-size: 1em;
+			font-size: 0.8em;
 			padding-left: 0em;
 			padding-right: 0em;
 		}

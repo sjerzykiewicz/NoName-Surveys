@@ -6,7 +6,6 @@
 	import { copy } from '$lib/utils/copy';
 	import { popup } from '$lib/utils/popup';
 	import { errorModalContent, isErrorModalHidden, M } from '$lib/stores/global';
-	import { onMount } from 'svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -26,27 +25,20 @@
 		}
 	}
 
-	onMount(() => {
-		function handleEnter(event: KeyboardEvent) {
-			if (!isHidden && event.key === 'Enter') {
-				event.preventDefault();
-				isHidden = true;
-				event.stopImmediatePropagation();
-			}
+	function handleEnter(event: KeyboardEvent) {
+		if (!isHidden && event.key === 'Enter') {
+			event.preventDefault();
+			isHidden = true;
+			event.stopImmediatePropagation();
 		}
-
-		document.body.addEventListener('keydown', handleEnter);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEnter);
-		};
-	});
+	}
 
 	let innerWidth: number;
 	let innerHeight: number;
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
+<svelte:body on:keydown={handleEnter} />
 
 <Modal
 	icon="qr_code_2"
@@ -99,7 +91,7 @@
 		width: 7em;
 		padding-bottom: 0.25em;
 		font-size: 4em;
-		font-weight: 700 !important;
+		font-weight: 700;
 		cursor: text;
 	}
 

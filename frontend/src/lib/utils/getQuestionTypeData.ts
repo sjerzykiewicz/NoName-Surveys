@@ -57,7 +57,7 @@ export function getQuestionTypeData(questionType: ComponentType) {
 		case SliderFill:
 		case SliderAnswer:
 		case SliderSummary:
-			return { title: 'slider_title', icon: 'sliders', text: 'slider_text' };
+			return { title: 'slider_title', icon: 'switches', text: 'slider_text' };
 		case ListCreate:
 		case ListFill:
 		case ListAnswer:

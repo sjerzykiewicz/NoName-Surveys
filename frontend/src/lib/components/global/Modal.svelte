@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { fade, scale } from 'svelte/transition';
 	import { getContext } from 'svelte';
@@ -15,30 +14,22 @@
 
 	let isClickable: boolean = false;
 
-	onMount(() => {
-		function handleEscape(event: KeyboardEvent) {
-			if (!isHidden && event.key === 'Escape') {
-				hide();
-				event.stopImmediatePropagation();
-			}
+	function handleEscape(event: KeyboardEvent) {
+		if (!isHidden && event.key === 'Escape') {
+			hide();
+			event.stopImmediatePropagation();
 		}
+	}
 
-		function handleClick(event: MouseEvent) {
-			if (isClickable && !isHidden && !(event.target as HTMLElement).closest('.modal')) {
-				hide();
-				event.stopImmediatePropagation();
-			}
+	function handleClick(event: MouseEvent) {
+		if (isClickable && !isHidden && !(event.target as HTMLElement).closest('.modal')) {
+			hide();
+			event.stopImmediatePropagation();
 		}
-
-		document.body.addEventListener('keydown', handleEscape);
-		document.body.addEventListener('click', handleClick);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEscape);
-			document.body.removeEventListener('click', handleClick);
-		};
-	});
+	}
 </script>
+
+<svelte:body on:keydown={handleEscape} on:click={handleClick} />
 
 {#if !isHidden}
 	<section class="overlay" transition:fade={{ duration: 200, easing: cubicInOut }}>
@@ -126,7 +117,7 @@
 
 	.caption {
 		align-items: center;
-		font-weight: 700 !important;
+		font-weight: 700;
 		font-size: 1.2em;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { invalidateAll, goto } from '$app/navigation';
-	import { onMount, tick } from 'svelte';
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { GroupError } from '$lib/entities/GroupError';
 	import { errorModalContent, isErrorModalHidden, LIMIT_OF_CHARS, XL } from '$lib/stores/global';
@@ -37,7 +36,7 @@
 		selectedGroupsToRemove = allSelected ? [] : [...groupNames];
 	}
 
-	async function checkCorrectness(name: string) {
+	function checkCorrectness(name: string) {
 		nameError = GroupError.NoError;
 		const n = name;
 		if (n === null || n === undefined || n.length === 0) {
@@ -51,7 +50,6 @@
 		}
 
 		if (nameError !== GroupError.NoError) {
-			await tick();
 			scrollToElement('.group-input');
 			return false;
 		}
@@ -62,7 +60,7 @@
 	async function renameGroup() {
 		const newGroupName = newName.trim();
 
-		if (!(await checkCorrectness(newGroupName))) return;
+		if (!checkCorrectness(newGroupName)) return;
 
 		const response = await fetch('/api/groups/rename', {
 			method: 'POST',
@@ -88,26 +86,19 @@
 		await invalidateAll();
 	}
 
-	onMount(() => {
-		function handleEnter(event: KeyboardEvent) {
-			if (!isModalHidden && event.key === 'Enter') {
-				event.preventDefault();
-				renameGroup();
-				event.stopImmediatePropagation();
-			}
+	function handleEnter(event: KeyboardEvent) {
+		if (!isModalHidden && event.key === 'Enter') {
+			event.preventDefault();
+			renameGroup();
+			event.stopImmediatePropagation();
 		}
-
-		document.body.addEventListener('keydown', handleEnter);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEnter);
-		};
-	});
+	}
 
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
+<svelte:body on:keydown={handleEnter} />
 
 <Modal
 	icon="edit"

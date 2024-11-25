@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Modal from '$lib/components/global/Modal.svelte';
 	import { warningModalContent, isWarningModalHidden } from '$lib/stores/global';
-	import { onMount } from 'svelte';
 	import { downloadFile } from '$lib/utils/downloadFile';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -13,22 +12,16 @@
 	export let emails: string[] = [];
 	export let hide: () => void = () => ($isWarningModalHidden = true);
 
-	onMount(() => {
-		function handleEnter(event: KeyboardEvent) {
-			if (!$isWarningModalHidden && event.key === 'Enter') {
-				event.preventDefault();
-				hide();
-				event.stopImmediatePropagation();
-			}
+	function handleEnter(event: KeyboardEvent) {
+		if (!$isWarningModalHidden && event.key === 'Enter') {
+			event.preventDefault();
+			hide();
+			event.stopImmediatePropagation();
 		}
-
-		document.body.addEventListener('keydown', handleEnter);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEnter);
-		};
-	});
+	}
 </script>
+
+<svelte:body on:keydown={handleEnter} />
 
 <Modal
 	icon="warning"
@@ -53,3 +46,9 @@
 		><i class="symbol">done</i>OK</button
 	>
 </Modal>
+
+<style>
+	.content {
+		text-align: justify;
+	}
+</style>

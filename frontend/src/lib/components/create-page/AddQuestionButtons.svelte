@@ -18,7 +18,7 @@
 	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
 	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
 	import { questions } from '$lib/stores/create-page';
-	import { type ComponentType, onMount, tick } from 'svelte';
+	import { type ComponentType, tick } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import QuestionTypeButton from './QuestionTypeButton.svelte';
@@ -43,19 +43,15 @@
 	let isPanelVisible: boolean = false;
 	let questionTypes: Array<ComponentType> = [
 		Text,
+		Number,
 		Single,
 		Multi,
-		Scale,
 		Binary,
-		Number,
+		Scale,
 		Slider,
 		List,
 		Rank
 	];
-
-	$: questionsInfo = questionTypes.map((questionType) =>
-		$t(getQuestionTypeData(questionType).text)
-	);
 
 	function getPreviewComponent(component: ComponentType) {
 		switch (component) {
@@ -472,34 +468,23 @@
 		}
 	}
 
-	onMount(() => {
-		function handleEscape(event: KeyboardEvent) {
-			if (isPanelVisible && event.key === 'Escape') {
-				isPanelVisible = false;
-				event.stopImmediatePropagation();
-			}
+	function handleEscape(event: KeyboardEvent) {
+		if (isPanelVisible && event.key === 'Escape') {
+			isPanelVisible = false;
 		}
+	}
 
-		function handleClick(event: MouseEvent) {
-			if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
-				isPanelVisible = false;
-			}
+	function handleClick(event: MouseEvent) {
+		if (isPanelVisible && !(event.target as HTMLElement).closest('.add-question')) {
+			isPanelVisible = false;
 		}
-
-		document.body.addEventListener('keydown', handleEscape);
-		document.body.addEventListener('click', handleClick);
-
-		return () => {
-			document.body.removeEventListener('keydown', handleEscape);
-			document.body.removeEventListener('click', handleClick);
-		};
-	});
+	}
 
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
-<svelte:body on:keydown|capture={handleHotkeys} />
+<svelte:body on:keydown|capture={handleHotkeys} on:keydown={handleEscape} on:click={handleClick} />
 
 <div class="button-group" style="--width: {currentLang === 'en' ? '7.5em' : '8em'}">
 	<div class="add-buttons">
@@ -540,23 +525,13 @@
 	{/if}
 </div>
 {#if innerWidth > $M}
-	<div class="tooltip hotkeys-info">
+	<div
+		class="tooltip hotkeys-info"
+		style="--tooltip-width: {currentLang === 'en' ? '28em' : '31em'}"
+	>
 		<i class="symbol">bolt</i>
 		<span class="tooltip-text right">
-			<Tx
-				html="hotkeys_info"
-				params={{
-					one: questionsInfo[0],
-					two: questionsInfo[1],
-					three: questionsInfo[2],
-					four: questionsInfo[3],
-					five: questionsInfo[4],
-					six: questionsInfo[5],
-					seven: questionsInfo[6],
-					eight: questionsInfo[7],
-					nine: questionsInfo[8]
-				}}
-			/>
+			<Tx html="hotkeys_info" />
 		</span>
 	</div>
 {/if}
@@ -615,7 +590,7 @@
 		width: var(--width, 7.5em);
 		height: auto;
 		position: absolute;
-		z-index: 1;
+		z-index: 2;
 	}
 
 	.add-question.clicked .add {
@@ -637,13 +612,12 @@
 	}
 
 	.hotkeys-info.tooltip {
-		--tooltip-width: 35em;
 		font-size: 1.5em;
 	}
 
 	.hotkeys-info.tooltip .tooltip-text {
 		text-align: left;
-		font-size: 0.67em;
+		font-size: 0.6em;
 		z-index: 2;
 	}
 
@@ -652,7 +626,7 @@
 	}
 
 	.hotkeys-info.tooltip .tooltip-text.right::after {
-		top: 27.5%;
+		top: 9.5%;
 	}
 
 	.tooltip i {
@@ -661,16 +635,6 @@
 		transition:
 			0.2s,
 			outline 0s;
-	}
-
-	@media screen and (max-width: 1145px) {
-		.hotkeys-info.tooltip {
-			--tooltip-width: 28.1em;
-		}
-
-		.hotkeys-info.tooltip .tooltip-text {
-			font-size: 0.6em;
-		}
 	}
 
 	@media screen and (max-width: 768px) {

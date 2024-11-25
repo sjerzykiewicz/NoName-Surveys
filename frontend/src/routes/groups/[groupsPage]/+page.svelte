@@ -16,7 +16,7 @@
 </script>
 
 <Header>
-	<div class="title">
+	<div title={$t('your_groups')} class="title static">
 		<Tx text="your_groups" />
 		<span title={$t('number_of_groups')} class:max={data.numGroups >= $LIMIT_OF_GROUPS}
 			>[ {data.numGroups} / {$LIMIT_OF_GROUPS} ]</span
@@ -36,12 +36,6 @@
 </Content>
 
 <style>
-	.title {
-		display: flex;
-		justify-content: space-between;
-		white-space: normal !important;
-	}
-
 	.title span.max {
 		color: var(--warning-color-1);
 		transition:

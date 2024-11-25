@@ -2,16 +2,16 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
+	import Input from '$lib/components/global/Input.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 	export let questionTypeData: { title: string; icon: string; text: string };
 	export let questionInput: HTMLDivElement;
-
-	function removeQuestion() {
-		$questions.splice(questionIndex, 1);
-		$questions = $questions;
-	}
 
 	function moveQuestionUp() {
 		const higher = $questions[questionIndex];
@@ -27,84 +27,79 @@
 
 	function toggleRequirement() {
 		$questions[questionIndex].required = !$questions[questionIndex].required;
+	}
+
+	function removeQuestion() {
+		$questions.splice(questionIndex, 1);
 		$questions = $questions;
 	}
+
+	let innerWidth: number;
 </script>
 
-<div
-	class="question-label"
-	id={questionIndex.toString()}
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
-	<div title="Question no. {questionIndex + 1}" class="index">{questionIndex + 1}.</div>
-	<div title={questionTypeData.title} class="type">
-		<i class="material-symbols-rounded">{questionTypeData.icon}</i>{questionTypeData.text}
+<svelte:window bind:innerWidth />
+
+<div class="question-label" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<div title={$t('question_index', { index: questionIndex + 1 })} class="index">
+		{questionIndex + 1}.
+	</div>
+	<div title={$t(questionTypeData.title)} class="type">
+		<i class="symbol">{questionTypeData.icon}</i><Tx text={questionTypeData.text} />
 	</div>
 </div>
-<div
-	class="question-area"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="question-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="arrows">
 		<button
-			title="Move question up"
+			title={$t('question_up')}
 			class="up"
 			disabled={questionIndex === 0}
 			on:click={moveQuestionUp}
 		>
-			<i class="material-symbols-rounded">arrow_drop_up</i>
+			<i class="symbol">keyboard_arrow_up</i>
 		</button>
 		<button
-			title="Move question down"
+			title={$t('question_down')}
 			class="down"
 			disabled={questionIndex === $questions.length - 1}
 			on:click={moveQuestionDown}
 		>
-			<i class="material-symbols-rounded">arrow_drop_down</i>
+			<i class="symbol">keyboard_arrow_down</i>
 		</button>
 	</div>
-	<div
-		title="Enter question"
-		class="question-input"
-		contenteditable
-		bind:textContent={$questions[questionIndex].question}
-		bind:this={questionInput}
-		role="textbox"
-		tabindex="0"
-		on:keydown={handleNewLine}
-	>
-		{$questions[questionIndex].question}
-	</div>
+	<Input
+		bind:text={$questions[questionIndex].question}
+		label={$t('question_label')}
+		title={$t('question_title')}
+		bind:element={questionInput}
+	/>
 	<button
 		class="required-button tooltip"
 		class:checked={$questions[questionIndex].required}
 		on:click={toggleRequirement}
 	>
-		<i class="material-symbols-rounded">asterisk</i>
+		<i class="symbol">asterisk</i>
 		<span class="tooltip-text top"
-			>{$questions[questionIndex].required ? 'Required.' : 'Not required.'}</span
+			>{$questions[questionIndex].required
+				? $t('question_required')
+				: $t('question_not_required')}</span
 		>
 	</button>
-	<button title="Remove question" class="remove-question" on:click={removeQuestion}>
-		<i class="material-symbols-rounded">close</i>
+	<button title={$t('question_remove')} class="remove-question" on:click={removeQuestion}>
+		<i class="symbol">delete</i>
 	</button>
 </div>
 
 <style>
 	.tooltip {
-		--tooltip-width: 6.5em;
-	}
-
-	.question-input[contenteditable]:empty::before {
-		content: 'Enter question...';
-		color: var(--text-dark-color);
+		--tooltip-width: 7.25em;
 	}
 
 	.required-button {
 		margin-right: 0.5em;
 		cursor: pointer;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.required-button .tooltip-text {
@@ -112,19 +107,15 @@
 	}
 
 	.required-button.checked {
-		background-color: var(--accent-color);
+		background-color: var(--accent-color-1);
 		color: var(--text-color-2);
 	}
 
 	.required-button.checked:hover {
-		background-color: var(--accent-dark-color);
+		background-color: var(--accent-color-2);
 	}
 
 	.required-button.checked:active {
-		background-color: var(--border-color);
-	}
-
-	.remove-question i {
-		font-variation-settings: 'wght' 700;
+		background-color: var(--border-color-1);
 	}
 </style>

@@ -14,4 +14,8 @@ export class MultiQuestionAnswered extends MultiQuestion {
 		super(required, question, choices);
 		this.answer = answer;
 	}
+
+	getAnswer(): string {
+		return this.answer ? this.answer.join('') : '';
+	}
 }

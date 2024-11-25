@@ -2,51 +2,43 @@
 	import { questions } from '$lib/stores/create-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
+	import Input from '$lib/components/global/Input.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 </script>
 
-<div
-	class="choice-area binary"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
-	<label class="choice binary">
+<div class="choice-area binary" transition:slide={{ duration: 200, easing: cubicInOut }}>
+	<label class="choice binary" id={`q${questionIndex}c0`}>
 		<div class="icon">
-			<input type="radio" disabled name={questionIndex.toString()} />
-			<i class="material-symbols-rounded">thumb_up</i>
+			<input type="radio" disabled />
+			<i class="symbol">thumb_up</i>
 		</div>
-		<div
-			title="Enter positive choice"
-			class="choice-input yes binary"
-			contenteditable
-			role="textbox"
-			tabindex="0"
-			bind:textContent={$questions[questionIndex].choices[0]}
-			on:keydown|once={() => ($questions[questionIndex].choices[0] = '')}
-			on:keydown={handleNewLine}
-		>
-			{$questions[questionIndex].choices[0]}
-		</div>
+		<Input
+			bind:text={$questions[questionIndex].choices[0]}
+			label={$t('binary_positive_label')}
+			title={$t('binary_positive_title')}
+			clearOnce={true}
+			--label-top="18px"
+			--label-top-mobile="14px"
+		/>
 	</label>
-	<label class="choice binary">
+	<label class="choice binary" id={`q${questionIndex}c1`}>
 		<div class="icon">
-			<input type="radio" disabled name={questionIndex.toString()} />
-			<i class="material-symbols-rounded">thumb_down</i>
+			<input type="radio" disabled />
+			<i class="symbol">thumb_down</i>
 		</div>
-		<div
-			title="Enter negative choice"
-			class="choice-input no binary"
-			contenteditable
-			role="textbox"
-			tabindex="0"
-			bind:textContent={$questions[questionIndex].choices[1]}
-			on:keydown|once={() => ($questions[questionIndex].choices[1] = '')}
-			on:keydown={handleNewLine}
-		>
-			{$questions[questionIndex].choices[1]}
-		</div>
+		<Input
+			bind:text={$questions[questionIndex].choices[1]}
+			label={$t('binary_negative_label')}
+			title={$t('binary_negative_title')}
+			clearOnce={true}
+			--label-top="18px"
+			--label-top-mobile="14px"
+		/>
 	</label>
 </div>
 
@@ -56,29 +48,20 @@
 		width: calc(86% - 2.25em);
 	}
 
-	.choice-input {
-		width: 12em;
-	}
-
 	input {
-		cursor: default;
-	}
-
-	.yes[contenteditable]:empty::before {
-		content: 'Enter positive choice...';
-	}
-
-	.no[contenteditable]:empty::before {
-		content: 'Enter negative choice...';
+		cursor: default !important;
 	}
 
 	i {
-		font-size: 1em;
-		color: var(--border-color);
+		font-size: 1.25em;
+		color: var(--border-color-1);
 		cursor: default;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
-	@media screen and (max-width: 767px) {
+	@media screen and (max-width: 768px) {
 		.choice-area {
 			width: 86%;
 		}

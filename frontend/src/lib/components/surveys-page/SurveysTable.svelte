@@ -1,196 +1,163 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
-	import { copyCode } from '$lib/utils/copyCode';
-	import { delay } from '$lib/utils/delay';
-	import { cubicInOut } from 'svelte/easing';
-	import { fade } from 'svelte/transition';
-	import QrCode from '$lib/components/QrCode.svelte';
+	import { goto } from '$app/navigation';
+	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
+	import { S, XL } from '$lib/stores/global';
 	import { page } from '$app/stores';
-	import noname_hat from '$lib/assets/noname_hat.png';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import { formatDateTime } from '$lib/utils/formatDate';
 
-	let copiedIndex: number;
-	let innerWidth: number;
-	let isCopyPopupVisible: boolean = false;
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let survey_list: {
+	export let surveys: {
 		title: string;
 		survey_code: string;
 		creation_date: string;
 		uses_cryptographic_module: boolean;
 		is_owned_by_user: boolean;
+		group_size: number;
 	}[];
+	export let selectedSurveysToRemove: typeof surveys = [];
 
-	function deleteSurvey(i: number) {
-		fetch('/api/surveys/delete', {
-			method: 'POST',
-			body: JSON.stringify({
-				user_email: $page.data.session?.user?.email,
-				survey_code: survey_list[i].survey_code
-			}),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-			.then(() => {
-				survey_list.splice(i, 1);
-				invalidateAll();
-			})
-			.catch(() => alert('Error deleting survey'));
+	let innerWidth: number;
+	let selectedCode: string;
+	let isModalHidden: boolean = true;
+
+	$: allSelected =
+		selectedSurveysToRemove.length === surveys.length && selectedSurveysToRemove.length > 0;
+
+	function toggleAll() {
+		selectedSurveysToRemove = allSelected ? [] : [...surveys];
 	}
 </script>
 
 <svelte:window bind:innerWidth />
 
-{#if survey_list.length === 0}
+<QrCodeModal title={$t('access_code')} bind:isHidden={isModalHidden} surveyCode={selectedCode} />
+
+{#if surveys.length === 0}
 	<div class="info-row">
-		<div title="Surveys" class="title empty">No surveys yet!</div>
+		<div title={$t('surveys')} class="title empty"><Tx text="no_surveys_yet" /></div>
 		<div class="tooltip">
-			<i class="material-symbols-rounded">info</i>
-			<span class="tooltip-text {innerWidth <= 423 ? 'bottom' : 'right'}">
-				To create a survey, click on the "Create" tab at the top of the page or the button below.
-				All your created surveys will be stored on this page.
+			<i class="symbol">info</i>
+			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
+				<Tx text="surveys_tooltip" />
 			</span>
 		</div>
 	</div>
 {:else}
 	<table>
 		<tr>
-			<th title="Survey title" id="title-header" colspan="3">Survey Title</th>
-			<th title="Access code" id="code-header">Code</th>
-			<th title="Creation date" id="date-header" colspan="2">Date</th>
+			<th title={$t('select_all')} class="checkbox-entry" class:disabled={surveys.length === 0}
+				><label
+					><input
+						type="checkbox"
+						disabled={surveys.length === 0}
+						on:change={toggleAll}
+						checked={allSelected}
+					/></label
+				></th
+			>
+			<th title={$t('survey_info')} id="info-header" colspan="2">Info</th>
+			<th title={$t('survey_title')} id="title-header"><Tx text="survey_title" /></th>
+			<th title={$t('group_size')} id="group-header"><Tx text="group_size" /></th>
+			<th title={$t('access_code')} id="code-header"><Tx text="access_code" /></th>
+			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date" /></th>
 		</tr>
-		{#each survey_list.toReversed() as entry, entryIndex}
+		{#each surveys as survey}
 			<tr>
+				<td title="{$t('select')} {survey.title}" class="checkbox-entry"
+					><label>
+						<input type="checkbox" bind:group={selectedSurveysToRemove} value={survey} />
+					</label></td
+				>
 				<td class="info-entry tooltip">
-					{#if entry.uses_cryptographic_module}
-						<i class="material-symbols-rounded">encrypted</i>
-						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
-							>This survey has an established group of possible respondents.</span
+					{#if survey.uses_cryptographic_module}
+						<i class="symbol">encrypted</i>
+						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+							><Tx text="survey_is_secure" /></span
 						>
 					{:else}
-						<i class="material-symbols-rounded">public</i>
-						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
-							>Everyone can submit an answer to this survey.</span
+						<i class="symbol">public</i>
+						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+							><Tx text="survey_is_public" /></span
 						>
 					{/if}
 				</td>
 				<td class="info-entry tooltip access">
-					{#if entry.is_owned_by_user}
-						<i class="material-symbols-rounded">verified</i>
-						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
-							>You are the owner of this survey.</span
+					{#if survey.is_owned_by_user}
+						<i class="symbol">verified</i>
+						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+							><Tx text="survey_owner" /></span
 						>
 					{:else}
-						<i class="material-symbols-rounded">share</i>
-						<span class="tooltip-text {innerWidth <= 1272 ? 'right' : 'left'}"
-							>Results of this survey have been shared with you.</span
+						<i class="symbol">share</i>
+						<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+							><Tx text="survey_shared" /></span
 						>
 					{/if}
 				</td>
-				<td
-					title="View the summary"
-					class="title-entry"
-					on:click={() => goto('/' + entry.survey_code + '/summary')}>{entry.title}</td
+				<td title={$t('view_summary')} class="title-entry"
+					><button on:click={() => goto($page.url.pathname + '/' + survey.survey_code)}
+						>{survey.title}</button
+					></td
 				>
-				<td
-					title="Copy"
-					class="code-entry tooltip popup"
-					on:click={async () => {
-						if (copyCode(entry.survey_code)) {
-							copiedIndex = entryIndex;
-							isCopyPopupVisible = true;
-							await delay(2000);
-							isCopyPopupVisible = false;
-						}
-					}}
-				>
-					{entry.survey_code}
-					{#if copiedIndex === entryIndex && isCopyPopupVisible}
-						<span
-							title=""
-							class="popup-text left"
-							transition:fade={{ duration: 200, easing: cubicInOut }}>Copied!</span
+				{#if survey.uses_cryptographic_module}
+					<td title={$t('view_respondents')} class="code-entry"
+						><button
+							on:click={() =>
+								goto($page.url.pathname + '/' + survey.survey_code + '/respondents/0')}
+							>{survey.group_size}</button
 						>
-					{/if}
-					{#if innerWidth > 767}
-						<a
-							href="/fill?code={entry.survey_code}"
-							title="Fill out the survey"
-							class="tooltip-text right"
-							transition:fade={{ duration: 200, easing: cubicInOut }}
-						>
-							<QrCode code={entry.survey_code} codeSize={150} image={noname_hat} />
-						</a>
-					{/if}
+					</td>
+				{:else}
+					<td title={$t('not_available_for_public')} class="info-entry">N/A</td>
+				{/if}
+				<td title={$t('view_qr')} class="code-entry"
+					><button
+						on:click={() => {
+							selectedCode = survey.survey_code;
+							isModalHidden = false;
+						}}>{survey.survey_code}</button
+					>
 				</td>
-				<td title="Creation date" class="date-entry">{entry.creation_date}</td>
-				<td
-					title="Delete the survey"
-					class="button-entry"
-					class:disabled={!entry.is_owned_by_user}
-					on:click={() => {
-						if (entry.is_owned_by_user) deleteSurvey(survey_list.length - entryIndex - 1);
-					}}
-				>
-					<i class="material-symbols-rounded">delete</i></td
+				<td title={$t('creation_date')} class="date-entry"
+					>{formatDateTime(survey.creation_date)}</td
 				>
 			</tr>
 		{/each}
 	</table>
 {/if}
-<button title="Create a survey" on:click={() => goto('/create')}>
-	<i class="material-symbols-rounded">add</i>Survey
-</button>
 
 <style>
 	.tooltip.access {
 		--tooltip-width: 13em;
 	}
 
-	button {
-		font-size: 1.25em;
-		margin-top: 0.5em;
-	}
-
-	button i {
-		margin-right: 0.15em;
-		font-variation-settings: 'wght' 700;
-	}
-
-	.code-entry.tooltip {
-		cursor: pointer;
-	}
-
-	.code-entry.tooltip .tooltip-text.right {
-		--tooltip-width: 150px;
-		margin-left: 0em;
-		padding: 0.25em;
-		pointer-events: auto;
-	}
-
-	.code-entry.popup .popup-text.left {
-		--tooltip-width: 4em;
+	#group-header {
+		width: 8%;
 	}
 
 	#code-header {
-		width: 12%;
+		width: 11%;
 	}
 
 	#date-header {
-		width: 20%;
+		width: 11%;
 	}
 
-	@media screen and (max-width: 767px) {
-		button {
-			font-size: 1em;
+	@media screen and (max-width: 768px) {
+		#group-header {
+			width: 14%;
 		}
 
 		#code-header {
-			width: 20%;
+			width: 19%;
 		}
 
 		#date-header {
-			width: 32%;
+			width: 19%;
 		}
 	}
 </style>

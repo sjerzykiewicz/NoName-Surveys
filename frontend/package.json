@@ -33,6 +33,7 @@
 		"svelte": "^4.2.19",
 		"svelte-check": "^3.6.0",
 		"svelte-hamburgers": "^4.2.0",
+		"sveltekit-translate": "^1.0.0",
 		"tslib": "^2.4.1",
 		"typescript": "^5.0.0",
 		"vite": "^5.0.3",
@@ -42,8 +43,11 @@
 	"dependencies": {
 		"@auth/core": "^0.35.0",
 		"@auth/sveltekit": "^1.5.0",
+		"cookie": "^1.0.2",
+		"crypto-js": "^4.2.0",
 		"dotenv": "^16.4.5",
+		"oauth-1.0a": "^2.2.6",
 		"svelte-multiselect": "^10.3.0",
-		"wasm-pack": "^0.12.1"
+		"wasm-pack": "^0.13.0"
 	}
 }

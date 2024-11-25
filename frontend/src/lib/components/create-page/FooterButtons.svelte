@@ -1,109 +1,67 @@
 <script lang="ts">
-	import {
-		title,
-		questions,
-		previousQuestion,
-		useCrypto,
-		ringMembers,
-		selectedGroup,
-		isDraftModalHidden,
-		isDraftPopupVisible,
-		currentDraftId,
-		draft
-	} from '$lib/stores/create-page';
+	import { title, questions, currentDraftId, draftStructure } from '$lib/stores/create-page';
 	import Survey from '$lib/entities/surveys/Survey';
-	import Slider from '$lib/components/create-page/Slider.svelte';
-	import Text from '$lib/components/create-page/Text.svelte';
-	import Binary from '$lib/components/create-page/Binary.svelte';
-	import SurveyInfo from '$lib/entities/surveys/SurveyCreateInfo';
-	import { goto } from '$app/navigation';
-	import { QuestionError } from '$lib/entities/QuestionError';
+	import { SurveyError } from '$lib/entities/SurveyError';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
-	import { tick } from 'svelte';
-	import { page } from '$app/stores';
-	import { error } from '@sveltejs/kit';
-	import { fade } from 'svelte/transition';
-	import { cubicInOut } from 'svelte/easing';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
-	import { delay } from '$lib/utils/delay';
+	import { popup } from '$lib/utils/popup';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { getDraft } from '$lib/utils/getDraft';
+	import { trimQuestions } from '$lib/utils/trimQuestions';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		isWarningModalHidden,
+		LIMIT_OF_CHARS,
+		LIMIT_OF_DRAFTS,
+		LIMIT_OF_SURVEYS,
+		warningModalContent
+	} from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { invalidateAll } from '$app/navigation';
+	import { checkQuestionError } from '$lib/utils/checkQuestionError';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
+	export let numSurveys: number;
+	export let numDrafts: number;
 	export let isPreview: boolean = false;
-	export let titleError: boolean = false;
-	export let cryptoError: boolean = false;
+	export let isDraftModalHidden: boolean = true;
+	export let isRespondentModalHidden: boolean = true;
+	export let isExportButtonVisible: boolean = false;
 
 	function togglePreview() {
 		isPreview = !isPreview;
 	}
 
-	async function checkCorrectness() {
-		titleError = false;
-		const t = $title;
+	function checkCorrectness() {
+		const t = $title.title;
 		if (t === null || t === undefined || t.length === 0) {
-			titleError = true;
+			$title.error = SurveyError.TitleRequired;
+		} else if (t.length > $LIMIT_OF_CHARS) {
+			$title.error = SurveyError.TitleTooLong;
+		} else {
+			$title.error = SurveyError.NoError;
 		}
 
 		const numQuestions = $questions.length;
 
 		for (let i = 0; i < numQuestions; i++) {
-			const q = $questions[i].question;
-			if (q === null || q === undefined || q.length === 0) {
-				$questions[i].error = QuestionError.QuestionRequired;
-			} else if (
-				$questions[i].component != Text &&
-				$questions[i].choices.some((c) => c === null || c === undefined || c.length === 0)
-			) {
-				switch ($questions[i].component) {
-					case Slider:
-						$questions[i].error = QuestionError.SliderValuesRequired;
-						break;
-					case Binary:
-						$questions[i].error = QuestionError.BinaryChoicesRequired;
-						break;
-					default:
-						$questions[i].error = QuestionError.ChoicesRequired;
-				}
-			} else if (
-				$questions[i].component === Slider &&
-				parseFloat($questions[i].choices[0]) >= parseFloat($questions[i].choices[1])
-			) {
-				$questions[i].error = QuestionError.ImproperSliderValues;
-			} else if (new Set($questions[i].choices).size !== $questions[i].choices.length) {
-				$questions[i].error = QuestionError.DuplicateChoices;
-			} else {
-				$questions[i].error = QuestionError.NoError;
-			}
+			checkQuestionError($questions[i], $LIMIT_OF_CHARS);
 		}
 
-		cryptoError = false;
-		const g = $selectedGroup;
-		const r = $ringMembers;
-		if (
-			$useCrypto &&
-			(g === null || g === undefined || g.length === 0) &&
-			(r === null || r === undefined || r.length === 0)
-		) {
-			cryptoError = true;
-		}
-
-		if (titleError) {
-			await tick();
+		if ($title.error !== SurveyError.NoError) {
 			scrollToElementById('header');
 			return false;
 		}
 
-		if (!$questions.every((q) => q.error === QuestionError.NoError)) {
-			await tick();
+		if (!$questions.every((q) => q.error === SurveyError.NoError)) {
 			scrollToElementById(
-				$questions.indexOf($questions.find((q) => q.error !== QuestionError.NoError)!).toString()
+				`q${$questions.indexOf($questions.find((q) => q.error !== SurveyError.NoError)!).toString()}`
 			);
-			return false;
-		}
-
-		if (cryptoError) {
-			await tick();
-			scrollToElementById('crypto');
 			return false;
 		}
 
@@ -111,14 +69,30 @@
 	}
 
 	async function saveDraft() {
-		if (!(await checkCorrectness())) return;
 		if ($currentDraftId !== null) {
-			$isDraftModalHidden = false;
-		} else {
-			const parsedSurvey = new Survey($title, constructQuestionList($questions));
-			const draftInfo = new DraftCreateInfo($page.data.session!.user!.email!, parsedSurvey);
+			$title.title = $title.title.trim();
+			$questions = trimQuestions($questions);
 
-			const createResponse = await fetch('/api/surveys/drafts/create', {
+			if (!checkCorrectness()) return;
+
+			isDraftModalHidden = false;
+		} else {
+			if (numDrafts >= $LIMIT_OF_DRAFTS) {
+				isExportButtonVisible = false;
+				$warningModalContent = $t('limit_reached', { items: $t('drafts_genitive') });
+				$isWarningModalHidden = false;
+				return;
+			}
+
+			$title.title = $title.title.trim();
+			$questions = trimQuestions($questions);
+
+			if (!checkCorrectness()) return;
+
+			const parsedSurvey = new Survey(constructQuestionList($questions));
+			const draftInfo = new DraftCreateInfo($title.title, parsedSurvey);
+
+			const response = await fetch('/api/surveys/drafts/create', {
 				method: 'POST',
 				body: JSON.stringify(draftInfo),
 				headers: {
@@ -126,141 +100,77 @@
 				}
 			});
 
-			if (!createResponse.ok) {
-				error(createResponse.status, { message: await createResponse.json() });
-			} else {
-				const allResponse = await fetch('/api/surveys/drafts/all', {
-					method: 'POST',
-					body: JSON.stringify({ user_email: $page.data.session?.user?.email }),
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				});
-
-				if (!allResponse.ok) {
-					error(allResponse.status, { message: await allResponse.json() });
-				} else {
-					const body = await allResponse.json();
-					$currentDraftId = body[body.length - 1].id;
-					$draft = getDraft($title, $questions);
-					$isDraftPopupVisible = true;
-					await delay(2000);
-					$isDraftPopupVisible = false;
-				}
+			if (!response.ok) {
+				const body = await response.json();
+				$errorModalContent = getErrorMessage(body.detail);
+				$isErrorModalHidden = false;
+				return;
 			}
-		}
-	}
 
-	let ring: string[] = [];
-
-	async function fetchGroup(name: string) {
-		const response = await fetch('/api/groups/fetch', {
-			method: 'POST',
-			body: JSON.stringify({ user_email: $page.data.session?.user?.email, name: name }),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			const body = await response.json();
-			alert(body.detail);
-		} else {
-			const body = await response.json();
-			ring = [...$ringMembers, ...body];
+			$currentDraftId = await response.json();
+			$draftStructure = getDraft($title.title, $questions);
+			popup('draft-popup');
+			await invalidateAll();
 		}
 	}
 
 	async function createSurvey() {
-		if (!(await checkCorrectness())) return;
-
-		const parsedSurvey = new Survey($title, constructQuestionList($questions));
-		let finalRing: string[] = [];
-
-		if ($selectedGroup.length > 0) {
-			await fetchGroup($selectedGroup[0]);
-			finalRing = [...new Set(ring)];
-		} else if ($ringMembers.length > 0) {
-			finalRing = [...$ringMembers];
+		if (numSurveys >= $LIMIT_OF_SURVEYS) {
+			isExportButtonVisible = false;
+			$warningModalContent = $t('limit_reached', { items: $t('surveys_genitive') });
+			$isWarningModalHidden = false;
+			return;
 		}
 
-		const surveyInfo = new SurveyInfo(
-			$page.data.session!.user!.email!,
-			parsedSurvey,
-			$useCrypto,
-			finalRing
-		);
+		$title.title = $title.title.trim();
+		$questions = trimQuestions($questions);
 
-		const response = await fetch('/api/surveys/create', {
-			method: 'POST',
-			body: JSON.stringify(surveyInfo),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
+		if (!checkCorrectness()) return;
 
-		if (!response.ok) {
-			error(response.status, { message: await response.json() });
-		} else {
-			const body = await response.json();
-			$title = '';
-			$questions = [];
-			$previousQuestion = null;
-			$useCrypto = false;
-			$ringMembers = [];
-			$selectedGroup = [];
-			$currentDraftId = null;
-			$draft = getDraft('', []);
-			ring = [];
-			finalRing = [];
-			return await goto(`/${body.survey_code}/view`, { replaceState: true, invalidateAll: true });
-		}
+		isRespondentModalHidden = false;
 	}
 </script>
 
 {#if isPreview}
-	<button title="Edit survey" class="footer-button" on:click={togglePreview}>
-		<i class="material-symbols-rounded">edit</i>Edit
+	<button title={$t('edit_title')} class="footer-button" on:click={togglePreview}>
+		<i class="symbol">edit</i><Tx text="edit" />
 	</button>
 {:else}
-	<button title="Preview survey" class="footer-button" on:click={togglePreview}>
-		<i class="material-symbols-rounded">search</i>Preview
+	<button
+		title={$t('preview_title')}
+		class="footer-button"
+		on:click={() => {
+			$title.title = $title.title.trim();
+			$questions = trimQuestions($questions);
+			togglePreview();
+		}}
+	>
+		<i class="symbol">search</i><Tx text="preview" />
 	</button>
 {/if}
-<button
-	title="Save draft"
-	class="footer-button save popup"
-	disabled={$questions.length === 0 || isPreview || $isDraftPopupVisible}
-	on:click={saveDraft}
->
-	<i class="material-symbols-rounded">save</i>Save Draft
-	{#if $isDraftPopupVisible}
-		<span class="popup-text top" transition:fade={{ duration: 200, easing: cubicInOut }}
-			>Saved!</span
-		>
-	{/if}
-</button>
-<button
-	title="Finish survey creation"
-	class="footer-button save done"
-	disabled={$questions.length === 0 || isPreview}
-	on:click={createSurvey}
->
-	<i class="material-symbols-rounded">done</i>Create
-</button>
+<div class="footer-button-group">
+	<button
+		title={$t('save_draft')}
+		class="footer-button save popup"
+		disabled={$questions.length === 0 || isPreview}
+		on:click={saveDraft}
+	>
+		<i class="symbol">save</i><Tx text="save_draft" />
+		<span class="popup-text top" id="draft-popup"><Tx text="saved" /></span>
+	</button>
+	<button
+		title={$t('create_title')}
+		class="footer-button done"
+		id="create"
+		disabled={$questions.length === 0 || isPreview}
+		on:click={createSurvey}
+	>
+		<i class="symbol">done</i><Tx text="create" />
+	</button>
+</div>
 
 <style>
 	.popup {
-		--tooltip-width: 4em;
-	}
-
-	.footer-button:disabled {
-		color: var(--text-dark-color);
-		background-color: var(--secondary-color);
-		cursor: not-allowed;
-	}
-
-	.done i {
-		font-variation-settings: 'wght' 700;
+		--tooltip-width: 5em;
 	}
 </style>

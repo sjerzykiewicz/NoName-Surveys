@@ -1,5 +1,9 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 
@@ -21,11 +25,10 @@
 
 <div class="choice-area display">
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<label title="Select your answer" class="choice">
+		<label title={$t('select_answer')} class="choice">
 			<div class="checkbox">
 				<input
 					type="checkbox"
-					name={questionIndex.toString()}
 					on:change={() => {
 						updateAnswers(choice);
 						selected[choiceIndex] = !selected[choiceIndex];

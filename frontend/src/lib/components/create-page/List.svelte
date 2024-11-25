@@ -3,7 +3,13 @@
 	import { afterUpdate, tick } from 'svelte';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
+	import { M } from '$lib/stores/global';
+	import Input from '$lib/components/global/Input.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 
@@ -12,13 +18,17 @@
 
 	async function addChoice() {
 		$questions[questionIndex].choices = [...$questions[questionIndex].choices, ''];
-		await tick();
-		choiceInput.focus();
+		if (innerWidth > $M) {
+			await tick();
+			choiceInput.focus();
+		}
 	}
 
 	function removeChoice(index: number) {
-		$questions[questionIndex].choices.splice(index, 1);
-		$questions = $questions;
+		if ($questions[questionIndex].choices.length > 2) {
+			$questions[questionIndex].choices.splice(index, 1);
+			$questions = $questions;
+		}
 	}
 
 	afterUpdate(() => {
@@ -28,42 +38,36 @@
 			isButtonHidden = true;
 		}
 	});
+
+	let innerWidth: number;
 </script>
 
-<div
-	class="choice-area"
-	in:slide={{ delay: 200, duration: 200, easing: cubicInOut }}
-	out:slide={{ duration: 200, easing: cubicInOut }}
->
+<svelte:window bind:innerWidth />
+
+<div class="choice-area" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div class="dropdown">
 		<select disabled />
 	</div>
 	{#each $questions[questionIndex].choices as choice, choiceIndex}
-		<div class="choice">
-			<div
-				title="Enter choice"
-				class="choice-input"
-				contenteditable
-				bind:textContent={choice}
-				bind:this={choiceInput}
-				role="textbox"
-				tabindex="0"
-				on:keydown={handleNewLine}
-			>
-				{choice}
-			</div>
+		<div class="choice" id={`q${questionIndex}c${choiceIndex}`}>
+			<Input
+				bind:text={choice}
+				label={$t('choice')}
+				title={$t('choice_title')}
+				bind:element={choiceInput}
+			/>
 			<button
-				title="Remove choice"
+				title={$t('choice_remove')}
 				class="remove-choice"
 				class:hidden={isButtonHidden}
 				on:click={() => removeChoice(choiceIndex)}
 			>
-				<i class="material-symbols-rounded">cancel</i>
+				<i class="symbol">delete</i>
 			</button>
 		</div>
 	{/each}
-	<button title="Add choice" class="add-choice" on:click={addChoice}>
-		<i class="material-symbols-rounded">add_circle</i>Choice
+	<button title={$t('choice_add')} class="add-choice" on:click={addChoice}>
+		<i class="symbol">add</i><Tx text="choice" />
 	</button>
 </div>
 

@@ -1,46 +1,43 @@
 <script lang="ts">
-	import { signIn } from '@auth/sveltekit/client';
+	import amu from '$lib/assets/amu.png';
+	import { startOAuth } from '$lib/utils/startOAuth';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 </script>
 
-<h1>Sign in with:</h1>
+<h1><Tx text="account_sign_in" /></h1>
 <div class="sign-buttons">
-	<button title="Google" class="sign-in" on:click={() => signIn('google')}
-		><i class="fa-brands fa-google"></i></button
-	>
-	<button title="Microsoft" class="sign-in" disabled><i class="fa-brands fa-microsoft"></i></button>
-	<button title="GitHub" class="sign-in" on:click={() => signIn('github')}
-		><i class="fa-brands fa-github"></i></button
+	<button title={$t('sign_in')} class="sign-in" on:click={() => startOAuth('/account')}
+		><img src={amu} alt="AMU logo" class="amu-logo" /><Tx text="sign_in" /></button
 	>
 </div>
-<div title="Account information" class="info">
+<div title={$t('account_info_title')} class="info">
 	<div class="text">
-		Authorizing yourself will enable you to:
-		<ul>
-			<li>Create your own surveys,</li>
-			<li>Save survey drafts,</li>
-			<li>View your survey's results,</li>
-			<li>
-				Generate digital signature keys that allow you to participate in secure surveys without
-				needing to sign in each time.
-			</li>
-		</ul>
+		<Tx html="account_authorization_info" />
 	</div>
 </div>
-<div title="Account information" class="info">
+<div title={$t('account_info_title')} class="info bottom">
 	<div class="text">
-		We do not recommend signing in if you only wish to fill out a survey. For secure surveys, if you
-		have already generated your digital signature keys, signing in is also not necessary.
+		<Tx text="account_info" />
 	</div>
 </div>
 
 <style>
 	h1 {
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color);
-		color: var(--text-color);
-		font-size: 3em;
-		font-weight: bold;
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		color: var(--text-color-1);
+		font-size: 2.75em;
+		font-weight: 700;
 		cursor: default;
+		margin: 0;
+		padding: 0.25em 0 0.5em;
+		transition:
+			0.2s,
+			outline 0s;
 	}
 
 	.sign-buttons {
@@ -51,28 +48,44 @@
 		margin-bottom: 2em;
 	}
 
-	.sign-in {
-		margin-left: 0.5em;
-		margin-right: 0.5em;
-	}
-
-	.sign-in {
-		font-size: 2em;
-	}
-
 	.info {
-		font-size: 1.25em;
+		display: flex;
+		flex-flow: row;
+		align-items: center;
+		justify-content: center;
+		padding: 0.5em 0.5em 0em;
+		border-top: 1px solid var(--border-color-1);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		cursor: default;
+		overflow-wrap: break-word;
+		color: var(--text-color-1);
+		font-size: 1.1em;
+		transition: 0.2s;
 	}
 
-	@media screen and (max-width: 767px) {
+	.info.bottom {
+		padding: 0.5em;
+		border-bottom: 1px solid var(--border-color-1);
+	}
+
+	.text {
+		font-weight: 700;
+		text-align: left;
+	}
+
+	.info.bottom .text {
+		font-weight: 500;
+	}
+
+	@media screen and (max-width: 768px) {
 		h1 {
 			font-size: 2em;
 		}
 
 		.info {
-			font-size: 1em;
-			margin-left: 0em;
-			margin-right: 0em;
+			font-size: 0.8em;
+			padding-left: 0em;
+			padding-right: 0em;
 		}
 	}
 </style>

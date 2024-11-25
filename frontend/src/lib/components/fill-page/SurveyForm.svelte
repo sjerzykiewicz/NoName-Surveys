@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { title, questions, answers } from '$lib/stores/fill-page';
-	import Header from '$lib/components/Header.svelte';
-	import Content from '$lib/components/Content.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/global/Header.svelte';
+	import Content from '$lib/components/global/Content.svelte';
+	import Footer from '$lib/components/global/Footer.svelte';
 	import { TextQuestionAnswered, type TextQuestion } from '$lib/entities/questions/Text';
 	import { SingleQuestion, SingleQuestionAnswered } from '$lib/entities/questions/Single';
 	import { SliderQuestionAnswered, type SliderQuestion } from '$lib/entities/questions/Slider';
+	import { NumberQuestion, NumberQuestionAnswered } from '$lib/entities/questions/Number';
 	import type Survey from '$lib/entities/surveys/Survey';
 	import type Question from '$lib/entities/questions/Question';
 	import { MultiQuestionAnswered } from '$lib/entities/questions/Multi';
@@ -13,7 +14,7 @@
 	import { RankQuestionAnswered } from '$lib/entities/questions/Rank';
 	import { ListQuestionAnswered } from '$lib/entities/questions/List';
 	import { ScaleQuestionAnswered } from '$lib/entities/questions/Scale';
-	import { SurveyAnswer } from '$lib/entities/surveys/SurveyAnswer';
+	import SurveyAnswer from '$lib/entities/surveys/SurveyAnswer';
 	import QuestionTitle from './QuestionTitle.svelte';
 	import Single from './Single.svelte';
 	import Text from './Text.svelte';
@@ -23,6 +24,7 @@
 	import Slider from './Slider.svelte';
 	import Binary from './Binary.svelte';
 	import Rank from './Rank.svelte';
+	import Number from './Number.svelte';
 	import type { ComponentType } from 'svelte';
 	import AnswerError from './AnswerError.svelte';
 	import { cubicInOut } from 'svelte/easing';
@@ -30,20 +32,42 @@
 	import { goto } from '$app/navigation';
 	import KeyPair from '$lib/entities/KeyPair';
 	import { scrollToElementById } from '$lib/utils/scrollToElement';
-	import { onMount, tick } from 'svelte';
+	import { onMount } from 'svelte';
 	import init, { linkable_ring_signature } from 'wasm';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
+	import Modal from '$lib/components/global/Modal.svelte';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		successModalContent,
+		isSuccessModalHidden,
+		M
+	} from '$lib/stores/global';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
+	import { FileError } from '$lib/entities/FileError';
+	import KeysError from './KeysError.svelte';
+	import { readFile } from '$lib/utils/readFile';
+	import SuccessModal from '$lib/components/global/SuccessModal.svelte';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import decryptKeys from '$lib/utils/decryptKeys';
+	import PassphraseError from './PassphraseError.svelte';
 
-	onMount(async () => {
-		await init();
-	});
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
+	export let survey_title: string;
 	export let survey: Survey;
+	export let code: string;
 	export let uses_crypto: boolean;
 	export let keys: Array<string>;
-	export let code: string;
 
 	let innerWidth: number;
+	let isKeysModalHidden: boolean = true;
+	let isSubmitButtonDisabled: boolean = false;
+	let passphrase: string = '';
+	let passphraseError: boolean = false;
+	let keyPair: KeyPair | null = null;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -51,12 +75,13 @@
 		multi: Multi,
 		scale: Scale,
 		binary: Binary,
+		number: Number,
 		slider: Slider,
 		rank: Rank,
 		list: List
 	};
 
-	$title = survey.title;
+	$title = survey_title;
 
 	for (let i in survey.questions) {
 		$questions[i] = {
@@ -76,6 +101,11 @@
 			case 'slider':
 				$questions[i].choices[0] = (survey.questions[i] as SliderQuestion).min_value.toString();
 				$questions[i].choices[1] = (survey.questions[i] as SliderQuestion).max_value.toString();
+				$questions[i].choices[2] = (survey.questions[i] as SliderQuestion).precision.toString();
+				break;
+			case 'number':
+				$questions[i].choices[0] = (survey.questions[i] as NumberQuestion).min_value.toString();
+				$questions[i].choices[1] = (survey.questions[i] as NumberQuestion).max_value.toString();
 				break;
 			default:
 				$questions[i].choices = (survey.questions[i] as SingleQuestion).choices;
@@ -145,7 +175,7 @@
 						$questions[i].required,
 						$questions[i].question,
 						$questions[i].choices[0],
-						$answers[i].choices[0]
+						$answers[i].choices[0].trim()
 					);
 					break;
 				case 'slider':
@@ -154,48 +184,158 @@
 						$questions[i].question,
 						parseFloat($questions[i].choices[0]),
 						parseFloat($questions[i].choices[1]),
+						parseFloat($questions[i].choices[2]),
 						parseFloat($answers[i].choices[0])
 					);
+					break;
+				case 'number':
+					answerList[i] = new NumberQuestionAnswered(
+						$questions[i].required,
+						$questions[i].question,
+						parseFloat($questions[i].choices[0]),
+						parseFloat($questions[i].choices[1]),
+						parseFloat($answers[i].choices[0])
+					);
+					break;
 			}
 		}
 		return answerList;
 	}
 
-	let unansweredRequired: Array<number> = [];
+	let unansweredRequired: Set<number> = new Set();
 
-	async function processForm(keyPair: KeyPair | undefined) {
-		unansweredRequired = [];
+	function checkAnswerCorrectness() {
+		unansweredRequired = new Set();
 		for (let i = 0; i < numQuestions; i++) {
 			if ($questions[i].required) {
 				if ($answers[i].choices.length === 0) {
-					unansweredRequired[i] = i;
+					unansweredRequired.add(i);
 				} else if (
-					$answers[i].choices.some((c) => c === null || c === undefined || c.length === 0)
+					$answers[i].choices.some(
+						(c) => c === null || c === undefined || c.toString().trim().length === 0
+					)
 				) {
-					unansweredRequired[i] = i;
+					unansweredRequired.add(i);
 				}
 			}
 		}
 
-		if (unansweredRequired.length > 0) {
-			await tick();
-			scrollToElementById(unansweredRequired[0].toString());
+		if (unansweredRequired.size > 0) {
+			const [first] = unansweredRequired;
+			scrollToElementById(first.toString());
+			return false;
+		}
+
+		return true;
+	}
+
+	let fileElement: HTMLInputElement | null = null;
+	let fileName: string = $t('no_file_selected');
+	let fileError: FileError = FileError.NoError;
+
+	function handleFileChange() {
+		fileName = fileElement?.files?.[0]?.name ?? $t('no_file_selected');
+	}
+
+	function checkFileCorrectness() {
+		fileError = FileError.NoError;
+
+		if (fileElement?.files?.length === 0) {
+			fileError = FileError.FileRequired;
+			return false;
+		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'txt') {
+			fileError = FileError.FileInvalid;
+			return false;
+		}
+
+		return true;
+	}
+
+	function checkPassphraseCorrectness(keyPair: KeyPair | null) {
+		passphraseError = false;
+
+		if (keyPair === null) {
+			passphraseError = true;
+			return false;
+		}
+
+		return true;
+	}
+
+	async function processCrypto() {
+		isSubmitButtonDisabled = true;
+		if (!checkFileCorrectness()) {
+			isSubmitButtonDisabled = false;
 			return;
 		}
 
+		const text = await readFile(fileElement).then(
+			(resolve) => {
+				return resolve;
+			},
+			(reject) => {
+				$errorModalContent = reject as string;
+				$isErrorModalHidden = false;
+				return '';
+			}
+		);
+
+		keyPair = await getKeys(text);
+
+		if (!checkPassphraseCorrectness(keyPair)) {
+			isSubmitButtonDisabled = false;
+			return;
+		}
+
+		if (!keys.includes(keyPair!.publicKey)) {
+			$errorModalContent = $t('public_key_not_on_list');
+			$isErrorModalHidden = false;
+			isSubmitButtonDisabled = false;
+			return;
+		}
+
+		processForm(keyPair!);
+	}
+
+	async function getKeys(text: string): Promise<KeyPair | null> {
+		const data = JSON.parse(text);
+		const salt = new Uint8Array([...data.salt].map((char) => char.charCodeAt(0)));
+		const iv = new Uint8Array([...data.iv].map((char) => char.charCodeAt(0)));
+		const ciphertext = new Uint8Array([...data.ciphertext].map((char) => char.charCodeAt(0)));
+
+		try {
+			const decrypted = await decryptKeys(ciphertext, passphrase, salt, iv);
+			const decoder = new TextDecoder();
+			const pemKeys = decoder.decode(decrypted);
+
+			const words = pemKeys.split('\n\n');
+
+			let publicKey = words[0] + '\n';
+			let privateKey = words[1];
+
+			return new KeyPair(privateKey, publicKey);
+		} catch (e) {
+			return null;
+		}
+	}
+
+	async function processForm(keyPair: KeyPair | undefined) {
 		let signature: string[] = [];
 
 		const answerList: Array<Question> = constructAnswerList();
 
 		if (uses_crypto) {
+			const message = answerList.map((answer) => answer.getAnswer()).join('') + code;
 			const privateKey = keyPair!.privateKey;
 			const publicKey = keyPair!.publicKey;
 			const index = keys.indexOf(publicKey);
 
 			try {
-				signature = linkable_ring_signature(code, keys, privateKey, index);
+				signature = linkable_ring_signature(message, keys, privateKey, index);
 			} catch (e) {
-				alert(e);
+				$errorModalContent = e as string;
+				$isErrorModalHidden = false;
+				isSubmitButtonDisabled = false;
 				return;
 			}
 		}
@@ -212,68 +352,128 @@
 
 		if (!response.ok) {
 			const body = await response.json();
-			alert(body.detail);
-		} else {
-			return await goto('/fill/success', { replaceState: true, invalidateAll: true });
-		}
-	}
-
-	function getKeys(text: string): KeyPair {
-		const words = text.split('\n');
-
-		let publicKey = words[0];
-		let privateKey = words[1];
-
-		return new KeyPair(privateKey, publicKey);
-	}
-
-	function processCrypto() {
-		const keyInput = document.querySelector<HTMLInputElement>('#keys-file');
-
-		const keysReader = new FileReader();
-		const keysFile = keyInput?.files?.[0];
-		try {
-			keysReader.readAsText(keysFile!);
-		} catch {
-			alert('No key file has been provided.');
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			isSubmitButtonDisabled = false;
 			return;
 		}
-		let keyPair: KeyPair | undefined;
-		keysReader.onload = (e) => {
-			const fileData = e.target?.result;
-			const text = fileData as string;
-			keyPair = getKeys(text);
-			if (!keys.includes(keyPair.publicKey)) {
-				alert('Your public key is not on the list');
-				return;
-			}
-			processForm(keyPair);
-		};
+
+		isSubmitButtonDisabled = true;
+		isKeysModalHidden = true;
+		$successModalContent = $t('answer_submit_success');
+		$isSuccessModalHidden = false;
 	}
 
 	async function submitSurvey() {
+		isSubmitButtonDisabled = true;
+		if (!checkAnswerCorrectness()) {
+			isSubmitButtonDisabled = false;
+			return;
+		}
+
 		if (uses_crypto) {
+			isSubmitButtonDisabled = false;
+			isKeysModalHidden = false;
+		} else {
+			processForm(undefined);
+		}
+	}
+
+	async function hideSuccessModal() {
+		$isSuccessModalHidden = true;
+		await goto('/', { replaceState: true, invalidateAll: true });
+	}
+
+	function handleEnter(event: KeyboardEvent) {
+		if (!isKeysModalHidden && !isSubmitButtonDisabled && event.key === 'Enter') {
+			event.preventDefault();
 			processCrypto();
-		} else processForm(undefined);
+			event.stopImmediatePropagation();
+		}
 	}
 
-	let filename: string = 'No file chosen';
-
-	function handleFileChange() {
-		filename =
-			document.querySelector<HTMLInputElement>('#keys-file')?.files?.[0]?.name ?? 'No file chosen';
-	}
+	onMount(async () => {
+		await init();
+	});
 </script>
 
 <svelte:window bind:innerWidth />
+<svelte:body on:keydown={handleEnter} />
+
+<SuccessModal hide={hideSuccessModal} />
+
+<Modal
+	icon="encrypted"
+	title={$t('load_keys_title')}
+	bind:isHidden={isKeysModalHidden}
+	hide={() => {
+		isKeysModalHidden = true;
+		passphrase = '';
+		passphraseError = false;
+		fileName = $t('no_file_selected');
+		fileError = FileError.NoError;
+	}}
+	--width={innerWidth <= $M ? '20em' : '38em'}
+>
+	<div slot="content" title={$t('load_keys')} class="file-div">
+		<span class="file-label"
+			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.txt"</span
+		>
+		<label>
+			<div class="file-input">
+				<span class="file-button"><i class="symbol">upload_file</i><Tx text="select_file" /></span>
+				<span class="file-name">{fileName}</span>
+			</div>
+			<input type="file" bind:this={fileElement} on:change={handleFileChange} />
+		</label>
+		<KeysError error={fileError} element={fileElement} />
+		<div title={$t('enter_passphrase')}>
+			<br />
+			<Tx text="enter_passphrase" />
+			<br />
+			<br />
+			<label class="passphrase-label">
+				<input
+					type="password"
+					title={$t('passphrase_title')}
+					class="passphrase-input"
+					placeholder="{$t('passphrase_title')}..."
+					bind:value={passphrase}
+				/></label
+			>
+			<PassphraseError error={passphraseError} {keyPair} />
+		</div>
+	</div>
+	<button
+		title={$t('submit_keys')}
+		class="save"
+		disabled={isSubmitButtonDisabled}
+		on:click={processCrypto}><i class="symbol">done</i><Tx text="submit" /></button
+	>
+</Modal>
 
 <Header>
-	<div title="Survey title" class="title" in:slide={{ duration: 200, easing: cubicInOut }}>
+	<div title={$t('survey_title')} class="title" in:slide={{ duration: 200, easing: cubicInOut }}>
 		{$title}
 	</div>
 </Header>
 
 <Content>
+	{#if uses_crypto}
+		<p title={$t('survey_secure_title')} class="survey-info">
+			<i class="symbol">encrypted</i><Tx text="survey_secure_info" />
+		</p>
+	{:else}
+		<p title={$t('survey_public_title')} class="survey-info">
+			<i class="symbol">public</i><Tx text="survey_public_info" />
+		</p>
+	{/if}
+	{#if keys.length === 1 || keys.length === 2}
+		<p title={$t('survey_not_secure_title')} class="warning">
+			<i class="symbol">warning</i><Tx text="survey_not_secure" />
+			{keys.length === 1 ? $t('only_respondent') : $t('two_respondents')}
+		</p>
+	{/if}
 	{#each $questions as question, questionIndex (question)}
 		<div class="question" in:slide={{ duration: 200, easing: cubicInOut }}>
 			<QuestionTitle
@@ -282,162 +482,49 @@
 			/>
 			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
 		</div>
-		<AnswerError {unansweredRequired} {questionIndex} />
+		<AnswerError
+			{unansweredRequired}
+			{questionIndex}
+			--margin-top={question.type === 'text' ? '-2em' : ''}
+		/>
 	{/each}
-	{#if uses_crypto}
-		<div title="Load your digital signature keys" class="load-div">
-			<div class="load-text">
-				<span class="load-label">Load your keys</span>
-				<div title="" class="tooltip">
-					<i class="material-symbols-rounded">info</i>
-					<span class="tooltip-text {innerWidth <= 615 ? 'top' : 'right'}"
-						>Please load the file which you have previously generated on this application. The file
-						contains your keys, necessary for cryptographic calculations which are needed for
-						validating your right to fill out this survey.<br /><br />Default filename:
-						"noname-keys.txt"</span
-					>
-				</div>
-			</div>
-			<label for="keys-file">
-				<div class="file-input">
-					<span class="file-button"
-						><i class="material-symbols-rounded">upload_file</i>Choose File</span
-					>
-					<span class="file-name">{filename}</span>
-				</div>
-				<input type="file" name="keys" id="keys-file" on:change={handleFileChange} />
-			</label>
-		</div>
-	{/if}
 </Content>
 
 <Footer>
-	<button title="Submit survey" class="footer-button save" on:click={submitSurvey}>
-		<i class="material-symbols-rounded">done</i>Submit
+	<button
+		title={$t('submit_survey')}
+		class="footer-button done"
+		disabled={uses_crypto ? false : isSubmitButtonDisabled}
+		on:click={submitSurvey}
+	>
+		<i class="symbol">done</i><Tx text="submit" />
 	</button>
 </Footer>
 
 <style>
-	.tooltip {
-		--tooltip-width: 38em;
-		margin-left: 0.5em;
-	}
-
-	.tooltip i {
-		font-size: 1em;
-	}
-
-	.load-div {
-		color: var(--text-color);
-		font-size: 1.25em;
-		text-shadow: 0px 4px 4px var(--shadow-color);
+	.file-div {
 		width: 100%;
-		text-align: center;
-		margin-top: 2.25em;
-		padding-top: 1.5em;
-		border-top: 1px solid var(--border-color);
 	}
 
-	.load-text {
+	.survey-info {
 		display: flex;
-		flex-direction: row;
 		align-items: center;
-		justify-content: flex-start;
-	}
-
-	.load-label {
+		color: var(--text-color-1);
+		font-weight: 700;
+		font-size: 1em;
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
-	}
-
-	.load-text,
-	.load-div label {
-		font-size: 1.2em;
-	}
-
-	input[type='file'] {
-		display: none;
-	}
-
-	.file-input {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-		align-items: center;
-		text-align: left;
-		width: fit-content;
-		margin-top: 0.5em;
-		background-color: var(--secondary-dark-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		padding: 0.5em;
-		font-size: 0.8em;
-		cursor: default;
-	}
-
-	.file-button {
-		display: flex;
-		align-items: center;
-		padding: 0.25em;
-		background-color: var(--primary-color);
-		border: 1px solid var(--border-color);
-		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color);
-		text-shadow: none;
-		color: var(--text-color);
-		cursor: pointer;
 		transition: 0.2s;
-		margin-right: 0.5em;
-		min-width: 7em;
 	}
 
-	.file-button:hover {
-		background-color: var(--secondary-color);
+	.warning,
+	.survey-info {
+		margin: 0em 0em 0.5em 0em;
 	}
 
-	.file-button:active {
-		background-color: var(--border-color);
-	}
-
-	.file-name {
-		overflow: hidden;
-		overflow-wrap: anywhere;
-		text-overflow: ellipsis;
-		height: 1.15em;
-	}
-
-	.save i {
-		font-variation-settings: 'wght' 700;
-	}
-
-	@media screen and (max-width: 1193px) {
-		.tooltip {
-			--tooltip-width: 26.9em;
-		}
-	}
-
-	@media screen and (max-width: 767px) {
-		.load-div {
-			font-size: 1em;
-		}
-
-		.save {
-			font-size: 1.5em;
-		}
-
-		.file-input {
-			flex-flow: column;
-		}
-
-		.file-button {
-			margin-right: 0em;
-			margin-bottom: 0.5em;
-		}
-	}
-
-	@media screen and (max-width: 615px) {
-		.tooltip {
-			--tooltip-width: 17em;
+	@media screen and (max-width: 768px) {
+		.footer-button.done {
+			font-size: 1.25em;
 		}
 	}
 </style>

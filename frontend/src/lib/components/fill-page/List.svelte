@@ -1,17 +1,19 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
+	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let questionIndex: number;
 
-	$answers[questionIndex].choices[0] = $questions[questionIndex].choices[0];
+	$answers[questionIndex].choices[0] = '';
 </script>
 
 <div class="choice-area display">
-	<select
-		title="Select your answer"
-		name={questionIndex.toString()}
-		bind:value={$answers[questionIndex].choices[0]}
-	>
+	<select title={$t('select_answer')} bind:value={$answers[questionIndex].choices[0]}>
+		<option value="" selected><Tx text="select_no_answer" /></option>
 		{#each $questions[questionIndex].choices as choice}
 			<option value={choice}>
 				{choice}

@@ -14,4 +14,8 @@ export class SingleQuestionAnswered extends SingleQuestion {
 		super(required, question, choices);
 		this.answer = answer;
 	}
+
+	getAnswer(): string {
+		return this.answer ? this.answer : '';
+	}
 }

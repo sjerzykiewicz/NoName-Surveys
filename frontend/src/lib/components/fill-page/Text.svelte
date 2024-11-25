@@ -1,35 +1,23 @@
 <script lang="ts">
 	import { questions, answers } from '$lib/stores/fill-page';
-	import { handleNewLine } from '$lib/utils/handleNewLine';
+	import Input from '$lib/components/global/Input.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	export let questionIndex: number;
 
 	$answers[questionIndex].choices[0] = '';
 </script>
 
-<div class="choice-area display">
-	<div title="Question details" class="details">
+<div class="choice-area text display">
+	<div title={$t('question_details')} class="details">
 		{$questions[questionIndex].choices[0]}
 	</div>
-	<div
-		title="Enter your answer"
-		class="text-area"
-		contenteditable
-		bind:textContent={$answers[questionIndex].choices[0]}
-		role="textbox"
-		tabindex="0"
-		on:keydown={handleNewLine}
-	>
-		{$answers[questionIndex].choices[0]}
-	</div>
+	<Input
+		bind:text={$answers[questionIndex].choices[0]}
+		label={$t('answer')}
+		title={$t('enter_answer')}
+		--margin-right="0em"
+	/>
 </div>
-
-<style>
-	.text-area {
-		margin-right: 0em;
-	}
-
-	.text-area[contenteditable]:empty::before {
-		content: 'Enter your answer...';
-	}
-</style>

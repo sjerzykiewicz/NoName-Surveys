@@ -298,6 +298,14 @@
 		z-index: 2;
 	}
 
+	.create-info.tooltip .tooltip-text.right {
+		top: 220%;
+	}
+
+	.create-info.tooltip .tooltip-text.right::after {
+		top: 15%;
+	}
+
 	.button-row {
 		align-items: center;
 		font-size: 1em;
@@ -356,12 +364,20 @@
 			font-size: 1.25em;
 		}
 
+		.create-info.tooltip .tooltip-text.right {
+			top: 350%;
+		}
+
+		.create-info.tooltip .tooltip-text.right::after {
+			top: 10%;
+		}
+
 		.create-info.tooltip .tooltip-text.bottom {
 			left: -175%;
 		}
 
 		.create-info.tooltip .tooltip-text.bottom::after {
-			left: 85%;
+			left: 80%;
 		}
 
 		.import {

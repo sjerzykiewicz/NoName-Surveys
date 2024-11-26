@@ -41,7 +41,8 @@
 		isErrorModalHidden,
 		successModalContent,
 		isSuccessModalHidden,
-		M
+		M,
+		LIMIT_OF_CHARS
 	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { FileError } from '$lib/entities/FileError';
@@ -433,11 +434,16 @@
 			<br />
 			<br />
 			<label class="passphrase-label">
+				<!-- svelte-ignore a11y-autofocus -->
 				<input
 					type="password"
 					title={$t('passphrase_title')}
 					class="passphrase-input"
 					placeholder="{$t('passphrase_title')}..."
+					required
+					maxlength={$LIMIT_OF_CHARS}
+					autocomplete="off"
+					autofocus={innerWidth > $M}
 					bind:value={passphrase}
 				/></label
 			>

@@ -86,7 +86,7 @@
 		} else if (component === Scale) {
 			return ['1', '2', '3', '4', '5'];
 		} else if (component === Binary) {
-			return ['Yes', 'No'];
+			return [$t('binary_yes'), $t('binary_no')];
 		} else if (component === Slider) {
 			return ['0', '10', '1'];
 		} else if (component === Number) {

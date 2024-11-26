@@ -18,7 +18,7 @@
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-node": "^5.0.1",
-		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/kit": ">=2.8.3",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/crypto-js": "^4.2.2",
 		"@types/eslint": "^8.56.0",
@@ -41,13 +41,11 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@auth/core": "^0.35.0",
-		"@auth/sveltekit": "^1.5.0",
-		"cookie": "^1.0.2",
+		"@sveltejs/kit": ">=2.8.3",
 		"crypto-js": "^4.2.0",
 		"dotenv": "^16.4.5",
 		"oauth-1.0a": "^2.2.6",
 		"svelte-multiselect": "^10.3.0",
-		"wasm-pack": "^0.13.0"
+		"wasm-pack": "^0.13.1"
 	}
 }

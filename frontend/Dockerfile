@@ -6,8 +6,8 @@ ENV PUBLIC_BACKEND_HOST $PUBLIC_BACKEND_HOST
 RUN apk add --no-cache rust cargo rustup curl wasm-pack
 
 WORKDIR /app
-COPY package.json ./
-RUN npm install
+COPY package.json package-lock.json ./
+RUN npm ci
 
 COPY . .
 RUN npm run build

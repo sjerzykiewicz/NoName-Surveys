@@ -16,7 +16,6 @@
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	let isPanelVisible: boolean = false;
-	let from: string = $page.route.id!;
 
 	const ACCOUNT_BUTTON_BREAKPOINT = 1155;
 
@@ -62,14 +61,18 @@
 		on:click={togglePanel}
 	>
 		<div class="button-text">
-			<i class="symbol">{$page.data.session ? 'account_circle' : 'account_circle_off'}</i>
+			<i class="symbol" class:signed-in={$page.data.session}
+				>{$page.data.session ? 'account_circle' : 'account_circle_off'}</i
+			>
 			{#if innerWidth > ACCOUNT_BUTTON_BREAKPOINT || innerWidth <= $M}
-				{$page.data.session ? $page.data.session.user?.email.split('@')[0] : $t('signed_out')}
+				{$page.data.session ? $page.data.session.user?.email.split('@')[0] : $t('sign_in')}
 			{/if}
 		</div>
 		<i class="symbol arrow">arrow_drop_down</i>
-		{#if $page.data.session && innerWidth > $M}
-			<span class="tooltip-text left">{$page.data.session.user?.email}</span>
+		{#if innerWidth > $M}
+			<span class="tooltip-text left"
+				>{$page.data.session ? $page.data.session.user?.email : $t('signed_out_info')}</span
+			>
 		{/if}
 	</button>
 	{#if isPanelVisible}
@@ -99,7 +102,10 @@
 					><i class="symbol">logout</i><Tx text="sign_out" />
 				</button>
 			{:else}
-				<button title={$t('sign_in')} class="nav-button" on:click={() => startOAuth(from)}
+				<button
+					title={$t('sign_in')}
+					class="nav-button"
+					on:click={() => startOAuth($page.url.pathname === '/fill' ? '/' : $page.url.pathname)}
 					><i class="symbol">login</i><Tx text="sign_in" /></button
 				>
 			{/if}
@@ -109,7 +115,7 @@
 
 <style>
 	.tooltip {
-		--tooltip-width: fit-content;
+		--tooltip-width: max-content;
 	}
 
 	.tooltip .tooltip-text {
@@ -119,6 +125,10 @@
 
 	.tooltip .tooltip-text.left::after {
 		border-color: transparent transparent transparent var(--primary-color-2);
+	}
+
+	.signed-in {
+		color: var(--accent-color-1);
 	}
 
 	.button-group {

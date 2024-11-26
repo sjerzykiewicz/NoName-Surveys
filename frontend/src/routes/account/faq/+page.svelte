@@ -33,6 +33,7 @@
 			answer={$t('faq_secure_survey_a')}
 		/>
 		<FaqItem id="keys" icon="key" question={$t('faq_keys_q')} answer={$t('faq_keys_a')} />
+		<FaqItem id="ring" icon="graph_6" question={$t('faq_ring_q')} answer={$t('faq_ring_a')} />
 		<FaqItem
 			id="authorize"
 			icon="login"

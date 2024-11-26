@@ -115,12 +115,14 @@
 	<div {title} class="file-div" class:disabled>
 		<div class="label-container">
 			<span class="file-label">{label}</span>
-			<div class="tooltip">
-				<i class="symbol">info</i>
-				<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
-					<Tx html="example_csv" />
-				</span>
-			</div>
+			{#if !disabled}
+				<div title="" class="tooltip">
+					<i class="symbol">info</i>
+					<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
+						<Tx html="example_csv" />
+					</span>
+				</div>
+			{/if}
 		</div>
 		<label>
 			<div class="file-input">

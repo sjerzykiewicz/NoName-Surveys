@@ -67,6 +67,8 @@ export const data = {
 		other_lang: 'Polish',
 		scroll_to_top: 'Scroll to the top',
 		signed_out: 'Signed Out',
+		signed_out_info: 'You are signed out',
+		sign_out_alert: 'Sign out to ensure security while filling out the survey.',
 		sign_in_info: 'to access ',
 		and: 'and',
 		or: 'Or',
@@ -392,7 +394,8 @@ export const data = {
 		passphrase_title: 'Enter a passphrase',
 		incorrect_passphrase: 'Incorrect passphrase.',
 		error_empty_passphrase: 'Passphrase cannot be empty.',
-		provide_passphrase: 'Please provide a passphrase to protect your keys on your device.',
+		provide_passphrase:
+			'Please provide a passphrase to protect your keys on your device. Remember it, as it will be required to load your keys each time.',
 		enter_passphrase: 'Enter passphrase to the file.',
 		example_csv: `A valid .csv file should not contain a headline. Each email should be placed in a new line and separated by a comma or a semicolon.<br /><br />
 			Example:<br />
@@ -411,10 +414,14 @@ export const data = {
 			You need to authorize at least once and generate keys which are needed to fill out a secure survey.
 			After generating keys, you do not need to authorize again.`,
 		faq_keys_q: 'What are digital signature keys?',
-		faq_keys_a: `Digital signature keys are a pair of cryptographic, asymmetric keys that are used to sign and verify digital information.
+		faq_keys_a: `Digital signature keys are a pair of cryptographic, asymmetric keys that are used to sign and verify digital information via ring signatures.
 			They are used in secure surveys to ensure the anonymity of the respondents and their right to answer a given survey.
 			You can generate your keys in the "Account" tab after authorizing yourself. You will be asked to provide a passphrase to protect your keys.
-			Make sure to generate new keys every year for increased security.`,
+			Remember it, as it will be required each time you load your keys. Make sure to generate new keys every year for increased security.`,
+		faq_ring_q: 'What is a ring signature?',
+		faq_ring_a: `Ring signature is a cryptographic scheme that allows a spontaneous creation of a group of users.
+			Each of these users can then generate a signature that makes it possible to verify if they are members of this group, without revealing their identity.
+			The linkable variant of ring signature additionally allows for determining whether two signed messages come from the same group member.`,
 		faq_authorize_q: 'Why can I not sign in?',
 		faq_authorize_a: `Only AMU employees and students are allowed to authorize in this instance of our application.
 			If you are from AMU and are still having trouble signing in, it may be due to a problem with the AMU USOS authorization system.
@@ -647,6 +654,8 @@ export const data = {
 		other_lang: 'Angielski',
 		scroll_to_top: 'Przewiń na samą górę',
 		signed_out: 'Wylogowany',
+		signed_out_info: 'Jesteś wylogowany',
+		sign_out_alert: 'Wyloguj się, aby zapewnić bezpieczeństwo podczas wypełniania ankiety.',
 		sign_in_info: 'aby uzyskać dostęp do ',
 		and: 'i',
 		or: 'Lub',
@@ -969,7 +978,8 @@ export const data = {
 		passphrase_title: 'Wprowadź hasło do pliku',
 		incorrect_passphrase: 'Niepoprawne hasło.',
 		error_empty_passphrase: 'Hasło nie może być puste.',
-		provide_passphrase: 'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu.',
+		provide_passphrase:
+			'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu. Zapamiętaj je, gdyż będzie ono wymagane do każdego załadowania kluczy.',
 		enter_passphrase: 'Podaj hasło do pliku.',
 		example_csv: `Poprawny plik .csv nie powinien zawierać nagłówka. Każdy email powinien być w osobnej linii oraz oddzielony przecinkiem lub średnikiem.<br /><br />
 			Przykład:<br />
@@ -988,10 +998,14 @@ export const data = {
 			Musisz się zautoryzować przynajmniej raz i wygenerować klucze, które są potrzebne do wypełnienia bezpiecznej ankiety.
 			Po wygenerowaniu kluczy, nie musisz się autoryzować ponownie.`,
 		faq_keys_q: 'Czym są klucze podpisu cyfrowego?',
-		faq_keys_a: `Klucze podpisu cyfrowego są parą kryptograficznych, asymetrycznych kluczy, które są używane do podpisywania i weryfikacji cyfrowych informacji.
+		faq_keys_a: `Klucze podpisu cyfrowego są parą kryptograficznych, asymetrycznych kluczy, które są używane do podpisywania i weryfikacji cyfrowych informacji za pomocą podpisów pierścieniowych.
 			Wykorzystywane są w bezpiecznych ankietach, aby zapewnić anonimowość respondentów i zweryfikować ich prawo do wypełnienia danej ankiety.
 			Możesz wygenerować swoje klucze w zakładce "Konto" po zautoryzowaniu się. Będziesz poproszony o podanie hasła, które zabezpieczy Twoje klucze.
-			Pamiętaj, by generować nowe klucze co roku, aby zwiększyć bezpieczeństwo.`,
+			Należy je zapamiętać, gdyż będzie ono wymagane do każdego załadowania kluczy. Generuj nowe klucze co roku, aby zwiększyć bezpieczeństwo.`,
+		faq_ring_q: 'Czym jest podpis pierścieniowy?',
+		faq_ring_a: `Podpis pierścieniowy to schemat kryptograficzny, który pozwala na spontaniczne utworzenie grupy użytkowników.
+			Każdy z tych użytkowników może wtedy wygenerować podpis, który umożliwia weryfikację ich przynależności do tej grupy bez wyjawiania ich tożsamości.
+			Wariant połączeniowy podpisu pierścieniowego dodatkowo pozwala na określenie czy dwie podpisane wiadomości pochodzą od tego samego członka grupy.`,
 		faq_authorize_q: 'Czemu nie mogę się zautoryzować?',
 		faq_authorize_a: `Tylko pracownicy i studenci UAM mogą zautoryzować się w tej instancji naszej aplikacji.
 			Jeśli jesteś z UAM i nadal nie możesz się zautoryzować, może być to spowodowane problemami z systemem autoryzacyjnym USOS UAM.

@@ -21,26 +21,24 @@
 	<Header>
 		<div title={$t('your_account')} class="title static">
 			<Tx text="welcome" />, {$page.data.session.user?.email.split('@')[0]}!
-			{#if data.hasKey}
-				<span title="" class="tooltip">
+			<span title="" class="tooltip">
+				{#if data.hasKey}
 					<i class="symbol generated">key</i>
 					<span class="tooltip-text left">
 						<Tx text="keys_generated" />
 					</span>
-				</span>
-			{:else}
-				<span title="" class="tooltip">
+				{:else}
 					<i class="symbol">key_off</i>
 					<span class="tooltip-text left">
 						<Tx text="keys_not_generated" />
 					</span>
-				</span>
-			{/if}
+				{/if}
+			</span>
 		</div>
 	</Header>
 
 	<Content>
-		<DownloadKey lastTime={data.keyCreationDate} hasKey={data.hasKey} />
+		<DownloadKey lastTime={data.keyCreationDate} bind:hasKey={data.hasKey} />
 		<AccountButtons />
 		<SignOut />
 	</Content>

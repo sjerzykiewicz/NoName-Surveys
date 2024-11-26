@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { L, M, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
+	import { L, LIMIT_OF_CHARS, M, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { formatDate } from '$lib/utils/formatDate';
 	import Modal from '$lib/components/global/Modal.svelte';
 	import init, { get_keypair } from 'wasm';
@@ -42,13 +42,28 @@
 
 	async function reloadCreationDate() {
 		const response = await fetch('/api/users/get-key-creation-date');
+
 		if (!response.ok) {
 			const body = await response.json();
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
 			return;
 		}
+
 		lastTime = await response.json();
+	}
+
+	async function reloadHasKey() {
+		const response = await fetch('/api/users/has-public-key');
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		hasKey = await response.json();
 	}
 
 	async function generateKeyPair() {
@@ -90,6 +105,7 @@
 			passphrase = '';
 			downloadFile('noname-keys.txt', 'text/plain', JSON.stringify(decoded));
 			reloadCreationDate();
+			reloadHasKey();
 		} catch (e) {
 			$errorModalContent = e as string;
 			$isErrorModalHidden = false;
@@ -136,11 +152,16 @@
 		<br />
 		<br />
 		<label class="passphrase-label">
+			<!-- svelte-ignore a11y-autofocus -->
 			<input
 				type="password"
 				title={$t('passphrase_title')}
 				class="passphrase-input"
 				placeholder="{$t('passphrase_title')}..."
+				required
+				maxlength={$LIMIT_OF_CHARS}
+				autocomplete="off"
+				autofocus={innerWidth > $M}
 				bind:value={passphrase}
 			/></label
 		>

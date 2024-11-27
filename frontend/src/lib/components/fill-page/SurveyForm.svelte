@@ -269,7 +269,6 @@
 			isSubmitButtonDisabled = false;
 			return;
 		}
-		Binary;
 		const byteArray = await readBinaryFile(fileElement).then(
 			(resolve) => {
 				return resolve;

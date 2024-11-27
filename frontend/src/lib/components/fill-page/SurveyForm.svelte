@@ -47,13 +47,13 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { FileError } from '$lib/entities/FileError';
 	import KeysError from './KeysError.svelte';
-	import { readFile } from '$lib/utils/readFile';
 	import SuccessModal from '$lib/components/global/SuccessModal.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import decryptKeys from '$lib/utils/decryptKeys';
 	import PassphraseError from './PassphraseError.svelte';
+	import { readBinaryFile } from '$lib/utils/readFile';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -244,7 +244,7 @@
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
 			return false;
-		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'txt') {
+		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'bin') {
 			fileError = FileError.FileInvalid;
 			return false;
 		}
@@ -269,8 +269,7 @@
 			isSubmitButtonDisabled = false;
 			return;
 		}
-
-		const text = await readFile(fileElement).then(
+		const byteArray = await readBinaryFile(fileElement).then(
 			(resolve) => {
 				return resolve;
 			},
@@ -281,7 +280,7 @@
 			}
 		);
 
-		keyPair = await getKeys(text);
+		keyPair = await getKeys(byteArray as Uint8Array);
 
 		if (!checkPassphraseCorrectness(keyPair)) {
 			isSubmitButtonDisabled = false;
@@ -298,11 +297,10 @@
 		processForm(keyPair!);
 	}
 
-	async function getKeys(text: string): Promise<KeyPair | null> {
-		const data = JSON.parse(text);
-		const salt = new Uint8Array([...data.salt].map((char) => char.charCodeAt(0)));
-		const iv = new Uint8Array([...data.iv].map((char) => char.charCodeAt(0)));
-		const ciphertext = new Uint8Array([...data.ciphertext].map((char) => char.charCodeAt(0)));
+	async function getKeys(byteArray: Uint8Array): Promise<KeyPair | null> {
+		const salt = byteArray.slice(0, 16);
+		const iv = byteArray.slice(16, 16 + 12);
+		const ciphertext = byteArray.slice(16 + 12);
 
 		try {
 			const decrypted = await decryptKeys(ciphertext, passphrase, salt, iv);
@@ -418,7 +416,7 @@
 >
 	<div slot="content" title={$t('load_keys')} class="file-div">
 		<span class="file-label"
-			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.txt"</span
+			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.bin"</span
 		>
 		<label>
 			<div class="file-input">

@@ -4,12 +4,12 @@
 	import Modal from '$lib/components/global/Modal.svelte';
 	import init, { get_keypair } from 'wasm';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import { downloadFile } from '$lib/utils/downloadFile';
 	import encryptKeys from '$lib/utils/encryptKeys';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import PassphraseError from './PassphraseError.svelte';
+	import { downloadBinaryFile } from '$lib/utils/downloadFile';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -77,11 +77,10 @@
 
 			const pemData = publicKey + '\n\n' + privateKey;
 			const { salt, iv, ciphertext } = await encryptKeys(pemData, passphrase);
-			const decoded = {
-				salt: Array.from(salt, (byte) => String.fromCharCode(byte)).join(''),
-				iv: Array.from(iv, (byte) => String.fromCharCode(byte)).join(''),
-				ciphertext: Array.from(ciphertext, (byte) => String.fromCharCode(byte)).join('')
-			};
+			const keysData = new Uint8Array(salt.length + iv.length + ciphertext.length);
+			keysData.set(salt, 0);
+			keysData.set(iv, salt.length);
+			keysData.set(ciphertext, salt.length + iv.length);
 
 			const response = await fetch('/api/users/update-public-key', {
 				method: 'POST',
@@ -103,7 +102,7 @@
 
 			isModalHidden = true;
 			passphrase = '';
-			downloadFile('noname-keys.txt', 'text/plain', JSON.stringify(decoded));
+			downloadBinaryFile('noname-keys.bin', keysData);
 			reloadCreationDate();
 			reloadHasKey();
 		} catch (e) {

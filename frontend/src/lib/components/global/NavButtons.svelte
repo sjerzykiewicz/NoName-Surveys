@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { M } from '$lib/stores/global';
+	import { colorScheme, colorContrast, M } from '$lib/stores/global';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -9,8 +9,8 @@
 	import { signOut } from '$lib/utils/signOut';
 	import { startOAuth } from '$lib/utils/startOAuth';
 	import { goto } from '$app/navigation';
-	import { toggleTheme } from '$lib/utils/toggleTheme';
-	import { colorScheme } from '$lib/stores/global';
+	import { toggleScheme } from '$lib/utils/toggleScheme';
+	import { toggleContrast } from '$lib/utils/toggleContrast';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
@@ -80,7 +80,7 @@
 			<button
 				title={$t('toggle_theme')}
 				class="nav-button"
-				on:click={() => ($colorScheme = toggleTheme($colorScheme))}
+				on:click={() => ($colorScheme = toggleScheme($colorScheme))}
 			>
 				<i class="symbol">{bulb}</i>
 				{#key $t}
@@ -88,6 +88,20 @@
 						<Tx text="light_theme" />
 					{:else}
 						<Tx text="dark_theme" />
+					{/if}
+				{/key}
+			</button>
+			<button
+				title={$t('toggle_contrast')}
+				class="nav-button"
+				on:click={() => ($colorContrast = toggleContrast($colorContrast))}
+			>
+				<i class="symbol">contrast</i>
+				{#key $t}
+					{#if $colorContrast === 'medium'}
+						<Tx text="high_contrast" />
+					{:else}
+						<Tx text="medium_contrast" />
 					{/if}
 				{/key}
 			</button>
@@ -200,7 +214,7 @@
 	}
 
 	.nav-button {
-		width: 9em;
+		width: 10.25em;
 		border-radius: 0px;
 		box-shadow: none;
 		border: none;
@@ -248,7 +262,7 @@
 		}
 	}
 
-	@media screen and (max-width: 375px) {
+	@media screen and (max-width: 425px) {
 		.nav-button-panel {
 			flex-flow: column;
 		}

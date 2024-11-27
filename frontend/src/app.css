@@ -1,55 +1,126 @@
 /* global.css */
 :root {
+	--tooltip-width: 12em;
+}
+
+:root[data-color-scheme='dark'][data-color-contrast='medium'] {
 	--primary-color-1: #464649;
 	--primary-color-2: #37373a;
 	--secondary-color-1: #28282b;
 	--secondary-color-2: #19191c;
 
-	--text-color-1: #ebebee;
-	--text-color-2: #ebebee;
-	--text-color-3: #555558;
+	--gradient-color-1: #1d1d20;
+	--gradient-color-2: #252528;
 
-	--border-color-1: #828285;
-	--shadow-color-1: #19191c;
 	--entry-color-1: #464649;
 	--entry-color-2: #37373a;
 	--entry-color-3: #28282b;
 
-	--gradient-color-1: #1d1d20;
-	--gradient-color-2: #252528;
+	--shadow-color-1: #19191c;
+	--border-color-1: #828285;
 
-	--accent-color-1: #0075ff;
-	--accent-color-2: #005cc8;
+	--text-color-1: #ebebee;
+	--text-color-2: #ebebee;
+	--text-color-3: #555558;
+
+	--accent-color-1: #0080ff;
+	--accent-color-2: #0066cc;
 	--error-color-1: #ff3333;
 	--error-color-2: #990000;
-	--warning-color-1: #ff9900;
-	--warning-color-2: #cc7a00;
+	--warning-color-1: #ff8000;
+	--warning-color-2: #cc6600;
 	--amu-color-1: #002d69;
 	--amu-color-2: #00214d;
-
-	--tooltip-width: 12em;
 }
 
-:root[data-color-scheme='light'] {
+:root[data-color-scheme='dark'][data-color-contrast='high'] {
+	--primary-color-1: #000000;
+	--primary-color-2: #000000;
+	--secondary-color-1: #000000;
+	--secondary-color-2: #000000;
+
+	--gradient-color-1: #000000;
+	--gradient-color-2: #000000;
+
+	--entry-color-1: #000000;
+	--entry-color-2: #000000;
+	--entry-color-3: #000000;
+
+	--shadow-color-1: #000000;
+	--border-color-1: #ffffff;
+
+	--text-color-1: #ffffff;
+	--text-color-2: #000000;
+	--text-color-3: #808080;
+
+	--accent-color-1: #00ffff;
+	--accent-color-2: #00ffff;
+	--error-color-1: #ff0000;
+	--error-color-2: #ff0000;
+	--warning-color-1: #ffff00;
+	--warning-color-2: #ffff00;
+	--amu-color-1: #00ffff;
+	--amu-color-2: #00ffff;
+}
+
+:root[data-color-scheme='light'][data-color-contrast='medium'] {
 	--primary-color-1: #bebec1;
 	--primary-color-2: #cdcdd0;
 	--secondary-color-1: #dcdcdf;
 	--secondary-color-2: #ebebee;
 
-	--text-color-1: #19191c;
-	--text-color-3: #828285;
+	--gradient-color-1: #e0e0e3;
+	--gradient-color-2: #e8e8eb;
 
-	--border-color-1: #555558;
-	--shadow-color-1: #bebec1;
 	--entry-color-1: #ebebee;
 	--entry-color-2: #dcdcdf;
 	--entry-color-3: #cdcdd0;
 
-	--gradient-color-1: #e0e0e3;
-	--gradient-color-2: #e8e8eb;
+	--shadow-color-1: #bebec1;
+	--border-color-1: #555558;
 
+	--text-color-1: #19191c;
+	--text-color-2: #ebebee;
+	--text-color-3: #828285;
+
+	--accent-color-1: #0080ff;
+	--accent-color-2: #0066cc;
+	--error-color-1: #ff3333;
+	--error-color-2: #990000;
 	--warning-color-1: #ff6600;
 	--warning-color-2: #cc5200;
+	--amu-color-1: #002d69;
+	--amu-color-2: #00214d;
+}
+
+:root[data-color-scheme='light'][data-color-contrast='high'] {
+	--primary-color-1: #ffffff;
+	--primary-color-2: #ffffff;
+	--secondary-color-1: #ffffff;
+	--secondary-color-2: #ffffff;
+
+	--gradient-color-1: #ffffff;
+	--gradient-color-2: #ffffff;
+
+	--entry-color-1: #ffffff;
+	--entry-color-2: #ffffff;
+	--entry-color-3: #ffffff;
+
+	--shadow-color-1: #ffffff;
+	--border-color-1: #000000;
+
+	--text-color-1: #000000;
+	--text-color-2: #ffffff;
+	--text-color-3: #808080;
+
+	--accent-color-1: #0000ff;
+	--accent-color-2: #0000ff;
+	--error-color-1: #ff0000;
+	--error-color-2: #ff0000;
+	--warning-color-1: #ff6600;
+	--warning-color-2: #ff6600;
+	--amu-color-1: #0000ff;
+	--amu-color-2: #0000ff;
 }
 
 @font-face {
@@ -261,11 +332,18 @@ body {
 .amu-logo {
 	height: 1.5em;
 	margin-right: 0.3em;
+}
+
+:root[data-color-scheme='dark'][data-color-contrast='medium'] .amu-logo {
 	filter: invert(99%) sepia(0%) saturate(0%) hue-rotate(268deg) brightness(108%) contrast(100%);
 }
 
-:root[data-color-scheme='light'] .amu-logo {
+:root[data-color-scheme='light'][data-color-contrast='medium'] .amu-logo {
 	filter: invert(15%) sepia(38%) saturate(3554%) hue-rotate(196deg) brightness(95%) contrast(108%);
+}
+
+:root[data-color-scheme='light'][data-color-contrast='high'] .amu-logo {
+	filter: invert(10%) sepia(99%) saturate(7411%) hue-rotate(247deg) brightness(86%) contrast(144%);
 }
 
 /* buttons */

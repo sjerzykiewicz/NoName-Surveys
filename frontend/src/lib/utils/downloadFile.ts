@@ -1,5 +1,5 @@
-export function downloadFile(filename: string, type: string, content: string) {
-	const blob = new Blob([content], { type: type + ';charset=utf-8;' });
+export function downloadFile(filename: string, type: string, content: Uint8Array) {
+	const blob = new Blob([content], { type: type });
 
 	const element = document.createElement('a');
 	element.href = URL.createObjectURL(blob);

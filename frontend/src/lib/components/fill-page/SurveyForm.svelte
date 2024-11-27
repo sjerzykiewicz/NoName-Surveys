@@ -54,6 +54,7 @@
 	import decryptKeys from '$lib/utils/decryptKeys';
 	import PassphraseError from './PassphraseError.svelte';
 	import { readBinaryFile } from '$lib/utils/readFile';
+	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -67,7 +68,7 @@
 	let isKeysModalHidden: boolean = true;
 	let isSubmitButtonDisabled: boolean = false;
 	let passphrase: string = '';
-	let passphraseError: boolean = false;
+	let passphraseError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
 	let keyPair: KeyPair | null = null;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
@@ -253,10 +254,10 @@
 	}
 
 	function checkPassphraseCorrectness(keyPair: KeyPair | null) {
-		passphraseError = false;
+		passphraseError = PassphraseErrorEnum.NoError;
 
 		if (keyPair === null) {
-			passphraseError = true;
+			passphraseError = PassphraseErrorEnum.DecryptionFailed;
 			return false;
 		}
 
@@ -408,7 +409,7 @@
 	hide={() => {
 		isKeysModalHidden = true;
 		passphrase = '';
-		passphraseError = false;
+		passphraseError = PassphraseErrorEnum.NoError;
 		fileName = $t('no_file_selected');
 		fileError = FileError.NoError;
 	}}

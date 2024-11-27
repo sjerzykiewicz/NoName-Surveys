@@ -392,7 +392,8 @@ export const data = {
 		default_filename: 'Default filename',
 		no_file_selected: 'No file selected',
 		passphrase_title: 'Enter a passphrase',
-		incorrect_passphrase: 'Incorrect passphrase.',
+		passphrase_file_decryption_failed:
+			'File could not be opened. Make sure the provided passphrase is correct.',
 		error_empty_passphrase: 'Passphrase cannot be empty.',
 		error_passphrase_confirm_no_match: 'Passphrases are not the same.',
 		provide_passphrase:
@@ -978,7 +979,8 @@ export const data = {
 		default_filename: 'Domyślna nazwa pliku: ',
 		no_file_selected: 'Nie wybrano pliku',
 		passphrase_title: 'Wprowadź hasło do pliku',
-		incorrect_passphrase: 'Niepoprawne hasło.',
+		passphrase_file_decryption_failed:
+			'Nie udało się otworzyć pliku. Upewnij się, że wprowadzone hasło jest poprawne.',
 		error_empty_passphrase: 'Hasło nie może być puste.',
 		error_passphrase_confirm_no_match: 'Hasła nie są takie same.',
 		provide_passphrase:

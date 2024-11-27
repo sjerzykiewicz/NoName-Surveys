@@ -20,7 +20,7 @@
 	let isModalHidden: boolean = true;
 	let passphrase: string = '';
 	let passphraseConfirm: string = '';
-	let passphraseError: PassphraseErrorEnum;
+	let passphraseError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
 
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
@@ -77,6 +77,7 @@
 		isModalHidden = true;
 		passphrase = '';
 		passphraseConfirm = '';
+		passphraseError = PassphraseErrorEnum.NoError;
 	}
 
 	async function generateKeyPair() {
@@ -146,11 +147,7 @@
 	icon="encrypted"
 	title={$t('account_generating_keys')}
 	bind:isHidden={isModalHidden}
-	hide={() => {
-		isModalHidden = true;
-		passphrase = '';
-		passphraseError = PassphraseErrorEnum.NoError;
-	}}
+	hide={hideModal}
 	--width={innerWidth <= $M ? '20em' : '28em'}
 >
 	<span slot="content" class="content">

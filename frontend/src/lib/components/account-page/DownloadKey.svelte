@@ -4,12 +4,12 @@
 	import Modal from '$lib/components/global/Modal.svelte';
 	import init, { get_keypair } from 'wasm';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import { downloadFile } from '$lib/utils/downloadFile';
 	import encryptKeys from '$lib/utils/encryptKeys';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import PassphraseError from './PassphraseError.svelte';
+	import { downloadBinaryFile } from '$lib/utils/downloadFile';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -102,7 +102,7 @@
 
 			isModalHidden = true;
 			passphrase = '';
-			downloadFile('noname-keys.bin', 'application/octet-stream', keysData);
+			downloadBinaryFile('noname-keys.bin', keysData);
 			reloadCreationDate();
 			reloadHasKey();
 		} catch (e) {

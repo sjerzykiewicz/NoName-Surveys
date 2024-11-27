@@ -47,13 +47,13 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { FileError } from '$lib/entities/FileError';
 	import KeysError from './KeysError.svelte';
-	import { readFile } from '$lib/utils/readFile';
 	import SuccessModal from '$lib/components/global/SuccessModal.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import decryptKeys from '$lib/utils/decryptKeys';
 	import PassphraseError from './PassphraseError.svelte';
+	import { readBinaryFile } from '$lib/utils/readFile';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -269,8 +269,8 @@
 			isSubmitButtonDisabled = false;
 			return;
 		}
-
-		const byteArray = await readFile(fileElement).then(
+		Binary;
+		const byteArray = await readBinaryFile(fileElement).then(
 			(resolve) => {
 				return resolve;
 			},

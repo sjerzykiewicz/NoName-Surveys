@@ -3,18 +3,30 @@
 	import { slide } from 'svelte/transition';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let error: boolean;
+	export let error: PassphraseErrorEnum;
 	export let passphrase: string;
+	export let passphraseConfirm: string;
 
 	function errorMessage() {
-		return $t('error_empty_passphrase');
+		switch (error) {
+			case PassphraseErrorEnum.Empty:
+				return $t('error_empty_passphrase');
+			case PassphraseErrorEnum.ConfirmNotMatching:
+				return $t('error_passphrase_confirm_no_match');
+		}
 	}
 
 	$: checkPassphraseError = () => {
-		return error && passphrase === '';
+		switch (error) {
+			case PassphraseErrorEnum.Empty:
+				return passphrase === '';
+			case PassphraseErrorEnum.ConfirmNotMatching:
+				return passphrase !== passphraseConfirm;
+		}
 	};
 </script>
 

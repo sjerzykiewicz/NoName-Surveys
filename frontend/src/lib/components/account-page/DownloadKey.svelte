@@ -10,6 +10,7 @@
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import PassphraseError from './PassphraseError.svelte';
 	import { downloadBinaryFile } from '$lib/utils/downloadFile';
+	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -18,7 +19,8 @@
 
 	let isModalHidden: boolean = true;
 	let passphrase: string = '';
-	let passphraseError: boolean = false;
+	let passphraseConfirm: string = '';
+	let passphraseError: PassphraseErrorEnum;
 
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
@@ -30,10 +32,15 @@
 	}
 
 	function checkPassphraseCorrectness() {
-		passphraseError = false;
+		passphraseError = PassphraseErrorEnum.NoError;
 
 		if (passphrase === '') {
-			passphraseError = true;
+			passphraseError = PassphraseErrorEnum.Empty;
+			return false;
+		}
+
+		if (passphrase !== passphraseConfirm) {
+			passphraseError = PassphraseErrorEnum.ConfirmNotMatching;
 			return false;
 		}
 
@@ -64,6 +71,12 @@
 		}
 
 		hasKey = await response.json();
+	}
+
+	function hideModal() {
+		isModalHidden = true;
+		passphrase = '';
+		passphraseConfirm = '';
 	}
 
 	async function generateKeyPair() {
@@ -100,8 +113,7 @@
 				return;
 			}
 
-			isModalHidden = true;
-			passphrase = '';
+			hideModal();
 			downloadBinaryFile('noname-keys.bin', keysData);
 			reloadCreationDate();
 			reloadHasKey();
@@ -137,7 +149,7 @@
 	hide={() => {
 		isModalHidden = true;
 		passphrase = '';
-		passphraseError = false;
+		passphraseError = PassphraseErrorEnum.NoError;
 	}}
 	--width={innerWidth <= $M ? '20em' : '28em'}
 >
@@ -164,19 +176,25 @@
 				bind:value={passphrase}
 			/></label
 		>
-		<PassphraseError error={passphraseError} {passphrase} />
+		<br />
+		<label class="passphrase-label">
+			<input
+				type="password"
+				title={$t('confirm_passphrase')}
+				class="passphrase-input"
+				placeholder="{$t('confirm_passphrase')}..."
+				required
+				maxlength={$LIMIT_OF_CHARS}
+				autocomplete="off"
+				bind:value={passphraseConfirm}
+			/>
+		</label>
+		<PassphraseError error={passphraseError} {passphrase} {passphraseConfirm} />
 	</span>
 	<button title={$t('generate')} class="done" on:click={generateKeyPair}>
 		<i class="symbol">done</i><Tx text="generate" />
 	</button>
-	<button
-		title={$t('cancel')}
-		class="not"
-		on:click={() => {
-			isModalHidden = true;
-			passphrase = '';
-		}}
-	>
+	<button title={$t('cancel')} class="not" on:click={hideModal}>
 		<i class="symbol">close</i><Tx text="cancel" />
 	</button>
 </Modal>

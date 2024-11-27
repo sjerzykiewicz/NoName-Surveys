@@ -394,7 +394,7 @@ export const data = {
 		passphrase_title: 'Enter a passphrase',
 		incorrect_passphrase: 'Incorrect passphrase.',
 		error_empty_passphrase: 'Passphrase cannot be empty.',
-		error_passphrase_confirm_no_match: 'Passphrases are not the same',
+		error_passphrase_confirm_no_match: 'Passphrases are not the same.',
 		provide_passphrase:
 			'Please provide a passphrase to protect your keys on your device. Remember it, as it will be required to load your keys each time.',
 		confirm_passphrase: 'Confirm passphrase',

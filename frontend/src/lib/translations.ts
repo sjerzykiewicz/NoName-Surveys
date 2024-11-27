@@ -392,10 +392,13 @@ export const data = {
 		default_filename: 'Default filename',
 		no_file_selected: 'No file selected',
 		passphrase_title: 'Enter a passphrase',
-		incorrect_passphrase: 'Incorrect passphrase.',
+		passphrase_file_decryption_failed:
+			'File could not be opened. Make sure the provided passphrase is correct.',
 		error_empty_passphrase: 'Passphrase cannot be empty.',
+		error_passphrase_confirm_no_match: 'Passphrases are not the same.',
 		provide_passphrase:
 			'Please provide a passphrase to protect your keys on your device. Remember it, as it will be required to load your keys each time.',
+		confirm_passphrase: 'Confirm passphrase',
 		enter_passphrase: 'Enter passphrase to the file.',
 		example_csv: `A valid .csv file should not contain a headline. Each email should be placed in a new line and separated by a comma or a semicolon.<br /><br />
 			Example:<br />
@@ -976,10 +979,13 @@ export const data = {
 		default_filename: 'Domyślna nazwa pliku: ',
 		no_file_selected: 'Nie wybrano pliku',
 		passphrase_title: 'Wprowadź hasło do pliku',
-		incorrect_passphrase: 'Niepoprawne hasło.',
+		passphrase_file_decryption_failed:
+			'Nie udało się otworzyć pliku. Upewnij się, że wprowadzone hasło jest poprawne.',
 		error_empty_passphrase: 'Hasło nie może być puste.',
+		error_passphrase_confirm_no_match: 'Hasła nie są takie same.',
 		provide_passphrase:
 			'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu. Zapamiętaj je, gdyż będzie ono wymagane do każdego załadowania kluczy.',
+		confirm_passphrase: 'Potwierdź hasło',
 		enter_passphrase: 'Podaj hasło do pliku.',
 		example_csv: `Poprawny plik .csv nie powinien zawierać nagłówka. Każdy email powinien być w osobnej linii oraz oddzielony przecinkiem lub średnikiem.<br /><br />
 			Przykład:<br />

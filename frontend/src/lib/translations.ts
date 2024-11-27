@@ -980,10 +980,10 @@ export const data = {
 		passphrase_title: 'Wprowadź hasło do pliku',
 		incorrect_passphrase: 'Niepoprawne hasło.',
 		error_empty_passphrase: 'Hasło nie może być puste.',
-		error_passphrase_confirm_no_match: 'Hasła nie są takie same',
+		error_passphrase_confirm_no_match: 'Hasła nie są takie same.',
 		provide_passphrase:
 			'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu. Zapamiętaj je, gdyż będzie ono wymagane do każdego załadowania kluczy.',
-		confirm_passphrase: 'Potwierdź hasło.',
+		confirm_passphrase: 'Potwierdź hasło',
 		enter_passphrase: 'Podaj hasło do pliku.',
 		example_csv: `Poprawny plik .csv nie powinien zawierać nagłówka. Każdy email powinien być w osobnej linii oraz oddzielony przecinkiem lub średnikiem.<br /><br />
 			Przykład:<br />

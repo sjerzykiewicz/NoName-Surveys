@@ -34,17 +34,17 @@
 }
 
 :root[data-color-scheme='dark'][data-color-contrast='high'] {
-	--primary-color-1: #000000;
-	--primary-color-2: #000000;
-	--secondary-color-1: #000000;
+	--primary-color-1: #181818;
+	--primary-color-2: #101010;
+	--secondary-color-1: #080808;
 	--secondary-color-2: #000000;
 
-	--gradient-color-1: #000000;
-	--gradient-color-2: #000000;
+	--gradient-color-1: #020202;
+	--gradient-color-2: #060606;
 
-	--entry-color-1: #000000;
-	--entry-color-2: #000000;
-	--entry-color-3: #000000;
+	--entry-color-1: #181818;
+	--entry-color-2: #101010;
+	--entry-color-3: #080808;
 
 	--shadow-color-1: #000000;
 	--border-color-1: #ffffff;
@@ -54,13 +54,13 @@
 	--text-color-3: #808080;
 
 	--accent-color-1: #00ffff;
-	--accent-color-2: #00ffff;
+	--accent-color-2: #00cccc;
 	--error-color-1: #ff0000;
-	--error-color-2: #ff0000;
+	--error-color-2: #cc0000;
 	--warning-color-1: #ffff00;
-	--warning-color-2: #ffff00;
+	--warning-color-2: #cccc00;
 	--amu-color-1: #00ffff;
-	--amu-color-2: #00ffff;
+	--amu-color-2: #00cccc;
 }
 
 :root[data-color-scheme='light'][data-color-contrast='medium'] {
@@ -94,19 +94,19 @@
 }
 
 :root[data-color-scheme='light'][data-color-contrast='high'] {
-	--primary-color-1: #ffffff;
-	--primary-color-2: #ffffff;
-	--secondary-color-1: #ffffff;
+	--primary-color-1: #e7e7e7;
+	--primary-color-2: #efefef;
+	--secondary-color-1: #f7f7f7;
 	--secondary-color-2: #ffffff;
 
-	--gradient-color-1: #ffffff;
-	--gradient-color-2: #ffffff;
+	--gradient-color-1: #f9f9f9;
+	--gradient-color-2: #fdfdfd;
 
 	--entry-color-1: #ffffff;
-	--entry-color-2: #ffffff;
-	--entry-color-3: #ffffff;
+	--entry-color-2: #f7f7f7;
+	--entry-color-3: #efefef;
 
-	--shadow-color-1: #ffffff;
+	--shadow-color-1: #e7e7e7;
 	--border-color-1: #000000;
 
 	--text-color-1: #000000;
@@ -114,13 +114,13 @@
 	--text-color-3: #808080;
 
 	--accent-color-1: #0000ff;
-	--accent-color-2: #0000ff;
+	--accent-color-2: #0000cc;
 	--error-color-1: #ff0000;
-	--error-color-2: #ff0000;
+	--error-color-2: #cc0000;
 	--warning-color-1: #ff6600;
-	--warning-color-2: #ff6600;
+	--warning-color-2: #cc5200;
 	--amu-color-1: #0000ff;
-	--amu-color-2: #0000ff;
+	--amu-color-2: #0000cc;
 }
 
 @font-face {

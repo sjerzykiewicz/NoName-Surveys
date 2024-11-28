@@ -11,6 +11,7 @@
 	import PassphraseError from './PassphraseError.svelte';
 	import { downloadBinaryFile } from '$lib/utils/downloadFile';
 	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
+	import { magicNumber } from '$lib/entities/MagicNumber';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -91,10 +92,11 @@
 
 			const pemData = publicKey + '\n\n' + privateKey;
 			const { salt, iv, ciphertext } = await encryptKeys(pemData, passphrase);
-			const keysData = new Uint8Array(salt.length + iv.length + ciphertext.length);
-			keysData.set(salt, 0);
-			keysData.set(iv, salt.length);
-			keysData.set(ciphertext, salt.length + iv.length);
+			const keysData = new Uint8Array(8 + salt.length + iv.length + ciphertext.length);
+			keysData.set(magicNumber, 0);
+			keysData.set(salt, 8);
+			keysData.set(iv, 24);
+			keysData.set(ciphertext, 36);
 
 			const response = await fetch('/api/users/update-public-key', {
 				method: 'POST',

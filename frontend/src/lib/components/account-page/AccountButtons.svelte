@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { toggleTheme } from '$lib/utils/toggleTheme';
-	import { colorScheme } from '$lib/stores/global';
+	import { toggleScheme } from '$lib/utils/toggleScheme';
+	import { toggleContrast } from '$lib/utils/toggleContrast';
+	import { colorScheme, colorContrast } from '$lib/stores/global';
 	import { goto } from '$app/navigation';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
@@ -23,13 +24,26 @@
 </script>
 
 <div class="account-buttons">
-	<button title={$t('toggle_theme')} on:click={() => ($colorScheme = toggleTheme($colorScheme))}>
+	<button title={$t('toggle_theme')} on:click={() => ($colorScheme = toggleScheme($colorScheme))}>
 		<i class="symbol">{bulb}</i>
 		{#key $t}
 			{#if $colorScheme === 'dark'}
 				<Tx text="light_theme" />
 			{:else}
 				<Tx text="dark_theme" />
+			{/if}
+		{/key}
+	</button>
+	<button
+		title={$t('toggle_contrast')}
+		on:click={() => ($colorContrast = toggleContrast($colorContrast))}
+	>
+		<i class="symbol">contrast</i>
+		{#key $t}
+			{#if $colorContrast === 'medium'}
+				<Tx text="high_contrast" />
+			{:else}
+				<Tx text="medium_contrast" />
 			{/if}
 		{/key}
 	</button>

@@ -1,4 +1,4 @@
-export function setTheme(): string {
+export function setScheme(): string {
 	const colorScheme = localStorage.getItem('colorScheme') || 'dark';
 
 	if (colorScheme === 'dark') {

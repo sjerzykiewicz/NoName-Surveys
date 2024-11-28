@@ -49,6 +49,7 @@
 				id="code-input"
 				name="survey-code"
 				type="text"
+				inputmode="numeric"
 				placeholder="______"
 				required
 				maxlength="6"

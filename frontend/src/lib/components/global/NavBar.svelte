@@ -114,9 +114,11 @@
 	}
 
 	.nav-logo {
+		display: flex;
 		position: absolute;
-		top: 0.25em;
-		left: 0.25em;
+		top: 0;
+		left: 0;
+		padding: 0.125em;
 		text-decoration: none;
 		opacity: 1;
 		transition:

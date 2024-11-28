@@ -24,35 +24,39 @@
 </script>
 
 <div class="account-buttons">
-	<button title={$t('toggle_theme')} on:click={() => ($colorScheme = toggleScheme($colorScheme))}>
-		<i class="symbol">{bulb}</i>
-		{#key $t}
-			{#if $colorScheme === 'dark'}
-				<Tx text="light_theme" />
-			{:else}
-				<Tx text="dark_theme" />
-			{/if}
-		{/key}
-	</button>
-	<button
-		title={$t('toggle_contrast')}
-		on:click={() => ($colorContrast = toggleContrast($colorContrast))}
-	>
-		<i class="symbol">contrast</i>
-		{#key $t}
-			{#if $colorContrast === 'medium'}
-				<Tx text="high_contrast" />
-			{:else}
-				<Tx text="medium_contrast" />
-			{/if}
-		{/key}
-	</button>
-	<button title={$t('toggle_lang')} on:click={() => changeLang(otherLang)}
-		><i class="symbol">language</i><Tx text="other_lang" />
-	</button>
-	<button title={$t('faq_title')} on:click={() => goto('/account/faq')}
-		><i class="symbol">question_mark</i>FAQ
-	</button>
+	<div class="button-sub-row">
+		<button title={$t('toggle_theme')} on:click={() => ($colorScheme = toggleScheme($colorScheme))}>
+			<i class="symbol">{bulb}</i>
+			{#key $t}
+				{#if $colorScheme === 'dark'}
+					<Tx text="light_theme" />
+				{:else}
+					<Tx text="dark_theme" />
+				{/if}
+			{/key}
+		</button>
+		<button
+			title={$t('toggle_contrast')}
+			on:click={() => ($colorContrast = toggleContrast($colorContrast))}
+		>
+			<i class="symbol">contrast</i>
+			{#key $t}
+				{#if $colorContrast === 'medium'}
+					<Tx text="high_contrast" />
+				{:else}
+					<Tx text="medium_contrast" />
+				{/if}
+			{/key}
+		</button>
+	</div>
+	<div class="button-sub-row">
+		<button title={$t('toggle_lang')} on:click={() => changeLang(otherLang)}
+			><i class="symbol">language</i><Tx text="other_lang" />
+		</button>
+		<button title={$t('faq_title')} on:click={() => goto('/account/faq')}
+			><i class="symbol">question_mark</i>FAQ
+		</button>
+	</div>
 </div>
 
 <style>
@@ -63,8 +67,12 @@
 		justify-content: flex-start;
 		gap: 0.5em;
 		font-size: 1.5em;
-		padding-top: 0.5em;
-		padding-bottom: 0.5em;
+		padding-top: 1em;
+		padding-bottom: 1em;
+	}
+
+	.button-sub-row {
+		flex-wrap: wrap;
 	}
 
 	i {

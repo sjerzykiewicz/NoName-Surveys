@@ -30,21 +30,21 @@
 
 <Modal
 	icon="logout"
-	title={$t('sign_out')}
+	title={$t('signed_out_title')}
 	bind:isHidden={isModalHidden}
 	hide={async () => {
 		await signOut();
 		isModalHidden = true;
 	}}
 >
-	<span slot="content"><Tx text="sign_out_alert" /></span>
+	<span slot="content"><Tx text="signed_out_alert" /></span>
 	<button
-		title={$t('sign_out')}
-		class="save"
+		title="Ok"
+		class="done"
 		on:click={async () => {
 			await signOut();
 			isModalHidden = true;
-		}}><i class="symbol">logout</i><Tx text="sign_out" /></button
+		}}><i class="symbol">done</i>OK</button
 	>
 </Modal>
 

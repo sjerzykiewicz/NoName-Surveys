@@ -13,7 +13,7 @@
 
 	export let isHidden: boolean = true;
 	export let title: string;
-	export let surveyCode: string;
+	export let id: string;
 
 	async function handleCopy(str: string, id: string) {
 		if (copy(str)) {
@@ -46,11 +46,11 @@
 	--width={innerWidth > $M && innerHeight > $M ? '30em' : '20em'}
 >
 	<div slot="content" class="content">
-		<span class="survey-code">{surveyCode}</span>
-		<a href="/fill?code={surveyCode}" title={$t('fill_survey')}>
+		<span class="scan"><Tx text="scan_to_join" /></span>
+		<a href="/account" title={$t('scan_to_join')}>
 			<QrCode
-				href={$page.url.origin + '/fill?code=' + surveyCode}
-				id={surveyCode}
+				href={$page.url.toString()}
+				{id}
 				codeSize={innerWidth > $M && innerHeight > $M ? 360 : 260}
 				codeMargin={3}
 				imageMargin={6}
@@ -60,16 +60,9 @@
 	<button
 		title={$t('copy_link_title')}
 		class="save popup"
-		on:click={() => handleCopy($page.url.origin + '/fill?code=' + surveyCode, 'link-popup')}
+		on:click={() => handleCopy($page.url.toString(), 'link-popup')}
 		><i class="symbol">link</i><Tx text="copy_link" />
 		<span class="popup-text top" id="link-popup"><Tx text="copied" /></span></button
-	>
-	<button
-		title={$t('copy_code_title')}
-		class="save popup"
-		on:click={() => handleCopy(surveyCode, 'code-popup')}
-		><i class="symbol">content_copy</i><Tx text="copy_code" />
-		<span class="popup-text top" id="code-popup"><Tx text="copied" /></span></button
 	>
 </Modal>
 
@@ -86,12 +79,8 @@
 		padding-bottom: 1em;
 	}
 
-	.survey-code {
-		display: block;
-		width: 7em;
-		padding-bottom: 0.25em;
-		font-size: 4em;
-		font-weight: 700;
-		cursor: text;
+	.scan {
+		padding-bottom: 0.75em;
+		font-size: 1.75em;
 	}
 </style>

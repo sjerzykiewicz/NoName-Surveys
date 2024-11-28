@@ -1575,6 +1575,7 @@ button.popup {
 .account-ul {
 	list-style-type: none;
 	margin-top: 0.25em;
+	margin-bottom: 0em;
 	padding-left: 0em;
 	font-weight: 500;
 }

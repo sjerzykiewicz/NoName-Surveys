@@ -212,7 +212,7 @@
 			<div class="tooltip">
 				<i class="symbol">info</i>
 				<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-					<Tx html="account_generate_info" />
+					<Tx text="account_generate_info" />
 				</span>
 			</div>
 		</div>
@@ -224,7 +224,7 @@
 				<div class="tooltip">
 					<i class="symbol">info</i>
 					<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-						<Tx html="account_key_update_info" />
+						<Tx text="account_key_update_info" />
 					</span>
 				</div>
 			</div>
@@ -263,7 +263,7 @@
 		flex-flow: row;
 		align-items: center;
 		justify-content: center;
-		padding: 0em 0.5em;
+		padding-bottom: 1em;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
 		overflow-wrap: break-word;
@@ -310,6 +310,7 @@
 		align-items: center;
 		justify-content: flex-start;
 		width: 100%;
+		padding-bottom: 0.5em;
 	}
 
 	.download-key button {
@@ -322,7 +323,6 @@
 		align-items: center;
 		justify-content: flex-start;
 		width: 100%;
-		padding-top: 0.75em;
 		font-size: 0.8em;
 		cursor: default;
 	}

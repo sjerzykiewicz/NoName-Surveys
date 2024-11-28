@@ -55,6 +55,7 @@
 	import PassphraseError from './PassphraseError.svelte';
 	import { readBinaryFile } from '$lib/utils/readFile';
 	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
+	import { magicNumber } from '$lib/entities/MagicNumber';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -245,11 +246,7 @@
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
 			return false;
-		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'bin') {
-			fileError = FileError.FileInvalid;
-			return false;
 		}
-
 		return true;
 	}
 
@@ -266,11 +263,13 @@
 
 	async function processCrypto() {
 		isSubmitButtonDisabled = true;
+
 		if (!checkFileCorrectness()) {
 			isSubmitButtonDisabled = false;
 			return;
 		}
-		const byteArray = await readBinaryFile(fileElement).then(
+
+		const contents = await readBinaryFile(fileElement).then(
 			(resolve) => {
 				return resolve;
 			},
@@ -280,6 +279,15 @@
 				return '';
 			}
 		);
+
+		const byteArray = contents as Uint8Array;
+
+		if (byteArray.slice(0, 8).toString() !== magicNumber.toString()) {
+			$errorModalContent = $t('invalid_key_file_format');
+			$isErrorModalHidden = false;
+			isSubmitButtonDisabled = false;
+			return;
+		}
 
 		keyPair = await getKeys(byteArray as Uint8Array);
 
@@ -299,9 +307,9 @@
 	}
 
 	async function getKeys(byteArray: Uint8Array): Promise<KeyPair | null> {
-		const salt = byteArray.slice(0, 16);
-		const iv = byteArray.slice(16, 16 + 12);
-		const ciphertext = byteArray.slice(16 + 12);
+		const salt = byteArray.slice(8, 24);
+		const iv = byteArray.slice(24, 36);
+		const ciphertext = byteArray.slice(36);
 
 		try {
 			const decrypted = await decryptKeys(ciphertext, passphrase, salt, iv);

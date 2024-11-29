@@ -30,7 +30,7 @@
 {#if checkCryptoError()}
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="symbol">error</i>
-		{#key $t}
+		{#key [$t, error]}
 			{errorMessage()}
 		{/key}
 	</p>

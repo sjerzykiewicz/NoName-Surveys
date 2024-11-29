@@ -1,28 +1,26 @@
 <script lang="ts">
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { GroupError } from '$lib/entities/GroupError';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import type KeyPair from '$lib/entities/KeyPair';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let members: string[];
-	export let error: GroupError;
+	export let error: boolean;
+	export let keys: string[];
+	export let keyPair: KeyPair | null;
 
 	function errorMessage() {
-		return $t('members_error');
+		return $t('no_access_to_survey');
 	}
 
-	$: checkMembersError = () => {
-		const m = members;
-		return (
-			error === GroupError.MembersRequired && (m === null || m === undefined || m.length === 0)
-		);
+	$: checkAccessError = () => {
+		return error && keyPair !== null && !keys.includes(keyPair.publicKey);
 	};
 </script>
 
-{#if checkMembersError()}
+{#if checkAccessError()}
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="symbol">error</i>
 		{#key [$t, error]}
@@ -33,6 +31,6 @@
 
 <style>
 	.error {
-		margin: 0em;
+		font-size: 0.8em;
 	}
 </style>

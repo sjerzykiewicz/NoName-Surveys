@@ -9,6 +9,7 @@
 	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import PassphraseError from './PassphraseError.svelte';
+	import ConfirmError from './ConfirmError.svelte';
 	import { downloadBinaryFile } from '$lib/utils/downloadFile';
 	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
 	import { magicNumber } from '$lib/entities/MagicNumber';
@@ -22,6 +23,7 @@
 	let passphrase: string = '';
 	let passphraseConfirm: string = '';
 	let passphraseError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
+	let passphraseConfirmError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
 
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
@@ -34,14 +36,13 @@
 
 	function checkPassphraseCorrectness() {
 		passphraseError = PassphraseErrorEnum.NoError;
+		passphraseConfirmError = PassphraseErrorEnum.NoError;
 
 		if (passphrase === '') {
 			passphraseError = PassphraseErrorEnum.Empty;
 			return false;
-		}
-
-		if (passphrase !== passphraseConfirm) {
-			passphraseError = PassphraseErrorEnum.ConfirmNotMatching;
+		} else if (passphrase !== passphraseConfirm) {
+			passphraseConfirmError = PassphraseErrorEnum.ConfirmNotMatching;
 			return false;
 		}
 
@@ -79,6 +80,7 @@
 		passphrase = '';
 		passphraseConfirm = '';
 		passphraseError = PassphraseErrorEnum.NoError;
+		passphraseConfirmError = PassphraseErrorEnum.NoError;
 	}
 
 	async function generateKeyPair() {
@@ -175,6 +177,7 @@
 				bind:value={passphrase}
 			/></label
 		>
+		<PassphraseError error={passphraseError} {passphrase} />
 		<br />
 		<label class="passphrase-label">
 			<input
@@ -188,7 +191,7 @@
 				bind:value={passphraseConfirm}
 			/>
 		</label>
-		<PassphraseError error={passphraseError} {passphrase} {passphraseConfirm} />
+		<ConfirmError error={passphraseConfirmError} {passphrase} {passphraseConfirm} />
 	</span>
 	<button title={$t('generate')} class="done" on:click={generateKeyPair}>
 		<i class="symbol">done</i><Tx text="generate" />

@@ -241,6 +241,7 @@ export const data = {
 			' There are only two people who can respond to this survey. The other person could be the creator of this survey.',
 		survey_success: 'Survey Created Successfully!',
 		public_key_not_on_list: 'Your public key is not on the list.',
+		no_access_to_survey: 'You do not have access to this survey.',
 		possible_respondents: 'Possible Respondents',
 		possible_respondents_empty: 'No possible respondents to display!',
 		define_respondent_group: 'Define Respondent Group',
@@ -840,6 +841,7 @@ export const data = {
 			' Tylko dwie osoby mogą wypełnić tę ankietę. Istnieje możliwość, że drugą osobą jest twórca ankiety.',
 		survey_success: 'Ankieta utworzona pomyślnie!',
 		public_key_not_on_list: 'Twój klucz publiczny nie znajduje się na liście',
+		no_access_to_survey: 'Nie masz dostępu do tej ankiety.',
 		possible_respondents: 'Możliwi respondenci',
 		possible_respondents_empty: 'Brak możliwych respondentów do wyświetlenia!',
 		define_respondent_group: 'Zdefiniuj grupę respondentów',
@@ -996,7 +998,7 @@ export const data = {
 		submit_file: 'Załaduj plik',
 		key_file_label: `Załaduj plik, który wcześniej wygenerowałeś w tej aplikacji. Plik zawiera Twoje klucze, które są
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
-		default_filename: 'Domyślna nazwa pliku: ',
+		default_filename: 'Domyślna nazwa pliku',
 		no_file_selected: 'Nie wybrano pliku',
 		passphrase_title: 'Wprowadź hasło do pliku',
 		passphrase_file_decryption_failed:

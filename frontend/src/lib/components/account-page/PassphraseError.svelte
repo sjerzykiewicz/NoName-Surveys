@@ -9,31 +9,20 @@
 
 	export let error: PassphraseErrorEnum;
 	export let passphrase: string;
-	export let passphraseConfirm: string;
 
 	function errorMessage() {
-		switch (error) {
-			case PassphraseErrorEnum.Empty:
-				return $t('error_empty_passphrase');
-			case PassphraseErrorEnum.ConfirmNotMatching:
-				return $t('error_passphrase_confirm_no_match');
-		}
+		return $t('error_empty_passphrase');
 	}
 
 	$: checkPassphraseError = () => {
-		switch (error) {
-			case PassphraseErrorEnum.Empty:
-				return passphrase === '';
-			case PassphraseErrorEnum.ConfirmNotMatching:
-				return passphrase !== passphraseConfirm;
-		}
+		return error === PassphraseErrorEnum.Empty && passphrase === '';
 	};
 </script>
 
 {#if checkPassphraseError()}
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="symbol">error</i>
-		{#key $t}
+		{#key [$t, error]}
 			{errorMessage()}
 		{/key}
 	</p>

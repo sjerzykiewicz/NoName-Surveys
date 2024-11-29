@@ -99,7 +99,7 @@ export const data = {
 			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Select previous or next input<br />
 			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Select previous or next question<br />
 			<span class="accent">[ Home ]</span> - Select Survey Title<br />
-			<span class="accent">[ End ]</span> - Select Create button<br />
+			<span class="accent">[ End ]</span> - Select Finish button<br />
 			Besides that, you can still use <span class="accent">[ Tab ]</span> and <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span>.`,
 
 		// questions
@@ -178,8 +178,7 @@ export const data = {
 		number_of_drafts: 'Number of drafts',
 		no_drafts_yet: 'No drafts yet!',
 		draft_tooltip: `When creating a survey, you can save it as a draft for later use. To create a survey, click
-			on the "Create" tab at the top of the page or the button below. All your saved drafts will
-			be stored on this page.`,
+			on the "Create" tab at the top of the page. All your saved drafts will be stored on this page.`,
 		draft_title: 'Draft Title',
 		deleting_drafts: 'Deleting Drafts',
 		create_draft: 'Create a draft',
@@ -212,7 +211,7 @@ export const data = {
 		your_surveys: 'Your surveys',
 		number_of_surveys: 'Number of surveys',
 		no_surveys_yet: 'No surveys yet!',
-		surveys_tooltip: `To create a survey, click on the "Create" tab at the top of the page or the button below.
+		surveys_tooltip: `To create a survey, click on the "Create" tab at the top of the page.
 			All your created surveys will be stored on this page.`,
 		survey_is_secure: 'This survey has an established group of possible respondents.',
 		survey_is_public: 'Everyone can submit an answer to this survey.',
@@ -251,6 +250,7 @@ export const data = {
 		edit_title: 'Edit survey',
 		preview: 'Preview',
 		preview_title: 'Preview survey',
+		finish: 'Finish',
 		create: 'Create',
 		create_title: 'Finish survey creation',
 		invalid_summary: 'Invalid survey summary',
@@ -699,7 +699,7 @@ export const data = {
 			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Zaznacz poprzednie lub następne pole<br />
 			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Zaznacz poprzednie lub następne pytanie<br />
 			<span class="accent">[ Home ]</span> - Zaznacz Tytuł ankiety<br />
-			<span class="accent">[ End ]</span> - Zaznacz przycisk Utwórz<br />
+			<span class="accent">[ End ]</span> - Zaznacz przycisk Zakończ<br />
 			Poza tym, nadal możesz używać <span class="accent">[ Tab ]</span> i <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span>.`,
 
 		// questions
@@ -849,6 +849,7 @@ export const data = {
 		edit_title: 'Edytuj ankietę',
 		preview: 'Podgląd',
 		preview_title: 'Podgląd ankiety',
+		finish: 'Zakończ',
 		create: 'Utwórz',
 		create_title: 'Zakończ tworzenie ankiety',
 		invalid_summary: 'Niewłaściwe podsumowanie ankiety',

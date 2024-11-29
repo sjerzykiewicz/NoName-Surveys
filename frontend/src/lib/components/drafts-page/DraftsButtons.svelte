@@ -4,7 +4,7 @@
 	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
 	import { questions, title } from '$lib/stores/create-page';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { changePage } from '$lib/utils/changePage';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
@@ -64,9 +64,6 @@
 
 <div class="button-row">
 	<div class="button-sub-row">
-		<button title={$t('create_draft')} class="add-draft" on:click={() => goto('/create')}>
-			<i class="symbol">add</i><Tx text="draft" />
-		</button>
 		{#if drafts.length > 0}
 			<button
 				title={$t('delete_selected_drafts')}

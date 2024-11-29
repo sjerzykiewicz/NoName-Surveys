@@ -46,6 +46,7 @@
 	<div title={$t('select_answer')} class="slider-area">
 		<input
 			class="range"
+			class:thumb-hidden={value === null || isNaN(value)}
 			type="range"
 			min={$questions[questionIndex].choices[0]}
 			max={$questions[questionIndex].choices[1]}
@@ -98,5 +99,13 @@
 
 	.range::-moz-range-thumb:active {
 		cursor: grabbing;
+	}
+
+	.thumb-hidden::-webkit-slider-thumb {
+		opacity: 0;
+	}
+
+	.thumb-hidden::-moz-range-thumb {
+		opacity: 0;
 	}
 </style>

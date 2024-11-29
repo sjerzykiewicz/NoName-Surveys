@@ -30,7 +30,14 @@
 	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
 	import type Question from '$lib/entities/questions/Question';
 	import { getDraft } from '$lib/utils/getDraft';
-	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		isWarningModalHidden,
+		LIMIT_OF_SURVEYS,
+		S,
+		warningModalContent
+	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
@@ -45,6 +52,9 @@
 		creation_date: string;
 	}[];
 	export let selectedDraftsToRemove: number[] = [];
+	export let numSurveys: number;
+	export let isExportButtonVisible: boolean = false;
+	export let isRespondentModalHidden: boolean = true;
 
 	$: draftIds = drafts.map((d) => d.id);
 
@@ -55,7 +65,12 @@
 		selectedDraftsToRemove = allSelected ? [] : [...draftIds];
 	}
 
-	async function loadDraft(draft: { id: number; title: string }) {
+	async function loadDraft() {
+		$draftStructure = getDraft($title.title, $questions);
+		await goto('/create');
+	}
+
+	async function fetchDraft(draft: { id: number; title: string }) {
 		const response = await fetch('/api/surveys/drafts/fetch', {
 			method: 'POST',
 			body: JSON.stringify({ id: draft.id }),
@@ -203,8 +218,17 @@
 					break;
 			}
 		});
-		$draftStructure = getDraft($title.title, $questions);
-		await goto('/create');
+	}
+
+	async function createSurvey() {
+		if (numSurveys >= $LIMIT_OF_SURVEYS) {
+			isExportButtonVisible = false;
+			$warningModalContent = $t('limit_reached', { items: $t('surveys_genitive') });
+			$isWarningModalHidden = false;
+			return;
+		}
+
+		isRespondentModalHidden = false;
 	}
 
 	let innerWidth: number;
@@ -237,6 +261,7 @@
 			>
 			<th title={$t('draft_title')} id="title-header"><Tx text="draft_title" /></th>
 			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date" /></th>
+			<th title={$t('create')} id="create-header"><Tx text="create" /></th>
 		</tr>
 		{#each drafts as draft}
 			<tr>
@@ -246,9 +271,22 @@
 					</label></td
 				>
 				<td title="{$t('open')} {draft.title}" class="title-entry"
-					><button on:click={() => loadDraft(draft)}>{draft.title}</button></td
+					><button
+						on:click={async () => {
+							await fetchDraft(draft);
+							await loadDraft();
+						}}>{draft.title}</button
+					></td
 				>
 				<td title={$t('creation_date')} class="date-entry">{formatDateTime(draft.creation_date)}</td
+				>
+				<td title="{$t('finish')} {draft.title}" class="button-entry"
+					><button
+						on:click={async () => {
+							await fetchDraft(draft);
+							await createSurvey();
+						}}><i class="symbol">check_circle</i></button
+					></td
 				>
 			</tr>
 		{/each}
@@ -256,13 +294,19 @@
 {/if}
 
 <style>
+	.button-entry i {
+		color: var(--accent-color-1);
+		font-variation-settings: 'wght' 700;
+	}
+
 	#date-header {
 		width: 22%;
+		text-align: center;
 	}
 
 	@media screen and (max-width: 768px) {
 		#date-header {
-			width: 33%;
+			width: 34%;
 		}
 	}
 </style>

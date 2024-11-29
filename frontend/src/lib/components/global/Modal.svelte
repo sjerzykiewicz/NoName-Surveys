@@ -29,7 +29,7 @@
 	}
 </script>
 
-<svelte:body on:keydown={handleEscape} on:click={handleClick} />
+<svelte:body on:keydown={handleEscape} on:mousedown={handleClick} />
 
 {#if !isHidden}
 	<section class="overlay" transition:fade={{ duration: 200, easing: cubicInOut }}>

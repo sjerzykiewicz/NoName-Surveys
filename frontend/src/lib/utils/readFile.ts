@@ -31,7 +31,7 @@ export function readBinaryFile(fileInput: HTMLInputElement | null): Promise<Uint
 
 		fileReader.readAsArrayBuffer(file);
 		fileReader.onload = (e) => {
-			const fileData = e.target?.result as Uint8Array;
+			const fileData = e.target?.result as ArrayBuffer;
 			const byteArray = new Uint8Array(fileData);
 			resolve(byteArray);
 		};

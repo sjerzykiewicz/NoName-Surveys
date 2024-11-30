@@ -137,14 +137,17 @@
 
 	#group-header {
 		width: 8%;
+		text-align: center;
 	}
 
 	#code-header {
 		width: 11%;
+		text-align: center;
 	}
 
 	#date-header {
 		width: 11%;
+		text-align: center;
 	}
 
 	@media screen and (max-width: 768px) {

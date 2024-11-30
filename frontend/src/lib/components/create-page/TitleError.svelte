@@ -35,7 +35,7 @@
 	{#if checkTitleError()}
 		<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 			<i class="symbol">error</i>
-			{#key $t}
+			{#key [$t, $title.error]}
 				{errorMessage()}
 			{/key}
 		</p>

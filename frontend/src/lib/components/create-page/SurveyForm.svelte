@@ -10,7 +10,6 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import Survey from '$lib/entities/surveys/Survey';
-	import SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { getDraft } from '$lib/utils/getDraft';
@@ -26,12 +25,9 @@
 		warningModalContent,
 		isWarningModalHidden
 	} from '$lib/stores/global';
-	import SelectGroup from './SelectGroup.svelte';
-	import SelectUsers from './SelectUsers.svelte';
-	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 	import { invalidateAll } from '$app/navigation';
+	import RespondentModal from './RespondentModal.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -50,25 +46,9 @@
 	export let selectedGroups: string[] = [];
 	export let useCrypto: boolean = false;
 
-	let cryptoError: boolean = false;
 	let questionInput: HTMLDivElement;
 	let isSurveyModalHidden: boolean = true;
 	let surveyCode: string;
-
-	function checkCorrectness() {
-		cryptoError = false;
-		const g = selectedGroups;
-		const r = ringMembers;
-		if (
-			useCrypto &&
-			(g === null || g === undefined || g.length === 0) &&
-			(r === null || r === undefined || r.length === 0)
-		) {
-			cryptoError = true;
-			return false;
-		}
-		return true;
-	}
 
 	async function saveDraft(overwrite: boolean) {
 		isDraftModalHidden = true;
@@ -124,61 +104,19 @@
 		await invalidateAll();
 	}
 
-	async function createSurvey() {
-		if (!checkCorrectness()) return;
-
-		isRespondentModalHidden = true;
-
-		const parsedSurvey = new Survey(constructQuestionList($questions));
-		const surveyInfo = new SurveyCreateInfo($title.title, parsedSurvey, useCrypto, ringMembers);
-
-		const response = await fetch('/api/surveys/create', {
-			method: 'POST',
-			body: JSON.stringify(surveyInfo),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			const body = await response.json();
-			$errorModalContent = getErrorMessage(body.detail);
-			$isErrorModalHidden = false;
-			return;
-		}
-
-		const body = await response.json();
-		useCrypto = false;
-		ringMembers = [];
-		selectedGroups = [];
-		surveyCode = body.survey_code;
-		isSurveyModalHidden = false;
-		await invalidateAll();
-	}
-
-	let innerWidth: number;
-
-	$: isCryptoDisabled = !useCrypto;
-
-	function handleEnterRespondent(event: KeyboardEvent) {
-		if (!isRespondentModalHidden && event.key === 'Enter') {
-			event.preventDefault();
-			createSurvey();
-			event.stopImmediatePropagation();
-		}
-	}
-
-	function handleEnterDraft(event: KeyboardEvent) {
+	function handleEnter(event: KeyboardEvent) {
 		if (!isDraftModalHidden && event.key === 'Enter') {
 			event.preventDefault();
 			saveDraft(false);
 			event.stopImmediatePropagation();
 		}
 	}
+
+	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
-<svelte:body on:keydown={handleEnterRespondent} on:keydown={handleEnterDraft} />
+<svelte:body on:keydown={handleEnter} />
 
 <Modal
 	icon="save"
@@ -195,55 +133,19 @@
 	>
 </Modal>
 
-<Modal
-	icon="group"
-	title={$t('define_respondent_group')}
+<RespondentModal
 	bind:isHidden={isRespondentModalHidden}
-	--width={innerWidth <= $M ? '20em' : '26em'}
->
-	<div slot="content">
-		<span><Tx text="define_respondent_group_alert" /></span>
-		<div class="crypto-buttons">
-			<button
-				title={$t('public')}
-				class="access-button"
-				class:save={!useCrypto}
-				on:click={() => (useCrypto = false)}
-			>
-				<i class="symbol">public</i><Tx text="public" />
-			</button>
-			<button
-				title={$t('secure')}
-				class="access-button"
-				class:save={useCrypto}
-				on:click={() => (useCrypto = true)}
-			>
-				<i class="symbol">encrypted</i><Tx text="secure" />
-			</button>
-		</div>
-		<div class="select-box" transition:slide={{ duration: 0.2, easing: cubicInOut }}>
-			<SelectGroup {groups} bind:ringMembers bind:selectedGroups disabled={isCryptoDisabled} />
-			<div id="or" class:disabled={isCryptoDisabled}><Tx text="or" /></div>
-			<SelectUsers {users} bind:ringMembers disabled={isCryptoDisabled} />
-			<CryptoError error={cryptoError} bind:ringMembers bind:selectedGroups bind:useCrypto />
-			<div class="import">
-				<ImportEmails
-					bind:users={ringMembers}
-					title={$t('import_users_title')}
-					label={$t('import_users_label')}
-					checkKeys={true}
-					--width="100%"
-					disabled={isCryptoDisabled}
-					bind:invalidEmails
-					bind:isExportButtonVisible
-				/>
-			</div>
-		</div>
-	</div>
-	<button title={$t('define_respondent_group')} class="done" on:click={createSurvey}
-		><i class="symbol">done</i><Tx text="create" /></button
-	>
-</Modal>
+	bind:users
+	bind:groups
+	bind:invalidEmails
+	bind:isExportButtonVisible
+	bind:ringMembers
+	bind:selectedGroups
+	bind:useCrypto
+	bind:isSurveyModalHidden
+	bind:surveyCode
+	isFromDraft={false}
+/>
 
 <QrCodeModal bind:isHidden={isSurveyModalHidden} title={$t('survey_success')} {surveyCode} />
 
@@ -312,52 +214,6 @@
 		margin-top: 0em;
 	}
 
-	.crypto-buttons {
-		display: flex;
-		flex-flow: row;
-		justify-content: space-around;
-		padding-top: 1em;
-		padding-bottom: 1em;
-	}
-
-	.access-button {
-		width: fit-content;
-		justify-content: center;
-		margin-right: 0.5em;
-		margin-bottom: 0.5em;
-	}
-
-	.access-button i {
-		margin-right: 0.15em;
-	}
-
-	.select-box {
-		text-align: left;
-	}
-
-	#or {
-		display: flex;
-		flex-flow: row;
-		align-items: flex-start;
-		justify-content: flex-start;
-		margin-bottom: 0.5em;
-		font-size: 0.8em;
-		color: var(--text-color-1);
-		cursor: default;
-		transition:
-			0.2s,
-			outline 0s;
-	}
-
-	#or.disabled {
-		color: var(--text-color-3) !important;
-		cursor: not-allowed !important;
-	}
-
-	.import {
-		font-size: 0.8em;
-	}
-
 	@media screen and (max-width: 768px) {
 		.create-info.tooltip {
 			--tooltip-width: 12em;
@@ -378,10 +234,6 @@
 
 		.create-info.tooltip .tooltip-text.bottom::after {
 			left: 80%;
-		}
-
-		.import {
-			font-size: 1em;
 		}
 	}
 </style>

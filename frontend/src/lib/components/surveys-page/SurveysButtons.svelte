@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
@@ -99,9 +99,6 @@
 
 <div class="button-row">
 	<div class="button-sub-row">
-		<button title={$t('create_survey')} class="add-survey" on:click={() => goto('/create')}>
-			<i class="symbol">add</i><Tx text="survey" />
-		</button>
 		{#if surveys.length > 0}
 			<button
 				title={$t('delete_selected_surveys')}
@@ -112,17 +109,15 @@
 				<i class="symbol">delete</i><Tx text="delete" />
 			</button>
 		{/if}
+		<button
+			title={$t('import_survey_summary')}
+			class="import-export-button"
+			on:click={() => (isImportModalHidden = false)}
+		>
+			<i class="symbol">upload_file</i><Tx text="import" />
+		</button>
 	</div>
 	<PageButtons numEntries={numSurveys} />
-</div>
-<div class="button-row">
-	<button
-		title={$t('import_survey_summary')}
-		class="import-export-button"
-		on:click={() => (isImportModalHidden = false)}
-	>
-		<i class="symbol">upload_file</i><Tx text="import" />
-	</button>
 </div>
 
 <style>

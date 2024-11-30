@@ -1,28 +1,26 @@
 <script lang="ts">
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import { GroupError } from '$lib/entities/GroupError';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let members: string[];
-	export let error: GroupError;
+	export let error: PassphraseErrorEnum;
+	export let passphrase: string;
+	export let passphraseConfirm: string;
 
 	function errorMessage() {
-		return $t('members_error');
+		return $t('error_passphrase_confirm_no_match');
 	}
 
-	$: checkMembersError = () => {
-		const m = members;
-		return (
-			error === GroupError.MembersRequired && (m === null || m === undefined || m.length === 0)
-		);
+	$: checkPassphraseError = () => {
+		return error === PassphraseErrorEnum.ConfirmNotMatching && passphrase !== passphraseConfirm;
 	};
 </script>
 
-{#if checkMembersError()}
+{#if checkPassphraseError()}
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="symbol">error</i>
 		{#key [$t, error]}
@@ -33,6 +31,6 @@
 
 <style>
 	.error {
-		margin: 0em;
+		font-size: 0.8em;
 	}
 </style>

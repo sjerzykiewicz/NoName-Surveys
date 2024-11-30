@@ -9,7 +9,6 @@
 
 	export let warning: FileError;
 	export let element: HTMLInputElement | null;
-	export let disabled: boolean = false;
 
 	function warningMessage() {
 		switch (warning) {
@@ -23,9 +22,9 @@
 	$: checkFileWarning = () => {
 		switch (warning) {
 			case FileError.FileRequired:
-				return !disabled && element?.files?.length === 0;
+				return element?.files?.length === 0;
 			case FileError.FileInvalid:
-				return !disabled && element?.files?.[0]?.name.split('.').pop() !== 'csv';
+				return element?.files?.[0]?.name.split('.').pop() !== 'csv';
 		}
 	};
 </script>

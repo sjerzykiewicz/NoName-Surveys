@@ -1088,7 +1088,6 @@ input[type='radio']:disabled {
 .download-key .tooltip i,
 .last-update-container .tooltip i,
 .crypto-row .tooltip i,
-.load-text .tooltip i,
 .code-text .tooltip i,
 .label-container .tooltip i {
 	color: var(--border-color-1);
@@ -1098,10 +1097,9 @@ input[type='radio']:disabled {
 		outline 0s;
 }
 
-.info-row .tooltip .tooltip-text,
-.load-text .tooltip .tooltip-text {
+.info-row .tooltip .tooltip-text {
 	text-align: left;
-	font-size: 0.8em;
+	font-size: 0.67em;
 }
 
 .slider-area {
@@ -1220,6 +1218,11 @@ td {
 	padding: 0.2em;
 	text-align: left;
 	text-shadow: 0px 4px 4px var(--shadow-color-1);
+}
+
+th:not(:last-of-type),
+td:not(:last-of-type) {
+	border-right: 1px solid var(--text-color-3);
 }
 
 th {
@@ -1369,10 +1372,16 @@ th .checkbox-entry {
 	overflow-y: hidden;
 }
 
-.title-entry button,
-.code-entry button {
+.title-entry button {
 	justify-content: left;
 	text-align: left;
+}
+
+.button-entry button,
+.code-entry button,
+.date-entry,
+.info-entry {
+	text-align: center;
 }
 
 .title-entry.disabled,

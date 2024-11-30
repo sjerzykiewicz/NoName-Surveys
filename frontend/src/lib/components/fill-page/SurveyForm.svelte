@@ -56,6 +56,7 @@
 	import { readBinaryFile } from '$lib/utils/readFile';
 	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
 	import { magicNumber } from '$lib/entities/MagicNumber';
+	import AccessError from './AccessError.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -70,7 +71,7 @@
 	let isSubmitButtonDisabled: boolean = false;
 	let passphrase: string = '';
 	let passphraseError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
-	let keyPair: KeyPair | null = null;
+	let accessError: boolean = false;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -240,70 +241,55 @@
 		fileName = fileElement?.files?.[0]?.name ?? $t('no_file_selected');
 	}
 
-	function checkFileCorrectness() {
+	let keyPair: KeyPair | null = null;
+	let byteArray: Uint8Array = new Uint8Array();
+
+	async function processCrypto() {
 		fileError = FileError.NoError;
+		passphraseError = PassphraseErrorEnum.NoError;
+		keyPair = null;
+		byteArray = new Uint8Array();
+		accessError = false;
+		isSubmitButtonDisabled = true;
 
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
-			return false;
-		}
-		return true;
-	}
-
-	function checkPassphraseCorrectness(keyPair: KeyPair | null) {
-		passphraseError = PassphraseErrorEnum.NoError;
-
-		if (keyPair === null) {
-			passphraseError = PassphraseErrorEnum.DecryptionFailed;
-			return false;
-		}
-
-		return true;
-	}
-
-	async function processCrypto() {
-		isSubmitButtonDisabled = true;
-
-		if (!checkFileCorrectness()) {
 			isSubmitButtonDisabled = false;
 			return;
 		}
 
-		const contents = await readBinaryFile(fileElement).then(
+		byteArray = await readBinaryFile(fileElement).then(
 			(resolve) => {
 				return resolve;
 			},
 			(reject) => {
 				$errorModalContent = reject as string;
 				$isErrorModalHidden = false;
-				return '';
+				return new Uint8Array();
 			}
 		);
 
-		const byteArray = contents as Uint8Array;
-
 		if (byteArray.slice(0, 8).toString() !== magicNumber.toString()) {
-			$errorModalContent = $t('invalid_key_file_format');
-			$isErrorModalHidden = false;
+			fileError = FileError.FileInvalid;
 			isSubmitButtonDisabled = false;
 			return;
 		}
 
-		keyPair = await getKeys(byteArray as Uint8Array);
+		keyPair = await getKeys(byteArray);
 
-		if (!checkPassphraseCorrectness(keyPair)) {
+		if (keyPair === null) {
+			passphraseError = PassphraseErrorEnum.DecryptionFailed;
 			isSubmitButtonDisabled = false;
 			return;
 		}
 
-		if (!keys.includes(keyPair!.publicKey)) {
-			$errorModalContent = $t('public_key_not_on_list');
-			$isErrorModalHidden = false;
+		if (!keys.includes(keyPair.publicKey)) {
+			accessError = true;
 			isSubmitButtonDisabled = false;
 			return;
 		}
 
-		processForm(keyPair!);
+		processForm(keyPair);
 	}
 
 	async function getKeys(byteArray: Uint8Array): Promise<KeyPair | null> {
@@ -434,7 +420,7 @@
 			</div>
 			<input type="file" bind:this={fileElement} on:change={handleFileChange} />
 		</label>
-		<KeysError error={fileError} element={fileElement} />
+		<KeysError error={fileError} element={fileElement} {byteArray} />
 		<div title={$t('enter_passphrase')}>
 			<br />
 			<Tx text="enter_passphrase" />
@@ -455,6 +441,7 @@
 				/></label
 			>
 			<PassphraseError error={passphraseError} {keyPair} />
+			<AccessError error={accessError} {keys} {keyPair} />
 		</div>
 	</div>
 	<button

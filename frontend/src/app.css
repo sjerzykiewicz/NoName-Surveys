@@ -4,29 +4,24 @@
 	--primary-color-2: #37373a;
 	--secondary-color-1: #28282b;
 	--secondary-color-2: #19191c;
-
 	--text-color-1: #ebebee;
 	--text-color-2: #ebebee;
 	--text-color-3: #555558;
-
 	--border-color-1: #828285;
 	--shadow-color-1: #19191c;
 	--entry-color-1: #464649;
 	--entry-color-2: #37373a;
 	--entry-color-3: #28282b;
-
 	--gradient-color-1: #1d1d20;
 	--gradient-color-2: #252528;
-
 	--accent-color-1: #0075ff;
 	--accent-color-2: #005cc8;
-	--error-color-1: #ff3333;
-	--error-color-2: #990000;
-	--warning-color-1: #ff9900;
+	--error-color-1: #f33;
+	--error-color-2: #900;
+	--warning-color-1: #f90;
 	--warning-color-2: #cc7a00;
 	--amu-color-1: #002d69;
 	--amu-color-2: #00214d;
-
 	--tooltip-width: 12em;
 }
 
@@ -35,20 +30,16 @@
 	--primary-color-2: #cdcdd0;
 	--secondary-color-1: #dcdcdf;
 	--secondary-color-2: #ebebee;
-
 	--text-color-1: #19191c;
 	--text-color-3: #828285;
-
 	--border-color-1: #555558;
 	--shadow-color-1: #bebec1;
 	--entry-color-1: #ebebee;
 	--entry-color-2: #dcdcdf;
 	--entry-color-3: #cdcdd0;
-
 	--gradient-color-1: #e0e0e3;
 	--gradient-color-2: #e8e8eb;
-
-	--warning-color-1: #ff6600;
+	--warning-color-1: #f60;
 	--warning-color-2: #cc5200;
 }
 
@@ -58,7 +49,7 @@
 }
 
 @font-face {
-	font-family: Material Symbols Rounded;
+	font-family: 'Material Symbols Rounded';
 	font-style: normal;
 	font-weight: 400 700;
 	font-display: block;
@@ -66,7 +57,7 @@
 }
 
 .symbol {
-	font-family: 'Material Symbols Rounded';
+	font-family: 'Material Symbols Rounded', sans-serif;
 	font-weight: normal;
 	font-style: normal;
 	font-size: 1.15em;
@@ -85,7 +76,7 @@
 }
 
 * {
-	font-family: 'Jura';
+	font-family: Jura, sans-serif;
 	font-weight: inherit;
 }
 
@@ -98,15 +89,10 @@ body {
 }
 
 body {
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden auto;
 	background: var(--gradient-color-2);
-	background: -moz-linear-gradient(0deg, var(--gradient-color-1) 0%, var(--gradient-color-2) 100%);
-	background: -webkit-linear-gradient(
-		0deg,
-		var(--gradient-color-1) 0%,
-		var(--gradient-color-2) 100%
-	);
+	background: linear-gradient(0deg, var(--gradient-color-1) 0%, var(--gradient-color-2) 100%);
+	background: linear-gradient(0deg, var(--gradient-color-1) 0%, var(--gradient-color-2) 100%);
 	background: linear-gradient(0deg, var(--gradient-color-1) 0%, var(--gradient-color-2) 100%);
 	background-attachment: fixed;
 	font-weight: 500;
@@ -150,6 +136,7 @@ body {
 .select-list *:where(div.multiselect.disabled),
 .select-list *:where(div.multiselect.disabled) * {
 	--sms-text-color: var(--text-color-3) !important;
+
 	color: var(--text-color-3) !important;
 	cursor: not-allowed !important;
 }
@@ -277,7 +264,7 @@ button {
 	background-color: var(--primary-color-1);
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	font-size: 1em;
 	color: var(--text-color-1);
 	cursor: pointer;
@@ -394,15 +381,15 @@ button:active,
 }
 
 .up {
-	border-radius: 5px 5px 0px 0px;
+	border-radius: 5px 5px 0 0;
 	border-bottom: 0.5px solid var(--border-color-1);
-	padding: 0em 0.25em 0em 0.25em;
+	padding: 0 0.25em;
 }
 
 .down {
-	border-radius: 0px 0px 5px 5px;
+	border-radius: 0 0 5px 5px;
 	border-top: 0.5px solid var(--border-color-1);
-	padding: 0em 0.25em 0em 0.25em;
+	padding: 0 0.25em;
 }
 
 button:disabled,
@@ -459,7 +446,7 @@ a:active {
 
 .file-div {
 	color: var(--text-color-1);
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	text-align: justify;
 	cursor: default;
 	transition:
@@ -496,7 +483,7 @@ input[type='file'] {
 	background-color: var(--secondary-color-2);
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	padding: 0.5em;
 	font-size: 0.8em;
 	cursor: default;
@@ -509,7 +496,7 @@ input[type='file'] {
 	background-color: var(--primary-color-1);
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	text-shadow: none;
 	color: var(--text-color-1);
 	cursor: pointer;
@@ -543,7 +530,7 @@ input[type='file'] {
 	font-weight: 700;
 	text-align: right;
 	color: var(--text-color-1);
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	transition:
 		0.2s,
 		outline 0s;
@@ -571,7 +558,7 @@ input[type='file'] {
 	cursor: default;
 	width: calc(100% - 4.5em);
 	margin-left: 2.25em;
-	margin-bottom: 0em;
+	margin-bottom: 0;
 }
 
 .question-label {
@@ -589,6 +576,7 @@ input[type='file'] {
 
 .question-label .tooltip {
 	--tooltip-width: 5.5em;
+
 	margin-left: 0.5em;
 }
 
@@ -616,7 +604,7 @@ input[type='file'] {
 
 .question-title {
 	flex: 1;
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	padding-bottom: 1em;
 	overflow: hidden;
 	overflow-wrap: break-word;
@@ -635,7 +623,7 @@ input[type='file'] {
 
 .details {
 	margin-bottom: 0.5em;
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	cursor: default;
 	overflow-wrap: break-word;
 }
@@ -645,11 +633,10 @@ input[type='file'] {
 	padding: 0.25em;
 	border: 1px solid var(--text-color-3);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	color: var(--text-color-1);
 	cursor: default;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: hidden auto;
 	min-height: 1.15em;
 	max-height: 11.5em;
 	overflow-wrap: break-word;
@@ -684,7 +671,7 @@ input[type='file'] {
 }
 
 .choice-area.display .input {
-	margin-right: 0em !important;
+	margin-right: 0 !important;
 	min-height: 5.75em !important;
 	max-height: 11.5em !important;
 	white-space: pre-wrap !important;
@@ -695,7 +682,7 @@ input[type='file'] {
 	padding: 0.25em;
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	cursor: pointer;
 	overflow: hidden;
 	overflow-wrap: break-word;
@@ -724,7 +711,7 @@ input[type='file'] {
 .choice.scale {
 	flex-flow: column;
 	text-align: center;
-	margin-bottom: 0em;
+	margin-bottom: 0;
 	padding: 0.5em;
 	cursor: default;
 }
@@ -761,12 +748,12 @@ input[type='file'] {
 	flex-flow: column;
 	text-align: center;
 	margin-top: -0.5em;
-	margin-bottom: 0em;
+	margin-bottom: 0;
 	cursor: default;
 }
 
 .choice.binary .input {
-	margin: 0.5em 0em 0em 0em !important;
+	margin: 0.5em 0 0 !important;
 	width: 13em !important;
 	max-width: 15em !important;
 	overflow-wrap: anywhere !important;
@@ -844,7 +831,7 @@ input[type='file'] {
 }
 
 .limit {
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	font-weight: 700;
 	color: var(--text-color-1);
 	cursor: default;
@@ -858,7 +845,7 @@ input[type='file'] {
 	padding: 0.25em;
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	font-size: 1em;
 	color: var(--text-color-1);
 	text-align: center;
@@ -875,6 +862,7 @@ input[type='file'] {
 }
 
 /*	pasting text into div[contenteditable] carries over its style */
+
 /*	this eliminates most such cases */
 div[contenteditable] * {
 	font-size: inherit !important;
@@ -900,7 +888,7 @@ div[contenteditable] * {
 
 .rank {
 	color: var(--text-color-1);
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	cursor: default;
 	transition:
 		0.2s,
@@ -918,7 +906,7 @@ div[contenteditable] * {
 
 input[type='checkbox'],
 input[type='radio'] {
-	margin: 0em;
+	margin: 0;
 	cursor: pointer;
 	transition:
 		0.2s,
@@ -942,9 +930,9 @@ input[type='radio']:disabled {
 	color: var(--error-color-1);
 	font-weight: 700;
 	font-size: 1em;
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	cursor: default;
-	margin: 0.5em 0em 0em 0em;
+	margin: 0.5em 0 0;
 	transition: 0.2s;
 }
 
@@ -954,7 +942,7 @@ input[type='radio']:disabled {
 
 .title {
 	flex: 1;
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	font-size: 1.5em;
 	font-weight: 700;
 	color: var(--text-color-1);
@@ -976,15 +964,15 @@ input[type='radio']:disabled {
 	align-items: center;
 	overflow-wrap: unset;
 	overflow: unset;
-	padding-bottom: 0em;
-	margin-bottom: 0em;
+	padding-bottom: 0;
+	margin-bottom: 0;
 	white-space: normal !important;
 }
 
 .title.empty,
 .title.answers {
 	padding-bottom: 0.5em;
-	margin-bottom: 0em;
+	margin-bottom: 0;
 }
 
 .info-row {
@@ -995,13 +983,14 @@ input[type='radio']:disabled {
 
 .info-row .title.empty {
 	flex: none;
-	padding: 0em;
+	padding: 0;
 	margin-right: 0.5em;
 	overflow: visible;
 }
 
 .info-row .tooltip {
 	--tooltip-width: 25em;
+
 	font-size: 1.5em;
 }
 
@@ -1014,7 +1003,7 @@ input[type='radio']:disabled {
 .code-text .tooltip i,
 .label-container .tooltip i {
 	color: var(--border-color-1);
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	transition:
 		0.2s,
 		outline 0s;
@@ -1031,7 +1020,7 @@ input[type='radio']:disabled {
 	align-items: center;
 	justify-content: center;
 	width: calc(100% - 2.25em);
-	margin: 0.5em 2.25em 1em 0em;
+	margin: 0.5em 2.25em 1em 0;
 }
 
 .range {
@@ -1096,7 +1085,7 @@ select {
 	background-color: var(--primary-color-1);
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	color: var(--text-color-1);
 	font-size: 1em;
 	padding: 0.25em;
@@ -1114,7 +1103,7 @@ select:disabled {
 
 .select-list {
 	flex: 1;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	font-size: 0.8em;
 	margin-right: 0.625em;
 	margin-bottom: 0.625em;
@@ -1128,7 +1117,7 @@ table {
 	border-collapse: separate;
 	border-spacing: 0;
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	font-size: 1.15em;
 	color: var(--text-color-1);
 }
@@ -1141,7 +1130,7 @@ th,
 td {
 	padding: 0.2em;
 	text-align: left;
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 }
 
 th {
@@ -1185,11 +1174,11 @@ tr:nth-child(2n + 2) td button:active {
 }
 
 tr:first-of-type {
-	border-radius: 4px 4px 0px 0px;
+	border-radius: 4px 4px 0 0;
 }
 
 tr:last-of-type {
-	border-radius: 0px 0px 4px 4px;
+	border-radius: 0 0 4px 4px;
 }
 
 th:first-of-type {
@@ -1263,7 +1252,7 @@ th .checkbox-entry {
 
 .title-entry {
 	height: 2em;
-	padding: 0em;
+	padding: 0;
 	cursor: pointer;
 }
 
@@ -1272,7 +1261,7 @@ th .checkbox-entry {
 .code-entry {
 	height: 2em;
 	width: 2em;
-	padding: 0em;
+	padding: 0;
 	cursor: pointer;
 }
 
@@ -1284,7 +1273,7 @@ th .checkbox-entry {
 	border: none;
 	border-radius: 0;
 	box-shadow: none;
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	height: 100%;
 	width: 100%;
 	max-height: 6.5em;
@@ -1349,16 +1338,14 @@ th .checkbox-entry {
 .popup .popup-text {
 	position: absolute;
 	z-index: 1;
-
 	width: var(--tooltip-width);
 	padding: 0.5em;
 	border-radius: 5px;
 	background: var(--shadow-color-1);
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	color: var(--text-color-1);
 	text-align: center;
 	font-weight: 400;
-
 	pointer-events: none;
 	visibility: hidden;
 	opacity: 0;
@@ -1371,7 +1358,6 @@ th .checkbox-entry {
 .popup .popup-text.top {
 	left: 50%;
 	margin-left: calc((var(--tooltip-width) + 1em) / -2);
-
 	bottom: 100%;
 	margin-bottom: 0.25em;
 }
@@ -1380,7 +1366,6 @@ th .checkbox-entry {
 .popup .popup-text.right {
 	top: 50%;
 	transform: translateY(-50%);
-
 	left: 100%;
 	margin-left: 0.25em;
 }
@@ -1389,7 +1374,6 @@ th .checkbox-entry {
 .popup .popup-text.bottom {
 	left: 50%;
 	margin-left: calc((var(--tooltip-width) + 1em) / -2);
-
 	top: 100%;
 	margin-top: 0.25em;
 }
@@ -1398,7 +1382,6 @@ th .checkbox-entry {
 .popup .popup-text.left {
 	top: 50%;
 	transform: translateY(-50%);
-
 	right: 100%;
 	margin-right: 0.25em;
 }
@@ -1407,9 +1390,7 @@ th .checkbox-entry {
 .popup .popup-text::after {
 	content: '';
 	position: absolute;
-
 	border: 0.5em solid var(--shadow-color-1);
-
 	visibility: hidden;
 	opacity: 0;
 	transition:
@@ -1420,10 +1401,8 @@ th .checkbox-entry {
 .tooltip .tooltip-text.top::after,
 .popup .popup-text.top::after {
 	top: 100%;
-
 	left: 50%;
 	margin-left: -0.5em;
-
 	border-color: var(--shadow-color-1) transparent transparent transparent;
 }
 
@@ -1431,20 +1410,16 @@ th .checkbox-entry {
 .popup .popup-text.right::after {
 	right: 100%;
 	margin-left: -0.5em;
-
 	top: 50%;
 	transform: translateY(-50%);
-
 	border-color: transparent var(--shadow-color-1) transparent transparent;
 }
 
 .tooltip .tooltip-text.bottom::after,
 .popup .popup-text.bottom::after {
 	bottom: 100%;
-
 	left: 50%;
 	margin-left: -0.5em;
-
 	border-color: transparent transparent var(--shadow-color-1) transparent;
 }
 
@@ -1452,10 +1427,8 @@ th .checkbox-entry {
 .popup .popup-text.left::after {
 	left: 100%;
 	margin-right: -0.5em;
-
 	top: 50%;
 	transform: translateY(-50%);
-
 	border-color: transparent transparent transparent var(--shadow-color-1);
 }
 
@@ -1497,7 +1470,7 @@ button.popup {
 .account-ul {
 	list-style-type: none;
 	margin-top: 0.25em;
-	padding-left: 0em;
+	padding-left: 0;
 	font-weight: 500;
 }
 
@@ -1517,7 +1490,7 @@ button.popup {
 	display: flex;
 	justify-content: center;
 	color: var(--accent-color-1);
-	text-shadow: 0px 4px 4px var(--shadow-color-1);
+	text-shadow: 0 4px 4px var(--shadow-color-1);
 	font-weight: 700;
 	font-size: 1.25em;
 	cursor: default;
@@ -1534,7 +1507,7 @@ button.popup {
 	padding: 0.25em;
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0px 4px 4px var(--shadow-color-1);
+	box-shadow: 0 4px 4px var(--shadow-color-1);
 	color: var(--text-color-1);
 	overflow-x: hidden;
 	overflow-wrap: break-word;
@@ -1546,7 +1519,7 @@ button.popup {
 		outline 0s;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
 	html {
 		background: var(--secondary-color-1);
 	}
@@ -1597,14 +1570,14 @@ button.popup {
 	.choice-area.binary {
 		flex-flow: column;
 		align-items: flex-start;
-		margin-left: 0em;
+		margin-left: 0;
 		width: calc(100% - 2.25em);
 	}
 
 	.choice.binary {
 		flex-flow: row;
 		text-align: left;
-		margin-top: 0em;
+		margin-top: 0;
 		margin-bottom: 0.5em;
 	}
 
@@ -1620,7 +1593,7 @@ button.popup {
 	}
 
 	.binary input {
-		top: 0em;
+		top: 0;
 		left: 1em;
 	}
 

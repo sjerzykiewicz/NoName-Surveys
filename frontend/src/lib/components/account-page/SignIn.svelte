@@ -53,7 +53,8 @@
 		flex-flow: row;
 		align-items: center;
 		justify-content: center;
-		padding: 0.5em 0.5em 0em;
+		padding-top: 1em;
+		padding-bottom: 1em;
 		border-top: 1px solid var(--border-color-1);
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
@@ -64,7 +65,6 @@
 	}
 
 	.info.bottom {
-		padding: 0.5em;
 		border-bottom: 1px solid var(--border-color-1);
 	}
 

@@ -17,8 +17,8 @@
 	.sign-buttons {
 		display: flex;
 		justify-content: flex-start;
-		padding-top: 0.5em;
-		padding-bottom: 0.5em;
+		padding-top: 1em;
+		padding-bottom: 1em;
 		font-size: 1.5em;
 		border-top: 1px solid var(--border-color-1);
 	}

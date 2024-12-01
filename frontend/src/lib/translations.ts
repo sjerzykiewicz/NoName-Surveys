@@ -63,12 +63,20 @@ export const data = {
 		dark_theme: 'Dark Theme',
 		light_theme: 'Light Theme',
 		toggle_theme: 'Toggle theme',
+		medium_contrast: 'Medium Contrast',
+		high_contrast: 'High Contrast',
+		toggle_contrast: 'Toggle contrast',
 		toggle_lang: 'Toggle language',
 		other_lang: 'Polish',
+		invite: 'Invite',
+		invite_title: 'Invite users to authorize and generate keys',
+		invitation: 'Invitation',
+		scan_to_join: 'Scan the QR code to join',
 		scroll_to_top: 'Scroll to the top',
 		signed_out: 'Signed Out',
 		signed_out_info: 'You are signed out',
-		sign_out_alert: 'Sign out to ensure security while filling out the survey.',
+		signed_out_title: 'Signing Out',
+		signed_out_alert: 'You are being signed out to ensure security while filling out the survey.',
 		sign_in_info: 'to access ',
 		and: 'and',
 		or: 'Or',
@@ -91,7 +99,7 @@ export const data = {
 			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Select previous or next input<br />
 			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Select previous or next question<br />
 			<span class="accent">[ Home ]</span> - Select Survey Title<br />
-			<span class="accent">[ End ]</span> - Select Create button<br />
+			<span class="accent">[ End ]</span> - Select Finish button<br />
 			Besides that, you can still use <span class="accent">[ Tab ]</span> and <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span>.`,
 
 		// questions
@@ -170,8 +178,7 @@ export const data = {
 		number_of_drafts: 'Number of drafts',
 		no_drafts_yet: 'No drafts yet!',
 		draft_tooltip: `When creating a survey, you can save it as a draft for later use. To create a survey, click
-			on the "Create" tab at the top of the page or the button below. All your saved drafts will
-			be stored on this page.`,
+			on the "Create" tab at the top of the page. All your saved drafts will be stored on this page.`,
 		draft_title: 'Draft Title',
 		deleting_drafts: 'Deleting Drafts',
 		create_draft: 'Create a draft',
@@ -204,7 +211,7 @@ export const data = {
 		your_surveys: 'Your surveys',
 		number_of_surveys: 'Number of surveys',
 		no_surveys_yet: 'No surveys yet!',
-		surveys_tooltip: `To create a survey, click on the "Create" tab at the top of the page or the button below.
+		surveys_tooltip: `To create a survey, click on the "Create" tab at the top of the page.
 			All your created surveys will be stored on this page.`,
 		survey_is_secure: 'This survey has an established group of possible respondents.',
 		survey_is_public: 'Everyone can submit an answer to this survey.',
@@ -234,6 +241,7 @@ export const data = {
 			' There are only two people who can respond to this survey. The other person could be the creator of this survey.',
 		survey_success: 'Survey Created Successfully!',
 		public_key_not_on_list: 'Your public key is not on the list.',
+		no_access_to_survey: 'You do not have access to this survey.',
 		possible_respondents: 'Possible Respondents',
 		possible_respondents_empty: 'No possible respondents to display!',
 		define_respondent_group: 'Define Respondent Group',
@@ -243,6 +251,7 @@ export const data = {
 		edit_title: 'Edit survey',
 		preview: 'Preview',
 		preview_title: 'Preview survey',
+		finish: 'Finish',
 		create: 'Create',
 		create_title: 'Finish survey creation',
 		invalid_summary: 'Invalid survey summary',
@@ -381,6 +390,7 @@ export const data = {
 		error_no_file: 'Please select a file.',
 		error_file_not_bin: 'Please select a .bin file.',
 		error_file_not_json: 'Please select a .json file.',
+		invalid_key_file_format: 'Invalid file.',
 		select_file: 'Select File',
 		load_keys_title: 'Load your keys',
 		load_keys: 'Load your digital signature keys',
@@ -653,12 +663,21 @@ export const data = {
 		dark_theme: 'Ciemny motyw',
 		light_theme: 'Jasny motyw',
 		toggle_theme: 'Zmień motyw',
+		medium_contrast: 'Średni kontrast',
+		high_contrast: 'Wysoki kontrast',
+		toggle_contrast: 'Zmień kontrast',
 		toggle_lang: 'Zmień język',
 		other_lang: 'Angielski',
+		invite: 'Zaproś',
+		invite_title: 'Zaproś użytkowników do autoryzacji i wygenerowania kluczy',
+		invitation: 'Zaproszenie',
+		scan_to_join: 'Zeskanuj kod QR, aby dołączyć',
 		scroll_to_top: 'Przewiń na samą górę',
 		signed_out: 'Wylogowany',
 		signed_out_info: 'Jesteś wylogowany',
-		sign_out_alert: 'Wyloguj się, aby zapewnić bezpieczeństwo podczas wypełniania ankiety.',
+		signed_out_title: 'Zostajesz wylogowany',
+		signed_out_alert:
+			'Zostajesz wylogowany, aby zapewnić bezpieczeństwo podczas wypełniania ankiety.',
 		sign_in_info: 'aby uzyskać dostęp do ',
 		and: 'i',
 		or: 'Lub',
@@ -681,7 +700,7 @@ export const data = {
 			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Zaznacz poprzednie lub następne pole<br />
 			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Zaznacz poprzednie lub następne pytanie<br />
 			<span class="accent">[ Home ]</span> - Zaznacz Tytuł ankiety<br />
-			<span class="accent">[ End ]</span> - Zaznacz przycisk Utwórz<br />
+			<span class="accent">[ End ]</span> - Zaznacz przycisk Zakończ<br />
 			Poza tym, nadal możesz używać <span class="accent">[ Tab ]</span> i <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span>.`,
 
 		// questions
@@ -822,6 +841,7 @@ export const data = {
 			' Tylko dwie osoby mogą wypełnić tę ankietę. Istnieje możliwość, że drugą osobą jest twórca ankiety.',
 		survey_success: 'Ankieta utworzona pomyślnie!',
 		public_key_not_on_list: 'Twój klucz publiczny nie znajduje się na liście',
+		no_access_to_survey: 'Nie masz dostępu do tej ankiety.',
 		possible_respondents: 'Możliwi respondenci',
 		possible_respondents_empty: 'Brak możliwych respondentów do wyświetlenia!',
 		define_respondent_group: 'Zdefiniuj grupę respondentów',
@@ -831,6 +851,7 @@ export const data = {
 		edit_title: 'Edytuj ankietę',
 		preview: 'Podgląd',
 		preview_title: 'Podgląd ankiety',
+		finish: 'Zakończ',
 		create: 'Utwórz',
 		create_title: 'Zakończ tworzenie ankiety',
 		invalid_summary: 'Niewłaściwe podsumowanie ankiety',
@@ -969,6 +990,7 @@ export const data = {
 		error_no_file: 'Proszę wybrać plik.',
 		error_file_not_bin: 'Proszę wybrać plik .bin.',
 		error_file_not_json: 'Proszę wybrać plik .json.',
+		invalid_key_file_format: 'Niepoprawny plik.',
 		select_file: 'Wybierz plik',
 		load_keys_title: 'Załaduj swoje klucze',
 		load_keys: 'Załaduj swoje klucze podpisu cyfrowego',
@@ -976,7 +998,7 @@ export const data = {
 		submit_file: 'Załaduj plik',
 		key_file_label: `Załaduj plik, który wcześniej wygenerowałeś w tej aplikacji. Plik zawiera Twoje klucze, które są
 			niezbędne do obliczeń kryptograficznych potrzebnych do weryfikacji Twojego prawa do wypełnienia tej ankiety.`,
-		default_filename: 'Domyślna nazwa pliku: ',
+		default_filename: 'Domyślna nazwa pliku',
 		no_file_selected: 'Nie wybrano pliku',
 		passphrase_title: 'Wprowadź hasło do pliku',
 		passphrase_file_decryption_failed:

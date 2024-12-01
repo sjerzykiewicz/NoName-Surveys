@@ -16,14 +16,14 @@
 	}
 
 	$: checkPassphraseError = () => {
-		return error !== PassphraseErrorEnum.NoError && keyPair === null;
+		return error === PassphraseErrorEnum.DecryptionFailed && keyPair === null;
 	};
 </script>
 
 {#if checkPassphraseError()}
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="symbol">error</i>
-		{#key $t}
+		{#key [$t, error]}
 			{errorMessage()}
 		{/key}
 	</p>

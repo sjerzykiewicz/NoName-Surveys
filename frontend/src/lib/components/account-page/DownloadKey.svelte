@@ -9,8 +9,10 @@
 	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import PassphraseError from './PassphraseError.svelte';
+	import ConfirmError from './ConfirmError.svelte';
 	import { downloadBinaryFile } from '$lib/utils/downloadFile';
 	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
+	import { magicNumber } from '$lib/entities/MagicNumber';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -21,6 +23,7 @@
 	let passphrase: string = '';
 	let passphraseConfirm: string = '';
 	let passphraseError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
+	let passphraseConfirmError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
 
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
@@ -33,14 +36,13 @@
 
 	function checkPassphraseCorrectness() {
 		passphraseError = PassphraseErrorEnum.NoError;
+		passphraseConfirmError = PassphraseErrorEnum.NoError;
 
 		if (passphrase === '') {
 			passphraseError = PassphraseErrorEnum.Empty;
 			return false;
-		}
-
-		if (passphrase !== passphraseConfirm) {
-			passphraseError = PassphraseErrorEnum.ConfirmNotMatching;
+		} else if (passphrase !== passphraseConfirm) {
+			passphraseConfirmError = PassphraseErrorEnum.ConfirmNotMatching;
 			return false;
 		}
 
@@ -78,6 +80,7 @@
 		passphrase = '';
 		passphraseConfirm = '';
 		passphraseError = PassphraseErrorEnum.NoError;
+		passphraseConfirmError = PassphraseErrorEnum.NoError;
 	}
 
 	async function generateKeyPair() {
@@ -91,10 +94,11 @@
 
 			const pemData = publicKey + '\n\n' + privateKey;
 			const { salt, iv, ciphertext } = await encryptKeys(pemData, passphrase);
-			const keysData = new Uint8Array(salt.length + iv.length + ciphertext.length);
-			keysData.set(salt, 0);
-			keysData.set(iv, salt.length);
-			keysData.set(ciphertext, salt.length + iv.length);
+			const keysData = new Uint8Array(8 + salt.length + iv.length + ciphertext.length);
+			keysData.set(magicNumber, 0);
+			keysData.set(salt, 8);
+			keysData.set(iv, 24);
+			keysData.set(ciphertext, 36);
 
 			const response = await fetch('/api/users/update-public-key', {
 				method: 'POST',
@@ -173,6 +177,7 @@
 				bind:value={passphrase}
 			/></label
 		>
+		<PassphraseError error={passphraseError} {passphrase} />
 		<br />
 		<label class="passphrase-label">
 			<input
@@ -186,7 +191,7 @@
 				bind:value={passphraseConfirm}
 			/>
 		</label>
-		<PassphraseError error={passphraseError} {passphrase} {passphraseConfirm} />
+		<ConfirmError error={passphraseConfirmError} {passphrase} {passphraseConfirm} />
 	</span>
 	<button title={$t('generate')} class="done" on:click={generateKeyPair}>
 		<i class="symbol">done</i><Tx text="generate" />
@@ -210,7 +215,7 @@
 			<div class="tooltip">
 				<i class="symbol">info</i>
 				<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-					<Tx html="account_generate_info" />
+					<Tx text="account_generate_info" />
 				</span>
 			</div>
 		</div>
@@ -222,7 +227,7 @@
 				<div class="tooltip">
 					<i class="symbol">info</i>
 					<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-						<Tx html="account_key_update_info" />
+						<Tx text="account_key_update_info" />
 					</span>
 				</div>
 			</div>
@@ -261,7 +266,7 @@
 		flex-flow: row;
 		align-items: center;
 		justify-content: center;
-		padding: 0em 0.5em;
+		padding-bottom: 1em;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
 		overflow-wrap: break-word;
@@ -308,6 +313,7 @@
 		align-items: center;
 		justify-content: flex-start;
 		width: 100%;
+		padding-bottom: 0.5em;
 	}
 
 	.download-key button {
@@ -320,7 +326,6 @@
 		align-items: center;
 		justify-content: flex-start;
 		width: 100%;
-		padding-top: 0.75em;
 		font-size: 0.8em;
 		cursor: default;
 	}

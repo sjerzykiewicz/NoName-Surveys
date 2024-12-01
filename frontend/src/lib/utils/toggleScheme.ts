@@ -1,4 +1,4 @@
-export function toggleTheme(colorScheme: string): string {
+export function toggleScheme(colorScheme: string): string {
 	if (colorScheme === 'dark') {
 		document.documentElement.dataset.colorScheme = 'light';
 		localStorage.setItem('colorScheme', 'light');

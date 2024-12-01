@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import noname_black from '$lib/assets/noname_black.png';
 
-	export let code: string;
+	export let href: string;
+	export let id: string;
 	export let codeSize: number;
 	export let codeMargin: number = 0;
-	export let image: string = '';
 	export let imageSize: number = 1;
 	export let imageMargin: number = 0;
-
-	let data: string = $page.url.origin + '/fill?code=' + code;
 
 	onMount(() => {
 		let script = document.createElement('script');
@@ -23,8 +21,8 @@
 				width: codeSize,
 				height: codeSize,
 				margin: codeMargin,
-				data: data,
-				image: image,
+				data: href,
+				image: noname_black,
 				dotsOptions: {
 					color: '#000000',
 					type: 'rounded'
@@ -44,7 +42,7 @@
 				}
 			});
 
-			const element = document.getElementById(code);
+			const element = document.getElementById(id);
 			if (element) {
 				qrCode.append(element);
 			}
@@ -52,7 +50,7 @@
 	});
 </script>
 
-<div id={code}></div>
+<div {id}></div>
 
 <style>
 	div {

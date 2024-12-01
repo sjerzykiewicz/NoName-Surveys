@@ -1,46 +1,106 @@
 /* global.css */
 :root {
+	--tooltip-width: 12em;
+}
+
+:root[data-color-scheme='dark'][data-color-contrast='medium'] {
 	--primary-color-1: #464649;
 	--primary-color-2: #37373a;
 	--secondary-color-1: #28282b;
 	--secondary-color-2: #19191c;
-	--text-color-1: #ebebee;
-	--text-color-2: #ebebee;
-	--text-color-3: #555558;
-	--border-color-1: #828285;
-	--shadow-color-1: #19191c;
+	--gradient-color-1: #1d1d20;
+	--gradient-color-2: #252528;
 	--entry-color-1: #464649;
 	--entry-color-2: #37373a;
 	--entry-color-3: #28282b;
-	--gradient-color-1: #1d1d20;
-	--gradient-color-2: #252528;
-	--accent-color-1: #0075ff;
-	--accent-color-2: #005cc8;
+	--shadow-color-1: #19191c;
+	--border-color-1: #828285;
+	--text-color-1: #ebebee;
+	--text-color-2: #ebebee;
+	--text-color-3: #555558;
+	--accent-color-1: #0080ff;
+	--accent-color-2: #06c;
 	--error-color-1: #f33;
 	--error-color-2: #900;
-	--warning-color-1: #f90;
-	--warning-color-2: #cc7a00;
+	--warning-color-1: #ff8000;
+	--warning-color-2: #c60;
 	--amu-color-1: #002d69;
 	--amu-color-2: #00214d;
-	--tooltip-width: 12em;
 }
 
-:root[data-color-scheme='light'] {
+:root[data-color-scheme='dark'][data-color-contrast='high'] {
+	--primary-color-1: #181818;
+	--primary-color-2: #101010;
+	--secondary-color-1: #080808;
+	--secondary-color-2: #000;
+	--gradient-color-1: #020202;
+	--gradient-color-2: #060606;
+	--entry-color-1: #181818;
+	--entry-color-2: #101010;
+	--entry-color-3: #080808;
+	--shadow-color-1: #000;
+	--border-color-1: #fff;
+	--text-color-1: #fff;
+	--text-color-2: #000;
+	--text-color-3: #808080;
+	--accent-color-1: #0ff;
+	--accent-color-2: #0cc;
+	--error-color-1: #f00;
+	--error-color-2: #c00;
+	--warning-color-1: #ff0;
+	--warning-color-2: #cc0;
+	--amu-color-1: #0ff;
+	--amu-color-2: #0cc;
+}
+
+:root[data-color-scheme='light'][data-color-contrast='medium'] {
 	--primary-color-1: #bebec1;
 	--primary-color-2: #cdcdd0;
 	--secondary-color-1: #dcdcdf;
 	--secondary-color-2: #ebebee;
-	--text-color-1: #19191c;
-	--text-color-3: #828285;
-	--border-color-1: #555558;
-	--shadow-color-1: #bebec1;
+	--gradient-color-1: #e0e0e3;
+	--gradient-color-2: #e8e8eb;
 	--entry-color-1: #ebebee;
 	--entry-color-2: #dcdcdf;
 	--entry-color-3: #cdcdd0;
-	--gradient-color-1: #e0e0e3;
-	--gradient-color-2: #e8e8eb;
+	--shadow-color-1: #bebec1;
+	--border-color-1: #555558;
+	--text-color-1: #19191c;
+	--text-color-2: #ebebee;
+	--text-color-3: #828285;
+	--accent-color-1: #0080ff;
+	--accent-color-2: #06c;
+	--error-color-1: #f33;
+	--error-color-2: #900;
 	--warning-color-1: #f60;
 	--warning-color-2: #cc5200;
+	--amu-color-1: #002d69;
+	--amu-color-2: #00214d;
+}
+
+:root[data-color-scheme='light'][data-color-contrast='high'] {
+	--primary-color-1: #e7e7e7;
+	--primary-color-2: #efefef;
+	--secondary-color-1: #f7f7f7;
+	--secondary-color-2: #fff;
+	--gradient-color-1: #f9f9f9;
+	--gradient-color-2: #fdfdfd;
+	--entry-color-1: #fff;
+	--entry-color-2: #f7f7f7;
+	--entry-color-3: #efefef;
+	--shadow-color-1: #e7e7e7;
+	--border-color-1: #000;
+	--text-color-1: #000;
+	--text-color-2: #fff;
+	--text-color-3: #808080;
+	--accent-color-1: #00f;
+	--accent-color-2: #00c;
+	--error-color-1: #f00;
+	--error-color-2: #c00;
+	--warning-color-1: #f60;
+	--warning-color-2: #cc5200;
+	--amu-color-1: #00f;
+	--amu-color-2: #00c;
 }
 
 @font-face {
@@ -248,11 +308,18 @@ body {
 .amu-logo {
 	height: 1.5em;
 	margin-right: 0.3em;
+}
+
+:root[data-color-scheme='dark'][data-color-contrast='medium'] .amu-logo {
 	filter: invert(99%) sepia(0%) saturate(0%) hue-rotate(268deg) brightness(108%) contrast(100%);
 }
 
-:root[data-color-scheme='light'] .amu-logo {
+:root[data-color-scheme='light'][data-color-contrast='medium'] .amu-logo {
 	filter: invert(15%) sepia(38%) saturate(3554%) hue-rotate(196deg) brightness(95%) contrast(108%);
+}
+
+:root[data-color-scheme='light'][data-color-contrast='high'] .amu-logo {
+	filter: invert(10%) sepia(99%) saturate(7411%) hue-rotate(247deg) brightness(86%) contrast(144%);
 }
 
 /* buttons */
@@ -999,7 +1066,6 @@ input[type='radio']:disabled {
 .download-key .tooltip i,
 .last-update-container .tooltip i,
 .crypto-row .tooltip i,
-.load-text .tooltip i,
 .code-text .tooltip i,
 .label-container .tooltip i {
 	color: var(--border-color-1);
@@ -1009,10 +1075,9 @@ input[type='radio']:disabled {
 		outline 0s;
 }
 
-.info-row .tooltip .tooltip-text,
-.load-text .tooltip .tooltip-text {
+.info-row .tooltip .tooltip-text {
 	text-align: left;
-	font-size: 0.8em;
+	font-size: 0.67em;
 }
 
 .slider-area {
@@ -1131,6 +1196,11 @@ td {
 	padding: 0.2em;
 	text-align: left;
 	text-shadow: 0 4px 4px var(--shadow-color-1);
+}
+
+th:not(:last-of-type),
+td:not(:last-of-type) {
+	border-right: 1px solid var(--text-color-3);
 }
 
 th {
@@ -1280,10 +1350,16 @@ th .checkbox-entry {
 	overflow-y: hidden;
 }
 
-.title-entry button,
-.code-entry button {
+.title-entry button {
 	justify-content: left;
 	text-align: left;
+}
+
+.button-entry button,
+.code-entry button,
+.date-entry,
+.info-entry {
+	text-align: center;
 }
 
 .title-entry.disabled,
@@ -1470,6 +1546,7 @@ button.popup {
 .account-ul {
 	list-style-type: none;
 	margin-top: 0.25em;
+	margin-bottom: 0;
 	padding-left: 0;
 	font-weight: 500;
 }

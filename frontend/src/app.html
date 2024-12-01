@@ -25,5 +25,9 @@
 		if (colorScheme) {
 			document.documentElement.setAttribute('data-color-scheme', colorScheme);
 		}
+		const colorContrast = localStorage.getItem('colorContrast');
+		if (colorContrast) {
+			document.documentElement.setAttribute('data-color-contrast', colorContrast);
+		}
 	});
 </script>

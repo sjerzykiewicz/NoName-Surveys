@@ -2,20 +2,28 @@
 	import { Hamburger } from 'svelte-hamburgers';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { M } from '$lib/stores/global';
+	import { colorScheme, colorContrast, M } from '$lib/stores/global';
 	import NavLinks from './NavLinks.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import NavButtons from './NavButtons.svelte';
 	import noname_dark from '$lib/assets/noname_dark.png';
+	import noname_black from '$lib/assets/noname_black.png';
 	import noname_light from '$lib/assets/noname_light.png';
-	import { colorScheme } from '$lib/stores/global';
+	import noname_white from '$lib/assets/noname_white.png';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	let open: boolean = false;
 
-	$: logo = $colorScheme === 'dark' ? noname_light : noname_dark;
+	$: logo =
+		$colorScheme === 'dark'
+			? $colorContrast === 'high'
+				? noname_white
+				: noname_light
+			: $colorContrast === 'high'
+				? noname_black
+				: noname_dark;
 
 	function handleClick(event: MouseEvent) {
 		if (open && !(event.target as HTMLElement).closest('.hamburger')) {
@@ -106,9 +114,11 @@
 	}
 
 	.nav-logo {
+		display: flex;
 		position: absolute;
-		top: 0.25em;
-		left: 0.25em;
+		top: 0;
+		left: 0;
+		padding: 0.125em;
 		text-decoration: none;
 		opacity: 1;
 		transition:

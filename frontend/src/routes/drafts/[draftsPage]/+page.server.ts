@@ -1,5 +1,11 @@
 import type { PageServerLoad } from './$types';
-import { countSurveyDrafts, getSurveyDrafts } from '$lib/server/database';
+import {
+	countSurveyDrafts,
+	getSurveyDrafts,
+	getUserGroupsWithKeys,
+	getUsersWithKeys,
+	countSurveys
+} from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
 import { getEmail } from '$lib/utils/getEmail';
 
@@ -24,11 +30,29 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
 		creation_date: string;
 	}[] = await draftsResponse.json();
 
-	const countResponse = await countSurveyDrafts(user_email);
-	if (!countResponse.ok) {
-		error(countResponse.status, { message: await countResponse.json() });
+	const draftCountResponse = await countSurveyDrafts(user_email);
+	if (!draftCountResponse.ok) {
+		error(draftCountResponse.status, { message: await draftCountResponse.json() });
 	}
-	const numDrafts: number = await countResponse.json();
+	const numDrafts: number = await draftCountResponse.json();
 
-	return { drafts, numDrafts };
+	const surveyCountResponse = await countSurveys(user_email);
+	if (!surveyCountResponse.ok) {
+		error(surveyCountResponse.status, { message: await surveyCountResponse.json() });
+	}
+	const numSurveys: number = await surveyCountResponse.json();
+
+	const groupsResponse = await getUserGroupsWithKeys(user_email);
+	if (!groupsResponse.ok) {
+		error(groupsResponse.status, { message: await groupsResponse.json() });
+	}
+	const group_list: string[] = await groupsResponse.json();
+
+	const usersResponse = await getUsersWithKeys();
+	if (!usersResponse.ok) {
+		error(usersResponse.status, { message: await usersResponse.json() });
+	}
+	const user_list: string[] = await usersResponse.json();
+
+	return { drafts, numDrafts, numSurveys, group_list, user_list };
 };

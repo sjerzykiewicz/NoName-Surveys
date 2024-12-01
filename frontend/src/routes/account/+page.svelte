@@ -11,11 +11,16 @@
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import AccountButtons from '$lib/components/account-page/AccountButtons.svelte';
+	import QrCodeModal from '$lib/components/account-page/QrCodeModal.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let data;
+
+	let isModalHidden: boolean = true;
 </script>
+
+<QrCodeModal bind:isHidden={isModalHidden} title={$t('invitation')} id="account-modal" />
 
 {#if $page.data.session}
 	<Header>
@@ -38,7 +43,7 @@
 	</Header>
 
 	<Content>
-		<DownloadKey lastTime={data.keyCreationDate} bind:hasKey={data.hasKey} />
+		<DownloadKey bind:lastTime={data.keyCreationDate} bind:hasKey={data.hasKey} />
 		<AccountButtons />
 		<SignOut />
 	</Content>
@@ -48,8 +53,17 @@
 		<AccountButtons />
 	</Content>
 {/if}
+
 <Footer>
-	<OpenSourceInfo />
+	<div class="footer-box">
+		<OpenSourceInfo />
+		<button
+			title={$t('invite_title')}
+			class="footer-button"
+			on:click={() => (isModalHidden = false)}
+			><i class="symbol">qr_code_2</i><Tx text="invite" /></button
+		>
+	</div>
 </Footer>
 
 <style>
@@ -59,5 +73,12 @@
 
 	.generated {
 		color: var(--accent-color-1);
+	}
+
+	.footer-box {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		gap: 0.5em;
 	}
 </style>

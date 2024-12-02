@@ -138,11 +138,9 @@ def get_user_group_members_count(user_group_id: int, session: Session) -> int:
     return session.exec(statement).one()
 
 
-def get_user_group_members(
-    user_group_id: int, session: Session
-) -> list[UserGroupMember]:
+def get_user_group_members(user_group_id: int, session: Session) -> list[int]:
     statement = (
-        select(UserGroupMember)
+        select(UserGroupMember.user_id)
         .where(UserGroupMember.group_id == user_group_id)
         .where(UserGroupMember.is_deleted == False)  # noqa: E712
     )

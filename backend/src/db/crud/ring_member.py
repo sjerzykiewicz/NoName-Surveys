@@ -12,11 +12,16 @@ def get_ring_members_for_survey(
     return session.exec(statement).all()
 
 
+def get_public_keys_for_survey(survey_id: int, session: Session) -> list[str]:
+    statement = select(RingMember.public_key).where(RingMember.survey_id == survey_id)
+    return session.exec(statement).all()
+
+
 def get_ring_members_for_survey_paginated(
     survey_id: int, offset: int, limit: int, session: Session
-) -> list[RingMemberBase]:
+) -> list[str]:
     statement = (
-        select(RingMember)
+        select(RingMember.user_email)
         .where(RingMember.survey_id == survey_id)
         .order_by(RingMember.user_email.asc())
         .offset(offset)

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
+import src.api.utils.helpers as helpers
 import src.db.crud.survey_draft as survey_draft_crud
-import src.db.crud.user as user_crud
 from src.api.models.surveys.survey import SurveyStructure
 from src.api.models.surveys.survey_draft import (
     SurveyDraftCreate,
@@ -29,12 +29,8 @@ PAGE_SIZE = 10
 async def get_survey_drafts(
     page: int, user_input: User, session: Session = Depends(get_session)
 ):
-    if page < 0:
-        raise HTTPException(status_code=400, detail="Invalid page number")
-
-    user = user_crud.get_user_by_email(user_input.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not found")
+    helpers.validate_page_for_pagination(page)
+    user = helpers.get_user_by_email(user_input.user_email, session)
 
     return [
         SurveyDraftHeadersOutput(
@@ -57,21 +53,13 @@ async def get_survey_draft(
     survey_draft_fetch: SurveyDraftUserActions,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(survey_draft_fetch.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not found")
+    user = helpers.get_user_by_email(survey_draft_fetch.user_email, session)
 
-    survey_draft = survey_draft_crud.get_not_deleted_survey_draft_by_id(
+    survey_draft = helpers.get_not_deleted_survey_draft_by_id(
         survey_draft_fetch.id, session
     )
-    if survey_draft is None:
-        raise HTTPException(status_code=404, detail="Survey Draft does not exist")
 
-    if survey_draft.creator_id != user.id:
-        raise HTTPException(
-            status_code=403,
-            detail="User does not have access to this Survey Draft",
-        )
+    helpers.check_if_user_has_access(survey_draft.creator_id, user.id)
 
     return SurveyDraftFetchOutput(
         title=survey_draft.title,
@@ -90,9 +78,7 @@ async def delete_survey_drafts(
     survey_draft_delete: SurveyDraftUserActionDelete,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(survey_draft_delete.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not found")
+    user = helpers.get_user_by_email(survey_draft_delete.user_email, session)
 
     deleted_survey_drafts = survey_draft_crud.delete_survey_drafts(
         user.id, survey_draft_delete.ids, session
@@ -116,9 +102,7 @@ async def create_survey_draft(
     survey_draft_create: SurveyDraftCreate,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(survey_draft_create.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not found")
+    user = helpers.get_user_by_email(survey_draft_create.user_email, session)
 
     survey_drafts_count = (
         survey_draft_crud.get_count_of_not_deleted_survey_drafts_for_user(
@@ -158,10 +142,7 @@ async def create_survey_draft(
 async def count_survey_drafts(
     user_input: User, session: Session = Depends(get_session)
 ):
-    user = user_crud.get_user_by_email(user_input.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not found")
-
+    user = helpers.get_user_by_email(user_input.user_email, session)
     return survey_draft_crud.get_count_of_not_deleted_survey_drafts_for_user(
         user.id, session
     )

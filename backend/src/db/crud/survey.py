@@ -180,8 +180,8 @@ def get_all_users_with_access_to_survey_count(survey_id: int, session: Session) 
 
 def get_all_users_with_no_access_to_survey(
     survey_id: int, session: Session
-) -> list[User]:
-    statement = select(User).where(
+) -> list[str]:
+    statement = select(User.email).where(
         User.id.notin_(
             select(AccessToViewResults.user_id)
             .where(AccessToViewResults.survey_id == survey_id)

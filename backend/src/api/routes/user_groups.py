@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
+import src.api.utils.helpers as helpers
 import src.db.crud.user as user_crud
 import src.db.crud.user_groups as user_groups_crud
 from src.api.models.user_groups.user_groups import (  # noqa
@@ -31,10 +32,7 @@ async def get_user_groups_count(
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_creator.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
-
+    user = helpers.get_user_by_email(user_group_creator.user_email, session)
     return user_groups_crud.get_count_of_user_groups_of_user(user.id, session)
 
 
@@ -48,22 +46,13 @@ async def get_user_groups(
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
-    if page < 0:
-        raise HTTPException(status_code=400, detail="Invalid page number")
-
-    user = user_crud.get_user_by_email(user_group_creator.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
+    helpers.validate_page_for_pagination(page)
+    user = helpers.get_user_by_email(user_group_creator.user_email, session)
     return [
         AllUserGroupsOutput(
             user_group_name=user_group.name,
             all_members_have_public_keys=user_crud.all_users_have_public_keys(
-                [
-                    member.user_id
-                    for member in user_groups_crud.get_user_group_members(
-                        user_group.id, session
-                    )
-                ],
+                user_groups_crud.get_user_group_members(user_group.id, session),
                 session,
             ),
         )
@@ -85,19 +74,12 @@ async def get_user_groups_with_members_having_public_keys(
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_creator.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
+    user = helpers.get_user_by_email(user_group_creator.user_email, session)
     return [
         user_group.name
         for user_group in user_groups_crud.get_all_user_groups_of_user(user.id, session)
         if user_crud.all_users_have_public_keys(
-            [
-                member.user_id
-                for member in user_groups_crud.get_user_group_members(
-                    user_group.id, session
-                )
-            ],
+            user_groups_crud.get_user_group_members(user_group.id, session),
             session,
         )
     ]
@@ -112,23 +94,11 @@ async def get_user_group_members_count(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_request.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
-
-    user_group = user_groups_crud.get_user_group_by_name(
+    user = helpers.get_user_by_email(user_group_request.user_email, session)
+    user_group = helpers.get_user_group_by_name(
         user.id, user_group_request.name, session
     )
-    if user_group is None:
-        raise HTTPException(
-            status_code=400, detail="User group not found for the given user"
-        )
-
-    if user_group.creator_id != user.id:
-        raise HTTPException(
-            status_code=400,
-            detail="User does not have access to this User Group",
-        )
+    helpers.check_if_user_has_access(user.id, user_group.creator_id)
 
     return user_groups_crud.get_user_group_members_count(user_group.id, session)
 
@@ -142,23 +112,11 @@ async def get_users_who_are_not_members(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_request.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
-
-    user_group = user_groups_crud.get_user_group_by_name(
+    user = helpers.get_user_by_email(user_group_request.user_email, session)
+    user_group = helpers.get_user_group_by_name(
         user.id, user_group_request.name, session
     )
-    if user_group is None:
-        raise HTTPException(
-            status_code=400, detail="User group not found for the given user"
-        )
-
-    if user_group.creator_id != user.id:
-        raise HTTPException(
-            status_code=400,
-            detail="User does not have access to this User Group",
-        )
+    helpers.check_if_user_has_access(user.id, user_group.creator_id)
 
     return [
         user.email
@@ -177,23 +135,11 @@ async def get_whole_user_group(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_request.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
-
-    user_group = user_groups_crud.get_user_group_by_name(
+    user = helpers.get_user_by_email(user_group_request.user_email, session)
+    user_group = helpers.get_user_group_by_name(
         user.id, user_group_request.name, session
     )
-    if user_group is None:
-        raise HTTPException(
-            status_code=400, detail="User group not found for the given user"
-        )
-
-    if user_group.creator_id != user.id:
-        raise HTTPException(
-            status_code=400,
-            detail="User does not have access to this User Group",
-        )
+    helpers.check_if_user_has_access(user.id, user_group.creator_id)
 
     return [
         UserGroupMembersOutput(
@@ -215,26 +161,12 @@ async def get_user_group(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
-    if page < 0:
-        raise HTTPException(status_code=400, detail="Invalid page number")
-
-    user = user_crud.get_user_by_email(user_group_request.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
-
-    user_group = user_groups_crud.get_user_group_by_name(
+    helpers.validate_page_for_pagination(page)
+    user = helpers.get_user_by_email(user_group_request.user_email, session)
+    user_group = helpers.get_user_group_by_name(
         user.id, user_group_request.name, session
     )
-    if user_group is None:
-        raise HTTPException(
-            status_code=400, detail="User group not found for the given user"
-        )
-
-    if user_group.creator_id != user.id:
-        raise HTTPException(
-            status_code=400,
-            detail="User does not have access to this User Group",
-        )
+    helpers.check_if_user_has_access(user.id, user_group.creator_id)
 
     return [
         UserGroupMembersOutput(
@@ -251,9 +183,7 @@ async def create_user_group(
     user_group_creation_request: UserGroupCreate,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_creation_request.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
+    user = helpers.get_user_by_email(user_group_creation_request.user_email, session)
 
     user_groups_count = user_groups_crud.get_count_of_user_groups_of_user(
         user.id, session
@@ -288,8 +218,10 @@ async def create_user_group(
     )
 
     users_to_add = [
-        user_crud.get_user_by_email(email, session).id
-        for email in user_group_creation_request.user_group_members
+        user_to_add.id
+        for user_to_add in user_crud.get_users_by_emails(
+            user_group_creation_request.user_group_members, session
+        )
     ]
     added_users = user_groups_crud.add_users_to_group(
         user_group.id, users_to_add, session
@@ -311,31 +243,22 @@ async def rename_user_group(
     user_group_rename_request: UserGroupNameUpdate,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_rename_request.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
+    user = helpers.get_user_by_email(user_group_rename_request.user_email, session)
 
-    existing_user_group_with_new_name = user_groups_crud.get_user_group_by_name(
-        user.id, user_group_rename_request.new_name, session
-    )
-    if existing_user_group_with_new_name is not None:
+    if (
+        user_groups_crud.get_user_group_by_name(
+            user.id, user_group_rename_request.new_name, session
+        )
+        is not None
+    ):
         raise HTTPException(
             status_code=400, detail="User group with the new name already exists"
         )
 
-    user_group = user_groups_crud.get_user_group_by_name(
+    user_group = helpers.get_user_group_by_name(
         user.id, user_group_rename_request.name, session
     )
-    if user_group is None:
-        raise HTTPException(
-            status_code=400, detail="User group not found for the given user"
-        )
-
-    if user_group.creator_id != user.id:
-        raise HTTPException(
-            status_code=400,
-            detail="User does not have access to this User Group",
-        )
+    helpers.check_if_user_has_access(user.id, user_group.creator_id)
 
     user_groups_crud.update_user_group_name(
         user_group.id, user_group_rename_request.new_name, session
@@ -349,9 +272,7 @@ async def delete_user_groups(
     user_group_request: UserGroupMultipleActions,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_request.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
+    user = helpers.get_user_by_email(user_group_request.user_email, session)
 
     deleted_user_groups = user_groups_crud.delete_user_groups(
         user.id, user_group_request.names, session
@@ -372,28 +293,17 @@ async def add_users_to_group(
     user_group_request: UserGroupUsersActions,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_request.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
-
-    user_group = user_groups_crud.get_user_group_by_name(
+    user = helpers.get_user_by_email(user_group_request.user_email, session)
+    user_group = helpers.get_user_group_by_name(
         user.id, user_group_request.name, session
     )
-
-    if user_group is None:
-        raise HTTPException(
-            status_code=400, detail="User group not found for the given user"
-        )
-
-    if user_group.creator_id != user.id:
-        raise HTTPException(
-            status_code=400,
-            detail="User does not have access to this User Group",
-        )
+    helpers.check_if_user_has_access(user.id, user_group.creator_id)
 
     users_to_add = [
-        user_crud.get_user_by_email(email, session).id
-        for email in user_group_request.users
+        user_to_add.id
+        for user_to_add in user_crud.get_users_by_emails(
+            user_group_request.users, session
+        )
     ]
     added_users = user_groups_crud.add_users_to_group(
         user_group.id, users_to_add, session
@@ -416,28 +326,17 @@ async def remove_users_from_group(
     user_group_request: UserGroupUsersActions,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_group_request.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
-
-    user_group = user_groups_crud.get_user_group_by_name(
+    user = helpers.get_user_by_email(user_group_request.user_email, session)
+    user_group = helpers.get_user_group_by_name(
         user.id, user_group_request.name, session
     )
-
-    if user_group is None:
-        raise HTTPException(
-            status_code=400, detail="User group not found for the given user"
-        )
-
-    if user_group.creator_id != user.id:
-        raise HTTPException(
-            status_code=400,
-            detail="User does not have access to this User Group",
-        )
+    helpers.check_if_user_has_access(user.id, user_group.creator_id)
 
     users_to_remove = [
-        user_crud.get_user_by_email(email, session).id
-        for email in user_group_request.users
+        user_to_remove.id
+        for user_to_remove in user_crud.get_users_by_emails(
+            user_group_request.users, session
+        )
     ]
     removed_users = user_groups_crud.remove_users_from_group(
         user_group.id, users_to_remove, session

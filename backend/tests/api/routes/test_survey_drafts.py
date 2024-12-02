@@ -81,7 +81,7 @@ def test_get_survey_drafts_user_is_not_creator(client: TestClient):
     )
 
     # then
-    assert response.status_code == 403
+    assert response.status_code == 400
 
 
 def test_get_survey_draft(client: TestClient):

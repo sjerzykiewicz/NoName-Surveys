@@ -105,7 +105,8 @@ pub fn get_keypair() -> KeyPair {
     let generator: BigUint = BigUint::parse_bytes(G_HEX, 16).unwrap();
 
     let mut rng = rand::thread_rng();
-    let priv_key = rng.gen_biguint_below(&order - BigUint::One) + BigUint::One;
+    let range = &order - BigUint::one();
+    let priv_key = rng.gen_biguint_below(&range) + BigUint::one();
     let pub_key = generator.modpow(&priv_key, &prime);
 
     let private_pem = encode(&Pem::new("PRIVATE KEY", priv_key.to_string().as_bytes()));

@@ -25,7 +25,7 @@ class UserUpdatePublicKey(User):
 
     @field_validator("public_key")
     def validate_user_public_key(cls, v) -> str:
-        return Base.validate_pem_key(v) and Base.validate_key_correctness(v)
+        return Base.validate_public_key(v)
 
     @field_validator("fingerprint")
     def validate_fingerprint(cls, v) -> str:

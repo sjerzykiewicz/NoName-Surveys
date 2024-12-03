@@ -1,13 +1,7 @@
 import type { PageServerLoad } from './$types';
-import {
-	getUserGroup,
-	countUserGroupMembers,
-	getAllUsersWhoAreNotMembers
-} from '$lib/server/database';
 import { error } from '@sveltejs/kit';
-import { getEmail } from '$lib/utils/getEmail';
 
-export const load: PageServerLoad = async ({ parent, params, cookies }) => {
+export const load: PageServerLoad = async ({ parent, params, url }) => {
 	const { session } = await parent();
 	if (!session) {
 		error(401, 'You must be logged in to access this page.');
@@ -15,23 +9,39 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
 
 	const group = params.group;
 	const page = parseInt(params.groupPage);
+	const host = url.origin;
 
-	const sessionCookie = cookies.get('user_session');
-	const user_email = await getEmail(sessionCookie ?? '');
-
-	const membersResponse = await getUserGroup(user_email, group, page);
+	const membersResponse = await fetch(`${host}/api/groups/members/all`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ name: group, page })
+	});
 	if (!membersResponse.ok) {
 		error(membersResponse.status, { message: await membersResponse.json() });
 	}
 	const members: { email: string; has_public_key: boolean }[] = await membersResponse.json();
 
-	const notMembersResponse = await getAllUsersWhoAreNotMembers(user_email, group);
+	const notMembersResponse = await fetch(`${host}/api/groups/members/all-not-members`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ name: group })
+	});
 	if (!notMembersResponse.ok) {
 		error(notMembersResponse.status, { message: await notMembersResponse.json() });
 	}
 	const notMembers: string[] = await notMembersResponse.json();
 
-	const countResponse = await countUserGroupMembers(user_email, group);
+	const countResponse = await fetch(`${host}/api/groups/members/count`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ name: group })
+	});
 	if (!countResponse.ok) {
 		error(countResponse.status, { message: await countResponse.json() });
 	}

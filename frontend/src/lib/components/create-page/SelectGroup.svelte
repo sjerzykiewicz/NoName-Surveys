@@ -13,7 +13,7 @@
 	export let selectedGroups: string[] = [];
 
 	async function getGroupMembers(name: string): Promise<string[]> {
-		const response = await fetch('/api/groups/fetch', {
+		const response = await fetch('/api/groups/members/fetch', {
 			method: 'POST',
 			body: JSON.stringify({ name: name }),
 			headers: {

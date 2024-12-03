@@ -1,6 +1,7 @@
 import { _getUserInfo } from '../../routes/api/oauth/user/+server';
+import { error } from '@sveltejs/kit';
 
-export async function getEmail(sessionCookie: string) {
+export async function getEmail(sessionCookie: string): Promise<string> {
 	if (sessionCookie) {
 		const sessionCookieJson = JSON.parse(sessionCookie);
 		const userData = await _getUserInfo(
@@ -11,6 +12,5 @@ export async function getEmail(sessionCookie: string) {
 			return userData.email;
 		}
 	}
-
-	return '';
+	error(401, 'Unauthorized');
 }

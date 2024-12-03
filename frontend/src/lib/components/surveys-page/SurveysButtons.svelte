@@ -55,7 +55,7 @@
 		}
 
 		if (sharedSurveyCodes.length > 0) {
-			const rejectResponse = await fetch('/api/surveys/reject-access', {
+			const rejectResponse = await fetch('/api/surveys/access/reject', {
 				method: 'POST',
 				body: JSON.stringify({
 					survey_codes: sharedSurveyCodes

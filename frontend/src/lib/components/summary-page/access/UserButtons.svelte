@@ -56,7 +56,7 @@
 	async function addUsers() {
 		if (!checkCorrectness(selectedUsersToAdd)) return;
 
-		const response = await fetch('/api/surveys/give-access', {
+		const response = await fetch('/api/surveys/access/give', {
 			method: 'POST',
 			body: JSON.stringify({
 				survey_code: code,
@@ -80,7 +80,7 @@
 	}
 
 	async function removeUsers() {
-		const response = await fetch('/api/surveys/take-away-access', {
+		const response = await fetch('/api/surveys/access/take-away', {
 			method: 'POST',
 			body: JSON.stringify({
 				survey_code: code,

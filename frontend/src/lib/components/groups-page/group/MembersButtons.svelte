@@ -59,7 +59,7 @@
 	async function addMembers() {
 		if (!checkCorrectness(selectedMembersToAdd)) return;
 
-		const response = await fetch('/api/groups/add-users', {
+		const response = await fetch('/api/groups/members/add', {
 			method: 'POST',
 			body: JSON.stringify({
 				name: group,
@@ -106,7 +106,7 @@
 			return;
 		}
 
-		const response = await fetch('/api/groups/remove-users', {
+		const response = await fetch('/api/groups/members/delete', {
 			method: 'POST',
 			body: JSON.stringify({
 				name: group,

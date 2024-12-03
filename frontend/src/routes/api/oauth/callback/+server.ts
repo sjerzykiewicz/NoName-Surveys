@@ -48,9 +48,9 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		const userData = await _getUserInfo(responseData.oauth_token, responseData.oauth_token_secret);
 
 		if (userData.email) {
-			const isUserRegistered = await (await validateUser(userData.email!)).json();
+			const isUserRegistered = await (await validateUser(userData.email)).json();
 			if (!isUserRegistered) {
-				await createUser(userData.email!);
+				await createUser(userData.email);
 			}
 		}
 

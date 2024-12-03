@@ -1,11 +1,11 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
-import { getSurvey } from '$lib/server/database';
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	default: async ({ request, url }) => {
 		const data = await request.formData();
 		const code = data.get('survey-code');
+		const host = url.origin;
 
 		if (code === null || code === '') {
 			return fail(422, {
@@ -21,7 +21,13 @@ export const actions: Actions = {
 			});
 		}
 
-		const response = await getSurvey(code.toString());
+		const response = await fetch(`${host}/api/surveys/fetch`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ survey_code: code })
+		});
 		if (!response.ok) {
 			return fail(404, { error: 'Survey not found.' });
 		}

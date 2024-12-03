@@ -66,12 +66,18 @@ repos:
         files: ^frontend/
         pass_filenames: false
 
-      - id: lint
-        name: lint
+      - id: eslint
+        name: eslint
         entry: npm run lint
         args: ['--prefix', 'frontend']
         language: system
         files: ^frontend/
+        pass_filenames: false
+
+      - id: stylelint
+        name: stylelint
+        entry: bash -c 'cd frontend && npx stylelint "src/*.css" --fix'
+        language: system
         pass_filenames: false
 
       - id: rustfmt

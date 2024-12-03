@@ -85,6 +85,9 @@ def test_save_survey_answer_public_survey(client: TestClient):
                     "question": "Is this a test?",
                     "choices": ["Yes", "No"],
                     "answer": "Yes",
+                },
+                {
+                    "subtitle": "This test section covers..."
                 }
             ],
         },

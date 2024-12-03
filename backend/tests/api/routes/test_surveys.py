@@ -12,6 +12,9 @@ TEST_SURVEY_STRUCTURE = {
             "required": True,
             "question": "Is this a test?",
             "choices": ["Yes", "No"]
+        },
+        {
+            "subtitle": "This test section covers..."
         }
     ]
 }

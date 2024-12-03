@@ -1,4 +1,3 @@
-use getrandom::Error;
 use num_bigint::{BigUint, RandBigInt};
 use num_traits::{One, Zero};
 use pem::{encode, parse, Pem};
@@ -106,7 +105,7 @@ pub fn get_keypair() -> KeyPair {
     let generator: BigUint = BigUint::parse_bytes(G_HEX, 16).unwrap();
 
     let mut rng = rand::thread_rng();
-    let priv_key = rng.gen_biguint_below(&order);
+    let priv_key = rng.gen_biguint_below(&order - BigUint::One) + BigUint::One;
     let pub_key = generator.modpow(&priv_key, &prime);
 
     let private_pem = encode(&Pem::new("PRIVATE KEY", priv_key.to_string().as_bytes()));

@@ -1,6 +1,9 @@
 from re import UNICODE, match
 
+from pem import PublicKey
 from pydantic import BaseModel, ConfigDict
+
+from src.cryptography.parameters import p, q
 
 EMAIL_REGEX = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 SURVEY_CODE_REGEX = r"^\d{6}$"
@@ -94,6 +97,15 @@ class Base(BaseModel):
 
         if not match(KEY_PEM_REGEX, value):
             raise ValueError("invalid public key format")
+        return value
+
+    def validate_key_correctness(value):
+        if value is None or not isinstance(value, str) or value == "":
+            raise ValueError("public key must be provided")
+
+        decoded_key = int(PublicKey(value).decoded_payload)
+        if decoded_key <= 0 or decoded_key >= p or pow(decoded_key, q, p) != 1:
+            raise ValueError("incorrect public key")
         return value
 
     def validate_fingerprint(value):

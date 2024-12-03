@@ -4,6 +4,7 @@ from typing import Optional, Union
 from pydantic import Field, ValidationInfo, field_validator
 
 from src.api.models.base import Base
+from src.api.models.metadata.subtitle import Subtitle
 from src.api.models.questions.binary_question import BinaryQuestion
 from src.api.models.questions.list_question import ListQuestion
 from src.api.models.questions.multi_question import MultiQuestion
@@ -27,6 +28,7 @@ class SurveyStructure(Base):
             SingleQuestion,
             SliderQuestion,
             TextQuestion,
+            Subtitle,
         ]
     ] = Field(
         min_length=1,

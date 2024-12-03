@@ -85,6 +85,9 @@ def test_save_survey_answer_public_survey(client: TestClient):
                     "question": "Is this a test?",
                     "choices": ["Yes", "No"],
                     "answer": "Yes",
+                },
+                {
+                    "subtitle": "This test section covers..."
                 }
             ],
         },
@@ -92,3 +95,33 @@ def test_save_survey_answer_public_survey(client: TestClient):
 
     # then
     assert response.status_code == 200
+
+
+def test_save_survey_answer_public_survey_wrong_answer_structure(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+    create_survey_response = create_survey(client, TEST_VALID_USER_EMAIL_1)
+    survey_code = create_survey_response.json()["survey_code"]
+
+    # when
+    response = client.post(
+        "/answers/fill",
+        json={
+            "survey_code": survey_code,
+            "questions": [
+                {
+                    "question_type": "binary",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": "Yes",
+                },
+                {
+                    "subtitle": "This is a mismatched subtitle"
+                }
+            ],
+        },
+    )
+
+    # then
+    assert response.status_code == 400

@@ -1,6 +1,7 @@
 import pytest
 from src.api.models.base import Base
 
+from tests.common_values import TEST_PUBLIC_KEY_1
 
 def test_validate_email():
     assert Base.validate_email("test@example.com") == "test@example.com"
@@ -110,20 +111,19 @@ def test_validate_user_group_names():
 
 
 def test_validate_pem_key():
-    valid_key = "-----BEGIN PUBLIC KEY-----\n1\n-----END PUBLIC KEY-----"
-    assert Base.validate_pem_key(valid_key) == valid_key
+    assert Base.validate_public_key(TEST_PUBLIC_KEY_1) == TEST_PUBLIC_KEY_1
 
     with pytest.raises(ValueError):
-        Base.validate_pem_key("invalid-key")
+        Base.validate_public_key("invalid-key")
 
     with pytest.raises(ValueError):
-        Base.validate_pem_key(None)
+        Base.validate_public_key(None)
 
     with pytest.raises(ValueError):
-        Base.validate_pem_key("")
+        Base.validate_public_key("")
 
     with pytest.raises(ValueError):
-        Base.validate_pem_key(5)
+        Base.validate_public_key(5)
 
 
 def test_validate_fingerprint():

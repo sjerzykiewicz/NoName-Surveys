@@ -9,15 +9,18 @@
 
 	export let isHidden: boolean = true;
 	export let title: string;
-	export let deleteEntries: () => void;
+	export let deleteEntries: () => Promise<void>;
 
 	let innerWidth: number;
+	let isButtonDisabled: boolean = false;
 
-	function handleEnter(event: KeyboardEvent) {
-		if (!isHidden && event.key === 'Enter') {
+	async function handleEnter(event: KeyboardEvent) {
+		if (!isHidden && !isButtonDisabled && event.key === 'Enter') {
 			event.preventDefault();
-			deleteEntries();
 			event.stopImmediatePropagation();
+			isButtonDisabled = true;
+			await deleteEntries();
+			isButtonDisabled = false;
 		}
 	}
 </script>
@@ -30,9 +33,12 @@
 	<button
 		title={$t('delete')}
 		class="save"
-		on:click={() => {
+		disabled={isButtonDisabled}
+		on:click={async () => {
 			isHidden = true;
-			deleteEntries();
+			isButtonDisabled = true;
+			await deleteEntries();
+			isButtonDisabled = false;
 		}}
 	>
 		<i class="symbol">delete</i><Tx text="delete" />

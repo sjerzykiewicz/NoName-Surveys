@@ -30,3 +30,9 @@
 		{/key}
 	</p>
 {/if}
+
+<style>
+	.error {
+		margin: 0em;
+	}
+</style>

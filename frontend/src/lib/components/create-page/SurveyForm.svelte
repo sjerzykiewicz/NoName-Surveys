@@ -104,11 +104,11 @@
 		await invalidateAll();
 	}
 
-	function handleEnter(event: KeyboardEvent) {
+	async function handleEnter(event: KeyboardEvent) {
 		if (!isDraftModalHidden && event.key === 'Enter') {
 			event.preventDefault();
-			saveDraft(false);
 			event.stopImmediatePropagation();
+			await saveDraft(false);
 		}
 	}
 
@@ -125,10 +125,10 @@
 	--width={innerWidth <= $M ? '20em' : '24em'}
 >
 	<span slot="content"><Tx text="saving_draft_alert" /></span>
-	<button title={$t('overwrite_draft')} class="save" on:click={() => saveDraft(true)}
+	<button title={$t('overwrite_draft')} class="save" on:click={async () => await saveDraft(true)}
 		><i class="symbol">save_as</i><Tx text="overwrite_draft" /></button
 	>
-	<button title={$t('save_new_draft')} class="save" on:click={() => saveDraft(false)}
+	<button title={$t('save_new_draft')} class="save" on:click={async () => await saveDraft(false)}
 		><i class="symbol">save</i><Tx text="save_new_draft" /></button
 	>
 </Modal>

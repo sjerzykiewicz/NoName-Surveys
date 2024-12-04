@@ -6,12 +6,21 @@
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
+	let isSignInButtonDisabled = false;
 </script>
 
 <h1><Tx text="account_sign_in" /></h1>
 <div class="sign-buttons">
-	<button title={$t('sign_in')} class="sign-in" on:click={() => startOAuth('/account')}
-		><img src={amu} alt="AMU logo" class="amu-logo" /><Tx text="sign_in" /></button
+	<button
+		title={$t('sign_in')}
+		class="sign-in"
+		disabled={isSignInButtonDisabled}
+		on:click={async () => {
+			isSignInButtonDisabled = true;
+			await startOAuth('/account');
+			isSignInButtonDisabled = false;
+		}}><img src={amu} alt="AMU logo" class="amu-logo" /><Tx text="sign_in" /></button
 	>
 </div>
 <div title={$t('account_info_title')} class="info">

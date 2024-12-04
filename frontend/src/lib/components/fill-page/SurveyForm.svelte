@@ -250,11 +250,9 @@
 		keyPair = null;
 		byteArray = new Uint8Array();
 		accessError = false;
-		isSubmitButtonDisabled = true;
 
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
-			isSubmitButtonDisabled = false;
 			return;
 		}
 
@@ -271,7 +269,6 @@
 
 		if (byteArray.slice(0, 8).toString() !== magicNumber.toString()) {
 			fileError = FileError.FileInvalid;
-			isSubmitButtonDisabled = false;
 			return;
 		}
 
@@ -279,13 +276,11 @@
 
 		if (keyPair === null) {
 			passphraseError = PassphraseErrorEnum.DecryptionFailed;
-			isSubmitButtonDisabled = false;
 			return;
 		}
 
 		if (!keys.includes(keyPair.publicKey)) {
 			accessError = true;
-			isSubmitButtonDisabled = false;
 			return;
 		}
 
@@ -329,7 +324,6 @@
 			} catch (e) {
 				$errorModalContent = e as string;
 				$isErrorModalHidden = false;
-				isSubmitButtonDisabled = false;
 				return;
 			}
 		}
@@ -348,29 +342,19 @@
 			const body = await response.json();
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
-			isSubmitButtonDisabled = false;
 			return;
 		}
 
-		isSubmitButtonDisabled = true;
 		isKeysModalHidden = true;
 		$successModalContent = $t('answer_submit_success');
 		$isSuccessModalHidden = false;
 	}
 
 	async function submitSurvey() {
-		isSubmitButtonDisabled = true;
-		if (!checkAnswerCorrectness()) {
-			isSubmitButtonDisabled = false;
-			return;
-		}
+		if (!checkAnswerCorrectness()) return;
 
-		if (uses_crypto) {
-			isSubmitButtonDisabled = false;
-			isKeysModalHidden = false;
-		} else {
-			processForm(undefined);
-		}
+		if (uses_crypto) isKeysModalHidden = false;
+		else processForm(undefined);
 	}
 
 	async function hideSuccessModal() {
@@ -378,11 +362,13 @@
 		await goto('/', { replaceState: true, invalidateAll: true });
 	}
 
-	function handleEnter(event: KeyboardEvent) {
+	async function handleEnter(event: KeyboardEvent) {
 		if (!isKeysModalHidden && !isSubmitButtonDisabled && event.key === 'Enter') {
 			event.preventDefault();
-			processCrypto();
 			event.stopImmediatePropagation();
+			isSubmitButtonDisabled = true;
+			await processCrypto();
+			isSubmitButtonDisabled = false;
 		}
 	}
 
@@ -406,6 +392,7 @@
 		passphraseError = PassphraseErrorEnum.NoError;
 		fileName = $t('no_file_selected');
 		fileError = FileError.NoError;
+		accessError = false;
 	}}
 	--width={innerWidth <= $M ? '20em' : '38em'}
 >
@@ -448,7 +435,11 @@
 		title={$t('submit_keys')}
 		class="save"
 		disabled={isSubmitButtonDisabled}
-		on:click={processCrypto}><i class="symbol">done</i><Tx text="submit" /></button
+		on:click={async () => {
+			isSubmitButtonDisabled = true;
+			await processCrypto();
+			isSubmitButtonDisabled = false;
+		}}><i class="symbol">done</i><Tx text="submit" /></button
 	>
 </Modal>
 
@@ -495,7 +486,11 @@
 		title={$t('submit_survey')}
 		class="footer-button done"
 		disabled={uses_crypto ? false : isSubmitButtonDisabled}
-		on:click={submitSurvey}
+		on:click={async () => {
+			isSubmitButtonDisabled = true;
+			await submitSurvey();
+			isSubmitButtonDisabled = false;
+		}}
 	>
 		<i class="symbol">done</i><Tx text="submit" />
 	</button>

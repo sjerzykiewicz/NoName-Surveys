@@ -99,6 +99,13 @@
 
 <div class="button-row">
 	<div class="button-sub-row">
+		<button
+			title={$t('import_survey_summary')}
+			class="import-export-button"
+			on:click={() => (isImportModalHidden = false)}
+		>
+			<i class="symbol">upload_file</i><Tx text="import" />
+		</button>
 		{#if surveys.length > 0}
 			<button
 				title={$t('delete_selected_surveys')}
@@ -109,13 +116,6 @@
 				<i class="symbol">delete</i><Tx text="delete" />
 			</button>
 		{/if}
-		<button
-			title={$t('import_survey_summary')}
-			class="import-export-button"
-			on:click={() => (isImportModalHidden = false)}
-		>
-			<i class="symbol">upload_file</i><Tx text="import" />
-		</button>
 	</div>
 	<PageButtons numEntries={numSurveys} />
 </div>

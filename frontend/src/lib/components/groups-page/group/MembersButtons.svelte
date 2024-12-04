@@ -35,6 +35,7 @@
 	let selectedMembersToAdd: string[] = [];
 	let membersError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
+	let isSubmitButtonDisabled: boolean = false;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -189,7 +190,16 @@
 					placeholder={$t('select_group_members')}
 				/>
 			</div>
-			<button title={$t('add_members_finish')} class="done" on:click={addMembers}>
+			<button
+				title={$t('add_members_finish')}
+				class="done"
+				disabled={isSubmitButtonDisabled}
+				on:click={async () => {
+					isSubmitButtonDisabled = true;
+					await addMembers();
+					isSubmitButtonDisabled = false;
+				}}
+			>
 				<i class="symbol">done</i><Tx text="submit" />
 			</button>
 		</div>

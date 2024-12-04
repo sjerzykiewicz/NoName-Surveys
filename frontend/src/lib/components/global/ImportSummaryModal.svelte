@@ -18,6 +18,7 @@
 	let fileElement: HTMLInputElement | null = null;
 	let fileName: string = $t('no_file_selected');
 	let fileError: FileError = FileError.NoError;
+	let isButtonDisabled: boolean = false;
 
 	function handleFileChange() {
 		fileName = fileElement?.files?.[0]?.name ?? $t('no_file_selected');
@@ -71,10 +72,21 @@
 		}
 	}
 
+	async function handleEnter(event: KeyboardEvent) {
+		if (!isHidden && !isButtonDisabled && event.key === 'Enter') {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			isButtonDisabled = true;
+			await importSummary();
+			isButtonDisabled = false;
+		}
+	}
+
 	let innerWidth: number;
 </script>
 
 <svelte:window bind:innerWidth />
+<svelte:body on:keydown={handleEnter} />
 
 <Modal
 	icon="upload_file"
@@ -99,8 +111,15 @@
 			<ImportError error={fileError} element={fileElement} />
 		</div>
 	</div>
-	<button title={$t('submit_file')} class="done" on:click={importSummary}
-		><i class="symbol">done</i><Tx text="submit" /></button
+	<button
+		title={$t('submit_file')}
+		class="done"
+		disabled={isButtonDisabled}
+		on:click={async () => {
+			isButtonDisabled = true;
+			await importSummary();
+			isButtonDisabled = false;
+		}}><i class="symbol">done</i><Tx text="submit" /></button
 	>
 </Modal>
 

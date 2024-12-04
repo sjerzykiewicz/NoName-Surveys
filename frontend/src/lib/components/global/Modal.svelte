@@ -16,15 +16,15 @@
 
 	function handleEscape(event: KeyboardEvent) {
 		if (!isHidden && event.key === 'Escape') {
-			hide();
 			event.stopImmediatePropagation();
+			hide();
 		}
 	}
 
 	function handleClick(event: MouseEvent) {
 		if (isClickable && !isHidden && !(event.target as HTMLElement).closest('.modal')) {
-			hide();
 			event.stopImmediatePropagation();
+			hide();
 		}
 	}
 </script>

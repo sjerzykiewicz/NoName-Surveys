@@ -15,8 +15,8 @@
 	function handleEnter(event: KeyboardEvent) {
 		if (!$isWarningModalHidden && event.key === 'Enter') {
 			event.preventDefault();
-			hide();
 			event.stopImmediatePropagation();
+			hide();
 		}
 	}
 </script>

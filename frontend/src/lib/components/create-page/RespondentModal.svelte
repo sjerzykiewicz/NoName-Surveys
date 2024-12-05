@@ -33,6 +33,7 @@
 	export let isFromDraft: boolean;
 
 	let cryptoError: boolean = false;
+	let isFinishButtonDisabled: boolean = false;
 
 	function checkCorrectness() {
 		cryptoError = false;
@@ -91,10 +92,12 @@
 	}
 
 	async function handleEnter(event: KeyboardEvent) {
-		if (!isHidden && event.key === 'Enter') {
+		if (!isHidden && !isFinishButtonDisabled && event.key === 'Enter') {
 			event.preventDefault();
-			await createSurvey();
 			event.stopImmediatePropagation();
+			isFinishButtonDisabled = true;
+			await createSurvey();
+			isFinishButtonDisabled = false;
 		}
 	}
 
@@ -156,8 +159,15 @@
 			</div>
 		{/if}
 	</div>
-	<button title={$t('define_respondent_group')} class="done" on:click={createSurvey}
-		><i class="symbol">done</i><Tx text="finish" /></button
+	<button
+		title={$t('define_respondent_group')}
+		class="done"
+		disabled={isFinishButtonDisabled}
+		on:click={async () => {
+			isFinishButtonDisabled = true;
+			await createSurvey();
+			isFinishButtonDisabled = false;
+		}}><i class="symbol">done</i><Tx text="finish" /></button
 	>
 </Modal>
 

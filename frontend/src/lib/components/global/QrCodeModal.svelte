@@ -27,8 +27,8 @@
 	function handleEnter(event: KeyboardEvent) {
 		if (!isHidden && event.key === 'Enter') {
 			event.preventDefault();
-			isHidden = true;
 			event.stopImmediatePropagation();
+			isHidden = true;
 		}
 	}
 

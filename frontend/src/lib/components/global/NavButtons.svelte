@@ -16,6 +16,8 @@
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	let isPanelVisible: boolean = false;
+	let isSignOutButtonDisabled: boolean = false;
+	let isSignInButtonDisabled: boolean = false;
 
 	const ACCOUNT_BUTTON_BREAKPOINT = 1155;
 
@@ -112,15 +114,27 @@
 				><i class="symbol">question_mark</i>FAQ
 			</button>
 			{#if $page.data.session}
-				<button title={$t('sign_out')} class="nav-button" on:click={signOut}
+				<button
+					title={$t('sign_out')}
+					class="nav-button"
+					disabled={isSignOutButtonDisabled}
+					on:click={async () => {
+						isSignOutButtonDisabled = true;
+						await signOut();
+						isSignOutButtonDisabled = false;
+					}}
 					><i class="symbol">logout</i><Tx text="sign_out" />
 				</button>
 			{:else}
 				<button
 					title={$t('sign_in')}
 					class="nav-button"
-					on:click={() => startOAuth($page.url.pathname === '/fill' ? '/' : $page.url.pathname)}
-					><i class="symbol">login</i><Tx text="sign_in" /></button
+					disabled={isSignInButtonDisabled}
+					on:click={async () => {
+						isSignInButtonDisabled = true;
+						await startOAuth($page.url.pathname === '/fill' ? '/' : $page.url.pathname);
+						isSignInButtonDisabled = false;
+					}}><i class="symbol">login</i><Tx text="sign_in" /></button
 				>
 			{/if}
 		</div>

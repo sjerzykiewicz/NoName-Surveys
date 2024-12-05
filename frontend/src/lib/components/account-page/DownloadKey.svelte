@@ -24,6 +24,7 @@
 	let passphraseConfirm: string = '';
 	let passphraseError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
 	let passphraseConfirmError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
+	let isGenerateButtonDisabled: boolean = false;
 
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
@@ -130,11 +131,13 @@
 		}
 	}
 
-	function handleEnter(event: KeyboardEvent) {
-		if (!isModalHidden && event.key === 'Enter') {
+	async function handleEnter(event: KeyboardEvent) {
+		if (!isModalHidden && !isGenerateButtonDisabled && event.key === 'Enter') {
 			event.preventDefault();
-			generateKeyPair();
 			event.stopImmediatePropagation();
+			isGenerateButtonDisabled = true;
+			await generateKeyPair();
+			isGenerateButtonDisabled = false;
 		}
 	}
 
@@ -194,7 +197,16 @@
 		</label>
 		<ConfirmError error={passphraseConfirmError} {passphrase} {passphraseConfirm} />
 	</span>
-	<button title={$t('generate')} class="done" on:click={generateKeyPair}>
+	<button
+		title={$t('generate')}
+		class="done"
+		disabled={isGenerateButtonDisabled}
+		on:click={async () => {
+			isGenerateButtonDisabled = true;
+			await generateKeyPair();
+			isGenerateButtonDisabled = false;
+		}}
+	>
 		<i class="symbol">done</i><Tx text="generate" />
 	</button>
 	<button title={$t('cancel')} class="not" on:click={hideModal}>

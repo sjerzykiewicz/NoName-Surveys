@@ -5,10 +5,20 @@
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
+	let isSignOutButtonDisabled: boolean = false;
 </script>
 
 <div class="sign-buttons">
-	<button title={$t('sign_out')} class="sign-out" on:click={signOut}
+	<button
+		title={$t('sign_out')}
+		class="sign-out"
+		disabled={isSignOutButtonDisabled}
+		on:click={async () => {
+			isSignOutButtonDisabled = true;
+			await signOut();
+			isSignOutButtonDisabled = false;
+		}}
 		><i class="symbol">logout</i><Tx text="sign_out" />
 	</button>
 </div>

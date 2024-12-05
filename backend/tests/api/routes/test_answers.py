@@ -84,7 +84,64 @@ def test_save_survey_answer_public_survey(client: TestClient):
                     "required": True,
                     "question": "Is this a test?",
                     "choices": ["Yes", "No"],
-                    "answer": "Yes",
+                    "answer": "Yes"
+                },
+                {
+                    "question_type": "list",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": "Yes"
+                },
+                {
+                    "question_type": "multi",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": ["Yes", "No"]
+                },
+                {
+                    "question_type": "number",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "min_value": 0,
+                    "max_value": 10,
+                    "answer": 5
+                },
+                {
+                    "question_type": "rank",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": ["No", "Yes"]
+                },
+                {
+                    "question_type": "scale",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "answer": 5
+                },
+                {
+                    "question_type": "single",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": "Yes"
+                },
+                {
+                    "question_type": "slider",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "min_value": 0,
+                    "max_value": 10,
+                    "answer": 7
+                },
+                {
+                    "question_type": "text",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "details": "details",
+                    "answer": "Yes"
                 },
                 {
                     "subtitle": "This test section covers..."
@@ -117,7 +174,7 @@ def test_save_survey_answer_public_survey_wrong_answer_structure(client: TestCli
                     "answer": "Yes",
                 },
                 {
-                    "subtitle": "This is a mismatched subtitle"
+                    "subtitle": "This is a mismatched structure"
                 }
             ],
         },

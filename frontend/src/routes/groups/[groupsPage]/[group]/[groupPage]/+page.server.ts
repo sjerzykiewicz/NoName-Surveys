@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ parent, params, url }) => {
+export const load: PageServerLoad = async ({ parent, params, fetch }) => {
 	const { session } = await parent();
 	if (!session) {
 		error(401, 'You must be logged in to access this page.');
@@ -9,9 +9,8 @@ export const load: PageServerLoad = async ({ parent, params, url }) => {
 
 	const group = params.group;
 	const page = parseInt(params.groupPage);
-	const host = url.origin;
 
-	const membersResponse = await fetch(`${host}/api/groups/members/all`, {
+	const membersResponse = await fetch(`/api/groups/members/all`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -23,7 +22,7 @@ export const load: PageServerLoad = async ({ parent, params, url }) => {
 	}
 	const members: { email: string; has_public_key: boolean }[] = await membersResponse.json();
 
-	const notMembersResponse = await fetch(`${host}/api/groups/members/all-not-members`, {
+	const notMembersResponse = await fetch(`/api/groups/members/all-not-members`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -35,7 +34,7 @@ export const load: PageServerLoad = async ({ parent, params, url }) => {
 	}
 	const notMembers: string[] = await notMembersResponse.json();
 
-	const countResponse = await fetch(`${host}/api/groups/members/count`, {
+	const countResponse = await fetch(`/api/groups/members/count`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'

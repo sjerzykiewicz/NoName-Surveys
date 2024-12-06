@@ -2,10 +2,9 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	default: async ({ request, url }) => {
+	default: async ({ request, fetch }) => {
 		const data = await request.formData();
 		const code = data.get('survey-code');
-		const host = url.origin;
 
 		if (code === null || code === '') {
 			return fail(422, {
@@ -21,7 +20,7 @@ export const actions: Actions = {
 			});
 		}
 
-		const response = await fetch(`${host}/api/surveys/fetch`, {
+		const response = await fetch(`/api/surveys/fetch`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

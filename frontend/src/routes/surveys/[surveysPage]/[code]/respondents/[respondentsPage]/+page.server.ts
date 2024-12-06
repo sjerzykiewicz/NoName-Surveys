@@ -1,12 +1,11 @@
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ params, url }) => {
+export const load: PageServerLoad = async ({ params, fetch }) => {
 	const code = params.code;
 	const page = parseInt(params.respondentsPage);
-	const host = url.origin;
 
-	const respondentsResponse = await fetch(`${host}/api/surveys/respondents/all`, {
+	const respondentsResponse = await fetch(`/api/surveys/respondents/all`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -18,7 +17,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 	}
 	const respondents: string[] = await respondentsResponse.json();
 
-	const countResponse = await fetch(`${host}/api/surveys/respondents/count`, {
+	const countResponse = await fetch(`/api/surveys/respondents/count`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'

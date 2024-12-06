@@ -1,16 +1,15 @@
 import type { LayoutServerLoad } from './$types';
 import { error, redirect } from '@sveltejs/kit';
 
-export const load: LayoutServerLoad = async ({ parent, params, url }) => {
+export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
 	const { session } = await parent();
 	if (!session) {
 		redirect(303, `/account`);
 	}
 
 	const page = parseInt(params.groupsPage);
-	const host = url.origin;
 
-	const groupsResponse = await fetch(`${host}/api/groups/all`, {
+	const groupsResponse = await fetch(`/api/groups/all`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -25,13 +24,13 @@ export const load: LayoutServerLoad = async ({ parent, params, url }) => {
 		all_members_have_public_keys: true;
 	}[] = await groupsResponse.json();
 
-	const usersResponse = await fetch(`${host}/api/users/all`);
+	const usersResponse = await fetch(`/api/users/all`);
 	if (!usersResponse.ok) {
 		error(usersResponse.status, { message: await usersResponse.json() });
 	}
 	const user_list: string[] = await usersResponse.json();
 
-	const countResponse = await fetch(`${host}/api/groups/count`);
+	const countResponse = await fetch(`/api/groups/count`);
 	if (!countResponse.ok) {
 		error(countResponse.status, { message: await countResponse.json() });
 	}

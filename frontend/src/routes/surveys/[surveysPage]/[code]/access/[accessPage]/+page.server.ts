@@ -1,12 +1,11 @@
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ params, url }) => {
+export const load: PageServerLoad = async ({ params, fetch }) => {
 	const code = params.code;
 	const page = parseInt(params.accessPage);
-	const host = url.origin;
 
-	const accessResponse = await fetch(`${host}/api/surveys/access/all-with`, {
+	const accessResponse = await fetch(`/api/surveys/access/all-with`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -18,7 +17,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 	}
 	const usersWithAccess: string[] = await accessResponse.json();
 
-	const notAccessResponse = await fetch(`${host}/api/surveys/access/all-without`, {
+	const notAccessResponse = await fetch(`/api/surveys/access/all-without`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -30,7 +29,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 	}
 	const usersWithoutAccess: string[] = await notAccessResponse.json();
 
-	const countResponse = await fetch(`${host}/api/surveys/access/count`, {
+	const countResponse = await fetch(`/api/surveys/access/count`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'

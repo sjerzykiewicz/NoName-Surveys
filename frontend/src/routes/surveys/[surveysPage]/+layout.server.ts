@@ -1,16 +1,15 @@
 import type { LayoutServerLoad } from './$types';
 import { error, redirect } from '@sveltejs/kit';
 
-export const load: LayoutServerLoad = async ({ parent, params, url }) => {
+export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
 	const { session } = await parent();
 	if (!session) {
 		redirect(303, `/account`);
 	}
 
 	const page = parseInt(params.surveysPage);
-	const host = url.origin;
 
-	const surveysResponse = await fetch(`${host}/api/surveys/all`, {
+	const surveysResponse = await fetch(`/api/surveys/all`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -29,7 +28,7 @@ export const load: LayoutServerLoad = async ({ parent, params, url }) => {
 		group_size: number;
 	}[] = await surveysResponse.json();
 
-	const countResponse = await fetch(`${host}/api/surveys/count`);
+	const countResponse = await fetch(`/api/surveys/count`);
 	if (!countResponse.ok) {
 		error(countResponse.status, { message: await countResponse.json() });
 	}

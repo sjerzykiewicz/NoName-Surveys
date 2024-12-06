@@ -3,16 +3,15 @@ import { error } from '@sveltejs/kit';
 import Survey from '$lib/entities/surveys/Survey';
 import SurveySummary from '$lib/entities/surveys/SurveySummary';
 
-export const load: LayoutServerLoad = async ({ parent, params, url }) => {
+export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
 	const { session } = await parent();
 	if (!session) {
 		error(401, 'You must be logged in to access this page.');
 	}
 
 	const code = params.code;
-	const host = url.origin;
 
-	const surveyResponse = await fetch(`${host}/api/surveys/fetch`, {
+	const surveyResponse = await fetch(`/api/surveys/fetch`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -30,7 +29,7 @@ export const load: LayoutServerLoad = async ({ parent, params, url }) => {
 		public_keys: string[];
 	} = await surveyResponse.json();
 
-	const answersResponse = await fetch(`${host}/api/surveys/answers/fetch`, {
+	const answersResponse = await fetch(`/api/surveys/answers/fetch`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'

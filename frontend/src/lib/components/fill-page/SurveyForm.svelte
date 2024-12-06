@@ -330,7 +330,7 @@
 
 		const answer = new SurveyAnswer(code, answerList, signature);
 
-		const response = await fetch('/api/surveys/fill', {
+		const response = await fetch('/api/surveys/answers/fill', {
 			method: 'POST',
 			body: JSON.stringify(answer),
 			headers: {

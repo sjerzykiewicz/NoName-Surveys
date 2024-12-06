@@ -1,6 +1,6 @@
+import type SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
 import type { RequestHandler } from './$types';
 import { createSurvey } from '$lib/server/database';
-import type SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
 import { getEmail } from '$lib/utils/getEmail';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {

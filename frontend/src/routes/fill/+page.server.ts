@@ -1,16 +1,21 @@
 import type { PageServerLoad } from './$types';
-import { getSurvey } from '$lib/server/database';
 import { error } from '@sveltejs/kit';
 import Survey from '$lib/entities/surveys/Survey';
 
-export const load: PageServerLoad = async ({ url }) => {
+export const load: PageServerLoad = async ({ url, fetch }) => {
 	const survey_code = url.searchParams.get('code');
 
 	if (survey_code === null) {
-		error(404);
+		error(404, { message: 'Survey not found' });
 	}
 
-	const response = await getSurvey(survey_code);
+	const response = await fetch(`/api/surveys/fetch`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ survey_code })
+	});
 	if (!response.ok) {
 		error(response.status, { message: await response.json() });
 	}

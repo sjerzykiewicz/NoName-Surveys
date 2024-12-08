@@ -1,96 +1,96 @@
-## TL;DR
-**NoName Anonymous Surveys** is a fully open-source platform for conducting anonymous surveys. By using linkable ring signatures, it ensures that:
-- You can verify that a response is from a member of a specific group.
-- The identity of the respondent remains unknown.
-- Each user can only respond once.
+# NoName Anonymous Surveys
 
-You can freely use the code, modify it, and host your own instance of the platform - tips for which you can find [here](#Setup). We also welcome contributions from the community.
+**NoName Anonymous Surveys** is an open-source platform designed for conducting truly anonymous surveys. Using linkable ring signature technology, it ensures that:
 
-## Example Use Case
-We've set up an example instance for the [University of Adam Miczkiewicz](https://amu.edu.pl/en). You can check it out [here](https://noname-stage.projektstudencki.pl/).
+#### - ✅ Responses are verifiable as being from members of a designated group.
+#### - ✅ Respondent identities remain entirely anonymous.
+#### - ✅ Each user can respond only once to a survey.
 
-## How To Use
-### User's Guide
-1. **Generate Keys**
+You are free to use, modify, and host your own instance of the platform. Setup instructions and tips are provided below.
+
+---
+
+## 🎯 Key Features
+1. **Anonymity**: Identity protection through cryptographic techniques.
+2. **Group-Specific Access**: Surveys can be restricted to specific groups or open to the public.
+3. **User-Friendly**: Easy setup and usage for both users and administrators.
+
+---
+
+## 🚀 Example Use Case
+
+### Check out the example instance for the **University of Adam Mickiewicz** [here](https://nonamesurveys.projektstudencki.pl/).
+> [!NOTE]
+> Keep in mind that this instance can be accessed only by students and staff of the university.
+
+---
+
+## 📖 User's Guide
+
 > [!IMPORTANT]
-> Your keys are being generated on your device and only the public key is sent to the server.
-  - Click on the "Account" button in the navigation bar.
-  - Provide a passphrase which will be used to encrypt and decrypt your keys on your device.
-  - Click on the "Generate keys" button.
-  - Save the generated keys in a place of your choice.
+> The keys used in the cryptographic protocol are generated locally on your device.
+> **Do not lose your keys** – they are required for you to answer private surveys.
 
-2. **Create a Survey**
-  - Click on the "Create" button in the navigation bar.
-  - Fill in the survey title and prepare questions.
-  - Optionally, you can save a created structure for later by clicking on "Save draft".
-  - You can view how the survey will look by clicking on "Preview".
-  - When you're ready, click on "Finish".
-  - Choose whether you want to specify a group of users who can respond to the survey.
-    - **If Yes**:
-      - Select "Secure".
-      - Choose a group from the list of previously created user groups or specify users by their email addresses.
-      - Make sure that all users have registered beforehand and created their keys.
-      - Only users from the specified group will be able to respond.
-    - **If No**:
-      - Select "Public".
-      - The survey will be open to everyone.
-  - Click on "Finish" to create the survey.
+### 1️⃣ **Generate Keys**
+Your cryptographic keys are generated **locally on your device**, ensuring your private key never leaves your hands.
+1. Go to the **Account** section in the navigation bar.
+2. Enter a **passphrase** (used to encrypt and decrypt your keys) and confirm it.
+3. Click on **Generate Keys**.
+4. Save the keys in a secure location.
 
-3. **Respond to a Survey**
-  - Click on the survey link.
-  - Fill in the answers.
-  - Click on the "Submit" button.
+---
 
-4. **View Survey Results**
-  - TODO
+### 2️⃣ **Create a Survey**
+1. Navigate to the **Create** section in the navigation bar.
+2. Fill out the survey title and questions.
+3. Optionally:
+   - Save a draft for later use by clicking **Save Draft**.
+   - Preview the survey by clicking **Preview**.
+4. Once ready, click **Finish**.
+5. Choose who can respond to the survey:
+   - **Secure** (restricted to specific users or groups):
+     - Select a user group from the list or add users by email.
+     - Ensure all users have registered and generated their keys.
+   - **Public** (open to everyone).
+6. Click **Finish** again to finalize.
 
-5. **Create a User Group**
-  - TODO
+---
 
-## Administrator's Guide
-### Dependencies
-- npm
-- Python
+### 3️⃣ **Respond to a Survey**
+1. Open the survey link.
+2. Fill out the form with your responses.
+3. If the survey has a restricted access, you will be asked to **load your keys** and **enter the passphrase** you have generated during keys creation.
+4. Click **Submit**.
 
-### Setup
-To run the app, you can use prebuilt images from DockerHub for [frontend]() and [backend]():
-- ```sh
-  docker compose up
-  ```
+---
 
-Or build it locally:
-- ```sh
-  docker compose -f "docker-compose.local.yml" up --no-deps --build
-  ```
+### 4️⃣ **View Survey Results**
+1. Navigate to the **Surveys** section in the navigation bar.
+2. Click on the survey you are interested in.
+3. You will see the summary of responses but will be able to see individual responses if you nagivate to the **Answers** tab.
 
-You have to set up the needed environment variables (.env files in the frontend/backend directory):
-- frontend:
-  ```sh
-  AUTH_GOOGLE_ID = "<google_client_id>" # used for oauth2.0 authentication
-  AUTH_GOOGLE_SECRET = "<google_client_secret>" # used for oauth2.0 authentication
-  AUTH_GITHUB_ID = "<github_client_id>" # used for oauth2.0 authentication
-  AUTH_GITHUB_SECRET = "<github_client_secret>" # used for oauth2.0 authentication
-  AUTH_USOS_ID="<usos_consumer_key>" # used for usos oauth1.0a authentication
-  AUTH_USOS_SECRET="<usos_consumer_secret>" # used for usos oauth1.0a authentication
-  AUTH_USOS_BASE_URL="<usosapi_base_url>" # used for usos oauth1.0a authentication
-  BACKEND_HOST = "http://backend:8000" # change it if docker is not used
-  ORIGIN = "http://localhost:3000" # change it if docker is not used
-  AUTH_SECRET = "<random_string>" # used for auth.js token generation
-  ```
-- backend:
-  ```sh
-  SETTINGS_db_type = "" # database type (postgresql)
-  SETTINGS_db_dialect =  "" # can be left empty
-  SETTINGS_db_user = "" # database username
-  SETTINGS_db_password = "" # database password
-  SETTINGS_db_host = "" # database server address
-  SETTINGS_db_port = "" # database server port
-  SETTINGS_db_name = "" # database name
-  ```
+---
 
-## Developers
-### Contributing
-We welcome contributions from the community. To contribute, please fork the repository, create a new branch, and submit a pull request. Make sure to follow our coding standards and include tests for any new features or bug fixes.
+### 5️⃣ **Create a User Group**
+1. Navigate to the **Groups** section in the navigation bar.
+2. Click on the **+ Group** button.
+3. Fill out the group name.
+4. Add users by email or import them from a CSV file.
+5. Click **Submit**.
 
-### Open Source Licensing Info
-1. [LICENSE](LICENSE)
+---
+
+## 🛠 Administrator's Guide
+
+### 1️⃣ **Dependencies**
+- **Node.js (npm)**
+- **Python**
+
+---
+
+### 2️⃣ **Setup**
+You can deploy the app using Docker images or build it locally.
+
+#### Using Prebuilt Docker Images:
+```bash
+docker compose up

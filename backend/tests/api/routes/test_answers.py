@@ -84,7 +84,64 @@ def test_save_survey_answer_public_survey(client: TestClient):
                     "required": True,
                     "question": "Is this a test?",
                     "choices": ["Yes", "No"],
-                    "answer": "Yes",
+                    "answer": "Yes"
+                },
+                {
+                    "question_type": "list",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": "Yes"
+                },
+                {
+                    "question_type": "multi",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": ["Yes", "No"]
+                },
+                {
+                    "question_type": "number",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "min_value": 0,
+                    "max_value": 10,
+                    "answer": 5
+                },
+                {
+                    "question_type": "rank",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": ["No", "Yes"]
+                },
+                {
+                    "question_type": "scale",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "answer": 5
+                },
+                {
+                    "question_type": "single",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": "Yes"
+                },
+                {
+                    "question_type": "slider",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "min_value": 0,
+                    "max_value": 10,
+                    "answer": 7
+                },
+                {
+                    "question_type": "text",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "details": "details",
+                    "answer": "Yes"
                 },
                 {
                     "subtitle": "This test section covers..."
@@ -118,6 +175,102 @@ def test_save_survey_answer_public_survey_wrong_answer_structure(client: TestCli
                 },
                 {
                     "subtitle": "This is a mismatched subtitle"
+                }
+            ],
+        },
+    )
+
+    # then
+    assert response.status_code == 400
+
+
+def test_save_survey_answer_public_survey(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+    create_survey_response = create_survey(client, TEST_VALID_USER_EMAIL_1)
+    survey_code = create_survey_response.json()["survey_code"]
+
+    client.post(
+        "/surveys/set-enabled",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "survey_code": survey_code,
+            "is_enabled": False,
+        },
+    )
+
+    # when
+    response = client.post(
+        "/answers/fill",
+        json={
+            "survey_code": survey_code,
+            "questions": [
+                {
+                    "question_type": "binary",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": "Yes"
+                },
+                {
+                    "question_type": "list",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": "Yes"
+                },
+                {
+                    "question_type": "multi",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": ["Yes", "No"]
+                },
+                {
+                    "question_type": "number",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "min_value": 0,
+                    "max_value": 10,
+                    "answer": 5
+                },
+                {
+                    "question_type": "rank",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": ["No", "Yes"]
+                },
+                {
+                    "question_type": "scale",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "answer": 5
+                },
+                {
+                    "question_type": "single",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "choices": ["Yes", "No"],
+                    "answer": "Yes"
+                },
+                {
+                    "question_type": "slider",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "min_value": 0,
+                    "max_value": 10,
+                    "answer": 7
+                },
+                {
+                    "question_type": "text",
+                    "required": True,
+                    "question": "Is this a test?",
+                    "details": "details",
+                    "answer": "Yes"
+                },
+                {
+                    "subtitle": "This test section covers..."
                 }
             ],
         },

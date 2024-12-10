@@ -1,11 +1,23 @@
 from fastapi.testclient import TestClient
 from test_users import create_user, create_user_with_public_key
-from tests.common_values import TEST_SURVEY_STRUCTURE
 
 TEST_VALID_USER_EMAIL_1 = "user1@st.amu.edu.pl"
 TEST_VALID_USER_EMAIL_2 = "user2@st.amu.edu.pl"
 TEST_VALID_USER_EMAIL_3 = "user3@st.amu.edu.pl"
 TEST_SURVEY_TITLE = "Test Survey"
+TEST_SURVEY_STRUCTURE = {
+    "questions": [
+        {
+            "question_type": "binary",
+            "required": True,
+            "question": "Is this a test?",
+            "choices": ["Yes", "No"]
+        },
+        {
+            "subtitle": "This test section covers..."
+        }
+    ]
+}
 
 
 def create_survey(

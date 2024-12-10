@@ -36,14 +36,6 @@ To start your work, you need to set up your local environment and hooks.
 make install_dev
 ```
 
-Later you will define aliases for your CLI here. `Makefile` already contains calls to build tools and checks. Use `build` to run them all.
-
-```Makefile
-build: pre_commit mypy test
-```
-
-Please note that `build` does not encompass the coverage and dependencies updates. These need to be run separately. Coverage may not always be necessary and you're gonna be running `build` often while working locally. Updating dependencies should be approached with the utmost care, no reason to bump the versions all the time when code does the work it's intended for. Better use some automation tool like [dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file).
-
 To quickly format your repo while coding run:
 
 ```sh

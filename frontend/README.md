@@ -1,6 +1,6 @@
 ## Prerequisites
 
-In order to use this app, you need to have both `npm` installed.
+In order to use this app, you need to have `npm` installed.
 
 ## Getting started
 

@@ -1,23 +1,18 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import QrCodeModal from '$lib/components/global/QrCodeModal.svelte';
-	import { S, XL } from '$lib/stores/global';
+	import { errorModalContent, isErrorModalHidden, S, XL } from '$lib/stores/global';
 	import { page } from '$app/stores';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import { formatDateTime } from '$lib/utils/formatDate';
+	import type SurveyHeader from '$lib/entities/surveys/SurveyHeader';
+	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let surveys: {
-		title: string;
-		survey_code: string;
-		creation_date: string;
-		uses_cryptographic_module: boolean;
-		is_owned_by_user: boolean;
-		group_size: number;
-	}[];
+	export let surveys: SurveyHeader[];
 	export let selectedSurveysToRemove: typeof surveys = [];
 
 	let innerWidth: number;
@@ -29,6 +24,25 @@
 
 	function toggleAll() {
 		selectedSurveysToRemove = allSelected ? [] : [...surveys];
+	}
+
+	async function toggleSurveyActive(survey_code: string, is_enabled: boolean) {
+		const response = await fetch('/api/surveys/toggle-enabled', {
+			method: 'POST',
+			body: JSON.stringify({ survey_code, is_enabled }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			const body = await response.json();
+			$errorModalContent = getErrorMessage(body.detail);
+			$isErrorModalHidden = false;
+			return;
+		}
+
+		await invalidateAll();
 	}
 </script>
 
@@ -59,7 +73,7 @@
 					/></label
 				></th
 			>
-			<th title={$t('survey_info')} id="info-header" colspan="2">Info</th>
+			<th title={$t('survey_info')} id="info-header" colspan="3">Info</th>
 			<th title={$t('survey_title')} id="title-header"><Tx text="survey_title" /></th>
 			<th title={$t('group_size')} id="group-header"><Tx text="group_size" /></th>
 			<th title={$t('access_code')} id="code-header"><Tx text="access_code" /></th>
@@ -98,6 +112,23 @@
 						>
 					{/if}
 				</td>
+				<td class="button-entry tooltip active">
+					<button
+						on:click={async () => await toggleSurveyActive(survey.survey_code, !survey.is_enabled)}
+					>
+						{#if survey.is_enabled}
+							<i class="symbol deactivate">mode_off_on</i>
+							<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+								><Tx text="survey_deactivate" /></span
+							>
+						{:else}
+							<i class="symbol activate">mode_off_on</i>
+							<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+								><Tx text="survey_activate" /></span
+							>
+						{/if}
+					</button>
+				</td>
 				<td title={$t('view_summary')} class="title-entry"
 					><button on:click={() => goto($page.url.pathname + '/' + survey.survey_code)}
 						>{survey.title}</button
@@ -131,8 +162,17 @@
 {/if}
 
 <style>
-	.tooltip.access {
+	.tooltip.access,
+	.tooltip.active {
 		--tooltip-width: 13em;
+	}
+
+	i.deactivate {
+		color: var(--accent-color-1);
+	}
+
+	i.activate {
+		color: var(--error-color-1);
 	}
 
 	#group-header {

@@ -10,17 +10,11 @@
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import ImportSummaryModal from '$lib/components/global/ImportSummaryModal.svelte';
+	import type SurveyHeader from '$lib/entities/surveys/SurveyHeader';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let surveys: {
-		title: string;
-		survey_code: string;
-		creation_date: string;
-		uses_cryptographic_module: boolean;
-		is_owned_by_user: boolean;
-		group_size: number;
-	}[];
+	export let surveys: SurveyHeader[];
 	export let numSurveys: number;
 	export let selectedSurveysToRemove: typeof surveys = [];
 

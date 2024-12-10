@@ -226,7 +226,7 @@
 
 		if (unansweredRequired.size > 0) {
 			const [first] = unansweredRequired;
-			scrollToElementById(first.toString());
+			scrollToElementById(`q${first.toString()}`);
 			return false;
 		}
 
@@ -466,7 +466,7 @@
 		</p>
 	{/if}
 	{#each $questions as question, questionIndex (question)}
-		<div class="question" in:slide={{ duration: 200, easing: cubicInOut }}>
+		<div class="question" id={`q${questionIndex}`} in:slide={{ duration: 200, easing: cubicInOut }}>
 			<QuestionTitle
 				{questionIndex}
 				questionTypeData={getQuestionTypeData(componentTypeMap[question.type])}

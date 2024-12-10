@@ -17,6 +17,8 @@
 	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
 	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
+	import Subtitle from '$lib/components/create-page/Subtitle.svelte';
+	import SubtitlePreview from '$lib/components/create-page/preview/SubtitlePreview.svelte';
 	import { questions } from '$lib/stores/create-page';
 	import { type ComponentType, tick } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -71,8 +73,10 @@
 				return BinaryPreview;
 			case Number:
 				return NumberPreview;
-			default:
+			case Text:
 				return TextPreview;
+			default:
+				return SubtitlePreview;
 		}
 	}
 
@@ -91,8 +95,10 @@
 			return ['0', '10', '1'];
 		} else if (component === Number) {
 			return ['0', '10'];
-		} else {
+		} else if (component === Text) {
 			return [''];
+		} else {
+			return [];
 		}
 	}
 
@@ -114,8 +120,10 @@
 			}
 		];
 
-		$previousQuestion = component;
-		isPanelVisible = false;
+		if (component !== Subtitle) {
+			$previousQuestion = component;
+			isPanelVisible = false;
+		}
 
 		if (innerWidth > $M) {
 			await tick();
@@ -381,6 +389,7 @@
 		return { index: parseInt(itemElement.id.substring(charIndex + 1)), element: focusedElement };
 	}
 
+	// TODO: subtitle hotkeys
 	function handleHotkeys(e: KeyboardEvent) {
 		if (e.altKey) {
 			const key = e.code;
@@ -524,17 +533,6 @@
 		</div>
 	{/if}
 </div>
-{#if innerWidth > $M}
-	<div
-		class="tooltip hotkeys-info"
-		style="--tooltip-width: {currentLang === 'en' ? '28em' : '31em'}"
-	>
-		<i class="symbol">bolt</i>
-		<span class="tooltip-text right">
-			<Tx html="hotkeys_info" />
-		</span>
-	</div>
-{/if}
 
 <style>
 	.button-group {
@@ -609,32 +607,6 @@
 	.add-question i {
 		transform: rotate(0deg);
 		transition: transform 0.2s;
-	}
-
-	.hotkeys-info.tooltip {
-		font-size: 1.5em;
-	}
-
-	.hotkeys-info.tooltip .tooltip-text {
-		text-align: left;
-		font-size: 0.6em;
-		z-index: 2;
-	}
-
-	.hotkeys-info.tooltip .tooltip-text.right {
-		top: 400%;
-	}
-
-	.hotkeys-info.tooltip .tooltip-text.right::after {
-		top: 9.5%;
-	}
-
-	.tooltip i {
-		color: var(--accent-color-2);
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		transition:
-			0.2s,
-			outline 0s;
 	}
 
 	@media screen and (max-width: 768px) {

@@ -4,7 +4,6 @@
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
-	import Subtitle from './Subtitle.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -12,39 +11,22 @@
 
 	export let questionIndex: number;
 
-	$: displayIndex =
-		questionIndex +
-		1 -
-		$questions.slice(0, questionIndex).filter((q) => q.component === Subtitle).length;
-
-	function errorMessage(i: number) {
-		const error = $questions[i].error;
-		switch (error) {
-			case SurveyError.QuestionRequired:
-				return $t('question_error_required', { index: displayIndex });
-			case SurveyError.QuestionTooLong:
-				return $t('question_error_limit', { index: displayIndex, limit: $LIMIT_OF_CHARS });
-		}
+	function errorMessage() {
+		return $t('subtitle_error', { limit: $LIMIT_OF_CHARS });
 	}
 
-	$: checkQuestionError = (i: number) => {
+	$: checkSubtitleError = (i: number) => {
 		const q = $questions[i].question;
-		const error = $questions[i].error;
-		switch (error) {
-			case SurveyError.QuestionRequired:
-				return q === null || q === undefined || q.trim().length === 0;
-			case SurveyError.QuestionTooLong:
-				return q.length > $LIMIT_OF_CHARS;
-		}
+		return $questions[i].error === SurveyError.SubtitleTooLong && q.length > $LIMIT_OF_CHARS;
 	};
 </script>
 
 <div transition:slide={{ duration: 200, easing: cubicInOut }}>
-	{#if checkQuestionError(questionIndex)}
+	{#if checkSubtitleError(questionIndex)}
 		<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 			<i class="symbol">error</i>
 			{#key [$t, $questions[questionIndex].error]}
-				{errorMessage(questionIndex)}
+				{errorMessage()}
 			{/key}
 		</p>
 	{/if}

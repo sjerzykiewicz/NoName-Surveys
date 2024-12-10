@@ -4,6 +4,7 @@
 	import { LIMIT_OF_CHARS } from '$lib/stores/global';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import Subtitle from './Subtitle.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
@@ -11,25 +12,30 @@
 
 	export let questionIndex: number;
 
+	$: displayIndex =
+		questionIndex +
+		1 -
+		$questions.slice(0, questionIndex).filter((q) => q.component === Subtitle).length;
+
 	function errorMessage(i: number) {
 		const error = $questions[i].error;
 		switch (error) {
 			case SurveyError.ChoicesRequired:
-				return $t('choice_error_required', { index: i + 1 });
+				return $t('choice_error_required', { index: displayIndex });
 			case SurveyError.BinaryChoicesRequired:
-				return $t('choice_error_binary_required', { index: i + 1 });
+				return $t('choice_error_binary_required', { index: displayIndex });
 			case SurveyError.NumberValuesRequired:
-				return $t('choice_error_number_required', { index: i + 1 });
+				return $t('choice_error_number_required', { index: displayIndex });
 			case SurveyError.SliderValuesRequired:
-				return $t('choice_error_slider_required', { index: i + 1 });
+				return $t('choice_error_slider_required', { index: displayIndex });
 			case SurveyError.ChoicesTooLong:
-				return $t('choice_error_limit', { index: i + 1, limit: $LIMIT_OF_CHARS });
+				return $t('choice_error_limit', { index: displayIndex, limit: $LIMIT_OF_CHARS });
 			case SurveyError.DuplicateChoices:
-				return $t('choice_error_duplicate', { index: i + 1 });
+				return $t('choice_error_duplicate', { index: displayIndex });
 			case SurveyError.ImproperSliderValues:
-				return $t('choice_error_slider_values', { index: i + 1 });
+				return $t('choice_error_slider_values', { index: displayIndex });
 			case SurveyError.ImproperSliderPrecision:
-				return $t('choice_error_slider_precision', { index: i + 1 });
+				return $t('choice_error_slider_precision', { index: displayIndex });
 		}
 	}
 

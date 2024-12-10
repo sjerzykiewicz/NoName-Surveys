@@ -3,6 +3,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import Input from '$lib/components/global/Input.svelte';
+	import Subtitle from './Subtitle.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -12,6 +13,11 @@
 	export let questionIndex: number;
 	export let questionTypeData: { title: string; icon: string; text: string };
 	export let questionInput: HTMLDivElement;
+
+	$: displayIndex =
+		questionIndex +
+		1 -
+		$questions.slice(0, questionIndex).filter((q) => q.component === Subtitle).length;
 
 	function moveQuestionUp() {
 		const higher = $questions[questionIndex];
@@ -33,15 +39,11 @@
 		$questions.splice(questionIndex, 1);
 		$questions = $questions;
 	}
-
-	let innerWidth: number;
 </script>
 
-<svelte:window bind:innerWidth />
-
 <div class="question-label" transition:slide={{ duration: 200, easing: cubicInOut }}>
-	<div title={$t('question_index', { index: questionIndex + 1 })} class="index">
-		{questionIndex + 1}.
+	<div title={$t('question_index', { index: displayIndex })} class="index">
+		{displayIndex}.
 	</div>
 	<div title={$t(questionTypeData.title)} class="type">
 		<i class="symbol">{questionTypeData.icon}</i><Tx text={questionTypeData.text} />

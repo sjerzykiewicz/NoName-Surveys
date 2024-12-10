@@ -10,7 +10,7 @@
 	export let questionTypeData: { title: string; icon: string; text: string };
 </script>
 
-<div class="question-label" id={questionIndex.toString()}>
+<div class="question-label">
 	<div title={$t('question_no', { index: questionIndex + 1 })} class="index">
 		{questionIndex + 1}.
 	</div>

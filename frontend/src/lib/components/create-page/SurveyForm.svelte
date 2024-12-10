@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { questions, title, currentDraftId, draftStructure } from '$lib/stores/create-page';
+	import Subtitle from '$lib/components/create-page/Subtitle.svelte';
+	import SubtitlePreview from '$lib/components/create-page/preview/SubtitlePreview.svelte';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import QuestionError from './QuestionError.svelte';
@@ -23,16 +25,21 @@
 		M,
 		LIMIT_OF_DRAFTS,
 		warningModalContent,
-		isWarningModalHidden
+		isWarningModalHidden,
+		LIMIT_OF_CHARS
 	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { invalidateAll } from '$app/navigation';
 	import RespondentModal from './RespondentModal.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
-	import { getContext } from 'svelte';
+	import { getContext, tick } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import { SurveyError } from '$lib/entities/SurveyError';
+	import { checkQuestionError } from '$lib/utils/checkQuestionError';
+	import SubtitleError from './SubtitleError.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let users: string[];
 	export let groups: string[];
@@ -49,6 +56,31 @@
 	let questionInput: HTMLDivElement;
 	let isSurveyModalHidden: boolean = true;
 	let surveyCode: string;
+
+	$: currentLang = $options.currentLang;
+
+	async function addSubtitle() {
+		const i: number = $questions.length - 1;
+		if (i >= 0) checkQuestionError($questions[i], $LIMIT_OF_CHARS);
+
+		$questions = [
+			...$questions,
+			{
+				component: Subtitle,
+				preview: SubtitlePreview,
+				required: false,
+				question: '',
+				choices: [],
+				error: SurveyError.NoError
+			}
+		];
+
+		if (innerWidth > $M) {
+			await tick();
+			questionInput.focus();
+			questionInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+		}
+	}
 
 	async function saveDraft(overwrite: boolean) {
 		isDraftModalHidden = true;
@@ -157,11 +189,18 @@
 		on:introend={() => scrollToElement('.add-question')}
 	>
 		{#if isPreview}
-			<QuestionTitlePreview
-				{questionIndex}
-				questionTypeData={getQuestionTypeData(question.component)}
-			/>
-			<svelte:component this={question.preview} {questionIndex} />
+			{#if question.component === Subtitle}
+				<SubtitlePreview {questionIndex} />
+			{:else}
+				<QuestionTitlePreview
+					{questionIndex}
+					questionTypeData={getQuestionTypeData(question.component)}
+				/>
+				<svelte:component this={question.preview} {questionIndex} />
+			{/if}
+		{:else if question.component === Subtitle}
+			<Subtitle {questionIndex} bind:questionInput />
+			<SubtitleError {questionIndex} />
 		{:else}
 			<QuestionTitle
 				{questionIndex}
@@ -177,7 +216,20 @@
 {#if !isPreview}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div class="button-sub-row">
-			<AddQuestionButtons {questionInput} />
+			<button class="add-subtitle" on:click={addSubtitle}
+				><i class="symbol">add</i><Tx text="subtitle" /></button
+			>
+			{#if innerWidth > $M}
+				<div
+					class="tooltip hotkeys-info"
+					style="--tooltip-width: {currentLang === 'en' ? '28em' : '31em'}"
+				>
+					<i class="symbol">bolt</i>
+					<span class="tooltip-text right">
+						<Tx html="hotkeys_info" />
+					</span>
+				</div>
+			{/if}
 			<div class="tooltip create-info">
 				<i class="symbol">info</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
@@ -186,9 +238,38 @@
 			</div>
 		</div>
 	</div>
+	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<div class="button-sub-row">
+			<AddQuestionButtons {questionInput} />
+		</div>
+	</div>
 {/if}
 
 <style>
+	.hotkeys-info.tooltip {
+		font-size: 1.5em;
+	}
+
+	.hotkeys-info.tooltip i {
+		color: var(--accent-color-2);
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		transition: 0.2s;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text {
+		text-align: left;
+		font-size: 0.6em;
+		z-index: 2;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.right {
+		top: 400%;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.right::after {
+		top: 9.5%;
+	}
+
 	.create-info.tooltip {
 		--tooltip-width: 20em;
 		font-size: 1.5em;
@@ -212,6 +293,16 @@
 		align-items: center;
 		font-size: 1em;
 		margin-top: 0em;
+		margin-bottom: 0.5em;
+	}
+
+	.add-subtitle {
+		font-size: 1.25em;
+	}
+
+	.add-subtitle i {
+		margin-right: 0.15em;
+		font-variation-settings: 'wght' 700;
 	}
 
 	@media screen and (max-width: 768px) {

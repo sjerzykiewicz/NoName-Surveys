@@ -604,19 +604,26 @@ input[type='file'] {
 }
 
 .question {
-	margin-bottom: 1.5em;
+	padding-bottom: 1.5em;
 }
 
 .question-area {
 	display: flex;
 	flex-flow: row;
 	align-items: center;
-	margin-bottom: 1em;
+	padding-bottom: 1em;
 	font-size: 1.25em;
 	color: var(--text-color-1);
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
+}
+
+.question-area.subtitle {
+	padding-top: 1em;
+	padding-bottom: 0;
+}
+
+#q0 .question-area.subtitle {
+	padding-top: 0;
 }
 
 .question-area.display {
@@ -625,14 +632,26 @@ input[type='file'] {
 	cursor: default;
 	width: calc(100% - 4.5em);
 	margin-left: 2.25em;
-	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.question-area.subtitle.display {
+	width: 100%;
+	margin-left: 0;
+	border-top: 1px solid var(--border-color-1);
+	border-bottom: 1px solid var(--border-color-1);
+}
+
+#q0 .question-area.subtitle.display {
+	padding-top: 0.5em;
+	border-top: none;
 }
 
 .question-label {
 	display: flex;
 	flex-flow: row;
 	align-items: center;
-	margin-bottom: 0.5em;
+	padding-bottom: 0.5em;
 	font-size: 1.25em;
 	color: var(--border-color-1);
 	cursor: default;
@@ -649,9 +668,7 @@ input[type='file'] {
 
 .question-label .tooltip i {
 	color: var(--accent-color-1);
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .question-label .tooltip .tooltip-text {
@@ -683,9 +700,7 @@ input[type='file'] {
 	top: 0.1em;
 	font-size: 1em;
 	color: var(--accent-color-1);
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .details {

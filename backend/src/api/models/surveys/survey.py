@@ -57,6 +57,7 @@ class SurveyHeadersOutput(Base):
     uses_cryptographic_module: bool
     is_owned_by_user: bool
     group_size: int
+    is_enabled: bool
 
 
 class SurveyInfoFetchInput(Base):
@@ -110,6 +111,10 @@ class SurveyUserActions(SurveyUserAction):
     @field_validator("survey_code")
     def validate_survey_code(cls, v) -> str:
         return Base.validate_survey_code(v)
+
+
+class SurveyEnableDisableAction(SurveyUserActions):
+    is_enabled: bool
 
 
 class SurveyUserDeleteAction(SurveyUserAction):

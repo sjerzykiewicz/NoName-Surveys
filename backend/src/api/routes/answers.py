@@ -65,7 +65,7 @@ async def save_survey_answer(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    survey = helpers.get_survey_by_code(survey_answer.survey_code, session)
+    survey = helpers.get_active_survey_by_code(survey_answer.survey_code, session)
 
     if survey.uses_cryptographic_module:
         if not survey_answer.signature:

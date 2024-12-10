@@ -243,6 +243,21 @@ export const checkAccessToSurvey = (user_email: string, survey_code: string, pag
 	});
 };
 
+export const enableOrDisableSurvey = (
+	user_email: string,
+	survey_code: string,
+	is_enabled: boolean
+) => {
+	return fetch(`${host}/surveys/set-enabled`, {
+		method: 'POST',
+		body: JSON.stringify({ user_email, survey_code, is_enabled }),
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${env.BEARER_TOKEN}`
+		}
+	});
+};
+
 // user groups
 
 export const countUserGroups = (user_email: string) => {

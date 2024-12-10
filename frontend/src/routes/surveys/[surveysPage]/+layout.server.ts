@@ -1,5 +1,6 @@
 import type { LayoutServerLoad } from './$types';
 import { error, redirect } from '@sveltejs/kit';
+import type SurveyHeader from '$lib/entities/surveys/SurveyHeader';
 
 export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
 	const { session } = await parent();
@@ -19,14 +20,7 @@ export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
 	if (!surveysResponse.ok) {
 		error(surveysResponse.status, { message: await surveysResponse.json() });
 	}
-	const surveys: {
-		title: string;
-		survey_code: string;
-		creation_date: string;
-		uses_cryptographic_module: boolean;
-		is_owned_by_user: boolean;
-		group_size: number;
-	}[] = await surveysResponse.json();
+	const surveys: SurveyHeader[] = await surveysResponse.json();
 
 	const countResponse = await fetch(`/api/surveys/count`);
 	if (!countResponse.ok) {

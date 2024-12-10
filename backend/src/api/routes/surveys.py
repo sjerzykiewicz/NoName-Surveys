@@ -8,6 +8,7 @@ import src.db.crud.survey_draft as survey_draft_crud
 import src.db.crud.user as user_crud
 from src.api.models.surveys.survey import (
     ShareSurveyActions,
+    SurveyEnableDisableAction,
     SurveyHeadersOutput,
     SurveyInfoFetchInput,
     SurveyStructure,
@@ -60,6 +61,7 @@ async def get_surveys_for_user(
             group_size=ring_member_crud.get_ring_member_count_for_survey(
                 survey.id, session
             ),
+            is_enabled=survey.is_enabled,
         )
         for survey, ownership in user_surveys
     ]
@@ -336,3 +338,21 @@ async def check_access_to_surveys(
             survey.id, page * PAGE_SIZE, PAGE_SIZE, session
         )
     ]
+
+
+@router.post(
+    "/set-enabled",
+    response_description="Enable or disable a survey",
+    response_model=dict,
+)
+async def enable_or_disable_survey(
+    user_input: SurveyEnableDisableAction,
+    session: Session = Depends(get_session),
+):
+    owner = helpers.get_user_by_email(user_input.user_email, session)
+    survey = helpers.get_survey_by_code(user_input.survey_code, session)
+    helpers.check_if_user_has_access(owner.id, survey.creator_id)
+
+    survey_crud.enable_or_disable_survey(survey.id, user_input.is_enabled, session)
+
+    return {"message": "Survey enabled status set successfully"}

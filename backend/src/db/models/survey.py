@@ -17,6 +17,7 @@ class SurveyBase(SQLModel):
 
 class Survey(SurveyBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    is_enabled: bool = Field(default=True)
     is_deleted: bool = Field(default=False)
     creation_date: datetime = Field(
         sa_column=Field(TIMESTAMP(timezone=True)),

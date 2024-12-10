@@ -41,6 +41,15 @@ def get_survey_by_code(survey_code: str, session: Session) -> Survey:
     return survey
 
 
+def get_active_survey_by_code(survey_code: str, session: Session) -> Survey:
+    survey = survey_crud.get_active_survey_by_code(survey_code, session)
+    if survey is None:
+        raise HTTPException(
+            status_code=400, detail="Survey disactivated by the creator or not found"
+        )
+    return survey
+
+
 def get_survey_draft_by_id(survey_draft_id: int, session: Session) -> SurveyDraft:
     survey_draft = survey_draft_crud.get_survey_draft_by_id(survey_draft_id, session)
     if survey_draft is None:

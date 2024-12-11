@@ -55,3 +55,14 @@ If you want to run app locally, you can use:
 ```sh
 make run # poetry run uvicorn src.main:app --reload
 ```
+
+## Running the tests
+To run tests, you can use:
+```sh
+make test # poetry run pytest
+```
+
+or if you want to run tests with coverage:
+```sh
+make test_cov # poetry run pytest --cov
+```

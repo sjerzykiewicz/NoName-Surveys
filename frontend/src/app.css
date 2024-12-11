@@ -622,10 +622,6 @@ input[type='file'] {
 	padding-bottom: 0;
 }
 
-#q0 .question-area.subtitle {
-	padding-top: 0;
-}
-
 .question-area.display {
 	align-items: flex-start;
 	font-weight: 700;
@@ -640,11 +636,6 @@ input[type='file'] {
 	margin-left: 0;
 	border-top: 1px solid var(--border-color-1);
 	border-bottom: 1px solid var(--border-color-1);
-}
-
-#q0 .question-area.subtitle.display {
-	padding-top: 0.5em;
-	border-top: none;
 }
 
 .question-label {

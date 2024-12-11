@@ -148,7 +148,10 @@
 			if (q.index === 0) {
 				element = document.getElementById('header');
 			} else {
-				if ($questions[q.index - 1].component === Scale) {
+				if (
+					$questions[q.index - 1].component === Scale ||
+					$questions[q.index - 1].component === Subtitle
+				) {
 					element = document.getElementById(`q${q.index - 1}`);
 				} else {
 					element = document.getElementById(
@@ -157,7 +160,10 @@
 				}
 			}
 		} else {
-			if ($questions[$questions.length - 1].component === Scale) {
+			if (
+				$questions[$questions.length - 1].component === Scale ||
+				$questions[$questions.length - 1].component === Subtitle
+			) {
 				element = document.getElementById(`q${$questions.length - 1}`);
 			} else {
 				element = document.getElementById(
@@ -192,7 +198,7 @@
 				element = document.getElementById(`q${q.index}c${c.index + 1}`);
 			}
 		} else if (q) {
-			if ($questions[q.index].component === Scale) {
+			if ($questions[q.index].component === Scale || $questions[q.index].component === Subtitle) {
 				if (q.index === $questions.length - 1) {
 					element = document.getElementById('header');
 				} else {
@@ -306,6 +312,7 @@
 	function toggleRequirement() {
 		const q = getClosestElement('question');
 		if (!q) return;
+		if ($questions[q.index].component === Subtitle) return;
 
 		$questions[q.index].required = !$questions[q.index].required;
 	}
@@ -389,7 +396,6 @@
 		return { index: parseInt(itemElement.id.substring(charIndex + 1)), element: focusedElement };
 	}
 
-	// TODO: subtitle hotkeys
 	function handleHotkeys(e: KeyboardEvent) {
 		if (e.altKey) {
 			const key = e.code;
@@ -433,6 +439,9 @@
 				case 'Digit0':
 				case 'Numpad0':
 					if ($previousQuestion) addQuestion($previousQuestion);
+					break;
+				case 'Minus':
+					addQuestion(Subtitle);
 					break;
 				case 'ArrowUp':
 					focusPreviousQuestion();

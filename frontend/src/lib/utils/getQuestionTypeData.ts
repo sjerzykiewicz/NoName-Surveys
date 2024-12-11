@@ -88,6 +88,6 @@ export function getQuestionTypeData(questionType: ComponentType) {
 		case NumberSummary:
 			return { title: 'number_title', icon: 'numbers', text: 'number_text' };
 		default:
-			return { title: '', icon: '', text: '' };
+			return { title: 'subtitle', icon: 'title', text: 'subtitle' };
 	}
 }

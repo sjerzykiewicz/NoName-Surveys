@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { answers } from '$lib/stores/fill-page';
+	import { answers, questions } from '$lib/stores/fill-page';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import { getContext } from 'svelte';
@@ -10,13 +10,18 @@
 	export let unansweredRequired: Set<number>;
 	export let questionIndex: number;
 
-	function errorMessage(i: number) {
-		return $t('answer_question_no', { index: i + 1 });
+	$: displayIndex =
+		questionIndex +
+		1 -
+		$questions.slice(0, questionIndex).filter((q) => q.type === 'subtitle').length;
+
+	function errorMessage() {
+		return $t('answer_question_no', { index: displayIndex });
 	}
 
 	$: checkAnswerError = (i: number) => {
 		return (
-			unansweredRequired.has(questionIndex) &&
+			unansweredRequired.has(i) &&
 			($answers[i].choices.length === 0 ||
 				$answers[i].choices.some((c) => c === null || c === undefined || c.trim().length === 0))
 		);
@@ -27,13 +32,13 @@
 	<p title={$t('error')} class="error" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<i class="symbol">error</i>
 		{#key [$t, unansweredRequired.has(questionIndex)]}
-			{errorMessage(questionIndex)}
+			{errorMessage()}
 		{/key}
 	</p>
 {/if}
 
 <style>
 	.error {
-		margin: var(--margin-top, -1em) 0em 0.5em 2.8em;
+		margin: -1em 0em 0.5em 2.8em;
 	}
 </style>

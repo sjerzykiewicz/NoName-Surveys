@@ -18,11 +18,7 @@
 		$questions.slice(0, questionIndex).filter((q) => q.component === Subtitle).length;
 </script>
 
-<div
-	class="question-label"
-	id={questionIndex.toString()}
-	transition:slide={{ duration: 200, easing: cubicInOut }}
->
+<div class="question-label" transition:slide={{ duration: 200, easing: cubicInOut }}>
 	<div title={$t('question_no', { index: displayIndex })} class="index">
 		{displayIndex}.
 	</div>

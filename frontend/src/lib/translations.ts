@@ -92,6 +92,7 @@ export const data = {
 			Hold <span class="accent">[ LeftAlt ]</span> and press:<br />
 			<span class="accent">[ 1 - 9 ]</span> - Add various question types<br />
 			<span class="accent">[ 0 ]</span> - Add previous question type<br />
+			<span class="accent">[ - ]</span> - Add Subtitle<br />
 			<span class="accent">[ Enter ]</span> / <span class="accent">[ Ins ]</span> - Add choice to selected question<br />
 			<span class="accent">[ Bksp ]</span> / <span class="accent">[ Del ]</span> - Remove selected question or choice<br />
 			<span class="accent">[ PgUp ]</span> / <span class="accent">[ PgDn ]</span> - Move selected question up or down<br />
@@ -344,7 +345,7 @@ export const data = {
 		answer: 'Answer',
 		answers: 'Answers',
 		select_answer: 'Select your answer',
-		select_no_answer: 'Not answered',
+		select_no_answer: 'Unanswered',
 		enter_answer: 'Enter your answer',
 		answer_question_no: 'Please answer question no. {index}.',
 		move_answer_up: 'Move answer up',
@@ -701,6 +702,7 @@ export const data = {
 			Przytrzymaj <span class="accent">[ LeftAlt ]</span> i naciśnij:<br />
 			<span class="accent">[ 1 - 9 ]</span> - Dodaj różne typy pytań<br />
 			<span class="accent">[ 0 ]</span> - Dodaj poprzedni typ pytania<br />
+			<span class="accent">[ - ]</span> - Dodaj Podtytuł<br />
 			<span class="accent">[ Enter ]</span> / <span class="accent">[ Ins ]</span> - Dodaj wybór do zaznaczonego pytania<br />
 			<span class="accent">[ Bksp ]</span> / <span class="accent">[ Del ]</span> - Usuń zaznaczone pytanie lub wybór<br />
 			<span class="accent">[ PgUp ]</span> / <span class="accent">[ PgDn ]</span> - Przesuń zaznaczone pytanie w górę lub w dół<br />

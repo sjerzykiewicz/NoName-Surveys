@@ -19,6 +19,7 @@
 	import Slider from '$lib/components/create-page/Slider.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import Number from '$lib/components/create-page/Number.svelte';
+	import SubtitleComponent from '$lib/components/create-page/Subtitle.svelte';
 	import SinglePreview from '$lib/components/create-page/preview/SinglePreview.svelte';
 	import MultiPreview from '$lib/components/create-page/preview/MultiPreview.svelte';
 	import ScalePreview from '$lib/components/create-page/preview/ScalePreview.svelte';
@@ -28,7 +29,9 @@
 	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
 	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
+	import SubtitlePreview from '$lib/components/create-page/preview/SubtitlePreview.svelte';
 	import type Question from '$lib/entities/questions/Question';
+	import type Subtitle from '$lib/entities/questions/Subtitle';
 	import { getDraft } from '$lib/utils/getDraft';
 	import {
 		errorModalContent,
@@ -90,132 +93,146 @@
 		$currentDraftId = draft.id;
 		$title.title = draft.title;
 		$questions = [];
-		body.survey_structure.questions.forEach((q: Question) => {
-			switch (q.question_type) {
-				case 'single':
-					$questions = [
-						...$questions,
-						{
-							component: Single,
-							preview: SinglePreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as SingleQuestion).choices,
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'multi':
-					$questions = [
-						...$questions,
-						{
-							component: Multi,
-							preview: MultiPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as MultiQuestion).choices,
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'list':
-					$questions = [
-						...$questions,
-						{
-							component: List,
-							preview: ListPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as ListQuestion).choices,
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'rank':
-					$questions = [
-						...$questions,
-						{
-							component: Rank,
-							preview: RankPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as RankQuestion).choices,
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'binary':
-					$questions = [
-						...$questions,
-						{
-							component: Binary,
-							preview: BinaryPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as BinaryQuestion).choices,
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'scale':
-					$questions = [
-						...$questions,
-						{
-							component: Scale,
-							preview: ScalePreview,
-							required: q.required,
-							question: q.question,
-							choices: ['1', '2', '3', '4', '5'],
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'slider':
-					$questions = [
-						...$questions,
-						{
-							component: Slider,
-							preview: SliderPreview,
-							required: q.required,
-							question: q.question,
-							choices: [
-								(q as SliderQuestion).min_value.toString(),
-								(q as SliderQuestion).max_value.toString(),
-								(q as SliderQuestion).precision.toString()
-							],
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'number':
-					$questions = [
-						...$questions,
-						{
-							component: Number,
-							preview: NumberPreview,
-							required: q.required,
-							question: q.question,
-							choices: [
-								(q as NumberQuestion).min_value.toString(),
-								(q as NumberQuestion).max_value.toString()
-							],
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'text':
-					$questions = [
-						...$questions,
-						{
-							component: Text,
-							preview: TextPreview,
-							required: q.required,
-							question: q.question,
-							choices: [(q as TextQuestion).details],
-							error: SurveyError.NoError
-						}
-					];
-					break;
+		body.survey_structure.questions.forEach((q: Question | Subtitle) => {
+			if ('subtitle' in q) {
+				$questions = [
+					...$questions,
+					{
+						component: SubtitleComponent,
+						preview: SubtitlePreview,
+						required: false,
+						question: q.subtitle,
+						choices: [],
+						error: SurveyError.NoError
+					}
+				];
+			} else {
+				switch (q.question_type) {
+					case 'single':
+						$questions = [
+							...$questions,
+							{
+								component: Single,
+								preview: SinglePreview,
+								required: q.required,
+								question: q.question,
+								choices: (q as SingleQuestion).choices,
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'multi':
+						$questions = [
+							...$questions,
+							{
+								component: Multi,
+								preview: MultiPreview,
+								required: q.required,
+								question: q.question,
+								choices: (q as MultiQuestion).choices,
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'list':
+						$questions = [
+							...$questions,
+							{
+								component: List,
+								preview: ListPreview,
+								required: q.required,
+								question: q.question,
+								choices: (q as ListQuestion).choices,
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'rank':
+						$questions = [
+							...$questions,
+							{
+								component: Rank,
+								preview: RankPreview,
+								required: q.required,
+								question: q.question,
+								choices: (q as RankQuestion).choices,
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'binary':
+						$questions = [
+							...$questions,
+							{
+								component: Binary,
+								preview: BinaryPreview,
+								required: q.required,
+								question: q.question,
+								choices: (q as BinaryQuestion).choices,
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'scale':
+						$questions = [
+							...$questions,
+							{
+								component: Scale,
+								preview: ScalePreview,
+								required: q.required,
+								question: q.question,
+								choices: ['1', '2', '3', '4', '5'],
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'slider':
+						$questions = [
+							...$questions,
+							{
+								component: Slider,
+								preview: SliderPreview,
+								required: q.required,
+								question: q.question,
+								choices: [
+									(q as SliderQuestion).min_value.toString(),
+									(q as SliderQuestion).max_value.toString(),
+									(q as SliderQuestion).precision.toString()
+								],
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'number':
+						$questions = [
+							...$questions,
+							{
+								component: Number,
+								preview: NumberPreview,
+								required: q.required,
+								question: q.question,
+								choices: [
+									(q as NumberQuestion).min_value.toString(),
+									(q as NumberQuestion).max_value.toString()
+								],
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'text':
+						$questions = [
+							...$questions,
+							{
+								component: Text,
+								preview: TextPreview,
+								required: q.required,
+								question: q.question,
+								choices: [(q as TextQuestion).details],
+								error: SurveyError.NoError
+							}
+						];
+						break;
+				}
 			}
 		});
 	}

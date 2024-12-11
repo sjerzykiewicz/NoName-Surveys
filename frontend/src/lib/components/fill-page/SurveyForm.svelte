@@ -9,6 +9,7 @@
 	import { NumberQuestion, NumberQuestionAnswered } from '$lib/entities/questions/Number';
 	import type Survey from '$lib/entities/surveys/Survey';
 	import type Question from '$lib/entities/questions/Question';
+	import Subtitle from '$lib/entities/questions/Subtitle';
 	import { MultiQuestionAnswered } from '$lib/entities/questions/Multi';
 	import { BinaryQuestionAnswered } from '$lib/entities/questions/Binary';
 	import { RankQuestionAnswered } from '$lib/entities/questions/Rank';
@@ -25,6 +26,7 @@
 	import Binary from './Binary.svelte';
 	import Rank from './Rank.svelte';
 	import Number from './Number.svelte';
+	import SubtitleComponent from './Subtitle.svelte';
 	import type { ComponentType } from 'svelte';
 	import AnswerError from './AnswerError.svelte';
 	import { cubicInOut } from 'svelte/easing';
@@ -88,32 +90,41 @@
 	$title = survey_title;
 
 	for (let i in survey.questions) {
-		$questions[i] = {
-			type: survey.questions[i].question_type,
-			required: survey.questions[i].required,
-			question: survey.questions[i].question,
-			choices: []
-		};
+		if ('subtitle' in survey.questions[i]) {
+			$questions[i] = {
+				type: 'subtitle',
+				required: false,
+				question: survey.questions[i].subtitle,
+				choices: []
+			};
+		} else {
+			$questions[i] = {
+				type: survey.questions[i].question_type,
+				required: survey.questions[i].required,
+				question: survey.questions[i].question,
+				choices: []
+			};
 
-		switch (survey.questions[i].question_type) {
-			case 'text':
-				$questions[i].choices[0] = (survey.questions[i] as TextQuestion).details;
-				break;
-			case 'scale':
-				$questions[i].choices = ['1', '2', '3', '4', '5'];
-				break;
-			case 'slider':
-				$questions[i].choices[0] = (survey.questions[i] as SliderQuestion).min_value.toString();
-				$questions[i].choices[1] = (survey.questions[i] as SliderQuestion).max_value.toString();
-				$questions[i].choices[2] = (survey.questions[i] as SliderQuestion).precision.toString();
-				break;
-			case 'number':
-				$questions[i].choices[0] = (survey.questions[i] as NumberQuestion).min_value.toString();
-				$questions[i].choices[1] = (survey.questions[i] as NumberQuestion).max_value.toString();
-				break;
-			default:
-				$questions[i].choices = (survey.questions[i] as SingleQuestion).choices;
-				break;
+			switch (survey.questions[i].question_type) {
+				case 'text':
+					$questions[i].choices[0] = (survey.questions[i] as TextQuestion).details;
+					break;
+				case 'scale':
+					$questions[i].choices = ['1', '2', '3', '4', '5'];
+					break;
+				case 'slider':
+					$questions[i].choices[0] = (survey.questions[i] as SliderQuestion).min_value.toString();
+					$questions[i].choices[1] = (survey.questions[i] as SliderQuestion).max_value.toString();
+					$questions[i].choices[2] = (survey.questions[i] as SliderQuestion).precision.toString();
+					break;
+				case 'number':
+					$questions[i].choices[0] = (survey.questions[i] as NumberQuestion).min_value.toString();
+					$questions[i].choices[1] = (survey.questions[i] as NumberQuestion).max_value.toString();
+					break;
+				default:
+					$questions[i].choices = (survey.questions[i] as SingleQuestion).choices;
+					break;
+			}
 		}
 	}
 
@@ -123,7 +134,7 @@
 	}
 
 	function constructAnswerList() {
-		let answerList: Array<Question> = [];
+		let answerList: Array<Question | Subtitle> = [];
 		for (let i = 0; i < numQuestions; i++) {
 			const type = $questions[i].type;
 			switch (type) {
@@ -200,6 +211,9 @@
 						parseFloat($questions[i].choices[1]),
 						parseFloat($answers[i].choices[0])
 					);
+					break;
+				case 'subtitle':
+					answerList[i] = new Subtitle($questions[i].question);
 					break;
 			}
 		}
@@ -311,7 +325,7 @@
 	async function processForm(keyPair: KeyPair | undefined) {
 		let signature: string[] = [];
 
-		const answerList: Array<Question> = constructAnswerList();
+		const answerList: Array<Question | Subtitle> = constructAnswerList();
 
 		if (uses_crypto) {
 			const message = answerList.map((answer) => answer.getAnswer()).join('') + code;
@@ -467,17 +481,17 @@
 	{/if}
 	{#each $questions as question, questionIndex (question)}
 		<div class="question" id={`q${questionIndex}`} in:slide={{ duration: 200, easing: cubicInOut }}>
-			<QuestionTitle
-				{questionIndex}
-				questionTypeData={getQuestionTypeData(componentTypeMap[question.type])}
-			/>
-			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
+			{#if question.type === 'subtitle'}
+				<SubtitleComponent {questionIndex} />
+			{:else}
+				<QuestionTitle
+					{questionIndex}
+					questionTypeData={getQuestionTypeData(componentTypeMap[question.type])}
+				/>
+				<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
+			{/if}
 		</div>
-		<AnswerError
-			{unansweredRequired}
-			{questionIndex}
-			--margin-top={question.type === 'text' ? '-2em' : ''}
-		/>
+		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
 </Content>
 
@@ -514,7 +528,8 @@
 
 	.warning,
 	.survey-info {
-		margin: 0em 0em 0.5em 0em;
+		margin: 0;
+		padding-bottom: 1em;
 	}
 
 	@media screen and (max-width: 768px) {

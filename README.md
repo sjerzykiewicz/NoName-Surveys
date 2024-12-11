@@ -125,11 +125,13 @@ If you want to deploy the app on a Kubernetes cluster, you have to add secrets f
 kubectl create secret generic frontend --from-env-file=./frontend/.env
 kubectl create secret generic backend --from-env-file=./backend/.env
 ```
+> [!IMPORTANT]
+> Not all environment variables are secrets, so you have to edit env values in the `k8s/*-deployment.yaml` files.
 
 ---
 
 ### 3️⃣ **Setup**
-You can deploy the app using Docker images or build it locally.
+You can deploy the app using Docker images, build it locally or run it on Kubernetes cluster.
 
 #### Using Prebuilt Docker Images: [frontend](https://hub.docker.com/repository/docker/sjerzykiewicz/noname-surveys-frontend) & [backend](https://hub.docker.com/repository/docker/sjerzykiewicz/noname-surveys-backend):
 ```bash
@@ -147,7 +149,9 @@ Frontend and Backend have separate setup instructions. Refer to the respective R
 - Backend: `make install_dev` & `make run`
 
 #### Kubernetes:
-You can deploy the app on a Kubernetes cluster using the provided configuration files. You need to have `kubectl` installed and configured to use the cluster. You can change images tags in *-deployment.yaml files. Run the following command to deploy the app:
+You can deploy the app on a Kubernetes cluster using the provided configuration files. You need to have `kubectl` installed and configured to use the cluster. Run the following command to deploy the app:
 ```bash
 kubectl apply -f k8s/
 ```
+> [!NOTE]
+> You can change images tags in `k8s/*-deployment.yaml` files.

@@ -58,6 +58,9 @@
 	let surveyCode: string;
 	let isInfoPinned: boolean = false;
 
+	const groupLink =
+		'https://github.com/sjerzykiewicz/NoName-Surveys/tree/dev?tab=readme-ov-file#create-a-user-group';
+
 	$: currentLang = $options.currentLang;
 
 	async function addSubtitle() {
@@ -249,10 +252,12 @@
 					{/if}
 				</button>
 			{/if}
-			<div class="tooltip create-info">
-				<i class="symbol">info</i>
+			<div class="tooltip hoverable create-info">
+				<i class="symbol">help</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
-					><Tx text="groups_info" /></span
+					><Tx text="create_groups_info" /><a href={groupLink} target="_blank"
+						><Tx text="read_more" /></a
+					></span
 				>
 			</div>
 		</div>
@@ -354,11 +359,11 @@
 		}
 
 		.create-info.tooltip .tooltip-text.bottom {
-			left: -175%;
+			left: -60%;
 		}
 
 		.create-info.tooltip .tooltip-text.bottom::after {
-			left: 80%;
+			left: 65%;
 		}
 
 		.add-subtitle {

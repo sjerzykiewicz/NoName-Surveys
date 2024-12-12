@@ -4,7 +4,7 @@
 	import DraftsTable from '$lib/components/drafts-page/DraftsTable.svelte';
 	import DraftsButtons from '$lib/components/drafts-page/DraftsButtons.svelte';
 	import LimitWarning from '$lib/components/global/LimitWarning.svelte';
-	import { LIMIT_OF_DRAFTS, M } from '$lib/stores/global';
+	import { LIMIT_OF_DRAFTS, M, S } from '$lib/stores/global';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -22,6 +22,9 @@
 	export let ringMembers: string[] = [];
 	export let selectedGroups: string[] = [];
 	export let useCrypto: boolean = false;
+
+	const draftLink =
+		'https://github.com/sjerzykiewicz/NoName-Surveys/tree/dev?tab=readme-ov-file#managing-existing-drafts';
 
 	let isSurveyModalHidden: boolean = true;
 	let surveyCode: string;
@@ -54,9 +57,20 @@
 
 <Header>
 	<div title={$t('your_drafts')} class="title static">
-		<Tx text="your_drafts" />
-		<span title={$t('number_of_drafts')} class:max={data.numDrafts >= $LIMIT_OF_DRAFTS}
-			>[ {data.numDrafts} / {$LIMIT_OF_DRAFTS} ]</span
+		<div class="header-tooltip">
+			<Tx text="your_drafts" />
+			<div class="tooltip hoverable">
+				<i class="symbol">help</i>
+				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
+					<Tx text="drafts_info" /><a href={draftLink} target="_blank"><Tx text="read_more" /></a>
+				</span>
+			</div>
+		</div>
+		<a
+			href="/account/faq/#limit-items"
+			title={$t('number_of_drafts')}
+			class="items"
+			class:max={data.numDrafts >= $LIMIT_OF_DRAFTS}>[ {data.numDrafts} / {$LIMIT_OF_DRAFTS} ]</a
 		>
 	</div>
 </Header>
@@ -74,10 +88,20 @@
 </Content>
 
 <style>
-	.title span.max {
-		color: var(--warning-color-1);
+	.items {
+		color: var(--text-color-1);
+		opacity: 1;
+		text-decoration: none;
 		transition:
 			0.2s,
 			outline 0s;
+	}
+
+	.items:hover {
+		opacity: 0.75;
+	}
+
+	.items.max {
+		color: var(--warning-color-1);
 	}
 </style>

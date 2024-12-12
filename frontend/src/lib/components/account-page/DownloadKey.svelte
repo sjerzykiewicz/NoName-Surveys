@@ -29,6 +29,9 @@
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
 
+	const keysLink =
+		'https://github.com/sjerzykiewicz/NoName-Surveys/tree/dev?tab=readme-ov-file#generate-keys';
+
 	$: timeDiff = lastTime !== '' ? milisecondsToDays(Date.now() - Date.parse(lastTime)) : 0;
 
 	function milisecondsToDays(miliseconds: number) {
@@ -225,10 +228,12 @@
 			<button title={$t('account_new_key')} class="save" on:click={() => (isModalHidden = false)}>
 				<i class="symbol">encrypted</i><Tx text="account_new_key" />
 			</button>
-			<div class="tooltip">
-				<i class="symbol">info</i>
+			<div class="tooltip hoverable">
+				<i class="symbol">help</i>
 				<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-					<Tx text="account_generate_info" />
+					<Tx text="account_generate_info" /><a href={keysLink} target="_blank"
+						><Tx text="read_more" /></a
+					>
 				</span>
 			</div>
 		</div>
@@ -237,10 +242,10 @@
 				<div title={$t('account_last_key_update')} class="last-update-info">
 					<Tx text="account_last_key_update" />: {formatDate(lastTime)}
 				</div>
-				<div class="tooltip">
-					<i class="symbol">info</i>
+				<div class="tooltip hoverable">
+					<i class="symbol">help</i>
 					<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-						<Tx text="account_key_update_info" />
+						<Tx text="account_key_update_info" /><a href="/account/faq#keys"><Tx text="help" /></a>
 					</span>
 				</div>
 			</div>
@@ -312,7 +317,7 @@
 	}
 
 	.download-key .tooltip {
-		--tooltip-width: 22em;
+		--tooltip-width: 23em;
 	}
 
 	.download-key .tooltip .tooltip-text {
@@ -376,7 +381,7 @@
 
 	@media screen and (max-width: 1440px) {
 		.download-key .tooltip {
-			--tooltip-width: 16em;
+			--tooltip-width: 18em;
 		}
 	}
 
@@ -390,11 +395,11 @@
 		}
 
 		.download-key .tooltip .tooltip-text.bottom {
-			left: -350%;
+			left: -400%;
 		}
 
 		.download-key .tooltip .tooltip-text.bottom::after {
-			left: 92%;
+			left: 92.5%;
 		}
 
 		.last-update-container .tooltip .tooltip-text.bottom {

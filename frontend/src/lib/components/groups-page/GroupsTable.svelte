@@ -146,10 +146,10 @@
 {#if groups.length === 0}
 	<div class="info-row">
 		<div title={$t('groups')} class="title empty"><Tx text="no_groups_yet" /></div>
-		<div class="tooltip">
-			<i class="symbol">info</i>
+		<div class="tooltip hoverable">
+			<i class="symbol">help</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				<Tx text="groups_tooltip" />
+				<Tx text="groups_tooltip" /><a href="/account/faq#group"><Tx text="help" /></a>
 			</span>
 		</div>
 	</div>

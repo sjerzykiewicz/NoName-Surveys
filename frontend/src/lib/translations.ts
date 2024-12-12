@@ -85,7 +85,8 @@ export const data = {
 		rename: 'Rename',
 		close_menu: 'Close menu',
 		open_menu: 'Open menu',
-		read_more: 'Read more...',
+		read_more: 'Read more',
+		help: 'Help',
 		slogan: 'Unlock true anonymity with the power of ring signatures!',
 		open_source_info: 'Our project is open source. You can find the source code on ',
 		hotkeys_pin: 'Click to pin',
@@ -180,8 +181,9 @@ export const data = {
 		your_drafts: 'Your drafts',
 		number_of_drafts: 'Number of drafts',
 		no_drafts_yet: 'No drafts yet!',
-		draft_tooltip: `When creating a survey, you can save it as a draft for later use. To create a survey, click
-			on the "Create" tab at the top of the page. All your saved drafts will be stored on this page.`,
+		drafts_tooltip: `When creating a survey, you can save it as a draft for later use.
+			To create a survey, click on the "Create" tab at the top of the page. `,
+		drafts_info: `All your saved drafts are stored on this page. `,
 		draft_title: 'Draft Title',
 		deleting_drafts: 'Deleting Drafts',
 		create_draft: 'Create a draft',
@@ -197,7 +199,7 @@ export const data = {
 		surveys_genitive: 'surveys',
 		code_info: 'Enter a survey code to fill it out',
 		code_tooltip:
-			'Enter the code provided to you by the survey creator. Your answers are completely anonymous.',
+			'Enter the code provided to you by the survey creator. Your answers are completely anonymous. ',
 		submit_code: 'Submit the code',
 		home_keys_info: `To fill out a secure survey, you must have generated keys.<br />
 			If you do not have keys, authorize yourself and generate them in `,
@@ -220,8 +222,8 @@ export const data = {
 		your_surveys: 'Your surveys',
 		number_of_surveys: 'Number of surveys',
 		no_surveys_yet: 'No surveys yet!',
-		surveys_tooltip: `To create a survey, click on the "Create" tab at the top of the page.
-			All your created surveys will be stored on this page.`,
+		surveys_tooltip: `To create a survey, click on the "Create" tab at the top of the page. `,
+		surveys_info: `All your created surveys are stored on this page. `,
 		survey_is_secure: 'This survey has an established group of possible respondents.',
 		survey_is_public: 'Everyone can submit an answer to this survey.',
 		survey_owner: 'You are the owner of this survey.',
@@ -278,8 +280,9 @@ export const data = {
 		renaming: 'Renaming',
 		enter_new_group_name: 'Enter a new group name',
 		no_groups_yet: 'No groups yet!',
-		groups_tooltip: `When creating a secure survey, you can choose a group of possible respondents. To create a
-			group, click on the button below. All your created groups will be stored on this page.`,
+		groups_tooltip: `When creating a secure survey, you can choose a group of possible respondents.
+			To create a group, click on the button below. `,
+		groups_info: `All your created groups are stored on this page. `,
 		group_name: 'Group Name',
 		everyone_has_keys:
 			'Everyone in this group have generated their keys. You can use this group in secure surveys.',
@@ -302,9 +305,9 @@ export const data = {
 		rename_group: 'Rename Group',
 		save_new_group_name_title: 'Save the new group name',
 		keys_info_title: 'Keys Information',
-		groups_info: `Before creating a secure survey, consider setting up a user group. User groups make it
+		create_groups_info: `Before creating a secure survey, consider setting up a user group. User groups make it
 			easy to select the same set of respondents across multiple surveys. However, if you
-			prefer, you can proceed without using them.`,
+			prefer, you can proceed without using them. `,
 
 		// users / members
 
@@ -486,7 +489,7 @@ export const data = {
 			This is only possible in secure surveys. In a public survey, anyone can submit an answer multiple times.`,
 		faq_survey_time_q: 'Can I set a start and end time for a survey?',
 		faq_survey_time_a: `No, you cannot set a start and end time for a survey. However, it is your choice when you share the access code with other users.
-			If you want to limit the time when the survey is available, you can export the survey summary into a file and delete the survey.`,
+			If you want to limit the time when the survey is available, you can deactivate it to remove the option to submit responses.`,
 		faq_summary_q: 'What is a survey summary?',
 		faq_summary_a: `A survey summary is a collection of all the answers to a survey. You can view the averages of the answers to each question,
 			as well as each individual answer. To access the survey summary, click on the "Surveys" tab at the top of the page and then click on the survey title.
@@ -508,9 +511,11 @@ export const data = {
 
 		account: 'Account',
 		your_account: 'Your account',
+		auth_tooltip:
+			'Only AMU employees and students are allowed to authorize in this instance of our application. ',
 		account_sign_in: 'Authorize yourself with AMU USOS:',
 		account_info: `We do not recommend signing in if you only wish to fill out a public survey. For secure surveys, if you
-			have already generated your digital signature keys, signing in is also not necessary.`,
+			have already generated your digital signature keys, signing in is also not necessary. `,
 		keys_generated: 'You have already generated your keys.',
 		keys_not_generated: 'You have not generated your keys yet.',
 		account_generating_keys: 'Generating Keys',
@@ -518,10 +523,10 @@ export const data = {
 			Make sure you have answered all the surveys you wanted before generating new keys.`,
 		account_new_key: 'Generate New Keys',
 		account_generate_info:
-			'Generated file contains your public and private keys. Do not share this file with anyone. It is your responsibility to keep it safe.',
+			'Generated file contains your public and private keys. Do not share this file with anyone. It is your responsibility to keep it safe. ',
 		account_last_key_update: 'Last key update',
 		account_key_update_info:
-			'In order to increase security, we recommend generating a new key pair every year.',
+			'In order to increase security, we recommend generating a new key pair every year. ',
 		account_expiration_warning: 'Key expiration warning',
 		account_expiration_critical: 'Key expiration critical warning',
 		account_keys_expire_soon:
@@ -534,42 +539,41 @@ export const data = {
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">encrypted</i></div>
 					<div>
-						Generate <span class="account-accent">digital signature keys</span> that allow you to participate
-						in
-						<span class="account-accent">secure surveys</span> without the need to sign in each time,
+						Generate <a href="/account/faq#keys">digital signature keys</a> that allow you to participate in
+						<a href="/account/faq#secure">secure surveys</a> without the need to sign in each time,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">article</i></div>
 					<div>
 						Create both
-						<span class="account-accent">public</span>
-						and <span class="account-accent">secure</span> surveys,
+						<a href="/account/faq#public">public</a>
+						and <a href="/account/faq#secure">secure</a> surveys,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">save</i></div>
 					<div>
 						Save surveys as
-						<span class="account-accent">drafts</span> for later editing,
+						<a href="/account/faq#draft">drafts</a> for later editing,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">bar_chart</i></div>
 					<div>
-						View <span class="account-accent">responses</span>
-						and <span class="account-accent">summaries</span> of your surveys,
+						View <a href="/account/faq#summary">responses</a>
+						and <a href="/account/faq#summary">summaries</a> of your surveys,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">share</i></div>
-					<div><span class="account-accent">Share</span> surveys' results with others,</div>
+					<div><a href="/account/faq#summary">Share</a> surveys' results with others,</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">group</i></div>
 					<div>
 						Create and manage
-						<span class="account-accent">user groups</span>.
+						<a href="/account/faq#group">user groups</a>.
 					</div>
 				</li>
 			</ul>`,
@@ -579,32 +583,32 @@ export const data = {
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">encrypted</i></div>
 					<div>
-						Generating them allows you to participate in <span class="account-accent">secure surveys</span> and remain fully anonymous,
+						Generating them allows you to participate in <a href="/account/faq#secure">secure surveys</a> and remain fully anonymous,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">graph_6</i></div>
 					<div>
-						They are being utilized in <span class="account-accent">ring signatures</span>,
+						They are being utilized in <a href="/account/faq#ring">ring signatures</a>,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">contract_edit</i></div>
 					<div>
 						When answering a secure survey, you will have to provide these keys to your browser for a
-						<span class="account-accent">digital signature</span>,
+						<a href="/account/faq#ring">digital signature</a>,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">account_circle_off</i></div>
 					<div>
-						After generating them, you do not need to be signed in to participate in <span class="account-accent">secure surveys</span>,
+						After generating them, you do not need to be signed in to participate in <a href="/account/faq#secure">secure surveys</a>,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">priority_high</i></div>
 					<div>
-						If you are not going to take part in <span class="account-accent">secure surveys</span>, there is no need to generate them.
+						If you are not going to take part in <a href="/account/faq#secure">secure surveys</a>, there is no need to generate them.
 					</div>
 				</li>
 			</ul>`
@@ -697,7 +701,8 @@ export const data = {
 		rename: 'Zmień nazwę',
 		close_menu: 'Zamknij menu',
 		open_menu: 'Otwórz menu',
-		read_more: 'Czytaj więcej...',
+		read_more: 'Czytaj więcej',
+		help: 'Pomoc',
 		slogan: 'Zyskaj pełną anonimowość dzięki potędze podpisów pierścieniowych!',
 		open_source_info: 'Nasz projekt jest open source. Kod źródłowy znajdziesz na ',
 		hotkeys_pin: 'Kliknij, by przypiąć',
@@ -791,8 +796,9 @@ export const data = {
 		your_drafts: 'Twoje szkice',
 		number_of_drafts: 'Liczba szkiców',
 		no_drafts_yet: 'Brak szkiców!',
-		draft_tooltip: `Podczas tworzenia ankiety, możesz zapisać ją jako szkic do późniejszego wykorzystania. Aby stworzyć ankietę, wejdź
-			w zakładkę "Utwórz" na górze strony lub kliknij przycisk poniżej. Wszystkie zapisane szkice będą dostępne na tej stronie.`,
+		drafts_tooltip: `Podczas tworzenia ankiety, możesz zapisać ją jako szkic do późniejszego wykorzystania.
+			Aby utworzyć ankietę, wejdź w zakładkę "Utwórz" na górze strony. `,
+		drafts_info: `Wszystkie zapisane szkice są dostępne na tej stronie. `,
 		draft_title: 'Tytuł szkicu',
 		deleting_drafts: 'Usuwanie szkiców',
 		create_draft: 'Stwórz szkic',
@@ -808,7 +814,7 @@ export const data = {
 		surveys_genitive: 'ankiet',
 		code_info: 'Podaj kod ankiety, by ją wypełnić',
 		code_tooltip:
-			'Wprowadź kod podany przez twórcę ankiety. Twoje odpowiedzi są w pełni anonimowe.',
+			'Wprowadź kod podany przez twórcę ankiety. Twoje odpowiedzi są w pełni anonimowe. ',
 		submit_code: 'Wyślij kod',
 		home_keys_info: `By odpowiedzieć na bezpieczną ankietę, musisz mieć wygenerowane klucze.<br />
 			Jeśli nie masz kluczy, zautoryzuj się i wygeneruj je w `,
@@ -831,8 +837,8 @@ export const data = {
 		your_surveys: 'Twoje ankiety',
 		number_of_surveys: 'Liczba ankiet',
 		no_surveys_yet: 'Brak ankiet!',
-		surveys_tooltip: `Aby stworzyć ankietę, kliknij w zakładkę "Utwórz" na górze strony lub przycisk poniżej.
-			Wszystkie stworzone ankiety będą dostępne na tej stronie.`,
+		surveys_tooltip: `Aby utworzyć ankietę, kliknij w zakładkę "Utwórz" na górze strony. `,
+		surveys_info: `Wszystkie utworzone ankiety są dostępne na tej stronie. `,
 		survey_is_secure: 'Ta ankieta ma określoną grupę możliwych respondentów.',
 		survey_is_public: 'Każdy może przesłać odpowiedź do tej ankiety.',
 		survey_owner: 'Jesteś właścicielem tej ankiety.',
@@ -889,8 +895,9 @@ export const data = {
 		renaming: 'Zmienianie nazwy',
 		enter_new_group_name: 'Wprowadź nową nazwę grupy',
 		no_groups_yet: 'Brak grup!',
-		groups_tooltip: `Podczas tworzenia bezpiecznej ankiety możesz wybrać grupę uprawnionych respondentów. Aby stworzyć
-			grupę, kliknij przycisk poniżej. Wszystkie utworzone grupy będą dostępne na tej stronie.`,
+		groups_tooltip: `Podczas tworzenia bezpiecznej ankiety możesz wybrać grupę uprawnionych respondentów.
+			Aby utworzyć grupę, kliknij przycisk poniżej. `,
+		groups_info: `Wszystkie utworzone grupy są dostępne na tej stronie. `,
 		group_name: 'Nazwa grupy',
 		everyone_has_keys:
 			'Każdy członek tej grupy wygenerował klucze. Ta grupa może być wykorzystana w bezpiecznych ankietach.',
@@ -913,8 +920,8 @@ export const data = {
 		rename_group: 'Zmień nazwę grupy',
 		save_new_group_name_title: 'Zapisz nową nazwę grupy',
 		keys_info_title: 'Informacje o kluczach',
-		groups_info: `Przed utworzeniem bezpiecznej ankiety, rozważ utworzenie grupy użytkowników. Grupy użytkowników ułatwiają wybór
-			takiego samego zestawu respondentów w wielu ankietach. Jeśli chcesz, możesz kontynuować bez ich użycia.`,
+		create_groups_info: `Przed utworzeniem bezpiecznej ankiety, rozważ utworzenie grupy użytkowników. Grupy użytkowników ułatwiają wybór
+			takiego samego zestawu respondentów w wielu ankietach. Jeśli chcesz, możesz kontynuować bez ich użycia. `,
 
 		// users / members
 
@@ -1098,7 +1105,7 @@ export const data = {
 			To jest możliwe jedynie w bezpiecznych ankietach. W publicznych ankietach każdy może odpowiedzieć wielokrotnie.`,
 		faq_survey_time_q: 'Czy mogę ustawić czas, w którym ankieta będzie dostępna?',
 		faq_survey_time_a: `Nie, nie możesz ustawić czasu, w którym ankieta będzie dostępna. Natomiast, do twojego wyboru należy kiedy udostępnisz jej kod dostępu innym użytkownikom.
-			Jeśli chcesz ograniczyć czas, w którym ankieta jest dostępna, możesz wyeksportować podsumowanie ankiety do pliku i usunąć ankietę.`,
+			Jeśli chcesz ograniczyć czas, w którym ankieta jest dostępna, możesz ją dezaktywować, by uniemożliwić wysłanie odpowiedzi.`,
 		faq_summary_q: 'Czym jest podsumowanie ankiety?',
 		faq_summary_a: `Podsumowanie ankiety to kolekcja wszystkich odpowiedzi na daną ankietę. Możesz przeglądać średnie odpowiedzi do każdego pytania,
 			jak i wszystkie indywidualne odpowiedzi. By sprawdzić podsumowanie ankiety, kliknij w zakładkę "Ankiety" na górze strony i kliknij w tytuł ankiety.
@@ -1119,9 +1126,11 @@ export const data = {
 
 		account: 'Konto',
 		your_account: 'Twoje konto',
+		auth_tooltip:
+			'Tylko pracownicy i studenci UAM mają zezwolenie na autoryzację w tej instancji naszej aplikacji. ',
 		account_sign_in: 'Zautoryzuj się za pomocą USOS UAM:',
 		account_info: `Nie zalecamy logowania się, jeśli chcesz jedynie wypełnić publiczną ankietę. W przypadku bezpiecznych ankiet, jeśli
-			wygenerowałeś już klucze podpisu cyfrowego, logowanie się również nie jest konieczne.`,
+			wygenerowałeś już klucze podpisu cyfrowego, logowanie się również nie jest konieczne. `,
 		keys_generated: 'Klucze zostały już wygenerowane.',
 		keys_not_generated: 'Nie wygenerowałeś jeszcze kluczy.',
 		account_generating_keys: 'Generowanie kluczy',
@@ -1129,10 +1138,10 @@ export const data = {
 			Upewnij się, że wypełniłeś wszystkie ankiety, które chciałeś, zanim wygenerujesz nowe klucze.`,
 		account_new_key: 'Wygeneruj nowe klucze',
 		account_generate_info:
-			'Wygenerowany plik zawiera Twój publiczny i prywatny klucz. Nie udostępniaj nikomu tego pliku. Twoim obowiązkiem jest bezpieczne przechowanie go.',
+			'Wygenerowany plik zawiera Twój publiczny i prywatny klucz. Nie udostępniaj nikomu tego pliku. Twoim obowiązkiem jest bezpieczne przechowanie go. ',
 		account_last_key_update: 'Ostatnia aktualizacja kluczy',
 		account_key_update_info:
-			'Aby zwiększyć bezpieczeństwo, zalecamy wygenerowanie nowej pary kluczy raz na rok.',
+			'Aby zwiększyć bezpieczeństwo, zalecamy wygenerowanie nowej pary kluczy raz na rok. ',
 		account_expiration_warning: 'Ostrzeżenie o wygaśnięciu kluczy',
 		account_expiration_critical: 'Krytyczne ostrzeżenie o wygaśnięciu kluczy',
 		account_keys_expire_soon:
@@ -1145,36 +1154,36 @@ export const data = {
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">encrypted</i></div>
 					<div>
-						Generowanie <span class="account-accent">kluczy podpisu cyfrowego</span>, które pozwalają na uczestniczenie
-						w <span class="account-accent">bezpiecznych ankietach</span> bez konieczności logowania się za każdym razem,
+						Generowanie <a href="/account/faq#keys">kluczy podpisu cyfrowego</a>, które pozwalają na uczestniczenie
+						w <a href="/account/faq#secure">bezpiecznych ankietach</a> bez konieczności logowania się za każdym razem,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">article</i></div>
 					<div>
-						Tworzenie zarówno <span class="account-accent">publicznych</span>, jak i <span class="account-accent">bezpiecznych</span> ankiet,
+						Tworzenie zarówno <a href="/account/faq#public">publicznych</a>, jak i <a href="/account/faq#secure">bezpiecznych</a> ankiet,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">save</i></div>
 					<div>
-						Zapisywanie ankiet jako <span class="account-accent">szkice</span> do późniejszej edycji,
+						Zapisywanie ankiet jako <a href="/account/faq#drafts">szkice</a> do późniejszej edycji,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">bar_chart</i></div>
 					<div>
-						Podgląd <span class="account-accent">odpowiedzi</span> i <span class="account-accent">podsumowań</span> swoich ankiet,
+						Podgląd <a href="/account/faq#summary">odpowiedzi</a> i <a href="/account/faq#summary">podsumowań</a> swoich ankiet,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">share</i></div>
-					<div><span class="account-accent">Udostępnianie</span> wyników ankiet innym osobom,</div>
+					<div><a href="/account/faq#summary">Udostępnianie</a> wyników ankiet innym osobom,</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">group</i></div>
 					<div>
-						Tworzenie i zarządzanie <span class="account-accent">grupami użytkowników</span>.
+						Tworzenie i zarządzanie <a href="/account/faq#group">grupami użytkowników</a>.
 					</div>
 				</li>
 			</ul>`,
@@ -1184,32 +1193,32 @@ export const data = {
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">encrypted</i></div>
 					<div>
-						Wygenerowanie ich pozwala na uczestnictwo w <span class="account-accent">bezpiecznych ankietach</span> i pozostanie w pełni anonimowym,
+						Wygenerowanie ich pozwala na uczestnictwo w <a href="/account/faq#secure">bezpiecznych ankietach</a> i pozostanie w pełni anonimowym,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">graph_6</i></div>
 					<div>
-						Wykorzystywane są w <span class="account-accent">podpisach pierścieniowych</span>,
+						Wykorzystywane są w <a href="/account/faq#ring">podpisach pierścieniowych</a>,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">contract_edit</i></div>
 					<div>
 						Przy odpowiadaniu na bezpieczną ankietę, będziesz musiał podać te klucze swojej przeglądarce do
-						<span class="account-accent">podpisu cyfrowego</span>,
+						<a href="/account/faq#ring">podpisu cyfrowego</a>,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">account_circle_off</i></div>
 					<div>
-						Po ich wygenerowaniu, nie musisz być zalogowany, aby uczestniczyć w <span class="account-accent">bezpiecznych ankietach</span>,
+						Po ich wygenerowaniu, nie musisz być zalogowany, aby uczestniczyć w <a href="/account/faq#secure">bezpiecznych ankietach</a>,
 					</div>
 				</li>
 				<li class="account-li">
 					<div class="account-icon"><i class="symbol">priority_high</i></div>
 					<div>
-						Jeśli nie zamierzasz korzystać z <span class="account-accent">bezpiecznych ankiet</span>, nie ma potrzeby ich generować.
+						Jeśli nie zamierzasz korzystać z <a href="/account/faq#secure">bezpiecznych ankiet</a>, nie ma potrzeby ich generować.
 					</div>
 				</li>
 			</ul>`

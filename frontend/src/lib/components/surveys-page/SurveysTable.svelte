@@ -114,18 +114,23 @@
 				</td>
 				<td class="button-entry tooltip active">
 					<button
+						disabled={!survey.is_owned_by_user}
 						on:click={async () => await toggleSurveyActive(survey.survey_code, !survey.is_enabled)}
 					>
-						{#if survey.is_enabled}
-							<i class="symbol deactivate">mode_off_on</i>
-							<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-								><Tx text="survey_deactivate" /></span
-							>
+						{#if survey.is_owned_by_user}
+							{#if survey.is_enabled}
+								<i class="symbol deactivate">mode_off_on</i>
+								<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+									><Tx text="survey_deactivate" /></span
+								>
+							{:else}
+								<i class="symbol activate">mode_off_on</i>
+								<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
+									><Tx text="survey_activate" /></span
+								>
+							{/if}
 						{:else}
-							<i class="symbol activate">mode_off_on</i>
-							<span class="tooltip-text {innerWidth <= $XL ? 'right' : 'left'}"
-								><Tx text="survey_activate" /></span
-							>
+							<i class="symbol">mode_off_on</i>
 						{/if}
 					</button>
 				</td>

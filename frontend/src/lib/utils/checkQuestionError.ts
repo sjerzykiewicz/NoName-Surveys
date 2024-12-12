@@ -4,8 +4,18 @@ import Binary from '../components/create-page/Binary.svelte';
 import Number from '../components/create-page/Number.svelte';
 import Slider from '../components/create-page/Slider.svelte';
 import Text from '../components/create-page/Text.svelte';
+import Subtitle from '../components/create-page/Subtitle.svelte';
 
 export function checkQuestionError(question: QuestionsStore, limit: number) {
+	if (question.component === Subtitle) {
+		if (question.question.length > limit) {
+			question.error = SurveyError.SubtitleTooLong;
+		} else {
+			question.error = SurveyError.NoError;
+		}
+		return;
+	}
+
 	const q = question.question;
 	if (q === null || q === undefined || q.length === 0) {
 		question.error = SurveyError.QuestionRequired;

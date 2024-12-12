@@ -118,7 +118,7 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		padding: 0.125em;
+		padding: 0.125em 0.5em;
 		text-decoration: none;
 		opacity: 1;
 		transition:

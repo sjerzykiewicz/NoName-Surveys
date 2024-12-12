@@ -149,6 +149,7 @@
 	.tooltip .tooltip-text {
 		background-color: var(--primary-color-2);
 		font-size: 0.8em;
+		text-shadow: 0 4px 4px var(--shadow-color-1);
 	}
 
 	.tooltip .tooltip-text.left::after {

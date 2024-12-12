@@ -25,6 +25,7 @@
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import { downloadFile } from '$lib/utils/downloadFile';
+	import SubtitleComponent from './Subtitle.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -56,61 +57,73 @@
 	}[] = [];
 
 	surveyAnswers.forEach((surveyAnswer) => {
-		surveyAnswer?.questions.forEach((question, id: number) => {
-			let details = '';
+		surveyAnswer?.questions.forEach((q, id: number) => {
+			let required: boolean = false;
+			let question: string = '';
+			let question_type: string = '';
+			let details: string = '';
 			let answers: (string | number)[] = [];
 			let multi_answers: string[][] = [];
 			let choices: string[] = [];
-			let min_value = 0;
-			let max_value = 0;
-			switch (question?.question_type) {
-				case 'text':
-					details = (question as TextQuestionAnswered)?.details;
-					answers = [(question as TextQuestionAnswered)?.answer];
-					break;
-				case 'single':
-					answers = [(question as SingleQuestionAnswered)?.answer];
-					choices = (question as SingleQuestionAnswered)?.choices;
-					break;
-				case 'multi':
-					answers = (question as MultiQuestionAnswered)?.answer;
-					choices = (question as MultiQuestionAnswered)?.choices;
-					multi_answers = [(question as MultiQuestionAnswered)?.answer];
-					break;
-				case 'scale':
-					answers = [(question as ScaleQuestionAnswered)?.answer];
-					break;
-				case 'binary':
-					answers = [(question as BinaryQuestionAnswered)?.answer];
-					choices = (question as BinaryQuestionAnswered)?.choices;
-					break;
-				case 'number':
-					answers = [(question as NumberQuestionAnswered)?.answer];
-					min_value = (question as NumberQuestionAnswered)?.min_value;
-					max_value = (question as NumberQuestionAnswered)?.max_value;
-					break;
-				case 'slider':
-					answers = [(question as SliderQuestionAnswered)?.answer];
-					min_value = (question as SliderQuestionAnswered)?.min_value;
-					max_value = (question as SliderQuestionAnswered)?.max_value;
-					break;
-				case 'rank':
-					multi_answers = [(question as RankQuestionAnswered)?.answer];
-					choices = (question as RankQuestionAnswered)?.choices;
-					break;
-				case 'list':
-					answers = [(question as ListQuestionAnswered)?.answer];
-					choices = (question as ListQuestionAnswered)?.choices;
-					break;
+			let min_value: number = 0;
+			let max_value: number = 0;
+			if ('subtitle' in q) {
+				required = false;
+				question = q?.subtitle;
+				question_type = 'subtitle';
+			} else {
+				required = q?.required;
+				question = q?.question;
+				question_type = q?.question_type;
+				switch (q?.question_type) {
+					case 'text':
+						details = (q as TextQuestionAnswered)?.details;
+						answers = [(q as TextQuestionAnswered)?.answer];
+						break;
+					case 'single':
+						answers = [(q as SingleQuestionAnswered)?.answer];
+						choices = (q as SingleQuestionAnswered)?.choices;
+						break;
+					case 'multi':
+						answers = (q as MultiQuestionAnswered)?.answer;
+						choices = (q as MultiQuestionAnswered)?.choices;
+						multi_answers = [(q as MultiQuestionAnswered)?.answer];
+						break;
+					case 'scale':
+						answers = [(q as ScaleQuestionAnswered)?.answer];
+						break;
+					case 'binary':
+						answers = [(q as BinaryQuestionAnswered)?.answer];
+						choices = (q as BinaryQuestionAnswered)?.choices;
+						break;
+					case 'number':
+						answers = [(q as NumberQuestionAnswered)?.answer];
+						min_value = (q as NumberQuestionAnswered)?.min_value;
+						max_value = (q as NumberQuestionAnswered)?.max_value;
+						break;
+					case 'slider':
+						answers = [(q as SliderQuestionAnswered)?.answer];
+						min_value = (q as SliderQuestionAnswered)?.min_value;
+						max_value = (q as SliderQuestionAnswered)?.max_value;
+						break;
+					case 'rank':
+						multi_answers = [(q as RankQuestionAnswered)?.answer];
+						choices = (q as RankQuestionAnswered)?.choices;
+						break;
+					case 'list':
+						answers = [(q as ListQuestionAnswered)?.answer];
+						choices = (q as ListQuestionAnswered)?.choices;
+						break;
+				}
 			}
 
 			if (groupedAnswers.length <= id) {
 				groupedAnswers.push({
-					required: question?.required,
-					question: question?.question,
+					required: required,
+					question: question,
 					answers: answers,
 					multi_answers: multi_answers,
-					question_type: question?.question_type,
+					question_type: question_type,
 					choices: choices,
 					details: details,
 					min_value: min_value,
@@ -118,11 +131,11 @@
 				});
 			} else {
 				groupedAnswers[id] = {
-					required: question?.required,
-					question: question?.question,
+					required: required,
+					question: question,
 					answers: [...groupedAnswers[id].answers, ...answers],
 					multi_answers: [...groupedAnswers[id].multi_answers, ...multi_answers],
-					question_type: question?.question_type,
+					question_type: question_type,
 					choices: choices,
 					details: details,
 					min_value: min_value,
@@ -152,17 +165,20 @@
 		{/if}
 	</div>
 	{#each groupedAnswers as question, questionIndex}
-		{#if question?.question && question?.question_type && typeof question?.required === 'boolean'}
-			<div class="question">
+		<div class="question">
+			{#if question?.question_type === 'subtitle'}
+				<SubtitleComponent question={question.question} />
+			{:else if question?.question && question?.question_type && typeof question?.required === 'boolean'}
 				<QuestionTitle
-					question={question?.question}
+					question={question.question}
 					{questionIndex}
-					questionTypeData={getQuestionTypeData(componentTypeMap[question?.question_type])}
-					required={question?.required}
+					questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
+					required={question.required}
+					surveyStructure={surveyAnswers[0]}
 				/>
-				<svelte:component this={componentTypeMap[question?.question_type]} data={question} />
-			</div>
-		{/if}
+				<svelte:component this={componentTypeMap[question.question_type]} data={question} />
+			{/if}
+		</div>
 	{/each}
 {/if}
 

@@ -604,19 +604,22 @@ input[type='file'] {
 }
 
 .question {
-	margin-bottom: 1.5em;
+	padding-bottom: 1.5em;
 }
 
 .question-area {
 	display: flex;
 	flex-flow: row;
 	align-items: center;
-	margin-bottom: 1em;
+	padding-bottom: 1em;
 	font-size: 1.25em;
 	color: var(--text-color-1);
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
+}
+
+.question-area.subtitle {
+	padding-top: 1em;
+	padding-bottom: 0;
 }
 
 .question-area.display {
@@ -625,20 +628,34 @@ input[type='file'] {
 	cursor: default;
 	width: calc(100% - 4.5em);
 	margin-left: 2.25em;
-	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.question-area.subtitle.display {
+	width: 100%;
+	margin-left: 0;
+	border-top: 1px solid var(--border-color-1);
+	border-bottom: 1px solid var(--border-color-1);
+}
+
+.question-area.subtitle.display.empty {
+	padding-top: 0;
+	border-top: none;
+}
+
+.question-area.subtitle.display.empty .question-title {
+	padding-bottom: 0 !important;
 }
 
 .question-label {
 	display: flex;
 	flex-flow: row;
 	align-items: center;
-	margin-bottom: 0.5em;
+	padding-bottom: 0.5em;
 	font-size: 1.25em;
 	color: var(--border-color-1);
 	cursor: default;
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .question-label .tooltip {
@@ -649,9 +666,7 @@ input[type='file'] {
 
 .question-label .tooltip i {
 	color: var(--accent-color-1);
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .question-label .tooltip .tooltip-text {
@@ -683,9 +698,7 @@ input[type='file'] {
 	top: 0.1em;
 	font-size: 1em;
 	color: var(--accent-color-1);
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .details {
@@ -1385,6 +1398,11 @@ th .checkbox-entry {
 }
 
 .tooltip.clickable {
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+	border-radius: 0;
+	padding: 0;
 	cursor: pointer;
 }
 
@@ -1425,9 +1443,7 @@ th .checkbox-entry {
 	pointer-events: none;
 	visibility: hidden;
 	opacity: 0;
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .tooltip .tooltip-text.top,
@@ -1469,9 +1485,14 @@ th .checkbox-entry {
 	border: 0.5em solid var(--shadow-color-1);
 	visibility: hidden;
 	opacity: 0;
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
+}
+
+.tooltip .tooltip-text.none::after,
+.popup .popup-text.none::after {
+	border: none;
+	visibility: hidden !important;
+	opacity: 0 !important;
 }
 
 .tooltip .tooltip-text.top::after,
@@ -1596,7 +1617,7 @@ button.popup {
 		outline 0s;
 }
 
-@media screen and (width <= 768px) {
+@media screen and (width <=768px) {
 	html {
 		background: var(--secondary-color-1);
 	}

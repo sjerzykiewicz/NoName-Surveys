@@ -45,7 +45,7 @@ def get_active_survey_by_code(survey_code: str, session: Session) -> Survey:
     survey = survey_crud.get_active_survey_by_code(survey_code, session)
     if survey is None:
         raise HTTPException(
-            status_code=400, detail="Survey disactivated by the creator or not found"
+            status_code=400, detail="Survey deactivated by the creator or not found"
         )
     return survey
 

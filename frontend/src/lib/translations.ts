@@ -88,16 +88,19 @@ export const data = {
 		read_more: 'Read more...',
 		slogan: 'Unlock true anonymity with the power of ring signatures!',
 		open_source_info: 'Our project is open source. You can find the source code on ',
+		hotkeys_pin: 'Click to pin',
+		hotkeys_unpin: 'Click to unpin',
 		hotkeys_info: `You can create surveys faster by using hotkeys.<br />
 			Hold <span class="accent">[ LeftAlt ]</span> and press:<br />
-			<span class="accent">[ 1 - 9 ]</span> - Add various question types<br />
+			<span class="accent">[ 1 ]</span> - <span class="accent">[ 9 ]</span> - Add various question types<br />
 			<span class="accent">[ 0 ]</span> - Add previous question type<br />
+			<span class="accent">[ - ]</span> / <span class="accent">[ = ]</span> - Add Subtitle<br />
 			<span class="accent">[ Enter ]</span> / <span class="accent">[ Ins ]</span> - Add choice to selected question<br />
 			<span class="accent">[ Bksp ]</span> / <span class="accent">[ Del ]</span> - Remove selected question or choice<br />
 			<span class="accent">[ PgUp ]</span> / <span class="accent">[ PgDn ]</span> - Move selected question up or down<br />
 			<span class="accent">[ ~ ]</span> / <span class="accent">[ \\ ]</span> - Toggle requirement for selected question<br />
-			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Select previous or next input<br />
-			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Select previous or next question<br />
+			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Select previous or next input<br />
+			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Select previous or next question<br />
 			<span class="accent">[ Home ]</span> - Select Survey Title<br />
 			<span class="accent">[ End ]</span> - Select Finish button<br />
 			Besides that, you can still use <span class="accent">[ Tab ]</span> and <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span>.`,
@@ -206,6 +209,12 @@ export const data = {
 		survey_title_title: 'Enter a survey title',
 		survey_title_error_required: 'Please enter survey title.',
 		survey_title_error_limit: 'Survey title must be {limit} or less characters long.',
+		subtitle: 'Subtitle',
+		subtitle_title: 'Enter a subtitle',
+		subtitle_error: 'Subtitle must be {limit} or less characters long.',
+		subtitle_up: 'Move subtitle up',
+		subtitle_down: 'Move subtitle down',
+		subtitle_remove: 'Remove subtitle',
 		fill_survey: 'Fill out the survey',
 		submit_survey: 'Submit survey',
 		your_surveys: 'Your surveys',
@@ -338,7 +347,7 @@ export const data = {
 		answer: 'Answer',
 		answers: 'Answers',
 		select_answer: 'Select your answer',
-		select_no_answer: 'Not answered',
+		select_no_answer: 'Unanswered',
 		enter_answer: 'Enter your answer',
 		answer_question_no: 'Please answer question no. {index}.',
 		move_answer_up: 'Move answer up',
@@ -691,16 +700,19 @@ export const data = {
 		read_more: 'Czytaj więcej...',
 		slogan: 'Zyskaj pełną anonimowość dzięki potędze podpisów pierścieniowych!',
 		open_source_info: 'Nasz projekt jest open source. Kod źródłowy znajdziesz na ',
+		hotkeys_pin: 'Kliknij, by przypiąć',
+		hotkeys_unpin: 'Kliknij, by odpiąć',
 		hotkeys_info: `Możesz tworzyć ankiety szybciej używając skrótów klawiszowych.<br />
 			Przytrzymaj <span class="accent">[ LeftAlt ]</span> i naciśnij:<br />
-			<span class="accent">[ 1 - 9 ]</span> - Dodaj różne typy pytań<br />
+			<span class="accent">[ 1 ]</span> - <span class="accent">[ 9 ]</span> - Dodaj różne typy pytań<br />
 			<span class="accent">[ 0 ]</span> - Dodaj poprzedni typ pytania<br />
+			<span class="accent">[ - ]</span> / <span class="accent">[ = ]</span> - Dodaj Podtytuł<br />
 			<span class="accent">[ Enter ]</span> / <span class="accent">[ Ins ]</span> - Dodaj wybór do zaznaczonego pytania<br />
 			<span class="accent">[ Bksp ]</span> / <span class="accent">[ Del ]</span> - Usuń zaznaczone pytanie lub wybór<br />
 			<span class="accent">[ PgUp ]</span> / <span class="accent">[ PgDn ]</span> - Przesuń zaznaczone pytanie w górę lub w dół<br />
 			<span class="accent">[ ~ ]</span> / <span class="accent">[ \\ ]</span> - Przełącz wymaganie dla zaznaczonego pytania<br />
-			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Zaznacz poprzednie lub następne pole<br />
-			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Zaznacz poprzednie lub następne pytanie<br />
+			<span class="accent">[<i class="symbol">arrow_drop_up</i>]</span> / <span class="accent">[<i class="symbol">arrow_drop_down</i>]</span> - Zaznacz poprzednie lub następne pole<br />
+			<span class="accent">[<i class="symbol">arrow_left</i>]</span> / <span class="accent">[<i class="symbol">arrow_right</i>]</span> - Zaznacz poprzednie lub następne pytanie<br />
 			<span class="accent">[ Home ]</span> - Zaznacz Tytuł ankiety<br />
 			<span class="accent">[ End ]</span> - Zaznacz przycisk Zakończ<br />
 			Poza tym, nadal możesz używać <span class="accent">[ Tab ]</span> i <span class="accent">[ Shift ]</span> + <span class="accent">[ Tab ]</span>.`,
@@ -808,6 +820,12 @@ export const data = {
 		survey_title_title: 'Wprowadź tytuł ankiety',
 		survey_title_error_required: 'Proszę wprowadzić tytuł ankiety.',
 		survey_title_error_limit: 'Tytuł ankiety musi mieć {limit} lub mniej znaków.',
+		subtitle: 'Podtytuł',
+		subtitle_title: 'Wprowadź podtytuł',
+		subtitle_error: 'Podtytuł musi mieć {limit} lub mniej znaków.',
+		subtitle_up: 'Przesuń podtytuł w górę',
+		subtitle_down: 'Przesuń podtytuł w dół',
+		subtitle_remove: 'Usuń podtytuł',
 		fill_survey: 'Wypełnij ankietę',
 		submit_survey: 'Prześlij ankietę',
 		your_surveys: 'Twoje ankiety',
@@ -896,7 +914,7 @@ export const data = {
 		save_new_group_name_title: 'Zapisz nową nazwę grupy',
 		keys_info_title: 'Informacje o kluczach',
 		groups_info: `Przed utworzeniem bezpiecznej ankiety, rozważ utworzenie grupy użytkowników. Grupy użytkowników ułatwiają wybór
-			takiego samego zestawu respondentów w wielu ankietach. Możesz jednak kontynuować bez ich użycia, jeśli chcesz.`,
+			takiego samego zestawu respondentów w wielu ankietach. Jeśli chcesz, możesz kontynuować bez ich użycia.`,
 
 		// users / members
 

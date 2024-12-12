@@ -441,18 +441,20 @@
 					if ($previousQuestion) addQuestion($previousQuestion);
 					break;
 				case 'Minus':
+				case 'Equal':
+				case 'NumpadSubtract':
 					addQuestion(Subtitle);
 					break;
-				case 'ArrowUp':
+				case 'ArrowLeft':
 					focusPreviousQuestion();
 					break;
-				case 'ArrowDown':
+				case 'ArrowRight':
 					focusNextQuestion();
 					break;
-				case 'ArrowLeft':
+				case 'ArrowUp':
 					focusPreviousInput();
 					break;
-				case 'ArrowRight':
+				case 'ArrowDown':
 					focusNextInput();
 					break;
 				case 'Home':
@@ -469,15 +471,19 @@
 					break;
 				case 'Backquote':
 				case 'Backslash':
+				case 'NumpadMultiply':
+				case 'NumpadDivide':
 					toggleRequirement();
 					break;
 				case 'Backspace':
 				case 'Delete':
+				case 'NumpadDecimal':
 					removeQuestionOrChoice();
 					break;
 				case 'Enter':
 				case 'NumpadEnter':
 				case 'Insert':
+				case 'NumpadAdd':
 					addChoice();
 					break;
 			}

@@ -1398,6 +1398,11 @@ th .checkbox-entry {
 }
 
 .tooltip.clickable {
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+	border-radius: 0;
+	padding: 0;
 	cursor: pointer;
 }
 
@@ -1438,9 +1443,7 @@ th .checkbox-entry {
 	pointer-events: none;
 	visibility: hidden;
 	opacity: 0;
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .tooltip .tooltip-text.top,
@@ -1482,9 +1485,14 @@ th .checkbox-entry {
 	border: 0.5em solid var(--shadow-color-1);
 	visibility: hidden;
 	opacity: 0;
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
+}
+
+.tooltip .tooltip-text.none::after,
+.popup .popup-text.none::after {
+	border: none;
+	visibility: hidden !important;
+	opacity: 0 !important;
 }
 
 .tooltip .tooltip-text.top::after,
@@ -1609,7 +1617,7 @@ button.popup {
 		outline 0s;
 }
 
-@media screen and (width <= 768px) {
+@media screen and (width <=768px) {
 	html {
 		background: var(--secondary-color-1);
 	}

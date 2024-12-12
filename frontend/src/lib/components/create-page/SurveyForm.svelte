@@ -56,6 +56,7 @@
 	let questionInput: HTMLDivElement;
 	let isSurveyModalHidden: boolean = true;
 	let surveyCode: string;
+	let isInfoPinned: boolean = false;
 
 	$: currentLang = $options.currentLang;
 
@@ -220,15 +221,33 @@
 				><i class="symbol">add</i><Tx text="subtitle" /></button
 			>
 			{#if innerWidth > $M}
-				<div
-					class="tooltip hotkeys-info"
-					style="--tooltip-width: {currentLang === 'en' ? '28em' : '31em'}"
+				<button
+					class="tooltip clickable hotkeys-info"
+					on:click={() => (isInfoPinned = !isInfoPinned)}
 				>
-					<i class="symbol">bolt</i>
-					<span class="tooltip-text right">
-						<Tx html="hotkeys_info" />
-					</span>
-				</div>
+					<i class="symbol" class:fill={isInfoPinned}>bolt</i>
+					{#if isInfoPinned}
+						<span class="tooltip-text top">
+							<Tx text="hotkeys_unpin" />
+						</span>
+						<span
+							class="tooltip-text none"
+							style="--tooltip-width: {currentLang === 'en' ? '28em' : '31em'}"
+						>
+							<Tx html="hotkeys_info" />
+						</span>
+					{:else}
+						<span class="tooltip-text top">
+							<Tx text="hotkeys_pin" />
+						</span>
+						<span
+							class="tooltip-text right"
+							style="--tooltip-width: {currentLang === 'en' ? '28em' : '31em'}"
+						>
+							<Tx html="hotkeys_info" />
+						</span>
+					{/if}
+				</button>
 			{/if}
 			<div class="tooltip create-info">
 				<i class="symbol">info</i>
@@ -251,23 +270,38 @@
 	}
 
 	.hotkeys-info.tooltip i {
-		color: var(--accent-color-2);
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		transition: 0.2s;
 	}
 
 	.hotkeys-info.tooltip .tooltip-text {
-		text-align: left;
 		font-size: 0.6em;
 		z-index: 2;
 	}
 
-	.hotkeys-info.tooltip .tooltip-text.right {
-		top: 400%;
+	.hotkeys-info.tooltip .tooltip-text.top {
+		--tooltip-width: 9em;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.right,
+	.hotkeys-info.tooltip .tooltip-text.none {
+		text-align: left;
+		top: 445%;
 	}
 
 	.hotkeys-info.tooltip .tooltip-text.right::after {
-		top: 9.5%;
+		top: 7%;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.none {
+		left: 700%;
+		transform: translateY(-50%);
+		visibility: visible !important;
+		opacity: 1 !important;
+	}
+
+	.fill {
+		font-variation-settings: 'FILL' 1;
 	}
 
 	.create-info.tooltip {
@@ -282,11 +316,11 @@
 	}
 
 	.create-info.tooltip .tooltip-text.right {
-		top: 220%;
+		top: 234%;
 	}
 
 	.create-info.tooltip .tooltip-text.right::after {
-		top: 15%;
+		top: 12.5%;
 	}
 
 	.button-row {
@@ -312,11 +346,11 @@
 		}
 
 		.create-info.tooltip .tooltip-text.right {
-			top: 350%;
+			top: 367%;
 		}
 
 		.create-info.tooltip .tooltip-text.right::after {
-			top: 10%;
+			top: 7.5%;
 		}
 
 		.create-info.tooltip .tooltip-text.bottom {

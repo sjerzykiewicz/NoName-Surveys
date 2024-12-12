@@ -638,6 +638,15 @@ input[type='file'] {
 	border-bottom: 1px solid var(--border-color-1);
 }
 
+.question-area.subtitle.display.empty {
+	padding-top: 0;
+	border-top: none;
+}
+
+.question-area.subtitle.display.empty .question-title {
+	padding-bottom: 0 !important;
+}
+
 .question-label {
 	display: flex;
 	flex-flow: row;
@@ -646,9 +655,7 @@ input[type='file'] {
 	font-size: 1.25em;
 	color: var(--border-color-1);
 	cursor: default;
-	transition:
-		0.2s,
-		outline 0s;
+	transition: 0.2s;
 }
 
 .question-label .tooltip {

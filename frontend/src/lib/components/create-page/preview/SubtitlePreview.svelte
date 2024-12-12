@@ -8,6 +8,7 @@
 
 <div
 	class="question-area subtitle display"
+	class:empty={$questions[questionIndex].question === ''}
 	transition:slide={{ duration: 200, easing: cubicInOut }}
 >
 	<div class="question-title">

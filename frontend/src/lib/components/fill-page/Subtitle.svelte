@@ -4,7 +4,7 @@
 	export let questionIndex: number;
 </script>
 
-<div class="question-area subtitle display">
+<div class="question-area subtitle display" class:empty={$questions[questionIndex].question === ''}>
 	<div class="question-title">
 		{$questions[questionIndex].question}
 	</div>

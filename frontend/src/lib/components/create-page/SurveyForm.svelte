@@ -326,5 +326,9 @@
 		.create-info.tooltip .tooltip-text.bottom::after {
 			left: 80%;
 		}
+
+		.add-subtitle {
+			font-size: 1em;
+		}
 	}
 </style>

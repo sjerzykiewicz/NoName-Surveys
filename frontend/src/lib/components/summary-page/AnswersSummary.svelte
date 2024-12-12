@@ -165,22 +165,20 @@
 		{/if}
 	</div>
 	{#each groupedAnswers as question, questionIndex}
-		{#if question?.question && question?.question_type && typeof question?.required === 'boolean'}
-			<div class="question">
-				{#if question.question_type === 'subtitle'}
-					<SubtitleComponent question={question.question} />
-				{:else}
-					<QuestionTitle
-						question={question.question}
-						{questionIndex}
-						questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
-						required={question.required}
-						surveyStructure={surveyAnswers[0]}
-					/>
-					<svelte:component this={componentTypeMap[question.question_type]} data={question} />
-				{/if}
-			</div>
-		{/if}
+		<div class="question">
+			{#if question?.question_type === 'subtitle'}
+				<SubtitleComponent question={question.question} />
+			{:else if question?.question && question?.question_type && typeof question?.required === 'boolean'}
+				<QuestionTitle
+					question={question.question}
+					{questionIndex}
+					questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
+					required={question.required}
+					surveyStructure={surveyAnswers[0]}
+				/>
+				<svelte:component this={componentTypeMap[question.question_type]} data={question} />
+			{/if}
+		</div>
 	{/each}
 {/if}
 

@@ -1,4 +1,4 @@
-# NoName Anonymous Surveys
+# 🔐 NoName Anonymous Surveys
 
 **NoName Anonymous Surveys** is an open-source platform designed for conducting truly anonymous surveys. Using linkable ring signature technology, it ensures that:
 
@@ -10,71 +10,160 @@ You are free to use, modify, and host your own instance of the platform. Setup i
 
 ---
 
-## 🎯 Key Features
-1. **Anonymity**: Identity protection through cryptographic techniques.
-2. **Group-Specific Access**: Surveys can be restricted to specific groups or open to the public.
-3. **User-Friendly**: Easy setup and usage for both users and administrators.
-
----
-
 ## 🚀 Example Use Case
 
 ### Check out the example instance for the **University of Adam Mickiewicz** [here](https://nonamesurveys.projektstudencki.pl/).
 > [!NOTE]
 > Keep in mind that this instance can be accessed only by students and staff of the university.
 
-### Our example infrastructure diagram:
+### A Diagram of our infrastructure:
 ![Infrastructure Diagram](images/diagram.png)
 
 ---
 
 ## 📖 User's Guide
 
+### **Generate Keys**
+1. Go to the **Account** section in the navigation bar.
+2. Enter a **passphrase** (used to encrypt and decrypt your keys later).
+3. Confirm the passphrase by entering it again.
+4. Click on **Generate**.
+5. Save the keys in a secure location.
+
 > [!IMPORTANT]
-> The keys used in the cryptographic protocol are generated locally on your device.
+> The keys are used in the cryptographic protocol and are generated locally on your device.
 > **Do not lose your keys** - they are required for you to answer private surveys.
 
-### 1️⃣ **Generate Keys**
-Your cryptographic keys are generated **locally on your device**, ensuring your private key never leaves your hands.
-1. Go to the **Account** section in the navigation bar.
-2. Enter a **passphrase** (used to encrypt and decrypt your keys) and confirm it.
-3. Click on **Generate Keys**.
-4. Save the keys in a secure location.
-
 ---
 
-### 2️⃣ **Create a Survey**
+### **Create a Survey**
 1. Navigate to the **Create** section in the navigation bar.
-2. Fill out the survey title and questions.
+2. Fill out the survey title and questions - see what [question types](#question-types) you can use below.
 3. Optionally:
-   - Save a draft for later use by clicking **Save Draft**.
-   - Preview the survey by clicking **Preview**.
-4. Once ready, click **Finish**.
+  - Save a draft [for later use](#managing-drafts) by clicking **Save Draft**.
+  - Preview the survey by clicking **Preview** (and go back to editing mode by clicking **Edit**).
+4. Once the survey is ready, click **Finish**.
 5. Choose who can respond to the survey:
-   - **Secure** (restricted to specific users or groups):
-     - Select a user group from the list or add users by email.
-     - Ensure all users have registered and generated their keys.
-   - **Public** (open to everyone).
+  - **Secure** (restricted to specific users or groups):
+    - Select a user group from the list or add users by email.
+    - Ensure all users have registered and generated their keys.
+  - **Public** (open to everyone).
 6. Click **Finish** again to finalize.
+7. You will now be presented with a survey code and a QR code that you can share with others.
 
 ---
 
-### 3️⃣ **Respond to a Survey**
-1. Open the survey link.
+### **Respond to a Survey**
+1. Open a survey by either:
+    - Clicking on a survey link that you received.
+    - Navigating to the **Fill Out** section in the navigation bar and providing the survey code.
+    - Scan the QR code that has been shared with you.
 2. Fill out the form with your responses.
 3. If the survey has a restricted access, you will be asked to **load your keys** and **enter the passphrase** you have generated during keys creation.
 4. Click **Submit**.
 
 ---
 
-### 4️⃣ **View Survey Results**
+### **View Survey Results**
 1. Navigate to the **Surveys** section in the navigation bar.
 2. Click on the survey you are interested in.
 3. You will see the summary of responses but will be able to see individual responses if you nagivate to the **Answers** tab.
 
 ---
 
-### 5️⃣ **Create a User Group**
+### **Managing Existing Surveys**
+#### Navigate to the **Surveys** section in the navigation bar and look at the survey you are interested in.
+
+1. Deactivate (or activate) a survey.
+  - If the "turn off" icon visible next to the survey is blue, it means the survey is active.
+  - Click on the "turn off" icon to deactivate the survey, it should turn red.
+  - If you want to activate the survey again, click on the "turn on" icon, it should turn blue again.
+  - If the said buttong is grey, it means you are not the owner of the survey and you cannot change its status.
+
+> [!NOTE]
+> Deactivating a survey will prevent users from responding to it.
+> You can still view the results of a deactivated survey and activate it again at any time.
+
+---
+
+2. Delete surveys:
+  - Select the surveys you want to delete by clicking on the checkbox on the left side of the survey.
+  - Click on the **Delete** button.
+
+> [!WARNING]
+> Deleting a survey is irreversible and you will lose access to all responses.
+
+---
+
+3. Export a survey:
+  - Click on the survey title of a survey you are interested in.
+  - Click on the **Export** button.
+  - Choose where you want to save the file and save it.
+  - The survey will be downloaded in a specific format that can be later imported.
+
+---
+
+4. Import a survey from a file:
+  - Click on the **Import** button.
+  - Select a file with a survey in the correct format.
+  - Click **Submit**.
+
+> [!NOTE]
+> The file should be in a specific format, you can see it by exporting a survey.
+> This action only allows you to view the historic summary of the survey - it does not change the survey's status.
+
+---
+
+5. Share invitation to a created survey:
+  - Click on the survey code of a given survey in the **Access Code** column.
+  - Copy the link, survey code or QR code and share them with others.
+
+---
+
+6. See possible respondents of a secure survey:
+  - Click on the number of a given survey in the **Group Size** column of a secure survey.
+  - You will see a list of users who can respond to the survey anonymously and only once.
+  - N/A means that the survey is public and everyone can respond to it.
+
+---
+
+7. Manage access to results of your survey:
+  - Click on the survey title of a survey you are interested in.
+  - Click on the **Share** button at the bottom of the page.
+  - You can see the list of users who already have access to the survey results.
+  - To remove users from the list, click on the checkbox next to their email and click **Delete**.
+  - To add users:
+    - Click on the **+ Users** button.
+    - Select users by email from the list or import them from a CSV file.
+    - Click **Submit**.
+
+---
+
+### **Managing Existing Drafts**
+#### Navigate to the **Drafts** section in the navigation bar and look at the draft you are interested in.
+
+1. Edit a draft:
+  - Click on the draft title of a draft you are interested in.
+  - You will now be able to interact with the draft as if it was a survey.
+
+---
+
+2. Delete drafts:
+  - Select the drafts you want to delete by clicking on the checkbox on the left side of the draft.
+  - Click on the **Delete** button.
+
+> [!WARNING]
+> Deleting a draft is irreversible and you will lose access to it.
+
+---
+
+3. Create a survey from a draft:
+  - Click on the blue checkmark icon in the **Create** column of a draft you are interested in.
+  - Follow the same steps as when creating a survey.
+
+---
+
+### **Create a User Group**
 1. Navigate to the **Groups** section in the navigation bar.
 2. Click on the **+ Group** button.
 3. Fill out the group name.
@@ -83,9 +172,113 @@ Your cryptographic keys are generated **locally on your device**, ensuring your 
 
 ---
 
+### **Managing Existing User Groups**
+#### Navigate to the **Groups** section in the navigation bar and look at the group you are interested in.
+
+1. Edit a group:
+  - Click on the **Group Name* of a group you are interested in.
+  - You will now see the list of users in the group.
+  - To add users:
+    - Click on the **+ Members** button.
+    - Select users by email from the list or import them from a CSV file.
+    - Click **Submit**.
+  - To remove users:
+    - Click on the checkbox next to their email and click **Delete**.
+
+2. Delete groups:
+  - Select the groups you want to delete by clicking on the checkbox on the left side of the group.
+  - Click on the **Delete** button.
+
+> [!WARNING]
+> Deleting a group is irreversible and you will lose access to it.
+
+3. Rename a group:
+  - Click on the **Rename** icon of a group you are interested in.
+  - Enter a new group name.
+  - Click **Submit**.
+
+> [!NOTE]
+> The user group name must be unique.
+
+---
+
+## 🤔 Explanations
+
+### **Linkable Ring Signature**
+- **Linkable Ring Signature** is a cryptographic protocol that ...
+TODO: Add more information about the protocol.
+
+---
+
+## 📚 Additional Information
+
+### 🧅 We strongly recommend using the [Tor](https://www.torproject.org/download/) browser to ensure your anonymity - it will ensure that administrators of the platform will not be able to track your activity by your IP address.
+
+
+### ❓ **Question Types**
+- **Text** - allows the respondent to enter a free-form text response.
+- **Number** - allows the respondent to enter a numerical response.
+- **Single** - allows the respondent to select one option from a list of choices.
+- **Multi** - allows the respondent to select multiple options from a list of choices.
+- **Binary** - allows the respondent to select one of two options (e.g., yes/no).
+- **Scale** - allows the respondent to select a value from a range (e.g., 1-5).
+- **Slider** - allows the respondent to select a value by moving a slider.
+- **List** - allows the respondent to select one option from a list of choices (e.g., dropdown).
+- **Rank** - allows the respondent to rank a list of choices in order of preference.
+
+### 🌐 Sharing the Website
+- You can share a QR code by clicking on the **Invite** button at the bottom of the page after going to the **Account** section.
+- You can also share the website with others by providing them with the link: [https://nonamesurveys.projektstudencki.pl/](https://nonamesurveys.projektstudencki.pl/).
+
+### 🔑 AMU USOS Authentication
+- The platform uses the AMU USOS API for authentication.
+- You need to have an AMU USOS account to log in to the platform.
+- If you are a student or staff member of the University of Adam Mickiewicz, you can log in using your AMU USOS credentials.
+- It makes it easier both for us and for you to verify your identity.
+
+### 👁️ Accessibility
+- We strive to make the platform accessible to everyone.
+- If you encounter any issues or have suggestions for improvement, please let us know.
+- You can use the **High Contrast** mode by clicking on the **High Contrast** in numerous places on the website.
+
+### 🌚 Dark and 🌞 Light Mode
+- You can switch between **Dark** and **Light** mode by clicking on the **Dark Mode** or **Light Mode** button in the navigation bar.
+- We have very strong feelings about the superiority of each mode, so we encourage you to try both and see which one you prefer.
+
+### 🌍 Languages Supported
+- The platform is currently available in 2 languages:
+  - 🇬🇧🫘 **English**
+  - 🇵🇱🥟 **Polish**
+- You can switch between them by clicking on **Polish** or **Angielski** similarly to the **Dark** and **Light** mode.
+
+### ❔ FAQ Section
+- If you have any questions or need help, check out the **FAQ** section in the navigation bar.
+- If you don't find the answer to your question, feel free to contact us.
+
+### ⌨️ Keyboard Shortcuts
+You can create surveys faster by using hotkeys. Hold **[ LeftAlt ]** and press:
+- **[ 1 - 9 ]** - Add various question types
+- **[ 0 ]** - Add previous question type
+- **[ Enter ]** / **[ Ins ]** - Add choice to selected question
+- **[ - ]** / **[ = ]** - Add Subtitle
+- **[ Enter ]** / **[Ins]** - Add choice to selected question
+- **[ Bksp ]** / **[ Del ]** - Remove selected question or choice
+- **[ PgUp ]** / **[ PgDn ]** - Move selected question up or down
+- **[ ~ ]** / **[ \\ ]** - Toggle requirement for selected question
+- **[ ← ]** / **[ → ]** - Select previous or next input
+- **[ ↑ ]** / **[ ↓ ]** - Select previous or next question
+- **[ Home ]** - Select Survey Title
+- **[ End ]** - Select Finish button
+
+Besides that, you can still use **[ Tab ]** and **[ Shift ]** + **[ Tab ]**.
+
+### 🏃🚪 If you are logged in when trying to answer a survey, we will log you out forcibly. That is to prevent the evil administrators from tracking you down!
+
+---
+
 ## 🛠 Administrator's Guide
 
-### 1️⃣ **Dependencies**
+### 1️⃣ 🖇️ **Dependencies**
 - **Node.js (npm)**
 - **Python**
 - **Poetry**
@@ -95,7 +288,7 @@ Your cryptographic keys are generated **locally on your device**, ensuring your 
 
 ---
 
-### 2️⃣ **Environment Variables**
+### 2️⃣ 🤝 **Environment Variables**
 You need to set up the required environment variables in the `.env` files in the frontend and backend directories.
 #### Frontend:
 ```bash
@@ -130,7 +323,7 @@ kubectl create secret generic backend --from-env-file=./backend/.env
 
 ---
 
-### 3️⃣ **Setup**
+### 3️⃣ 🐳 **Setup**
 You can deploy the app using Docker images, build it locally or run it on Kubernetes cluster.
 
 #### Using Prebuilt Docker Images: [frontend](https://hub.docker.com/repository/docker/sjerzykiewicz/noname-surveys-frontend) & [backend](https://hub.docker.com/repository/docker/sjerzykiewicz/noname-surveys-backend):

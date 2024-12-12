@@ -31,7 +31,7 @@ spec:
             - containerPort: 3000
           env:
             - name: ORIGIN
-              value: "https://noname-stage.projektstudencki.pl"
+              value: "https://nonamesurveys.projektstudencki.pl"
             - name: BACKEND_HOST
               value: "http://backend:8000"
             - name: AUTH_USOS_ID

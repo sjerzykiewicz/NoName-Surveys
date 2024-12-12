@@ -38,10 +38,7 @@ test:
 	poetry run pytest
 
 test_cov:
-	poetry run coverage run -m pytest src --cov-config=.coveragerc
-	poetry run coverage html
-	poetry run coverage xml
-	poetry run coverage report --show-missing
+	poetry run pytest --cov
 
 compile_env:
 	poetry lock --no-update
@@ -56,7 +53,3 @@ build: pre_commit mypy test
 
 run:
 	poetry run uvicorn src.main:app --reload
-
-# Misc
-jupyter:
-	poetry run jupyter notebook

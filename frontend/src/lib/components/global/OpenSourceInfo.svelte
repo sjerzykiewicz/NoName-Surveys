@@ -6,7 +6,7 @@
 
 <div class="open-source-info">
 	<Tx text="open_source_info" />
-	<a href={githubLink} target="_blank" title="GitHub">GitHub</a>.
+	<a href={githubLink} target="_blank" title="GitHub">GitHub</a>
 </div>
 
 <style>

@@ -17,7 +17,8 @@
 
 	export let form: ActionData;
 
-	const githubLink = 'https://github.com/sjerzykiewicz/NoName-Surveys';
+	const explanationsLink =
+		'https://github.com/sjerzykiewicz/NoName-Surveys?tab=readme-ov-file#-explanations';
 
 	let innerWidth: number;
 </script>
@@ -35,10 +36,8 @@
 		<div class="tooltip hoverable">
 			<i class="symbol">help</i>
 			<span class="tooltip-text {innerWidth <= $M ? 'top' : 'bottom'}">
-				<!-- TODO: better link -->
-				<Tx text="code_tooltip" /><br /><a href={githubLink} target="_blank"
-					><Tx text="read_more" /></a
-				>
+				<Tx text="code_tooltip" />
+				<a href={explanationsLink} target="_blank"><Tx text="read_more" /></a>
 			</span>
 		</div>
 	</div>
@@ -71,18 +70,18 @@
 		</label>
 	</form>
 	<p class="home-info">
-		<Tx html="home_keys_info" /><a href="/account" title={$t('account')}><Tx text="account" /></a>.
+		<Tx html="home_keys_info" /><a href="/account" title={$t('account')}><Tx text="account" /></a>
 	</p>
 	<p class="home-info">
 		<Tx text="home_redirect" />
 		{#if $page.data.session}
 			<Tx text="home_redirect_create" /><a href="/create" title={$t('create')}
 				><Tx text="create" /></a
-			>.
+			>
 		{:else}
 			<Tx text="home_redirect_account" /><a href="/account" title={$t('account')}
 				><Tx text="account" /></a
-			>.
+			>
 		{/if}
 	</p>
 </Content>

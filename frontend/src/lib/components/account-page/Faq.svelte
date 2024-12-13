@@ -1,34 +1,34 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { cubicInOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
+	import { getContext } from 'svelte';
+	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+
+	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let id: string;
 	export let icon: string;
-	export let question: string;
-	export let answer: string;
-	export let html: boolean = false;
+	export let q: string;
+	export let a: string;
 
-	let isAnswerVisible: boolean = false;
+	let isAnswerVisible: boolean = $page.url.href.includes(id);
 
 	function toggleAnswer() {
 		isAnswerVisible = !isAnswerVisible;
 	}
 </script>
 
-<div class="faq-item" {id} title={question}>
+<div class="faq-item" {id} title={$t(q)}>
 	<button class="faq-question" class:clicked={isAnswerVisible} on:click={toggleAnswer}>
 		<i class="symbol">{icon}</i>
-		{question}
+		<Tx text={q} />
 		<i class="symbol arrow">arrow_drop_down</i>
 	</button>
 	{#if isAnswerVisible}
 		<div class="faq-answer" transition:slide={{ duration: 200, easing: cubicInOut }}>
-			{#if html}
-				<Tx html={answer} />
-			{:else}
-				{answer}
-			{/if}
+			<Tx html={a} />
 		</div>
 	{/if}
 </div>

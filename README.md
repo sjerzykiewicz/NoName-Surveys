@@ -78,7 +78,7 @@ You are free to use, modify, and host your own instance of the platform. Setup i
   - If the "turn off" icon visible next to the survey is blue, it means the survey is active.
   - Click on the "turn off" icon to deactivate the survey, it should turn red.
   - If you want to activate the survey again, click on the "turn on" icon, it should turn blue again.
-  - If the said buttong is grey, it means you are not the owner of the survey and you cannot change its status.
+  - If the said button is grey, it means you are not the owner of the survey and you cannot change its status.
 
 > [!NOTE]
 > Deactivating a survey will prevent users from responding to it.
@@ -214,7 +214,7 @@ the same for the same user. However, it is mathematically infeasible to recover 
 
 ## 📚 Additional Information
 
-### 🧅 We strongly recommend using the [Tor](https://www.torproject.org/download/) browser to ensure your anonymity - it will ensure that administrators of the platform will not be able to track your activity by your IP address.
+### 🧅 If you want to be extra careful, and wish to enhance your anonymity further, we recommend using the [Tor](https://www.torproject.org/download/) browser. Tor routes your internet traffic through a network of servers, encrypting it multiple times and masking your IP address to obscure your location and activity. This ensures that platform administrators, as well as other parties, cannot trace your actions back to your device or monitor your browsing activity effectively.
 
 
 ### ❓ **Question Types**
@@ -230,12 +230,12 @@ the same for the same user. However, it is mathematically infeasible to recover 
 
 ### 🌐 Sharing the Website
 - You can share a QR code by clicking on the **Invite** button at the bottom of the page after going to the **Account** section.
-- You can also share the website with others by providing them with the link: [https://nonamesurveys.projektstudencki.pl/](https://nonamesurveys.projektstudencki.pl/).
+- You can also share the website with others by providing them with the link: [https://nonamesurveys.projektstudencki.pl/](https://nonamesurveys.projektstudencki.pl/)
 
 ### 🔑 AMU USOS Authentication
 - The platform uses the AMU USOS API for authentication.
 - You need to have an AMU USOS account to log in to the platform.
-- If you are a student or staff member of the University of Adam Mickiewicz, you can log in using your AMU USOS credentials.
+- If you are a student or a staff member of the University of Adam Mickiewicz, you can log in using your AMU USOS credentials.
 - It makes it easier both for us and for you to verify your identity.
 
 ### 👁️ Accessibility
@@ -259,16 +259,15 @@ the same for the same user. However, it is mathematically infeasible to recover 
 
 ### ⌨️ Keyboard Shortcuts
 You can create surveys faster by using hotkeys. Hold **[ LeftAlt ]** and press:
-- **[ 1 - 9 ]** - Add various question types
+- **[ 1 ] - [ 9 ]** - Add various question types
 - **[ 0 ]** - Add previous question type
-- **[ Enter ]** / **[ Ins ]** - Add choice to selected question
 - **[ - ]** / **[ = ]** - Add Subtitle
-- **[ Enter ]** / **[Ins]** - Add choice to selected question
+- **[ Enter ]** / **[ Ins ]** - Add choice to selected question
 - **[ Bksp ]** / **[ Del ]** - Remove selected question or choice
 - **[ PgUp ]** / **[ PgDn ]** - Move selected question up or down
 - **[ ~ ]** / **[ \\ ]** - Toggle requirement for selected question
-- **[ ← ]** / **[ → ]** - Select previous or next input
-- **[ ↑ ]** / **[ ↓ ]** - Select previous or next question
+- **[ ↑ ]** / **[ ↓ ]** - Select previous or next input
+- **[ ← ]** / **[ → ]** - Select previous or next question
 - **[ Home ]** - Select Survey Title
 - **[ End ]** - Select Finish button
 

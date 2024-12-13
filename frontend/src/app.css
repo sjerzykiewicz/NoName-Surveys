@@ -277,7 +277,7 @@ body {
 
 .sign-in {
 	justify-content: center;
-	font-size: 3em;
+	font-size: 1.5em;
 	font-weight: 700;
 	padding: 0.3em;
 	background-color: var(--amu-color-1);
@@ -1069,18 +1069,25 @@ input[type='radio']:disabled {
 }
 
 .info-row .tooltip {
-	--tooltip-width: 25em;
+	--tooltip-width: 15em;
 
 	font-size: 1.5em;
 }
 
-.create-info i,
+.info-row .tooltip .tooltip-text {
+	text-align: left;
+	font-size: 0.67em;
+}
+
+.create-info .tooltip i,
 .info-row .tooltip i,
 .download-key .tooltip i,
 .last-update-container .tooltip i,
 .crypto-row .tooltip i,
 .code-text .tooltip i,
-.label-container .tooltip i {
+.label-container .tooltip i,
+.sign-buttons .tooltip i,
+.header-tooltip .tooltip i {
 	color: var(--border-color-1);
 	text-shadow: 0 4px 4px var(--shadow-color-1);
 	transition:
@@ -1088,9 +1095,14 @@ input[type='radio']:disabled {
 		outline 0s;
 }
 
-.info-row .tooltip .tooltip-text {
-	text-align: left;
+.header-tooltip {
+	display: flex;
+	gap: 0.5em;
+}
+
+.header-tooltip .tooltip-text {
 	font-size: 0.67em;
+	text-align: left !important;
 }
 
 .slider-area {
@@ -1556,10 +1568,6 @@ button.popup {
 .accent {
 	display: inline-flex;
 	align-items: flex-end;
-}
-
-.account-accent,
-.accent {
 	color: var(--accent-color-1);
 	font-weight: 700;
 }
@@ -1643,7 +1651,8 @@ button.popup {
 	.dropdown,
 	.arrows,
 	.button-row,
-	.summary-no-answers {
+	.summary-no-answers,
+	.sign-in {
 		font-size: 1em;
 	}
 
@@ -1659,10 +1668,6 @@ button.popup {
 
 	table {
 		font-size: 0.75em;
-	}
-
-	.sign-in {
-		font-size: 2.25em;
 	}
 
 	.choice-area.binary {
@@ -1693,10 +1698,6 @@ button.popup {
 	.binary input {
 		top: 0;
 		left: 1em;
-	}
-
-	.info-row .tooltip {
-		--tooltip-width: 12em;
 	}
 
 	.title-container .input {

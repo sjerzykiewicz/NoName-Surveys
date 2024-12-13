@@ -10,6 +10,27 @@ You are free to use, modify, and host your own instance of the platform. Setup i
 
 ---
 
+## Table of Contents
+- [Example Use Case](#-example-use-case)
+- [User's Guide](#-users-guide)
+  - [Generate Keys](#generate-keys)
+  - [Create a Survey](#create-a-survey)
+  - [Respond to a Survey](#respond-to-a-survey)
+  - [View Survey Results](#view-survey-results)
+  - [Managing Existing Surveys](#managing-existing-surveys)
+  - [Managing Existing Drafts](#managing-existing-drafts)
+  - [Create a User Group](#create-a-user-group)
+  - [Managing Existing User Groups](#managing-existing-user-groups)
+- [Explanations](#-explanations)
+  - [Linkable Ring Signature](#linkable-ring-signature)
+- [Additional Information](#-additional-information)
+- [Administrator's Guide](#-administrators-guide)
+  - [Dependencies](#-dependencies)
+  - [Environment Variables](#-environment-variables)
+  - [Setup](#-setup)
+
+---
+
 ## 🚀 Example Use Case
 
 ### Check out the example instance for the **University of Adam Mickiewicz** [here](https://nonamesurveys.projektstudencki.pl/).

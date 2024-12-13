@@ -24,7 +24,7 @@
 	export let useCrypto: boolean = false;
 
 	const draftLink =
-		'https://github.com/sjerzykiewicz/NoName-Surveys/tree/dev?tab=readme-ov-file#managing-existing-drafts';
+		'https://github.com/sjerzykiewicz/NoName-Surveys?tab=readme-ov-file#managing-existing-drafts';
 
 	let isSurveyModalHidden: boolean = true;
 	let surveyCode: string;

@@ -15,7 +15,7 @@
 	export let selectedSurveysToRemove: typeof data.surveys = [];
 
 	const surveyLink =
-		'https://github.com/sjerzykiewicz/NoName-Surveys/tree/dev?tab=readme-ov-file#create-a-survey';
+		'https://github.com/sjerzykiewicz/NoName-Surveys?tab=readme-ov-file#create-a-survey';
 
 	let innerWidth: number;
 </script>

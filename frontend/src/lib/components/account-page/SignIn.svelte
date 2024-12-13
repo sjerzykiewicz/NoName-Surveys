@@ -11,9 +11,9 @@
 	let isSignInButtonDisabled = false;
 
 	const authLink =
-		'https://github.com/sjerzykiewicz/NoName-Surveys/tree/dev?tab=readme-ov-file#-amu-usos-authentication';
+		'https://github.com/sjerzykiewicz/NoName-Surveys?tab=readme-ov-file#-amu-usos-authentication';
 	const readmeLink =
-		'https://github.com/sjerzykiewicz/NoName-Surveys/tree/dev?tab=readme-ov-file#-noname-anonymous-surveys';
+		'https://github.com/sjerzykiewicz/NoName-Surveys?tab=readme-ov-file#-noname-anonymous-surveys';
 
 	let innerWidth: number;
 </script>

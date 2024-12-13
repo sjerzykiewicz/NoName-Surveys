@@ -30,7 +30,7 @@
 	const WARNING_THRESHOLD = 335;
 
 	const keysLink =
-		'https://github.com/sjerzykiewicz/NoName-Surveys/tree/dev?tab=readme-ov-file#generate-keys';
+		'https://github.com/sjerzykiewicz/NoName-Surveys?tab=readme-ov-file#generate-keys';
 
 	$: timeDiff = lastTime !== '' ? milisecondsToDays(Date.now() - Date.parse(lastTime)) : 0;
 

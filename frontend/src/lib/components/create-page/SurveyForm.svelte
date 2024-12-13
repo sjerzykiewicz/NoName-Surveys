@@ -59,7 +59,7 @@
 	let isInfoPinned: boolean = false;
 
 	const groupLink =
-		'https://github.com/sjerzykiewicz/NoName-Surveys/tree/dev?tab=readme-ov-file#create-a-user-group';
+		'https://github.com/sjerzykiewicz/NoName-Surveys?tab=readme-ov-file#create-a-user-group';
 
 	$: currentLang = $options.currentLang;
 

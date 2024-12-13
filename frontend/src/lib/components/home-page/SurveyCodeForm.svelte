@@ -18,7 +18,7 @@
 	export let form: ActionData;
 
 	const explanationsLink =
-		'https://github.com/sjerzykiewicz/NoName-Surveys/tree/dev?tab=readme-ov-file#-explanations';
+		'https://github.com/sjerzykiewicz/NoName-Surveys?tab=readme-ov-file#-explanations';
 
 	let innerWidth: number;
 </script>

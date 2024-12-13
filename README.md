@@ -212,7 +212,7 @@ TODO: Add more information about the protocol.
 
 ## 📚 Additional Information
 
-### 🧅 If you want to be extra careful, and wish to enhance your anonymity further, beyond what we offer, we recommend using the [Tor](https://www.torproject.org/download/) browser. Tor routes your internet traffic through a network of servers, encrypting it multiple times and masking your IP address to obscure your location and activity. This ensures that platform administrators, as well as other parties, cannot trace your actions back to your device or monitor your browsing activity effectively.
+### 🧅 If you want to be extra careful, and wish to enhance your anonymity further, we recommend using the [Tor](https://www.torproject.org/download/) browser. Tor routes your internet traffic through a network of servers, encrypting it multiple times and masking your IP address to obscure your location and activity. This ensures that platform administrators, as well as other parties, cannot trace your actions back to your device or monitor your browsing activity effectively.
 
 
 ### ❓ **Question Types**

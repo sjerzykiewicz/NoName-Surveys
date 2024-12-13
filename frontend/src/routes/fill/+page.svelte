@@ -20,6 +20,15 @@
 	$questions = [];
 	$answers = [];
 
+	async function handleEnter(event: KeyboardEvent) {
+		if (!isModalHidden && event.key === 'Enter') {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			isModalHidden = true;
+			await signOut();
+		}
+	}
+
 	onMount(async () => {
 		await init();
 		if ($page.data.session) {
@@ -28,23 +37,25 @@
 	});
 </script>
 
+<svelte:body on:keydown={handleEnter} />
+
 <Modal
 	icon="logout"
-	title={$t('sign_out')}
+	title={$t('signed_out_title')}
 	bind:isHidden={isModalHidden}
 	hide={async () => {
-		await signOut();
 		isModalHidden = true;
+		await signOut();
 	}}
 >
-	<span slot="content"><Tx text="sign_out_alert" /></span>
+	<span slot="content"><Tx text="signed_out_alert" /></span>
 	<button
-		title={$t('sign_out')}
-		class="save"
+		title="Ok"
+		class="done"
 		on:click={async () => {
-			await signOut();
 			isModalHidden = true;
-		}}><i class="symbol">logout</i><Tx text="sign_out" /></button
+			await signOut();
+		}}><i class="symbol">done</i>OK</button
 	>
 </Modal>
 

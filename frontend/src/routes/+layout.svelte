@@ -7,8 +7,9 @@
 	import type { TranslateOptions } from 'sveltekit-translate/translate/translateStore';
 	import { onMount } from 'svelte';
 	import { data } from '$lib/translations';
-	import { colorScheme } from '$lib/stores/global';
-	import { setTheme } from '$lib/utils/setTheme';
+	import { colorContrast, colorScheme } from '$lib/stores/global';
+	import { setScheme } from '$lib/utils/setScheme';
+	import { setContrast } from '$lib/utils/setContrast';
 
 	let opts: TranslateOptions = {
 		defaultLang: 'en',
@@ -16,7 +17,8 @@
 	};
 
 	onMount(() => {
-		$colorScheme = setTheme();
+		$colorScheme = setScheme();
+		$colorContrast = setContrast();
 	});
 </script>
 

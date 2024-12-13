@@ -3,8 +3,8 @@ export default async function keyFromMaterial(keyMaterial: CryptoKey, salt: Uint
 		{
 			name: 'PBKDF2',
 			salt,
-			iterations: 100000,
-			hash: 'SHA-256'
+			iterations: 500000,
+			hash: 'SHA-512'
 		},
 		keyMaterial,
 		{ name: 'AES-GCM', length: 256 },

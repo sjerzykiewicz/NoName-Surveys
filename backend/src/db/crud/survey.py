@@ -25,6 +25,16 @@ def get_survey_by_code(survey_code: str, session: Session) -> Survey:
     return session.exec(statement).first()
 
 
+def get_active_survey_by_code(survey_code: str, session: Session) -> Survey:
+    statement = (
+        select(Survey)
+        .where(Survey.survey_code == survey_code)
+        .where(Survey.is_deleted == False)  # noqa: E712
+        .where(Survey.is_enabled == True)  # noqa: E712
+    )
+    return session.exec(statement).first()
+
+
 def delete_surveys(
     user_id: int, survey_codes: list[str], session: Session
 ) -> list[Survey]:
@@ -180,8 +190,8 @@ def get_all_users_with_access_to_survey_count(survey_id: int, session: Session) 
 
 def get_all_users_with_no_access_to_survey(
     survey_id: int, session: Session
-) -> list[User]:
-    statement = select(User).where(
+) -> list[str]:
+    statement = select(User.email).where(
         User.id.notin_(
             select(AccessToViewResults.user_id)
             .where(AccessToViewResults.survey_id == survey_id)
@@ -215,3 +225,13 @@ def user_has_access_to_survey(user_id: int, survey_id: int, session: Session) ->
         .where(AccessToViewResults.is_deleted == False)  # noqa: E712
     )
     return session.exec(statement).first() is not None
+
+
+def enable_or_disable_survey(
+    survey_id: int, is_enabled: bool, session: Session
+) -> None:
+    survey = session.exec(select(Survey).where(Survey.id == survey_id)).first()
+    survey.is_enabled = is_enabled
+    session.commit()
+    session.refresh(survey)
+    return survey

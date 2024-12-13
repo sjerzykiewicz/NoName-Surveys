@@ -19,6 +19,7 @@
 	import Slider from '$lib/components/create-page/Slider.svelte';
 	import Text from '$lib/components/create-page/Text.svelte';
 	import Number from '$lib/components/create-page/Number.svelte';
+	import SubtitleComponent from '$lib/components/create-page/Subtitle.svelte';
 	import SinglePreview from '$lib/components/create-page/preview/SinglePreview.svelte';
 	import MultiPreview from '$lib/components/create-page/preview/MultiPreview.svelte';
 	import ScalePreview from '$lib/components/create-page/preview/ScalePreview.svelte';
@@ -28,9 +29,18 @@
 	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
 	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
+	import SubtitlePreview from '$lib/components/create-page/preview/SubtitlePreview.svelte';
 	import type Question from '$lib/entities/questions/Question';
+	import type Subtitle from '$lib/entities/questions/Subtitle';
 	import { getDraft } from '$lib/utils/getDraft';
-	import { errorModalContent, isErrorModalHidden, S } from '$lib/stores/global';
+	import {
+		errorModalContent,
+		isErrorModalHidden,
+		isWarningModalHidden,
+		LIMIT_OF_SURVEYS,
+		S,
+		warningModalContent
+	} from '$lib/stores/global';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
@@ -45,6 +55,9 @@
 		creation_date: string;
 	}[];
 	export let selectedDraftsToRemove: number[] = [];
+	export let numSurveys: number;
+	export let isExportButtonVisible: boolean = false;
+	export let isRespondentModalHidden: boolean = true;
 
 	$: draftIds = drafts.map((d) => d.id);
 
@@ -55,7 +68,12 @@
 		selectedDraftsToRemove = allSelected ? [] : [...draftIds];
 	}
 
-	async function loadDraft(draft: { id: number; title: string }) {
+	async function loadDraft() {
+		$draftStructure = getDraft($title.title, $questions);
+		await goto('/create');
+	}
+
+	async function fetchDraft(draft: { id: number; title: string }) {
 		const response = await fetch('/api/surveys/drafts/fetch', {
 			method: 'POST',
 			body: JSON.stringify({ id: draft.id }),
@@ -75,136 +93,159 @@
 		$currentDraftId = draft.id;
 		$title.title = draft.title;
 		$questions = [];
-		body.survey_structure.questions.forEach((q: Question) => {
-			switch (q.question_type) {
-				case 'single':
-					$questions = [
-						...$questions,
-						{
-							component: Single,
-							preview: SinglePreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as SingleQuestion).choices,
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'multi':
-					$questions = [
-						...$questions,
-						{
-							component: Multi,
-							preview: MultiPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as MultiQuestion).choices,
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'list':
-					$questions = [
-						...$questions,
-						{
-							component: List,
-							preview: ListPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as ListQuestion).choices,
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'rank':
-					$questions = [
-						...$questions,
-						{
-							component: Rank,
-							preview: RankPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as RankQuestion).choices,
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'binary':
-					$questions = [
-						...$questions,
-						{
-							component: Binary,
-							preview: BinaryPreview,
-							required: q.required,
-							question: q.question,
-							choices: (q as BinaryQuestion).choices,
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'scale':
-					$questions = [
-						...$questions,
-						{
-							component: Scale,
-							preview: ScalePreview,
-							required: q.required,
-							question: q.question,
-							choices: ['1', '2', '3', '4', '5'],
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'slider':
-					$questions = [
-						...$questions,
-						{
-							component: Slider,
-							preview: SliderPreview,
-							required: q.required,
-							question: q.question,
-							choices: [
-								(q as SliderQuestion).min_value.toString(),
-								(q as SliderQuestion).max_value.toString(),
-								(q as SliderQuestion).precision.toString()
-							],
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'number':
-					$questions = [
-						...$questions,
-						{
-							component: Number,
-							preview: NumberPreview,
-							required: q.required,
-							question: q.question,
-							choices: [
-								(q as NumberQuestion).min_value.toString(),
-								(q as NumberQuestion).max_value.toString()
-							],
-							error: SurveyError.NoError
-						}
-					];
-					break;
-				case 'text':
-					$questions = [
-						...$questions,
-						{
-							component: Text,
-							preview: TextPreview,
-							required: q.required,
-							question: q.question,
-							choices: [(q as TextQuestion).details],
-							error: SurveyError.NoError
-						}
-					];
-					break;
+		body.survey_structure.questions.forEach((q: Question | Subtitle) => {
+			if ('subtitle' in q) {
+				$questions = [
+					...$questions,
+					{
+						component: SubtitleComponent,
+						preview: SubtitlePreview,
+						required: false,
+						question: q.subtitle,
+						choices: [],
+						error: SurveyError.NoError
+					}
+				];
+			} else {
+				switch (q.question_type) {
+					case 'single':
+						$questions = [
+							...$questions,
+							{
+								component: Single,
+								preview: SinglePreview,
+								required: q.required,
+								question: q.question,
+								choices: (q as SingleQuestion).choices,
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'multi':
+						$questions = [
+							...$questions,
+							{
+								component: Multi,
+								preview: MultiPreview,
+								required: q.required,
+								question: q.question,
+								choices: (q as MultiQuestion).choices,
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'list':
+						$questions = [
+							...$questions,
+							{
+								component: List,
+								preview: ListPreview,
+								required: q.required,
+								question: q.question,
+								choices: (q as ListQuestion).choices,
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'rank':
+						$questions = [
+							...$questions,
+							{
+								component: Rank,
+								preview: RankPreview,
+								required: q.required,
+								question: q.question,
+								choices: (q as RankQuestion).choices,
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'binary':
+						$questions = [
+							...$questions,
+							{
+								component: Binary,
+								preview: BinaryPreview,
+								required: q.required,
+								question: q.question,
+								choices: (q as BinaryQuestion).choices,
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'scale':
+						$questions = [
+							...$questions,
+							{
+								component: Scale,
+								preview: ScalePreview,
+								required: q.required,
+								question: q.question,
+								choices: ['1', '2', '3', '4', '5'],
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'slider':
+						$questions = [
+							...$questions,
+							{
+								component: Slider,
+								preview: SliderPreview,
+								required: q.required,
+								question: q.question,
+								choices: [
+									(q as SliderQuestion).min_value.toString(),
+									(q as SliderQuestion).max_value.toString(),
+									(q as SliderQuestion).precision.toString()
+								],
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'number':
+						$questions = [
+							...$questions,
+							{
+								component: Number,
+								preview: NumberPreview,
+								required: q.required,
+								question: q.question,
+								choices: [
+									(q as NumberQuestion).min_value.toString(),
+									(q as NumberQuestion).max_value.toString()
+								],
+								error: SurveyError.NoError
+							}
+						];
+						break;
+					case 'text':
+						$questions = [
+							...$questions,
+							{
+								component: Text,
+								preview: TextPreview,
+								required: q.required,
+								question: q.question,
+								choices: [(q as TextQuestion).details],
+								error: SurveyError.NoError
+							}
+						];
+						break;
+				}
 			}
 		});
-		$draftStructure = getDraft($title.title, $questions);
-		await goto('/create');
+	}
+
+	async function createSurvey() {
+		if (numSurveys >= $LIMIT_OF_SURVEYS) {
+			isExportButtonVisible = false;
+			$warningModalContent = $t('limit_reached', { items: $t('surveys_genitive') });
+			$isWarningModalHidden = false;
+			return;
+		}
+
+		isRespondentModalHidden = false;
 	}
 
 	let innerWidth: number;
@@ -215,10 +256,10 @@
 {#if drafts.length === 0}
 	<div class="info-row">
 		<div title={$t('drafts')} class="title empty"><Tx text="no_drafts_yet" /></div>
-		<div class="tooltip">
-			<i class="symbol">info</i>
+		<div class="tooltip hoverable">
+			<i class="symbol">help</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				<Tx text="draft_tooltip" />
+				<Tx text="drafts_tooltip" /><a href="/account/faq#draft"><Tx text="help" /></a>
 			</span>
 		</div>
 	</div>
@@ -237,6 +278,7 @@
 			>
 			<th title={$t('draft_title')} id="title-header"><Tx text="draft_title" /></th>
 			<th title={$t('creation_date')} id="date-header"><Tx text="creation_date" /></th>
+			<th title={$t('create')} id="create-header"><Tx text="create" /></th>
 		</tr>
 		{#each drafts as draft}
 			<tr>
@@ -246,9 +288,22 @@
 					</label></td
 				>
 				<td title="{$t('open')} {draft.title}" class="title-entry"
-					><button on:click={() => loadDraft(draft)}>{draft.title}</button></td
+					><button
+						on:click={async () => {
+							await fetchDraft(draft);
+							await loadDraft();
+						}}>{draft.title}</button
+					></td
 				>
 				<td title={$t('creation_date')} class="date-entry">{formatDateTime(draft.creation_date)}</td
+				>
+				<td title="{$t('finish')} {draft.title}" class="button-entry"
+					><button
+						on:click={async () => {
+							await fetchDraft(draft);
+							await createSurvey();
+						}}><i class="symbol">check_circle</i></button
+					></td
 				>
 			</tr>
 		{/each}
@@ -256,13 +311,19 @@
 {/if}
 
 <style>
+	.button-entry i {
+		color: var(--accent-color-1);
+		font-variation-settings: 'wght' 700;
+	}
+
 	#date-header {
 		width: 22%;
+		text-align: center;
 	}
 
 	@media screen and (max-width: 768px) {
 		#date-header {
-			width: 33%;
+			width: 34%;
 		}
 	}
 </style>

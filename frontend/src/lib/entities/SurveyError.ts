@@ -1,6 +1,7 @@
 export enum SurveyError {
 	TitleRequired,
 	TitleTooLong,
+	SubtitleTooLong,
 	QuestionRequired,
 	QuestionTooLong,
 	ChoicesRequired,

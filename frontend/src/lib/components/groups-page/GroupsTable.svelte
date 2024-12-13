@@ -26,6 +26,7 @@
 	let nameError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
 	let nameInput: HTMLDivElement;
+	let isSubmitButtonDisabled: boolean = false;
 
 	$: groupNames = groups.map((g) => g.user_group_name);
 
@@ -86,11 +87,13 @@
 		await invalidateAll();
 	}
 
-	function handleEnter(event: KeyboardEvent) {
-		if (!isModalHidden && event.key === 'Enter') {
+	async function handleEnter(event: KeyboardEvent) {
+		if (!isModalHidden && !isSubmitButtonDisabled && event.key === 'Enter') {
 			event.preventDefault();
-			renameGroup();
 			event.stopImmediatePropagation();
+			isSubmitButtonDisabled = true;
+			await renameGroup();
+			isSubmitButtonDisabled = false;
 		}
 	}
 
@@ -114,11 +117,13 @@
 			label={$t('group_name')}
 			title={$t('enter_new_group_name')}
 			bind:element={nameInput}
-			handleEnter={(e) => {
-				if (e.key === 'Enter') {
+			handleEnter={async (e) => {
+				if (!isSubmitButtonDisabled && e.key === 'Enter') {
 					e.preventDefault();
-					renameGroup();
 					e.stopImmediatePropagation();
+					isSubmitButtonDisabled = true;
+					await renameGroup();
+					isSubmitButtonDisabled = false;
 				}
 			}}
 			--margin-right="0em"
@@ -126,18 +131,25 @@
 		/>
 		<NameError name={newName.trim()} error={nameError} groups={groupNames} --font-size="0.8em" />
 	</div>
-	<button title={$t('save_new_group_name_title')} class="done" on:click={renameGroup}
-		><i class="symbol">done</i><Tx text="submit" /></button
+	<button
+		title={$t('save_new_group_name_title')}
+		class="done"
+		disabled={isSubmitButtonDisabled}
+		on:click={async () => {
+			isSubmitButtonDisabled = true;
+			await renameGroup();
+			isSubmitButtonDisabled = false;
+		}}><i class="symbol">done</i><Tx text="submit" /></button
 	>
 </Modal>
 
 {#if groups.length === 0}
 	<div class="info-row">
 		<div title={$t('groups')} class="title empty"><Tx text="no_groups_yet" /></div>
-		<div class="tooltip">
-			<i class="symbol">info</i>
+		<div class="tooltip hoverable">
+			<i class="symbol">help</i>
 			<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
-				<Tx text="groups_tooltip" />
+				<Tx text="groups_tooltip" /><a href="/account/faq#group"><Tx text="help" /></a>
 			</span>
 		</div>
 	</div>
@@ -155,7 +167,8 @@
 				></th
 			>
 			<th title={$t('keys_info_title')} id="info-header"><i class="symbol">encrypted</i></th>
-			<th title={$t('group_name')} id="title-header" colspan="2"><Tx text="group_name" /></th>
+			<th title={$t('group_name')} id="title-header"><Tx text="group_name" /></th>
+			<th title={$t('rename')} id="rename-header"><Tx text="rename" /></th>
 		</tr>
 		{#each groups as group}
 			<tr>

@@ -48,6 +48,7 @@
 	let membersError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
 	let nameInput: HTMLDivElement;
+	let isSubmitButtonDisabled: boolean = false;
 
 	$: groupNames = groups.map((g) => g.user_group_name);
 
@@ -208,11 +209,15 @@
 				label={$t('group_name')}
 				title={$t('enter_group_name')}
 				bind:element={nameInput}
-				handleEnter={(e) => {
+				handleEnter={async (e) => {
 					if (e.key === 'Enter') {
 						e.preventDefault();
-						createGroup();
 						e.stopImmediatePropagation();
+						if (!isSubmitButtonDisabled) {
+							isSubmitButtonDisabled = true;
+							await createGroup();
+							isSubmitButtonDisabled = false;
+						}
 					}
 				}}
 				--margin-right="0em"
@@ -234,8 +239,17 @@
 					placeholder={$t('select_group_members')}
 				/>
 			</div>
-			<button title={$t('save_group')} class="done" on:click={createGroup}>
-				<i class="symbol">done</i><Tx text="create" />
+			<button
+				title={$t('save_group')}
+				class="done"
+				disabled={isSubmitButtonDisabled}
+				on:click={async () => {
+					isSubmitButtonDisabled = true;
+					await createGroup();
+					isSubmitButtonDisabled = false;
+				}}
+			>
+				<i class="symbol">done</i><Tx text="submit" />
 			</button>
 		</div>
 		<MembersError members={groupMembers} error={membersError} />

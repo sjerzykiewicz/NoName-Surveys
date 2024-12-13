@@ -1,4 +1,5 @@
 import Question from '$lib/entities/questions/Question';
+import Subtitle from '$lib/entities/questions/Subtitle';
 import { SingleQuestion } from '$lib/entities/questions/Single';
 import { MultiQuestion } from '$lib/entities/questions/Multi';
 import { ScaleQuestion } from '$lib/entities/questions/Scale';
@@ -8,6 +9,7 @@ import { RankQuestion } from '$lib/entities/questions/Rank';
 import { TextQuestion } from '$lib/entities/questions/Text';
 import { BinaryQuestion } from '$lib/entities/questions/Binary';
 import { NumberQuestion } from '$lib/entities/questions/Number';
+import SubtitleComponent from '$lib/components/create-page/Subtitle.svelte';
 import Single from '$lib/components/create-page/Single.svelte';
 import Multi from '$lib/components/create-page/Multi.svelte';
 import Scale from '$lib/components/create-page/Scale.svelte';
@@ -19,8 +21,10 @@ import Text from '$lib/components/create-page/Text.svelte';
 import Number from '$lib/components/create-page/Number.svelte';
 import QuestionsStore from '$lib/entities/questions/QuestionsStore';
 
-export function constructQuestionList(questions: Array<QuestionsStore>): Array<Question> {
-	let questionList: Array<Question> = [];
+export function constructQuestionList(
+	questions: Array<QuestionsStore>
+): Array<Question | Subtitle> {
+	let questionList: Array<Question | Subtitle> = [];
 	questions.forEach((q) => {
 		switch (q.component) {
 			case Single:
@@ -66,6 +70,9 @@ export function constructQuestionList(questions: Array<QuestionsStore>): Array<Q
 				break;
 			case Binary:
 				questionList = [...questionList, new BinaryQuestion(q.required, q.question, q.choices)];
+				break;
+			case SubtitleComponent:
+				questionList = [...questionList, new Subtitle(q.question)];
 				break;
 		}
 	});

@@ -9,6 +9,7 @@
 	import { NumberQuestion, NumberQuestionAnswered } from '$lib/entities/questions/Number';
 	import type Survey from '$lib/entities/surveys/Survey';
 	import type Question from '$lib/entities/questions/Question';
+	import Subtitle from '$lib/entities/questions/Subtitle';
 	import { MultiQuestionAnswered } from '$lib/entities/questions/Multi';
 	import { BinaryQuestionAnswered } from '$lib/entities/questions/Binary';
 	import { RankQuestionAnswered } from '$lib/entities/questions/Rank';
@@ -25,6 +26,7 @@
 	import Binary from './Binary.svelte';
 	import Rank from './Rank.svelte';
 	import Number from './Number.svelte';
+	import SubtitleComponent from './Subtitle.svelte';
 	import type { ComponentType } from 'svelte';
 	import AnswerError from './AnswerError.svelte';
 	import { cubicInOut } from 'svelte/easing';
@@ -47,13 +49,16 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { FileError } from '$lib/entities/FileError';
 	import KeysError from './KeysError.svelte';
-	import { readFile } from '$lib/utils/readFile';
 	import SuccessModal from '$lib/components/global/SuccessModal.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import decryptKeys from '$lib/utils/decryptKeys';
 	import PassphraseError from './PassphraseError.svelte';
+	import { readBinaryFile } from '$lib/utils/readFile';
+	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
+	import { magicNumber } from '$lib/entities/MagicNumber';
+	import AccessError from './AccessError.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -67,8 +72,8 @@
 	let isKeysModalHidden: boolean = true;
 	let isSubmitButtonDisabled: boolean = false;
 	let passphrase: string = '';
-	let passphraseError: boolean = false;
-	let keyPair: KeyPair | null = null;
+	let passphraseError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
+	let accessError: boolean = false;
 
 	export const componentTypeMap: { [id: string]: ComponentType } = {
 		text: Text,
@@ -85,32 +90,41 @@
 	$title = survey_title;
 
 	for (let i in survey.questions) {
-		$questions[i] = {
-			type: survey.questions[i].question_type,
-			required: survey.questions[i].required,
-			question: survey.questions[i].question,
-			choices: []
-		};
+		if ('subtitle' in survey.questions[i]) {
+			$questions[i] = {
+				type: 'subtitle',
+				required: false,
+				question: survey.questions[i].subtitle,
+				choices: []
+			};
+		} else {
+			$questions[i] = {
+				type: survey.questions[i].question_type,
+				required: survey.questions[i].required,
+				question: survey.questions[i].question,
+				choices: []
+			};
 
-		switch (survey.questions[i].question_type) {
-			case 'text':
-				$questions[i].choices[0] = (survey.questions[i] as TextQuestion).details;
-				break;
-			case 'scale':
-				$questions[i].choices = ['1', '2', '3', '4', '5'];
-				break;
-			case 'slider':
-				$questions[i].choices[0] = (survey.questions[i] as SliderQuestion).min_value.toString();
-				$questions[i].choices[1] = (survey.questions[i] as SliderQuestion).max_value.toString();
-				$questions[i].choices[2] = (survey.questions[i] as SliderQuestion).precision.toString();
-				break;
-			case 'number':
-				$questions[i].choices[0] = (survey.questions[i] as NumberQuestion).min_value.toString();
-				$questions[i].choices[1] = (survey.questions[i] as NumberQuestion).max_value.toString();
-				break;
-			default:
-				$questions[i].choices = (survey.questions[i] as SingleQuestion).choices;
-				break;
+			switch (survey.questions[i].question_type) {
+				case 'text':
+					$questions[i].choices[0] = (survey.questions[i] as TextQuestion).details;
+					break;
+				case 'scale':
+					$questions[i].choices = ['1', '2', '3', '4', '5'];
+					break;
+				case 'slider':
+					$questions[i].choices[0] = (survey.questions[i] as SliderQuestion).min_value.toString();
+					$questions[i].choices[1] = (survey.questions[i] as SliderQuestion).max_value.toString();
+					$questions[i].choices[2] = (survey.questions[i] as SliderQuestion).precision.toString();
+					break;
+				case 'number':
+					$questions[i].choices[0] = (survey.questions[i] as NumberQuestion).min_value.toString();
+					$questions[i].choices[1] = (survey.questions[i] as NumberQuestion).max_value.toString();
+					break;
+				default:
+					$questions[i].choices = (survey.questions[i] as SingleQuestion).choices;
+					break;
+			}
 		}
 	}
 
@@ -120,7 +134,7 @@
 	}
 
 	function constructAnswerList() {
-		let answerList: Array<Question> = [];
+		let answerList: Array<Question | Subtitle> = [];
 		for (let i = 0; i < numQuestions; i++) {
 			const type = $questions[i].type;
 			switch (type) {
@@ -198,6 +212,9 @@
 						parseFloat($answers[i].choices[0])
 					);
 					break;
+				case 'subtitle':
+					answerList[i] = new Subtitle($questions[i].question);
+					break;
 			}
 		}
 		return answerList;
@@ -223,7 +240,7 @@
 
 		if (unansweredRequired.size > 0) {
 			const [first] = unansweredRequired;
-			scrollToElementById(first.toString());
+			scrollToElementById(`q${first.toString()}`);
 			return false;
 		}
 
@@ -238,71 +255,56 @@
 		fileName = fileElement?.files?.[0]?.name ?? $t('no_file_selected');
 	}
 
-	function checkFileCorrectness() {
+	let keyPair: KeyPair | null = null;
+	let byteArray: Uint8Array = new Uint8Array();
+
+	async function processCrypto() {
 		fileError = FileError.NoError;
+		passphraseError = PassphraseErrorEnum.NoError;
+		keyPair = null;
+		byteArray = new Uint8Array();
+		accessError = false;
 
 		if (fileElement?.files?.length === 0) {
 			fileError = FileError.FileRequired;
-			return false;
-		} else if (fileElement?.files?.[0]?.name.split('.').pop() !== 'txt') {
-			fileError = FileError.FileInvalid;
-			return false;
-		}
-
-		return true;
-	}
-
-	function checkPassphraseCorrectness(keyPair: KeyPair | null) {
-		passphraseError = false;
-
-		if (keyPair === null) {
-			passphraseError = true;
-			return false;
-		}
-
-		return true;
-	}
-
-	async function processCrypto() {
-		isSubmitButtonDisabled = true;
-		if (!checkFileCorrectness()) {
-			isSubmitButtonDisabled = false;
 			return;
 		}
 
-		const text = await readFile(fileElement).then(
+		byteArray = await readBinaryFile(fileElement).then(
 			(resolve) => {
 				return resolve;
 			},
 			(reject) => {
 				$errorModalContent = reject as string;
 				$isErrorModalHidden = false;
-				return '';
+				return new Uint8Array();
 			}
 		);
 
-		keyPair = await getKeys(text);
-
-		if (!checkPassphraseCorrectness(keyPair)) {
-			isSubmitButtonDisabled = false;
+		if (byteArray.slice(0, 8).toString() !== magicNumber.toString()) {
+			fileError = FileError.FileInvalid;
 			return;
 		}
 
-		if (!keys.includes(keyPair!.publicKey)) {
-			$errorModalContent = $t('public_key_not_on_list');
-			$isErrorModalHidden = false;
-			isSubmitButtonDisabled = false;
+		keyPair = await getKeys(byteArray);
+
+		if (keyPair === null) {
+			passphraseError = PassphraseErrorEnum.DecryptionFailed;
 			return;
 		}
 
-		processForm(keyPair!);
+		if (!keys.includes(keyPair.publicKey)) {
+			accessError = true;
+			return;
+		}
+
+		processForm(keyPair);
 	}
 
-	async function getKeys(text: string): Promise<KeyPair | null> {
-		const data = JSON.parse(text);
-		const salt = new Uint8Array([...data.salt].map((char) => char.charCodeAt(0)));
-		const iv = new Uint8Array([...data.iv].map((char) => char.charCodeAt(0)));
-		const ciphertext = new Uint8Array([...data.ciphertext].map((char) => char.charCodeAt(0)));
+	async function getKeys(byteArray: Uint8Array): Promise<KeyPair | null> {
+		const salt = byteArray.slice(8, 24);
+		const iv = byteArray.slice(24, 36);
+		const ciphertext = byteArray.slice(36);
 
 		try {
 			const decrypted = await decryptKeys(ciphertext, passphrase, salt, iv);
@@ -323,7 +325,7 @@
 	async function processForm(keyPair: KeyPair | undefined) {
 		let signature: string[] = [];
 
-		const answerList: Array<Question> = constructAnswerList();
+		const answerList: Array<Question | Subtitle> = constructAnswerList();
 
 		if (uses_crypto) {
 			const message = answerList.map((answer) => answer.getAnswer()).join('') + code;
@@ -336,14 +338,13 @@
 			} catch (e) {
 				$errorModalContent = e as string;
 				$isErrorModalHidden = false;
-				isSubmitButtonDisabled = false;
 				return;
 			}
 		}
 
 		const answer = new SurveyAnswer(code, answerList, signature);
 
-		const response = await fetch('/api/surveys/fill', {
+		const response = await fetch('/api/surveys/answers/fill', {
 			method: 'POST',
 			body: JSON.stringify(answer),
 			headers: {
@@ -355,29 +356,19 @@
 			const body = await response.json();
 			$errorModalContent = getErrorMessage(body.detail);
 			$isErrorModalHidden = false;
-			isSubmitButtonDisabled = false;
 			return;
 		}
 
-		isSubmitButtonDisabled = true;
 		isKeysModalHidden = true;
 		$successModalContent = $t('answer_submit_success');
 		$isSuccessModalHidden = false;
 	}
 
 	async function submitSurvey() {
-		isSubmitButtonDisabled = true;
-		if (!checkAnswerCorrectness()) {
-			isSubmitButtonDisabled = false;
-			return;
-		}
+		if (!checkAnswerCorrectness()) return;
 
-		if (uses_crypto) {
-			isSubmitButtonDisabled = false;
-			isKeysModalHidden = false;
-		} else {
-			processForm(undefined);
-		}
+		if (uses_crypto) isKeysModalHidden = false;
+		else processForm(undefined);
 	}
 
 	async function hideSuccessModal() {
@@ -385,11 +376,13 @@
 		await goto('/', { replaceState: true, invalidateAll: true });
 	}
 
-	function handleEnter(event: KeyboardEvent) {
+	async function handleEnter(event: KeyboardEvent) {
 		if (!isKeysModalHidden && !isSubmitButtonDisabled && event.key === 'Enter') {
 			event.preventDefault();
-			processCrypto();
 			event.stopImmediatePropagation();
+			isSubmitButtonDisabled = true;
+			await processCrypto();
+			isSubmitButtonDisabled = false;
 		}
 	}
 
@@ -410,15 +403,16 @@
 	hide={() => {
 		isKeysModalHidden = true;
 		passphrase = '';
-		passphraseError = false;
+		passphraseError = PassphraseErrorEnum.NoError;
 		fileName = $t('no_file_selected');
 		fileError = FileError.NoError;
+		accessError = false;
 	}}
 	--width={innerWidth <= $M ? '20em' : '38em'}
 >
 	<div slot="content" title={$t('load_keys')} class="file-div">
 		<span class="file-label"
-			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.txt"</span
+			><Tx text="key_file_label" /><br /><br /><Tx text="default_filename" />: "noname-keys.bin"</span
 		>
 		<label>
 			<div class="file-input">
@@ -427,7 +421,7 @@
 			</div>
 			<input type="file" bind:this={fileElement} on:change={handleFileChange} />
 		</label>
-		<KeysError error={fileError} element={fileElement} />
+		<KeysError error={fileError} element={fileElement} {byteArray} />
 		<div title={$t('enter_passphrase')}>
 			<br />
 			<Tx text="enter_passphrase" />
@@ -448,13 +442,18 @@
 				/></label
 			>
 			<PassphraseError error={passphraseError} {keyPair} />
+			<AccessError error={accessError} {keys} {keyPair} />
 		</div>
 	</div>
 	<button
 		title={$t('submit_keys')}
 		class="save"
 		disabled={isSubmitButtonDisabled}
-		on:click={processCrypto}><i class="symbol">done</i><Tx text="submit" /></button
+		on:click={async () => {
+			isSubmitButtonDisabled = true;
+			await processCrypto();
+			isSubmitButtonDisabled = false;
+		}}><i class="symbol">done</i><Tx text="submit" /></button
 	>
 </Modal>
 
@@ -481,18 +480,18 @@
 		</p>
 	{/if}
 	{#each $questions as question, questionIndex (question)}
-		<div class="question" in:slide={{ duration: 200, easing: cubicInOut }}>
-			<QuestionTitle
-				{questionIndex}
-				questionTypeData={getQuestionTypeData(componentTypeMap[question.type])}
-			/>
-			<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
+		<div class="question" id={`q${questionIndex}`} in:slide={{ duration: 200, easing: cubicInOut }}>
+			{#if question.type === 'subtitle'}
+				<SubtitleComponent {questionIndex} />
+			{:else}
+				<QuestionTitle
+					{questionIndex}
+					questionTypeData={getQuestionTypeData(componentTypeMap[question.type])}
+				/>
+				<svelte:component this={componentTypeMap[question.type]} {questionIndex} />
+			{/if}
 		</div>
-		<AnswerError
-			{unansweredRequired}
-			{questionIndex}
-			--margin-top={question.type === 'text' ? '-2em' : ''}
-		/>
+		<AnswerError {unansweredRequired} {questionIndex} />
 	{/each}
 </Content>
 
@@ -501,7 +500,11 @@
 		title={$t('submit_survey')}
 		class="footer-button done"
 		disabled={uses_crypto ? false : isSubmitButtonDisabled}
-		on:click={submitSurvey}
+		on:click={async () => {
+			isSubmitButtonDisabled = true;
+			await submitSurvey();
+			isSubmitButtonDisabled = false;
+		}}
 	>
 		<i class="symbol">done</i><Tx text="submit" />
 	</button>
@@ -525,7 +528,8 @@
 
 	.warning,
 	.survey-info {
-		margin: 0em 0em 0.5em 0em;
+		margin: 0;
+		padding-bottom: 1em;
 	}
 
 	@media screen and (max-width: 768px) {

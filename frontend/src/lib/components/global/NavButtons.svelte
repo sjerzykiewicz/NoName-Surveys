@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { M } from '$lib/stores/global';
+	import { colorScheme, colorContrast, M } from '$lib/stores/global';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -9,13 +9,15 @@
 	import { signOut } from '$lib/utils/signOut';
 	import { startOAuth } from '$lib/utils/startOAuth';
 	import { goto } from '$app/navigation';
-	import { toggleTheme } from '$lib/utils/toggleTheme';
-	import { colorScheme } from '$lib/stores/global';
+	import { toggleScheme } from '$lib/utils/toggleScheme';
+	import { toggleContrast } from '$lib/utils/toggleContrast';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	let isPanelVisible: boolean = false;
+	let isSignOutButtonDisabled: boolean = false;
+	let isSignInButtonDisabled: boolean = false;
 
 	const ACCOUNT_BUTTON_BREAKPOINT = 1155;
 
@@ -80,7 +82,7 @@
 			<button
 				title={$t('toggle_theme')}
 				class="nav-button"
-				on:click={() => ($colorScheme = toggleTheme($colorScheme))}
+				on:click={() => ($colorScheme = toggleScheme($colorScheme))}
 			>
 				<i class="symbol">{bulb}</i>
 				{#key $t}
@@ -91,6 +93,20 @@
 					{/if}
 				{/key}
 			</button>
+			<button
+				title={$t('toggle_contrast')}
+				class="nav-button"
+				on:click={() => ($colorContrast = toggleContrast($colorContrast))}
+			>
+				<i class="symbol">contrast</i>
+				{#key $t}
+					{#if $colorContrast === 'medium'}
+						<Tx text="high_contrast" />
+					{:else}
+						<Tx text="medium_contrast" />
+					{/if}
+				{/key}
+			</button>
 			<button title={$t('toggle_lang')} class="nav-button" on:click={() => changeLang(otherLang)}
 				><i class="symbol">language</i><Tx text="other_lang" />
 			</button>
@@ -98,15 +114,27 @@
 				><i class="symbol">question_mark</i>FAQ
 			</button>
 			{#if $page.data.session}
-				<button title={$t('sign_out')} class="nav-button" on:click={signOut}
+				<button
+					title={$t('sign_out')}
+					class="nav-button"
+					disabled={isSignOutButtonDisabled}
+					on:click={async () => {
+						isSignOutButtonDisabled = true;
+						await signOut();
+						isSignOutButtonDisabled = false;
+					}}
 					><i class="symbol">logout</i><Tx text="sign_out" />
 				</button>
 			{:else}
 				<button
 					title={$t('sign_in')}
 					class="nav-button"
-					on:click={() => startOAuth($page.url.pathname === '/fill' ? '/' : $page.url.pathname)}
-					><i class="symbol">login</i><Tx text="sign_in" /></button
+					disabled={isSignInButtonDisabled}
+					on:click={async () => {
+						isSignInButtonDisabled = true;
+						await startOAuth($page.url.pathname === '/fill' ? '/' : $page.url.pathname);
+						isSignInButtonDisabled = false;
+					}}><i class="symbol">login</i><Tx text="sign_in" /></button
 				>
 			{/if}
 		</div>
@@ -121,6 +149,7 @@
 	.tooltip .tooltip-text {
 		background-color: var(--primary-color-2);
 		font-size: 0.8em;
+		text-shadow: 0 4px 4px var(--shadow-color-1);
 	}
 
 	.tooltip .tooltip-text.left::after {
@@ -200,7 +229,7 @@
 	}
 
 	.nav-button {
-		width: 9em;
+		width: 10.25em;
 		border-radius: 0px;
 		box-shadow: none;
 		border: none;
@@ -248,7 +277,7 @@
 		}
 	}
 
-	@media screen and (max-width: 375px) {
+	@media screen and (max-width: 425px) {
 		.nav-button-panel {
 			flex-flow: column;
 		}

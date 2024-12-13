@@ -1,20 +1,11 @@
 from fastapi.testclient import TestClient
 from test_users import create_user, create_user_with_public_key
+from tests.common_values import TEST_SURVEY_STRUCTURE
 
 TEST_VALID_USER_EMAIL_1 = "user1@st.amu.edu.pl"
 TEST_VALID_USER_EMAIL_2 = "user2@st.amu.edu.pl"
 TEST_VALID_USER_EMAIL_3 = "user3@st.amu.edu.pl"
 TEST_SURVEY_TITLE = "Test Survey"
-TEST_SURVEY_STRUCTURE = {
-    "questions": [
-        {
-            "question_type": "binary",
-            "required": True,
-            "question": "Is this a test?",
-            "choices": ["Yes", "No"]
-        }
-    ]
-}
 
 
 def create_survey(
@@ -452,3 +443,62 @@ def test_reject_access_to_surveys(client: TestClient):
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 1  # Only the owner should have access now
+
+
+def test_enable_or_disable_survey_survey_not_created(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+
+    # when
+    response = client.post(
+        "/surveys/set-enabled",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "survey_code": "123456",
+            "is_enabled": True,
+        },
+    )
+
+    # then
+    assert response.status_code == 400
+
+
+def test_enable_or_disable_survey_survey_not_owned(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+    create_user(client, TEST_VALID_USER_EMAIL_2)
+    create_survey_response = create_survey(client, TEST_VALID_USER_EMAIL_1)
+    survey_code = create_survey_response.json()["survey_code"]
+
+    # when
+    response = client.post(
+        "/surveys/set-enabled",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_2,
+            "survey_code": survey_code,
+            "is_enabled": True,
+        },
+    )
+
+    # then
+    assert response.status_code == 400
+
+
+def test_enable_or_disable_survey_happy_path(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+    create_survey_response = create_survey(client, TEST_VALID_USER_EMAIL_1)
+    survey_code = create_survey_response.json()["survey_code"]
+
+    # when
+    response = client.post(
+        "/surveys/set-enabled",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "survey_code": survey_code,
+            "is_enabled": False,
+        },
+    )
+
+    # then
+    assert response.status_code == 200

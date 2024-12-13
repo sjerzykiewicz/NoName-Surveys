@@ -17,6 +17,8 @@
 	import BinaryPreview from '$lib/components/create-page/preview/BinaryPreview.svelte';
 	import TextPreview from '$lib/components/create-page/preview/TextPreview.svelte';
 	import NumberPreview from '$lib/components/create-page/preview/NumberPreview.svelte';
+	import Subtitle from '$lib/components/create-page/Subtitle.svelte';
+	import SubtitlePreview from '$lib/components/create-page/preview/SubtitlePreview.svelte';
 	import { questions } from '$lib/stores/create-page';
 	import { type ComponentType, tick } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -71,8 +73,10 @@
 				return BinaryPreview;
 			case Number:
 				return NumberPreview;
-			default:
+			case Text:
 				return TextPreview;
+			default:
+				return SubtitlePreview;
 		}
 	}
 
@@ -91,8 +95,10 @@
 			return ['0', '10', '1'];
 		} else if (component === Number) {
 			return ['0', '10'];
-		} else {
+		} else if (component === Text) {
 			return [''];
+		} else {
+			return [];
 		}
 	}
 
@@ -114,8 +120,10 @@
 			}
 		];
 
-		$previousQuestion = component;
-		isPanelVisible = false;
+		if (component !== Subtitle) {
+			$previousQuestion = component;
+			isPanelVisible = false;
+		}
 
 		if (innerWidth > $M) {
 			await tick();
@@ -140,7 +148,10 @@
 			if (q.index === 0) {
 				element = document.getElementById('header');
 			} else {
-				if ($questions[q.index - 1].component === Scale) {
+				if (
+					$questions[q.index - 1].component === Scale ||
+					$questions[q.index - 1].component === Subtitle
+				) {
 					element = document.getElementById(`q${q.index - 1}`);
 				} else {
 					element = document.getElementById(
@@ -149,7 +160,10 @@
 				}
 			}
 		} else {
-			if ($questions[$questions.length - 1].component === Scale) {
+			if (
+				$questions[$questions.length - 1].component === Scale ||
+				$questions[$questions.length - 1].component === Subtitle
+			) {
 				element = document.getElementById(`q${$questions.length - 1}`);
 			} else {
 				element = document.getElementById(
@@ -184,7 +198,7 @@
 				element = document.getElementById(`q${q.index}c${c.index + 1}`);
 			}
 		} else if (q) {
-			if ($questions[q.index].component === Scale) {
+			if ($questions[q.index].component === Scale || $questions[q.index].component === Subtitle) {
 				if (q.index === $questions.length - 1) {
 					element = document.getElementById('header');
 				} else {
@@ -298,6 +312,7 @@
 	function toggleRequirement() {
 		const q = getClosestElement('question');
 		if (!q) return;
+		if ($questions[q.index].component === Subtitle) return;
 
 		$questions[q.index].required = !$questions[q.index].required;
 	}
@@ -425,16 +440,21 @@
 				case 'Numpad0':
 					if ($previousQuestion) addQuestion($previousQuestion);
 					break;
-				case 'ArrowUp':
-					focusPreviousQuestion();
-					break;
-				case 'ArrowDown':
-					focusNextQuestion();
+				case 'Minus':
+				case 'Equal':
+				case 'NumpadSubtract':
+					addQuestion(Subtitle);
 					break;
 				case 'ArrowLeft':
-					focusPreviousInput();
+					focusPreviousQuestion();
 					break;
 				case 'ArrowRight':
+					focusNextQuestion();
+					break;
+				case 'ArrowUp':
+					focusPreviousInput();
+					break;
+				case 'ArrowDown':
 					focusNextInput();
 					break;
 				case 'Home':
@@ -451,15 +471,19 @@
 					break;
 				case 'Backquote':
 				case 'Backslash':
+				case 'NumpadMultiply':
+				case 'NumpadDivide':
 					toggleRequirement();
 					break;
 				case 'Backspace':
 				case 'Delete':
+				case 'NumpadDecimal':
 					removeQuestionOrChoice();
 					break;
 				case 'Enter':
 				case 'NumpadEnter':
 				case 'Insert':
+				case 'NumpadAdd':
 					addChoice();
 					break;
 			}
@@ -524,17 +548,6 @@
 		</div>
 	{/if}
 </div>
-{#if innerWidth > $M}
-	<div
-		class="tooltip hotkeys-info"
-		style="--tooltip-width: {currentLang === 'en' ? '28em' : '31em'}"
-	>
-		<i class="symbol">bolt</i>
-		<span class="tooltip-text right">
-			<Tx html="hotkeys_info" />
-		</span>
-	</div>
-{/if}
 
 <style>
 	.button-group {
@@ -609,32 +622,6 @@
 	.add-question i {
 		transform: rotate(0deg);
 		transition: transform 0.2s;
-	}
-
-	.hotkeys-info.tooltip {
-		font-size: 1.5em;
-	}
-
-	.hotkeys-info.tooltip .tooltip-text {
-		text-align: left;
-		font-size: 0.6em;
-		z-index: 2;
-	}
-
-	.hotkeys-info.tooltip .tooltip-text.right {
-		top: 400%;
-	}
-
-	.hotkeys-info.tooltip .tooltip-text.right::after {
-		top: 9.5%;
-	}
-
-	.tooltip i {
-		color: var(--accent-color-2);
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		transition:
-			0.2s,
-			outline 0s;
 	}
 
 	@media screen and (max-width: 768px) {

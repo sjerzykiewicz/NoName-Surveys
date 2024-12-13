@@ -1,9 +1,7 @@
 import type { PageServerLoad } from './$types';
-import { countSurveyDrafts, getSurveyDrafts } from '$lib/server/database';
 import { error, redirect } from '@sveltejs/kit';
-import { getEmail } from '$lib/utils/getEmail';
 
-export const load: PageServerLoad = async ({ parent, params, cookies }) => {
+export const load: PageServerLoad = async ({ parent, params, fetch }) => {
 	const { session } = await parent();
 	if (!session) {
 		redirect(303, `/account`);
@@ -11,10 +9,13 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
 
 	const page = parseInt(params.draftsPage);
 
-	const sessionCookie = cookies.get('user_session');
-	const user_email = await getEmail(sessionCookie ?? '');
-
-	const draftsResponse = await getSurveyDrafts(user_email, page);
+	const draftsResponse = await fetch(`/api/surveys/drafts/all`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ page })
+	});
 	if (!draftsResponse.ok) {
 		error(draftsResponse.status, { message: await draftsResponse.json() });
 	}
@@ -24,11 +25,29 @@ export const load: PageServerLoad = async ({ parent, params, cookies }) => {
 		creation_date: string;
 	}[] = await draftsResponse.json();
 
-	const countResponse = await countSurveyDrafts(user_email);
-	if (!countResponse.ok) {
-		error(countResponse.status, { message: await countResponse.json() });
+	const draftCountResponse = await fetch(`/api/surveys/drafts/count`);
+	if (!draftCountResponse.ok) {
+		error(draftCountResponse.status, { message: await draftCountResponse.json() });
 	}
-	const numDrafts: number = await countResponse.json();
+	const numDrafts: number = await draftCountResponse.json();
 
-	return { drafts, numDrafts };
+	const surveyCountResponse = await fetch(`/api/surveys/count`);
+	if (!surveyCountResponse.ok) {
+		error(surveyCountResponse.status, { message: await surveyCountResponse.json() });
+	}
+	const numSurveys: number = await surveyCountResponse.json();
+
+	const groupsResponse = await fetch(`/api/groups/all-with-public-keys`);
+	if (!groupsResponse.ok) {
+		error(groupsResponse.status, { message: await groupsResponse.json() });
+	}
+	const group_list: string[] = await groupsResponse.json();
+
+	const usersResponse = await fetch(`/api/users/all-with-public-keys`);
+	if (!usersResponse.ok) {
+		error(usersResponse.status, { message: await usersResponse.json() });
+	}
+	const user_list: string[] = await usersResponse.json();
+
+	return { drafts, numDrafts, numSurveys, group_list, user_list };
 };

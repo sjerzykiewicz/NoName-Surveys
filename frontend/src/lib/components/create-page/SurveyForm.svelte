@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { questions, title, currentDraftId, draftStructure } from '$lib/stores/create-page';
+	import Subtitle from '$lib/components/create-page/Subtitle.svelte';
+	import SubtitlePreview from '$lib/components/create-page/preview/SubtitlePreview.svelte';
 	import QuestionTitle from '$lib/components/create-page/QuestionTitle.svelte';
 	import QuestionTitlePreview from '$lib/components/create-page/preview/QuestionTitlePreview.svelte';
 	import QuestionError from './QuestionError.svelte';
@@ -10,7 +12,6 @@
 	import { scrollToElement } from '$lib/utils/scrollToElement';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import Survey from '$lib/entities/surveys/Survey';
-	import SurveyCreateInfo from '$lib/entities/surveys/SurveyCreateInfo';
 	import DraftCreateInfo from '$lib/entities/surveys/DraftCreateInfo';
 	import { constructQuestionList } from '$lib/utils/constructQuestionList';
 	import { getDraft } from '$lib/utils/getDraft';
@@ -24,19 +25,21 @@
 		M,
 		LIMIT_OF_DRAFTS,
 		warningModalContent,
-		isWarningModalHidden
+		isWarningModalHidden,
+		LIMIT_OF_CHARS
 	} from '$lib/stores/global';
-	import SelectGroup from './SelectGroup.svelte';
-	import SelectUsers from './SelectUsers.svelte';
-	import CryptoError from './CryptoError.svelte';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import ImportEmails from '$lib/components/global/ImportEmails.svelte';
 	import { invalidateAll } from '$app/navigation';
+	import RespondentModal from './RespondentModal.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
-	import { getContext } from 'svelte';
+	import { getContext, tick } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
+	import { SurveyError } from '$lib/entities/SurveyError';
+	import { checkQuestionError } from '$lib/utils/checkQuestionError';
+	import SubtitleError from './SubtitleError.svelte';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
 	export let users: string[];
 	export let groups: string[];
@@ -50,24 +53,37 @@
 	export let selectedGroups: string[] = [];
 	export let useCrypto: boolean = false;
 
-	let cryptoError: boolean = false;
 	let questionInput: HTMLDivElement;
 	let isSurveyModalHidden: boolean = true;
 	let surveyCode: string;
+	let isInfoPinned: boolean = false;
 
-	function checkCorrectness() {
-		cryptoError = false;
-		const g = selectedGroups;
-		const r = ringMembers;
-		if (
-			useCrypto &&
-			(g === null || g === undefined || g.length === 0) &&
-			(r === null || r === undefined || r.length === 0)
-		) {
-			cryptoError = true;
-			return false;
+	const groupLink =
+		'https://github.com/sjerzykiewicz/NoName-Surveys?tab=readme-ov-file#create-a-user-group';
+
+	$: currentLang = $options.currentLang;
+
+	async function addSubtitle() {
+		const i: number = $questions.length - 1;
+		if (i >= 0) checkQuestionError($questions[i], $LIMIT_OF_CHARS);
+
+		$questions = [
+			...$questions,
+			{
+				component: Subtitle,
+				preview: SubtitlePreview,
+				required: false,
+				question: '',
+				choices: [],
+				error: SurveyError.NoError
+			}
+		];
+
+		if (innerWidth > $M) {
+			await tick();
+			questionInput.focus();
+			questionInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		}
-		return true;
 	}
 
 	async function saveDraft(overwrite: boolean) {
@@ -124,61 +140,19 @@
 		await invalidateAll();
 	}
 
-	async function createSurvey() {
-		if (!checkCorrectness()) return;
-
-		isRespondentModalHidden = true;
-
-		const parsedSurvey = new Survey(constructQuestionList($questions));
-		const surveyInfo = new SurveyCreateInfo($title.title, parsedSurvey, useCrypto, ringMembers);
-
-		const response = await fetch('/api/surveys/create', {
-			method: 'POST',
-			body: JSON.stringify(surveyInfo),
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		});
-
-		if (!response.ok) {
-			const body = await response.json();
-			$errorModalContent = getErrorMessage(body.detail);
-			$isErrorModalHidden = false;
-			return;
+	async function handleEnter(event: KeyboardEvent) {
+		if (!isDraftModalHidden && event.key === 'Enter') {
+			event.preventDefault();
+			event.stopImmediatePropagation();
+			await saveDraft(false);
 		}
-
-		const body = await response.json();
-		useCrypto = false;
-		ringMembers = [];
-		selectedGroups = [];
-		surveyCode = body.survey_code;
-		isSurveyModalHidden = false;
-		await invalidateAll();
 	}
 
 	let innerWidth: number;
-
-	$: isCryptoDisabled = !useCrypto;
-
-	function handleEnterRespondent(event: KeyboardEvent) {
-		if (!isRespondentModalHidden && event.key === 'Enter') {
-			event.preventDefault();
-			createSurvey();
-			event.stopImmediatePropagation();
-		}
-	}
-
-	function handleEnterDraft(event: KeyboardEvent) {
-		if (!isDraftModalHidden && event.key === 'Enter') {
-			event.preventDefault();
-			saveDraft(false);
-			event.stopImmediatePropagation();
-		}
-	}
 </script>
 
 <svelte:window bind:innerWidth />
-<svelte:body on:keydown={handleEnterRespondent} on:keydown={handleEnterDraft} />
+<svelte:body on:keydown={handleEnter} />
 
 <Modal
 	icon="save"
@@ -187,63 +161,27 @@
 	--width={innerWidth <= $M ? '20em' : '24em'}
 >
 	<span slot="content"><Tx text="saving_draft_alert" /></span>
-	<button title={$t('overwrite_draft')} class="save" on:click={() => saveDraft(true)}
+	<button title={$t('overwrite_draft')} class="save" on:click={async () => await saveDraft(true)}
 		><i class="symbol">save_as</i><Tx text="overwrite_draft" /></button
 	>
-	<button title={$t('save_new_draft')} class="save" on:click={() => saveDraft(false)}
+	<button title={$t('save_new_draft')} class="save" on:click={async () => await saveDraft(false)}
 		><i class="symbol">save</i><Tx text="save_new_draft" /></button
 	>
 </Modal>
 
-<Modal
-	icon="group"
-	title={$t('define_respondent_group')}
+<RespondentModal
 	bind:isHidden={isRespondentModalHidden}
-	--width={innerWidth <= $M ? '20em' : '26em'}
->
-	<div slot="content">
-		<span><Tx text="define_respondent_group_alert" /></span>
-		<div class="crypto-buttons">
-			<button
-				title={$t('public')}
-				class="access-button"
-				class:save={!useCrypto}
-				on:click={() => (useCrypto = false)}
-			>
-				<i class="symbol">public</i><Tx text="public" />
-			</button>
-			<button
-				title={$t('secure')}
-				class="access-button"
-				class:save={useCrypto}
-				on:click={() => (useCrypto = true)}
-			>
-				<i class="symbol">encrypted</i><Tx text="secure" />
-			</button>
-		</div>
-		<div class="select-box" transition:slide={{ duration: 0.2, easing: cubicInOut }}>
-			<SelectGroup {groups} bind:ringMembers bind:selectedGroups disabled={isCryptoDisabled} />
-			<div id="or" class:disabled={isCryptoDisabled}><Tx text="or" /></div>
-			<SelectUsers {users} bind:ringMembers disabled={isCryptoDisabled} />
-			<CryptoError error={cryptoError} bind:ringMembers bind:selectedGroups bind:useCrypto />
-			<div class="import">
-				<ImportEmails
-					bind:users={ringMembers}
-					title={$t('import_users_title')}
-					label={$t('import_users_label')}
-					checkKeys={true}
-					--width="100%"
-					disabled={isCryptoDisabled}
-					bind:invalidEmails
-					bind:isExportButtonVisible
-				/>
-			</div>
-		</div>
-	</div>
-	<button title={$t('define_respondent_group')} class="done" on:click={createSurvey}
-		><i class="symbol">done</i><Tx text="create" /></button
-	>
-</Modal>
+	bind:users
+	bind:groups
+	bind:invalidEmails
+	bind:isExportButtonVisible
+	bind:ringMembers
+	bind:selectedGroups
+	bind:useCrypto
+	bind:isSurveyModalHidden
+	bind:surveyCode
+	isFromDraft={false}
+/>
 
 <QrCodeModal bind:isHidden={isSurveyModalHidden} title={$t('survey_success')} {surveyCode} />
 
@@ -255,11 +193,18 @@
 		on:introend={() => scrollToElement('.add-question')}
 	>
 		{#if isPreview}
-			<QuestionTitlePreview
-				{questionIndex}
-				questionTypeData={getQuestionTypeData(question.component)}
-			/>
-			<svelte:component this={question.preview} {questionIndex} />
+			{#if question.component === Subtitle}
+				<SubtitlePreview {questionIndex} />
+			{:else}
+				<QuestionTitlePreview
+					{questionIndex}
+					questionTypeData={getQuestionTypeData(question.component)}
+				/>
+				<svelte:component this={question.preview} {questionIndex} />
+			{/if}
+		{:else if question.component === Subtitle}
+			<Subtitle {questionIndex} bind:questionInput />
+			<SubtitleError {questionIndex} />
 		{:else}
 			<QuestionTitle
 				{questionIndex}
@@ -275,18 +220,95 @@
 {#if !isPreview}
 	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
 		<div class="button-sub-row">
-			<AddQuestionButtons {questionInput} />
-			<div class="tooltip create-info">
-				<i class="symbol">info</i>
+			<button class="add-subtitle" on:click={addSubtitle}
+				><i class="symbol">add</i><Tx text="subtitle" /></button
+			>
+			{#if innerWidth > $M}
+				<button
+					class="tooltip clickable hotkeys-info"
+					on:click={() => (isInfoPinned = !isInfoPinned)}
+				>
+					<i class="symbol" class:fill={isInfoPinned}>bolt</i>
+					{#if isInfoPinned}
+						<span class="tooltip-text top">
+							<Tx text="hotkeys_unpin" />
+						</span>
+						<span
+							class="tooltip-text none"
+							style="--tooltip-width: {currentLang === 'en' ? '28em' : '31em'}"
+						>
+							<Tx html="hotkeys_info" />
+						</span>
+					{:else}
+						<span class="tooltip-text top">
+							<Tx text="hotkeys_pin" />
+						</span>
+						<span
+							class="tooltip-text right"
+							style="--tooltip-width: {currentLang === 'en' ? '28em' : '31em'}"
+						>
+							<Tx html="hotkeys_info" />
+						</span>
+					{/if}
+				</button>
+			{/if}
+			<div class="tooltip hoverable create-info">
+				<i class="symbol">help</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}"
-					><Tx text="groups_info" /></span
+					><Tx text="create_groups_info" /><a href={groupLink} target="_blank"
+						><Tx text="read_more" /></a
+					></span
 				>
 			</div>
+		</div>
+	</div>
+	<div class="button-row" transition:slide={{ duration: 200, easing: cubicInOut }}>
+		<div class="button-sub-row">
+			<AddQuestionButtons {questionInput} />
 		</div>
 	</div>
 {/if}
 
 <style>
+	.hotkeys-info.tooltip {
+		font-size: 1.5em;
+	}
+
+	.hotkeys-info.tooltip i {
+		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		transition: 0.2s;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text {
+		font-size: 0.6em;
+		z-index: 2;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.top {
+		--tooltip-width: 9em;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.right,
+	.hotkeys-info.tooltip .tooltip-text.none {
+		text-align: left;
+		top: 445%;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.right::after {
+		top: 7%;
+	}
+
+	.hotkeys-info.tooltip .tooltip-text.none {
+		left: 700%;
+		transform: translateY(-50%);
+		visibility: visible !important;
+		opacity: 1 !important;
+	}
+
+	.fill {
+		font-variation-settings: 'FILL' 1;
+	}
+
 	.create-info.tooltip {
 		--tooltip-width: 20em;
 		font-size: 1.5em;
@@ -299,63 +321,27 @@
 	}
 
 	.create-info.tooltip .tooltip-text.right {
-		top: 220%;
+		top: 234%;
 	}
 
 	.create-info.tooltip .tooltip-text.right::after {
-		top: 15%;
+		top: 12.5%;
 	}
 
 	.button-row {
 		align-items: center;
 		font-size: 1em;
 		margin-top: 0em;
-	}
-
-	.crypto-buttons {
-		display: flex;
-		flex-flow: row;
-		justify-content: space-around;
-		padding-top: 1em;
-		padding-bottom: 1em;
-	}
-
-	.access-button {
-		width: fit-content;
-		justify-content: center;
-		margin-right: 0.5em;
 		margin-bottom: 0.5em;
 	}
 
-	.access-button i {
+	.add-subtitle {
+		font-size: 1.25em;
+	}
+
+	.add-subtitle i {
 		margin-right: 0.15em;
-	}
-
-	.select-box {
-		text-align: left;
-	}
-
-	#or {
-		display: flex;
-		flex-flow: row;
-		align-items: flex-start;
-		justify-content: flex-start;
-		margin-bottom: 0.5em;
-		font-size: 0.8em;
-		color: var(--text-color-1);
-		cursor: default;
-		transition:
-			0.2s,
-			outline 0s;
-	}
-
-	#or.disabled {
-		color: var(--text-color-3) !important;
-		cursor: not-allowed !important;
-	}
-
-	.import {
-		font-size: 0.8em;
+		font-variation-settings: 'wght' 700;
 	}
 
 	@media screen and (max-width: 768px) {
@@ -365,22 +351,22 @@
 		}
 
 		.create-info.tooltip .tooltip-text.right {
-			top: 350%;
+			top: 367%;
 		}
 
 		.create-info.tooltip .tooltip-text.right::after {
-			top: 10%;
+			top: 7.5%;
 		}
 
 		.create-info.tooltip .tooltip-text.bottom {
-			left: -175%;
+			left: -60%;
 		}
 
 		.create-info.tooltip .tooltip-text.bottom::after {
-			left: 80%;
+			left: 65%;
 		}
 
-		.import {
+		.add-subtitle {
 			font-size: 1em;
 		}
 	}

@@ -5,6 +5,6 @@ import { getEmail } from '$lib/utils/getEmail';
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const sessionCookie = cookies.get('user_session');
 	const user_email = await getEmail(sessionCookie ?? '');
-	const { name, new_name } = await request.json();
+	const { name, new_name }: { name: string; new_name: string } = await request.json();
 	return renameUserGroup(user_email, name, new_name);
 };

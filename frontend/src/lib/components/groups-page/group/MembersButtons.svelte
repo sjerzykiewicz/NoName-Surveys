@@ -35,6 +35,7 @@
 	let selectedMembersToAdd: string[] = [];
 	let membersError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
+	let isSubmitButtonDisabled: boolean = false;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -59,7 +60,7 @@
 	async function addMembers() {
 		if (!checkCorrectness(selectedMembersToAdd)) return;
 
-		const response = await fetch('/api/groups/add-users', {
+		const response = await fetch('/api/groups/members/add', {
 			method: 'POST',
 			body: JSON.stringify({
 				name: group,
@@ -106,7 +107,7 @@
 			return;
 		}
 
-		const response = await fetch('/api/groups/remove-users', {
+		const response = await fetch('/api/groups/members/delete', {
 			method: 'POST',
 			body: JSON.stringify({
 				name: group,
@@ -189,7 +190,16 @@
 					placeholder={$t('select_group_members')}
 				/>
 			</div>
-			<button title={$t('add_members_finish')} class="done" on:click={addMembers}>
+			<button
+				title={$t('add_members_finish')}
+				class="done"
+				disabled={isSubmitButtonDisabled}
+				on:click={async () => {
+					isSubmitButtonDisabled = true;
+					await addMembers();
+					isSubmitButtonDisabled = false;
+				}}
+			>
 				<i class="symbol">done</i><Tx text="submit" />
 			</button>
 		</div>

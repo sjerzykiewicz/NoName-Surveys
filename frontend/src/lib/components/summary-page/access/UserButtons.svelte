@@ -32,6 +32,7 @@
 	let selectedUsersToAdd: string[] = [];
 	let usersError: GroupError = GroupError.NoError;
 	let isModalHidden: boolean = true;
+	let isSubmitButtonDisabled: boolean = false;
 
 	function togglePanel() {
 		isPanelVisible = !isPanelVisible;
@@ -56,7 +57,7 @@
 	async function addUsers() {
 		if (!checkCorrectness(selectedUsersToAdd)) return;
 
-		const response = await fetch('/api/surveys/give-access', {
+		const response = await fetch('/api/surveys/access/give', {
 			method: 'POST',
 			body: JSON.stringify({
 				survey_code: code,
@@ -80,7 +81,7 @@
 	}
 
 	async function removeUsers() {
-		const response = await fetch('/api/surveys/take-away-access', {
+		const response = await fetch('/api/surveys/access/take-away', {
 			method: 'POST',
 			body: JSON.stringify({
 				survey_code: code,
@@ -161,7 +162,16 @@
 					placeholder={$t('select_users')}
 				/>
 			</div>
-			<button title={$t('finish_giving_access')} class="done" on:click={addUsers}>
+			<button
+				title={$t('finish_giving_access')}
+				class="done"
+				disabled={isSubmitButtonDisabled}
+				on:click={async () => {
+					isSubmitButtonDisabled = true;
+					await addUsers();
+					isSubmitButtonDisabled = false;
+				}}
+			>
 				<i class="symbol">done</i><Tx text="submit" />
 			</button>
 		</div>

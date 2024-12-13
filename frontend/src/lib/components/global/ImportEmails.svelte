@@ -20,7 +20,6 @@
 	export let title: string;
 	export let label: string;
 	export let checkKeys: boolean;
-	export let disabled: boolean = false;
 	export let invalidEmails: string[] = [];
 	export let isExportButtonVisible: boolean = false;
 
@@ -112,28 +111,26 @@
 <svelte:window bind:innerWidth />
 
 <div class="button-row">
-	<div {title} class="file-div" class:disabled>
+	<div {title} class="file-div">
 		<div class="label-container">
 			<span class="file-label">{label}</span>
-			{#if !disabled}
-				<div title="" class="tooltip">
-					<i class="symbol">info</i>
-					<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
-						<Tx html="example_csv" />
-					</span>
-				</div>
-			{/if}
+			<div title="" class="tooltip hoverable">
+				<i class="symbol">help</i>
+				<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
+					<Tx html="example_csv" /><a href="/account/faq#import-users"><Tx text="help" /></a>
+				</span>
+			</div>
 		</div>
 		<label>
 			<div class="file-input">
 				<span class="file-button"><i class="symbol">upload_file</i>{$t('select_file')}</span>
 				<span class="file-name">{fileName}</span>
 			</div>
-			<input type="file" {disabled} bind:this={fileElement} on:change={handleFileChange} />
+			<input type="file" bind:this={fileElement} on:change={handleFileChange} />
 		</label>
 	</div>
 </div>
-<EmailsWarning warning={fileWarning} element={fileElement} {disabled} />
+<EmailsWarning warning={fileWarning} element={fileElement} />
 
 <style>
 	.tooltip {

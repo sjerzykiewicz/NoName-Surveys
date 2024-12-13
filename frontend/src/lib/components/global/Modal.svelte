@@ -16,20 +16,20 @@
 
 	function handleEscape(event: KeyboardEvent) {
 		if (!isHidden && event.key === 'Escape') {
-			hide();
 			event.stopImmediatePropagation();
+			hide();
 		}
 	}
 
 	function handleClick(event: MouseEvent) {
 		if (isClickable && !isHidden && !(event.target as HTMLElement).closest('.modal')) {
-			hide();
 			event.stopImmediatePropagation();
+			hide();
 		}
 	}
 </script>
 
-<svelte:body on:keydown={handleEscape} on:click={handleClick} />
+<svelte:body on:keydown={handleEscape} on:mousedown={handleClick} />
 
 {#if !isHidden}
 	<section class="overlay" transition:fade={{ duration: 200, easing: cubicInOut }}>

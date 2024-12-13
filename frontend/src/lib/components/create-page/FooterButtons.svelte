@@ -165,7 +165,7 @@
 		disabled={$questions.length === 0 || isPreview}
 		on:click={createSurvey}
 	>
-		<i class="symbol">done</i><Tx text="create" />
+		<i class="symbol">done</i><Tx text="finish" />
 	</button>
 </div>
 

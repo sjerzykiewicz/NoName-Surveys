@@ -4,7 +4,7 @@
 	import Footer from '$lib/components/global/Footer.svelte';
 	import OpenSourceInfo from '$lib/components/global/OpenSourceInfo.svelte';
 	import Back from '$lib/components/global/Back.svelte';
-	import FaqItem from '$lib/components/account-page/FaqItem.svelte';
+	import Faq from '$lib/components/account-page/Faq.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -20,85 +20,24 @@
 
 <Content>
 	<div class="faq">
-		<FaqItem
-			id="public"
-			icon="public"
-			question={$t('faq_public_survey_q')}
-			answer={$t('faq_public_survey_a')}
-		/>
-		<FaqItem
-			id="secure"
-			icon="encrypted"
-			question={$t('faq_secure_survey_q')}
-			answer={$t('faq_secure_survey_a')}
-		/>
-		<FaqItem id="keys" icon="key" question={$t('faq_keys_q')} answer={$t('faq_keys_a')} />
-		<FaqItem id="ring" icon="graph_6" question={$t('faq_ring_q')} answer={$t('faq_ring_a')} />
-		<FaqItem
-			id="authorize"
-			icon="login"
-			question={$t('faq_authorize_q')}
-			answer={$t('faq_authorize_a')}
-		/>
-		<FaqItem
-			id="personal"
-			icon="badge"
-			question={$t('faq_personal_q')}
-			answer={$t('faq_personal_a')}
-		/>
-		<FaqItem id="code" icon="qr_code_2" question={$t('faq_code_q')} answer={$t('faq_code_a')} />
-		<FaqItem id="create" icon="edit" question={$t('faq_create_q')} answer={$t('faq_create_a')} />
-		<FaqItem id="draft" icon="save" question={$t('faq_draft_q')} answer={$t('faq_draft_a')} />
-		<FaqItem id="group" icon="group" question={$t('faq_group_q')} answer={$t('faq_group_a')} />
-		<FaqItem
-			id="import-users"
-			icon="csv"
-			question={$t('faq_import_users_q')}
-			answer="faq_import_users_a"
-			html={true}
-		/>
-		<FaqItem
-			id="secure-group"
-			icon="group_off"
-			question={$t('faq_secure_group_q')}
-			answer={$t('faq_secure_group_a')}
-		/>
-		<FaqItem
-			id="limit-answers"
-			icon="mail_lock"
-			question={$t('faq_limit_answers_q')}
-			answer={$t('faq_limit_answers_a')}
-		/>
-		<FaqItem
-			id="survey-time"
-			icon="calendar_month"
-			question={$t('faq_survey_time_q')}
-			answer={$t('faq_survey_time_a')}
-		/>
-		<FaqItem
-			id="summary"
-			icon="bar_chart"
-			question={$t('faq_summary_q')}
-			answer={$t('faq_summary_a')}
-		/>
-		<FaqItem
-			id="import_summary"
-			icon="file_json"
-			question={$t('faq_import_summary_q')}
-			answer={$t('faq_import_summary_a')}
-		/>
-		<FaqItem
-			id="limit-items"
-			icon="block"
-			question={$t('faq_limit_items_q')}
-			answer={$t('faq_limit_items_a')}
-		/>
-		<FaqItem
-			id="anonymous"
-			icon="shield_person"
-			question={$t('faq_anonymous_q')}
-			answer={$t('faq_anonymous_a')}
-		/>
+		<Faq id="public" icon="public" q="faq_public_survey_q" a="faq_public_survey_a" />
+		<Faq id="secure" icon="encrypted" q="faq_secure_survey_q" a="faq_secure_survey_a" />
+		<Faq id="keys" icon="key" q="faq_keys_q" a="faq_keys_a" />
+		<Faq id="ring" icon="graph_6" q="faq_ring_q" a="faq_ring_a" />
+		<Faq id="authorize" icon="login" q="faq_authorize_q" a="faq_authorize_a" />
+		<Faq id="personal" icon="badge" q="faq_personal_q" a="faq_personal_a" />
+		<Faq id="code" icon="qr_code_2" q="faq_code_q" a="faq_code_a" />
+		<Faq id="create" icon="edit" q="faq_create_q" a="faq_create_a" />
+		<Faq id="draft" icon="save" q="faq_draft_q" a="faq_draft_a" />
+		<Faq id="group" icon="group" q="faq_group_q" a="faq_group_a" />
+		<Faq id="import-users" icon="csv" q="faq_import_users_q" a="faq_import_users_a" />
+		<Faq id="secure-group" icon="group_off" q="faq_secure_group_q" a="faq_secure_group_a" />
+		<Faq id="limit-answers" icon="mail_lock" q="faq_limit_answers_q" a="faq_limit_answers_a" />
+		<Faq id="survey-time" icon="calendar_month" q="faq_survey_time_q" a="faq_survey_time_a" />
+		<Faq id="summary" icon="bar_chart" q="faq_summary_q" a="faq_summary_a" />
+		<Faq id="import_summary" icon="file_json" q="faq_import_summary_q" a="faq_import_summary_a" />
+		<Faq id="limit-items" icon="block" q="faq_limit_items_q" a="faq_limit_items_a" />
+		<Faq id="anonymous" icon="shield_person" q="faq_anonymous_q" a="faq_anonymous_a" />
 	</div>
 </Content>
 

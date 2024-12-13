@@ -4,12 +4,15 @@
 	import Modal from '$lib/components/global/Modal.svelte';
 	import init, { get_keypair } from 'wasm';
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
-	import { downloadFile } from '$lib/utils/downloadFile';
 	import encryptKeys from '$lib/utils/encryptKeys';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import PassphraseError from './PassphraseError.svelte';
+	import ConfirmError from './ConfirmError.svelte';
+	import { downloadBinaryFile } from '$lib/utils/downloadFile';
+	import { PassphraseErrorEnum } from '$lib/entities/PassphraseErrorEnum';
+	import { magicNumber } from '$lib/entities/MagicNumber';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
@@ -18,10 +21,16 @@
 
 	let isModalHidden: boolean = true;
 	let passphrase: string = '';
-	let passphraseError: boolean = false;
+	let passphraseConfirm: string = '';
+	let passphraseError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
+	let passphraseConfirmError: PassphraseErrorEnum = PassphraseErrorEnum.NoError;
+	let isGenerateButtonDisabled: boolean = false;
 
 	const ERROR_THRESHOLD = 365;
 	const WARNING_THRESHOLD = 335;
+
+	const keysLink =
+		'https://github.com/sjerzykiewicz/NoName-Surveys?tab=readme-ov-file#generate-keys';
 
 	$: timeDiff = lastTime !== '' ? milisecondsToDays(Date.now() - Date.parse(lastTime)) : 0;
 
@@ -30,10 +39,14 @@
 	}
 
 	function checkPassphraseCorrectness() {
-		passphraseError = false;
+		passphraseError = PassphraseErrorEnum.NoError;
+		passphraseConfirmError = PassphraseErrorEnum.NoError;
 
 		if (passphrase === '') {
-			passphraseError = true;
+			passphraseError = PassphraseErrorEnum.Empty;
+			return false;
+		} else if (passphrase !== passphraseConfirm) {
+			passphraseConfirmError = PassphraseErrorEnum.ConfirmNotMatching;
 			return false;
 		}
 
@@ -66,6 +79,14 @@
 		hasKey = await response.json();
 	}
 
+	function hideModal() {
+		isModalHidden = true;
+		passphrase = '';
+		passphraseConfirm = '';
+		passphraseError = PassphraseErrorEnum.NoError;
+		passphraseConfirmError = PassphraseErrorEnum.NoError;
+	}
+
 	async function generateKeyPair() {
 		if (!checkPassphraseCorrectness()) return;
 
@@ -77,11 +98,13 @@
 
 			const pemData = publicKey + '\n\n' + privateKey;
 			const { salt, iv, ciphertext } = await encryptKeys(pemData, passphrase);
-			const decoded = {
-				salt: Array.from(salt, (byte) => String.fromCharCode(byte)).join(''),
-				iv: Array.from(iv, (byte) => String.fromCharCode(byte)).join(''),
-				ciphertext: Array.from(ciphertext, (byte) => String.fromCharCode(byte)).join('')
-			};
+			const keysData = new Uint8Array(8 + salt.length + iv.length + ciphertext.length);
+			keysData.set(magicNumber, 0);
+			keysData.set(salt, 8);
+			keysData.set(iv, 24);
+			keysData.set(ciphertext, 36);
+
+			downloadBinaryFile('noname-keys.bin', keysData);
 
 			const response = await fetch('/api/users/update-public-key', {
 				method: 'POST',
@@ -101,9 +124,7 @@
 				return;
 			}
 
-			isModalHidden = true;
-			passphrase = '';
-			downloadFile('noname-keys.txt', 'text/plain', JSON.stringify(decoded));
+			hideModal();
 			reloadCreationDate();
 			reloadHasKey();
 		} catch (e) {
@@ -113,11 +134,13 @@
 		}
 	}
 
-	function handleEnter(event: KeyboardEvent) {
-		if (!isModalHidden && event.key === 'Enter') {
+	async function handleEnter(event: KeyboardEvent) {
+		if (!isModalHidden && !isGenerateButtonDisabled && event.key === 'Enter') {
 			event.preventDefault();
-			generateKeyPair();
 			event.stopImmediatePropagation();
+			isGenerateButtonDisabled = true;
+			await generateKeyPair();
+			isGenerateButtonDisabled = false;
 		}
 	}
 
@@ -135,11 +158,7 @@
 	icon="encrypted"
 	title={$t('account_generating_keys')}
 	bind:isHidden={isModalHidden}
-	hide={() => {
-		isModalHidden = true;
-		passphrase = '';
-		passphraseError = false;
-	}}
+	hide={hideModal}
 	--width={innerWidth <= $M ? '20em' : '28em'}
 >
 	<span slot="content" class="content">
@@ -166,18 +185,34 @@
 			/></label
 		>
 		<PassphraseError error={passphraseError} {passphrase} />
+		<br />
+		<label class="passphrase-label">
+			<input
+				type="password"
+				title={$t('confirm_passphrase')}
+				class="passphrase-input"
+				placeholder="{$t('confirm_passphrase')}..."
+				required
+				maxlength={$LIMIT_OF_CHARS}
+				autocomplete="off"
+				bind:value={passphraseConfirm}
+			/>
+		</label>
+		<ConfirmError error={passphraseConfirmError} {passphrase} {passphraseConfirm} />
 	</span>
-	<button title={$t('generate')} class="done" on:click={generateKeyPair}>
-		<i class="symbol">done</i><Tx text="generate" />
-	</button>
 	<button
-		title={$t('cancel')}
-		class="not"
-		on:click={() => {
-			isModalHidden = true;
-			passphrase = '';
+		title={$t('generate')}
+		class="done"
+		disabled={isGenerateButtonDisabled}
+		on:click={async () => {
+			isGenerateButtonDisabled = true;
+			await generateKeyPair();
+			isGenerateButtonDisabled = false;
 		}}
 	>
+		<i class="symbol">done</i><Tx text="generate" />
+	</button>
+	<button title={$t('cancel')} class="not" on:click={hideModal}>
 		<i class="symbol">close</i><Tx text="cancel" />
 	</button>
 </Modal>
@@ -193,10 +228,12 @@
 			<button title={$t('account_new_key')} class="save" on:click={() => (isModalHidden = false)}>
 				<i class="symbol">encrypted</i><Tx text="account_new_key" />
 			</button>
-			<div class="tooltip">
-				<i class="symbol">info</i>
+			<div class="tooltip hoverable">
+				<i class="symbol">help</i>
 				<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-					<Tx html="account_generate_info" />
+					<Tx text="account_generate_info" /><a href={keysLink} target="_blank"
+						><Tx text="read_more" /></a
+					>
 				</span>
 			</div>
 		</div>
@@ -205,10 +242,10 @@
 				<div title={$t('account_last_key_update')} class="last-update-info">
 					<Tx text="account_last_key_update" />: {formatDate(lastTime)}
 				</div>
-				<div class="tooltip">
-					<i class="symbol">info</i>
+				<div class="tooltip hoverable">
+					<i class="symbol">help</i>
 					<span class="tooltip-text {innerWidth <= $L ? 'bottom' : 'right'}">
-						<Tx html="account_key_update_info" />
+						<Tx text="account_key_update_info" /><a href="/account/faq#keys"><Tx text="help" /></a>
 					</span>
 				</div>
 			</div>
@@ -247,7 +284,7 @@
 		flex-flow: row;
 		align-items: center;
 		justify-content: center;
-		padding: 0em 0.5em;
+		padding-bottom: 1em;
 		text-shadow: 0px 4px 4px var(--shadow-color-1);
 		cursor: default;
 		overflow-wrap: break-word;
@@ -280,7 +317,7 @@
 	}
 
 	.download-key .tooltip {
-		--tooltip-width: 22em;
+		--tooltip-width: 23em;
 	}
 
 	.download-key .tooltip .tooltip-text {
@@ -294,6 +331,7 @@
 		align-items: center;
 		justify-content: flex-start;
 		width: 100%;
+		padding-bottom: 0.5em;
 	}
 
 	.download-key button {
@@ -306,7 +344,6 @@
 		align-items: center;
 		justify-content: flex-start;
 		width: 100%;
-		padding-top: 0.75em;
 		font-size: 0.8em;
 		cursor: default;
 	}
@@ -344,7 +381,7 @@
 
 	@media screen and (max-width: 1440px) {
 		.download-key .tooltip {
-			--tooltip-width: 16em;
+			--tooltip-width: 18em;
 		}
 	}
 
@@ -358,11 +395,11 @@
 		}
 
 		.download-key .tooltip .tooltip-text.bottom {
-			left: -350%;
+			left: -400%;
 		}
 
 		.download-key .tooltip .tooltip-text.bottom::after {
-			left: 92%;
+			left: 92.5%;
 		}
 
 		.last-update-container .tooltip .tooltip-text.bottom {

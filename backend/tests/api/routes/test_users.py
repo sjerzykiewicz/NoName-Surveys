@@ -1,11 +1,14 @@
 from fastapi.testclient import TestClient
 import Crypto.Hash.SHA3_256 as SHA256
 
-
+from tests.common_values import (
+    TEST_PUBLIC_KEY_1,
+    TEST_PUBLIC_KEY_2,
+    TEST_ZERO_AS_PUBLIC_KEY,
+    TEST_INCORRECT_PUBLIC_KEY
+)
 TEST_VALID_USER_EMAIL_1 = "user1@st.amu.edu.pl"
 TEST_VALID_USER_EMAIL_2 = "user2@st.amu.edu.pl"
-TEST_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\n3\n-----END PUBLIC KEY-----"
-TEST_PUBLIC_KEY_2 = "-----BEGIN PUBLIC KEY-----\n7\n-----END PUBLIC KEY-----"
 
 
 def create_user(client: TestClient, email: str):
@@ -29,8 +32,8 @@ def create_user_with_public_key(client: TestClient, email: str):
         "/users/update-public-key",
         json={
             "user_email": email,
-            "public_key": TEST_PUBLIC_KEY,
-            "fingerprint": SHA256.new(TEST_PUBLIC_KEY.encode()).hexdigest(),
+            "public_key": TEST_PUBLIC_KEY_1,
+            "fingerprint": SHA256.new(TEST_PUBLIC_KEY_1.encode()).hexdigest(),
         },
     )
 
@@ -162,7 +165,7 @@ def test_update_public_key_when_user_not_registered(client: TestClient):
         "/users/update-public-key",
         json={
             "user_email": TEST_VALID_USER_EMAIL_1,
-            "public_key": TEST_PUBLIC_KEY,
+            "public_key": TEST_PUBLIC_KEY_1,
             "fingerprint": "12345",
         },
     )
@@ -180,7 +183,7 @@ def test_update_public_key_with_invalid_fingerprint(client: TestClient):
         "/users/update-public-key",
         json={
             "user_email": TEST_VALID_USER_EMAIL_1,
-            "public_key": TEST_PUBLIC_KEY,
+            "public_key": TEST_PUBLIC_KEY_1,
             "fingerprint": "12345",
         },
     )
@@ -188,6 +191,41 @@ def test_update_public_key_with_invalid_fingerprint(client: TestClient):
     # then
     assert response.status_code == 400
 
+
+def test_update_public_key_with_zero_as_key(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+
+    # when
+    response = client.post(
+        "/users/update-public-key",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "public_key": TEST_ZERO_AS_PUBLIC_KEY,
+            "fingerprint": SHA256.new(TEST_ZERO_AS_PUBLIC_KEY.encode()).hexdigest(),
+        },
+    )
+
+    # then
+    assert response.status_code == 422
+
+
+def test_update_public_key_with_incorrect_value(client: TestClient):
+    # given
+    create_user(client, TEST_VALID_USER_EMAIL_1)
+
+    # when
+    response = client.post(
+        "/users/update-public-key",
+        json={
+            "user_email": TEST_VALID_USER_EMAIL_1,
+            "public_key": TEST_INCORRECT_PUBLIC_KEY,
+            "fingerprint": SHA256.new(TEST_INCORRECT_PUBLIC_KEY.encode()).hexdigest(),
+        },
+    )
+
+    # then
+    assert response.status_code == 422
 
 def test_filter_unregistered_users(client: TestClient):
     # given

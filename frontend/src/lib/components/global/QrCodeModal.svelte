@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Modal from '$lib/components/global/Modal.svelte';
 	import QrCode from '$lib/components/global/QrCode.svelte';
-	import noname_black from '$lib/assets/noname_black.png';
 	import { page } from '$app/stores';
 	import { copy } from '$lib/utils/copy';
 	import { popup } from '$lib/utils/popup';
@@ -28,8 +27,8 @@
 	function handleEnter(event: KeyboardEvent) {
 		if (!isHidden && event.key === 'Enter') {
 			event.preventDefault();
-			isHidden = true;
 			event.stopImmediatePropagation();
+			isHidden = true;
 		}
 	}
 
@@ -48,12 +47,12 @@
 >
 	<div slot="content" class="content">
 		<span class="survey-code">{surveyCode}</span>
-		<a href="/fill?code={surveyCode}" title={$t('fill_survey')} class="qr-code">
+		<a href="/fill?code={surveyCode}" title={$t('fill_survey')}>
 			<QrCode
-				code={surveyCode}
+				href={$page.url.origin + '/fill?code=' + surveyCode}
+				id={surveyCode}
 				codeSize={innerWidth > $M && innerHeight > $M ? 360 : 260}
 				codeMargin={3}
-				image={noname_black}
 				imageMargin={6}
 			/>
 		</a>
@@ -84,6 +83,7 @@
 		flex-flow: inherit;
 		justify-content: inherit;
 		align-items: inherit;
+		padding-bottom: 1em;
 	}
 
 	.survey-code {
@@ -93,9 +93,5 @@
 		font-size: 4em;
 		font-weight: 700;
 		cursor: text;
-	}
-
-	.qr-code {
-		padding-bottom: 1em;
 	}
 </style>

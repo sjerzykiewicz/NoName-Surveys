@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import PageButtons from '$lib/components/global/PageButtons.svelte';
 	import DeleteModal from '$lib/components/global/DeleteModal.svelte';
 	import { ENTRIES_PER_PAGE, errorModalContent, isErrorModalHidden } from '$lib/stores/global';
@@ -10,17 +10,11 @@
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import ImportSummaryModal from '$lib/components/global/ImportSummaryModal.svelte';
+	import type SurveyHeader from '$lib/entities/surveys/SurveyHeader';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 
-	export let surveys: {
-		title: string;
-		survey_code: string;
-		creation_date: string;
-		uses_cryptographic_module: boolean;
-		is_owned_by_user: boolean;
-		group_size: number;
-	}[];
+	export let surveys: SurveyHeader[];
 	export let numSurveys: number;
 	export let selectedSurveysToRemove: typeof surveys = [];
 
@@ -55,7 +49,7 @@
 		}
 
 		if (sharedSurveyCodes.length > 0) {
-			const rejectResponse = await fetch('/api/surveys/reject-access', {
+			const rejectResponse = await fetch('/api/surveys/access/reject', {
 				method: 'POST',
 				body: JSON.stringify({
 					survey_codes: sharedSurveyCodes
@@ -99,8 +93,12 @@
 
 <div class="button-row">
 	<div class="button-sub-row">
-		<button title={$t('create_survey')} class="add-survey" on:click={() => goto('/create')}>
-			<i class="symbol">add</i><Tx text="survey" />
+		<button
+			title={$t('import_survey_summary')}
+			class="import-export-button"
+			on:click={() => (isImportModalHidden = false)}
+		>
+			<i class="symbol">upload_file</i><Tx text="import" />
 		</button>
 		{#if surveys.length > 0}
 			<button
@@ -114,15 +112,6 @@
 		{/if}
 	</div>
 	<PageButtons numEntries={numSurveys} />
-</div>
-<div class="button-row">
-	<button
-		title={$t('import_survey_summary')}
-		class="import-export-button"
-		on:click={() => (isImportModalHidden = false)}
-	>
-		<i class="symbol">upload_file</i><Tx text="import" />
-	</button>
 </div>
 
 <style>

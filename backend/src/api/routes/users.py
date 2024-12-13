@@ -3,6 +3,7 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
+import src.api.utils.helpers as helpers
 import src.db.crud.user as user_crud
 from src.api.models.users.user import (  # noqa
     User,
@@ -47,9 +48,7 @@ async def check_if_user_has_public_key(
     user_input: User,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(user_input.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
+    user = helpers.get_user_by_email(user_input.user_email, session)
     return user.public_key != ""
 
 
@@ -61,9 +60,7 @@ async def check_if_user_has_public_key(
 async def get_key_creation_date(
     user_input: User, session: Session = Depends(get_session)
 ):
-    user = user_crud.get_user_by_email(user_input.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
+    user = helpers.get_user_by_email(user_input.user_email, session)
     return user.key_creation_date
 
 
@@ -89,9 +86,7 @@ async def update_user_public_key(
     update_user_public_key: UserUpdatePublicKey,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(update_user_public_key.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not registered")
+    user = helpers.get_user_by_email(update_user_public_key.user_email, session)
 
     if not verify(
         update_user_public_key.public_key, update_user_public_key.fingerprint

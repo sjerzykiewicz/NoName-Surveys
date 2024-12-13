@@ -9,6 +9,7 @@
 	import Binary from './Binary.svelte';
 	import Rank from './Rank.svelte';
 	import Number from './Number.svelte';
+	import Subtitle from '../Subtitle.svelte';
 	import type { ComponentType } from 'svelte';
 	import { getQuestionTypeData } from '$lib/utils/getQuestionTypeData';
 	import type SurveySummary from '$lib/entities/surveys/SurveySummary';
@@ -38,12 +39,19 @@
 </div>
 {#each answer.questions as question, questionIndex}
 	<div class="question">
-		<QuestionTitle
-			question={question.question}
-			{questionIndex}
-			questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
-			required={question.required}
-		/>
-		<svelte:component this={componentTypeMap[question.question_type]} data={question} />
+		{#if 'subtitle' in question}
+			<Subtitle question={question.subtitle} />
+		{:else}
+			<div class="question">
+				<QuestionTitle
+					question={question.question}
+					{questionIndex}
+					questionTypeData={getQuestionTypeData(componentTypeMap[question.question_type])}
+					required={question.required}
+					surveyStructure={answer}
+				/>
+				<svelte:component this={componentTypeMap[question.question_type]} data={question} />
+			</div>
+		{/if}
 	</div>
 {/each}

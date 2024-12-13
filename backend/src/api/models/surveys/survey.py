@@ -4,6 +4,7 @@ from typing import Optional, Union
 from pydantic import Field, ValidationInfo, field_validator
 
 from src.api.models.base import Base
+from src.api.models.metadata.subtitle import Subtitle
 from src.api.models.questions.binary_question import BinaryQuestion
 from src.api.models.questions.list_question import ListQuestion
 from src.api.models.questions.multi_question import MultiQuestion
@@ -27,6 +28,7 @@ class SurveyStructure(Base):
             SingleQuestion,
             SliderQuestion,
             TextQuestion,
+            Subtitle,
         ]
     ] = Field(
         min_length=1,
@@ -55,6 +57,7 @@ class SurveyHeadersOutput(Base):
     uses_cryptographic_module: bool
     is_owned_by_user: bool
     group_size: int
+    is_enabled: bool
 
 
 class SurveyInfoFetchInput(Base):
@@ -108,6 +111,10 @@ class SurveyUserActions(SurveyUserAction):
     @field_validator("survey_code")
     def validate_survey_code(cls, v) -> str:
         return Base.validate_survey_code(v)
+
+
+class SurveyEnableDisableAction(SurveyUserActions):
+    is_enabled: bool
 
 
 class SurveyUserDeleteAction(SurveyUserAction):

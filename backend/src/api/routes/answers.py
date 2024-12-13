@@ -2,11 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from gmpy2 import mpz
 from sqlmodel import Session
 
+import src.api.utils.helpers as helpers
 import src.db.crud.answer as answer_crud
 import src.db.crud.ring_member as ring_member_crud
 import src.db.crud.survey as survey_crud
-import src.db.crud.survey_draft as survey_draft_crud
-import src.db.crud.user as user_crud
 from src.api.models.surveys.answer import (
     SurveyAnswerBase,
     SurveyAnswersFetchInput,
@@ -28,22 +27,15 @@ async def get_survey_answers_by_code(
     survey_fetch: SurveyAnswersFetchInput,
     session: Session = Depends(get_session),
 ):
-    user = user_crud.get_user_by_email(survey_fetch.user_email, session)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not found")
-
-    survey = survey_crud.get_survey_by_code(survey_fetch.survey_code, session)
-    if survey is None:
-        raise HTTPException(status_code=400, detail="Survey not found")
+    user = helpers.get_user_by_email(survey_fetch.user_email, session)
+    survey = helpers.get_survey_by_code(survey_fetch.survey_code, session)
 
     if not survey_crud.user_has_access_to_survey(user.id, survey.id, session):
         raise HTTPException(
             status_code=400, detail="User does not have access to this survey"
         )
 
-    survey_draft = survey_draft_crud.get_survey_draft_by_id(
-        survey.survey_structure_id, session
-    )
+    survey_draft = helpers.get_survey_draft_by_id(survey.survey_structure_id, session)
     survey_title = survey_draft.title
 
     answers = answer_crud.get_answers_by_survey_id(survey.id, session)
@@ -73,10 +65,7 @@ async def save_survey_answer(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    # fetch target survey structure
-    survey = survey_crud.get_survey_by_code(survey_answer.survey_code, session)
-    if not survey:
-        raise HTTPException(status_code=404, detail="No survey found with this code")
+    survey = helpers.get_active_survey_by_code(survey_answer.survey_code, session)
 
     if survey.uses_cryptographic_module:
         if not survey_answer.signature:
@@ -114,9 +103,7 @@ async def save_survey_answer(
                 detail="Answer has not been saved because the signature was invalid.",
             )
 
-    survey_draft = survey_draft_crud.get_survey_draft_by_id(
-        survey.survey_structure_id, session
-    )
+    survey_draft = helpers.get_survey_draft_by_id(survey.survey_structure_id, session)
 
     survey_structure = SurveyStructure.model_validate_json(
         survey_draft.survey_structure

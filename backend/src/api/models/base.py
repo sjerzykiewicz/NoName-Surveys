@@ -2,6 +2,8 @@ from re import UNICODE, match
 
 from pydantic import BaseModel, ConfigDict
 
+from src.cryptography.verify_key import verify_key
+
 EMAIL_REGEX = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 SURVEY_CODE_REGEX = r"^\d{6}$"
 DIGITS_ONLY_REGEX = r"^\d+$"
@@ -88,12 +90,16 @@ class Base(BaseModel):
             Base.validate_user_group_name(name)
         return value
 
-    def validate_pem_key(value):
+    def validate_public_key(value):
         if value is None or not isinstance(value, str) or value == "":
             raise ValueError("public key must be provided")
 
         if not match(KEY_PEM_REGEX, value):
-            raise ValueError("invalid public key format")
+            raise ValueError("invalid public key pem")
+
+        if not verify_key(value):
+            raise ValueError("incorrect public key")
+
         return value
 
     def validate_fingerprint(value):

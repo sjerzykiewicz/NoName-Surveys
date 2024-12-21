@@ -275,3 +275,96 @@ pub fn linkable_ring_signature(
 
     Ok(sig)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::get_keypair;
+    use super::linkable_ring_signature;
+    use std::fs;
+    fn read_file(filepath: &str) -> Result<String, std::io::Error> {
+        fs::read_to_string(filepath)
+    }
+    #[test]
+    fn test_happy_path() {
+        let key_pair = get_keypair();
+        let priv_key = key_pair.get_private_key();
+        let pub_key = key_pair.get_public_key();
+        let pub_key1 = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_pub_key1.txt"
+        ))
+        .unwrap();
+        let pub_key2 = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_pub_key2.txt"
+        ))
+        .unwrap();
+        let pub_key3 = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_pub_key3.txt"
+        ))
+        .unwrap();
+        let mut pub_keys: Vec<String> = Vec::new();
+        pub_keys.push(pub_key);
+        pub_keys.push(pub_key1);
+        pub_keys.push(pub_key2);
+        pub_keys.push(pub_key3);
+        let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 1).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_fail_on_non_pem() {
+        let key_pair = get_keypair();
+        let priv_key = key_pair.get_private_key();
+        let pub_key = String::from("abc");
+        let mut pub_keys: Vec<String> = Vec::new();
+        pub_keys.push(pub_key);
+        let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_fail_on_non_numeric() {
+        let key_pair = get_keypair();
+        let priv_key = key_pair.get_private_key();
+        let pub_key = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_non_numeric_pub_key.txt"
+        ))
+        .unwrap();
+        let mut pub_keys: Vec<String> = Vec::new();
+        pub_keys.push(pub_key);
+        let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_fail_on_incorrect_key() {
+        let key_pair = get_keypair();
+        let priv_key = key_pair.get_private_key();
+        let pub_key = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_incorrect_pub_key.txt"
+        ))
+        .unwrap();
+        let mut pub_keys: Vec<String> = Vec::new();
+        pub_keys.push(pub_key);
+        let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_fail_on_zero_key() {
+        let key_pair = get_keypair();
+        let priv_key = key_pair.get_private_key();
+        let pub_key = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_zero_pub_key.txt"
+        ))
+        .unwrap();
+        let mut pub_keys: Vec<String> = Vec::new();
+        pub_keys.push(pub_key);
+        let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
+    }
+}

@@ -6,6 +6,7 @@ import src.api.utils.helpers as helpers
 import src.db.crud.answer as answer_crud
 import src.db.crud.ring_member as ring_member_crud
 import src.db.crud.survey as survey_crud
+from src.api.models.questions.question_base import Question
 from src.api.models.surveys.answer import (
     SurveyAnswerBase,
     SurveyAnswersFetchInput,
@@ -81,8 +82,16 @@ async def save_survey_answer(
                 status_code=400, detail="User already answered this survey"
             )
 
+        question_answers = [
+            question
+            for question in survey_answer.questions
+            if isinstance(question, Question)
+        ]
         message = (
-            "".join(question.get_answer() for question in survey_answer.questions)
+            "".join(
+                question.question + question.get_answer()
+                for question in question_answers
+            )
             + survey_answer.survey_code
         )
 

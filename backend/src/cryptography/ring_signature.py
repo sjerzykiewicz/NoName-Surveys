@@ -31,7 +31,7 @@ def h2(x: str):
     return powmod(hashed, r, p)
 
 
-def verify_lrs(message: str, keys: list[mpz], signature: list[mpz]) -> bool:
+def verify_lrs(message: str, keys: list[str], signature: list[mpz]) -> bool:
     decoded_keys = [mpz(int(PublicKey(k).decoded_payload)) for k in keys]
     concatenated_keys: str = "".join([k.digits() for k in decoded_keys])
     h = h2(concatenated_keys)

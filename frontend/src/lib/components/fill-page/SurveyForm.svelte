@@ -8,7 +8,7 @@
 	import { SliderQuestionAnswered, type SliderQuestion } from '$lib/entities/questions/Slider';
 	import { NumberQuestion, NumberQuestionAnswered } from '$lib/entities/questions/Number';
 	import type Survey from '$lib/entities/surveys/Survey';
-	import type Question from '$lib/entities/questions/Question';
+	import Question from '$lib/entities/questions/Question';
 	import Subtitle from '$lib/entities/questions/Subtitle';
 	import { MultiQuestionAnswered } from '$lib/entities/questions/Multi';
 	import { BinaryQuestionAnswered } from '$lib/entities/questions/Binary';
@@ -328,7 +328,11 @@
 		const answerList: Array<Question | Subtitle> = constructAnswerList();
 
 		if (uses_crypto) {
-			const message = answerList.map((answer) => answer.getAnswer()).join('') + code;
+			const message =
+				answerList
+					.filter((x) => x instanceof Question)
+					.map((answer) => answer.question + answer.getAnswer())
+					.join('') + code;
 			const privateKey = keyPair!.privateKey;
 			const publicKey = keyPair!.publicKey;
 			const index = keys.indexOf(publicKey);

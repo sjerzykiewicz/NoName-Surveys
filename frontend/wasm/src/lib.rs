@@ -135,7 +135,7 @@ fn h1(x: &String) -> BigUint {
     let q: BigUint = BigUint::parse_bytes(Q_HEX, 16).unwrap();
 
     // reduce mod q
-    int.modpow(&BigUint::one(), &q)
+    int % &q
 }
 
 // h2 : {0,1}* -> <g>
@@ -148,16 +148,16 @@ fn h2(x: &String) -> BigUint {
     reader.read(&mut result);
     let int = BigUint::from_bytes_be(&result);
 
-    // reduce mod (p-1) -> element of Z(p-1)/Z
+    // reduce mod (p-1) -> element of Z/(p-1)Z
     let p: BigUint = BigUint::parse_bytes(P_HEX, 16).unwrap();
-    let int = int % (&p - BigUint::one());
+    let z = int % (&p - BigUint::one());
 
     // add 1 -> element of Z*p
-    let int: BigUint = int + BigUint::one();
+    let w: BigUint = z + BigUint::one();
 
-    // i^r is an element of <g>
+    // w^r is an element of <g>
     let r: BigUint = BigUint::parse_bytes(R_HEX, 16).unwrap();
-    int.modpow(&r, &p)
+    w.modpow(&r, &p)
 }
 
 #[wasm_bindgen]
@@ -191,6 +191,12 @@ pub fn linkable_ring_signature(
         Err(_) => return Err(JsValue::from_str("Invalid public key format")),
     };
 
+    for k in &y {
+        if *k == BigUint::zero() || *k >= p || k.modpow(&q, &p) != BigUint::one() {
+            return Err(JsValue::from_str("Invalid public key value"));
+        }
+    }
+
     let priv_key = match parse(priv_key) {
         Ok(k) => k,
         Err(_) => return Err(JsValue::from_str("Could not convert private key pem")),
@@ -206,13 +212,17 @@ pub fn linkable_ring_signature(
         Err(_) => return Err(JsValue::from_str("Invalid private key format")),
     };
 
+    if pk >= q {
+        return Err(JsValue::from_str("Invalid private key value"));
+    }
+
     let keys_concatenated = pub_keys.join("");
 
     let h = h2(&keys_concatenated);
+
     let y0 = h.modpow(&pk, &p);
 
     let mut rng = rand::thread_rng();
-    let r = rng.gen_biguint_below(&q);
 
     let n = pub_keys.len();
     let mut c: Vec<BigUint> = vec![BigUint::zero(); n];
@@ -233,6 +243,7 @@ pub fn linkable_ring_signature(
 
     sum_c_i %= &q;
 
+    let r = rng.gen_biguint_below(&q);
     let g_to_r = g.modpow(&r, &p);
     let h_to_r = h.modpow(&r, &p);
 
@@ -263,4 +274,97 @@ pub fn linkable_ring_signature(
     }
 
     Ok(sig)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::get_keypair;
+    use super::linkable_ring_signature;
+    use std::fs;
+    fn read_file(filepath: &str) -> Result<String, std::io::Error> {
+        fs::read_to_string(filepath)
+    }
+    #[test]
+    fn test_happy_path() {
+        let key_pair = get_keypair();
+        let priv_key = key_pair.get_private_key();
+        let pub_key = key_pair.get_public_key();
+        let pub_key1 = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_pub_key1.txt"
+        ))
+        .unwrap();
+        let pub_key2 = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_pub_key2.txt"
+        ))
+        .unwrap();
+        let pub_key3 = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_pub_key3.txt"
+        ))
+        .unwrap();
+        let mut pub_keys: Vec<String> = Vec::new();
+        pub_keys.push(pub_key);
+        pub_keys.push(pub_key1);
+        pub_keys.push(pub_key2);
+        pub_keys.push(pub_key3);
+        let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 1).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_fail_on_non_pem() {
+        let key_pair = get_keypair();
+        let priv_key = key_pair.get_private_key();
+        let pub_key = String::from("abc");
+        let mut pub_keys: Vec<String> = Vec::new();
+        pub_keys.push(pub_key);
+        let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_fail_on_non_numeric() {
+        let key_pair = get_keypair();
+        let priv_key = key_pair.get_private_key();
+        let pub_key = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_non_numeric_pub_key.txt"
+        ))
+        .unwrap();
+        let mut pub_keys: Vec<String> = Vec::new();
+        pub_keys.push(pub_key);
+        let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_fail_on_incorrect_key() {
+        let key_pair = get_keypair();
+        let priv_key = key_pair.get_private_key();
+        let pub_key = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_incorrect_pub_key.txt"
+        ))
+        .unwrap();
+        let mut pub_keys: Vec<String> = Vec::new();
+        pub_keys.push(pub_key);
+        let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_fail_on_zero_key() {
+        let key_pair = get_keypair();
+        let priv_key = key_pair.get_private_key();
+        let pub_key = read_file(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/test_data/test_zero_pub_key.txt"
+        ))
+        .unwrap();
+        let mut pub_keys: Vec<String> = Vec::new();
+        pub_keys.push(pub_key);
+        let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
+    }
 }

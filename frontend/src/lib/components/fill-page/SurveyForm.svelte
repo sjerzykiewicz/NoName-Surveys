@@ -328,7 +328,11 @@
 		const answerList: Array<Question | Subtitle> = constructAnswerList();
 
 		if (uses_crypto) {
-			const message = answerList.filter((x) => (x instanceof Question)).map((answer) => answer.question + answer.getAnswer()).join('') + code;
+			const message =
+				answerList
+					.filter((x) => x instanceof Question)
+					.map((answer) => answer.question + answer.getAnswer())
+					.join('') + code;
 			const privateKey = keyPair!.privateKey;
 			const publicKey = keyPair!.publicKey;
 			const index = keys.indexOf(publicKey);

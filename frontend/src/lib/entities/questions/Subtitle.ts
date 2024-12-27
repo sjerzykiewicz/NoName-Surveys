@@ -3,8 +3,4 @@ export default class Subtitle {
 	constructor(subtitle: string) {
 		this.subtitle = subtitle;
 	}
-
-	getAnswer(): string {
-		return '';
-	}
 }

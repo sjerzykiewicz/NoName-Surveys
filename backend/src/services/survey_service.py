@@ -19,6 +19,14 @@ from src.api.models.surveys.survey import (
     SurveyUserDeleteAction,
 )
 from src.db.models.user import User
+from src.services.utils.exceptions import (
+    InvalidFingerprintException,
+    InvalidSurveyStructureException,
+    LimitExceededException,
+    SurveyNotFoundException,
+    UserAccessException,
+    UserNotFoundException,
+)
 
 LIMIT_OF_ACTIVE_SURVEYS = 50
 PAGE_SIZE = 10
@@ -108,9 +116,8 @@ def delete_surveys(survey_delete: SurveyUserDeleteAction, session: Session) -> N
     )
 
     if len(deleted_surveys) != len(survey_delete.survey_codes):
-        raise HTTPException(
-            status_code=404,
-            detail="Some surveys do not exist or user does not have access to them",
+        raise SurveyNotFoundException(
+            "Some surveys do not exist or user does not have access to them"
         )
 
 
@@ -122,9 +129,8 @@ def create_survey(
         survey_crud.get_count_of_active_surveys_of_user(user.id, session)
         >= LIMIT_OF_ACTIVE_SURVEYS
     ):
-        raise HTTPException(
-            status_code=400,
-            detail="User already has too many active surveys, delete some to create more",
+        raise LimitExceededException(
+            "User already has too many active surveys, delete some to create more"
         )
 
     if (
@@ -133,15 +139,14 @@ def create_survey(
             survey_create.ring_members, session
         )
     ):
-        raise HTTPException(
-            status_code=400,
-            detail="Not all users are registered or have public keys created",
+        raise InvalidFingerprintException(
+            "Not all users are registered or have public keys created"
         )
 
     try:
         survey_create.survey_structure.validate()
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise InvalidSurveyStructureException(str(e))
 
     survey_draft = survey_draft_crud.create_survey_draft(
         user.id,
@@ -176,7 +181,7 @@ def give_access_to_surveys(
     helpers.check_if_user_has_access(owner.id, survey.creator_id)
 
     if not user_crud.all_users_exist(share_surveys_input.user_emails, session):
-        raise HTTPException(status_code=400, detail="Not all users are registered")
+        raise UserNotFoundException("Not all users are registered")
 
     for email in share_surveys_input.user_emails:
         user = helpers.get_user_by_email(email, session)
@@ -201,9 +206,7 @@ def take_away_access_to_surveys(
     )
 
     if len(access_taken_from) != len(users):
-        raise HTTPException(
-            status_code=404, detail="Some users did not have access taken away"
-        )
+        raise UserAccessException("Some users did not have access taken away")
 
 
 def reject_access_to_surveys(
@@ -215,9 +218,8 @@ def reject_access_to_surveys(
     )
 
     if len(rejected_surveys) != len(reject_access_input.survey_codes):
-        raise HTTPException(
-            status_code=404,
-            detail="Some surveys do not exist or user does not have access to them",
+        raise SurveyNotFoundException(
+            "Some surveys do not exist or user does not have access to them"
         )
 
 

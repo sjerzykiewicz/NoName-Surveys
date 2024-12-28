@@ -1,4 +1,3 @@
-from fastapi import HTTPException
 from sqlmodel import Session
 
 import src.db.crud.survey_draft as survey_draft_crud
@@ -8,6 +7,11 @@ from src.api.models.surveys.survey_draft import (
     SurveyDraftHeadersOutput,
 )
 from src.db.models.survey_draft import SurveyDraft
+from src.services.utils.exceptions import (
+    InvalidSurveyStructureException,
+    LimitExceededException,
+    SurveyDraftNotFoundException,
+)
 
 LIMIT_OF_ACTIVE_SURVEY_DRAFTS = 50
 PAGE_SIZE = 10
@@ -49,9 +53,8 @@ def delete_survey_drafts(
     )
 
     if len(deleted_survey_drafts) != len(survey_draft_ids):
-        raise HTTPException(
-            status_code=404,
-            detail="Some of the survey drafts do not exist or are already deleted",
+        raise SurveyDraftNotFoundException(
+            "Some of the survey drafts do not exist or are already deleted"
         )
 
 
@@ -66,15 +69,14 @@ def create_survey_draft(
         )
     )
     if survey_drafts_count >= LIMIT_OF_ACTIVE_SURVEY_DRAFTS:
-        raise HTTPException(
-            status_code=400,
-            detail=f"User cannot have more than {LIMIT_OF_ACTIVE_SURVEY_DRAFTS} active survey drafts",
+        raise LimitExceededException(
+            f"User cannot have more than {LIMIT_OF_ACTIVE_SURVEY_DRAFTS} active survey drafts"
         )
 
     try:
         survey_draft_create.survey_structure.validate()
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise InvalidSurveyStructureException(str(e))
 
     created_survey_draft = survey_draft_crud.create_survey_draft(
         user.id,

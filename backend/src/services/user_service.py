@@ -3,6 +3,7 @@ from sqlmodel import Session
 
 import src.db.crud.user as user_crud
 from src.db.models.user import User
+from src.services.utils.exceptions import DuplicateUserException
 from src.services.utils.helpers import get_user_by_email as helpers_get_user_by_email
 
 tz = pytz.timezone("Europe/Warsaw")
@@ -10,7 +11,7 @@ tz = pytz.timezone("Europe/Warsaw")
 
 def create_user(email: str, session: Session) -> User:
     if get_user_by_email(email, session) is not None:
-        raise ValueError("User is already registered")
+        raise DuplicateUserException("User is already registered")
     return user_crud.create_user(email, session)
 
 

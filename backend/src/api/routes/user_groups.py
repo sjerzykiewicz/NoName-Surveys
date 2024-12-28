@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 import src.services.user_group_service as service
@@ -13,6 +13,14 @@ from src.api.models.user_groups.user_groups import (
     UserGroupUsersActions,
 )
 from src.db.base import get_session
+from src.services.utils.exceptions import (
+    InvalidPageNumberException,
+    UserAccessException,
+    UserGroupExistsException,
+    UserGroupLimitExceededException,
+    UserGroupNotFoundException,
+    UserNotFoundException,
+)
 
 router = APIRouter()
 
@@ -26,7 +34,10 @@ async def get_user_groups_count(
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
-    return service.get_user_groups_count(user_group_creator.user_email, session)
+    try:
+        return service.get_user_groups_count(user_group_creator.user_email, session)
+    except UserNotFoundException as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -39,7 +50,10 @@ async def get_user_groups(
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
-    return service.get_user_groups(page, user_group_creator.user_email, session)
+    try:
+        return service.get_user_groups(page, user_group_creator.user_email, session)
+    except (UserNotFoundException, InvalidPageNumberException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -54,9 +68,12 @@ async def get_user_groups_with_members_having_public_keys(
     user_group_creator: UserGroupCreator,
     session: Session = Depends(get_session),
 ):
-    return service.get_user_groups_with_members_having_public_keys(
-        user_group_creator.user_email, session
-    )
+    try:
+        return service.get_user_groups_with_members_having_public_keys(
+            user_group_creator.user_email, session
+        )
+    except UserNotFoundException as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -68,7 +85,14 @@ async def get_user_group_members_count(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
-    return service.get_user_group_members_count(user_group_request, session)
+    try:
+        return service.get_user_group_members_count(user_group_request, session)
+    except (
+        UserNotFoundException,
+        UserGroupNotFoundException,
+        UserAccessException,
+    ) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -80,7 +104,14 @@ async def get_users_who_are_not_members(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
-    return service.get_users_who_are_not_members(user_group_request, session)
+    try:
+        return service.get_users_who_are_not_members(user_group_request, session)
+    except (
+        UserNotFoundException,
+        UserGroupNotFoundException,
+        UserAccessException,
+    ) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -92,7 +123,14 @@ async def get_whole_user_group(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
-    return service.get_whole_user_group(user_group_request, session)
+    try:
+        return service.get_whole_user_group(user_group_request, session)
+    except (
+        UserNotFoundException,
+        UserGroupNotFoundException,
+        UserAccessException,
+    ) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -105,7 +143,15 @@ async def get_user_group(
     user_group_request: UserGroupAction,
     session: Session = Depends(get_session),
 ):
-    return service.get_user_group(page, user_group_request, session)
+    try:
+        return service.get_user_group(page, user_group_request, session)
+    except (
+        UserNotFoundException,
+        UserGroupNotFoundException,
+        UserAccessException,
+        InvalidPageNumberException,
+    ) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post("/create", response_description="Create a user group", response_model=dict)
@@ -113,8 +159,15 @@ async def create_user_group(
     user_group_creation_request: UserGroupCreate,
     session: Session = Depends(get_session),
 ):
-    service.create_user_group(user_group_creation_request, session)
-    return {"message": "user group created successfully"}
+    try:
+        service.create_user_group(user_group_creation_request, session)
+        return {"message": "user group created successfully"}
+    except (
+        UserNotFoundException,
+        UserGroupExistsException,
+        UserGroupLimitExceededException,
+    ) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -126,8 +179,16 @@ async def rename_user_group(
     user_group_rename_request: UserGroupNameUpdate,
     session: Session = Depends(get_session),
 ):
-    service.rename_user_group(user_group_rename_request, session)
-    return {"message": "user group updated successfully"}
+    try:
+        service.rename_user_group(user_group_rename_request, session)
+        return {"message": "user group updated successfully"}
+    except (
+        UserNotFoundException,
+        UserGroupNotFoundException,
+        UserAccessException,
+        UserGroupExistsException,
+    ) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post("/delete", response_description="Delete user groups", response_model=dict)
@@ -135,8 +196,11 @@ async def delete_user_groups(
     user_group_request: UserGroupMultipleActions,
     session: Session = Depends(get_session),
 ):
-    service.delete_user_groups(user_group_request, session)
-    return {"message": "user group deleted successfully"}
+    try:
+        service.delete_user_groups(user_group_request, session)
+        return {"message": "user group deleted successfully"}
+    except (UserNotFoundException, UserGroupNotFoundException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -146,8 +210,15 @@ async def add_users_to_group(
     user_group_request: UserGroupUsersActions,
     session: Session = Depends(get_session),
 ):
-    service.add_users_to_group(user_group_request, session)
-    return {"message": "User added to the group successfully"}
+    try:
+        service.add_users_to_group(user_group_request, session)
+        return {"message": "User added to the group successfully"}
+    except (
+        UserNotFoundException,
+        UserGroupNotFoundException,
+        UserAccessException,
+    ) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -159,5 +230,12 @@ async def remove_users_from_group(
     user_group_request: UserGroupUsersActions,
     session: Session = Depends(get_session),
 ):
-    service.remove_users_from_group(user_group_request, session)
-    return {"message": "User removed from the group successfully"}
+    try:
+        service.remove_users_from_group(user_group_request, session)
+        return {"message": "User removed from the group successfully"}
+    except (
+        UserNotFoundException,
+        UserGroupNotFoundException,
+        UserAccessException,
+    ) as e:
+        raise HTTPException(status_code=400, detail=str(e))

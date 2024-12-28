@@ -1,5 +1,5 @@
 from pytest import raises
-from fastapi import HTTPException
+from src.services.utils.exceptions import InvalidPageNumberException, UserAccessException
 import src.services.utils.helpers as helpers
 
 
@@ -7,12 +7,9 @@ def test_validate_page_for_pagination_negative_number():
     # given
     page = -1
 
-    # when
-    with raises(HTTPException) as exception:
+    # when & then
+    with raises(InvalidPageNumberException) as exception:
         helpers.validate_page_for_pagination(page)
-
-    # then
-    assert exception.value.status_code == 400
 
 
 def test_validate_page_for_pagination_zero():
@@ -43,5 +40,5 @@ def test_check_if_user_has_access_negative():
     other_user_id = 2
 
     # when & then
-    with raises(HTTPException):
+    with raises(UserAccessException):
         helpers.check_if_user_has_access(user_id, other_user_id)

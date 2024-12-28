@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 import src.services.survey_service as service
@@ -15,6 +15,16 @@ from src.api.models.surveys.survey import (
 )
 from src.api.models.users.user import User
 from src.db.base import get_session
+from src.services.utils.exceptions import (
+    InvalidFingerprintException,
+    InvalidPageNumberException,
+    InvalidSurveyStructureException,
+    LimitExceededException,
+    SurveyDraftNotFoundException,
+    SurveyNotFoundException,
+    UserAccessException,
+    UserNotFoundException,
+)
 
 router = APIRouter()
 
@@ -23,7 +33,10 @@ router = APIRouter()
     "/count", response_description="Number of surveys of a user", response_model=int
 )
 async def count_surveys(user_input: User, session: Session = Depends(get_session)):
-    return service.count_surveys(user_input, session)
+    try:
+        return service.count_surveys(user_input, session)
+    except UserNotFoundException as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -34,7 +47,10 @@ async def count_surveys(user_input: User, session: Session = Depends(get_session
 async def get_surveys_for_user(
     page: int, user_input: User, session: Session = Depends(get_session)
 ):
-    return service.get_surveys_for_user(page, user_input, session)
+    try:
+        return service.get_surveys_for_user(page, user_input, session)
+    except (UserNotFoundException, InvalidPageNumberException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -46,7 +62,10 @@ async def get_survey_by_code(
     survey_fetch: SurveyInfoFetchInput,
     session: Session = Depends(get_session),
 ):
-    return service.get_survey_by_code(survey_fetch, session)
+    try:
+        return service.get_survey_by_code(survey_fetch, session)
+    except (SurveyNotFoundException, SurveyDraftNotFoundException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -57,7 +76,10 @@ async def get_survey_by_code(
 async def count_survey_respondents(
     respondents_fetch: SurveyInfoFetchInput, session: Session = Depends(get_session)
 ):
-    return service.count_survey_respondents(respondents_fetch, session)
+    try:
+        return service.count_survey_respondents(respondents_fetch, session)
+    except SurveyNotFoundException as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -70,15 +92,21 @@ async def get_respondents_by_code(
     respondents_fetch: SurveyInfoFetchInput,
     session: Session = Depends(get_session),
 ):
-    return service.get_respondents_by_code(page, respondents_fetch, session)
+    try:
+        return service.get_respondents_by_code(page, respondents_fetch, session)
+    except (SurveyNotFoundException, InvalidPageNumberException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post("/delete", response_description="Delete a survey", response_model=dict)
 async def delete_surveys(
     survey_delete: SurveyUserDeleteAction, session: Session = Depends(get_session)
 ):
-    service.delete_surveys(survey_delete, session)
-    return {"message": "survey deleted successfully"}
+    try:
+        service.delete_surveys(survey_delete, session)
+        return {"message": "survey deleted successfully"}
+    except (UserNotFoundException, SurveyNotFoundException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -90,7 +118,15 @@ async def create_survey(
     survey_create: SurveyStructureCreateInput,
     session: Session = Depends(get_session),
 ):
-    return service.create_survey(survey_create, session)
+    try:
+        return service.create_survey(survey_create, session)
+    except (
+        UserNotFoundException,
+        LimitExceededException,
+        InvalidFingerprintException,
+        InvalidSurveyStructureException,
+    ) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -101,8 +137,11 @@ async def create_survey(
 async def give_access_to_surveys(
     share_surveys_input: ShareSurveyActions, session: Session = Depends(get_session)
 ):
-    service.give_access_to_surveys(share_surveys_input, session)
-    return {"message": "Survey access given successfully"}
+    try:
+        service.give_access_to_surveys(share_surveys_input, session)
+        return {"message": "Survey access given successfully"}
+    except (UserNotFoundException, SurveyNotFoundException, UserAccessException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -114,8 +153,11 @@ async def take_away_access_to_surveys(
     take_away_access_input: ShareSurveyActions,
     session: Session = Depends(get_session),
 ):
-    service.take_away_access_to_surveys(take_away_access_input, session)
-    return {"message": "Survey access taken away successfully"}
+    try:
+        service.take_away_access_to_surveys(take_away_access_input, session)
+        return {"message": "Survey access taken away successfully"}
+    except (UserNotFoundException, SurveyNotFoundException, UserAccessException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -127,8 +169,11 @@ async def reject_access_to_surveys(
     reject_access_input: SurveyUserDeleteAction,
     session: Session = Depends(get_session),
 ):
-    service.reject_access_to_surveys(reject_access_input, session)
-    return {"message": "Survey access rejected successfully"}
+    try:
+        service.reject_access_to_surveys(reject_access_input, session)
+        return {"message": "Survey access rejected successfully"}
+    except (UserNotFoundException, SurveyNotFoundException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -139,7 +184,10 @@ async def reject_access_to_surveys(
 async def get_count_of_users_with_access(
     user_input: SurveyUserActions, session: Session = Depends(get_session)
 ):
-    return service.get_count_of_users_with_access(user_input, session)
+    try:
+        return service.get_count_of_users_with_access(user_input, session)
+    except (UserNotFoundException, SurveyNotFoundException, UserAccessException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -150,7 +198,10 @@ async def get_count_of_users_with_access(
 async def get_all_users_without_access(
     user_input: SurveyUserActions, session: Session = Depends(get_session)
 ):
-    return service.get_all_users_without_access(user_input, session)
+    try:
+        return service.get_all_users_without_access(user_input, session)
+    except (UserNotFoundException, SurveyNotFoundException, UserAccessException) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -163,7 +214,15 @@ async def check_access_to_surveys(
     check_survey_access_input: SurveyUserActions,
     session: Session = Depends(get_session),
 ):
-    return service.check_access_to_surveys(page, check_survey_access_input, session)
+    try:
+        return service.check_access_to_surveys(page, check_survey_access_input, session)
+    except (
+        UserNotFoundException,
+        SurveyNotFoundException,
+        UserAccessException,
+        InvalidPageNumberException,
+    ) as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -175,5 +234,8 @@ async def enable_or_disable_survey(
     user_input: SurveyEnableDisableAction,
     session: Session = Depends(get_session),
 ):
-    service.enable_or_disable_survey(user_input, session)
-    return {"message": "Survey enabled status set successfully"}
+    try:
+        service.enable_or_disable_survey(user_input, session)
+        return {"message": "Survey enabled status set successfully"}
+    except (UserNotFoundException, SurveyNotFoundException, UserAccessException) as e:
+        raise HTTPException(status_code=400, detail=str(e))

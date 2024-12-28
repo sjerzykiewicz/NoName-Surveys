@@ -11,6 +11,7 @@ from src.api.models.users.user import (  # noqa
 )
 from src.cryptography.fingerprint import verify
 from src.db.base import get_session
+from src.services.utils.exceptions import DuplicateUserException, UserNotFoundException
 
 router = APIRouter()
 
@@ -35,7 +36,10 @@ async def get_users_with_keys(session: Session = Depends(get_session)):
 
 @router.post("/validate", response_description="Validate a user", response_model=bool)
 async def does_user_exist(user_create: User, session: Session = Depends(get_session)):
-    return service.get_user_by_email(user_create.user_email, session) is not None
+    try:
+        return service.get_user_by_email(user_create.user_email, session) is not None
+    except UserNotFoundException as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -47,8 +51,11 @@ async def check_if_user_has_public_key(
     user_input: User,
     session: Session = Depends(get_session),
 ):
-    user = service.get_user_by_email_helper(user_input.user_email, session)
-    return user.public_key != ""
+    try:
+        user = service.get_user_by_email_helper(user_input.user_email, session)
+        return user.public_key != ""
+    except UserNotFoundException as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -59,8 +66,11 @@ async def check_if_user_has_public_key(
 async def get_key_creation_date(
     user_input: User, session: Session = Depends(get_session)
 ):
-    user = service.get_user_by_email_helper(user_input.user_email, session)
-    return user.key_creation_date
+    try:
+        user = service.get_user_by_email_helper(user_input.user_email, session)
+        return user.key_creation_date
+    except UserNotFoundException as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post(
@@ -69,7 +79,7 @@ async def get_key_creation_date(
 async def create_user(user_create: User, session: Session = Depends(get_session)):
     try:
         service.create_user(user_create.user_email, session)
-    except ValueError as e:
+    except DuplicateUserException as e:
         raise HTTPException(status_code=400, detail=str(e))
     return {"message": "User registered successfully"}
 
@@ -83,7 +93,12 @@ async def update_user_public_key(
     update_user_public_key: UserUpdatePublicKey,
     session: Session = Depends(get_session),
 ):
-    user = service.get_user_by_email_helper(update_user_public_key.user_email, session)
+    try:
+        user = service.get_user_by_email_helper(
+            update_user_public_key.user_email, session
+        )
+    except UserNotFoundException as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
     if not verify(
         update_user_public_key.public_key, update_user_public_key.fingerprint

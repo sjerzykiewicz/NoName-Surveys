@@ -1,4 +1,3 @@
-from fastapi import HTTPException
 from gmpy2 import mpz
 from sqlmodel import Session
 
@@ -14,6 +13,12 @@ from src.api.models.surveys.answer import (
 )
 from src.api.models.surveys.survey import SurveyStructure
 from src.cryptography.ring_signature import verify_lrs
+from src.services.utils.exceptions import (
+    DuplicateAnswerException,
+    InvalidSignatureException,
+    InvalidSurveyStructureException,
+    UserAccessException,
+)
 
 
 def get_survey_answers_by_code(
@@ -23,9 +28,7 @@ def get_survey_answers_by_code(
     survey = helpers.get_survey_by_code(survey_fetch.survey_code, session)
 
     if not survey_crud.user_has_access_to_survey(user.id, survey.id, session):
-        raise HTTPException(
-            status_code=400, detail="User does not have access to this survey"
-        )
+        raise UserAccessException("User does not have access to this survey")
 
     survey_draft = helpers.get_survey_draft_by_id(survey.survey_structure_id, session)
     survey_title = survey_draft.title
@@ -47,23 +50,18 @@ def save_survey_answer(survey_answer: SurveyAnswerBase, session: Session) -> dic
     try:
         survey_answer.validate()
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise InvalidSurveyStructureException(str(e))
 
     survey = helpers.get_active_survey_by_code(survey_answer.survey_code, session)
 
     if survey.uses_cryptographic_module:
         if not survey_answer.signature:
-            raise HTTPException(
-                status_code=400,
-                detail="Survey requires cryptographic signature",
-            )
+            raise InvalidSignatureException("Survey requires cryptographic signature")
 
         if answer_crud.signature_already_present_for_user(
             survey.id, survey_answer.signature[0], session
         ):
-            raise HTTPException(
-                status_code=400, detail="User already answered this survey"
-            )
+            raise DuplicateAnswerException("You have already answered this survey")
 
         question_answers = [
             question
@@ -90,10 +88,7 @@ def save_survey_answer(survey_answer: SurveyAnswerBase, session: Session) -> dic
             public_keys,
             [mpz(x) for x in survey_answer.signature],
         ):
-            raise HTTPException(
-                status_code=400,
-                detail="Answer has not been saved because the signature was invalid.",
-            )
+            raise InvalidSignatureException("Invalid cryptographic signature")
 
     survey_draft = helpers.get_survey_draft_by_id(survey.survey_structure_id, session)
 
@@ -103,15 +98,14 @@ def save_survey_answer(survey_answer: SurveyAnswerBase, session: Session) -> dic
     questions = survey_structure.questions
     # validate answer
     if len(survey_answer.questions) != len(questions):
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid answer. Number of questions did not match.",
+        raise InvalidSurveyStructureException(
+            "Invalid answer. Number of questions did not match."
         )
     try:
         for q1, q2 in zip(survey_answer.questions, questions):
             q1.validate_structure_against(q2)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise InvalidSurveyStructureException(str(e))
 
     y0 = survey_answer.signature[0] if survey_answer.signature else ""
     answer_crud.save_answer(survey.id, survey_answer.model_dump_json(), y0, session)

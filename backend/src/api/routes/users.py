@@ -3,8 +3,7 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
-import src.api.utils.helpers as helpers
-import src.db.crud.user as user_crud
+import src.services.user_service as service
 from src.api.models.users.user import (  # noqa
     User,
     UserFilterOthers,
@@ -22,7 +21,7 @@ router = APIRouter()
     response_model=list[str],
 )
 async def get_users(session: Session = Depends(get_session)):
-    return [user.email for user in user_crud.get_all_users(session)]
+    return [user.email for user in service.get_all_users(session)]
 
 
 @router.get(
@@ -31,12 +30,12 @@ async def get_users(session: Session = Depends(get_session)):
     response_model=list[str],
 )
 async def get_users_with_keys(session: Session = Depends(get_session)):
-    return [user.email for user in user_crud.get_all_users_with_public_keys(session)]
+    return [user.email for user in service.get_all_users_with_public_keys(session)]
 
 
 @router.post("/validate", response_description="Validate a user", response_model=bool)
 async def does_user_exist(user_create: User, session: Session = Depends(get_session)):
-    return user_crud.get_user_by_email(user_create.user_email, session) is not None
+    return service.get_user_by_email(user_create.user_email, session) is not None
 
 
 @router.post(
@@ -48,7 +47,7 @@ async def check_if_user_has_public_key(
     user_input: User,
     session: Session = Depends(get_session),
 ):
-    user = helpers.get_user_by_email(user_input.user_email, session)
+    user = service.get_user_by_email_helper(user_input.user_email, session)
     return user.public_key != ""
 
 
@@ -60,20 +59,18 @@ async def check_if_user_has_public_key(
 async def get_key_creation_date(
     user_input: User, session: Session = Depends(get_session)
 ):
-    user = helpers.get_user_by_email(user_input.user_email, session)
+    user = service.get_user_by_email_helper(user_input.user_email, session)
     return user.key_creation_date
 
 
 @router.post(
-    "/register",
-    response_description="Register a new user",
-    response_model=dict,
+    "/register", response_description="Register a new user", response_model=dict
 )
 async def create_user(user_create: User, session: Session = Depends(get_session)):
-    if user_crud.get_user_by_email(user_create.user_email, session) is not None:
-        raise HTTPException(status_code=400, detail="User already registered")
-
-    user_crud.create_user(user_create.user_email, session)
+    try:
+        service.create_user(user_create.user_email, session)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     return {"message": "User registered successfully"}
 
 
@@ -86,7 +83,7 @@ async def update_user_public_key(
     update_user_public_key: UserUpdatePublicKey,
     session: Session = Depends(get_session),
 ):
-    user = helpers.get_user_by_email(update_user_public_key.user_email, session)
+    user = service.get_user_by_email_helper(update_user_public_key.user_email, session)
 
     if not verify(
         update_user_public_key.public_key, update_user_public_key.fingerprint
@@ -95,9 +92,7 @@ async def update_user_public_key(
             status_code=400, detail="Invalid fingerprint. Please try again"
         )
 
-    user_crud.update_user_public_key(
-        user.id, update_user_public_key.public_key, session
-    )
+    service.update_user_public_key(user.id, update_user_public_key.public_key, session)
 
     return {"message": "User's public key updated successfully"}
 
@@ -112,7 +107,7 @@ async def filter_unregistered_users(
     session: Session = Depends(get_session),
 ):
     matched_users = {
-        user.email for user in user_crud.get_users_by_emails(user_input.emails, session)
+        user.email for user in service.get_users_by_emails(user_input.emails, session)
     }
     return [email for email in user_input.emails if email not in matched_users]
 
@@ -128,7 +123,7 @@ async def filter_users_with_no_public_keys(
 ):
     matched_users = {
         user.email
-        for user in user_crud.get_users_with_public_keys_by_emails(
+        for user in service.get_users_with_public_keys_by_emails(
             user_input.emails, session
         )
     }

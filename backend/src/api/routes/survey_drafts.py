@@ -1,8 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlmodel import Session
 
-import src.api.utils.helpers as helpers
-import src.db.crud.survey_draft as survey_draft_crud
+import src.services.survey_draft_service as service
 from src.api.models.surveys.survey import SurveyStructure
 from src.api.models.surveys.survey_draft import (
     SurveyDraftCreate,
@@ -17,10 +16,6 @@ from src.db.base import get_session
 router = APIRouter()
 
 
-LIMIT_OF_ACTIVE_SURVEY_DRAFTS = 50
-PAGE_SIZE = 10
-
-
 @router.post(
     "/all/{page}",
     response_description="Get all Survey Drafts Headers of a user",
@@ -29,19 +24,7 @@ PAGE_SIZE = 10
 async def get_survey_drafts(
     page: int, user_input: User, session: Session = Depends(get_session)
 ):
-    helpers.validate_page_for_pagination(page)
-    user = helpers.get_user_by_email(user_input.user_email, session)
-
-    return [
-        SurveyDraftHeadersOutput(
-            id=survey_draft.id,
-            title=survey_draft.title,
-            creation_date=survey_draft.creation_date,
-        )
-        for survey_draft in survey_draft_crud.get_not_deleted_survey_drafts_for_user(
-            user.id, page * PAGE_SIZE, PAGE_SIZE, session
-        )
-    ]
+    return service.get_survey_drafts(page, user_input.user_email, session)
 
 
 @router.post(
@@ -53,14 +36,9 @@ async def get_survey_draft(
     survey_draft_fetch: SurveyDraftUserActions,
     session: Session = Depends(get_session),
 ):
-    user = helpers.get_user_by_email(survey_draft_fetch.user_email, session)
-
-    survey_draft = helpers.get_not_deleted_survey_draft_by_id(
-        survey_draft_fetch.id, session
+    survey_draft = service.get_survey_draft(
+        survey_draft_fetch.id, survey_draft_fetch.user_email, session
     )
-
-    helpers.check_if_user_has_access(survey_draft.creator_id, user.id)
-
     return SurveyDraftFetchOutput(
         title=survey_draft.title,
         survey_structure=SurveyStructure.model_validate_json(
@@ -78,18 +56,9 @@ async def delete_survey_drafts(
     survey_draft_delete: SurveyDraftUserActionDelete,
     session: Session = Depends(get_session),
 ):
-    user = helpers.get_user_by_email(survey_draft_delete.user_email, session)
-
-    deleted_survey_drafts = survey_draft_crud.delete_survey_drafts(
-        user.id, survey_draft_delete.ids, session
+    service.delete_survey_drafts(
+        survey_draft_delete.user_email, survey_draft_delete.ids, session
     )
-
-    if len(deleted_survey_drafts) != len(survey_draft_delete.ids):
-        raise HTTPException(
-            status_code=404,
-            detail="Some of the survey drafts do not exist or are already deleted",
-        )
-
     return {"message": "Survey Draft deleted successfully"}
 
 
@@ -102,36 +71,7 @@ async def create_survey_draft(
     survey_draft_create: SurveyDraftCreate,
     session: Session = Depends(get_session),
 ):
-    user = helpers.get_user_by_email(survey_draft_create.user_email, session)
-
-    survey_drafts_count = (
-        survey_draft_crud.get_count_of_not_deleted_survey_drafts_for_user(
-            user.id, session
-        )
-    )
-    if survey_drafts_count >= LIMIT_OF_ACTIVE_SURVEY_DRAFTS:
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                f"User cannot have more than"
-                f"{LIMIT_OF_ACTIVE_SURVEY_DRAFTS} active survey drafts"
-            ),
-        )
-
-    try:
-        survey_draft_create.survey_structure.validate()
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-    created_survey_draft = survey_draft_crud.create_survey_draft(
-        user.id,
-        survey_draft_create.title,
-        survey_draft_create.survey_structure.model_dump_json(),
-        False,
-        session,
-    )
-
-    return created_survey_draft.id
+    return service.create_survey_draft(survey_draft_create, session)
 
 
 @router.post(
@@ -142,7 +82,4 @@ async def create_survey_draft(
 async def count_survey_drafts(
     user_input: User, session: Session = Depends(get_session)
 ):
-    user = helpers.get_user_by_email(user_input.user_email, session)
-    return survey_draft_crud.get_count_of_not_deleted_survey_drafts_for_user(
-        user.id, session
-    )
+    return service.count_survey_drafts(user_input.user_email, session)

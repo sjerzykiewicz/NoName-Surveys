@@ -1,6 +1,6 @@
 from pytest import raises
 from fastapi import HTTPException
-import src.api.utils.helpers as helpers
+import src.services.utils.helpers as helpers
 
 
 def test_validate_page_for_pagination_negative_number():

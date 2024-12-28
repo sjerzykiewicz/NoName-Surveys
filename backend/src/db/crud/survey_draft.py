@@ -30,9 +30,7 @@ def get_not_deleted_survey_drafts_for_user(
     return session.exec(statement).all()
 
 
-def get_not_deleted_survey_draft_by_id(
-    survey_draft_id: int, session: Session
-) -> SurveyDraft:
+def find_not_deleted_by_id(survey_draft_id: int, session: Session) -> SurveyDraft:
     statement = (
         select(SurveyDraft)
         .where(SurveyDraft.id == survey_draft_id)
@@ -42,7 +40,7 @@ def get_not_deleted_survey_draft_by_id(
     return survey_draft
 
 
-def get_survey_draft_by_id(survey_draft_id: int, session: Session) -> SurveyDraft:
+def find_by_id(survey_draft_id: int, session: Session) -> SurveyDraft:
     statement = select(SurveyDraft).where(SurveyDraft.id == survey_draft_id)
     survey_draft = session.exec(statement).first()
     return survey_draft

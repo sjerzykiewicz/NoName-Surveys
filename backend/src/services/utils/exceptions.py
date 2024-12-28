@@ -64,3 +64,19 @@ class InvalidSignatureException(Exception):
 
 class DuplicateAnswerException(Exception):
     pass
+
+
+class UserGroupLimitException(Exception):
+    pass
+
+
+class UserGroupExistsException(Exception):
+    pass
+
+
+class UserGroupNotFoundException(Exception):
+    pass
+
+
+class UserGroupMemberException(Exception):
+    pass

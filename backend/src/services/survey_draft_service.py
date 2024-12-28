@@ -1,6 +1,6 @@
 from sqlmodel import Session
 
-import src.db.crud.survey_draft as survey_draft_crud
+import src.db.crud.survey_draft as survey_draft_repository
 import src.services.utils.helpers as helpers
 from src.api.models.surveys.survey_draft import (
     SurveyDraftCreate,
@@ -29,7 +29,7 @@ def get_survey_drafts(
             title=survey_draft.title,
             creation_date=survey_draft.creation_date,
         )
-        for survey_draft in survey_draft_crud.get_not_deleted_survey_drafts_for_user(
+        for survey_draft in survey_draft_repository.get_not_deleted_survey_drafts_for_user(
             user.id, page * PAGE_SIZE, PAGE_SIZE, session
         )
     ]
@@ -48,7 +48,7 @@ def delete_survey_drafts(
     user_email: str, survey_draft_ids: list[int], session: Session
 ) -> None:
     user = helpers.get_user_by_email(user_email, session)
-    deleted_survey_drafts = survey_draft_crud.delete_survey_drafts(
+    deleted_survey_drafts = survey_draft_repository.delete_survey_drafts(
         user.id, survey_draft_ids, session
     )
 
@@ -64,7 +64,7 @@ def create_survey_draft(
     user = helpers.get_user_by_email(survey_draft_create.user_email, session)
 
     survey_drafts_count = (
-        survey_draft_crud.get_count_of_not_deleted_survey_drafts_for_user(
+        survey_draft_repository.get_count_of_not_deleted_survey_drafts_for_user(
             user.id, session
         )
     )
@@ -78,7 +78,7 @@ def create_survey_draft(
     except ValueError as e:
         raise InvalidSurveyStructureException(str(e))
 
-    created_survey_draft = survey_draft_crud.create_survey_draft(
+    created_survey_draft = survey_draft_repository.create_survey_draft(
         user.id,
         survey_draft_create.title,
         survey_draft_create.survey_structure.model_dump_json(),
@@ -91,6 +91,6 @@ def create_survey_draft(
 
 def count_survey_drafts(user_email: str, session: Session) -> int:
     user = helpers.get_user_by_email(user_email, session)
-    return survey_draft_crud.get_count_of_not_deleted_survey_drafts_for_user(
+    return survey_draft_repository.get_count_of_not_deleted_survey_drafts_for_user(
         user.id, session
     )

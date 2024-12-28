@@ -1,10 +1,9 @@
-from fastapi import HTTPException
 from sqlmodel import Session
 
-import src.db.crud.ring_member as ring_member_crud
-import src.db.crud.survey as survey_crud
-import src.db.crud.survey_draft as survey_draft_crud
-import src.db.crud.user as user_crud
+import src.db.crud.ring_member as ring_member_repository
+import src.db.crud.survey as survey_repository
+import src.db.crud.survey_draft as survey_draft_repository
+import src.db.crud.user as user_repository
 import src.services.utils.helpers as helpers
 from src.api.models.surveys.survey import (
     ShareSurveyActions,
@@ -34,7 +33,7 @@ PAGE_SIZE = 10
 
 def count_surveys(user_input: User, session: Session) -> int:
     user = helpers.get_user_by_email(user_input.user_email, session)
-    return survey_crud.get_count_of_not_deleted_surveys_for_user(user.id, session)
+    return survey_repository.get_count_of_not_deleted_surveys_for_user(user.id, session)
 
 
 def get_surveys_for_user(
@@ -42,19 +41,19 @@ def get_surveys_for_user(
 ) -> list[SurveyHeadersOutput]:
     helpers.validate_page_for_pagination(page)
     user = helpers.get_user_by_email(user_input.user_email, session)
-    user_surveys = survey_crud.get_all_surveys_user_can_view(
+    user_surveys = survey_repository.get_all_surveys_user_can_view(
         user.id, page * PAGE_SIZE, PAGE_SIZE, session
     )
     return [
         SurveyHeadersOutput(
-            title=survey_draft_crud.get_survey_draft_by_id(
+            title=survey_draft_repository.find_by_id(
                 survey.survey_structure_id, session
             ).title,
             survey_code=survey.survey_code,
             creation_date=survey.creation_date,
             uses_cryptographic_module=survey.uses_cryptographic_module,
             is_owned_by_user=ownership,
-            group_size=ring_member_crud.get_ring_member_count_for_survey(
+            group_size=ring_member_repository.get_ring_member_count_for_survey(
                 survey.id, session
             ),
             is_enabled=survey.is_enabled,
@@ -77,7 +76,7 @@ def get_survey_by_code(
         survey_code=survey.survey_code,
         uses_cryptographic_module=survey.uses_cryptographic_module,
         public_keys=(
-            ring_member_crud.get_public_keys_for_survey(survey.id, session)
+            ring_member_repository.get_public_keys_for_survey(survey.id, session)
             if survey.uses_cryptographic_module
             else []
         ),
@@ -89,7 +88,7 @@ def count_survey_respondents(
 ) -> int:
     survey = helpers.get_survey_by_code(respondents_fetch.survey_code, session)
     return (
-        ring_member_crud.get_ring_member_count_for_survey(survey.id, session)
+        ring_member_repository.get_ring_member_count_for_survey(survey.id, session)
         if survey.uses_cryptographic_module
         else 0
     )
@@ -101,7 +100,7 @@ def get_respondents_by_code(
     helpers.validate_page_for_pagination(page)
     survey = helpers.get_survey_by_code(respondents_fetch.survey_code, session)
     return (
-        ring_member_crud.get_ring_members_for_survey_paginated(
+        ring_member_repository.get_ring_members_for_survey_paginated(
             survey.id, page * PAGE_SIZE, PAGE_SIZE, session
         )
         if survey.uses_cryptographic_module
@@ -111,7 +110,7 @@ def get_respondents_by_code(
 
 def delete_surveys(survey_delete: SurveyUserDeleteAction, session: Session) -> None:
     user = helpers.get_user_by_email(survey_delete.user_email, session)
-    deleted_surveys = survey_crud.delete_surveys(
+    deleted_surveys = survey_repository.delete_surveys(
         user.id, survey_delete.survey_codes, session
     )
 
@@ -126,7 +125,7 @@ def create_survey(
 ) -> SurveyStructureCreateOutput:
     user = helpers.get_user_by_email(survey_create.user_email, session)
     if (
-        survey_crud.get_count_of_active_surveys_of_user(user.id, session)
+        survey_repository.get_count_of_active_surveys_of_user(user.id, session)
         >= LIMIT_OF_ACTIVE_SURVEYS
     ):
         raise LimitExceededException(
@@ -135,7 +134,7 @@ def create_survey(
 
     if (
         survey_create.uses_cryptographic_module
-        and not user_crud.all_users_exist_and_have_public_keys(
+        and not user_repository.all_exist_and_have_public_keys(
             survey_create.ring_members, session
         )
     ):
@@ -148,7 +147,7 @@ def create_survey(
     except ValueError as e:
         raise InvalidSurveyStructureException(str(e))
 
-    survey_draft = survey_draft_crud.create_survey_draft(
+    survey_draft = survey_draft_repository.create_survey_draft(
         user.id,
         survey_create.title,
         survey_create.survey_structure.model_dump_json(),
@@ -157,7 +156,7 @@ def create_survey(
     )
 
     survey_code = helpers.generate_survey_code(session)
-    survey = survey_crud.create_survey(
+    survey = survey_repository.create_survey(
         user.id,
         survey_create.uses_cryptographic_module,
         survey_draft.id,
@@ -167,9 +166,11 @@ def create_survey(
     if survey_create.uses_cryptographic_module:
         for email in survey_create.ring_members:
             public_key = helpers.get_user_by_email(email, session).public_key
-            ring_member_crud.add_ring_member(survey.id, email, public_key, session)
+            ring_member_repository.add_ring_member(
+                survey.id, email, public_key, session
+            )
 
-    survey_crud.give_survey_access(survey.id, user.id, session)
+    survey_repository.give_survey_access(survey.id, user.id, session)
     return SurveyStructureCreateOutput(survey_code=survey.survey_code)
 
 
@@ -180,12 +181,12 @@ def give_access_to_surveys(
     survey = helpers.get_survey_by_code(share_surveys_input.survey_code, session)
     helpers.check_if_user_has_access(owner.id, survey.creator_id)
 
-    if not user_crud.all_users_exist(share_surveys_input.user_emails, session):
+    if not user_repository.all_exist(share_surveys_input.user_emails, session):
         raise UserNotFoundException("Not all users are registered")
 
     for email in share_surveys_input.user_emails:
         user = helpers.get_user_by_email(email, session)
-        survey_crud.give_survey_access(survey.id, user.id, session)
+        survey_repository.give_survey_access(survey.id, user.id, session)
 
 
 def take_away_access_to_surveys(
@@ -197,11 +198,11 @@ def take_away_access_to_surveys(
 
     users = [
         user.id
-        for user in user_crud.get_users_by_emails(
+        for user in user_repository.find_by_emails(
             take_away_access_input.user_emails, session
         )
     ]
-    access_taken_from = survey_crud.take_away_survey_access(
+    access_taken_from = survey_repository.take_away_survey_access(
         owner.id, survey.id, users, session
     )
 
@@ -213,7 +214,7 @@ def reject_access_to_surveys(
     reject_access_input: SurveyUserDeleteAction, session: Session
 ) -> None:
     user = helpers.get_user_by_email(reject_access_input.user_email, session)
-    rejected_surveys = survey_crud.reject_access_to_surveys(
+    rejected_surveys = survey_repository.reject_access_to_surveys(
         user.id, reject_access_input.survey_codes, session
     )
 
@@ -230,7 +231,9 @@ def get_count_of_users_with_access(
     survey = helpers.get_survey_by_code(user_input.survey_code, session)
     helpers.check_if_user_has_access(owner.id, survey.creator_id)
 
-    return survey_crud.get_all_users_with_access_to_survey_count(survey.id, session)
+    return survey_repository.get_all_users_with_access_to_survey_count(
+        survey.id, session
+    )
 
 
 def get_all_users_without_access(
@@ -240,7 +243,7 @@ def get_all_users_without_access(
     survey = helpers.get_survey_by_code(user_input.survey_code, session)
     helpers.check_if_user_has_access(owner.id, survey.creator_id)
 
-    return survey_crud.get_all_users_with_no_access_to_survey(survey.id, session)
+    return survey_repository.get_all_users_with_no_access_to_survey(survey.id, session)
 
 
 def check_access_to_surveys(
@@ -252,8 +255,8 @@ def check_access_to_surveys(
     helpers.check_if_user_has_access(owner.id, survey.creator_id)
 
     return [
-        user_crud.get_user_by_id(access.user_id, session).email
-        for access in survey_crud.get_all_users_with_access_to_survey(
+        user_repository.find_by_id(access.user_id, session).email
+        for access in survey_repository.get_all_users_with_access_to_survey(
             survey.id, page * PAGE_SIZE, PAGE_SIZE, session
         )
     ]
@@ -266,4 +269,6 @@ def enable_or_disable_survey(
     survey = helpers.get_survey_by_code(user_input.survey_code, session)
     helpers.check_if_user_has_access(owner.id, survey.creator_id)
 
-    survey_crud.enable_or_disable_survey(survey.id, user_input.is_enabled, session)
+    survey_repository.enable_or_disable_survey(
+        survey.id, user_input.is_enabled, session
+    )

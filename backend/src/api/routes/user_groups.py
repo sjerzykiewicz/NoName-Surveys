@@ -17,7 +17,8 @@ from src.services.utils.exceptions import (
     InvalidPageNumberException,
     UserAccessException,
     UserGroupExistsException,
-    UserGroupLimitExceededException,
+    UserGroupLimitException,
+    UserGroupMemberException,
     UserGroupNotFoundException,
     UserNotFoundException,
 )
@@ -165,7 +166,8 @@ async def create_user_group(
     except (
         UserNotFoundException,
         UserGroupExistsException,
-        UserGroupLimitExceededException,
+        UserGroupLimitException,
+        UserGroupMemberException,
     ) as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -217,6 +219,7 @@ async def add_users_to_group(
         UserNotFoundException,
         UserGroupNotFoundException,
         UserAccessException,
+        UserGroupMemberException,
     ) as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -237,5 +240,6 @@ async def remove_users_from_group(
         UserNotFoundException,
         UserGroupNotFoundException,
         UserAccessException,
+        UserGroupMemberException,
     ) as e:
         raise HTTPException(status_code=400, detail=str(e))

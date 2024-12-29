@@ -2,8 +2,8 @@ from gmpy2 import mpz
 from sqlmodel import Session
 
 import src.db.crud.answer as answer_repository
-import src.db.crud.ring_member as ring_member_crud
-import src.db.crud.survey as survey_crud
+import src.db.crud.ring_member as ring_member_repository
+import src.db.crud.survey as survey_repository
 import src.services.utils.helpers as helpers
 from src.api.models.questions.question_base import Question
 from src.api.models.surveys.answer import (
@@ -27,7 +27,7 @@ def get_survey_answers_by_code(
     user = helpers.get_user_by_email(survey_fetch.user_email, session)
     survey = helpers.get_survey_by_code(survey_fetch.survey_code, session)
 
-    if not survey_crud.user_has_access_to_survey(user.id, survey.id, session):
+    if not survey_repository.user_has_access_to_survey(user.id, survey.id, session):
         raise UserAccessException("User does not have access to this survey")
 
     survey_draft = helpers.get_survey_draft_by_id(survey.survey_structure_id, session)
@@ -78,7 +78,7 @@ def save_survey_answer(survey_answer: SurveyAnswerBase, session: Session) -> dic
 
         public_keys = [
             ring_member.public_key
-            for ring_member in ring_member_crud.get_ring_members_for_survey(
+            for ring_member in ring_member_repository.get_ring_members_for_survey(
                 survey.id, session
             )
         ]

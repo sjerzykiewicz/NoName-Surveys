@@ -24,6 +24,8 @@ def test_find_by_code(session):
 
     # then
     assert survey is not None
+    assert survey.survey_code == "survey1"
+    assert survey.creator_id == user.id
 
 
 def test_find_active_by_code(session):
@@ -37,6 +39,21 @@ def test_find_active_by_code(session):
 
     # then
     assert active_survey is not None
+    assert active_survey.survey_code == "survey1"
+    assert active_survey.creator_id == user.id
+
+
+def test_find_active_by_code_negative_case(session):
+    # given
+    user = user_repository.create("test@example.com", session)
+    survey = survey_repository.create_survey(user.id, False, 1, "survey1", session)
+    survey_repository.enable_or_disable_survey(survey.id, False, session)
+
+    # when
+    active_survey = survey_repository.find_active_by_code("survey1", session)
+
+    # then
+    assert active_survey is None
 
 
 def test_delete_surveys(session):
@@ -50,18 +67,6 @@ def test_delete_surveys(session):
     # then
     assert len(surveys) == 1
     assert surveys[0].is_deleted
-
-
-def test_get_all_surveys_user_has_ownership_over(session):
-    # given
-    user = user_repository.create("test@example.com", session)
-    survey_repository.create_survey(user.id, False, 1, "survey1", session)
-
-    # when
-    surveys = survey_repository.get_all_surveys_user_has_ownership_over(user.id, session)
-
-    # then
-    assert len(surveys) == 1
 
 
 def test_get_count_of_active_surveys_of_user(session):
@@ -89,6 +94,18 @@ def test_is_code_taken(session):
     assert is_taken
 
 
+def test_is_code_taken_negative_case(session):
+    # given
+    user = user_repository.create("test@example.com", session)
+    survey_repository.create_survey(user.id, False, 1, "survey1", session)
+
+    # when
+    is_taken = survey_repository.is_code_taken("survey2", session)
+
+    # then
+    assert not is_taken
+
+
 def test_create_survey(session):
     # given
     user = user_repository.create("test@example.com", session)
@@ -114,6 +131,9 @@ def test_give_survey_access(session):
 
     # then
     assert len(surveys) == 1
+    assert not surveys[0][1]
+    assert surveys[0][0].survey_code == "survey1"
+    assert surveys[0][0].creator_id == user.id
 
 
 def test_take_away_survey_access(session):
@@ -132,6 +152,25 @@ def test_take_away_survey_access(session):
     assert len(surveys) == 1
 
 
+def test_take_away_survey_access_from_other_user(session):
+    # given
+    user = user_repository.create("test@example.com", session)
+    other_user = user_repository.create("test2@example.com", session)
+    survey = survey_repository.create_survey(user.id, False, 1, "survey1", session)
+    survey_repository.give_survey_access(survey.id, other_user.id, session)
+
+    # when
+    survey_repository.take_away_survey_access(
+        user.id, survey.id, [other_user.id], session
+    )
+    surveys = survey_repository.get_all_surveys_user_can_view(
+        other_user.id, 0, 10, session
+    )
+
+    # then
+    assert len(surveys) == 0
+
+
 def test_reject_access_to_surveys(session):
     # given
     user = user_repository.create("test@example.com", session)
@@ -146,6 +185,25 @@ def test_reject_access_to_surveys(session):
 
     # then
     assert len(surveys) == 1
+
+
+def test_reject_access_to_surveys_from_other_user(session):
+    # given
+    user = user_repository.create("test@example.com", session)
+    other_user = user_repository.create("test2@example.com", session)
+    survey = survey_repository.create_survey(user.id, False, 1, "survey1", session)
+    survey_repository.give_survey_access(survey.id, other_user.id, session)
+
+    # when
+    survey_repository.reject_access_to_surveys(
+        other_user.id, ["survey1"], session
+    )
+    surveys = survey_repository.get_all_surveys_user_can_view(
+        other_user.id, 0, 10, session
+    )
+
+    # then
+    assert len(surveys) == 0
 
 
 def test_get_all_surveys_user_can_view(session):
@@ -215,6 +273,22 @@ def test_user_has_access_to_survey(session):
 
     # then
     assert has_access
+
+
+def test_user_has_access_to_survey_negative_case(session):
+    # given
+    user = user_repository.create("test@example.com", session)
+    other_user = user_repository.create("test2@example.com", session)
+    survey = survey_repository.create_survey(user.id, False, 1, "survey1", session)
+    survey_repository.give_survey_access(survey.id, user.id, session)
+
+    # when
+    has_access = survey_repository.user_has_access_to_survey(
+        other_user.id, survey.id, session
+    )
+
+    # then
+    assert not has_access
 
 
 def test_enable_or_disable_survey(session):

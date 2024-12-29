@@ -51,18 +51,6 @@ def delete_surveys(
     return surveys
 
 
-def get_all_surveys_user_has_ownership_over(
-    user_id: int, session: Session
-) -> list[Survey]:
-    statement = (
-        select(Survey)
-        .where(Survey.creator_id == user_id)
-        .where(Survey.is_deleted == False)  # noqa: E712
-        .order_by(Survey.id.desc())
-    )
-    return session.exec(statement).all()
-
-
 def get_count_of_active_surveys_of_user(user_id: int, session: Session) -> int:
     statement = (
         select(func.count(Survey.id))

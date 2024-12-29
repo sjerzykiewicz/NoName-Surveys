@@ -87,6 +87,25 @@ def test_delete_survey_drafts(session):
     assert drafts[0].is_deleted
 
 
+def test_find_not_deleted_by_id_when_deleted(session):
+    # given
+    user = user_repository.create("test@example.com", session)
+    draft = survey_draft_repository.create_survey_draft(
+        user.id, DRAFT_NAME, DRAFT_STRUCTURE, False, session
+    )
+    survey_draft_repository.delete_survey_drafts(
+        user.id, [draft.id], session
+    )
+
+    # when
+    found_draft = survey_draft_repository.find_not_deleted_by_id(
+        draft.id, session
+    )
+
+    # then
+    assert found_draft is None
+
+
 def test_create_survey_draft(session):
     # given
     user = user_repository.create("test@example.com", session)

@@ -24,6 +24,7 @@ def test_get_all_user_groups_of_user(session):
 
     # then
     assert len(groups) == 1
+    assert groups[0].name == "Group 1"
 
 
 def test_get_user_groups(session):
@@ -38,6 +39,18 @@ def test_get_user_groups(session):
     assert len(groups) == 1
 
 
+def test_get_user_groups_out_of_range(session):
+    # given
+    user_id = 1
+    user_groups_repository.create_user_group(user_id, "Group 1", session)
+
+    # when
+    groups = user_groups_repository.get_user_groups(user_id, 10, 10, session)
+
+    # then
+    assert len(groups) == 0
+
+
 def test_find_by_name(session):
     # given
     user_id = 1
@@ -48,6 +61,7 @@ def test_find_by_name(session):
 
     # then
     assert group is not None
+    assert group.name == "Group 1"
 
 
 def test_update_user_group_name(session):
@@ -138,6 +152,7 @@ def test_get_user_group_members(session):
 
     # then
     assert len(members) == 1
+    assert members[0] == user_id
 
 
 def test_get_all_users_in_user_group(session):

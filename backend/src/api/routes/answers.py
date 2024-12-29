@@ -12,7 +12,6 @@ from src.services.utils.exceptions import (
     DuplicateAnswerException,
     InvalidSignatureException,
     InvalidSurveyStructureException,
-    SurveyDraftNotFoundException,
     SurveyNotFoundException,
     UserAccessException,
     UserNotFoundException,
@@ -35,7 +34,6 @@ async def get_survey_answers_by_code(
     except (
         UserNotFoundException,
         SurveyNotFoundException,
-        SurveyDraftNotFoundException,
         UserAccessException,
     ) as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -55,7 +53,6 @@ async def save_survey_answer(
     except (
         UserNotFoundException,
         SurveyNotFoundException,
-        UserAccessException,
         InvalidSurveyStructureException,
         DuplicateAnswerException,
         InvalidSignatureException,

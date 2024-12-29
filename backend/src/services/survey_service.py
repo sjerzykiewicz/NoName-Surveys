@@ -19,9 +19,9 @@ from src.api.models.surveys.survey import (
 )
 from src.db.models.user import User
 from src.services.utils.exceptions import (
-    InvalidFingerprintException,
     InvalidSurveyStructureException,
     LimitExceededException,
+    NotAllUsersCanParticipateInSecureSurveysException,
     SurveyNotFoundException,
     UserAccessException,
     UserNotFoundException,
@@ -138,7 +138,7 @@ def create_survey(
             survey_create.ring_members, session
         )
     ):
-        raise InvalidFingerprintException(
+        raise NotAllUsersCanParticipateInSecureSurveysException(
             "Not all users are registered or have public keys created"
         )
 

@@ -43,15 +43,18 @@ def test_create_user_duplicate(mock_get_user_by_email, session):
     mock_get_user_by_email.assert_called_once_with("test@example.com", session)
 
 
+@patch("src.services.user_service.fingerprint_verification.verify")
 @patch("src.services.user_service.user_repository.update_public_key")
-@patch("src.services.user_service.get_user_by_email")
-def test_update_user_public_key(mock_get_user_by_email, mock_update_public_key, session):
+@patch("src.services.user_service.helpers.get_user_by_email")
+def test_update_user_public_key(mock_get_user_by_email, mock_update_public_key,
+                                mock_verify, session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
+    mock_verify.return_value = True
     mock_update_public_key.return_value = MagicMock()
 
     # when
-    user = update_user_public_key(1, "new_public_key", session)
+    user = update_user_public_key("test@example.com", "new_public_key", "12345", session)
 
     # then
     mock_update_public_key.assert_called_once_with(1, "new_public_key", session)
@@ -130,7 +133,7 @@ def test_get_users_with_public_keys_by_emails(mock_find_with_public_keys_by_emai
     assert len(users) == 2
 
 
-@patch("src.services.user_service.helpers_get_user_by_email")
+@patch("src.services.user_service.helpers.get_user_by_email")
 def test_get_user_by_email_helper(mock_helpers_get_user_by_email, session):
     # given
     mock_helpers_get_user_by_email.return_value = MagicMock()

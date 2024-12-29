@@ -67,7 +67,7 @@ async def get_survey_draft(
 
 @router.post(
     "/delete",
-    response_description="Delete a survey draft",
+    response_description="Delete survey drafts",
     response_model=dict,
 )
 async def delete_survey_drafts(
@@ -78,7 +78,7 @@ async def delete_survey_drafts(
         service.delete_survey_drafts(
             survey_draft_delete.user_email, survey_draft_delete.ids, session
         )
-        return {"message": "Survey Draft deleted successfully"}
+        return {"message": "Survey Drafts deleted successfully"}
     except (UserNotFoundException, SurveyDraftNotFoundException) as e:
         raise HTTPException(status_code=400, detail=str(e))
 

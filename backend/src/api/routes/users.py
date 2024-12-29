@@ -9,9 +9,12 @@ from src.api.models.users.user import (  # noqa
     UserFilterOthers,
     UserUpdatePublicKey,
 )
-from src.cryptography.fingerprint import verify
 from src.db.base import get_session
-from src.services.utils.exceptions import DuplicateUserException, UserNotFoundException
+from src.services.utils.exceptions import (
+    DuplicateUserException,
+    InvalidFingerprintException,
+    UserNotFoundException,
+)
 
 router = APIRouter()
 
@@ -36,10 +39,7 @@ async def get_users_with_keys(session: Session = Depends(get_session)):
 
 @router.post("/validate", response_description="Validate a user", response_model=bool)
 async def does_user_exist(user_create: User, session: Session = Depends(get_session)):
-    try:
-        return service.get_user_by_email(user_create.user_email, session) is not None
-    except UserNotFoundException as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    return service.get_user_by_email(user_create.user_email, session) is not None
 
 
 @router.post(
@@ -94,20 +94,14 @@ async def update_user_public_key(
     session: Session = Depends(get_session),
 ):
     try:
-        user = service.get_user_by_email_helper(
-            update_user_public_key.user_email, session
+        service.update_user_public_key(
+            update_user_public_key.user_email,
+            update_user_public_key.public_key,
+            update_user_public_key.fingerprint,
+            session,
         )
-    except UserNotFoundException as e:
+    except (UserNotFoundException, InvalidFingerprintException) as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-    if not verify(
-        update_user_public_key.public_key, update_user_public_key.fingerprint
-    ):
-        raise HTTPException(
-            status_code=400, detail="Invalid fingerprint. Please try again"
-        )
-
-    service.update_user_public_key(user.id, update_user_public_key.public_key, session)
 
     return {"message": "User's public key updated successfully"}
 

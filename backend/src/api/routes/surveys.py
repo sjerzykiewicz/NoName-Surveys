@@ -16,11 +16,10 @@ from src.api.models.surveys.survey import (
 from src.api.models.users.user import User
 from src.db.base import get_session
 from src.services.utils.exceptions import (
-    InvalidFingerprintException,
     InvalidPageNumberException,
     InvalidSurveyStructureException,
     LimitExceededException,
-    SurveyDraftNotFoundException,
+    NotAllUsersCanParticipateInSecureSurveysException,
     SurveyNotFoundException,
     UserAccessException,
     UserNotFoundException,
@@ -64,7 +63,7 @@ async def get_survey_by_code(
 ):
     try:
         return service.get_survey_by_code(survey_fetch, session)
-    except (SurveyNotFoundException, SurveyDraftNotFoundException) as e:
+    except SurveyNotFoundException as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
@@ -123,7 +122,7 @@ async def create_survey(
     except (
         UserNotFoundException,
         LimitExceededException,
-        InvalidFingerprintException,
+        NotAllUsersCanParticipateInSecureSurveysException,
         InvalidSurveyStructureException,
     ) as e:
         raise HTTPException(status_code=400, detail=str(e))

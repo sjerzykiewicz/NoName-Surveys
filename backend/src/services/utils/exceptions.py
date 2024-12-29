@@ -34,6 +34,10 @@ class InvalidFingerprintException(Exception):
     pass
 
 
+class NotAllUsersCanParticipateInSecureSurveysException(Exception):
+    pass
+
+
 class UserGroupExistsException(Exception):
     pass
 

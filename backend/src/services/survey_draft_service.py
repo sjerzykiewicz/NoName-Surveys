@@ -25,11 +25,11 @@ def get_survey_drafts(
 
     return [
         SurveyDraftHeadersOutput(
-            id=survey_draft.id,
-            title=survey_draft.title,
-            creation_date=survey_draft.creation_date,
+            id=draft.id,
+            title=draft.title,
+            creation_date=draft.creation_date,
         )
-        for survey_draft in survey_draft_repository.get_not_deleted_survey_drafts_for_user(
+        for draft in survey_draft_repository.get_not_deleted_survey_drafts_for_user(
             user.id, page * PAGE_SIZE, PAGE_SIZE, session
         )
     ]
@@ -70,7 +70,7 @@ def create_survey_draft(
     )
     if survey_drafts_count >= LIMIT_OF_ACTIVE_SURVEY_DRAFTS:
         raise LimitExceededException(
-            f"User cannot have more than {LIMIT_OF_ACTIVE_SURVEY_DRAFTS} active survey drafts"
+            f"User cannot have more than {LIMIT_OF_ACTIVE_SURVEY_DRAFTS} active drafts"
         )
 
     try:

@@ -26,9 +26,14 @@ def test_get_survey_answers_by_code(
     mock_user_has_access_to_survey.return_value = True
     mock_get_survey_draft_by_id.return_value = MagicMock(title="Survey 1")
     mock_find_by_survey_id.return_value = [
-        MagicMock(answer='{"survey_code": "123456", "questions": [{"question_type": "binary", "required": true, "answer": "Yes", "question": "Is this a test?", "choices": ["Yes", "No"]}]}')
+        MagicMock(answer='{"survey_code": "123456", "questions": '
+                  '[{"question_type": "binary", '
+                  '"required": true, "answer": "Yes", "question": "Is this a test?", '
+                  '"choices": ["Yes", "No"]}]}')
     ]
-    survey_fetch = SurveyAnswersFetchInput(user_email="test@example.com", survey_code="123456")
+    survey_fetch = SurveyAnswersFetchInput(
+        user_email="test@example.com", survey_code="123456"
+    )
 
     # when
     answers = get_survey_answers_by_code(survey_fetch, session)
@@ -61,16 +66,22 @@ def test_save_survey_answer(
     session,
 ):
     # given
-    mock_get_active_survey_by_code.return_value = MagicMock(id=1, uses_cryptographic_module=True, survey_structure_id=1)
+    mock_get_active_survey_by_code.return_value = MagicMock(
+        id=1, uses_cryptographic_module=True, survey_structure_id=1
+    )
     mock_is_signature_present.return_value = False
     mock_get_ring_members_for_survey.return_value = [MagicMock(public_key="key1")]
     mock_verify_lrs.return_value = True
     mock_get_survey_draft_by_id.return_value = MagicMock(
-        survey_structure='{"questions": [{"question_type": "binary", "required": true, "question": "Is this a test?", "choices": ["Yes", "No"]}]}'
+        survey_structure='{"questions": [{"question_type": "binary", "required": true, '
+                         '"question": "Is this a test?", "choices": ["Yes", "No"]}]}'
     )
     survey_answer = SurveyAnswerBase(
         survey_code="123456",
-        questions=[BinaryQuestion(question="Is this a test?", required=True, choices=["Yes", "No"], answer="Yes")],
+        questions=[BinaryQuestion(
+            question="Is this a test?", required=True, choices=["Yes", "No"], answer="Yes"
+            )
+        ],
         signature=["1234"],
     )
 

@@ -18,7 +18,8 @@ from src.services.user_group_service import (
 
 @patch("src.services.user_group_service.helpers.get_user_by_email")
 @patch("src.services.user_group_service.user_groups_repository.get_count_of_user_groups_of_user")
-def test_get_user_groups_count(mock_get_count_of_user_groups_of_user, mock_get_user_by_email, session):
+def test_get_user_groups_count(mock_get_count_of_user_groups_of_user,
+                               mock_get_user_by_email, session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_get_count_of_user_groups_of_user.return_value = 5
@@ -35,7 +36,8 @@ def test_get_user_groups_count(mock_get_count_of_user_groups_of_user, mock_get_u
 @patch("src.services.user_group_service.helpers.get_user_by_email")
 @patch("src.services.user_group_service.user_groups_repository.get_user_groups")
 @patch("src.services.user_group_service.user_repository.all_have_public_keys")
-def test_get_user_groups(mock_all_have_public_keys, mock_get_user_groups, mock_get_user_by_email, session):
+def test_get_user_groups(mock_all_have_public_keys, mock_get_user_groups,
+                         mock_get_user_by_email, session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_get_user_groups.return_value = [
@@ -62,7 +64,9 @@ def test_get_user_groups(mock_all_have_public_keys, mock_get_user_groups, mock_g
 @patch("src.services.user_group_service.helpers.get_user_by_email")
 @patch("src.services.user_group_service.user_groups_repository.get_all_user_groups_of_user")
 @patch("src.services.user_group_service.user_repository.all_have_public_keys")
-def test_get_user_groups_with_members_having_public_keys(mock_all_have_public_keys, mock_get_all_user_groups_of_user, mock_get_user_by_email, session):
+def test_get_user_groups_with_members_having_public_keys(mock_all_have_public_keys,
+                                                         mock_get_all_user_groups_of_user,
+                                                         mock_get_user_by_email, session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_get_all_user_groups_of_user.return_value = [
@@ -74,7 +78,9 @@ def test_get_user_groups_with_members_having_public_keys(mock_all_have_public_ke
     mock_all_have_public_keys.side_effect = [True, False]
 
     # when
-    user_groups = get_user_groups_with_members_having_public_keys("test@example.com", session)
+    user_groups = get_user_groups_with_members_having_public_keys(
+        "test@example.com",session
+    )
 
     # then
     mock_get_user_by_email.assert_called_once_with("test@example.com", session)
@@ -87,7 +93,10 @@ def test_get_user_groups_with_members_having_public_keys(mock_all_have_public_ke
 @patch("src.services.user_group_service.user_groups_repository.get_user_group_members_count")
 @patch("src.services.user_group_service.helpers.get_user_group_by_name")
 @patch("src.services.user_group_service.helpers.check_if_user_has_access")
-def test_get_user_group_members_count(mock_check_if_user_has_access, mock_get_user_group_by_name, mock_get_user_group_members_count, mock_get_user_by_email, session):
+def test_get_user_group_members_count(mock_check_if_user_has_access,
+                                      mock_get_user_group_by_name,
+                                      mock_get_user_group_members_count,
+                                      mock_get_user_by_email, session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_get_user_group_by_name.return_value = MagicMock(id=1, creator_id=1)
@@ -108,20 +117,23 @@ def test_get_user_group_members_count(mock_check_if_user_has_access, mock_get_us
 
 
 @patch("src.services.user_group_service.helpers.get_user_by_email")
-@patch("src.services.user_group_service.user_groups_repository.get_all_users_who_are_not_members_of_user_group")
+@patch("src.services.user_group_service.user_groups_repository.get_all_users_who_are_not_members")
 @patch("src.services.user_group_service.helpers.get_user_group_by_name")
 @patch("src.services.user_group_service.helpers.check_if_user_has_access")
-def test_get_users_who_are_not_members(mock_check_if_user_has_access, mock_get_user_group_by_name, mock_get_all_users_who_are_not_members_of_user_group, mock_get_user_by_email, session):
+def test_get_users_who_are_not_members(mock_check_if_user_has_access,
+                                       mock_get_user_group_by_name,
+                                       mock_get_all_users_who_are_not_members,
+                                       mock_get_user_by_email, session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_get_user_group_by_name.return_value = MagicMock(id=1, creator_id=1)
     mock_check_if_user_has_access.return_value = True
-    mock_get_all_users_who_are_not_members_of_user_group.return_value = [
+    mock_get_all_users_who_are_not_members.return_value = [
         MagicMock(email="user1@example.com"),
         MagicMock(email="user2@example.com")
     ]
-    mock_get_all_users_who_are_not_members_of_user_group.return_value[0].email ="user1@example.com"
-    mock_get_all_users_who_are_not_members_of_user_group.return_value[1].email ="user2@example.com"
+    mock_get_all_users_who_are_not_members.return_value[0].email = "user1@example.com"
+    mock_get_all_users_who_are_not_members.return_value[1].email = "user2@example.com"
     user_group_request = MagicMock(user_email="test@example.com", name="Group 1")
     user_group_request.user_email = "test@example.com"
     user_group_request.name = "Group 1"
@@ -133,7 +145,7 @@ def test_get_users_who_are_not_members(mock_check_if_user_has_access, mock_get_u
     mock_get_user_by_email.assert_called_once_with("test@example.com", session)
     mock_get_user_group_by_name.assert_called_once_with(1, "Group 1", session)
     mock_check_if_user_has_access.assert_called_once_with(1, 1)
-    mock_get_all_users_who_are_not_members_of_user_group.assert_called_once_with(1, session)
+    mock_get_all_users_who_are_not_members.assert_called_once_with(1, session)
     assert len(users) == 2
     assert users[0] == "user1@example.com"
     assert users[1] == "user2@example.com"
@@ -143,7 +155,9 @@ def test_get_users_who_are_not_members(mock_check_if_user_has_access, mock_get_u
 @patch("src.services.user_group_service.user_groups_repository.get_all_users_in_user_group")
 @patch("src.services.user_group_service.helpers.get_user_group_by_name")
 @patch("src.services.user_group_service.helpers.check_if_user_has_access")
-def test_get_whole_user_group(mock_check_if_user_has_access, mock_get_user_group_by_name, mock_get_all_users_in_user_group, mock_get_user_by_email, session):
+def test_get_whole_user_group(mock_check_if_user_has_access, mock_get_user_group_by_name,
+                              mock_get_all_users_in_user_group, mock_get_user_by_email,
+                              session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_get_user_group_by_name.return_value = MagicMock(id=1, creator_id=1)
@@ -176,7 +190,9 @@ def test_get_whole_user_group(mock_check_if_user_has_access, mock_get_user_group
 @patch("src.services.user_group_service.user_groups_repository.get_user_group_members_paginated")
 @patch("src.services.user_group_service.helpers.get_user_group_by_name")
 @patch("src.services.user_group_service.helpers.check_if_user_has_access")
-def test_get_user_group(mock_check_if_user_has_access, mock_get_user_group_by_name, mock_get_user_group_members_paginated, mock_get_user_by_email, session):
+def test_get_user_group(mock_check_if_user_has_access, mock_get_user_group_by_name,
+                        mock_get_user_group_members_paginated, mock_get_user_by_email,
+                        session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_get_user_group_by_name.return_value = MagicMock(id=1, creator_id=1)
@@ -212,7 +228,11 @@ def test_get_user_group(mock_check_if_user_has_access, mock_get_user_group_by_na
 @patch("src.services.user_group_service.user_groups_repository.find_by_name")
 @patch("src.services.user_group_service.user_repository.find_by_emails")
 @patch("src.services.user_group_service.user_groups_repository.add_users_to_group")
-def test_create_user_group(mock_add_users_to_group, mock_find_by_emails, mock_find_by_name, mock_all_exist, mock_get_count_of_user_groups_of_user, mock_create_user_group, mock_get_user_by_email, session):
+def test_create_user_group(mock_add_users_to_group, mock_find_by_emails,
+                           mock_find_by_name, mock_all_exist,
+                           mock_get_count_of_user_groups_of_user,
+                           mock_create_user_group, mock_get_user_by_email,
+                           session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_get_count_of_user_groups_of_user.return_value = 0
@@ -231,10 +251,14 @@ def test_create_user_group(mock_add_users_to_group, mock_find_by_emails, mock_fi
     # then
     mock_get_user_by_email.assert_called_once_with("test@example.com", session)
     mock_get_count_of_user_groups_of_user.assert_called_once_with(1, session)
-    mock_all_exist.assert_called_once_with(["user1@example.com", "user2@example.com"], session)
+    mock_all_exist.assert_called_once_with(
+        ["user1@example.com", "user2@example.com"], session
+    )
     mock_find_by_name.assert_called_once_with(1, "Group 1", session)
     mock_create_user_group.assert_called_once_with(1, "Group 1", session)
-    mock_find_by_emails.assert_called_once_with(["user1@example.com", "user2@example.com"], session)
+    mock_find_by_emails.assert_called_once_with(
+        ["user1@example.com", "user2@example.com"], session
+    )
     mock_add_users_to_group.assert_called_once_with(1, [2, 3], session)
 
 
@@ -243,7 +267,9 @@ def test_create_user_group(mock_add_users_to_group, mock_find_by_emails, mock_fi
 @patch("src.services.user_group_service.user_groups_repository.update_user_group_name")
 @patch("src.services.user_group_service.helpers.get_user_group_by_name")
 @patch("src.services.user_group_service.helpers.check_if_user_has_access")
-def test_rename_user_group(mock_check_if_user_has_access, mock_get_user_group_by_name, mock_update_user_group_name, mock_find_by_name, mock_get_user_by_email, session):
+def test_rename_user_group(mock_check_if_user_has_access, mock_get_user_group_by_name,
+                           mock_update_user_group_name, mock_find_by_name,
+                           mock_get_user_by_email, session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_find_by_name.side_effect = [None, MagicMock(id=2)]
@@ -270,7 +296,9 @@ def test_rename_user_group(mock_check_if_user_has_access, mock_get_user_group_by
 def test_delete_user_groups(mock_delete_user_groups, mock_get_user_by_email, session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
-    mock_delete_user_groups.return_value = [MagicMock(name="Group 1"), MagicMock(name="Group 2")]
+    mock_delete_user_groups.return_value = [
+        MagicMock(name="Group 1"), MagicMock(name="Group 2")
+    ]
     user_group_request = MagicMock(user_email="test@example.com")
     user_group_request.names = ["Group 1", "Group 2"]
 
@@ -287,7 +315,9 @@ def test_delete_user_groups(mock_delete_user_groups, mock_get_user_by_email, ses
 @patch("src.services.user_group_service.user_repository.find_by_emails")
 @patch("src.services.user_group_service.helpers.get_user_group_by_name")
 @patch("src.services.user_group_service.helpers.check_if_user_has_access")
-def test_add_users_to_group(mock_check_if_user_has_access, mock_get_user_group_by_name, mock_find_by_emails, mock_add_users_to_group, mock_get_user_by_email, session):
+def test_add_users_to_group(mock_check_if_user_has_access, mock_get_user_group_by_name,
+                            mock_find_by_emails, mock_add_users_to_group,
+                            mock_get_user_by_email, session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_get_user_group_by_name.return_value = MagicMock(id=1, creator_id=1)
@@ -305,7 +335,9 @@ def test_add_users_to_group(mock_check_if_user_has_access, mock_get_user_group_b
     mock_get_user_by_email.assert_called_once_with("test@example.com", session)
     mock_get_user_group_by_name.assert_called_once_with(1, "Group 1", session)
     mock_check_if_user_has_access.assert_called_once_with(1, 1)
-    mock_find_by_emails.assert_called_once_with(["user1@example.com", "user2@example.com"], session)
+    mock_find_by_emails.assert_called_once_with(
+        ["user1@example.com", "user2@example.com"], session
+    )
     mock_add_users_to_group.assert_called_once_with(1, [2, 3], session)
 
 
@@ -314,7 +346,10 @@ def test_add_users_to_group(mock_check_if_user_has_access, mock_get_user_group_b
 @patch("src.services.user_group_service.user_repository.find_by_emails")
 @patch("src.services.user_group_service.helpers.get_user_group_by_name")
 @patch("src.services.user_group_service.helpers.check_if_user_has_access")
-def test_remove_users_from_group(mock_check_if_user_has_access, mock_get_user_group_by_name, mock_find_by_emails, mock_remove_users_from_group, mock_get_user_by_email, session):
+def test_remove_users_from_group(mock_check_if_user_has_access,
+                                 mock_get_user_group_by_name, mock_find_by_emails,
+                                 mock_remove_users_from_group, mock_get_user_by_email,
+                                 session):
     # given
     mock_get_user_by_email.return_value = MagicMock(id=1)
     mock_get_user_group_by_name.return_value = MagicMock(id=1, creator_id=1)
@@ -332,5 +367,7 @@ def test_remove_users_from_group(mock_check_if_user_has_access, mock_get_user_gr
     mock_get_user_by_email.assert_called_once_with("test@example.com", session)
     mock_get_user_group_by_name.assert_called_once_with(1, "Group 1", session)
     mock_check_if_user_has_access.assert_called_once_with(1, 1)
-    mock_find_by_emails.assert_called_once_with(["user1@example.com", "user2@example.com"], session)
+    mock_find_by_emails.assert_called_once_with(
+        ["user1@example.com", "user2@example.com"], session
+    )
     mock_remove_users_from_group.assert_called_once_with(1, [2, 3], session)

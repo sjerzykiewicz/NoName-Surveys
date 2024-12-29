@@ -106,20 +106,27 @@ def test_get_users_by_emails(mock_find_by_emails, session):
     users = get_users_by_emails(["test1@example.com", "test2@example.com"], session)
 
     # then
-    mock_find_by_emails.assert_called_once_with(["test1@example.com", "test2@example.com"], session)
+    mock_find_by_emails.assert_called_once_with(
+        ["test1@example.com", "test2@example.com"], session
+    )
     assert len(users) == 2
 
 
 @patch("src.services.user_service.user_repository.find_with_public_keys_by_emails")
-def test_get_users_with_public_keys_by_emails(mock_find_with_public_keys_by_emails, session):
+def test_get_users_with_public_keys_by_emails(mock_find_with_public_keys_by_emails,
+                                              session):
     # given
     mock_find_with_public_keys_by_emails.return_value = [MagicMock(), MagicMock()]
 
     # when
-    users = get_users_with_public_keys_by_emails(["test1@example.com", "test2@example.com"], session)
+    users = get_users_with_public_keys_by_emails(
+        ["test1@example.com", "test2@example.com"], session
+    )
 
     # then
-    mock_find_with_public_keys_by_emails.assert_called_once_with(["test1@example.com", "test2@example.com"], session)
+    mock_find_with_public_keys_by_emails.assert_called_once_with(
+        ["test1@example.com", "test2@example.com"], session
+    )
     assert len(users) == 2
 
 

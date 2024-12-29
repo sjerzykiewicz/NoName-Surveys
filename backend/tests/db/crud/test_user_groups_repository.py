@@ -56,7 +56,9 @@ def test_update_user_group_name(session):
     group = user_groups_repository.create_user_group(user_id, "Group 1", session)
 
     # when
-    updated_group = user_groups_repository.update_user_group_name(group.id, "New Group Name", session)
+    updated_group = user_groups_repository.update_user_group_name(
+        group.id, "New Group Name", session
+    )
 
     # then
     assert updated_group.name == "New Group Name"
@@ -159,7 +161,9 @@ def test_get_user_group_members_paginated(session):
     user_groups_repository.add_users_to_group(group.id, [user.id], session)
 
     # when
-    users = user_groups_repository.get_user_group_members_paginated(group.id, 0, 10, session)
+    users = user_groups_repository.get_user_group_members_paginated(
+        group.id, 0, 10, session
+    )
 
     # then
     assert len(users) == 1
@@ -171,7 +175,9 @@ def test_get_all_users_who_are_not_members_of_user_group(session):
     group = user_groups_repository.create_user_group(user_id, "Group 1", session)
 
     # when
-    users = user_groups_repository.get_all_users_who_are_not_members_of_user_group(group.id, session)
+    users = user_groups_repository.get_all_users_who_are_not_members(
+        group.id, session
+    )
 
     # then
     assert len(users) == 0

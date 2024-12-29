@@ -84,7 +84,7 @@ def get_users_who_are_not_members(
     helpers.check_if_user_has_access(user.id, user_group.creator_id)
     return [
         user.email
-        for user in user_groups_repository.get_all_users_who_are_not_members_of_user_group(
+        for user in user_groups_repository.get_all_users_who_are_not_members(
             user_group.id, session
         )
     ]

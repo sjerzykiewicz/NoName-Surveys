@@ -1,4 +1,3 @@
-
 import src.db.crud.survey as survey_repository
 import src.db.crud.user as user_repository
 
@@ -109,7 +108,9 @@ def test_give_survey_access(session):
 
     # when
     survey_repository.give_survey_access(survey.id, other_user.id, session)
-    surveys = survey_repository.get_all_surveys_user_can_view(other_user.id, 0, 10, session)
+    surveys = survey_repository.get_all_surveys_user_can_view(
+        other_user.id, 0, 10, session
+    )
 
     # then
     assert len(surveys) == 1
@@ -122,7 +123,9 @@ def test_take_away_survey_access(session):
     survey_repository.give_survey_access(survey.id, user.id, session)
 
     # when
-    survey_repository.take_away_survey_access(user.id, survey.id, [user.id], session)
+    survey_repository.take_away_survey_access(
+        user.id, survey.id, [user.id], session
+    )
     surveys = survey_repository.get_all_surveys_user_can_view(user.id, 0, 10, session)
 
     # then
@@ -136,7 +139,9 @@ def test_reject_access_to_surveys(session):
     survey_repository.give_survey_access(survey.id, user.id, session)
 
     # when
-    survey_repository.reject_access_to_surveys(user.id, ["survey1"], session)
+    survey_repository.reject_access_to_surveys(
+        user.id, ["survey1"], session
+    )
     surveys = survey_repository.get_all_surveys_user_can_view(user.id, 0, 10, session)
 
     # then
@@ -163,7 +168,9 @@ def test_get_all_users_with_access_to_survey_count(session):
     survey_repository.give_survey_access(survey.id, user.id, session)
 
     # when
-    count = survey_repository.get_all_users_with_access_to_survey_count(survey.id, session)
+    count = survey_repository.get_all_users_with_access_to_survey_count(
+        survey.id, session
+    )
 
     # then
     assert count == 1
@@ -189,7 +196,9 @@ def test_get_all_users_with_access_to_survey(session):
     survey_repository.give_survey_access(survey.id, user.id, session)
 
     # when
-    accesses = survey_repository.get_all_users_with_access_to_survey(survey.id, 0, 10, session)
+    accesses = survey_repository.get_all_users_with_access_to_survey(
+        survey.id, 0, 10, session
+    )
 
     # then
     assert len(accesses) == 1

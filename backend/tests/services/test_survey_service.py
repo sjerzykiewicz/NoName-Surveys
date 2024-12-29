@@ -1,7 +1,6 @@
 from unittest.mock import MagicMock, patch
 from datetime import datetime
 
-from tests.common_values import TEST_SURVEY_STRUCTURE
 
 from src.services.survey_service import (
     count_surveys,

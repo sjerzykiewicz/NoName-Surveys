@@ -8,7 +8,7 @@ def test_validate_page_for_pagination_negative_number():
     page = -1
 
     # when & then
-    with raises(InvalidPageNumberException) as exception:
+    with raises(InvalidPageNumberException):
         helpers.validate_page_for_pagination(page)
 
 

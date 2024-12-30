@@ -16,7 +16,7 @@ def get_count_of_not_deleted_surveys_for_user(user_id: int, session: Session) ->
     return session.exec(statement).one()
 
 
-def get_survey_by_code(survey_code: str, session: Session) -> Survey:
+def find_by_code(survey_code: str, session: Session) -> Survey:
     statement = (
         select(Survey)
         .where(Survey.survey_code == survey_code)
@@ -25,7 +25,7 @@ def get_survey_by_code(survey_code: str, session: Session) -> Survey:
     return session.exec(statement).first()
 
 
-def get_active_survey_by_code(survey_code: str, session: Session) -> Survey:
+def find_active_by_code(survey_code: str, session: Session) -> Survey:
     statement = (
         select(Survey)
         .where(Survey.survey_code == survey_code)
@@ -51,18 +51,6 @@ def delete_surveys(
     return surveys
 
 
-def get_all_surveys_user_has_ownership_over(
-    user_id: int, session: Session
-) -> list[Survey]:
-    statement = (
-        select(Survey)
-        .where(Survey.creator_id == user_id)
-        .where(Survey.is_deleted == False)  # noqa: E712
-        .order_by(Survey.id.desc())
-    )
-    return session.exec(statement).all()
-
-
 def get_count_of_active_surveys_of_user(user_id: int, session: Session) -> int:
     statement = (
         select(func.count(Survey.id))
@@ -72,7 +60,7 @@ def get_count_of_active_surveys_of_user(user_id: int, session: Session) -> int:
     return session.exec(statement).one()
 
 
-def survey_code_taken(survey_code: str, session: Session) -> bool:
+def is_code_taken(survey_code: str, session: Session) -> bool:
     statement = (
         select(Survey)
         .where(Survey.survey_code == survey_code)

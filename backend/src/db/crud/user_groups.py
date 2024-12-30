@@ -39,7 +39,7 @@ def get_user_groups(
     return session.exec(statement).all()
 
 
-def get_user_group_by_name(user_id: int, name: str, session: Session) -> UserGroup:
+def find_by_name(user_id: int, name: str, session: Session) -> UserGroup:
     statement = (
         select(UserGroup)
         .where(UserGroup.creator_id == user_id)
@@ -173,7 +173,7 @@ def get_user_group_members_paginated(
     return session.exec(statement).all()
 
 
-def get_all_users_who_are_not_members_of_user_group(
+def get_all_users_who_are_not_members(
     user_group_id: int, session: Session
 ) -> list[User]:
     statement = (

@@ -184,7 +184,7 @@ def test_save_survey_answer_public_survey_wrong_answer_structure(client: TestCli
     assert response.status_code == 400
 
 
-def test_save_survey_answer_public_survey(client: TestClient):
+def test_save_survey_answer_public_survey_when_survey_disabled(client: TestClient):
     # given
     create_user(client, TEST_VALID_USER_EMAIL_1)
     create_survey_response = create_survey(client, TEST_VALID_USER_EMAIL_1)

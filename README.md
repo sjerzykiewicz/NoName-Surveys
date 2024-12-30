@@ -25,9 +25,9 @@ You are free to use, modify, and host your own instance of the platform. Setup i
   - [Linkable Ring Signature](#linkable-ring-signature)
 - [Additional Information](#-additional-information)
 - [Administrator's Guide](#-administrators-guide)
-  - [Dependencies](#-dependencies)
-  - [Environment Variables](#-environment-variables)
-  - [Setup](#-setup)
+  - [Dependencies](#1%EF%B8%8F⃣-%EF%B8%8F-dependencies)
+  - [Environment Variables](#2%EF%B8%8F⃣--environment-variables)
+  - [Setup](#3%EF%B8%8F⃣--setup)
 
 ---
 

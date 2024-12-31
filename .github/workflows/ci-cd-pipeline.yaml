@@ -27,6 +27,17 @@ jobs:
           docker build . --file Dockerfile --tag noname-surveys-backend:latest
           docker run -d -e TESTING=true -p 8000:8000 --name noname-surveys-backend noname-surveys-backend:latest
 
+      - name: Wait for backend to be ready
+        run: |
+          for i in {1..30}; do
+            if curl -s http://localhost:8000/docs; then
+              echo "Backend is up!"
+              break
+            fi
+            echo "Waiting for backend to be ready..."
+            sleep 5
+          done
+
       - name: Add test data
         working-directory: ./backend
         run: |

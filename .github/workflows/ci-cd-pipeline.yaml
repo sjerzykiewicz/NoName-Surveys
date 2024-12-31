@@ -27,6 +27,11 @@ jobs:
           docker build . --file Dockerfile --tag noname-surveys-backend:latest
           docker run -d -p 8000:8000 --name noname-surveys-backend noname-surveys-backend:latest
 
+      - name: Add test data
+        working-directory: ./backend
+        run: |
+          source scripts/test_data.sh
+
       - name: Install dependencies
         run: npm ci
 

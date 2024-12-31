@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { env } from '$env/dynamic/private';
+
+const SURVEY_CODE = process.env.SURVEY_CODE;
 
 test('disallows nondigit code', async ({ page }) => {
 	await page.goto('/');
@@ -30,7 +31,7 @@ test('warns about nonexistent survey', async ({ page }) => {
 
 test('check existent survey', async ({ page }) => {
 	await page.goto('/');
-	await page.getByTitle('Enter a survey code to fill it out').fill(env.SURVEY_CODE as string);
+	await page.getByTitle('Enter a survey code to fill it out').fill(SURVEY_CODE as string);
 	await page.getByTitle('Submit the code').click();
 
 	await expect(page.getByTitle('Ok')).toBeVisible();

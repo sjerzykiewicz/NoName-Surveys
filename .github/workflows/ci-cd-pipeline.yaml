@@ -30,6 +30,7 @@ jobs:
       - name: Add test data
         working-directory: ./backend
         run: |
+          echo "TESTING=true" >> .env
           source scripts/test_data.sh
 
       - name: Install dependencies

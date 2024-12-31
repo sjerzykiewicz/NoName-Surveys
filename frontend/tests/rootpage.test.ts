@@ -34,5 +34,5 @@ test('check existent survey', async ({ page }) => {
 	await page.getByTitle('Enter a survey code to fill it out').fill(SURVEY_CODE as string);
 	await page.getByTitle('Submit the code').click();
 
-	await expect(page.getByTitle('Ok')).toBeVisible();
+	await expect(page.getByTitle('Survey Title')).toBeVisible();
 });

@@ -38,11 +38,6 @@ jobs:
             sleep 5
           done
 
-      - name: Add test data
-        working-directory: ./backend
-        run: |
-          source scripts/test_data.sh
-
       - name: Install dependencies
         run: npm ci
 
@@ -55,7 +50,9 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: |
+          source ../backend/scripts/test_data.sh
+          npx playwright test
 
   test-backend:
     timeout-minutes: 60

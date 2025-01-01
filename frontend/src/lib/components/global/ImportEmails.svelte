@@ -117,7 +117,9 @@
 			<div title="" class="tooltip hoverable">
 				<i class="symbol">help</i>
 				<span class="tooltip-text {innerWidth <= $M ? 'bottom' : 'right'}">
-					<Tx html="example_csv" /><a href="/account/faq#import-users"><Tx text="help" /></a>
+					<Tx text="csv_tooltip" /><a href="/account/faq#import-users"><Tx text="help" /></a><Tx
+						html="csv_example"
+					/>
 				</span>
 			</div>
 		</div>

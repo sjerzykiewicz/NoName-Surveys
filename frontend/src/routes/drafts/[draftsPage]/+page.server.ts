@@ -25,29 +25,44 @@ export const load: PageServerLoad = async ({ parent, params, fetch }) => {
 		creation_date: string;
 	}[] = await draftsResponse.json();
 
-	const draftCountResponse = await fetch(`/api/surveys/drafts/count`);
-	if (!draftCountResponse.ok) {
-		error(draftCountResponse.status, { message: await draftCountResponse.json() });
-	}
-	const numDrafts: number = await draftCountResponse.json();
+	try {
+		const [draftCountResponse, surveyCountResponse, groupsResponse, usersResponse] =
+			await Promise.all([
+				fetch(`/api/surveys/drafts/count`),
+				fetch(`/api/surveys/count`),
+				fetch(`/api/groups/all-with-public-keys`),
+				fetch(`/api/users/all-with-public-keys`)
+			]);
 
-	const surveyCountResponse = await fetch(`/api/surveys/count`);
-	if (!surveyCountResponse.ok) {
-		error(surveyCountResponse.status, { message: await surveyCountResponse.json() });
-	}
-	const numSurveys: number = await surveyCountResponse.json();
+		if (!draftCountResponse.ok) {
+			throw error(draftCountResponse.status, { message: await draftCountResponse.json() });
+		}
+		const numDrafts: number = await draftCountResponse.json();
 
-	const groupsResponse = await fetch(`/api/groups/all-with-public-keys`);
-	if (!groupsResponse.ok) {
-		error(groupsResponse.status, { message: await groupsResponse.json() });
-	}
-	const group_list: string[] = await groupsResponse.json();
+		if (!surveyCountResponse.ok) {
+			throw error(surveyCountResponse.status, { message: await surveyCountResponse.json() });
+		}
+		const numSurveys: number = await surveyCountResponse.json();
 
-	const usersResponse = await fetch(`/api/users/all-with-public-keys`);
-	if (!usersResponse.ok) {
-		error(usersResponse.status, { message: await usersResponse.json() });
-	}
-	const user_list: string[] = await usersResponse.json();
+		if (!groupsResponse.ok) {
+			throw error(groupsResponse.status, { message: await groupsResponse.json() });
+		}
+		const group_list: string[] = await groupsResponse.json();
 
-	return { drafts, numDrafts, numSurveys, group_list, user_list };
+		if (!usersResponse.ok) {
+			throw error(usersResponse.status, { message: await usersResponse.json() });
+		}
+		const user_list: string[] = await usersResponse.json();
+
+		return {
+			drafts,
+			numDrafts,
+			numSurveys,
+			group_list,
+			user_list
+		};
+	} catch (err) {
+		console.error(err);
+		throw error(500, { message: 'Failed to fetch data' });
+	}
 };

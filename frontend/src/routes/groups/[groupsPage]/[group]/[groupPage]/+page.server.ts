@@ -22,37 +22,43 @@ export const load: PageServerLoad = async ({ parent, params, fetch }) => {
 	}
 	const members: { email: string; has_public_key: boolean }[] = await membersResponse.json();
 
-	try {
-		const [notMembersResponse, countResponse] = await Promise.all([
-			fetch(`/api/groups/members/all-not-members`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ name: group })
-			}),
-			fetch(`/api/groups/members/count`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ name: group })
-			})
-		]);
+	let retries = 2;
+	while (retries > 0) {
+		try {
+			const [notMembersResponse, countResponse] = await Promise.all([
+				fetch(`/api/groups/members/all-not-members`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ name: group })
+				}),
+				fetch(`/api/groups/members/count`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ name: group })
+				})
+			]);
 
-		if (!notMembersResponse.ok) {
-			throw error(notMembersResponse.status, { message: await notMembersResponse.json() });
+			if (!notMembersResponse.ok) {
+				throw error(notMembersResponse.status, { message: await notMembersResponse.json() });
+			}
+			const notMembers: string[] = await notMembersResponse.json();
+
+			if (!countResponse.ok) {
+				throw error(countResponse.status, { message: await countResponse.json() });
+			}
+			const numMembers: number = await countResponse.json();
+
+			return { group, members, notMembers, numMembers };
+		} catch (err) {
+			console.error(err);
+			retries--;
+			if (retries === 0) {
+				throw error(500, { message: 'Failed to fetch data after multiple attempts' });
+			}
 		}
-		const notMembers: string[] = await notMembersResponse.json();
-
-		if (!countResponse.ok) {
-			throw error(countResponse.status, { message: await countResponse.json() });
-		}
-		const numMembers: number = await countResponse.json();
-
-		return { group, members, notMembers, numMembers };
-	} catch (err) {
-		console.error(err);
-		throw error(500, { message: 'Failed to fetch data' });
 	}
 };

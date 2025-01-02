@@ -47,12 +47,12 @@ jobs:
           echo "SURVEY_CODE=${{ env.SURVEY_CODE }}" >> $GITHUB_ENV
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps --only-shell
 
       - name: Run Playwright tests
         run: |
           source ../backend/scripts/test_data.sh
-          npx playwright test
+          npx playwright test --reporter=github
 
   test-backend:
     timeout-minutes: 60

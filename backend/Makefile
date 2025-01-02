@@ -40,6 +40,9 @@ test:
 test_cov:
 	poetry run pytest --cov
 
+test_cov_json:
+	poetry run pytest tests --cov --json-report --json-report-file=test-results/test-results.json
+
 compile_env:
 	poetry lock --no-update
 

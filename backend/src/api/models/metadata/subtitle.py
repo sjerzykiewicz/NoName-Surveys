@@ -13,6 +13,3 @@ class Subtitle(Base):
     def validate_structure_against(self, other) -> None:
         if not isinstance(other, Subtitle) or self.subtitle != other.subtitle:
             raise ValueError("Invalid subtitle!")
-
-    def get_answer(self):
-        return ""

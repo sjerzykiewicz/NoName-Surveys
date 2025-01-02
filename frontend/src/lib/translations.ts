@@ -424,8 +424,9 @@ export const data = {
 			'Please provide a passphrase to protect your keys on your device. Remember it, as it will be required to load your keys each time.',
 		confirm_passphrase: 'Confirm passphrase',
 		enter_passphrase: 'Enter passphrase to the file.',
-		example_csv: `A valid .csv file should not contain a headline. Each email should be placed in a new line and separated by a comma or a semicolon.<br /><br />
-			Example:<br />
+		csv_tooltip:
+			'A valid .csv file should not contain a headline. Each email should be placed in a new line and separated by a comma or a semicolon. ',
+		csv_example: `<br /><br />Example:<br />
 			user1@st.amu.edu.pl,<br />
 			user2@st.amu.edu.pl;<br />
 			user3@amu.edu.pl`,
@@ -875,7 +876,7 @@ export const data = {
 		define_respondent_group: 'Zdefiniuj grupę respondentów',
 		define_respondent_group_alert: 'Chcesz stworzyć ankietę publiczną czy bezpieczną?',
 		define_respondent_group_error: 'Proszę zdefiniować grupę respondentów.',
-		edit: 'Edytuj',
+		edit: 'Edycja',
 		edit_title: 'Edytuj ankietę',
 		preview: 'Podgląd',
 		preview_title: 'Podgląd ankiety',
@@ -1038,8 +1039,9 @@ export const data = {
 			'Wprowadź hasło, które posłuży do ochrony kluczy na Twoim urządzeniu. Zapamiętaj je, gdyż będzie ono wymagane do każdego załadowania kluczy.',
 		confirm_passphrase: 'Potwierdź hasło',
 		enter_passphrase: 'Podaj hasło do pliku.',
-		example_csv: `Poprawny plik .csv nie powinien zawierać nagłówka. Każdy email powinien być w osobnej linii oraz oddzielony przecinkiem lub średnikiem.<br /><br />
-			Przykład:<br />
+		csv_tooltip:
+			'Poprawny plik .csv nie powinien zawierać nagłówka. Każdy email powinien być w osobnej linii oraz oddzielony przecinkiem lub średnikiem. ',
+		csv_example: `<br /><br />Przykład:<br />
 			user1@st.amu.edu.pl,<br />
 			user2@st.amu.edu.pl;<br />
 			user3@amu.edu.pl`,

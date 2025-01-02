@@ -22,29 +22,37 @@ export const load: PageServerLoad = async ({ parent, params, fetch }) => {
 	}
 	const members: { email: string; has_public_key: boolean }[] = await membersResponse.json();
 
-	const notMembersResponse = await fetch(`/api/groups/members/all-not-members`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ name: group })
-	});
-	if (!notMembersResponse.ok) {
-		error(notMembersResponse.status, { message: await notMembersResponse.json() });
-	}
-	const notMembers: string[] = await notMembersResponse.json();
+	try {
+		const [notMembersResponse, countResponse] = await Promise.all([
+			fetch(`/api/groups/members/all-not-members`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ name: group })
+			}),
+			fetch(`/api/groups/members/count`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ name: group })
+			})
+		]);
 
-	const countResponse = await fetch(`/api/groups/members/count`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ name: group })
-	});
-	if (!countResponse.ok) {
-		error(countResponse.status, { message: await countResponse.json() });
-	}
-	const numMembers: number = await countResponse.json();
+		if (!notMembersResponse.ok) {
+			throw error(notMembersResponse.status, { message: await notMembersResponse.json() });
+		}
+		const notMembers: string[] = await notMembersResponse.json();
 
-	return { group, members, notMembers, numMembers };
+		if (!countResponse.ok) {
+			throw error(countResponse.status, { message: await countResponse.json() });
+		}
+		const numMembers: number = await countResponse.json();
+
+		return { group, members, notMembers, numMembers };
+	} catch (err) {
+		console.error(err);
+		throw error(500, { message: 'Failed to fetch data' });
+	}
 };

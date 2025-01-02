@@ -7,43 +7,29 @@ export const load: PageServerLoad = async ({ parent, fetch }) => {
 		redirect(303, `/account`);
 	}
 
-	try {
-		const [groupsResponse, usersResponse, draftCountResponse, surveyCountResponse] =
-			await Promise.all([
-				fetch(`/api/groups/all-with-public-keys`),
-				fetch(`/api/users/all-with-public-keys`),
-				fetch(`/api/surveys/drafts/count`),
-				fetch(`/api/surveys/count`)
-			]);
-
-		if (!groupsResponse.ok) {
-			throw error(groupsResponse.status, { message: await groupsResponse.json() });
-		}
-		const group_list: string[] = await groupsResponse.json();
-
-		if (!usersResponse.ok) {
-			throw error(usersResponse.status, { message: await usersResponse.json() });
-		}
-		const user_list: string[] = await usersResponse.json();
-
-		if (!draftCountResponse.ok) {
-			throw error(draftCountResponse.status, { message: await draftCountResponse.json() });
-		}
-		const numDrafts: number = await draftCountResponse.json();
-
-		if (!surveyCountResponse.ok) {
-			throw error(surveyCountResponse.status, { message: await surveyCountResponse.json() });
-		}
-		const numSurveys: number = await surveyCountResponse.json();
-
-		return {
-			group_list,
-			user_list,
-			numDrafts,
-			numSurveys
-		};
-	} catch (err) {
-		console.error(err);
-		throw error(500, { message: 'Failed to fetch data' });
+	const groupsResponse = await fetch(`/api/groups/all-with-public-keys`);
+	if (!groupsResponse.ok) {
+		error(groupsResponse.status, { message: await groupsResponse.json() });
 	}
+	const group_list: string[] = await groupsResponse.json();
+
+	const usersResponse = await fetch(`/api/users/all-with-public-keys`);
+	if (!usersResponse.ok) {
+		error(usersResponse.status, { message: await usersResponse.json() });
+	}
+	const user_list: string[] = await usersResponse.json();
+
+	const draftCountResponse = await fetch(`/api/surveys/drafts/count`);
+	if (!draftCountResponse.ok) {
+		error(draftCountResponse.status, { message: await draftCountResponse.json() });
+	}
+	const numDrafts: number = await draftCountResponse.json();
+
+	const surveyCountResponse = await fetch(`/api/surveys/count`);
+	if (!surveyCountResponse.ok) {
+		error(surveyCountResponse.status, { message: await surveyCountResponse.json() });
+	}
+	const numSurveys: number = await surveyCountResponse.json();
+
+	return { group_list, user_list, numDrafts, numSurveys };
 };

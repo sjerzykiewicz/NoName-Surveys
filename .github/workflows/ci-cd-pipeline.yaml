@@ -52,6 +52,7 @@ jobs:
       - name: Run Playwright tests
         run: |
           source ../backend/scripts/test_data.sh
+          sleep 10
           npx playwright test
 
       - uses: actions/upload-artifact@v4

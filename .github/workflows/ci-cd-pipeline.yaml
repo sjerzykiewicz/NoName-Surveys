@@ -58,7 +58,7 @@ jobs:
         if: always()
         with:
           name: playwright-report
-          path: test-results/
+          path: frontend/test-results/
           retention-days: 30
 
   test-backend:
@@ -90,7 +90,7 @@ jobs:
         if: always()
         with:
           name: pytest-report
-          path: test-results/
+          path: backend/test-results/
           retention-days: 30
 
   dockerize:

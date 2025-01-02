@@ -6,7 +6,8 @@ const config: PlaywrightTestConfig = {
 		port: 3000
 	},
 	testDir: 'tests',
-	testMatch: /(.+\.)?(test|spec)\.[jt]s/
+	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
+	reporter: [['list'], ['json', { outputFile: './test-results/test-results.json' }]]
 };
 
 export default config;

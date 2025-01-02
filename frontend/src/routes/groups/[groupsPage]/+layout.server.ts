@@ -41,7 +41,6 @@ export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
 		const numGroups: number = await countResponse.json();
 
 		return {
-			session,
 			group_list,
 			user_list,
 			numGroups

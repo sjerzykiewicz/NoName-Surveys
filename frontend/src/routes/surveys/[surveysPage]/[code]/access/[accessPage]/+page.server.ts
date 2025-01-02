@@ -8,22 +8,17 @@ export const load: PageServerLoad = async ({ parent, params, fetch }) => {
 	}
 
 	const code = params.code;
-	const page = params.accessPage;
-
-	const accessResponse = await fetch(`/api/surveys/access/fetch`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ survey_code: code, page })
-	});
-	if (!accessResponse.ok) {
-		error(accessResponse.status, { message: await accessResponse.json() });
-	}
-	const usersWithAccess: string[] = await accessResponse.json();
+	const page = parseInt(params.accessPage);
 
 	try {
-		const [notAccessResponse, countResponse] = await Promise.all([
+		const [accessResponse, notAccessResponse, countResponse] = await Promise.all([
+			fetch(`/api/surveys/access/all-with`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ survey_code: code, page })
+			}),
 			fetch(`/api/surveys/access/all-without`, {
 				method: 'POST',
 				headers: {
@@ -39,6 +34,11 @@ export const load: PageServerLoad = async ({ parent, params, fetch }) => {
 				body: JSON.stringify({ survey_code: code })
 			})
 		]);
+
+		if (!accessResponse.ok) {
+			throw error(accessResponse.status, { message: await accessResponse.json() });
+		}
+		const usersWithAccess: string[] = await accessResponse.json();
 
 		if (!notAccessResponse.ok) {
 			throw error(notAccessResponse.status, { message: await notAccessResponse.json() });

@@ -190,3 +190,5 @@ dist
 .DS_Store
 
 tmp
+
+backend/test-results

@@ -40,7 +40,7 @@ test('check required questions', async ({ page }) => {
 	await expect(page.getByTitle('Error').first()).toBeVisible();
 });
 
-test('check existent survey', async ({ page }) => {
+test('check survey filling', async ({ page }) => {
 	await page.goto('/');
 	await page.getByTitle('Enter a survey code to fill it out').fill(SURVEY_CODE_1 as string);
 	await page.getByTitle('Submit the code').click();

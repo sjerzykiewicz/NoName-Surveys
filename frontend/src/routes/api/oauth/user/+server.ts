@@ -14,14 +14,32 @@ export async function _getUserInfo(oauth_token: string, oauth_token_secret: stri
 		secret: oauth_token_secret
 	});
 
-	const responseUser = await fetch(requestDataUser.url, {
-		method: 'GET',
-		headers: oauth.toHeader(oauthDataUser)
-	});
+	const fetchWithTimeout = async (url: string, options: RequestInit, timeout: number) => {
+		const controller = new AbortController();
+		const timeoutId = setTimeout(() => controller.abort(), timeout);
+		const response = await fetch(url, { ...options, signal: controller.signal });
+		clearTimeout(timeoutId);
+		return response;
+	};
 
-	if (!responseUser.ok) {
+	try {
+		const responseUser = await fetchWithTimeout(
+			requestDataUser.url,
+			{
+				method: 'GET',
+				headers: oauth.toHeader(oauthDataUser)
+			},
+			11000
+		); // 11000 ms timeout because USOS API timeout is 10s
+
+		if (!responseUser.ok) {
+			console.log('Error fetching user info', responseUser);
+			return {};
+		}
+
+		return responseUser.json();
+	} catch (err) {
+		console.error('Fetch failed:', err);
 		return {};
 	}
-
-	return responseUser.json();
 }

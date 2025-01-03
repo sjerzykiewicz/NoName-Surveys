@@ -1079,7 +1079,7 @@ input[type='radio']:disabled {
 	font-size: 0.67em;
 }
 
-.create-info .tooltip i,
+.create-info.tooltip i,
 .info-row .tooltip i,
 .download-key .tooltip i,
 .last-update-container .tooltip i,

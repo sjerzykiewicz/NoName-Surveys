@@ -44,7 +44,6 @@ jobs:
       - name: Generate env file
         run: |
           echo "BACKEND_HOST=http://localhost:8000" >> .env
-          echo "SURVEY_CODE=${{ env.SURVEY_CODE }}" >> $GITHUB_ENV
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps --only-shell

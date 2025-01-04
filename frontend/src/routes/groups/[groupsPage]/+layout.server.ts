@@ -9,50 +9,23 @@ export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
 
 	const page = parseInt(params.groupsPage);
 
-	let retries = 2;
-	while (retries > 0) {
-		try {
-			const [groupsResponse, usersResponse, countResponse] = await Promise.all([
-				fetch(`/api/groups/all`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ page })
-				}),
-				fetch(`/api/users/all`),
-				fetch(`/api/groups/count`)
-			]);
+	const response = await fetch(`/api/combined/groups_users`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ page })
+	});
 
-			if (!groupsResponse.ok) {
-				throw error(groupsResponse.status, { message: await groupsResponse.json() });
-			}
-			const group_list: {
-				user_group_name: string;
-				all_members_have_public_keys: true;
-			}[] = await groupsResponse.json();
-
-			if (!usersResponse.ok) {
-				throw error(usersResponse.status, { message: await usersResponse.json() });
-			}
-			const user_list: string[] = await usersResponse.json();
-
-			if (!countResponse.ok) {
-				throw error(countResponse.status, { message: await countResponse.json() });
-			}
-			const numGroups: number = await countResponse.json();
-
-			return {
-				group_list,
-				user_list,
-				numGroups
-			};
-		} catch (err) {
-			console.error(err);
-			retries--;
-			if (retries === 0) {
-				throw error(500, { message: 'Failed to fetch data after multiple attempts' });
-			}
-		}
+	if (!response.ok) {
+		throw error(response.status, { message: await response.json() });
 	}
+
+	const { groups, groups_count, users } = await response.json();
+
+	return {
+		group_list: groups,
+		user_list: users,
+		numGroups: groups_count
+	};
 };

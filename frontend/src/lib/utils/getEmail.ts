@@ -4,13 +4,22 @@ import { error } from '@sveltejs/kit';
 export async function getEmail(sessionCookie: string): Promise<string> {
 	if (sessionCookie) {
 		const sessionCookieJson = JSON.parse(sessionCookie);
-		const userData = await _getUserInfo(
-			sessionCookieJson.oauth_token,
-			sessionCookieJson.oauth_token_secret
-		);
-		if (userData.email) {
-			return userData.email;
+		let retries = 2;
+		while (retries > 0) {
+			try {
+				const userData = await _getUserInfo(
+					sessionCookieJson.oauth_token,
+					sessionCookieJson.oauth_token_secret
+				);
+				if (userData.email) {
+					return userData.email;
+				}
+			} catch (err) {
+				console.error(err);
+				retries--;
+			}
 		}
+		error(500, { message: 'Failed to get data from USOS' });
 	}
-	error(401, 'Unauthorized');
+	error(401, { message: 'Unauthorized' });
 }

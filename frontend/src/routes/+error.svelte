@@ -11,6 +11,7 @@
 		if (!error) return $t('unknown_error');
 		if (typeof error.message === 'string') return error.message; // @ts-expect-error message is not necessarily a string
 		if (error.message && typeof error.message.detail === 'string') return error.message.detail;
+		if (error.message && typeof error.message.message === 'string') return error.message.message;
 		return $t('unknown_error');
 	})();
 </script>

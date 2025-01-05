@@ -66,3 +66,28 @@ or if you want to run tests with coverage:
 ```sh
 make test_cov # poetry run pytest --cov
 ```
+
+## General Application Structure
+
+The application is structured as follows:
+
+- **src/main.py**: The entry point of the application. It sets up the FastAPI app, middleware, and routes.
+- **src/api**: Contains the API routes and models.
+  - **routes**: Defines the API endpoints.
+  - **models**: Defines the data models used in the API.
+- **src/cryptography**: Contains cryptographic utilities and functions.
+- **src/db**: Contains the database models and CRUD operations.
+  - **models**: Defines the SQLModel models.
+  - **crud**: Contains the CRUD operations for the models.
+- **src/services/utils**: Contains utility functions and classes used in the service layer.
+- **src/services/.**: Contains the business logic and services used by the API routes.
+
+- **tests**: Contains the tests for the application.
+    - **tests/api**: Contains the API route tests.
+        - **tests/api/models/test_base.py**: Contains tests of data validation.
+        - **tests/api/routes/**: Contains tests of the API routes.
+    - **tests/cryptography**: Contains the cryptography tests.
+    - **tests/services/utils/test_helpers.py**: Contains the tests of the utility functions.
+    - **tests/services/.**: Contains the service tests.
+    - **tests/db**: Contains the database tests.
+    - **tests/conftest.py**: Contains the fixtures used in the tests.

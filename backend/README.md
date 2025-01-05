@@ -82,12 +82,12 @@ The application is structured as follows:
 - **src/services/utils**: Contains utility functions and classes used in the service layer.
 - **src/services/.**: Contains the business logic and services used by the API routes.
 
-- **tests**: Contains the tests for the application.
-    - **tests/api**: Contains the API route tests.
-        - **tests/api/models/test_base.py**: Contains tests of data validation.
-        - **tests/api/routes/**: Contains tests of the API routes.
-    - **tests/cryptography**: Contains the cryptography tests.
-    - **tests/services/utils/test_helpers.py**: Contains the tests of the utility functions.
-    - **tests/services/.**: Contains the service tests.
-    - **tests/db**: Contains the database tests.
-    - **tests/conftest.py**: Contains the fixtures used in the tests.
+- **tests/**: Contains the tests for the application.
+    - **api/**: Contains the API route tests.
+        - **models/test_base.py**: Contains tests of data validation.
+        - **routes/**: Contains tests of the API routes.
+    - **cryptography**: Contains the cryptography tests.
+    - **services/utils/test_helpers.py**: Contains the tests of the utility functions.
+    - **services/.**: Contains the service tests.
+    - **db/**: Contains the database tests.
+    - **conftest.py**: Contains the fixtures used in the tests.

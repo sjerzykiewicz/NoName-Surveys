@@ -19,7 +19,7 @@ export async function getEmail(sessionCookie: string): Promise<string> {
 				retries--;
 			}
 		}
-		error(500, { message: 'Failed to get data from USOS' });
+		error(500, { message: 'Failed to get data from the USOS API. Please try reloading the page' });
 	}
 	error(401, { message: 'Unauthorized' });
 }

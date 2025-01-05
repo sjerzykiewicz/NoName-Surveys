@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ parent, fetch }) => {
 		redirect(303, `/account`);
 	}
 
-	const response = await fetch(`/api/combined/groups_users_drafts_surveys`);
+	const response = await fetch(`/api/combined/create`);
 	if (!response.ok) {
 		throw error(response.status, { message: await response.json() });
 	}

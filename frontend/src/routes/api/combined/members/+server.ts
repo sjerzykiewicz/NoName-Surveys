@@ -1,11 +1,15 @@
 import type { RequestHandler } from './$types';
-import { getUserGroups, countUserGroups, getUsers } from '$lib/server/database';
+import {
+	getUserGroup,
+	getAllUsersWhoAreNotMembers,
+	countUserGroupMembers
+} from '$lib/server/database';
 import { getEmail } from '$lib/utils/getEmail';
 import { error } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const sessionCookie = cookies.get('user_session');
-	const { page }: { page: number } = await request.json();
+	const { group, page }: { group: string; page: number } = await request.json();
 	const user_email = await getEmail(sessionCookie ?? '');
 	if (!user_email) {
 		return error(500, {
@@ -13,16 +17,16 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		});
 	}
 
-	const [groups, groups_count, users] = await Promise.all([
-		getUserGroups(user_email, page),
-		countUserGroups(user_email),
-		getUsers()
+	const [members, notMembers, count] = await Promise.all([
+		getUserGroup(user_email, group, page),
+		getAllUsersWhoAreNotMembers(user_email, group),
+		countUserGroupMembers(user_email, group)
 	]);
 
 	const responseBody = {
-		groups: await groups.json(),
-		groups_count: await groups_count.json(),
-		users: await users.json()
+		members: await members.json(),
+		notMembers: await notMembers.json(),
+		count: await count.json()
 	};
 
 	return new Response(JSON.stringify(responseBody), {

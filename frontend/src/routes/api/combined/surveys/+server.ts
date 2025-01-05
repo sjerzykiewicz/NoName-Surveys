@@ -1,5 +1,5 @@
 import type { RequestHandler } from './$types';
-import { getUserGroups, countUserGroups, getUsers } from '$lib/server/database';
+import { getSurveys, countSurveys } from '$lib/server/database';
 import { getEmail } from '$lib/utils/getEmail';
 import { error } from '@sveltejs/kit';
 
@@ -13,16 +13,14 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		});
 	}
 
-	const [groups, groups_count, users] = await Promise.all([
-		getUserGroups(user_email, page),
-		countUserGroups(user_email),
-		getUsers()
+	const [surveys, count] = await Promise.all([
+		getSurveys(user_email, page),
+		countSurveys(user_email)
 	]);
 
 	const responseBody = {
-		groups: await groups.json(),
-		groups_count: await groups_count.json(),
-		users: await users.json()
+		surveys: await surveys.json(),
+		count: await count.json()
 	};
 
 	return new Response(JSON.stringify(responseBody), {

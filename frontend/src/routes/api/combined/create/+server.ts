@@ -12,7 +12,9 @@ export const GET: RequestHandler = async ({ cookies }) => {
 	const sessionCookie = cookies.get('user_session');
 	const user_email = await getEmail(sessionCookie ?? '');
 	if (!user_email) {
-		return error(500, { message: 'Failed to get data from USOS' });
+		return error(500, {
+			message: 'Failed to get data from the USOS API. Please try reloading the page'
+		});
 	}
 
 	const [groups, users, drafts_count, surveys_count] = await Promise.all([

@@ -10,55 +10,21 @@ export const load: PageServerLoad = async ({ parent, params, fetch }) => {
 	const group = params.group;
 	const page = parseInt(params.groupPage);
 
-	const membersResponse = await fetch(`/api/groups/members/all`, {
+	const response = await fetch('/api/combined/members', {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ name: group, page })
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ group, page })
 	});
-	if (!membersResponse.ok) {
-		error(membersResponse.status, { message: await membersResponse.json() });
+	if (!response.ok) {
+		throw error(response.status, { message: await response.json() });
 	}
-	const members: { email: string; has_public_key: boolean }[] = await membersResponse.json();
 
-	let retries = 2;
-	while (retries > 0) {
-		try {
-			const [notMembersResponse, countResponse] = await Promise.all([
-				fetch(`/api/groups/members/all-not-members`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ name: group })
-				}),
-				fetch(`/api/groups/members/count`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({ name: group })
-				})
-			]);
+	const { members, notMembers, count } = await response.json();
 
-			if (!notMembersResponse.ok) {
-				throw error(notMembersResponse.status, { message: await notMembersResponse.json() });
-			}
-			const notMembers: string[] = await notMembersResponse.json();
-
-			if (!countResponse.ok) {
-				throw error(countResponse.status, { message: await countResponse.json() });
-			}
-			const numMembers: number = await countResponse.json();
-
-			return { group, members, notMembers, numMembers };
-		} catch (err) {
-			console.error(err);
-			retries--;
-			if (retries === 0) {
-				throw error(500, { message: 'Failed to fetch data after multiple attempts' });
-			}
-		}
-	}
+	return {
+		group,
+		members,
+		notMembers,
+		numNembers: count
+	};
 };

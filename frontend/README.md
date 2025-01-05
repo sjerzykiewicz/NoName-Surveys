@@ -40,6 +40,7 @@ The application is structured as follows:
 - **demo/**: Contains an unused OAuth 2.0 example usage.
 
 - **src/**
+
   - **lib/**: Contains the application library code.
     - **assets/**: Contains graphics.
     - **components/**: Contains Svelte components.

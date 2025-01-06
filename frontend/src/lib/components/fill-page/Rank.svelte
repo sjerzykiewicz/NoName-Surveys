@@ -28,7 +28,7 @@
 		if (!dontAnswer) {
 			$answers[questionIndex].choices = [];
 		} else {
-			$answers[questionIndex].choices = $questions[questionIndex].choices;
+			$answers[questionIndex].choices = [...$questions[questionIndex].choices];
 		}
 		dontAnswer = !dontAnswer;
 	}

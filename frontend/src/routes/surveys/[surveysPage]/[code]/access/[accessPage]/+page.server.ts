@@ -1,12 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ parent, params, fetch }) => {
-	const { session } = await parent();
-	if (!session) {
-		error(401, 'You must be logged in to access this page.');
-	}
-
+export const load: PageServerLoad = async ({ params, fetch }) => {
 	const code = params.code;
 	const page = parseInt(params.accessPage);
 

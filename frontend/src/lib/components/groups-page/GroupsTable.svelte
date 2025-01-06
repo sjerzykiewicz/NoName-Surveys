@@ -17,7 +17,7 @@
 
 	export let groups: {
 		user_group_name: string;
-		all_members_have_public_keys: boolean;
+		all_members_have_public_keys: true;
 	}[];
 	export let selectedGroupsToRemove: string[] = [];
 

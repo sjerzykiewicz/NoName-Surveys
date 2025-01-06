@@ -1,10 +1,10 @@
 import type { LayoutServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
-import type Survey from '$lib/entities/surveys/Survey';
-import type SurveySummary from '$lib/entities/surveys/SurveySummary';
+import Survey from '$lib/entities/surveys/Survey';
+import SurveySummary from '$lib/entities/surveys/SurveySummary';
 
 export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
-	const { session, surveys } = await parent();
+	const { session } = await parent();
 	if (!session) {
 		error(401, 'You must be logged in to access this page.');
 	}

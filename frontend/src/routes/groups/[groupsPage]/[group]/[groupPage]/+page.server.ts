@@ -25,6 +25,6 @@ export const load: PageServerLoad = async ({ parent, params, fetch }) => {
 		group,
 		members,
 		notMembers,
-		numNembers: count
+		numMembers: count
 	};
 };

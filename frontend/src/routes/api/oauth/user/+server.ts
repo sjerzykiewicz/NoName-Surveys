@@ -1,5 +1,6 @@
 import { getOAuthInstance } from '$lib/oauth1';
 import { env } from '$env/dynamic/private';
+import { error } from '@sveltejs/kit';
 
 export async function _getUserInfo(oauth_token: string, oauth_token_secret: string) {
 	const oauth = getOAuthInstance();
@@ -20,7 +21,7 @@ export async function _getUserInfo(oauth_token: string, oauth_token_secret: stri
 	});
 
 	if (!responseUser.ok) {
-		return {};
+		return error(responseUser.status, { message: await responseUser.json() });
 	}
 
 	return responseUser.json();

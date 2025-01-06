@@ -9,32 +9,23 @@ export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
 
 	const page = parseInt(params.groupsPage);
 
-	const groupsResponse = await fetch(`/api/groups/all`, {
+	const response = await fetch(`/api/combined/groups_users`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({ page })
 	});
-	if (!groupsResponse.ok) {
-		error(groupsResponse.status, { message: await groupsResponse.json() });
-	}
-	const group_list: {
-		user_group_name: string;
-		all_members_have_public_keys: true;
-	}[] = await groupsResponse.json();
 
-	const usersResponse = await fetch(`/api/users/all`);
-	if (!usersResponse.ok) {
-		error(usersResponse.status, { message: await usersResponse.json() });
+	if (!response.ok) {
+		throw error(response.status, { message: await response.json() });
 	}
-	const user_list: string[] = await usersResponse.json();
 
-	const countResponse = await fetch(`/api/groups/count`);
-	if (!countResponse.ok) {
-		error(countResponse.status, { message: await countResponse.json() });
-	}
-	const numGroups: number = await countResponse.json();
+	const { groups, groups_count, users } = await response.json();
 
-	return { session, group_list, user_list, numGroups };
+	return {
+		group_list: groups,
+		user_list: users,
+		numGroups: groups_count
+	};
 };

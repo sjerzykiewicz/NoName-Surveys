@@ -1,6 +1,7 @@
-# 🔐 NoName Anonymous Surveys
+# 🔐 NoName Surveys
+# Conduct anonymous voting and surveys with **linkable ring signatures**.
 
-**NoName Anonymous Surveys** is an open-source platform designed for conducting truly anonymous surveys. Using linkable ring signature technology, it ensures that:
+An open-source platform built to protect your privacy and enable truly anonymous participation. It ensures that:
 
 #### - ✅ Responses are verifiable as being from members of a designated group.
 #### - ✅ Respondent identities remain entirely anonymous.
@@ -231,6 +232,11 @@ You are free to use, modify, and host your own instance of the platform. Setup i
 of a private key corresponding to some public key in this group. This allows the server to verify that you know this key, but its value remains secret.
 - **How does the server know I have already answered the survey?** - During signature generation, you compute a special value using the entire set of public keys and your private key. For a given group, this value will always be
 the same for the same user. However, it is mathematically infeasible to recover the private key used to compute this value, so you remain anonymous.
+- **What if I lose my keys?** - If you lose your keys, you will not be able to answer secure surveys. You can generate new keys, but you will not be able to answer surveys that you have already responded to.
+- **What if I share my keys?** - Sharing your keys is equivalent to sharing your identity. If someone else uses your keys to answer a survey, it will be as if you have answered it. This is why it is important to keep your keys secure.
+- **What if I forget my passphrase?** - If you forget your passphrase, you will not be able to access your keys. You will have to generate new keys and you will not be able to answer surveys that you have already been assigned to.
+
+### Read more about the [Linkable Ring Signature](https://link.springer.com/chapter/10.1007/11424826_65) in the original paper.
 ---
 
 ## 📚 Additional Information

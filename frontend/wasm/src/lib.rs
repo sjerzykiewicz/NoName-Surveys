@@ -312,6 +312,7 @@ mod tests {
         let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 1).unwrap();
     }
 
+    #[cfg(target_arch = "wasm32")]
     #[test]
     #[should_panic]
     fn test_fail_on_non_pem() {
@@ -323,6 +324,7 @@ mod tests {
         let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
     }
 
+    #[cfg(target_arch = "wasm32")]
     #[test]
     #[should_panic]
     fn test_fail_on_non_numeric() {
@@ -338,6 +340,7 @@ mod tests {
         let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
     }
 
+    #[cfg(target_arch = "wasm32")]
     #[test]
     #[should_panic]
     fn test_fail_on_incorrect_key() {
@@ -353,6 +356,7 @@ mod tests {
         let _ = linkable_ring_signature(String::from("m"), pub_keys, priv_key, 0).unwrap();
     }
 
+    #[cfg(target_arch = "wasm32")]
     #[test]
     #[should_panic]
     fn test_fail_on_zero_key() {

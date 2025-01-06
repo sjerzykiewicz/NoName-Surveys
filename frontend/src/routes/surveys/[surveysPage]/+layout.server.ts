@@ -1,6 +1,5 @@
 import type { LayoutServerLoad } from './$types';
 import { error, redirect } from '@sveltejs/kit';
-import type SurveyHeader from '$lib/entities/surveys/SurveyHeader';
 
 export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
 	const { session } = await parent();
@@ -10,23 +9,20 @@ export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
 
 	const page = parseInt(params.surveysPage);
 
-	const surveysResponse = await fetch(`/api/surveys/all`, {
+	const response = await fetch('/api/combined/surveys', {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
+		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ page })
 	});
-	if (!surveysResponse.ok) {
-		error(surveysResponse.status, { message: await surveysResponse.json() });
-	}
-	const surveys: SurveyHeader[] = await surveysResponse.json();
 
-	const countResponse = await fetch(`/api/surveys/count`);
-	if (!countResponse.ok) {
-		error(countResponse.status, { message: await countResponse.json() });
+	if (!response.ok) {
+		throw error(response.status, { message: await response.json() });
 	}
-	const numSurveys: number = await countResponse.json();
 
-	return { surveys, numSurveys };
+	const { surveys, count } = await response.json();
+
+	return {
+		surveys,
+		numSurveys: count
+	};
 };

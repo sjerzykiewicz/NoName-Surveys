@@ -5,41 +5,23 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 	const code = params.code;
 	const page = parseInt(params.accessPage);
 
-	const accessResponse = await fetch(`/api/surveys/access/all-with`, {
+	const response = await fetch(`/api/combined/surveys_access`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({ survey_code: code, page })
 	});
-	if (!accessResponse.ok) {
-		error(accessResponse.status, { message: await accessResponse.json() });
-	}
-	const usersWithAccess: string[] = await accessResponse.json();
 
-	const notAccessResponse = await fetch(`/api/surveys/access/all-without`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ survey_code: code })
-	});
-	if (!notAccessResponse.ok) {
-		error(notAccessResponse.status, { message: await notAccessResponse.json() });
+	if (!response.ok) {
+		throw error(response.status, { message: await response.json() });
 	}
-	const usersWithoutAccess: string[] = await notAccessResponse.json();
 
-	const countResponse = await fetch(`/api/surveys/access/count`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ survey_code: code })
-	});
-	if (!countResponse.ok) {
-		error(countResponse.status, { message: await countResponse.json() });
-	}
-	const numUsers: number = await countResponse.json();
+	const { has_access, without_access, users_count } = await response.json();
 
-	return { usersWithAccess, usersWithoutAccess, numUsers };
+	return {
+		usersWithAccess: has_access,
+		usersWithoutAccess: without_access,
+		numUsers: users_count
+	};
 };

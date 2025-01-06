@@ -87,7 +87,7 @@
 		display: flex;
 		flex-flow: row;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-start;
 		padding-top: 1em;
 		padding-bottom: 1em;
 		border-top: 1px solid var(--border-color-1);

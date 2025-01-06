@@ -44,7 +44,6 @@ jobs:
       - name: Generate env file
         run: |
           echo "BACKEND_HOST=http://localhost:8000" >> .env
-          echo "SURVEY_CODE=${{ env.SURVEY_CODE }}" >> $GITHUB_ENV
 
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps --only-shell
@@ -54,6 +53,11 @@ jobs:
           source ../backend/scripts/test_data.sh
           sleep 10
           npx playwright test
+
+      - name: Run Rust tests
+        run: |
+          cd wasm
+          cargo test
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -82,7 +86,7 @@ jobs:
           export PATH="$HOME/.local/bin:$PATH"
 
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --no-root
 
       - name: Run backend tests
         run: make test_cov_json
@@ -100,10 +104,10 @@ jobs:
     if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -132,10 +136,10 @@ jobs:
   deploy:
     needs: dockerize
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/main' # || github.ref == 'refs/heads/dev'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set Docker tags
         id: tags

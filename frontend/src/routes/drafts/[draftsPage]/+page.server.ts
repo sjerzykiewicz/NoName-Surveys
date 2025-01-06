@@ -9,45 +9,24 @@ export const load: PageServerLoad = async ({ parent, params, fetch }) => {
 
 	const page = parseInt(params.draftsPage);
 
-	const draftsResponse = await fetch(`/api/surveys/drafts/all`, {
+	const response = await fetch(`/api/combined/drafts`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({ page })
 	});
-	if (!draftsResponse.ok) {
-		error(draftsResponse.status, { message: await draftsResponse.json() });
-	}
-	const drafts: {
-		id: number;
-		title: string;
-		creation_date: string;
-	}[] = await draftsResponse.json();
 
-	const draftCountResponse = await fetch(`/api/surveys/drafts/count`);
-	if (!draftCountResponse.ok) {
-		error(draftCountResponse.status, { message: await draftCountResponse.json() });
+	if (!response.ok) {
+		throw error(response.status, { message: await response.json() });
 	}
-	const numDrafts: number = await draftCountResponse.json();
+	const { drafts, groups, users, drafts_count, surveys_count } = await response.json();
 
-	const surveyCountResponse = await fetch(`/api/surveys/count`);
-	if (!surveyCountResponse.ok) {
-		error(surveyCountResponse.status, { message: await surveyCountResponse.json() });
-	}
-	const numSurveys: number = await surveyCountResponse.json();
-
-	const groupsResponse = await fetch(`/api/groups/all-with-public-keys`);
-	if (!groupsResponse.ok) {
-		error(groupsResponse.status, { message: await groupsResponse.json() });
-	}
-	const group_list: string[] = await groupsResponse.json();
-
-	const usersResponse = await fetch(`/api/users/all-with-public-keys`);
-	if (!usersResponse.ok) {
-		error(usersResponse.status, { message: await usersResponse.json() });
-	}
-	const user_list: string[] = await usersResponse.json();
-
-	return { drafts, numDrafts, numSurveys, group_list, user_list };
+	return {
+		drafts: drafts,
+		numDrafts: drafts_count,
+		numSurveys: surveys_count,
+		group_list: groups,
+		user_list: users
+	};
 };

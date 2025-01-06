@@ -7,29 +7,16 @@ export const load: PageServerLoad = async ({ parent, fetch }) => {
 		redirect(303, `/account`);
 	}
 
-	const groupsResponse = await fetch(`/api/groups/all-with-public-keys`);
-	if (!groupsResponse.ok) {
-		error(groupsResponse.status, { message: await groupsResponse.json() });
+	const response = await fetch(`/api/combined/create`);
+	if (!response.ok) {
+		throw error(response.status, { message: await response.json() });
 	}
-	const group_list: string[] = await groupsResponse.json();
+	const { groups, users, drafts_count, surveys_count } = await response.json();
 
-	const usersResponse = await fetch(`/api/users/all-with-public-keys`);
-	if (!usersResponse.ok) {
-		error(usersResponse.status, { message: await usersResponse.json() });
-	}
-	const user_list: string[] = await usersResponse.json();
-
-	const draftCountResponse = await fetch(`/api/surveys/drafts/count`);
-	if (!draftCountResponse.ok) {
-		error(draftCountResponse.status, { message: await draftCountResponse.json() });
-	}
-	const numDrafts: number = await draftCountResponse.json();
-
-	const surveyCountResponse = await fetch(`/api/surveys/count`);
-	if (!surveyCountResponse.ok) {
-		error(surveyCountResponse.status, { message: await surveyCountResponse.json() });
-	}
-	const numSurveys: number = await surveyCountResponse.json();
-
-	return { group_list, user_list, numDrafts, numSurveys };
+	return {
+		group_list: groups,
+		user_list: users,
+		numDrafts: drafts_count,
+		numSurveys: surveys_count
+	};
 };

@@ -4,7 +4,7 @@ import Survey from '$lib/entities/surveys/Survey';
 import SurveySummary from '$lib/entities/surveys/SurveySummary';
 
 export const load: LayoutServerLoad = async ({ parent, params, fetch }) => {
-	const { session } = await parent();
+	const { session, surveys } = await parent();
 	if (!session) {
 		error(401, 'You must be logged in to access this page.');
 	}

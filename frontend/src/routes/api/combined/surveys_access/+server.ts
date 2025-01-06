@@ -1,11 +1,15 @@
 import type { RequestHandler } from './$types';
-import { getSurveys, countSurveys } from '$lib/server/database';
+import {
+	checkAccessToSurvey,
+	getAllUsersWithoutAccess,
+	countUsersWithAccess
+} from '$lib/server/database';
 import { getEmail } from '$lib/utils/getEmail';
 import { error } from '@sveltejs/kit';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const sessionCookie = cookies.get('user_session');
-	const { page }: { page: number } = await request.json();
+	const { survey_code, page }: { survey_code: string; page: number } = await request.json();
 	const user_email = await getEmail(sessionCookie ?? '');
 	if (!user_email) {
 		return error(500, {
@@ -13,14 +17,16 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		});
 	}
 
-	const [surveys, count] = await Promise.all([
-		getSurveys(user_email, page),
-		countSurveys(user_email)
+	const [all_with, all_without, count] = await Promise.all([
+		checkAccessToSurvey(user_email, survey_code, page),
+		getAllUsersWithoutAccess(user_email, survey_code),
+		countUsersWithAccess(user_email, survey_code)
 	]);
 
 	const responseBody = {
-		surveys: await surveys.json(),
-		count: await count.json()
+		has_access: await all_with.json(),
+		without_access: await all_without.json(),
+		users_count: await count.json()
 	};
 
 	return new Response(JSON.stringify(responseBody), {

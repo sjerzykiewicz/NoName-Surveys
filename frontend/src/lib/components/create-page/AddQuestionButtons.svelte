@@ -558,7 +558,7 @@
 	.add-buttons {
 		display: flex;
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		box-shadow: var(--shadow);
 	}
 
 	.add-question {
@@ -599,7 +599,7 @@
 		display: flex;
 		flex-flow: column;
 		border-radius: 0px 0px 5px 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		box-shadow: var(--shadow);
 		width: var(--width, 7.5em);
 		height: auto;
 		position: absolute;

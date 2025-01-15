@@ -18,6 +18,11 @@
 {#if numbersPaginated.length === 0}
 	<div title={$t('number_of_answers')} class="title empty"><Tx text="no_answers_yet" /></div>
 {:else}
+	<div title={$t('answers_guide_title')} class="info">
+		<div class="info-text">
+			<Tx text="answers_guide" />
+		</div>
+	</div>
 	<table>
 		<tr>
 			<th title={$t('number_of_answers')} id="info-header"><i class="symbol">numbers</i></th>
@@ -39,6 +44,10 @@
 {/if}
 
 <style>
+	.info {
+		padding-bottom: 0.5em;
+	}
+
 	.info-entry {
 		width: 2.3em;
 		text-align: center;

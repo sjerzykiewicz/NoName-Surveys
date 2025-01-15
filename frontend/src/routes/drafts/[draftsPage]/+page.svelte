@@ -59,7 +59,7 @@
 	<div title={$t('your_drafts')} class="title static">
 		<div class="header-tooltip">
 			<Tx text="your_drafts" />
-			<div class="tooltip hoverable">
+			<div title="" class="tooltip hoverable">
 				<i class="symbol">help</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 					<Tx text="drafts_info" /><a href={draftLink} target="_blank"><Tx text="read_more" /></a>

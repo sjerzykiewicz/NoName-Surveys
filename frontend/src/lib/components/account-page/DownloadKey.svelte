@@ -218,7 +218,7 @@
 </Modal>
 
 <div title={$t('account_keys_info_title')} class="info">
-	<div class="text">
+	<div class="info-text">
 		<Tx html="account_keys_info" />
 	</div>
 </div>
@@ -277,25 +277,6 @@
 
 	.tooltip i {
 		font-size: 1.25em;
-	}
-
-	.info {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
-		justify-content: flex-start;
-		padding-bottom: 1em;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		cursor: default;
-		overflow-wrap: break-word;
-		color: var(--text-color-1);
-		font-size: 1.1em;
-		transition: 0.2s;
-	}
-
-	.text {
-		font-weight: 700;
-		text-align: left;
 	}
 
 	.key-container {
@@ -360,7 +341,7 @@
 	.last-update-info {
 		margin-right: 0.5em;
 		font-size: 0.8em;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 	}
 
 	.warning-div {
@@ -386,10 +367,6 @@
 	}
 
 	@media screen and (max-width: 768px) {
-		.info {
-			font-size: 0.8em;
-		}
-
 		.key-container {
 			font-size: 1.25em;
 		}

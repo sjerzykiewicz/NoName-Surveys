@@ -102,10 +102,10 @@
 	}
 
 	.thumb-hidden::-webkit-slider-thumb {
-		opacity: 0;
+		background: var(--border-color-1) !important;
 	}
 
 	.thumb-hidden::-moz-range-thumb {
-		opacity: 0;
+		background: var(--border-color-1) !important;
 	}
 </style>

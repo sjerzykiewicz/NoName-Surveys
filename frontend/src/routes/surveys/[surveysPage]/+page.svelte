@@ -26,7 +26,7 @@
 	<div title={$t('your_surveys')} class="title static">
 		<div class="header-tooltip">
 			<Tx text="your_surveys" />
-			<div class="tooltip hoverable">
+			<div title="" class="tooltip hoverable">
 				<i class="symbol">help</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 					<Tx text="surveys_info" /><a href={surveyLink} target="_blank"><Tx text="read_more" /></a>

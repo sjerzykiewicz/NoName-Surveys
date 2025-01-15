@@ -7,6 +7,7 @@
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let questionIndex: number;
 
 	let text: string = '';

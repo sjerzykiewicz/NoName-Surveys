@@ -52,7 +52,7 @@
 		padding: 0.5em;
 		border-radius: 5px;
 		border: 1px solid var(--border-color-1);
-		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		box-shadow: var(--shadow);
 	}
 
 	.text-input {

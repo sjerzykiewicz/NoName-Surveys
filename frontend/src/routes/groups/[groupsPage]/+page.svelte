@@ -26,7 +26,7 @@
 	<div title={$t('your_groups')} class="title static">
 		<div class="header-tooltip">
 			<Tx text="your_groups" />
-			<div class="tooltip hoverable">
+			<div title="" class="tooltip hoverable">
 				<i class="symbol">help</i>
 				<span class="tooltip-text {innerWidth <= $S ? 'bottom' : 'right'}">
 					<Tx text="groups_info" /><a href={groupLink} target="_blank"><Tx text="read_more" /></a>

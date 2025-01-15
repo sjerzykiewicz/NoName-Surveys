@@ -61,6 +61,11 @@
 		</div>
 	</div>
 {:else}
+	<div title={$t('surveys_guide_title')} class="info">
+		<div class="info-text">
+			<Tx html="surveys_guide" />
+		</div>
+	</div>
 	<table>
 		<tr>
 			<th title={$t('select_all')} class="checkbox-entry" class:disabled={surveys.length === 0}
@@ -167,6 +172,10 @@
 {/if}
 
 <style>
+	.info {
+		padding-bottom: 0.5em;
+	}
+
 	.tooltip.access,
 	.tooltip.active {
 		--tooltip-width: 13em;

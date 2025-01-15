@@ -8,6 +8,7 @@
 	export let questionIndex: number;
 
 	let checked: number;
+
 	function updateAnswers(choice: string, choiceIndex: number) {
 		if (checked === choiceIndex) {
 			$answers[questionIndex].choices = [];

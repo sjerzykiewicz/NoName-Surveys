@@ -20,6 +20,7 @@
 	import { getErrorMessage } from '$lib/utils/getErrorMessage';
 	import { invalidateAll } from '$app/navigation';
 	import { checkQuestionError } from '$lib/utils/checkQuestionError';
+	import Subtitle from './Subtitle.svelte';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -152,7 +153,7 @@
 	<button
 		title={$t('save_draft')}
 		class="footer-button save popup"
-		disabled={$questions.length === 0 || isPreview}
+		disabled={$questions.filter((q) => q.component != Subtitle).length === 0 || isPreview}
 		on:click={saveDraft}
 	>
 		<i class="symbol">save</i><Tx text="save_draft" />
@@ -162,7 +163,7 @@
 		title={$t('create_title')}
 		class="footer-button done"
 		id="create"
-		disabled={$questions.length === 0 || isPreview}
+		disabled={$questions.filter((q) => q.component != Subtitle).length === 0 || isPreview}
 		on:click={createSurvey}
 	>
 		<i class="symbol">done</i><Tx text="finish" />

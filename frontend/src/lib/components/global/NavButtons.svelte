@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { colorScheme, colorContrast, M } from '$lib/stores/global';
+	import { colorScheme, colorContrast, shadows, M } from '$lib/stores/global';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
@@ -11,6 +11,7 @@
 	import { goto } from '$app/navigation';
 	import { toggleScheme } from '$lib/utils/toggleScheme';
 	import { toggleContrast } from '$lib/utils/toggleContrast';
+	import { toggleShadows } from '$lib/utils/toggleShadows';
 
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
 	let { options } = getContext<SvelteTranslate>(CONTEXT_KEY);
@@ -107,6 +108,20 @@
 					{/if}
 				{/key}
 			</button>
+			<button
+				title={$t('toggle_shadows')}
+				class="nav-button"
+				on:click={() => ($shadows = toggleShadows($shadows))}
+			>
+				<i class="symbol">shadow</i>
+				{#key $t}
+					{#if $shadows === 'on'}
+						<Tx text="shadows_off" />
+					{:else}
+						<Tx text="shadows_on" />
+					{/if}
+				{/key}
+			</button>
 			<button title={$t('toggle_lang')} class="nav-button" on:click={() => changeLang(otherLang)}
 				><i class="symbol">language</i><Tx text="other_lang" />
 			</button>
@@ -149,7 +164,7 @@
 	.tooltip .tooltip-text {
 		background-color: var(--primary-color-2);
 		font-size: 0.8em;
-		text-shadow: 0 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 	}
 
 	.tooltip .tooltip-text.left::after {
@@ -216,7 +231,7 @@
 		border-bottom-left-radius: 5px;
 		border-left: 1px solid var(--border-color-1);
 		border-bottom: 1px solid var(--border-color-1);
-		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		box-shadow: var(--shadow);
 		z-index: 2;
 	}
 

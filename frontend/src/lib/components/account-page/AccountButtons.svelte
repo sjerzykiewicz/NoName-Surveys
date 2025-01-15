@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { toggleScheme } from '$lib/utils/toggleScheme';
 	import { toggleContrast } from '$lib/utils/toggleContrast';
-	import { colorScheme, colorContrast } from '$lib/stores/global';
+	import { toggleShadows } from '$lib/utils/toggleShadows';
+	import { colorScheme, colorContrast, shadows } from '$lib/stores/global';
 	import { goto } from '$app/navigation';
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
 	import { getContext, onMount } from 'svelte';
@@ -50,6 +51,16 @@
 		</button>
 	</div>
 	<div class="button-sub-row">
+		<button title={$t('toggle_shadows')} on:click={() => ($shadows = toggleShadows($shadows))}>
+			<i class="symbol">shadow</i>
+			{#key $t}
+				{#if $shadows === 'on'}
+					<Tx text="shadows_off" />
+				{:else}
+					<Tx text="shadows_on" />
+				{/if}
+			{/key}
+		</button>
 		<button title={$t('toggle_lang')} on:click={() => changeLang(otherLang)}
 			><i class="symbol">language</i><Tx text="other_lang" />
 		</button>

@@ -75,7 +75,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: stretch;
-		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		box-shadow: var(--shadow);
 		border-radius: 5px;
 		border: 1px solid var(--border-color-1);
 		overflow: hidden;
@@ -109,7 +109,7 @@
 		background-color: var(--secondary-color-2);
 		color: var(--text-color-1);
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		font-weight: 700;
 		cursor: text;
 	}
@@ -123,7 +123,7 @@
 		color: var(--text-color-1);
 		font-size: 1em;
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		font-weight: 700;
 	}
 

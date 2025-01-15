@@ -104,8 +104,6 @@
 			keysData.set(iv, 24);
 			keysData.set(ciphertext, 36);
 
-			downloadBinaryFile('noname-keys.bin', keysData);
-
 			const response = await fetch('/api/users/update-public-key', {
 				method: 'POST',
 				headers: {
@@ -123,6 +121,8 @@
 				$isErrorModalHidden = false;
 				return;
 			}
+
+			downloadBinaryFile('noname-keys.bin', keysData);
 
 			hideModal();
 			reloadCreationDate();

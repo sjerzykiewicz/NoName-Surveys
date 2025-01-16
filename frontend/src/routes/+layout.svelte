@@ -7,9 +7,10 @@
 	import type { TranslateOptions } from 'sveltekit-translate/translate/translateStore';
 	import { onMount } from 'svelte';
 	import { data } from '$lib/translations';
-	import { colorContrast, colorScheme } from '$lib/stores/global';
+	import { colorContrast, colorScheme, shadows } from '$lib/stores/global';
 	import { setScheme } from '$lib/utils/setScheme';
 	import { setContrast } from '$lib/utils/setContrast';
+	import { setShadows } from '$lib/utils/setShadows';
 
 	let opts: TranslateOptions = {
 		defaultLang: 'en',
@@ -19,6 +20,7 @@
 	onMount(() => {
 		$colorScheme = setScheme();
 		$colorContrast = setContrast();
+		$shadows = setShadows();
 	});
 </script>
 
@@ -42,7 +44,7 @@
 		margin: 1.5em auto auto;
 		border: 1px solid var(--border-color-1);
 		border-bottom: none;
-		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		box-shadow: var(--shadow);
 		background-color: var(--secondary-color-1);
 		transition: background-color 0.2s;
 	}

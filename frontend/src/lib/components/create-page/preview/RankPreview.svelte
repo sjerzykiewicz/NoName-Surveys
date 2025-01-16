@@ -4,10 +4,12 @@
 	import { slide } from 'svelte/transition';
 	import { getContext } from 'svelte';
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
-
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
+
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let questionIndex: number;
+
 	let dontAnswer = false;
 	let choices = $questions[questionIndex].choices.slice();
 

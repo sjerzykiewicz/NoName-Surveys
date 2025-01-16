@@ -525,7 +525,7 @@
 		color: var(--text-color-1);
 		font-weight: 700;
 		font-size: 1em;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		cursor: default;
 		transition: 0.2s;
 	}

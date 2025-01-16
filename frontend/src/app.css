@@ -1,6 +1,11 @@
 /* global.css */
 :root {
 	--tooltip-width: 12em;
+	--shadow: 0 4px 4px var(--shadow-color-1);
+}
+
+:root[data-shadows='off'] {
+	--shadow: none;
 }
 
 :root[data-color-scheme='dark'][data-color-contrast='medium'] {
@@ -331,7 +336,7 @@ button {
 	background-color: var(--primary-color-1);
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	font-size: 1em;
 	color: var(--text-color-1);
 	cursor: pointer;
@@ -513,7 +518,7 @@ a:active {
 
 .file-div {
 	color: var(--text-color-1);
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	text-align: justify;
 	cursor: default;
 	transition:
@@ -550,7 +555,7 @@ input[type='file'] {
 	background-color: var(--secondary-color-2);
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	padding: 0.5em;
 	font-size: 0.8em;
 	cursor: default;
@@ -563,7 +568,7 @@ input[type='file'] {
 	background-color: var(--primary-color-1);
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	text-shadow: none;
 	color: var(--text-color-1);
 	cursor: pointer;
@@ -597,7 +602,7 @@ input[type='file'] {
 	font-weight: 700;
 	text-align: right;
 	color: var(--text-color-1);
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	transition:
 		0.2s,
 		outline 0s;
@@ -686,7 +691,7 @@ input[type='file'] {
 
 .question-title {
 	flex: 1;
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	padding-bottom: 1em;
 	overflow: hidden;
 	overflow-wrap: break-word;
@@ -703,7 +708,7 @@ input[type='file'] {
 
 .details {
 	margin-bottom: 0.5em;
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	cursor: default;
 	overflow-wrap: break-word;
 }
@@ -713,7 +718,7 @@ input[type='file'] {
 	padding: 0.25em;
 	border: 1px solid var(--text-color-3);
 	border-radius: 5px;
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	color: var(--text-color-1);
 	cursor: default;
 	overflow: hidden auto;
@@ -762,7 +767,7 @@ input[type='file'] {
 	padding: 0.25em;
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	cursor: pointer;
 	overflow: hidden;
 	overflow-wrap: break-word;
@@ -911,7 +916,7 @@ input[type='file'] {
 }
 
 .limit {
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	font-weight: 700;
 	color: var(--text-color-1);
 	cursor: default;
@@ -925,7 +930,7 @@ input[type='file'] {
 	padding: 0.25em;
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	font-size: 1em;
 	color: var(--text-color-1);
 	text-align: center;
@@ -968,7 +973,7 @@ div[contenteditable] * {
 
 .rank {
 	color: var(--text-color-1);
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	cursor: default;
 	transition:
 		0.2s,
@@ -1010,7 +1015,7 @@ input[type='radio']:disabled {
 	color: var(--error-color-1);
 	font-weight: 700;
 	font-size: 1em;
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	cursor: default;
 	margin: 0.5em 0 0;
 	transition: 0.2s;
@@ -1022,7 +1027,7 @@ input[type='radio']:disabled {
 
 .title {
 	flex: 1;
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	font-size: 1.5em;
 	font-weight: 700;
 	color: var(--text-color-1);
@@ -1053,6 +1058,45 @@ input[type='radio']:disabled {
 .title.answers {
 	padding-bottom: 0.5em;
 	margin-bottom: 0;
+}
+
+.guide-ul {
+	list-style-type: none;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-left: 0;
+	font-weight: 500;
+}
+
+.guide-li {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding-top: 0.5em;
+}
+
+.guide-icon {
+	margin-right: 0.5em;
+}
+
+.info {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+	justify-content: flex-start;
+	padding-bottom: 1em;
+	text-shadow: var(--shadow);
+	cursor: default;
+	overflow-wrap: break-word;
+	color: var(--text-color-1);
+	font-size: 1.1em;
+	transition: 0.2s;
+}
+
+.info-text {
+	font-weight: 700;
+	text-align: left;
 }
 
 .info-row {
@@ -1089,7 +1133,7 @@ input[type='radio']:disabled {
 .sign-buttons .tooltip i,
 .header-tooltip .tooltip i {
 	color: var(--border-color-1);
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	transition:
 		0.2s,
 		outline 0s;
@@ -1175,7 +1219,7 @@ select {
 	background-color: var(--primary-color-1);
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	color: var(--text-color-1);
 	font-size: 1em;
 	padding: 0.25em;
@@ -1193,7 +1237,7 @@ select:disabled {
 
 .select-list {
 	flex: 1;
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	font-size: 0.8em;
 	margin-right: 0.625em;
 	margin-bottom: 0.625em;
@@ -1207,7 +1251,7 @@ table {
 	border-collapse: separate;
 	border-spacing: 0;
 	border-radius: 5px;
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	font-size: 1.15em;
 	color: var(--text-color-1);
 }
@@ -1220,7 +1264,7 @@ th,
 td {
 	padding: 0.2em;
 	text-align: left;
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 }
 
 th:not(:last-of-type),
@@ -1368,7 +1412,7 @@ th .checkbox-entry {
 	border: none;
 	border-radius: 0;
 	box-shadow: none;
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	height: 100%;
 	width: 100%;
 	max-height: 6.5em;
@@ -1448,7 +1492,7 @@ th .checkbox-entry {
 	padding: 0.5em;
 	border-radius: 5px;
 	background: var(--shadow-color-1);
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	color: var(--text-color-1);
 	text-align: center;
 	font-weight: 400;
@@ -1596,7 +1640,7 @@ button.popup {
 	display: flex;
 	justify-content: center;
 	color: var(--accent-color-1);
-	text-shadow: 0 4px 4px var(--shadow-color-1);
+	text-shadow: var(--shadow);
 	font-weight: 700;
 	font-size: 1.25em;
 	cursor: default;
@@ -1613,7 +1657,7 @@ button.popup {
 	padding: 0.25em;
 	border: 1px solid var(--border-color-1);
 	border-radius: 5px;
-	box-shadow: 0 4px 4px var(--shadow-color-1);
+	box-shadow: var(--shadow);
 	color: var(--text-color-1);
 	overflow-x: hidden;
 	overflow-wrap: break-word;
@@ -1662,7 +1706,8 @@ button.popup {
 	.tooltip-text,
 	.popup-text,
 	.select-list,
-	.limit {
+	.limit,
+	.info {
 		font-size: 0.8em;
 	}
 

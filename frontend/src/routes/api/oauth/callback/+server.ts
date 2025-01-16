@@ -1,5 +1,5 @@
 import { type RequestHandler, error, redirect } from '@sveltejs/kit';
-import { getOAuthInstance } from '$lib/oauth1';
+import { getOAuthInstance } from '$lib/server/oauth1';
 import { env } from '$env/dynamic/private';
 import { validateUser, createUser } from '$lib/server/database';
 import { _getUserInfo } from '../user/+server';

@@ -29,6 +29,11 @@
 {#if members.length === 0}
 	<div title={$t('group_members')} class="title empty"><Tx text="no_members_yet" /></div>
 {:else}
+	<div title={$t('members_guide_title')} class="info">
+		<div class="info-text">
+			<Tx text="members_guide" />
+		</div>
+	</div>
 	<table>
 		<tr>
 			<th title={$t('select_all')} class="checkbox-entry" class:disabled={members.length === 0}
@@ -69,3 +74,9 @@
 		{/each}
 	</table>
 {/if}
+
+<style>
+	.info {
+		padding-bottom: 0.5em;
+	}
+</style>

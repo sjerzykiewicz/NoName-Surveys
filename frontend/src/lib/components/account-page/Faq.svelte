@@ -61,7 +61,7 @@
 		font-weight: 700;
 		font-size: 1.1em;
 		text-align: left;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		background-color: var(--secondary-color-1);
 		color: var(--accent-color-1);
 		cursor: pointer;
@@ -90,7 +90,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-start;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		color: var(--text-color-1);
 		padding: 0.5em 0em;
 	}

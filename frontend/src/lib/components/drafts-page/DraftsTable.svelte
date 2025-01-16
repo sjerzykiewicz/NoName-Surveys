@@ -264,6 +264,11 @@
 		</div>
 	</div>
 {:else}
+	<div title={$t('drafts_guide_title')} class="info">
+		<div class="info-text">
+			<Tx html="drafts_guide" />
+		</div>
+	</div>
 	<table>
 		<tr>
 			<th title={$t('select_all')} class="checkbox-entry" class:disabled={drafts.length === 0}
@@ -311,6 +316,10 @@
 {/if}
 
 <style>
+	.info {
+		padding-bottom: 0.5em;
+	}
+
 	.button-entry i {
 		color: var(--accent-color-1);
 		font-variation-settings: 'wght' 700;

@@ -10,6 +10,7 @@
 	export let questionIndex: number;
 
 	let selected: Array<boolean> = [];
+
 	for (let i = 0; i < $questions[questionIndex].choices.length; i++) {
 		selected[i] = false;
 	}

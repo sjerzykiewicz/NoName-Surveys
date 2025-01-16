@@ -41,12 +41,12 @@
 	</div>
 </div>
 <div title={$t('account_info_title')} class="info">
-	<div class="text">
+	<div class="info-text">
 		<Tx html="account_authorization_info" />
 	</div>
 </div>
 <div title={$t('account_info_title')} class="info bottom">
-	<div class="text">
+	<div class="info-text">
 		<Tx text="account_info" /><a href={readmeLink} target="_blank"><Tx text="read_more" /></a>
 	</div>
 </div>
@@ -63,7 +63,7 @@
 
 	h1 {
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		color: var(--text-color-1);
 		font-size: 2.75em;
 		font-weight: 700;
@@ -84,31 +84,15 @@
 	}
 
 	.info {
-		display: flex;
-		flex-flow: row;
-		align-items: center;
-		justify-content: flex-start;
 		padding-top: 1em;
-		padding-bottom: 1em;
 		border-top: 1px solid var(--border-color-1);
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
-		cursor: default;
-		overflow-wrap: break-word;
-		color: var(--text-color-1);
-		font-size: 1.1em;
-		transition: 0.2s;
 	}
 
 	.info.bottom {
 		border-bottom: 1px solid var(--border-color-1);
 	}
 
-	.text {
-		font-weight: 700;
-		text-align: left;
-	}
-
-	.info.bottom .text {
+	.info.bottom .info-text {
 		font-weight: 500;
 	}
 
@@ -127,7 +111,6 @@
 		}
 
 		.info {
-			font-size: 0.8em;
 			padding-left: 0em;
 			padding-right: 0em;
 		}

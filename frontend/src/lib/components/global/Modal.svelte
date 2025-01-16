@@ -88,7 +88,7 @@
 		border-width: 1px;
 		border-style: solid;
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		box-shadow: var(--shadow);
 		font-size: 1.2em;
 		color: var(--text-color, var(--text-color-1));
 		border-color: var(--border-color, var(--border-color-1));
@@ -119,7 +119,7 @@
 		align-items: center;
 		font-weight: 700;
 		font-size: 1.2em;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		cursor: default;
 	}
 
@@ -134,7 +134,7 @@
 		padding: 1em;
 		color: var(--text-color-1);
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		cursor: default;
 	}
 

@@ -92,7 +92,7 @@
 		margin-top: 0em;
 		font-size: 0.8em;
 		font-weight: 400;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		background-color: var(--primary-color-2);
 		cursor: default;
 	}

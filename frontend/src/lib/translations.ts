@@ -66,8 +66,11 @@ export const data = {
 		medium_contrast: 'Medium Contrast',
 		high_contrast: 'High Contrast',
 		toggle_contrast: 'Toggle contrast',
+		shadows_on: 'Shadows',
+		shadows_off: 'No Shadows',
+		toggle_shadows: 'Toggle shadows',
 		toggle_lang: 'Toggle language',
-		other_lang: 'Polish',
+		other_lang: 'Polski',
 		invite: 'Invite',
 		invite_title: 'Invite users to authorize and generate keys',
 		invitation: 'Invitation',
@@ -190,6 +193,28 @@ export const data = {
 		delete_selected_drafts: 'Delete selected drafts',
 		save_draft: 'Save draft',
 		saved: 'Saved!',
+		drafts_guide_title: 'Drafts guide',
+		drafts_guide: `How to use this page:
+			<ul class="guide-ul">
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">title</i></div>
+					<div>
+						Click the draft title to load the draft,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">check_circle</i></div>
+					<div>
+						Click the blue check button to create a survey from the draft,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">delete</i></div>
+					<div>
+						Select drafts and click the delete button to delete them.
+					</div>
+				</li>
+			</ul>`,
 
 		// surveys
 
@@ -268,6 +293,55 @@ export const data = {
 		create: 'Create',
 		create_title: 'Finish survey creation',
 		invalid_summary: 'Invalid survey summary',
+		surveys_guide_title: 'Surveys guide',
+		surveys_guide: `How to use this page:
+			<ul class="guide-ul">
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">mode_off_on</i></div>
+					<div>
+						Click the blue/red button to toggle the availability of the survey,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">title</i></div>
+					<div>
+						Click the survey title to view the summary,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">group</i></div>
+					<div>
+						Click the group size to view the possible respondents,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">qr_code_2</i></div>
+					<div>
+						Click the access code to view the QR code,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">upload_file</i></div>
+					<div>
+						Click the import button to load a previously exported summary,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">delete</i></div>
+					<div>
+						Select surveys and click the delete button to delete them.
+					</div>
+				</li>
+			</ul>`,
+		access_guide_title: 'Sharing guide',
+		access_guide:
+			'You can share the survey results with other users. You can also take the access away from them, but you cannot take it from yourself.',
+		respondents_guide_title: 'Respondents guide',
+		respondents_guide:
+			'Users displayed on this page are the possible respondents for this survey. It is unknown whether they have already answered it.',
+		answers_guide_title: 'Answers guide',
+		answers_guide:
+			'You can view individual answers by clicking an answer. You can also do this by clicking an answer to a text question on the summary page.',
 
 		// groups
 
@@ -308,6 +382,34 @@ export const data = {
 		create_groups_info: `Before creating a secure survey, consider setting up a user group. User groups make it
 			easy to select the same set of respondents across multiple surveys. However, if you
 			prefer, you can proceed without using them. `,
+		groups_guide_title: 'Groups guide',
+		groups_guide: `How to use this page:
+			<ul class="guide-ul">
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">title</i></div>
+					<div>
+						Click the group name to view its members,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">edit</i></div>
+					<div>
+						Click the pen button to change the group name,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">add</i></div>
+					<div>
+						Click the +group button to create a new group,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">delete</i></div>
+					<div>
+						Select groups and click the delete button to delete them.
+					</div>
+				</li>
+			</ul>`,
 
 		// users / members
 
@@ -344,6 +446,9 @@ export const data = {
 		duplicate_options: 'This option is already selected',
 		remove_all_title: 'Remove all',
 		remove_btn_title: 'Remove',
+		members_guide_title: 'Group members guide',
+		members_guide:
+			'You can add and remove group members. Removing all members will result in deleting the group.',
 
 		// answers
 
@@ -678,12 +783,15 @@ export const data = {
 		hide_account_options: 'Ukryj opcje konta',
 		dark_theme: 'Ciemny motyw',
 		light_theme: 'Jasny motyw',
-		toggle_theme: 'Zmień motyw',
+		toggle_theme: 'Przełącz motyw',
 		medium_contrast: 'Średni kontrast',
 		high_contrast: 'Wysoki kontrast',
-		toggle_contrast: 'Zmień kontrast',
-		toggle_lang: 'Zmień język',
-		other_lang: 'Angielski',
+		toggle_contrast: 'Przełącz kontrast',
+		shadows_on: 'Cienie',
+		shadows_off: 'Bez cieni',
+		toggle_shadows: 'Przełącz cienie',
+		toggle_lang: 'Przełącz język',
+		other_lang: 'English',
 		invite: 'Zaproś',
 		invite_title: 'Zaproś użytkowników do autoryzacji i wygenerowania kluczy',
 		invitation: 'Zaproszenie',
@@ -806,6 +914,28 @@ export const data = {
 		delete_selected_drafts: 'Usuń wybrane szkice',
 		save_draft: 'Zapisz szkic',
 		saved: 'Zapisano!',
+		drafts_guide_title: 'Przewodnik po szkicach',
+		drafts_guide: `Jak korzystać z tej strony:
+			<ul class="guide-ul">
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">title</i></div>
+					<div>
+						Kliknij tytuł szkicu, by załadować szkic,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">check_circle</i></div>
+					<div>
+						Kliknij niebieski przycisk z ptaszkiem, by utworzyć ankietę ze szkicu,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">delete</i></div>
+					<div>
+						Zaznacz szkice i kliknij przycisk usuń, by je usunąć.
+					</div>
+				</li>
+			</ul>`,
 
 		// surveys
 
@@ -884,6 +1014,55 @@ export const data = {
 		create: 'Utwórz',
 		create_title: 'Zakończ tworzenie ankiety',
 		invalid_summary: 'Niewłaściwe podsumowanie ankiety',
+		surveys_guide_title: 'Przewodnik po ankietach',
+		surveys_guide: `Jak korzystać z tej strony:
+			<ul class="guide-ul">
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">mode_off_on</i></div>
+					<div>
+						Kliknij niebieski/czerwony przycisk, by przełączyć dostępność ankiety,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">title</i></div>
+					<div>
+						Kliknij tytuł ankiety, by wyświetlić podsumowanie,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">group</i></div>
+					<div>
+						Kliknij rozmiar grupy, by wyświetlić możliwych respondentów,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">qr_code_2</i></div>
+					<div>
+						Kliknij kod dostępu, by wyświetlić kod QR,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">upload_file</i></div>
+					<div>
+						Kliknij przycisk import, by załadować wcześniej wyeksportowane podsumowanie,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">delete</i></div>
+					<div>
+						Zaznacz ankiety i kliknij przycisk usuń, by je usunąć.
+					</div>
+				</li>
+			</ul>`,
+		access_guide_title: 'Przewodnik po udostępnianiu',
+		access_guide:
+			'Możesz udostępniać wyniki ankiety innym użytkownikom. Możesz również zabrać im dostęp do nich, ale nie możesz zabrać go sobie.',
+		respondents_guide_title: 'Przewodnik po respondentach',
+		respondents_guide:
+			'Użytkownicy wyświetleni na tej stronie są możliwymi respondentami dla tej ankiety. Nie jest wiadome czy już na nią odpowiedzieli.',
+		answers_guide_title: 'Przewodnik po odpowiedziach',
+		answers_guide:
+			'Możesz wyświetlić indywidualne odpowiedzi poprzez kliknięcie w odpowiedź. Możesz to również zrobić poprzez kliknięcie w odpowiedź do pytania tekstowego na stronie podsumowania.',
 
 		// groups
 
@@ -923,6 +1102,34 @@ export const data = {
 		keys_info_title: 'Informacje o kluczach',
 		create_groups_info: `Przed utworzeniem bezpiecznej ankiety, rozważ utworzenie grupy użytkowników. Grupy użytkowników ułatwiają wybór
 			takiego samego zestawu respondentów w wielu ankietach. Jeśli chcesz, możesz kontynuować bez ich użycia. `,
+		groups_guide_title: 'Przewodnik po grupach',
+		groups_guide: `Jak korzystać z tej strony:
+			<ul class="guide-ul">
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">title</i></div>
+					<div>
+						Kliknij nazwę grupy, by wyświetlić jej członków,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">edit</i></div>
+					<div>
+						Kliknij przycisk z pisakiem, by zmienić nazwę grupy,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">add</i></div>
+					<div>
+						Kliknij przycisk +grupa, by utworzyć nową grupę,
+					</div>
+				</li>
+				<li class="guide-li">
+					<div class="guide-icon"><i class="symbol">delete</i></div>
+					<div>
+						Zaznacz grupy i kliknij przycisk usuń, by je usunąć.
+					</div>
+				</li>
+			</ul>`,
 
 		// users / members
 
@@ -959,6 +1166,9 @@ export const data = {
 		duplicate_options: 'Ta opcja jest już wybrana',
 		remove_all_title: 'Usuń wszystko',
 		remove_btn_title: 'Usuń',
+		members_guide_title: 'Przewodnik po członkach grupy',
+		members_guide:
+			'Możesz dodawać i usuwać członków grupy. Usunięcie wszystkich członków spowoduje usunięcie grupy.',
 
 		// answers
 
@@ -998,10 +1208,10 @@ export const data = {
 
 		// files
 
-		export: 'Eksportuj',
+		export: 'Eksport',
 		export_invalid_emails: 'Eksportuj niepoprawne emaile',
 		export_survey_summary: 'Eksportuj podsumowanie ankiety',
-		import: 'Importuj',
+		import: 'Import',
 		import_survey_summary: 'Importuj podsumowanie ankiety',
 		import_users_title: 'Importuj użytkowników z pliku .csv',
 		import_users_label: 'Lub importuj użytkowników z pliku .csv',

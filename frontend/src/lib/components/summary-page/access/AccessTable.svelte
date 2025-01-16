@@ -29,6 +29,11 @@
 		<Tx text="no_surveys_with_access" />
 	</div>
 {:else}
+	<div title={$t('access_guide_title')} class="info">
+		<div class="info-text">
+			<Tx text="access_guide" />
+		</div>
+	</div>
 	<table>
 		<tr>
 			<th
@@ -82,6 +87,10 @@
 {/if}
 
 <style>
+	.info {
+		padding-bottom: 0.5em;
+	}
+
 	.tooltip {
 		--tooltip-width: 9em;
 	}

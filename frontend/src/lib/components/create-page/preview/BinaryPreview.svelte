@@ -10,6 +10,7 @@
 	export let questionIndex: number;
 
 	let checked: number;
+
 	function updateAnswers(choiceIndex: number) {
 		if (checked === choiceIndex) {
 			checked = NaN;

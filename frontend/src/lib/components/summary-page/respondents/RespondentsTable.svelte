@@ -15,6 +15,11 @@
 		<Tx text="possible_respondents_empty" />
 	</div>
 {:else}
+	<div title={$t('respondents_guide_title')} class="info">
+		<div class="info-text">
+			<Tx text="respondents_guide" />
+		</div>
+	</div>
 	<table>
 		<tr>
 			<th title={$t('possible_respondents')} id="title-header"
@@ -33,6 +38,10 @@
 {/if}
 
 <style>
+	.info {
+		padding-bottom: 0.5em;
+	}
+
 	.button-row {
 		justify-content: flex-end;
 	}

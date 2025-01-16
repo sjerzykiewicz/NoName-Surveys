@@ -92,7 +92,7 @@
 		padding: 0.25em;
 		border: 1px solid var(--border-color-1);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		box-shadow: var(--shadow);
 		color: var(--text-color-1);
 		cursor: text;
 		overflow-x: hidden;

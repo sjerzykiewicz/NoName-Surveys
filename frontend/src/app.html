@@ -29,5 +29,9 @@
 		if (colorContrast) {
 			document.documentElement.setAttribute('data-color-contrast', colorContrast);
 		}
+		const shadows = localStorage.getItem('shadows');
+		if (shadows) {
+			document.documentElement.setAttribute('data-shadows', shadows);
+		}
 	});
 </script>

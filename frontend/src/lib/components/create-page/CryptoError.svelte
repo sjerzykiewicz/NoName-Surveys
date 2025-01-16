@@ -39,6 +39,6 @@
 <style>
 	.error {
 		font-size: 0.8em;
-		margin: 0em;
+		margin: 0 0 0.5em 0;
 	}
 </style>

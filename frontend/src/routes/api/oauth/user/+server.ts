@@ -1,4 +1,4 @@
-import { getOAuthInstance } from '$lib/oauth1';
+import { getOAuthInstance } from '$lib/server/oauth1';
 import { env } from '$env/dynamic/private';
 import { error } from '@sveltejs/kit';
 

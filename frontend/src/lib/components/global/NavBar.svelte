@@ -84,7 +84,7 @@
 	.bar {
 		background-color: var(--secondary-color-2);
 		border-bottom: 1px solid var(--border-color-1);
-		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		box-shadow: var(--shadow);
 		transition:
 			0.2s,
 			outline 0s;
@@ -148,7 +148,7 @@
 			min-width: 0px;
 			position: absolute;
 			border-bottom: 1px solid var(--border-color-1);
-			box-shadow: 0px 4px 4px var(--shadow-color-1);
+			box-shadow: var(--shadow);
 			z-index: 8;
 		}
 

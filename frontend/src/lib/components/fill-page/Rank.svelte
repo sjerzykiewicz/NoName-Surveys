@@ -4,12 +4,14 @@
 	import { CONTEXT_KEY, type SvelteTranslate } from 'sveltekit-translate/translate/translateStore';
 	import { slide } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-
 	import Tx from 'sveltekit-translate/translate/tx.svelte';
+
 	const { t } = getContext<SvelteTranslate>(CONTEXT_KEY);
+
 	export let questionIndex: number;
 
 	let dontAnswer: boolean = false;
+
 	$answers[questionIndex].choices = [...$questions[questionIndex].choices];
 
 	function moveChoiceUp(index: number) {

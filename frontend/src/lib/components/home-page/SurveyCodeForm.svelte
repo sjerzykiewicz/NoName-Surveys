@@ -94,7 +94,7 @@
 	h1 {
 		color: var(--text-color-1);
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		font-size: 3em;
 		font-weight: 700;
 		margin: 0em;
@@ -106,7 +106,7 @@
 	.subtitle {
 		color: var(--text-color-1);
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		font-size: 1.25em;
 		font-weight: 700;
 		padding-top: 0.5em;
@@ -124,7 +124,7 @@
 		color: var(--text-color-1);
 		font-weight: 700;
 		font-size: 2em;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		padding-top: 0.25em;
 		cursor: default;
 		transition:
@@ -148,7 +148,7 @@
 		background-color: var(--secondary-color-2);
 		border: 1px solid var(--border-color-1);
 		border-radius: 5px;
-		box-shadow: 0px 4px 4px var(--shadow-color-1);
+		box-shadow: var(--shadow);
 		color: var(--text-color-1);
 		font-weight: 700;
 		font-size: 1.5em;
@@ -185,7 +185,7 @@
 
 	.home-info {
 		text-align: center;
-		text-shadow: 0px 4px 4px var(--shadow-color-1);
+		text-shadow: var(--shadow);
 		font-size: 1.2em;
 		color: var(--text-color-1);
 		cursor: default;

@@ -10,7 +10,8 @@
 	export let questionIndex: number;
 
 	let checked: number;
-	function updateAnswers(choice: string, choiceIndex: number) {
+
+	function updateAnswers(choiceIndex: number) {
 		if (checked === choiceIndex) {
 			checked = NaN;
 		} else {
@@ -26,7 +27,7 @@
 				type="radio"
 				checked={checked === choiceIndex}
 				on:click={() => {
-					updateAnswers(choice, choiceIndex);
+					updateAnswers(choiceIndex);
 				}}
 			/>
 			<div class="choice-input display scale" class:selected={checked === choiceIndex}>
